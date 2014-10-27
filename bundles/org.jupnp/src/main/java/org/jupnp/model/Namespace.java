@@ -54,6 +54,7 @@ import org.jupnp.util.URIUtil;
  * </p>
  *
  * @author Christian Bauer
+ * @author Michael Grammling - FIXED a possible NPE (an empty list is returned instead of null)
  */
 public class Namespace {
 
@@ -152,27 +153,29 @@ public class Namespace {
     }
 
     public Resource[] getResources(Device device) throws ValidationException {
-        if (!device.isRoot()) return null;
-
         Set<Resource> resources = new HashSet<Resource>();
-        List<ValidationError> errors = new ArrayList<ValidationError>();
 
-        log.fine("Discovering local resources of device graph");
-        Resource[] discoveredResources = device.discoverResources(this);
-        for (Resource resource : discoveredResources) {
-            log.finer("Discovered: " + resource);
-            if (!resources.add(resource)) {
-                log.finer("Local resource already exists, queueing validation error");
-                errors.add(new ValidationError(
-                    getClass(),
-                    "resources",
-                    "Local URI namespace conflict between resources of device: " + resource
-                ));
+        if ((device != null) && (device.isRoot())) {
+            List<ValidationError> errors = new ArrayList<ValidationError>();
+    
+            log.fine("Discovering local resources of device graph");
+            Resource[] discoveredResources = device.discoverResources(this);
+            for (Resource resource : discoveredResources) {
+                log.finer("Discovered: " + resource);
+                if (!resources.add(resource)) {
+                    log.finer("Local resource already exists, queueing validation error");
+                    errors.add(new ValidationError(
+                        getClass(),
+                        "resources",
+                        "Local URI namespace conflict between resources of device: " + resource
+                    ));
+                }
+            }
+            if (errors.size() > 0) {
+                throw new ValidationException("Validation of device graph failed, call getErrors() on exception", errors);
             }
         }
-        if (errors.size() > 0) {
-            throw new ValidationException("Validation of device graph failed, call getErrors() on exception", errors);
-        }
+
         return resources.toArray(new Resource[resources.size()]);
     }
 

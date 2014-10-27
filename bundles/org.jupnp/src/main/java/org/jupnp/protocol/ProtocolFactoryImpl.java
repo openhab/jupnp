@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.jupnp.UpnpService;
+import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.NetworkAddress;
 import org.jupnp.model.action.ActionInvocation;
@@ -127,7 +128,11 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
     }
 
     protected boolean isSupportedServiceAdvertisement(IncomingDatagramMessage message) {
-        ServiceType[] exclusiveServiceTypes = getUpnpService().getConfiguration().getExclusiveServiceTypes();
+        UpnpService upnpService = getUpnpService();
+        if (upnpService == null) return false;
+        UpnpServiceConfiguration upnpServiceConfiguration = upnpService.getConfiguration();
+        if (upnpServiceConfiguration == null) return false;
+        ServiceType[] exclusiveServiceTypes = upnpServiceConfiguration.getExclusiveServiceTypes();
         if (exclusiveServiceTypes == null) return false; // Discovery is disabled
         if (exclusiveServiceTypes.length == 0) return true; // Any advertisement is fine
 

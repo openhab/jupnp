@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.logging.Level;
 
 import org.jupnp.UpnpService;
 import org.jupnp.binding.xml.DescriptorBindingException;
@@ -115,7 +114,6 @@ public class RetrieveRemoteDescriptors implements Runnable {
     }
 
     protected void describe() throws RouterException {
-
         // All of the following is a very expensive and time consuming procedure, thanks to the
         // braindead design of UPnP. Several GET requests, several descriptors, several XML parsing
         // steps - all of this could be done with one and it wouldn't make a difference. So every
@@ -130,7 +128,6 @@ public class RetrieveRemoteDescriptors implements Runnable {
     	StreamResponseMessage deviceDescMsg;
 
     	try {
-
     		deviceDescRetrievalMsg =
                 new StreamRequestMessage(UpnpRequest.Method.GET, rd.getIdentity().getDescriptorURL());
 
@@ -188,7 +185,6 @@ public class RetrieveRemoteDescriptors implements Runnable {
     }
 
     protected void describe(String descriptorXML) throws RouterException {
-
         boolean notifiedStart = false;
         RemoteDevice describedDevice = null;
         try {

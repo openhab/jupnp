@@ -18,16 +18,17 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.AsyncEvent;
-import javax.servlet.AsyncListener;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jupnp.model.message.Connection;
+import org.jupnp.servlet.AsyncContext;
+import org.jupnp.servlet.AsyncEvent;
+import org.jupnp.servlet.AsyncListener;
+import org.jupnp.servlet.http.AsyncHttpServlet;
+import org.jupnp.servlet.http.AsyncHttpServletRequest;
 import org.jupnp.transport.Router;
 import org.jupnp.transport.spi.InitializationException;
 import org.jupnp.transport.spi.StreamServer;
@@ -36,15 +37,21 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implementation based on Servlet 3.0 API.
+ * <p>
+ * Refactor the code back to the official Servlet 3.0 API if Servlet 2.5 support should be
+ * given up. There are minor changes needed <i>only</i> in that class to upgrade to the 
+ * Servlet 3.0 API again.
  *
  * @author Christian Bauer
+ * @author Michael Grammling - Refactored so that it can also work with Servlet 2.5 containers
  */
 public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletStreamServerConfigurationImpl> {
 
-    final private static Logger log = LoggerFactory.getLogger(AsyncServletStreamServerImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(AsyncServletStreamServerImpl.class);
 
-    final protected AsyncServletStreamServerConfigurationImpl configuration;
+    protected final AsyncServletStreamServerConfigurationImpl configuration;
     protected int localPort;
+
 
     public AsyncServletStreamServerImpl(AsyncServletStreamServerConfigurationImpl configuration) {
         this.configuration = configuration;
@@ -54,7 +61,9 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
         return configuration;
     }
 
-    synchronized public void init(InetAddress bindAddress, final Router router) throws InitializationException {
+    public synchronized void init(InetAddress bindAddress, final Router router)
+            throws InitializationException {
+
         try {
             log.debug("Setting executor service on servlet container adapter");
             getConfiguration().getServletContainerAdapter().setExecutorService(
@@ -66,12 +75,12 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
                 bindAddress.getHostAddress(),
                 getConfiguration().getListenPort()
             );
-
             String contextPath = router.getConfiguration().getNamespace().getBasePath().getPath();
-            getConfiguration().getServletContainerAdapter().registerServlet(contextPath, createServlet(router));
-
+            getConfiguration().getServletContainerAdapter().registerServlet(
+                    contextPath, createServlet(router));
         } catch (Exception ex) {
-            throw new InitializationException("Could not initialize " + getClass().getSimpleName() + ": " + ex.toString(), ex);
+            throw new InitializationException("Could not initialize " + getClass().getSimpleName()
+                    + ": " + ex.toString(), ex);
         }
     }
 
@@ -90,33 +99,33 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
     private int mCounter = 0;
 
     protected Servlet createServlet(final Router router) {
-        return new HttpServlet() {
+        // (Opt.: Create only an HttpServlet if you want to use the official Servlet 3.0 API functionality).
+        return new AsyncHttpServlet() {
+            // Override the method AsyncHttpServlet#service(HttpServletRequest, HttpServletResponse)
+            // if you want to use the official Servlet 3.0 API functionality. 
             @Override
-            protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+            protected void service(AsyncHttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
             	final long startTime = System.currentTimeMillis();
             	final int counter = mCounter++;
             	log.info(String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
                 log.debug("Handling Servlet request asynchronously: " + req);
 
-                AsyncContext async = req.startAsync();
-                async.setTimeout(getConfiguration().getAsyncTimeoutSeconds()*1000);
+                // Use the method HttpServletRequest#startAsync() to use the official Servlet 3.0 API functionality.
+                AsyncContext async = req.startAsynchronous();
+                async.setTimeout(getConfiguration().getAsyncTimeoutSeconds() * 1000);
 
                 async.addListener(new AsyncListener() {
-
                     @Override
                     public void onTimeout(AsyncEvent arg0) throws IOException {
                         long duration = System.currentTimeMillis() - startTime;
                         log.warn(String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s", counter, duration, arg0.getSuppliedRequest()));
                     }
 
-
                     @Override
                     public void onStartAsync(AsyncEvent arg0) throws IOException {
-                        // useless
+                        // not needed
                         log.debug(String.format("AsyncListener.onStartAsync(): id: %3d, request: %s", counter, arg0.getSuppliedRequest()));
                     }
-
 
                     @Override
                     public void onError(AsyncEvent arg0) throws IOException {
@@ -124,13 +133,11 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
                         log.warn(String.format("AsyncListener.onError(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
                     }
 
-
                     @Override
                     public void onComplete(AsyncEvent arg0) throws IOException {
                         long duration = System.currentTimeMillis() - startTime;
                         log.info(String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
                     }
-
                 });
 
                 AsyncServletUpnpStream stream =

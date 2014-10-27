@@ -14,24 +14,6 @@
 
 package org.jupnp.transport.impl;
 
-import org.jupnp.model.message.Connection;
-import org.jupnp.model.message.StreamRequestMessage;
-import org.jupnp.model.message.StreamResponseMessage;
-import org.jupnp.model.message.UpnpHeaders;
-import org.jupnp.model.message.UpnpMessage;
-import org.jupnp.model.message.UpnpRequest;
-import org.jupnp.protocol.ProtocolFactory;
-import org.jupnp.transport.spi.UpnpStream;
-import org.jupnp.util.Exceptions;
-import org.jupnp.util.io.IO;
-
-import javax.servlet.AsyncContext;
-import javax.servlet.AsyncEvent;
-import javax.servlet.AsyncListener;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -42,6 +24,24 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.jupnp.model.message.Connection;
+import org.jupnp.model.message.StreamRequestMessage;
+import org.jupnp.model.message.StreamResponseMessage;
+import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.message.UpnpMessage;
+import org.jupnp.model.message.UpnpRequest;
+import org.jupnp.protocol.ProtocolFactory;
+import org.jupnp.servlet.AsyncContext;
+import org.jupnp.servlet.AsyncEvent;
+import org.jupnp.servlet.AsyncListener;
+import org.jupnp.transport.spi.UpnpStream;
+import org.jupnp.util.Exceptions;
+import org.jupnp.util.io.IO;
+
 /**
  * Implementation based on Servlet 3.0 API.
  * <p>
@@ -50,6 +50,7 @@ import java.util.logging.Logger;
  * </p>
  *
  * @author Christian Bauer
+ * @author Michael Grammling - Refactored so that it can also work with Servlet 2.5
  */
 public abstract class AsyncServletUpnpStream extends UpnpStream implements AsyncListener {
 
@@ -132,8 +133,8 @@ public abstract class AsyncServletUpnpStream extends UpnpStream implements Async
 
     @Override
     public void onStartAsync(AsyncEvent event) throws IOException {
-        // This is a completely useless callback, it will only be called on request.startAsync() which
-        // then immediately removes the listener... what were they thinking.
+        // Call not needed, it will only be called on request.startAsync() which
+        // then immediately removes the listener.
     }
 
     @Override

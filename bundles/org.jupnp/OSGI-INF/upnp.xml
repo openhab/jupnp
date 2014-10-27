@@ -19,5 +19,5 @@
    <service>
       <provide interface="org.jupnp.UpnpService"/>
    </service>
-   <reference bind="setOSGiUpnpServiceConfiguration" cardinality="1..1" interface="org.jupnp.OSGiUpnpServiceConfiguration" name="OSGiUpnpServiceConfiguration" policy="dynamic" unbind="unsetOSGiUpnpServiceConfiguration"/>
+   <reference bind="setOSGiUpnpServiceConfiguration" cardinality="1..1" interface="org.jupnp.OSGiUpnpServiceConfiguration" name="OSGiUpnpServiceConfiguration" policy="static" unbind="unsetOSGiUpnpServiceConfiguration"/>
 </scr:component>

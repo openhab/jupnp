@@ -14,14 +14,14 @@
 
 package org.jupnp.protocol;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.jupnp.UpnpService;
 import org.jupnp.model.message.UpnpMessage;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.transport.RouterException;
 import org.jupnp.util.Exceptions;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Supertype for all asynchronously executing protocols, handling reception of UPnP messages.

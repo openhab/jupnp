@@ -14,6 +14,11 @@
 
 package org.jupnp.registry;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.gena.GENASubscription;
 import org.jupnp.model.meta.Device;
@@ -21,11 +26,6 @@ import org.jupnp.model.resource.Resource;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDN;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Internal class, required by {@link RegistryImpl}.

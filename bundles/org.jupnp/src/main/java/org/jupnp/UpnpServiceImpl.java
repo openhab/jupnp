@@ -69,20 +69,21 @@ public class UpnpServiceImpl implements UpnpService {
         this.protocolFactory = createProtocolFactory();
     	
         this.registry = createRegistry(protocolFactory);
-        
-}
+    }
 
     protected void setOSGiUpnpServiceConfiguration(OSGiUpnpServiceConfiguration configuration) {
     	this.configuration = configuration;
-    	if(isRunning) {
+    	if (isRunning) {
     		restart(true);
     	}
     }
 
     protected void unsetOSGiUpnpServiceConfiguration(OSGiUpnpServiceConfiguration configuration) {
-    	this.configuration = null;
+        if (this.configuration == configuration) {
+            this.configuration = null;
+        }
     }
-    
+
     protected ProtocolFactory createProtocolFactory() {
         return new ProtocolFactoryImpl(this);
     }
@@ -162,8 +163,6 @@ public class UpnpServiceImpl implements UpnpService {
         	restart.run();
         }
     }
-
-    
     
     protected void shutdownRegistry() {
         getRegistry().shutdown();
