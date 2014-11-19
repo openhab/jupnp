@@ -260,6 +260,8 @@ public class RetrieveRemoteDescriptors implements Runnable {
             throws RouterException, DescriptorBindingException, ValidationException {
 
         List<RemoteService> describedServices = new ArrayList();
+	log.warn("Check if currentDevice has Services: " + currentDevice);
+     	try {
         if (currentDevice.hasServices()) {
             List<RemoteService> filteredServices = filterExclusiveServices(currentDevice.getServices());
             for (RemoteService service : filteredServices) {
@@ -269,8 +271,13 @@ public class RetrieveRemoteDescriptors implements Runnable {
                 }
             }
         }
+    	}  catch(Exception e) {
+    		log.warn("Check if currentDevice has Services failed: " + currentDevice);
+    	}
 
         List<RemoteDevice> describedEmbeddedDevices = new ArrayList();
+    	log.warn("Trying to describe ebeddedDevices for currentDevice: " + currentDevice);
+     	try {
         if (currentDevice.hasEmbeddedDevices()) {
             for (RemoteDevice embeddedDevice : currentDevice.getEmbeddedDevices()) {
                 if (embeddedDevice == null) continue;
@@ -280,6 +287,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
                 }
             }
         }
+    	}  catch(Exception e) {
+    		log.warn("Could not describe ebeddedDevices for currentDevice: " + currentDevice);
+    	}
 
         if((currentDevice.hasServices() && describedServices.size()==0) ||
         		(currentDevice.hasEmbeddedDevices() && describedEmbeddedDevices.size()==0)) {

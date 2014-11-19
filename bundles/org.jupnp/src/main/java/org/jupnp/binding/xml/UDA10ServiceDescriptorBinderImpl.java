@@ -66,6 +66,18 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         if (descriptorXml == null || descriptorXml.length() == 0) {
             throw new DescriptorBindingException("Null or empty descriptor");
         }
+/*
+ * The Belkin UPNP stack is not 100% compatible with the cling library
+ * so we need to repair all of the problems with the xml files provided by the Wemo switch 
+ */
+            descriptorXml = descriptorXml.replaceAll("\0", " ");
+            descriptorXml = descriptorXml.replaceAll("<retval/>", " ");
+            descriptorXml = descriptorXml.replaceAll("<retval />", " "); /*	The SAX parser is seeing this as a null retval, also 
+            								  *	in some cases multiple return values where only 1 is allowed
+            								 */
+            
+            descriptorXml = descriptorXml.replaceAll("\"smartprivateKey\"", "smartprivateKey"); 	// can't contain quotes
+            descriptorXml = descriptorXml.replaceAll("\"pluginprivateKey\"", "pluginprivateKey"); 	// can't contain quotes
 
         try {
             log.fine("Populating service from XML descriptor: " + undescribedService);

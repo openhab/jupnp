@@ -72,6 +72,15 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         if (descriptorXml == null || descriptorXml.length() == 0) {
             throw new DescriptorBindingException("Null or empty descriptor");
         }
+/*
+ * The Belkin UPNP stack is not 100% compatible with the cling library
+ * So we have to repair all of the problems with the xml files provided by the Wemo switch 
+ */
+        if (descriptorXml.contains("WeMo")) {
+        	descriptorXml = descriptorXml.replaceAll("urn:Belkin", "urn:schemas-upnp-org");
+        	descriptorXml = descriptorXml.replaceAll("jpg", "image/jpeg");
+        	descriptorXml = descriptorXml.replaceAll("icon.jpg", "/icon.jpg");
+        }
 
         try {
             log.fine("Populating device from XML descriptor: " + undescribedDevice);
