@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
-import org.jupnp.binding.xml.RecoveringUDA10ServiceDescriptorBinderImpl;
+import org.jupnp.binding.xml.RecoveringUDA10ServiceDescriptorBinderSAXImpl;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.Namespace;
@@ -85,7 +85,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The default {@link org.jupnp.model.Namespace} is configured without any base path or prefix.
  * </p>
- * 
+ *
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool and http service streaming server
  */
@@ -180,34 +180,41 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         shutdown();
     }
 
+    @Override
     public DatagramProcessor getDatagramProcessor() {
         return datagramProcessor;
     }
 
+    @Override
     public SOAPActionProcessor getSoapActionProcessor() {
         return soapActionProcessor;
     }
 
+    @Override
     public GENAEventProcessor getGenaEventProcessor() {
         return genaEventProcessor;
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
         return new StreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService()));
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
     public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
         return new MulticastReceiverImpl(new MulticastReceiverConfigurationImpl(
                 networkAddressFactory.getMulticastGroup(), networkAddressFactory.getMulticastPort()));
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
     public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
         return new DatagramIOImpl(new DatagramIOConfigurationImpl());
     }
 
+    @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
         ServiceReference serviceReference = context.getServiceReference(HttpService.class.getName());
@@ -233,26 +240,32 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     }
 
+    @Override
     public ExecutorService getMulticastReceiverExecutor() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public ExecutorService getDatagramIOExecutor() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public ExecutorService getStreamServerExecutorService() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
         return deviceDescriptorBinderUDA10;
     }
 
+    @Override
     public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
         return serviceDescriptorBinderUDA10;
     }
 
+    @Override
     public ServiceType[] getExclusiveServiceTypes() {
         return new ServiceType[0];
     }
@@ -260,14 +273,17 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     /**
      * @return Defaults to <code>false</code>.
      */
+    @Override
     public boolean isReceivedSubscriptionTimeoutIgnored() {
         return false;
     }
 
+    @Override
     public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
         return null;
     }
 
+    @Override
     public UpnpHeaders getEventSubscriptionHeaders(RemoteService service) {
         return null;
     }
@@ -275,6 +291,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     /**
      * @return Defaults to 1000 milliseconds.
      */
+    @Override
     public int getRegistryMaintenanceIntervalMillis() {
         return 1000;
     }
@@ -282,38 +299,47 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     /**
      * @return Defaults to zero, disabling ALIVE flooding.
      */
+    @Override
     public int getAliveIntervalMillis() {
         return 0;
     }
 
+    @Override
     public Integer getRemoteDeviceMaxAgeSeconds() {
         return null;
     }
 
+    @Override
     public ExecutorService getAsyncProtocolExecutor() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public ExecutorService getSyncProtocolExecutorService() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public Namespace getNamespace() {
         return namespace;
     }
 
+    @Override
     public Executor getRegistryMaintainerExecutor() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public Executor getRegistryListenerExecutor() {
         return getDefaultExecutorService();
     }
 
+    @Override
     public NetworkAddressFactory createNetworkAddressFactory() {
         return createNetworkAddressFactory(streamListenPort, multicastResponsePort);
     }
 
+    @Override
     public void shutdown() {
         if (getDefaultExecutorService() != null) {
             log.debug("Shutting down default executor service");
@@ -345,7 +371,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected ServiceDescriptorBinder createServiceDescriptorBinderUDA10() {
-        return new RecoveringUDA10ServiceDescriptorBinderImpl();
+        return new RecoveringUDA10ServiceDescriptorBinderSAXImpl();
     }
 
     protected Namespace createNamespace() {
@@ -416,6 +442,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
         }
 
+        @Override
         public Thread newThread(Runnable r) {
             Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
             if (t.isDaemon())
