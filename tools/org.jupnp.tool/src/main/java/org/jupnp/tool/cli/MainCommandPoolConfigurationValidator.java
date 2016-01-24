@@ -26,48 +26,23 @@ import com.beust.jcommander.ParameterException;
 public class MainCommandPoolConfigurationValidator implements IParameterValidator {
 
 	private final static String ERROR_MSG = "Paramer --pool must be of format "
-			+ "'<corePoolSize>,<maxPoolSize>,<queueSize>,<timeout>{ms|s|m}[,stats]'";
+			+ "'<mainPoolSize>,<asyncPoolSize>[,stats]'";
 
 	public void validate(String name, String value) throws ParameterException {
 		if (name.equals("--pool")) {
-			// pool config is sth like "20,40,1000,stats"
+			// pool config is sth like "20,20,stats"
 			StringTokenizer tokenizer = new StringTokenizer(value, ",");
-			// must have 3..4 args
-			if ((tokenizer.countTokens() < 4) || (tokenizer.countTokens() > 5)) {
-				throw new ParameterException(ERROR_MSG + " (not 4 or 5 parameters)");
+			// must have 2..3 args
+			if ((tokenizer.countTokens() < 2) || (tokenizer.countTokens() > 3)) {
+				throw new ParameterException(ERROR_MSG + " (not 2 or 3 parameters)");
 			} else {
 				try {
-					int corePoolSize = new Integer(tokenizer.nextToken()).intValue();
-					int maxPoolSize = new Integer(tokenizer.nextToken()).intValue();
-					int queueSize = new Integer(tokenizer.nextToken()).intValue();
-
-					String timeoutAsString = tokenizer.nextToken().trim();
-					long timeout = 10000L; // in ms
-					if (timeoutAsString.endsWith("ms")) {
-						String s = timeoutAsString.substring(0, timeoutAsString.indexOf("ms")).trim();
-						timeout = Integer.valueOf(s) * 1L;
-					} else if (timeoutAsString.endsWith("s")) {
-						String s = timeoutAsString.substring(0, timeoutAsString.indexOf("s")).trim();
-						timeout = Integer.valueOf(s) * 1000L;
-					} else if (timeoutAsString.endsWith("m")) {
-						String s = timeoutAsString.substring(0, timeoutAsString.indexOf("m")).trim();
-						timeout = Integer.valueOf(s) * 60L * 1000L;
-					} else {
-						// we assume ms as default
-						timeout = Integer.valueOf(timeoutAsString) * 1L;
-					}
+					int mainPoolSize = new Integer(tokenizer.nextToken()).intValue();
+					int asyncPoolSize = new Integer(tokenizer.nextToken()).intValue();
 
 					// all >0
-					if ((corePoolSize <= 0) || (maxPoolSize <= 0) || (queueSize <= 0)) {
+					if ((mainPoolSize <= 0) || (asyncPoolSize <= 0)) {
 						throw new ParameterException(ERROR_MSG + " (all values must be greater than 0)");
-					}
-					// core < max
-					if (corePoolSize > maxPoolSize) {
-						throw new ParameterException(ERROR_MSG + " (max must be greater than core)");
-					}
-					// timeout >0
-					if (timeout <= 0L) {
-						throw new ParameterException(ERROR_MSG + " (timeout must be greater than 0)");
 					}
 					// one token left?
 					if (tokenizer.countTokens() == 1) {

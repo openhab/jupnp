@@ -75,6 +75,11 @@ public class SearchCommandTest extends AbstractTestCase {
 	}
 
 	@Test
+	public void testSearchNoSortWithStatistics() {
+		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,stats search");
+	}
+
+	@Test
 	public void testSearchSortByIp() {
 		// checkCommandLine(tool, JUPnPTool.RC_OK, "--loglevel=INFO search");
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search --timeout=20 --sort=ip");

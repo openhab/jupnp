@@ -73,6 +73,13 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
 
     final private String threadPoolName;
 
+    /**
+     * Allows to subclass QueueingThreadPoolExecutor
+     */
+    protected QueueingThreadPoolExecutor(String name, int threadPoolSize) {
+        this(name, new CommonThreadFactory(name), threadPoolSize, new QueueingThreadPoolExecutor.QueueingRejectionHandler());
+    }
+
     private QueueingThreadPoolExecutor(String threadPoolName, ThreadFactory threadFactory, int threadPoolSize,
             RejectedExecutionHandler rejectionHandler) {
         super(CORE_THREAD_POOL_SIZE, threadPoolSize, 10L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
@@ -197,7 +204,7 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      * This is the internally used rejection handler, which - instead of rejecting a task - puts it to the queue of the
      * pool.
      */
-    static private class QueueingRejectionHandler extends ThreadPoolExecutor.DiscardPolicy {
+    private static class QueueingRejectionHandler extends ThreadPoolExecutor.DiscardPolicy {
 
         @Override
         public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
