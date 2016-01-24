@@ -42,8 +42,9 @@ public class PrintUtils {
 		for (Iterator<String[]> iter = table.iterator(); iter.hasNext();) {
 			String[] line = iter.next();
 			for (int i = 0; i < line.length; i++) {
-				maxColumnSizes[i] = Math.max(maxColumnSizes[i],
-						line[i].length());
+				if (line[i] != null) {
+					maxColumnSizes[i] = Math.max(maxColumnSizes[i], line[i].length());
+				}
 			}
 		}
 		// now print

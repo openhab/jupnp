@@ -143,82 +143,42 @@ public class CommandLineTest extends AbstractTestCase {
 
 	@Test
 	public void testPoolConfigurationsOK() {
-		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,1000,10000ms nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.THREAD_CORE_POOL_SIZE, is(20));
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.THREAD_MAX_POOL_SIZE, is(40));
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.THREAD_QUEUE_SIZE, is(1000));
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(10000L));
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.DEBUG_STATISTICS, is(false));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,1000,10s nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(10000L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,1000,1m nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(60L * 1000L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "-p=20,40,1000,1000ms nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(1000L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "-p=20,20,1000,100ms nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(100L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "-p=1,1,1,10ms nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(10L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,1000,1ms,stats nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(1L));
-
-		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,1000,10ms nop");
-		Assert.assertThat(CmdlineUPnPServiceConfiguration.TIMEOUT_MILLI_SECONDS, is(10L));
+		CmdlineUPnPServiceConfiguration.setDebugStatistics(false);
+		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,20 nop");
+		Assert.assertThat(CmdlineUPnPServiceConfiguration.MAIN_POOL_SIZE, is(20));
+		Assert.assertThat(CmdlineUPnPServiceConfiguration.ASYNC_POOL_SIZE, is(20));
+		Assert.assertThat(MonitoredQueueingThreadPoolExecutor.DEBUG_STATISTICS, is(false));
 	}
 
 	@Test
 	public void testPoolConfigurationsWrong() {
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,40,1000 nop");
-		Assert.assertThat(err.toString(), containsString("(not 4 or 5 parameters)"));
-		resetStreams();
-
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,40,1000 nop");
-		Assert.assertThat(err.toString(), containsString("(not 4 or 5 parameters)"));
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,20,20,20 nop");
+		Assert.assertThat(err.toString(), containsString("(not 2 or 3 parameters)"));
 		resetStreams();
 
 		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20 nop");
-		Assert.assertThat(err.toString(), containsString("(not 4 or 5 parameters)"));
+		Assert.assertThat(err.toString(), containsString("(not 2 or 3 parameters)"));
 		resetStreams();
 
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=20,40 nop");
-		Assert.assertThat(err.toString(), containsString("(not 4 or 5 parameters)"));
-		resetStreams();
-
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=40,20,1000,10000ms nop");
-		Assert.assertThat(err.toString(), containsString("(max must be greater than core)"));
-		resetStreams();
-
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=0,0,0,10000ms nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=0,0 nop");
 		Assert.assertThat(err.toString(), containsString("(all values must be greater than 0)"));
 		resetStreams();
 
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=-1,40,1000,10000ms nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=-1,20 nop");
 		Assert.assertThat(err.toString(), containsString("(all values must be greater than 0)"));
 		resetStreams();
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=20,-1,1000,10000ms nop");
-		Assert.assertThat(err.toString(), containsString("(all values must be greater than 0)"));
-		resetStreams();
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=20,40,-1,10000ms nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "-p=20,-1 nop");
 		Assert.assertThat(err.toString(), containsString("(all values must be greater than 0)"));
 		resetStreams();
 
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20A,40,1000,10000ms nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20A,40 nop");
 		Assert.assertThat(err.toString(), containsString("(numbers wrong)"));
 		resetStreams();
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,4B0,1000,10000ms nop");
-		Assert.assertThat(err.toString(), containsString("(numbers wrong)"));
-		resetStreams();
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,40,C1000,10000ms nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,4B0 nop");
 		Assert.assertThat(err.toString(), containsString("(numbers wrong)"));
 		resetStreams();
 
-		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,40,1000,10000ms,WRONGOPTIONS nop");
+		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION, "--pool=20,40,WRONGOPTIONS nop");
 		Assert.assertThat(err.toString(), containsString("(only stats allowed as last option)"));
 		resetStreams();
 	}

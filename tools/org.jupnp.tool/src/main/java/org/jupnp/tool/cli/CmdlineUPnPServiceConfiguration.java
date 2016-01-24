@@ -14,27 +14,15 @@
 
 package org.jupnp.tool.cli;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,40 +38,37 @@ import org.slf4j.LoggerFactory;
  */
 public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-	private static final transient Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
-	private static final transient Logger statsLogger = LoggerFactory.getLogger("org.jupnp.tool.cli.stats");
+	static final transient Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
-	static boolean DEBUG_STATISTICS = false;
-
-	static int THREAD_CORE_POOL_SIZE = 100;
-	static int THREAD_MAX_POOL_SIZE = THREAD_CORE_POOL_SIZE * 2;
-	static int THREAD_QUEUE_SIZE = 1000;
-
-	static long TIMEOUT_MILLI_SECONDS = 10000L;
+	static int MAIN_POOL_SIZE = 20;
+	static int ASYNC_POOL_SIZE = 20;
 
 	static int MULTICAST_RESPONSE_LISTEN_PORT = NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT;
 
 	// class methods to configure behavior
 
 	public static void setDebugStatistics(boolean onOrOff) {
-		DEBUG_STATISTICS = onOrOff;
+		MonitoredQueueingThreadPoolExecutor.DEBUG_STATISTICS = onOrOff;
 	}
 
-	public static void setPoolConfiguration(int core, int max, int queue, long timeout) {
-		THREAD_CORE_POOL_SIZE = core;
-		THREAD_MAX_POOL_SIZE = max;
-		THREAD_QUEUE_SIZE = queue;
-		TIMEOUT_MILLI_SECONDS = timeout;
+	public static void setPoolConfiguration(int mainPoolSize, int asyncPoolSize) {
+		MAIN_POOL_SIZE = mainPoolSize;
+		ASYNC_POOL_SIZE = asyncPoolSize;
 	}
 
 	public static void setMulticastResponsePort(Integer port) {
 		MULTICAST_RESPONSE_LISTEN_PORT = port.intValue();
 	}
 
+	private ExecutorService mainExecutorService;
+
+	private ExecutorService asyncExecutorService;
+
 	// instance methods
 
 	public CmdlineUPnPServiceConfiguration() {
 		super();
+		createExecutorServices();
 	}
 
 	/**
@@ -95,171 +80,65 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 				MULTICAST_RESPONSE_LISTEN_PORT);
 	}
 
-	/**
-	 * We create our own executor service, which collects statistics and does
-	 * smart reject logging.
-	 */
-	protected ExecutorService createDefaultExecutorService() {
-		return new JUPnPExecutor();
+	private void createExecutorServices() {
+		mainExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-main", MAIN_POOL_SIZE);
+		asyncExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-async", ASYNC_POOL_SIZE);
+	}
+
+	protected ExecutorService getMainExecutorService() {
+		return mainExecutorService;
+	}
+
+	@Override
+	public Executor getRegistryMaintainerExecutor() {
+		return getMainExecutorService();
+	}
+
+	@Override
+	public Executor getRegistryListenerExecutor() {
+		return getMainExecutorService();
+	}
+
+	@Override
+	public ExecutorService getMulticastReceiverExecutor() {
+		return getMainExecutorService();
+	}
+
+	@Override
+	public ExecutorService getDatagramIOExecutor() {
+		return getMainExecutorService();
+	}
+
+	@Override
+	public ExecutorService getStreamServerExecutorService() {
+		return getMainExecutorService();
+	}
+
+	@Override
+	public ExecutorService getAsyncProtocolExecutor() {
+		return asyncExecutorService;
+	}
+
+	@Override
+	public void shutdown() {
+		logger.debug("Shutting down executor services");
+		shutdownExecutorServices();
+
+		// create the executor again ready for reuse in case the runtime is
+		// started up again.
+		createExecutorServices();
+	}
+
+	protected void shutdownExecutorServices() {
+		if (mainExecutorService != null) {
+			mainExecutorService.shutdownNow();
+		}
+		if (asyncExecutorService != null) {
+			asyncExecutorService.shutdownNow();
+		}
 	}
 
 	// inner classes
-
-	/**
-	 * This class executes threads and collects statistics information.
-	 */
-	public static class JUPnPExecutor extends ThreadPoolExecutor {
-
-		/** Statistical data collected. */
-		private Statistics stats;
-
-		public JUPnPExecutor() {
-			this(new JUPnPThreadFactory(), new SmartLoggingDiscardPolicy());
-		}
-
-		public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
-			// This is the same as Executors.newCachedThreadPool
-			// define timeout when tasks can not be executed to given timeout
-			super(THREAD_CORE_POOL_SIZE, THREAD_MAX_POOL_SIZE, TIMEOUT_MILLI_SECONDS, TimeUnit.MILLISECONDS,
-					new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE), threadFactory, rejectedHandler);
-			allowCoreThreadTimeOut(true);
-			logger.debug("Created Executor with core=" + THREAD_CORE_POOL_SIZE + ", max=" + THREAD_MAX_POOL_SIZE
-					+ ", queue=" + THREAD_QUEUE_SIZE + ", timeout=" + TIMEOUT_MILLI_SECONDS + "ms");
-			if (DEBUG_STATISTICS) {
-				stats = new Statistics();
-			}
-		}
-
-		@Override
-		protected void beforeExecute(Thread t, Runnable r) {
-			if (DEBUG_STATISTICS) {
-				stats.addCurrentPoolSize(this);
-				stats.addExcecutor(r);
-			}
-			// TODO why so much executors?
-			// if (getQueue().size() > 100) {
-			// System.out.println("ALERT");
-			// }
-			super.beforeExecute(t, r);
-		}
-
-		@Override
-		protected void afterExecute(Runnable runnable, Throwable throwable) {
-			super.afterExecute(runnable, throwable);
-			if (throwable != null) {
-				Throwable cause = Exceptions.unwrap(throwable);
-				if ((cause instanceof InterruptedException) && isTerminating()) {
-					// Ignore this, might happen when we shutdownNow() the
-					// executor. We can't
-					// log at this point as the logging system might be stopped
-					// already (e.g. if it's a CDI component).
-					return;
-				}
-				// Log only
-				logger.warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-				logger.warn("  Root cause: " + cause);
-			}
-		}
-
-		@Override
-		public void shutdown() {
-			logger.info("shutdown");
-			super.shutdown();
-			if (DEBUG_STATISTICS) {
-				stats.dumpPoolStats();
-				stats.dumpExecutorsStats();
-				stats.release();
-			}
-			logger.info("shutdown done");
-		}
-
-		@Override
-		public List<Runnable> shutdownNow() {
-			logger.info("shutdownNow");
-			List<Runnable> res = super.shutdownNow();
-			if (DEBUG_STATISTICS) {
-				stats.dumpPoolStats();
-				stats.dumpExecutorsStats();
-				stats.release();
-			}
-			logger.info("shutdownNow done");
-			return res;
-		}
-
-		// inner classes for statistics
-
-		static class Statistics {
-
-			static class PoolStatPoint {
-				public long timestamp, completedTasks;
-				public int corePoolSize, poolSize, maxPoolSize, activeCounts, queueSize;
-			}
-
-			/** Thread safe collection for points. */
-			private List<PoolStatPoint> points = new CopyOnWriteArrayList<PoolStatPoint>();
-
-			/** Thread safe collection for executors. */
-			private ConcurrentHashMap<String, AtomicInteger> executors = new ConcurrentHashMap<String, AtomicInteger>();
-
-			/**
-			 * Add info about current pool status.
-			 */
-			private void addCurrentPoolSize(ThreadPoolExecutor pool) {
-				PoolStatPoint p = new PoolStatPoint();
-				p.timestamp = System.currentTimeMillis();
-				p.corePoolSize = pool.getCorePoolSize();
-				p.poolSize = pool.getPoolSize();
-				p.maxPoolSize = pool.getMaximumPoolSize();
-				p.activeCounts = pool.getActiveCount();
-				p.queueSize = pool.getQueue().size();
-				p.completedTasks = pool.getCompletedTaskCount();
-				points.add(p);
-			}
-
-			/**
-			 * Increase number of calls to this runnable (by class name).
-			 */
-			public void addExcecutor(Runnable r) {
-				executors.putIfAbsent(r.getClass().getName(), new AtomicInteger(0));
-				executors.get(r.getClass().getName()).incrementAndGet();
-			}
-
-			public void release() {
-				points = null;
-				executors = null;
-			}
-
-			public void dumpPoolStats() {
-				statsLogger.info("Dump Pool Statistics:");
-				statsLogger.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
-				for (Iterator<PoolStatPoint> iter = points.iterator(); iter.hasNext();) {
-					PoolStatPoint p = iter.next();
-					statsLogger.info("" + p.timestamp + "," + p.corePoolSize + "," + p.poolSize + "," + p.maxPoolSize
-							+ "," + p.activeCounts + "," + p.queueSize + "," + p.completedTasks);
-				}
-			}
-
-			public void dumpExecutorsStats() {
-				statsLogger.info("Dump Pool Executors:");
-
-				List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<ConcurrentHashMap.Entry<String, AtomicInteger>>(
-						executors.entrySet());
-				// sort the entries by number of calls
-				Collections.sort(entries, new Comparator<ConcurrentHashMap.Entry<String, AtomicInteger>>() {
-					public int compare(ConcurrentHashMap.Entry<String, AtomicInteger> a,
-							ConcurrentHashMap.Entry<String, AtomicInteger> b) {
-						return Integer.compare(b.getValue().get(), a.getValue().get());
-					}
-				});
-
-				statsLogger.info("[executorClassName,numberOfExecutes]");
-				for (ConcurrentHashMap.Entry<String, AtomicInteger> e : entries) {
-					statsLogger.info(e.getKey() + "," + e.getValue().get());
-				}
-			}
-
-		}
-	}
 
 	/**
 	 * This class implements a rejection handler which logs rejects smart. Logs

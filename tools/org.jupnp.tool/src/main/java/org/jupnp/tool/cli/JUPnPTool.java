@@ -191,23 +191,10 @@ public class JUPnPTool {
 		// sets the pool configuration
 		if (poolConfiguration != null) {
 			StringTokenizer tokenizer = new StringTokenizer(poolConfiguration, ",");
-			int core = Integer.valueOf(tokenizer.nextToken()).intValue();
-			int max = Integer.valueOf(tokenizer.nextToken()).intValue();
-			int queue = Integer.valueOf(tokenizer.nextToken()).intValue();
-			String timeoutAsString = tokenizer.nextToken().trim();
-			long timeout = 10000L; // in ms
-			if (timeoutAsString.endsWith("ms")) {
-				timeoutAsString = timeoutAsString.substring(0, timeoutAsString.indexOf("ms")).trim();
-				timeout = Integer.valueOf(timeoutAsString) * 1L;
-			} else if (timeoutAsString.endsWith("s")) {
-				timeoutAsString = timeoutAsString.substring(0, timeoutAsString.indexOf("s")).trim();
-				timeout = Integer.valueOf(timeoutAsString) * 1000L;
-			} else if (timeoutAsString.endsWith("m")) {
-				timeoutAsString = timeoutAsString.substring(0, timeoutAsString.indexOf("m")).trim();
-				timeout = Integer.valueOf(timeoutAsString) * 60L * 1000L;
-			}
+			int mainPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
+			int asyncPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
 
-			CmdlineUPnPServiceConfiguration.setPoolConfiguration(core, max, queue, timeout);
+			CmdlineUPnPServiceConfiguration.setPoolConfiguration(mainPoolSize, asyncPoolSize);
 			// one token left for stats option?
 			String stats = tokenizer.countTokens() == 1 ? tokenizer.nextToken() : null;
 			if (CommandLineArgs.POOL_CONFIG_STATS_OPTION.equalsIgnoreCase(stats)) {
