@@ -65,16 +65,18 @@ public class SAXParser {
 
     protected XMLReader create() {
         try {
+            final XMLReader xmlReader;
             if (getSchemaSources() != null) {
                 // Jump through all the hoops and create a validating reader
-                SAXParserFactory factory = SAXParserFactory.newInstance();
+                final SAXParserFactory factory = SAXParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 factory.setSchema(createSchema(getSchemaSources()));
-                XMLReader xmlReader = factory.newSAXParser().getXMLReader();
-                xmlReader.setErrorHandler(getErrorHandler());
-                return xmlReader;
+                xmlReader = factory.newSAXParser().getXMLReader();
+            } else {
+                xmlReader = XMLReaderFactory.createXMLReader();
             }
-            return XMLReaderFactory.createXMLReader();
+            xmlReader.setErrorHandler(getErrorHandler());
+            return xmlReader;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
