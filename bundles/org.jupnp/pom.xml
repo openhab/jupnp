@@ -16,5 +16,13 @@
 	<name>jUPnP Core Library</name>
 
 	<packaging>eclipse-plugin</packaging>
-
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${apache.httpcomponents.httpclient.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
 </project>
