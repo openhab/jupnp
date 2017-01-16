@@ -14,13 +14,13 @@
 
 package org.jupnp.http;
 
-import org.jupnp.util.io.IO;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.jupnp.util.io.IO;
 
 /**
  * @author Christian Bauer
@@ -33,6 +33,7 @@ public class HttpFetch {
 
     public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
         return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<byte[]>() {
+            @Override
             public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
                 return new Representation<byte[]>(urlConnection, IO.readBytes(is));
             }
@@ -41,6 +42,7 @@ public class HttpFetch {
 
     public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
         return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<String>() {
+            @Override
             public Representation<String> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
                 return new Representation<String>(urlConnection, IO.readLines(is));
             }
@@ -73,12 +75,23 @@ public class HttpFetch {
         } catch (IOException ex) {
             if (urlConnection != null) {
                 int responseCode = urlConnection.getResponseCode();
+                InputStream errorStream = urlConnection.getErrorStream();
+                if (errorStream != null) {
+                    while (errorStream.read() != -1) {
+                    }
+                    errorStream.close();
+                }
                 throw new IOException("Fetching resource failed, returned status code: " + responseCode);
                 //String responseBody = IO.readString(urlConnection.getErrorStream());
             }
             throw ex;
         } finally {
-            if (is != null) is.close();
+            if (is != null) {
+                is.close();
+            }
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
         }
     }
 
@@ -88,6 +101,7 @@ public class HttpFetch {
 
     public static void validate(URL url) throws IOException {
         fetch(url, "HEAD", 500, 500, new RepresentationFactory() {
+            @Override
             public Representation createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
                 return new Representation(urlConnection, null);
             }
