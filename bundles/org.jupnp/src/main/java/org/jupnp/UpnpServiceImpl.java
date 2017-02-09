@@ -57,7 +57,7 @@ public class UpnpServiceImpl implements UpnpService {
     protected boolean isConfigured = false;
     protected Boolean isRunning = false;
 
-    private final Object LOCK = new Object();
+    private final Object lock = new Object();
 
     protected UpnpServiceConfiguration configuration;
     protected ProtocolFactory protocolFactory;
@@ -166,7 +166,7 @@ public class UpnpServiceImpl implements UpnpService {
         Runnable shutdown = new Runnable() {
             @Override
             public void run() {
-                synchronized (LOCK) {
+                synchronized (lock) {
                     if (isRunning) {
                         log.info("Shutting down UPnP service...");
                         shutdownRegistry();
@@ -240,7 +240,7 @@ public class UpnpServiceImpl implements UpnpService {
     }
 
     public void startup() {
-        synchronized (LOCK) {
+        synchronized (lock) {
             if (!isRunning) {
                 log.info("Starting UPnP service...");
 
