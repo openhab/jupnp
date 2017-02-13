@@ -23,7 +23,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jupnp.model.message.StreamResponseMessage;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.transport.impl.ServletUpnpStream;
 import org.jupnp.transport.spi.UpnpStream;
@@ -45,8 +44,6 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
 
     final protected AsyncContext asyncContext;
     final protected HttpServletRequest request;
-
-    protected StreamResponseMessage responseMessage;
 
     public AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext, HttpServletRequest request) {
         super(protocolFactory);
