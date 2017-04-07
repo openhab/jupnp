@@ -39,7 +39,7 @@ public class CommandLineArgs {
 
 	@Parameter(names = { "--pool",
 			"-p" }, description = "Configure thread pools and enable pool statistic (mainPoolSize,asyncPoolSize[,stats]) ", validateWith = MainCommandPoolConfigurationValidator.class)
-	public String poolConfig = "20,40";
+	public String poolConfig = "" + CmdlineUPnPServiceConfiguration.MAIN_POOL_SIZE + "," + CmdlineUPnPServiceConfiguration.ASYNC_POOL_SIZE;
 	public static final String POOL_CONFIG_STATS_OPTION = "stats";
 
 	@Parameter(names = { "--verbose", "-v" }, description = "Enable verbose messages")
