@@ -583,19 +583,22 @@ public class QueueingThreadPoolExecutorTest {
 	 */
 	@Test
 	public void testPoolSize10FillPoolParallel() throws InterruptedException {
-		String poolName = "testPoolSize10FillPoolParallel";
-		final ThreadPoolExecutor pool = QueueingThreadPoolExecutor.createInstance(poolName, 10);
+		final String poolName = "testPoolSize10FillPoolParallel";
+		final int poolSize = 10;
+		final ThreadPoolExecutor pool = QueueingThreadPoolExecutor.createInstance(poolName, poolSize);
 
-		int N = 200;
-		Thread[] fillThreads = new Thread[N];
+		final int N = 200;
+		final int millisPerRunnable = 1000;
+		final Thread[] fillThreads = new Thread[N];
 		for (int i = 0; i < fillThreads.length; i++) {
 			fillThreads[i] = new Thread() {
 				@Override
 				public void run() {
-					pool.execute(createRunnable100ms());
+					pool.execute(createRunnable(millisPerRunnable));
 				}
 			};
 		}
+
 		// now start all threads
 		for (int i = 0; i < fillThreads.length; i++) {
 			fillThreads[i].start();
@@ -606,11 +609,13 @@ public class QueueingThreadPoolExecutorTest {
 		// queue thread must be active
 		assertTrue(isQueueThreadActive(poolName));
 
-		// after N/10 sec+x sec all should be executed
-		// N/10 as every runnable runs 100ms, we have a poolsize of 10, so we
-		// execute 10/sec
-		// x=2 sec for some tolerance
-		Thread.sleep(((N / 10) + 2) * 1000); // * 1000 as in ms
+		// after N * millisPerRunnable all created Runnables should be executed
+		// since we have a pool of size "poolSize" the amount of Runnables running in parallel is "poolSize"
+		// so the execution time is ideally: (N * millisPerRunnable) / poolSize
+		// as there is some overhead we add some safety time for some tolerance
+		final int safetyTime = N * 10; // millis
+		Thread.sleep(((N * millisPerRunnable) / poolSize) + safetyTime);
+		
 		assertEquals(pool.getCompletedTaskCount(), N);
 		// at the end queue thread is shutdown, wait for additional 3 sec
 		Thread.sleep(3000);
@@ -806,6 +811,10 @@ public class QueueingThreadPoolExecutorTest {
 
 	// Runnables for testing
 
+	private Runnable createRunnable(final int millis) {
+		return new RunnableCustom(millis);
+	}
+
 	private Runnable createRunnableFast() {
 		return new RunnableFast();
 	}
@@ -902,6 +911,20 @@ public class QueueingThreadPoolExecutorTest {
 				}
 				tEnd = System.currentTimeMillis();
 			}
+		}
+	}
+
+	private static class RunnableCustom extends AbstractRunnable {
+		private final int millis;
+
+		RunnableCustom(final int millis) {
+			this.millis = millis;
+		}
+		
+		@Override
+		public void run() {
+			super.run();
+			sleep(millis);
 		}
 	}
 
