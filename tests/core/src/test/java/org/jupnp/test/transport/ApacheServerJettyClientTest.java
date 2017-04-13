@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 4th Line GmbH, Switzerland
+ * Copyright (C) 2017 Deutsche Telekom AG, Germany
  *
  * The contents of this file are subject to the terms of either the GNU
  * Lesser General Public License Version 2 or later ("LGPL") or the
@@ -15,25 +15,29 @@
 package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
-import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.apache.ApacheTransportConfiguration;
+import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
 
 /**
- * Testing interaction of Jetty server with Jetty client.
+ * Testing interaction of Apache server with Jetty client.
  * 
- * @author Christian Bauer - initial contribution
- * @author Victor Toni - adapted to JUPnP API
+ * @author Victor Toni - initial contribution
  * @author Victor Toni - changed to use TransportConfiguration
+ * 
  */
-public class JettyServerJettyClientTest extends StreamServerClientTest {
+public class ApacheServerJettyClientTest extends StreamServerClientTest {
+    @SuppressWarnings("rawtypes")
+    private final TransportConfiguration apacheConfiguration = new ApacheTransportConfiguration();
+
     @SuppressWarnings("rawtypes")
     private final TransportConfiguration jettyConfiguration = new JettyTransportConfiguration();
-
+    
     @Override
     public StreamServer createStreamServer(final int listenerPort) {
-        return jettyConfiguration.createStreamServer(listenerPort);
+        return apacheConfiguration.createStreamServer(listenerPort);
     }
 
     @Override
