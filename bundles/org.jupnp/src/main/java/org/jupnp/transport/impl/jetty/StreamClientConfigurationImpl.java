@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.transport.impl.jetty;
+package org.jupnp.transport.impl.jetty;
 
 import org.jupnp.transport.spi.AbstractStreamClientConfiguration;
 
