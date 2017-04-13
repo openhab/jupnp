@@ -15,6 +15,11 @@
 
 package org.fourthline.cling.transport.impl.jetty;
 
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.HttpExchange;
@@ -22,39 +27,37 @@ import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeaders;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
-import org.fourthline.cling.model.message.StreamRequestMessage;
-import org.fourthline.cling.model.message.StreamResponseMessage;
-import org.fourthline.cling.model.message.UpnpHeaders;
-import org.fourthline.cling.model.message.UpnpMessage;
-import org.fourthline.cling.model.message.UpnpRequest;
-import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.message.header.ContentTypeHeader;
-import org.fourthline.cling.model.message.header.UpnpHeader;
-import org.fourthline.cling.transport.spi.AbstractStreamClient;
-import org.fourthline.cling.transport.spi.InitializationException;
-import org.fourthline.cling.transport.spi.StreamClient;
-import org.seamless.util.Exceptions;
-import org.seamless.util.MimeType;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.jupnp.model.message.StreamRequestMessage;
+import org.jupnp.model.message.StreamResponseMessage;
+import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.message.UpnpMessage;
+import org.jupnp.model.message.UpnpRequest;
+import org.jupnp.model.message.UpnpResponse;
+import org.jupnp.model.message.header.ContentTypeHeader;
+import org.jupnp.model.message.header.UpnpHeader;
+import org.jupnp.transport.spi.AbstractStreamClient;
+import org.jupnp.transport.spi.InitializationException;
+import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.util.Exceptions;
+import org.jupnp.util.MimeType;
 
 /**
  * Implementation based on Jetty 8 client API.
  * <p>
- * This implementation works on Android, dependencies are the <code>jetty-client</code>
+ * This implementation might work on Android (not tested within JUPnP), dependencies are the <code>jetty-client</code>
  * Maven module.
  * </p>
  *
- * @author Christian Bauer
+ * @author Christian Bauer - initial contribution
+ * @author Victor Toni - refactoring for JUPnP
  */
 public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigurationImpl, StreamClientImpl.HttpContentExchange> {
 
-    final private static Logger log = Logger.getLogger(StreamClient.class.getName());
+    final private static Logger log = LoggerFactory.getLogger(StreamClient.class.getName());
 
     final protected StreamClientConfigurationImpl configuration;
     final protected HttpClient client;
@@ -108,8 +111,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
         return new Callable<StreamResponseMessage>() {
             public StreamResponseMessage call() throws Exception {
 
-                if (log.isLoggable(Level.FINE))
-                    log.fine("Sending HTTP request: " + requestMessage);
+                log.trace("Sending HTTP request: {}", requestMessage);
 
                 client.send(exchange);
                 int exchangeState = exchange.waitForDone();
@@ -118,7 +120,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
                     try {
                         return exchange.createResponse();
                     } catch (Throwable t) {
-                        log.log(Level.WARNING, "Error reading response: " + requestMessage, Exceptions.unwrap(t));
+                        log.warn("Error reading response: " + requestMessage, Exceptions.unwrap(t));
                         return null;
                     }
                 } else if (exchangeState == HttpExchange.STATUS_CANCELLED) {
@@ -128,7 +130,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
                     // The warnings of the "excepted" condition are logged in HttpContentExchange
                     return null;
                 } else {
-                    log.warning("Unhandled HTTP exchange status: " + exchangeState);
+                    log.warn("Unhandled HTTP exchange status: {}", exchangeState);
                     return null;
                 }
             }
@@ -150,7 +152,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
         try {
             client.stop();
         } catch (Exception ex) {
-            log.info("Error stopping HTTP client: " + ex);
+            log.info("Error stopping HTTP client: {}", ex);
         }
     }
 
@@ -176,12 +178,12 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
         @Override
         protected void onConnectionFailed(Throwable t) {
-            log.log(Level.WARNING, "HTTP connection failed: " + requestMessage, Exceptions.unwrap(t));
+            log.warn("HTTP connection failed: " + requestMessage, Exceptions.unwrap(t));
         }
 
         @Override
         protected void onException(Throwable t) {
-            log.log(Level.WARNING, "HTTP request failed: " + requestMessage, Exceptions.unwrap(t));
+            log.warn("HTTP request failed: " + requestMessage, Exceptions.unwrap(t));
         }
 
         public StreamClientConfigurationImpl getConfiguration() {
@@ -194,12 +196,11 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
         protected void applyRequestURLMethod() {
             final UpnpRequest requestOperation = getRequestMessage().getOperation();
-            if (log.isLoggable(Level.FINE))
-                log.fine(
-                    "Preparing HTTP request message with method '"
-                        + requestOperation.getHttpMethodName()
-                        + "': " + getRequestMessage()
-                );
+            log.trace(
+                "Preparing HTTP request message with method '{}': {}",
+                    requestOperation.getHttpMethodName(),
+                    getRequestMessage()
+            );
 
             setURL(requestOperation.getURI().toString());
             setMethod(requestOperation.getHttpMethodName());
@@ -208,8 +209,8 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
         protected void applyRequestHeaders() {
             // Headers
             UpnpHeaders headers = getRequestMessage().getHeaders();
-            if (log.isLoggable(Level.FINE))
-                log.fine("Writing headers on HttpContentExchange: " + headers.size());
+            log.trace("Writing headers on HttpContentExchange: {}", headers.size());
+
             // TODO Always add the Host header
             // TODO: ? setRequestHeader(UpnpHeader.Type.HOST.getHttpName(), );
             // Add the default user agent if not already set on the message
@@ -224,8 +225,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
                 for (String v : entry.getValue()) {
                     String headerName = entry.getKey();
-                    if (log.isLoggable(Level.FINE))
-                        log.fine("Setting header '" + headerName + "': " + v);
+                    log.trace("Setting header '{}': {}", headerName, v);
                     addRequestHeader(headerName, v);
                 }
             }
@@ -235,8 +235,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
             // Body
             if (getRequestMessage().hasBody()) {
                 if (getRequestMessage().getBodyType() == UpnpMessage.BodyType.STRING) {
-                    if (log.isLoggable(Level.FINE))
-                        log.fine("Writing textual request body: " + getRequestMessage());
+                    log.trace("Writing textual request body: {}", getRequestMessage());
 
                     MimeType contentType =
                         getRequestMessage().getContentTypeHeader() != null
@@ -259,8 +258,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
                     setRequestContent(buffer);
 
                 } else {
-                    if (log.isLoggable(Level.FINE))
-                        log.fine("Writing binary request body: " + getRequestMessage());
+                    log.trace("Writing binary request body: {}", getRequestMessage());
 
                     if (getRequestMessage().getContentTypeHeader() == null)
                         throw new RuntimeException(
@@ -285,8 +283,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
                     UpnpResponse.Status.getByStatusCode(getResponseStatus()).getStatusMsg()
                 );
 
-            if (log.isLoggable(Level.FINE))
-                log.fine("Received response: " + responseOperation);
+            log.trace("Received response: {}", responseOperation);
 
             StreamResponseMessage responseMessage = new StreamResponseMessage(responseOperation);
 
@@ -304,8 +301,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
             byte[] bytes = getResponseContentBytes();
             if (bytes != null && bytes.length > 0 && responseMessage.isContentTypeMissingOrText()) {
 
-                if (log.isLoggable(Level.FINE))
-                    log.fine("Response contains textual entity body, converting then setting string on message");
+                log.trace("Response contains textual entity body, converting then setting string on message");
                 try {
                     responseMessage.setBodyCharacters(bytes);
                 } catch (UnsupportedEncodingException ex) {
@@ -314,17 +310,14 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
             } else if (bytes != null && bytes.length > 0) {
 
-                if (log.isLoggable(Level.FINE))
-                    log.fine("Response contains binary entity body, setting bytes on message");
+                log.trace("Response contains binary entity body, setting bytes on message");
                 responseMessage.setBody(UpnpMessage.BodyType.BYTES, bytes);
 
             } else {
-                if (log.isLoggable(Level.FINE))
-                    log.fine("Response did not contain entity body");
+                    log.trace("Response did not contain entity body");
             }
 
-            if (log.isLoggable(Level.FINE))
-                log.fine("Response message complete: " + responseMessage);
+            log.trace("Response message complete: {}", responseMessage);
             return responseMessage;
         }
     }

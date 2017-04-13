@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.transport.impl.jetty;
 
-import org.fourthline.cling.transport.spi.AbstractStreamClientConfiguration;
+import org.jupnp.transport.spi.AbstractStreamClientConfiguration;
 
 import java.util.concurrent.ExecutorService;
 

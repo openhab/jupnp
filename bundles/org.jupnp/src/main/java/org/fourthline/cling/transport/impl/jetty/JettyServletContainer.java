@@ -15,23 +15,20 @@
 
 package org.fourthline.cling.transport.impl.jetty;
 
-import org.eclipse.jetty.server.AbstractHttpConnection;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Request;
+import javax.servlet.Servlet;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
-import org.fourthline.cling.transport.spi.ServletContainerAdapter;
 
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.jupnp.transport.spi.ServletContainerAdapter;
 
 /**
  * A singleton wrapper of a <code>org.eclipse.jetty.server.Server</code>.
@@ -41,15 +38,16 @@ import java.util.logging.Logger;
  * is registered, to handle UPnP requests.
  * </p>
  * <p>
- * This implementation works on Android, dependencies are <code>jetty-server</code>
+ * This implementation might work on Android (not tested within JUPnP), dependencies are <code>jetty-server</code>
  * and <code>jetty-servlet</code> Maven modules.
  * </p>
  *
- * @author Christian Bauer
+ * @author Christian Bauer - initial contribution
+ * @author Victor Toni - refactoring for JUPnP
  */
 public class JettyServletContainer implements ServletContainerAdapter {
 
-    final private static Logger log = Logger.getLogger(JettyServletContainer.class.getName());
+    final private Logger log = LoggerFactory.getLogger(JettyServletContainer.class.getName());
 
     // Singleton
     public static final JettyServletContainer INSTANCE = new JettyServletContainer();
@@ -88,34 +86,11 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 connector.start();
             } catch (Exception ex) {
-                log.severe("Couldn't start connector: " + connector + " " + ex);
+                log.error("Couldn't start connector: {} {}", connector, ex);
                 throw new RuntimeException(ex);
             }
         }
         return connector.getLocalPort();
-    }
-
-    @Override
-    synchronized public void removeConnector(String host, int port)  {
-        Connector[] connectors = server.getConnectors();
-        for (Connector connector : connectors) {
-            if (connector.getHost().equals(host) && connector.getLocalPort() == port) {
-                if (connector.isStarted() || connector.isStarting()) {
-                    try {
-                        connector.stop();
-                    } catch (Exception ex) {
-                        log.severe("Couldn't stop connector: " + connector + " " + ex);
-                        throw new RuntimeException(ex);
-                    }
-                }
-                server.removeConnector(connector);
-                if (connectors.length == 1) {
-                    log.info("No more connectors, stopping Jetty server");
-                    stopIfRunning();
-                }
-                break;
-            }
-        }
     }
 
     @Override
@@ -126,8 +101,9 @@ public class JettyServletContainer implements ServletContainerAdapter {
         log.info("Registering UPnP servlet under context path: " + contextPath);
         ServletContextHandler servletHandler =
             new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        if (contextPath != null && contextPath.length() > 0)
+        if (contextPath != null && contextPath.length() > 0) {
             servletHandler.setContextPath(contextPath);
+        }
         ServletHolder s = new ServletHolder(servlet);
         servletHandler.addServlet(s, "/*");
         server.setHandler(servletHandler);
@@ -140,7 +116,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 server.start();
             } catch (Exception ex) {
-                log.severe("Couldn't start Jetty server: " + ex);
+                log.error("Couldn't start Jetty server: {}", ex);
                 throw new RuntimeException(ex);
             }
         }
@@ -153,7 +129,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 server.stop();
             } catch (Exception ex) {
-                log.severe("Couldn't stop Jetty server: " + ex);
+                log.error("Couldn't stop Jetty server: [}", ex);
                 throw new RuntimeException(ex);
             } finally {
                 resetServer();
@@ -164,35 +140,6 @@ public class JettyServletContainer implements ServletContainerAdapter {
     protected void resetServer() {
         server = new Server(); // Has its own QueuedThreadPool
         server.setGracefulShutdown(1000); // Let's wait a second for ongoing transfers to complete
-    }
-
-    /**
-     * Casts the request to a Jetty API and tries to write a space character to the output stream of the socket.
-     * <p>
-     * This space character might confuse the HTTP client. The Cling transports for Jetty Client and
-     * Apache HttpClient have been tested to work with space characters. Unfortunately, Sun JDK's
-     * HttpURLConnection does not gracefully handle any garbage in the HTTP request!
-     * </p>
-     */
-    public static boolean isConnectionOpen(HttpServletRequest request) {
-        return isConnectionOpen(request, " ".getBytes());
-    }
-
-    public static boolean isConnectionOpen(HttpServletRequest request, byte[] heartbeat) {
-        Request jettyRequest = (Request)request;
-        AbstractHttpConnection connection = jettyRequest.getConnection();
-        Socket socket = (Socket)connection.getEndPoint().getTransport();
-        if (log.isLoggable(Level.FINE))
-            log.fine("Checking if client connection is still open: " + socket.getRemoteSocketAddress());
-        try {
-            socket.getOutputStream().write(heartbeat);
-            socket.getOutputStream().flush();
-            return true;
-        } catch (IOException ex) {
-            if (log.isLoggable(Level.FINE))
-                log.fine("Client connection has been closed: " + socket.getRemoteSocketAddress());
-            return false;
-        }
     }
 
 }
