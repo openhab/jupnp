@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
-package org.fourthline.cling.test.transport;
+package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
@@ -22,8 +22,6 @@ import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
 import org.jupnp.transport.impl.ServletStreamServerImpl;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
-
-import org.jupnp.test.transport.StreamServerClientTest;
 
 /**
  * @author Christian Bauer - initial contribution
