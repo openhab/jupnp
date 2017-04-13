@@ -14,38 +14,32 @@
  */
 package org.fourthline.cling.test.transport;
 
-import org.fourthline.cling.UpnpServiceConfiguration;
-import org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl;
-import org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl;
-import org.fourthline.cling.transport.impl.jetty.JettyServletContainer;
-import org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl;
-import org.fourthline.cling.transport.impl.jetty.StreamClientImpl;
-import org.fourthline.cling.transport.spi.StreamClient;
-import org.fourthline.cling.transport.spi.StreamServer;
+import org.jupnp.UpnpServiceConfiguration;
+import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
+import org.jupnp.transport.impl.jetty.StreamClientImpl;
+import org.jupnp.transport.impl.jetty.JettyServletContainer;
+import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
+import org.jupnp.transport.impl.ServletStreamServerImpl;
+import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamServer;
 
-import javax.servlet.http.HttpServletRequest;
+import org.jupnp.test.transport.StreamServerClientTest;
 
 /**
- * @author Christian Bauer
+ * @author Christian Bauer - initial contribution
+ * @author Victor Toni - adapted to JUPnP API
  */
 public class JettyServerJettyClientTest extends StreamServerClientTest {
 
     @Override
     public StreamServer createStreamServer(int port) {
-        AsyncServletStreamServerConfigurationImpl configuration =
-            new AsyncServletStreamServerConfigurationImpl(
+        final ServletStreamServerConfigurationImpl configuration =
+            new ServletStreamServerConfigurationImpl(
                 JettyServletContainer.INSTANCE,
                 port
             );
 
-        return new AsyncServletStreamServerImpl(
-            configuration
-        ) {
-            @Override
-            protected boolean isConnectionOpen(HttpServletRequest request) {
-                return JettyServletContainer.isConnectionOpen(request);
-            }
-        };
+        return new ServletStreamServerImpl(configuration);
     }
 
     @Override
