@@ -17,6 +17,7 @@ import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServerConfiguration;
 
 import org.jupnp.transport.impl.apache.ApacheTransportConfiguration;
+import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 
 /**
  * This is the central place to switch between transport implementations.
@@ -27,7 +28,8 @@ import org.jupnp.transport.impl.apache.ApacheTransportConfiguration;
 public final class TransportConfigurationProvider {
 
     public static <SCC extends StreamClientConfiguration, SSC extends StreamServerConfiguration> TransportConfiguration<SCC, SSC> getDefaultTransportConfiguration() {
-        final TransportConfiguration<SCC, SSC> transportConfiguration = new ApacheTransportConfiguration();
+//        final TransportConfiguration<SCC, SSC> transportConfiguration = new ApacheTransportConfiguration();
+        final TransportConfiguration<SCC, SSC> transportConfiguration = new JettyTransportConfiguration();
 
         return transportConfiguration;
     }
