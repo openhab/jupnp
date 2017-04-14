@@ -26,7 +26,6 @@ import org.eclipse.jetty.client.HttpExchange;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeaders;
 import org.eclipse.jetty.io.ByteArrayBuffer;
-import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,14 +69,16 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
         // Jetty client needs threads for its internal expiration routines, which we don't need but
         // can't disable, so let's abuse the request executor service for this
-        client.setThreadPool(
-            new ExecutorThreadPool(getConfiguration().getRequestExecutorService()) {
-                @Override
-                protected void doStop() throws Exception {
-                    // Do nothing, don't shut down the Cling ExecutorService when Jetty stops!
-                }
-            }
-        );
+
+        // FIXME: if this hack is still used the HttpClient won't receive a thing
+//        client.setThreadPool(
+//            new ExecutorThreadPool(getConfiguration().getRequestExecutorService()) {
+//                @Override
+//                protected void doStop() throws Exception {
+//                    // Do nothing, don't shut down the Cling ExecutorService when Jetty stops!
+//                }
+//            }
+//        );
 
         // These are some safety settings, we should never run into these timeouts as we
         // do our own expiration checking
@@ -115,6 +116,7 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
                 client.send(exchange);
                 int exchangeState = exchange.waitForDone();
+                log.trace("HTTP exchange status: {}", exchangeState);
 
                 if (exchangeState == HttpExchange.STATUS_COMPLETED) {
                     try {
