@@ -14,9 +14,7 @@
 
 package org.jupnp;
 
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -36,6 +34,8 @@ import org.jupnp.model.message.UpnpHeaders;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.TransportConfigurationProvider;
 import org.jupnp.transport.impl.DatagramIOConfigurationImpl;
 import org.jupnp.transport.impl.DatagramIOImpl;
 import org.jupnp.transport.impl.DatagramProcessorImpl;
@@ -44,10 +44,6 @@ import org.jupnp.transport.impl.MulticastReceiverConfigurationImpl;
 import org.jupnp.transport.impl.MulticastReceiverImpl;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
-import org.jupnp.transport.impl.apache.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.apache.StreamClientImpl;
-import org.jupnp.transport.impl.apache.StreamServerConfigurationImpl;
-import org.jupnp.transport.impl.apache.StreamServerImpl;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
 import org.jupnp.transport.spi.GENAEventProcessor;
@@ -84,6 +80,7 @@ import org.jupnp.util.Exceptions;
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool
  * @author Jochen Hiller - increased thread pool size to 200
+ * @author Victor Toni - consolidated transport abstraction into one interface
  */
 public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
@@ -107,6 +104,9 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
     final private Namespace namespace;
+
+    @SuppressWarnings("rawtypes")
+    final private TransportConfiguration transportConfiguration;
 
     /**
      * Defaults to port '0', ephemeral.
@@ -145,6 +145,8 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         serviceDescriptorBinderUDA10 = createServiceDescriptorBinderUDA10();
 
         namespace = createNamespace();
+        
+        transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
     public DatagramProcessor getDatagramProcessor() {
@@ -159,12 +161,14 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         return genaEventProcessor;
     }
 
+    @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
-                getSyncProtocolExecutorService()
-            )
-        );
+    	return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
+    }
+
+    @SuppressWarnings("rawtypes")
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+    	return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
     public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
@@ -178,14 +182,6 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
         return new DatagramIOImpl(new DatagramIOConfigurationImpl());
-    }
-
-    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new StreamServerImpl(
-                new StreamServerConfigurationImpl(
-                        networkAddressFactory.getStreamListenPort()
-                )
-        );
     }
 
     public ExecutorService getMulticastReceiverExecutor() {

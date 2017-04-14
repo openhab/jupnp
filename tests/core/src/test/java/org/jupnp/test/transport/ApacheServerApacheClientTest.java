@@ -15,32 +15,29 @@
 package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
-import org.jupnp.transport.impl.apache.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.apache.StreamClientImpl;
-import org.jupnp.transport.impl.apache.StreamServerConfigurationImpl;
-import org.jupnp.transport.impl.apache.StreamServerImpl;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.apache.ApacheTransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
 
 /**
+ * Testing interaction of Apache server with Apache client.
+ * 
  * @author Christian Bauer
+ * @author Victor Toni - changed to use TransportConfiguration
+ * 
  */
 public class ApacheServerApacheClientTest extends StreamServerClientTest {
+    @SuppressWarnings("rawtypes")
+    private final TransportConfiguration apacheConfiguration = new ApacheTransportConfiguration();
 
     @Override
-    public StreamServer createStreamServer(int port) {
-        return new StreamServerImpl(
-            new StreamServerConfigurationImpl(port)
-        );
+    public StreamServer createStreamServer(final int listenerPort) {
+        return apacheConfiguration.createStreamServer(listenerPort);
     }
 
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
-        return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
-                configuration.getSyncProtocolExecutorService(),
-                3
-            )
-        );
+        return apacheConfiguration.createStreamClient(configuration.getSyncProtocolExecutorService());
     }
 }
