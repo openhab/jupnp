@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: jUPnP OSGi UPnP Service
 Bundle-SymbolicName: org.jupnp.osgi
 Bundle-Version: 2.3.0.qualifier
-Bundle-Vendor: openHAB.org
+Bundle-Vendor: jUPnP.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.apache.commons.codec.binary,
  org.apache.http.client,
