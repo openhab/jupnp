@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.jupnp
 Bundle-Version: 2.3.0.qualifier
 Bundle-Vendor: jUPnP.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Service-Component: OSGI-INF/*
+Service-Component: OSGI-INF/*.xml
 Import-Package: javax.servlet,
  javax.servlet.http,
  javax.xml,
@@ -32,6 +32,7 @@ Import-Package: javax.servlet,
  org.apache.http.util,
  org.osgi.framework,
  org.osgi.service.cm,
+ org.osgi.service.component,
  org.osgi.service.http,
  org.slf4j,
  org.w3c.dom,
