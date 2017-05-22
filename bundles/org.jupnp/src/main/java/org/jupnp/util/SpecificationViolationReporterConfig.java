@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("rawtypes")
 public class SpecificationViolationReporterConfig implements ManagedService {
 
+    private static final String SPECIFICATION_VIOLATION_REPORTER_ENABLED = "specificationViolationReporterEnabled";
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private volatile boolean specificationViolationReportingEnabled = true;
@@ -38,7 +40,7 @@ public class SpecificationViolationReporterConfig implements ManagedService {
     }
 
     private void configure(Dictionary config) {
-        Object enabledObj = config.get("specificationViolationReporterEnabled");
+        Object enabledObj = config.get(SPECIFICATION_VIOLATION_REPORTER_ENABLED);
         if (enabledObj != null && enabledObj instanceof Boolean) {
             specificationViolationReportingEnabled = (Boolean) enabledObj;
         }
