@@ -4,5 +4,5 @@
    <service>
       <provide interface="org.osgi.service.cm.ManagedService"/>
    </service>
-   <property name="org.jupnp.util.SpecificationViolationReporterEnabled" type="Boolean" value="true"/>
+   <property name="specificationViolationReporterEnabled" type="Boolean" value="true"/>
 </scr:component>

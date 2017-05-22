@@ -5,7 +5,7 @@
 
 	<OCD name="jUPnP specification violation reporting configuration" id="org.jupnp.util"
 		description="Configuration for jUPnP specification violation reporting">
-		<AD name="org.jupnp.util.SpecificationViolationReporterEnabled" id="org.jupnp.util.SpecificationViolationReporterEnabled"
+		<AD name="specificationViolationReporterEnabled" id="specificationViolationReporterEnabled"
 			type="boolean" default="true"
 			description="Enable specification violation reporting." />
 	</OCD>

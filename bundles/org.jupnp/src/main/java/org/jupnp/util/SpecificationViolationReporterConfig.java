@@ -38,7 +38,7 @@ public class SpecificationViolationReporterConfig implements ManagedService {
     }
 
     private void configure(Dictionary config) {
-        Object enabledObj = config.get("org.jupnp.util.SpecificationViolationReporterEnabled");
+        Object enabledObj = config.get("specificationViolationReporterEnabled");
         if (enabledObj != null && enabledObj instanceof Boolean) {
             specificationViolationReportingEnabled = (Boolean) enabledObj;
         }
