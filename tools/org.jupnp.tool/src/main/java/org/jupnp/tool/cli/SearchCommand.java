@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Jochen Hiller - Initial contribution
  * @author Jochen Hiller - set verbose level of SpecificationViolationReporter
+ * @author Amit Kumar Mondal - Added feature to display all endpoints from same presentation URL
  */
 public class SearchCommand {
 
@@ -71,7 +72,7 @@ public class SearchCommand {
 		try {
 			Thread.sleep(timeout * 1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.error("{}", e);
 		}
 
 		logger.debug("Processing results...");
@@ -91,6 +92,7 @@ public class SearchCommand {
 		} catch (Exception ex) {
 			logger.error("Error during shutdown", ex);
 		}
+		logger.debug("Stopped jUPnP...");
 
 		return JUPnPTool.RC_OK;
 	}
@@ -114,13 +116,13 @@ public class SearchCommand {
 			String fullDeviceInformationString = ipAddress + "\n" + model + "\n" + manu + "\n" + udn + "\n"
 					+ serialNumber + "\n" + name;
 			boolean filterOK = false;
-			if (filter.equals("*")) {
+			if ("*".equals(filter)) {
 				filterOK = true;
 			} else if (fullDeviceInformationString.contains(filter)) {
 				logger.debug("Filter check: filter '{}' matched '{}'", filter, fullDeviceInformationString);
 				filterOK = true;
 			} else {
-				logger.debug("Filter check: filter '" + filter + "' NOT matched '" + fullDeviceInformationString + "'");
+				logger.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
 			}
 
 			// filter out: very simple: details from above should include
@@ -215,7 +217,7 @@ public class SearchCommand {
 
 		private final int[] COLUMN_WIDTH = new int[] { 17, 25, 25, 25, 25 };
 		private final List<Result> results = new ArrayList<Result>();
-		private final List<String> ipAddresses = new ArrayList<String>();
+		private final List<String> udns = new ArrayList<String>();
 		private final String sortBy;
 		private final boolean verbose;
 
@@ -242,7 +244,7 @@ public class SearchCommand {
 		}
 
 		public void add(String ip, String model, String serialNumber, String manu, String udn) {
-			if (!ipAddresses.contains(ip)) {
+			if (!udns.contains(udn)) {
 				results.add(new Result(ip, model, serialNumber, manu, udn));
 				if (!hasToSort(sortBy)) {
 					String msg;
@@ -256,7 +258,7 @@ public class SearchCommand {
 					}
 					tool.printStdout(msg);
 				}
-				ipAddresses.add(ip);
+				udns.add(udn);
 			}
 		}
 
@@ -291,8 +293,8 @@ public class SearchCommand {
 			}
 			String msg = PrintUtils.printTable(table, 4);
 			// if only one line: no device found
-			if (results.size() == 0) {
-				msg = msg + "<no devices found>";
+			if (results.isEmpty()) {
+				msg = msg + "<no device found>";
 			}
 			return msg;
 		}
