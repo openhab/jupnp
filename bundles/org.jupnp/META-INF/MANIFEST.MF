@@ -73,4 +73,5 @@ Export-Package: org.jupnp,
  org.jupnp.transport.spi,
  org.jupnp.util,
  org.jupnp.util.io,
+ org.jupnp.util.statemachine,
  org.jupnp.xml
