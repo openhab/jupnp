@@ -14,6 +14,7 @@
 
 package org.jupnp.osgi;
 
+import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.UpnpService;
 import org.jupnp.UpnpServiceImpl;
 import org.jupnp.osgi.discover.UPnPDiscover;
@@ -24,7 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Bruce Green
+ * @author Bruce Green - initial contribution
+ * @author Victor Toni - centralized transport implementation selection
  */
 public class Activator implements BundleActivator {
 
@@ -53,7 +55,7 @@ public class Activator implements BundleActivator {
         Activator.plugin = this;
         this.context = context;
 
-        upnpService = new UpnpServiceImpl(new ApacheUpnpServiceConfiguration());
+        upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
         discover = new UPnPDiscover(context, upnpService);
         present = new UPnPPresent(context, upnpService);
         upnpService.getControlPoint().search();
