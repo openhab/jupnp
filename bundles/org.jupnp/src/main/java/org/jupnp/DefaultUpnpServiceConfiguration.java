@@ -14,16 +14,8 @@
 
 package org.jupnp;
 
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
@@ -56,7 +48,6 @@ import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
-import org.jupnp.util.Exceptions;
 
 /**
  * Default configuration data of a typical UPnP stack.
@@ -84,15 +75,13 @@ import org.jupnp.util.Exceptions;
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool
  * @author Jochen Hiller - increased thread pool size to 200
+ * @author Christian Tenevo - make use of QueueingThreadPoolExecutor
  */
 public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private Logger log = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
-    /** we will use a core pool size of 1 as long as we allow to timeout core threads. */
-    final private static int CORE_THREAD_POOL_SIZE = 1;
-    final private static int THREAD_POOL_SIZE = 200;
-    final private static int THREAD_QUEUE_SIZE = 1000;
+    final private static int THREAD_POOL_SIZE = 200;    
     
     final private int streamListenPort;
     final private int multicastResponsePort;
@@ -307,81 +296,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     protected ExecutorService createDefaultExecutorService() {
-        return new JUPnPExecutor();
+    	return QueueingThreadPoolExecutor.createInstance("upnp-async", THREAD_POOL_SIZE);
+
     }
-
-    public static class JUPnPExecutor extends ThreadPoolExecutor {
-
-        public JUPnPExecutor() {
-            this(new JUPnPThreadFactory(),
-                 new ThreadPoolExecutor.DiscardPolicy() {
-                     // The pool is bounded and rejections will happen during shutdown
-                     @Override
-                     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-                         // Log and discard
-                    	 LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
-                         super.rejectedExecution(runnable, threadPoolExecutor);
-                     }
-                 }
-            );
-        }
-
-        public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
-            // This is the same as Executors.newCachedThreadPool
-            super(CORE_THREAD_POOL_SIZE,
-            	  THREAD_POOL_SIZE,
-                  10L,
-                  TimeUnit.SECONDS,
-                  new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE),
-                  threadFactory,
-                  rejectedHandler
-            );
-            allowCoreThreadTimeOut(true);
-        }
-
-        @Override
-        protected void afterExecute(Runnable runnable, Throwable throwable) {
-            super.afterExecute(runnable, throwable);
-            if (throwable != null) {
-                Throwable cause = Exceptions.unwrap(throwable);
-                if (cause instanceof InterruptedException) {
-                    // Ignore this, might happen when we shutdownNow() the executor. We can't
-                    // log at this point as the logging system might be stopped already (e.g.
-                    // if it's a CDI component).
-                    return;
-                }
-                // Log only
-                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Root cause: " + cause);
-            }
-        }
-    }
-
-    // Executors.DefaultThreadFactory is package visibility (...no touching, you unworthy JDK user!)
-    public static class JUPnPThreadFactory implements ThreadFactory {
-
-        protected final ThreadGroup group;
-        protected final AtomicInteger threadNumber = new AtomicInteger(1);
-        protected final String namePrefix = "jupnp-";
-
-        public JUPnPThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-        }
-
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(
-                    group, r,
-                    namePrefix + threadNumber.getAndIncrement(),
-                    0
-            );
-            if (t.isDaemon())
-                t.setDaemon(false);
-            if (t.getPriority() != Thread.NORM_PRIORITY)
-                t.setPriority(Thread.NORM_PRIORITY);
-
-            return t;
-        }
-    }
-
 }

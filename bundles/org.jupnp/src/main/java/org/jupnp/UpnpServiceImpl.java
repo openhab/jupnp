@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Christian Bauer
  * @author Kai Kreuzer - OSGiified the service
+ * @author Christian Tenevo - set the Config. in the default constructor
  */
 public class UpnpServiceImpl implements UpnpService {
 
@@ -71,6 +72,7 @@ public class UpnpServiceImpl implements UpnpService {
     protected volatile ScheduledFuture<?> scheduledFuture;
 
     public UpnpServiceImpl() {
+    	this(new DefaultUpnpServiceConfiguration());
     }
 
     public UpnpServiceImpl(UpnpServiceConfiguration configuration) {
