@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractStreamClient<C extends StreamClientConfiguration, REQUEST> implements StreamClient<C> {
 
-    final private Logger log = LoggerFactory.getLogger(StreamClient.class);
+    private final Logger log = LoggerFactory.getLogger(StreamClient.class);
 
     @Override
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {

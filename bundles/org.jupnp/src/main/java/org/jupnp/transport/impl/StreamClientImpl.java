@@ -70,11 +70,11 @@ import org.jupnp.util.io.IO;
  */
 public class StreamClientImpl implements StreamClient {
 
-    final static String HACK_STREAM_HANDLER_SYSTEM_PROPERTY = "hackStreamHandlerProperty";
+    static final String HACK_STREAM_HANDLER_SYSTEM_PROPERTY = "hackStreamHandlerProperty";
 
-    final private static Logger log = LoggerFactory.getLogger(StreamClient.class.getName());
+    private final Logger log = LoggerFactory.getLogger(StreamClient.class.getName());
 
-    final protected StreamClientConfigurationImpl configuration;
+    protected final StreamClientConfigurationImpl configuration;
 
     public StreamClientImpl(StreamClientConfigurationImpl configuration) throws InitializationException {
         this.configuration = configuration;

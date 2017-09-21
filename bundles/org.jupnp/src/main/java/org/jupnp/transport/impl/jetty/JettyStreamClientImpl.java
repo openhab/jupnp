@@ -47,11 +47,11 @@ import org.slf4j.LoggerFactory;
  */
 public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConfigurationImpl, Request> {
 
-    final private Logger log = LoggerFactory.getLogger(StreamClient.class);
+    private final Logger log = LoggerFactory.getLogger(StreamClient.class);
 
-    final protected StreamClientConfigurationImpl configuration;
-    final protected HttpClient httpClient;
-    final protected HttpFields defaultHttpFields = new HttpFields();
+    protected final StreamClientConfigurationImpl configuration;
+    protected final HttpClient httpClient;
+    protected final HttpFields defaultHttpFields = new HttpFields();
 
     public JettyStreamClientImpl(StreamClientConfigurationImpl configuration) throws InitializationException {
         this.configuration = configuration;

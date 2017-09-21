@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FixedSunURLStreamHandler implements URLStreamHandlerFactory {
 
-    final private static Logger log = LoggerFactory.getLogger(FixedSunURLStreamHandler.class.getName());
+    private final Logger log = LoggerFactory.getLogger(FixedSunURLStreamHandler.class.getName());
 
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {

@@ -158,7 +158,7 @@ public class UpnpServiceImpl implements UpnpService {
         return router;
     }
 
-    synchronized public void shutdown() {
+    public synchronized void shutdown() {
         shutdown(false);
     }
 

@@ -45,28 +45,29 @@ import org.jupnp.transport.spi.ServletContainerAdapter;
  */
 public class JettyServletContainer implements ServletContainerAdapter {
 
-    final private Logger log = LoggerFactory.getLogger(JettyServletContainer.class.getName());
+    private Logger log = LoggerFactory.getLogger(JettyServletContainer.class.getName());
 
     // Singleton
     public static final JettyServletContainer INSTANCE = new JettyServletContainer();
+
+    protected Server server;
+
     private JettyServletContainer() {
         resetServer();
     }
 
-    protected Server server;
-
     @Override
-    synchronized public void setExecutorService(ExecutorService executorService) {
+    public synchronized void setExecutorService(ExecutorService executorService) {
         // the Jetty server has its own QueuedThreadPool
     }
 
     @Override
-    synchronized public int addConnector(String host, int port) throws IOException {
+    public synchronized int addConnector(String host, int port) throws IOException {
         return port;
     }
 
     @Override
-    synchronized public void registerServlet(String contextPath, Servlet servlet) {
+    public synchronized void registerServlet(String contextPath, Servlet servlet) {
         if (server.getHandler() != null) {
             log.trace("Server handler is already set: {}", server.getHandler() );
             return;
@@ -83,7 +84,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
     }
 
     @Override
-    synchronized public void startIfNotRunning() {
+    public synchronized void startIfNotRunning() {
         if (!server.isStarted() && !server.isStarting()) {
             log.info("Starting Jetty server... ");
             try {
@@ -96,7 +97,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
     }
 
     @Override
-    synchronized public void stopIfRunning() {
+    public synchronized void stopIfRunning() {
         if (!server.isStopped() && !server.isStopping()) {
             log.info("Stopping Jetty server...");
             try {

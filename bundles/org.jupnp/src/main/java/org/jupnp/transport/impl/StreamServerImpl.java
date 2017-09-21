@@ -55,7 +55,7 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
 
     private static Logger log = LoggerFactory.getLogger(StreamServer.class.getName());
 
-    final protected StreamServerConfigurationImpl configuration;
+    protected final StreamServerConfigurationImpl configuration;
     protected HttpServer server;
 
     public StreamServerImpl(StreamServerConfigurationImpl configuration) {
@@ -63,7 +63,7 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
     }
 
     @Override
-    synchronized public void init(InetAddress bindAddress, Router router) throws InitializationException {
+    public synchronized void init(InetAddress bindAddress, Router router) throws InitializationException {
         try {
             InetSocketAddress socketAddress = new InetSocketAddress(bindAddress, configuration.getListenPort());
 
@@ -78,7 +78,7 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
     }
 
     @Override
-    synchronized public int getPort() {
+    public synchronized int getPort() {
         return server.getAddress().getPort();
     }
 
@@ -88,14 +88,14 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
     }
 
     @Override
-    synchronized public void run() {
+    public synchronized void run() {
         log.trace("Starting StreamServer...");
         // Starts a new thread but inherits the properties of the calling thread
         server.start();
     }
 
     @Override
-    synchronized public void stop() {
+    public synchronized void stop() {
         log.trace("Stopping StreamServer...");
         if (server != null) server.stop(1);
     }

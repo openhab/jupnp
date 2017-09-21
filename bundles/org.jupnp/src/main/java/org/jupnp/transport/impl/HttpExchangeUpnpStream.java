@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("restriction")
 public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
-    private static Logger log = LoggerFactory.getLogger(UpnpStream.class.getName());
+    private final Logger log = LoggerFactory.getLogger(UpnpStream.class.getName());
 
     private HttpExchange httpExchange;
 
@@ -107,15 +107,11 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
             log.trace("Reading request body bytes: {}", bodyBytes.length);
 
             if (bodyBytes.length > 0 && requestMessage.isContentTypeMissingOrText()) {
-
                 log.trace("Request contains textual entity body, converting then setting string on message");
                 requestMessage.setBodyCharacters(bodyBytes);
-
             } else if (bodyBytes.length > 0) {
-
                 log.trace("Request contains binary entity body, setting bytes on message");
                 requestMessage.setBody(UpnpMessage.BodyType.BYTES, bodyBytes);
-
             } else {
                 log.trace("Request did not contain entity body");
             }

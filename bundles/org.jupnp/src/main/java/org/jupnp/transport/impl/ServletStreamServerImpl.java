@@ -29,26 +29,28 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Servlet stream server implementation.
- * 
+ *
  * @author Christian Bauer - Initial contribution to work with Servlet 3.0
  * @author Ivan Iliev - Added support for runtime switch to Servlet 2.4
  */
 public class ServletStreamServerImpl implements StreamServer<ServletStreamServerConfigurationImpl> {
 
-    final private Logger log = LoggerFactory.getLogger(ServletStreamServerImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ServletStreamServerImpl.class);
 
-    final protected ServletStreamServerConfigurationImpl configuration;
+    protected final ServletStreamServerConfigurationImpl configuration;
     protected int localPort;
 
     public ServletStreamServerImpl(ServletStreamServerConfigurationImpl configuration) {
         this.configuration = configuration;
     }
 
+    @Override
     public ServletStreamServerConfigurationImpl getConfiguration() {
         return configuration;
     }
 
-    synchronized public void init(InetAddress bindAddress, final Router router) throws InitializationException {
+    @Override
+    public synchronized void init(InetAddress bindAddress, final Router router) throws InitializationException {
         try {
             log.debug("Setting executor service on servlet container adapter");
             getConfiguration().getServletContainerAdapter().setExecutorService(
@@ -76,14 +78,17 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
         }
     }
 
-    synchronized public int getPort() {
+    @Override
+    public synchronized int getPort() {
         return this.localPort;
     }
 
-    synchronized public void stop() {
+    @Override
+    public synchronized void stop() {
         getConfiguration().getServletContainerAdapter().stopIfRunning();
     }
 
+    @Override
     public void run() {
         getConfiguration().getServletContainerAdapter().startIfNotRunning();
     }
