@@ -14,11 +14,11 @@
 
 package org.jupnp.transport.impl.jetty;
 
+import org.eclipse.jetty.http.HttpField;
+import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.client.api.ContentProvider;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.api.Response;
-import org.eclipse.jetty.http.HttpField;
-import org.eclipse.jetty.http.HttpFields;
 import org.jupnp.http.Headers;
 
 import java.io.ByteArrayOutputStream;
@@ -39,12 +39,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HeaderUtil {
 
-	/**
+    private HeaderUtil() {
+        // no instance of this class
+    }
+
+    /**
      * Add all jUPnP {@link Headers} header information to {@link Request}.
-	 *
-	 * @param request to enrich with header information
-	 * @param headers to be added to the {@link Request}
-	 */
+     *
+     * @param request to enrich with header information
+     * @param headers to be added to the {@link Request}
+     */
     public static void add(final Request request, final Headers headers) {
     	final HttpFields httpFields = request.getHeaders();
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -54,12 +58,13 @@ public class HeaderUtil {
         }
     }
 
-	/**
-     * Add all jUPnP {@link Headers} header information to {@link org.eclipse.jetty.server.Response}.
-	 *
-	 * @param response to enrich with header information
-	 * @param headers to be added to the {@link org.eclipse.jetty.server.Response}
-	 */
+    /**
+     * Add all jUPnP {@link Headers} header information to
+     * {@link org.eclipse.jetty.server.Response}.
+     *
+     * @param response to enrich with header information
+     * @param headers to be added to the {@link org.eclipse.jetty.server.Response}
+     */
     public static void add(final HttpServletResponse response, final Headers headers) {
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
             for (final String value : entry.getValue()) {
