@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("restriction")
 public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
-    private final Logger log = LoggerFactory.getLogger(UpnpStream.class.getName());
+    private final Logger log = LoggerFactory.getLogger(HttpExchangeUpnpStream.class.getName());
 
     private HttpExchange httpExchange;
 

@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
  * Concrete implementations must provide a connection wrapper, as this wrapper most likely has to access proprietary
  * APIs to implement connection checking.
  * </p>
- * 
+ *
  * @author Christian Bauer
  */
 public abstract class AsyncServletUpnpStream extends ServletUpnpStream implements AsyncListener {
 
-    final private Logger log = LoggerFactory.getLogger(UpnpStream.class);
+    final private Logger log = LoggerFactory.getLogger(AsyncServletUpnpStream.class);
 
     final protected AsyncContext asyncContext;
     final protected HttpServletRequest request;

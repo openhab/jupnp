@@ -41,15 +41,15 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract implementation of a {@link UpnpStream}. This class is extended for each servlet implementations (blocking
  * servlet 2.4 and async servlet 3.0).
- * 
+ *
  * @author Ivan Iliev - Initial contribution and API
- * 
+ *
  */
 public abstract class ServletUpnpStream extends UpnpStream {
 
     protected StreamResponseMessage responseMessage;
 
-    final protected Logger log = LoggerFactory.getLogger(UpnpStream.class);
+    final protected Logger log = LoggerFactory.getLogger(ServletUpnpStream.class);
 
     public ServletUpnpStream(ProtocolFactory protocolFactory) {
         super(protocolFactory);
