@@ -130,7 +130,7 @@ public class StreamClientImpl implements StreamClient {
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) {
 
         final UpnpRequest requestOperation = requestMessage.getOperation();
-        log.trace("Preparing HTTP request message with method '{}': ", requestOperation.getHttpMethodName(), requestMessage);
+        log.trace("Preparing HTTP request message with method '{}': ", requestOperation.getHttpMethodName());
 
         URL url = URIUtil.toURL(requestOperation.getURI());
 
@@ -149,17 +149,17 @@ public class StreamClientImpl implements StreamClient {
             applyRequestProperties(urlConnection, requestMessage);
             applyRequestBody(urlConnection, requestMessage);
 
-            log.trace("Sending HTTP request: " + requestMessage);
+            log.trace("Sending HTTP request: {}",  requestMessage);
             inputStream = urlConnection.getInputStream();
             return createResponse(urlConnection, inputStream);
 
         } catch (ProtocolException ex) {
-            log.warn("HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
+            log.warn("HTTP request failed: {}", requestMessage, Exceptions.unwrap(ex));
             return null;
         } catch (IOException ex) {
 
             if (urlConnection == null) {
-                log.warn("HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
+                log.warn("HTTP request failed: {}", requestMessage, Exceptions.unwrap(ex));
                 return null;
             }
 
@@ -177,7 +177,7 @@ public class StreamClientImpl implements StreamClient {
                 return null;
             }
         } catch (Exception ex) {
-            log.warn("HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
+            log.warn("HTTP request failed: {}", requestMessage, Exceptions.unwrap(ex));
             return null;
 
         } finally {
@@ -275,20 +275,16 @@ public class StreamClientImpl implements StreamClient {
         }
 
         if (bodyBytes != null && bodyBytes.length > 0 && responseMessage.isContentTypeMissingOrText()) {
-
             log.trace("Response contains textual entity body, converting then setting string on message");
             responseMessage.setBodyCharacters(bodyBytes);
-
         } else if (bodyBytes != null && bodyBytes.length > 0) {
-
             log.trace("Response contains binary entity body, setting bytes on message");
             responseMessage.setBody(UpnpMessage.BodyType.BYTES, bodyBytes);
-
         } else {
             log.trace("Response did not contain entity body");
         }
 
-        log.trace("Response message complete: " + responseMessage);
+        log.trace("Response message complete: {}", responseMessage);
         return responseMessage;
     }
 

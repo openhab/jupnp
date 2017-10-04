@@ -168,12 +168,12 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
             // you might run into Errors as well (assertions).
             log.trace("Exception occured during UPnP stream processing: {}", t);
             if (log.isTraceEnabled()) {
-                log.trace("Cause: " + Exceptions.unwrap(t), Exceptions.unwrap(t));
+                log.trace("Cause: {}", Exceptions.unwrap(t), Exceptions.unwrap(t));
             }
             try {
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
             } catch (IOException ex) {
-                log.warn("Couldn't send error response: {}", ex);
+                log.warn("Couldn't send error response: {}", ex.getMessage(), ex);
             }
 
             responseException(t);
