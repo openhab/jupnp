@@ -228,10 +228,10 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     /**
      * @return Defaults to <code>false</code>.
      */
-	@Override
+    @Override
     public boolean isReceivedSubscriptionTimeoutIgnored() {
-		return false;
-	}
+        return false;
+    }
 
     @Override
     public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
@@ -256,7 +256,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
      */
     @Override
     public int getAliveIntervalMillis() {
-    	return 0;
+        return 0;
     }
 
     @Override
@@ -345,7 +345,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                      @Override
                      public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
                          // Log and discard
-                    	 LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
+                         LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
                          super.rejectedExecution(runnable, threadPoolExecutor);
                      }
                  }
@@ -355,7 +355,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
             // This is the same as Executors.newCachedThreadPool
             super(CORE_THREAD_POOL_SIZE,
-            	  THREAD_POOL_SIZE,
+                  THREAD_POOL_SIZE,
                   10L,
                   TimeUnit.SECONDS,
                   new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE),

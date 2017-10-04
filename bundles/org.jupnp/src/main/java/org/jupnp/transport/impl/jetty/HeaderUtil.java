@@ -50,10 +50,10 @@ public class HeaderUtil {
      * @param headers to be added to the {@link Request}
      */
     public static void add(final Request request, final Headers headers) {
-    	final HttpFields httpFields = request.getHeaders();
+        final HttpFields httpFields = request.getHeaders();
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
             for (final String value : entry.getValue()) {
-            	httpFields.add(entry.getKey(), value);
+                httpFields.add(entry.getKey(), value);
             }
         }
     }
@@ -68,7 +68,7 @@ public class HeaderUtil {
     public static void add(final HttpServletResponse response, final Headers headers) {
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
             for (final String value : entry.getValue()) {
-            	response.addHeader(entry.getKey(), value);
+                response.addHeader(entry.getKey(), value);
             }
         }
     }
