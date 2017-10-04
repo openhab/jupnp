@@ -71,8 +71,8 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
             httpClient.start();
         }
         catch (final Exception e){
-            log.error("Failed to instantied HTTP client", e);
-            throw new InitializationException("Failed to instantied HTTP client", e);
+            log.error("Failed to instantiate HTTP client", e);
+            throw new InitializationException("Failed to instantiate HTTP client", e);
         }
     }
 
