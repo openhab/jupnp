@@ -14,6 +14,8 @@
 
 package org.jupnp.transport.impl.jetty;
 
+import static org.eclipse.jetty.http.HttpHeader.CONNECTION;
+
 import java.util.concurrent.Callable;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -115,6 +117,12 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
             request.version(HttpVersion.HTTP_1_0);
         } else {
             request.version(HttpVersion.HTTP_1_1);
+            // This closes the http connection immediately after the call.
+            //
+            // Even though jetty client is able to close connections properly,
+            // it still takes ~30 seconds to do so. This may cause too many
+            // connections for installations with many upnp devices.
+            request.header(CONNECTION, "close");
         }
 
         // Add the default user agent if not already set on the message
