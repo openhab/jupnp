@@ -26,41 +26,59 @@ import org.slf4j.LoggerFactory;
  * disable these checks for performance improvement and to avoid flooding of
  * logs if you have UPnP devices in your network which do not comply to UPnP
  * specifications.
- * 
+ *
  * @author Jochen Hiller
+ * @author Victor Toni - made logger non-static
  */
 public class SpecificationViolationReporter {
+
+    private static final SpecificationViolationReporter INSTANCE = new SpecificationViolationReporter();
 
 	/**
      * Defaults to enabled. Is volatile to reflect changes in arbitrary threads immediately.
      */
-    private static volatile boolean enabled = true;
+    private volatile boolean enabled = true;
 
-	private static Logger logger = LoggerFactory.getLogger(SpecificationViolationReporter.class);
+    private Logger logger = LoggerFactory.getLogger(SpecificationViolationReporter.class);
 
-	public static void disableReporting() {
-		enabled = false;
-	}
+    private void _disableReporting() {
+        enabled = false;
+    }
 
-	public static void enableReporting() {
-		enabled = true;
-	}
+    private void _enableReporting() {
+        enabled = true;
+    }
 
-	public static void report(String format, Object... arguments) {
-		if (enabled) {
-			logger.warn("{}: " + format, "UPnP specification violation", arguments);
-		}
-	}
+    private void _report(String format, Object... arguments) {
+        if (enabled) {
+            logger.warn("{}: " + format, "UPnP specification violation", arguments);
+        }
+    }
 
-	public static void report(Device<DeviceIdentity, Device, Service> device, String format, Object... arguments) {
-		if (enabled) {
-			if (device == null) {
-				logger.warn("{}: " + format, "UPnP specification violation", arguments);
-			} else {
-				logger.warn("{} of device '{}': " + format, "UPnP specification violation", device.toString(),
-						arguments);
-			}
-		}
-	}
+    private void _report(Device<DeviceIdentity, Device, Service> device, String format, Object... arguments) {
+        if (enabled) {
+            if (device == null) {
+                logger.warn("{}: " + format, "UPnP specification violation", arguments);
+            } else {
+                logger.warn("{} of device '{}': " + format, "UPnP specification violation", device.toString(), arguments);
+            }
+        }
+    }
+
+    public static void disableReporting() {
+        INSTANCE._disableReporting();
+    }
+
+    public static void enableReporting() {
+        INSTANCE._enableReporting();
+    }
+
+    public static void report(String format, Object... arguments) {
+        INSTANCE._report(format, arguments);
+    }
+
+    public static void report(Device<DeviceIdentity, Device, Service> device, String format, Object... arguments) {
+        INSTANCE._report(device, format, arguments);
+    }
 
 }

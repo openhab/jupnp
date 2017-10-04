@@ -70,7 +70,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPDeviceTracker extends ServiceTracker {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPDeviceTracker.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPDeviceTracker.class);
 
     private UpnpService upnpService;
     private Map<UPnPDevice, LocalDevice> registrations = new Hashtable<UPnPDevice, LocalDevice>();

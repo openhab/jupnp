@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPActionExecutor implements ActionExecutor {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPActionExecutor.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPActionExecutor.class);
 
     private UPnPAction action;
 

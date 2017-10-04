@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DataAdapter implements UPnPEventListener {
 
-    final private static Logger log = LoggerFactory.getLogger(DataAdapter.class);
+    private final Logger log = LoggerFactory.getLogger(DataAdapter.class);
 
     private PropertyChangeSupport propertyChangeSupport;
 

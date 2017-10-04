@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 class JUPnPRegistryListener extends DefaultRegistryListener {
 
-    private static final Logger log = LoggerFactory.getLogger(JUPnPRegistryListener.class);
+    private final Logger log = LoggerFactory.getLogger(JUPnPRegistryListener.class);
 
     private Map<Device, UPnPDeviceBinding> deviceBindings = new Hashtable<Device, UPnPDeviceBinding>();
     private BundleContext context;

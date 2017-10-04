@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UPnPActionImpl implements UPnPAction {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPActionImpl.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPActionImpl.class);
 
     private Action<?> action;
 

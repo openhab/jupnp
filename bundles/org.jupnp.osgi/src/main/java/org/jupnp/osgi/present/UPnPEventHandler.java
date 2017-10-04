@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class UPnPEventHandler implements EventHandler {
-    private static final Logger logger = LoggerFactory.getLogger(UPnPEventHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPEventHandler.class);
 	private ServiceTracker tracker;
 	
 	public UPnPEventHandler(BundleContext context) {

@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPEventListenerTracker extends ServiceTracker {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
 
     private UpnpService upnpService;
     private UPnPDeviceImpl device;

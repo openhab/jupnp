@@ -52,7 +52,7 @@ import org.jupnp.transport.spi.StreamServer;
 @SuppressWarnings("restriction")
 public class StreamServerImpl implements StreamServer<StreamServerConfigurationImpl> {
 
-    private static Logger log = LoggerFactory.getLogger(StreamServer.class.getName());
+    private Logger log = LoggerFactory.getLogger(StreamServer.class.getName());
 
     protected final StreamServerConfigurationImpl configuration;
     protected HttpServer server;

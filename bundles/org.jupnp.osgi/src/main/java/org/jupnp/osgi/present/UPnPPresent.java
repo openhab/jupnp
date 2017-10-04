@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UPnPPresent {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPPresent.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPPresent.class);
 
     private static final String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
     private UPnPDeviceTracker deviceTracker;

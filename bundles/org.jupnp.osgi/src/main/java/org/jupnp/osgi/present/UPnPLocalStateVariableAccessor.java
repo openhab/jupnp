@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class UPnPLocalStateVariableAccessor extends StateVariableAccessor {
-    private static final Logger logger = LoggerFactory.getLogger(UPnPLocalStateVariableAccessor.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPLocalStateVariableAccessor.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final SimpleDateFormat dateTimeTZFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");

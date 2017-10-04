@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UPnPActionArgumentImpl extends UPnPStateVariableImpl {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPActionArgumentImpl.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPActionArgumentImpl.class);
 
     private ActionArgument<?> argument;
 

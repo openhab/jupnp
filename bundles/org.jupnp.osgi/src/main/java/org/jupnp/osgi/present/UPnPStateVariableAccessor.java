@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPStateVariableAccessor extends StateVariableAccessor {
 
-    final private static Logger log = LoggerFactory.getLogger(UPnPStateVariableAccessor.class);
+    private final Logger log = LoggerFactory.getLogger(UPnPStateVariableAccessor.class);
 
     private UPnPStateVariable variable;
 
