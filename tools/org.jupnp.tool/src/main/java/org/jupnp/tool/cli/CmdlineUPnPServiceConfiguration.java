@@ -22,7 +22,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
+import org.jupnp.transport.impl.StreamClientConfigurationImpl;
+import org.jupnp.transport.impl.StreamClientImpl;
+import org.jupnp.transport.impl.StreamServerConfigurationImpl;
+import org.jupnp.transport.impl.StreamServerImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
+import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,6 +143,21 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 			asyncExecutorService.shutdownNow();
 		}
 	}
+	
+    @Override
+    public StreamClient createStreamClient() {
+    	return new StreamClientImpl(
+    		new StreamClientConfigurationImpl(
+                getSyncProtocolExecutorService()
+            ));
+    }
+    
+    @Override
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+        return new StreamServerImpl(
+                new StreamServerConfigurationImpl()
+        );
+    }
 
 	// inner classes
 
