@@ -16,6 +16,8 @@ package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.test.transport.StreamServerClientTest;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.JDKTransportConfiguration;
 import org.jupnp.transport.impl.StreamClientConfigurationImpl;
 import org.jupnp.transport.impl.StreamClientImpl;
 import org.jupnp.transport.impl.StreamServerConfigurationImpl;
@@ -28,20 +30,17 @@ import org.jupnp.transport.spi.StreamServer;
  */
 public class JDKServerJDKClientTest extends StreamServerClientTest {
 
+    private TransportConfiguration jdkTransportConfiguration = JDKTransportConfiguration.INSTANCE;
+
     @Override
     public StreamServer createStreamServer(int port) {
-        return new StreamServerImpl(
-            new StreamServerConfigurationImpl(port)
-        );
+        return jdkTransportConfiguration.createStreamServer(port);
     }
 
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
-        return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
-                configuration.getSyncProtocolExecutorService(),
-                3
-            )
+        return jdkTransportConfiguration.createStreamClient(
+                configuration.getSyncProtocolExecutorService()
         );
     }
 

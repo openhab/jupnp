@@ -28,6 +28,8 @@ import org.jupnp.model.message.UpnpHeaders;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.TransportConfigurationProvider;
 import org.jupnp.transport.impl.DatagramIOConfigurationImpl;
 import org.jupnp.transport.impl.DatagramIOImpl;
 import org.jupnp.transport.impl.DatagramProcessorImpl;
@@ -38,10 +40,6 @@ import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
 import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
 import org.jupnp.transport.impl.ServletStreamServerImpl;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
-import org.jupnp.transport.impl.StreamServerConfigurationImpl;
-import org.jupnp.transport.impl.StreamServerImpl;
 import org.jupnp.transport.impl.osgi.HttpServiceServletContainerAdapter;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
@@ -77,6 +75,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool and http service streaming server
+ * @author Victor Toni - consolidated transport abstraction into one interface
  */
 public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
@@ -112,6 +111,9 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @SuppressWarnings("rawtypes")
     private ServiceReference httpServiceReference;
 
+    @SuppressWarnings("rawtypes")
+    private TransportConfiguration transportConfiguration;
+
     /**
      * Defaults to port '0', ephemeral.
      */
@@ -140,6 +142,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         this.streamListenPort = streamListenPort;
         this.multicastResponsePort = multicastResponsePort;
 
+        this.transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
     protected void activate(BundleContext context, Map<String, Object> configProps) throws ConfigurationException {
@@ -190,7 +193,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return new JettyStreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService()));
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
     }
 
     @Override
@@ -228,8 +231,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             }
         }
 
-        return new StreamServerImpl(new StreamServerConfigurationImpl());
-
+        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
     @Override

@@ -15,8 +15,11 @@
 package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.JDKTransportConfiguration;
 import org.jupnp.transport.impl.StreamClientConfigurationImpl;
 import org.jupnp.transport.impl.StreamClientImpl;
+import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
 
 /**
@@ -24,13 +27,12 @@ import org.jupnp.transport.spi.StreamClient;
  */
 public class JettyServerJDKClientTest extends JettyServerJettyClientTest {
 
+    private TransportConfiguration jdkTransportConfiguration = JDKTransportConfiguration.INSTANCE;
+
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
-        return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
-                configuration.getSyncProtocolExecutorService(),
-                3
-            )
+        return jdkTransportConfiguration.createStreamClient(
+                configuration.getSyncProtocolExecutorService()
         );
     }
 

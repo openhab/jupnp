@@ -34,6 +34,8 @@ import org.jupnp.model.message.UpnpHeaders;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.ServiceType;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.TransportConfigurationProvider;
 import org.jupnp.transport.impl.DatagramIOConfigurationImpl;
 import org.jupnp.transport.impl.DatagramIOImpl;
 import org.jupnp.transport.impl.DatagramProcessorImpl;
@@ -42,11 +44,6 @@ import org.jupnp.transport.impl.MulticastReceiverConfigurationImpl;
 import org.jupnp.transport.impl.MulticastReceiverImpl;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
-import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
-import org.jupnp.transport.impl.ServletStreamServerImpl;
-import org.jupnp.transport.impl.jetty.JettyServletContainer;
-import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
 import org.jupnp.transport.spi.GENAEventProcessor;
@@ -83,6 +80,7 @@ import org.jupnp.util.Exceptions;
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool
  * @author Jochen Hiller - increased thread pool size to 200
+ * @author Victor Toni - consolidated transport abstraction into one interface
  */
 public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
@@ -106,6 +104,9 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
     final private Namespace namespace;
+
+    @SuppressWarnings("rawtypes")
+    final private TransportConfiguration transportConfiguration;
 
     /**
      * Defaults to port '0', ephemeral.
@@ -144,6 +145,8 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         serviceDescriptorBinderUDA10 = createServiceDescriptorBinderUDA10();
 
         namespace = createNamespace();
+
+        transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
     @Override
@@ -162,12 +165,15 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return new JettyStreamClientImpl(
-            new StreamClientConfigurationImpl(
-                getSyncProtocolExecutorService()
-            )
-        );
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
+    }
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
     @Override
@@ -183,16 +189,6 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     @Override
     public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
         return new DatagramIOImpl(new DatagramIOConfigurationImpl());
-    }
-
-    @Override
-    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new ServletStreamServerImpl(
-                new ServletStreamServerConfigurationImpl(
-                    JettyServletContainer.INSTANCE,
-                    networkAddressFactory.getStreamListenPort()
-                )
-            );
     }
 
     @Override

@@ -16,11 +16,8 @@ package org.jupnp.test.transport;
 
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.test.transport.StreamServerClientTest;
-import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
-import org.jupnp.transport.impl.ServletStreamServerImpl;
-import org.jupnp.transport.impl.jetty.JettyServletContainer;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
 
@@ -30,26 +27,18 @@ import org.jupnp.transport.spi.StreamServer;
  */
 public class JettyServerJettyClientTest extends StreamServerClientTest {
 
-    @Override
-    public StreamServer createStreamServer(int port) {
-        ServletStreamServerConfigurationImpl configuration =
-            new ServletStreamServerConfigurationImpl(
-                JettyServletContainer.INSTANCE,
-                port
-            );
+    private TransportConfiguration jettyTransportConfiguration = JettyTransportConfiguration.INSTANCE;
 
-        return new ServletStreamServerImpl(
-            configuration
-        );
+    @Override
+    public StreamServer createStreamServer(final int port) {
+        return jettyTransportConfiguration.createStreamServer(port);
     }
 
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
-        return new JettyStreamClientImpl(
-            new StreamClientConfigurationImpl(
-                configuration.getSyncProtocolExecutorService(),
-                3
-            )
+        return jettyTransportConfiguration.createStreamClient(
+                configuration.getSyncProtocolExecutorService()
         );
     }
+
 }

@@ -21,11 +21,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
+import org.jupnp.transport.TransportConfiguration;
+import org.jupnp.transport.impl.JDKTransportConfiguration;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
-import org.jupnp.transport.impl.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.StreamClientImpl;
-import org.jupnp.transport.impl.StreamServerConfigurationImpl;
-import org.jupnp.transport.impl.StreamServerImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
@@ -34,11 +32,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class configures the behavior of jUPnP used in junpnptool.
- * 
+ *
  * It will allow to observe the processing by getting statistical information
  * about processing. It will also log rejected execution in a smarter way to not
  * flood logging with too much log messages.
- * 
+ *
  * Note: It allows to configure the behavior by static attributes, which can NOT
  * be changed after constructing the services.
  */
@@ -68,13 +66,17 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 
 	private ExecutorService mainExecutorService;
 
-	private ExecutorService asyncExecutorService;
+    private ExecutorService asyncExecutorService;
+
+    private TransportConfiguration transportConfiguration;
 
 	// instance methods
 
 	public CmdlineUPnPServiceConfiguration() {
 		super();
 		createExecutorServices();
+
+		transportConfiguration = new JDKTransportConfiguration();
 	}
 
 	/**
@@ -143,20 +145,17 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 			asyncExecutorService.shutdownNow();
 		}
 	}
-	
+
     @Override
     public StreamClient createStreamClient() {
-    	return new StreamClientImpl(
-    		new StreamClientConfigurationImpl(
+        return transportConfiguration.createStreamClient(
                 getSyncProtocolExecutorService()
-            ));
+        );
     }
-    
+
     @Override
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new StreamServerImpl(
-                new StreamServerConfigurationImpl()
-        );
+        return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
 	// inner classes
@@ -165,7 +164,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 	 * This class implements a rejection handler which logs rejects smart. Logs
 	 * once happens one error message, and further messages report only number
 	 * of rejections.
-	 * 
+	 *
 	 * This class locks against multiple usage to have clea log messages. This
 	 * may have influence during runtime, as logging will be done during holder
 	 * a lock.
