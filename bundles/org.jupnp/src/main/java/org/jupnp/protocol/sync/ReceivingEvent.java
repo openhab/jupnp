@@ -119,7 +119,7 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
                 getUpnpService().getRegistry().getWaitRemoteSubscription(requestMessage.getSubscrptionId());
 
         if (subscription == null) {
-            log.error("Invalid subscription ID, no active subscription: " + requestMessage);
+            log.debug("Invalid subscription ID, no active subscription: " + requestMessage);
             return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.PRECONDITION_FAILED));
         }
 
