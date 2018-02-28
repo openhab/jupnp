@@ -15,13 +15,16 @@
 package org.jupnp.registry;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.jupnp.UpnpService;
 import org.jupnp.UpnpServiceConfiguration;
@@ -69,9 +72,11 @@ public class RegistryImpl implements Registry {
         this.upnpService = upnpService;
 
         log.trace("Starting registry background maintenance...");
-        registryMaintainer = createRegistryMaintainer();
-        if (registryMaintainer != null) {
-            getConfiguration().getRegistryMaintainerExecutor().execute(registryMaintainer);
+        synchronized (lock) {
+            registryMaintainer = createRegistryMaintainer();
+            if (registryMaintainer != null) {
+                getConfiguration().getRegistryMaintainerExecutor().execute(registryMaintainer);
+            }
         }
     }
 
@@ -96,40 +101,38 @@ public class RegistryImpl implements Registry {
 
     // #################################################################################################
 
-    protected final Set<RegistryListener> registryListeners = new HashSet();
-    protected final Set<RegistryItem<URI, Resource>> resourceItems = new HashSet();
-    protected final List<Runnable> pendingExecutions = new ArrayList();
+    protected final Set<RegistryListener> registryListeners = new CopyOnWriteArraySet();
+    protected final Set<RegistryItem<URI, Resource>> resourceItems = Collections
+            .newSetFromMap(new ConcurrentHashMap<RegistryItem<URI, Resource>, Boolean>());
+    protected final List<Runnable> pendingExecutions = new LinkedList();
 
+    // in the methods that acquire both locks at the same time always acquire remoteItemsLock first
+    protected final ReentrantReadWriteLock remoteItemsLock = new ReentrantReadWriteLock(true);
+    protected final ReentrantReadWriteLock localItemsLock = new ReentrantReadWriteLock(true);
     protected final RemoteItems remoteItems = new RemoteItems(this);
     protected final LocalItems localItems = new LocalItems(this);
 
     // #################################################################################################
 
     public void addListener(RegistryListener listener) {
-        synchronized(registryListeners) {
-            registryListeners.add(listener);
-        }
+        registryListeners.add(listener);
     }
 
     public void removeListener(RegistryListener listener) {
-        synchronized(registryListeners) {
-            registryListeners.remove(listener);
-        }
+        registryListeners.remove(listener);
     }
 
     public Collection<RegistryListener> getListeners() {
-        synchronized(registryListeners) {
-            return Collections.unmodifiableCollection(registryListeners);
-        }
+        return Collections.unmodifiableCollection(registryListeners);
     }
 
     public boolean notifyDiscoveryStart(final RemoteDevice device) {
         // Exit if we have it already, this is atomic inside this method, finally
-        if (getUpnpService().getRegistry().getRemoteDevice(device.getIdentity().getUdn(), true) != null) {
+        if (getRemoteDevice(device.getIdentity().getUdn(), true) != null) {
             log.trace("Not notifying listeners, already registered: " + device);
             return false;
         }
-        
+
         for (final RegistryListener listener : getListeners()) {
             getConfiguration().getRegistryListenerExecutor().execute(
                     new Runnable() {
@@ -139,7 +142,7 @@ public class RegistryImpl implements Registry {
                     }
             );
         }
-        
+
         return true;
     }
 
@@ -158,62 +161,112 @@ public class RegistryImpl implements Registry {
     // #################################################################################################
 
     public void addDevice(LocalDevice localDevice) {
-        synchronized(localItems) {
-            localItems.add(localDevice);
+        remoteItemsLock.readLock().lock();
+        try {
+            localItemsLock.writeLock().lock();
+            try{
+                localItems.add(localDevice);
+            } finally {
+                localItemsLock.writeLock().unlock();
+            }
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
     }
 
     public void addDevice(LocalDevice localDevice, DiscoveryOptions options) {
-        synchronized(localItems) {
-            localItems.add(localDevice, options);
+        remoteItemsLock.readLock().lock();
+        try {
+            localItemsLock.writeLock().lock();
+            try {
+                localItems.add(localDevice, options);
+            } finally {
+                localItemsLock.writeLock().unlock();
+            }
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
     }
 
     public void setDiscoveryOptions(UDN udn, DiscoveryOptions options) {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             localItems.setDiscoveryOptions(udn, options);
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public DiscoveryOptions getDiscoveryOptions(UDN udn) {
-        synchronized(localItems) {
+        localItemsLock.readLock().lock();
+        try {
             return localItems.getDiscoveryOptions(udn);
+        } finally {
+            localItemsLock.readLock().unlock();
         }
     }
 
     public void addDevice(RemoteDevice remoteDevice) {
-        synchronized(remoteItems) {
-            remoteItems.add(remoteDevice);
+        remoteItemsLock.writeLock().lock();
+        try {
+            localItemsLock.readLock().lock();
+            try {
+                remoteItems.add(remoteDevice);
+            } finally {
+                localItemsLock.readLock().unlock();
+            }
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     public boolean update(RemoteDeviceIdentity rdIdentity) {
-        synchronized(remoteItems) {
-            return remoteItems.update(rdIdentity);
+        remoteItemsLock.writeLock().lock();
+        try {
+            localItemsLock.readLock().lock();
+            try {
+                return remoteItems.update(rdIdentity);
+            } finally {
+                localItemsLock.readLock().unlock();
+            }
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     public boolean removeDevice(LocalDevice localDevice) {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             return localItems.remove(localDevice);
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public boolean removeDevice(RemoteDevice remoteDevice) {
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             return remoteItems.remove(remoteDevice);
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     public void removeAllLocalDevices() {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             localItems.removeAll();
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public void removeAllRemoteDevices() {
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             remoteItems.removeAll();
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
@@ -228,76 +281,104 @@ public class RegistryImpl implements Registry {
 
     public Device getDevice(UDN udn, boolean rootOnly) {
         Device device;
-        synchronized(localItems) {
-            if ((device = localItems.get(udn, rootOnly)) != null) return device;
-        }
-        synchronized(remoteItems) {
-            if ((device = remoteItems.get(udn, rootOnly)) != null) return device;
-        }
-        
+
+        if ((device = getLocalDevice(udn, rootOnly)) != null) return device;
+        if ((device = getRemoteDevice(udn, rootOnly)) != null) return device;
+
         return null;
     }
 
     public LocalDevice getLocalDevice(UDN udn, boolean rootOnly) {
-        synchronized(localItems) {
+        localItemsLock.readLock().lock();
+        try {
             return localItems.get(udn, rootOnly);
+        } finally {
+            localItemsLock.readLock().unlock();
         }
     }
 
     public RemoteDevice getRemoteDevice(UDN udn, boolean rootOnly) {
-        synchronized(remoteItems) {
+        remoteItemsLock.readLock().lock();
+        try {
             return remoteItems.get(udn, rootOnly);
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
     }
 
     public Collection<LocalDevice> getLocalDevices() {
-        synchronized(localItems) {
+        localItemsLock.readLock().lock();
+        try {
             return Collections.unmodifiableCollection(localItems.get());
+        } finally {
+            localItemsLock.readLock().unlock();
         }
     }
 
     public Collection<RemoteDevice> getRemoteDevices() {
-        synchronized(remoteItems) {
+        remoteItemsLock.readLock().lock();
+        try {
             return Collections.unmodifiableCollection(remoteItems.get());
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
     }
 
     public Collection<Device> getDevices() {
-        Set all = new HashSet();
-        synchronized(localItems) {
-            all.addAll(localItems.get());
-        }
-        
-        synchronized(remoteItems) {
+        Set<Device> all = new HashSet<>();
+
+        remoteItemsLock.readLock().lock();
+        try {
             all.addAll(remoteItems.get());
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
-        
+
+        localItemsLock.readLock().lock();
+        try {
+            all.addAll(localItems.get());
+        } finally {
+            localItemsLock.readLock().unlock();
+        }
+
         return Collections.unmodifiableCollection(all);
     }
 
     public Collection<Device> getDevices(DeviceType deviceType) {
-        Collection<Device> devices = new HashSet();
+        Collection<Device> devices = new HashSet<>();
 
-        synchronized(localItems) {
-            devices.addAll(localItems.get(deviceType));
-        }
-        
-        synchronized(remoteItems) {
+        remoteItemsLock.readLock().lock();
+        try {
             devices.addAll(remoteItems.get(deviceType));
+        } finally {
+            remoteItemsLock.readLock().unlock();
+        }
+
+        localItemsLock.readLock().lock();
+        try {
+            devices.addAll(localItems.get(deviceType));
+        } finally {
+            localItemsLock.readLock().unlock();
         }
 
         return Collections.unmodifiableCollection(devices);
     }
 
     public Collection<Device> getDevices(ServiceType serviceType) {
-        Collection<Device> devices = new HashSet();
+        Collection<Device> devices = new HashSet<>();
 
-        synchronized(localItems) {
-            devices.addAll(localItems.get(serviceType));
-        }
-        
-        synchronized(remoteItems) {
+        remoteItemsLock.readLock().lock();
+        try {
             devices.addAll(remoteItems.get(serviceType));
+        } finally {
+            remoteItemsLock.readLock().unlock();
+        }
+
+        localItemsLock.readLock().lock();
+        try {
+            devices.addAll(localItems.get(serviceType));
+        } finally {
+            localItemsLock.readLock().unlock();
         }
 
         return Collections.unmodifiableCollection(devices);
@@ -320,26 +401,22 @@ public class RegistryImpl implements Registry {
 
         // Note: Uses field access on resourceItems for performance reasons
 
-        synchronized(resourceItems) {
-    		for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-            	Resource resource = resourceItem.getItem();
-            	if (resource.matches(pathQuery)) {
-                    return resource;
-                }
+		for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+        	Resource resource = resourceItem.getItem();
+        	if (resource.matches(pathQuery)) {
+                return resource;
             }
         }
 
         // TODO: UPNP VIOLATION: Fuppes on my ReadyNAS thinks it's a cool idea to add a slash at the end of the callback URI...
         // It also cuts off any query parameters in the callback URL - nice!
-        synchronized(resourceItems) {
-            if (pathQuery.getPath().endsWith("/")) {
-                URI pathQueryWithoutSlash = URI.create(pathQuery.toString().substring(0, pathQuery.toString().length() - 1));
-    
-     			for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                	Resource resource = resourceItem.getItem();
-                	if (resource.matches(pathQueryWithoutSlash)) {
-                        return resource;
-                    }
+        if (pathQuery.getPath().endsWith("/")) {
+            URI pathQueryWithoutSlash = URI.create(pathQuery.toString().substring(0, pathQuery.toString().length() - 1));
+
+ 			for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+            	Resource resource = resourceItem.getItem();
+            	if (resource.matches(pathQueryWithoutSlash)) {
+                    return resource;
                 }
             }
         }
@@ -356,22 +433,19 @@ public class RegistryImpl implements Registry {
     }
 
     public Collection<Resource> getResources() {
-        Collection<Resource> s = new HashSet();
-        synchronized(resourceItems) {
-            for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                s.add(resourceItem.getItem());
-            }
+        Collection<Resource> s = new HashSet(resourceItems.size());
+
+        for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+            s.add(resourceItem.getItem());
         }
         return s;
     }
 
     public <T extends Resource> Collection<T> getResources(Class<T> resourceType) {
-        Collection<T> s = new HashSet();
-        synchronized(resourceItems) {
-            for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                if (resourceType.isAssignableFrom(resourceItem.getItem().getClass()))
-                    s.add((T) resourceItem.getItem());
-            }
+        Collection<T> s = new HashSet(resourceItems.size());
+        for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+            if (resourceType.isAssignableFrom(resourceItem.getItem().getClass()))
+                s.add((T) resourceItem.getItem());
         }
         return s;
     }
@@ -382,75 +456,99 @@ public class RegistryImpl implements Registry {
 
     public void addResource(Resource resource, int maxAgeSeconds) {
         RegistryItem resourceItem = new RegistryItem(resource.getPathQuery(), resource, maxAgeSeconds);
-        synchronized(resourceItems) {
-            resourceItems.remove(resourceItem);
-            resourceItems.add(resourceItem);
-        }
+
+        resourceItems.remove(resourceItem);
+        resourceItems.add(resourceItem);
     }
 
     public boolean removeResource(Resource resource) {
-        synchronized(resourceItems) {
-            return resourceItems.remove(new RegistryItem(resource.getPathQuery()));
-        }
+        return resourceItems.remove(new RegistryItem(resource.getPathQuery()));
     }
 
     // #################################################################################################
 
     public void addLocalSubscription(LocalGENASubscription subscription) {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             localItems.addSubscription(subscription);
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public LocalGENASubscription getLocalSubscription(String subscriptionId) {
-        synchronized(localItems) {
+        localItemsLock.readLock().lock();
+        try {
             return localItems.getSubscription(subscriptionId);
+        } finally {
+            localItemsLock.readLock().unlock();
         }
     }
 
     public boolean updateLocalSubscription(LocalGENASubscription subscription) {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             return localItems.updateSubscription(subscription);
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public boolean removeLocalSubscription(LocalGENASubscription subscription) {
-        synchronized(localItems) {
+        localItemsLock.writeLock().lock();
+        try {
             return localItems.removeSubscription(subscription);
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
     }
 
     public void addRemoteSubscription(RemoteGENASubscription subscription) {
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             remoteItems.addSubscription(subscription);
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     public RemoteGENASubscription getRemoteSubscription(String subscriptionId) {
-        synchronized(remoteItems) {
+        remoteItemsLock.readLock().lock();
+        try {
             return remoteItems.getSubscription(subscriptionId);
+        } finally {
+            remoteItemsLock.readLock().unlock();
         }
     }
 
     public void updateRemoteSubscription(RemoteGENASubscription subscription) {
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             remoteItems.updateSubscription(subscription);
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     public void removeRemoteSubscription(RemoteGENASubscription subscription) {
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             remoteItems.removeSubscription(subscription);
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
     }
 
     /* ############################################################################################################ */
 
-   	public void advertiseLocalDevices() {
-       	 synchronized(localItems) {
-       		localItems.advertiseLocalDevices();
-       	 }
-   	}
+    public void advertiseLocalDevices() {
+        localItemsLock.readLock().lock();
+        try {
+            localItems.advertiseLocalDevices();
+        } finally {
+            localItemsLock.readLock().unlock();
+        }
+    }
 
     /* ############################################################################################################ */
 
@@ -462,7 +560,7 @@ public class RegistryImpl implements Registry {
             if (registryMaintainer != null)
                 registryMaintainer.stop();
         }
-        
+
         // Final cleanup run to flush out pending executions which might
         // not have been caught by the maintainer before it stopped
         synchronized(pendingExecutions) {
@@ -470,32 +568,30 @@ public class RegistryImpl implements Registry {
             runPendingExecutions(false);
         }
 
-        synchronized(registryListeners) {
-            for (RegistryListener listener : registryListeners) {
-                listener.beforeShutdown(this);
-            }
+        for (RegistryListener listener : registryListeners) {
+            listener.beforeShutdown(this);
         }
 
-        synchronized(resourceItems) {
-            RegistryItem<URI, Resource>[] resources = resourceItems.toArray(new RegistryItem[resourceItems.size()]);
-            for (RegistryItem<URI, Resource> resourceItem : resources) {
-                resourceItem.getItem().shutdown();
-            }
+        for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+            resourceItem.getItem().shutdown();
         }
 
-        
-        synchronized(remoteItems) {
+        remoteItemsLock.writeLock().lock();
+        try {
             remoteItems.shutdown();
-        }
-        
-        synchronized(localItems) {
-            localItems.shutdown();
+        } finally {
+            remoteItemsLock.writeLock().unlock();
         }
 
-        synchronized(registryListeners) {
-            for (RegistryListener listener : registryListeners) {
-                listener.afterShutdown();
-            }
+        localItemsLock.writeLock().lock();
+        try {
+            localItems.shutdown();
+        } finally {
+            localItemsLock.writeLock().unlock();
+        }
+
+        for (RegistryListener listener : registryListeners) {
+            listener.afterShutdown();
         }
     }
 
@@ -514,10 +610,18 @@ public class RegistryImpl implements Registry {
         synchronized(lock) {
             if (registryMaintainer == null) {
                 log.trace("Resuming registry maintenance");
-                synchronized(remoteItems) {
-                    remoteItems.resume();
+                remoteItemsLock.writeLock().lock();
+                try {
+                    localItemsLock.readLock().lock();
+                    try {
+                        remoteItems.resume();
+                    } finally {
+                        localItemsLock.readLock().unlock();
+                    }
+                } finally {
+                    remoteItemsLock.writeLock().unlock();
                 }
-                
+
                 registryMaintainer = createRegistryMaintainer();
                 if (registryMaintainer != null) {
                     getConfiguration().getRegistryMaintainerExecutor().execute(registryMaintainer);
@@ -539,37 +643,38 @@ public class RegistryImpl implements Registry {
         log.trace("Maintaining registry...");
 
         // Remove expired resources
-        synchronized (resourceItems) {
-            Iterator<RegistryItem<URI, Resource>> it = resourceItems.iterator();
-            while (it.hasNext()) {
-                RegistryItem<URI, Resource> item = it.next();
-                if (item.getExpirationDetails().hasExpired()) {
-                    log.trace("Removing expired resource: " + item);
-                    it.remove();
-                }
+        Iterator<RegistryItem<URI, Resource>> it = resourceItems.iterator();
+        while (it.hasNext()) {
+            RegistryItem<URI, Resource> item = it.next();
+            if (item.getExpirationDetails().hasExpired()) {
+                log.trace("Removing expired resource: " + item);
+                it.remove();
             }
-            
-            // Let each resource do its own maintenance
-            synchronized(pendingExecutions) {
-                for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                    resourceItem.getItem().maintain(
-                            pendingExecutions,
-                            resourceItem.getExpirationDetails()
-                    );
-                }
-            }
-        }
-
-
-
-
-        // These add all their operations to the pendingExecutions queue
-        synchronized(remoteItems) {
-            remoteItems.maintain();
         }
         
-        synchronized (localItems) {
+        // Let each resource do its own maintenance
+        synchronized(pendingExecutions) {
+            for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+                resourceItem.getItem().maintain(
+                        pendingExecutions,
+                        resourceItem.getExpirationDetails()
+                );
+            }
+        }
+
+        // These add all their operations to the pendingExecutions queue
+        remoteItemsLock.writeLock().lock();
+        try {
+            remoteItems.maintain();
+        } finally {
+            remoteItemsLock.writeLock().unlock();
+        }
+
+        localItemsLock.writeLock().lock();
+        try {
             localItems.maintain();
+        } finally {
+            localItemsLock.writeLock().unlock();
         }
 
         // We now run the queue asynchronously so the maintenance thread can continue its loop undisturbed
@@ -603,26 +708,30 @@ public class RegistryImpl implements Registry {
         if (log.isTraceEnabled()) {
             log.trace("====================================    REMOTE   ================================================");
 
-            synchronized(remoteItems) {
+            remoteItemsLock.readLock().lock();
+            try {
                 for (RemoteDevice remoteDevice : remoteItems.get()) {
                     log.trace(remoteDevice.toString());
                 }
+            } finally {
+                remoteItemsLock.readLock().unlock();
             }
 
             log.trace("====================================    LOCAL    ================================================");
 
-            synchronized(localItems) {
+            localItemsLock.readLock().lock();
+            try {
                 for (LocalDevice localDevice : localItems.get()) {
                     log.trace(localDevice.toString());
                 }
+            } finally {
+                localItemsLock.readLock().unlock();
             }
 
             log.trace("====================================  RESOURCES  ================================================");
 
-            synchronized(resourceItems) {
-                for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                    log.trace(resourceItem.toString());
-                }
+            for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+                log.trace(resourceItem.toString());
             }
 
             log.trace("=================================================================================================");

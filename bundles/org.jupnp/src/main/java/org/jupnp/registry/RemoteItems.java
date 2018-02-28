@@ -127,7 +127,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
 
         RemoteDevice registeredRemoteDevice = get(rdIdentity.getUdn(), false);
-                  
+
         if (registeredRemoteDevice != null) {
 
             // check for IP address change

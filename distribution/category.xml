@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.jupnp.feature_2.4.0.qualifier.jar" id="org.jupnp.feature" version="2.4.0.qualifier">
-      <category name="org.jupnp"/>
-   </feature>
-   <feature url="features/org.jupnp.feature.source_2.4.0.qualifier.jar" id="org.jupnp.feature.source" version="2.4.0.qualifier">
+   <feature url="features/org.jupnp.feature_2.3.1.QC29.jar" id="org.jupnp.feature" version="2.3.1.QC29">
       <category name="org.jupnp"/>
    </feature>
    <category-def name="org.jupnp" label="jUPnP">

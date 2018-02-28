@@ -18,7 +18,7 @@
 <feature
       id="org.jupnp.feature"
       label="jUPnP"
-      version="2.4.0.qualifier"
+      version="2.3.1.QC29"
       provider-name="openHAB UG">
 
    <description>
@@ -46,5 +46,11 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+     <plugin
+           id="org.jupnp.support"
+           download-size="0"
+           install-size="0"
+           version="0.0.0"
+           unpack="false"/>
 
 </feature>

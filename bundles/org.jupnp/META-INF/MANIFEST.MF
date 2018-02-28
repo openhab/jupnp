@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JUPnP Library
 Bundle-SymbolicName: org.jupnp
-Bundle-Version: 2.4.0.qualifier
+Bundle-Version: 2.3.1.QC29
 Bundle-Vendor: jUPnP.org
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/*.xml
@@ -38,16 +38,40 @@ Import-Package:
  org.w3c.dom.ls,
  org.xml.sax,
  org.xml.sax.helpers
-Export-Package: org.jupnp,org.jupnp.binding,org.jupnp.binding.annotati
- ons,org.jupnp.binding.staging,org.jupnp.binding.xml,org.jupnp.control
- point,org.jupnp.controlpoint.event,org.jupnp.http,org.jupnp.internal.
- compat.java.beans,org.jupnp.mock,org.jupnp.model,org.jupnp.model.acti
- on,org.jupnp.model.gena,org.jupnp.model.message,org.jupnp.model.messa
- ge.control,org.jupnp.model.message.discovery,org.jupnp.model.message.
- gena,org.jupnp.model.message.header,org.jupnp.model.meta,org.jupnp.mo
- del.profile,org.jupnp.model.resource,org.jupnp.model.state,org.jupnp.
- model.types,org.jupnp.model.types.csv,org.jupnp.protocol,org.jupnp.pr
- otocol.async,org.jupnp.protocol.sync,org.jupnp.registry,org.jupnp.reg
- istry.event,org.jupnp.transport,org.jupnp.transport.impl,org.jupnp.tr
- ansport.impl.jetty,org.jupnp.transport.spi,org.jupnp.util,org.jupnp.u
- til.io,org.jupnp.xml
+Export-Package: org.jupnp,
+ org.jupnp.binding,
+ org.jupnp.binding.annotations,
+ org.jupnp.binding.staging,
+ org.jupnp.binding.xml,
+ org.jupnp.controlpoint,
+ org.jupnp.controlpoint.event,
+ org.jupnp.http,
+ org.jupnp.internal.compat.java.beans,
+ org.jupnp.mock,
+ org.jupnp.model,
+ org.jupnp.model.action,
+ org.jupnp.model.gena,
+ org.jupnp.model.message,
+ org.jupnp.model.message.control,
+ org.jupnp.model.message.discovery,
+ org.jupnp.model.message.gena,
+ org.jupnp.model.message.header,
+ org.jupnp.model.meta,
+ org.jupnp.model.profile,
+ org.jupnp.model.resource,
+ org.jupnp.model.state,
+ org.jupnp.model.types,
+ org.jupnp.model.types.csv,
+ org.jupnp.protocol,
+ org.jupnp.protocol.async,
+ org.jupnp.protocol.sync,
+ org.jupnp.registry,
+ org.jupnp.registry.event,
+ org.jupnp.transport,
+ org.jupnp.transport.impl,
+ org.jupnp.transport.impl.jetty,
+ org.jupnp.transport.spi,
+ org.jupnp.util,
+ org.jupnp.util.io,
+ org.jupnp.util.statemachine,
+ org.jupnp.xml
