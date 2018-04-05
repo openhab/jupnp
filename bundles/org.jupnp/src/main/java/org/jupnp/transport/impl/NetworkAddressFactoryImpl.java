@@ -376,6 +376,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
+        if (iface.isPointToPoint()) {
+            log.trace("Skipping point-to-point network interface: {}", iface.getDisplayName());
+            return false;
+        }
+
         if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("vmnet") || (iface.getDisplayName() != null
                 && iface.getDisplayName().toLowerCase(Locale.ENGLISH).contains("vmnet"))) {
             log.trace("Skipping network interface (VMWare): {}", iface.getDisplayName());
