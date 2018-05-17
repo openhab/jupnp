@@ -113,24 +113,26 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      */
     protected void addToQueue(Runnable runnable) {
         lock.readLock().lock();
+
+        if (queueThread == null || !queueThread.isAlive()) {
+            lock.readLock().unlock();
+            lock.writeLock().lock();
+            try {
+                // check again to make sure it has not been created by another thread
+                if (queueThread == null || !queueThread.isAlive()) {
+                    logger.info("Thread pool '{}' exhausted, queueing tasks now.", threadPoolName);
+                    queueThread = createNewQueueThread();
+                    queueThread.start();
+                }
+
+                lock.readLock().lock();
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+
         try {
             taskQueue.add(runnable);
-
-            if (queueThread == null || !queueThread.isAlive()) {
-                lock.readLock().unlock();
-                lock.writeLock().lock();
-                try {
-                    // check again to make sure it has not been created by another thread
-                    if (queueThread == null || !queueThread.isAlive()) {
-                        logger.info("Thread pool '{}' exhausted, queueing tasks now.", threadPoolName);
-                        queueThread = createNewQueueThread();
-                        queueThread.start();
-                    }
-                } finally {
-                    lock.writeLock().unlock();
-                    lock.readLock().lock();
-                }
-            }
         } finally {
             lock.readLock().unlock();
         }
