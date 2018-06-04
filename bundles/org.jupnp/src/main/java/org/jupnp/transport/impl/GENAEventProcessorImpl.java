@@ -16,7 +16,6 @@ package org.jupnp.transport.impl;
 
 import java.io.StringReader;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -50,7 +49,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
     private Logger log = LoggerFactory.getLogger(GENAEventProcessor.class);
 
     protected DocumentBuilderFactory createDocumentBuilderFactory() throws FactoryConfigurationError {
-    	return DocumentBuilderFactory.newInstance();
+        return DocumentBuilderFactory.newInstance();
     }
 
     public void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException {
@@ -158,9 +157,14 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                         if (stateVariable.getName().equals(stateVariableName)) {
                             log.trace("Reading state variable value: " + stateVariableName);
                             String value = XMLUtil.getTextContent(propertyChild);
-                            message.getStateVariableValues().add(
-                                    new StateVariableValue(stateVariable, value)
-                            );
+                            try {
+                                message.getStateVariableValues().add(
+                                        new StateVariableValue(stateVariable, value)
+                                );
+                            } catch (Exception ex) {
+                                log.debug("Value " + value + " for the state variable " + stateVariableName
+                                        + " ignored: " + ex.getMessage());
+                            }
                             break;
                         }
                     }
@@ -208,4 +212,3 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
         throw e;
     }
 }
-
