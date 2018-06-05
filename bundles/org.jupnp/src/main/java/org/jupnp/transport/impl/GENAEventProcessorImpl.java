@@ -27,6 +27,7 @@ import org.jupnp.model.message.gena.IncomingEventRequestMessage;
 import org.jupnp.model.message.gena.OutgoingEventRequestMessage;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.state.StateVariableValue;
+import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.transport.spi.GENAEventProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,9 +162,8 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                                 message.getStateVariableValues().add(
                                         new StateVariableValue(stateVariable, value)
                                 );
-                            } catch (Exception ex) {
-                                log.debug("Value " + value + " for the state variable " + stateVariableName
-                                        + " ignored: " + ex.getMessage());
+                            } catch (InvalidValueException ex) {
+                                log.debug("Value {} for the state variable {} ignored: {}", value, stateVariableName, ex.getMessage());
                             }
                             break;
                         }
