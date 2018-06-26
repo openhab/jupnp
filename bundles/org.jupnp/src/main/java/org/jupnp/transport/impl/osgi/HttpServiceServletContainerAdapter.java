@@ -76,18 +76,16 @@ public class HttpServiceServletContainerAdapter implements
 
 	@Override
 	public void registerServlet(String contextPath, Servlet servlet) {
-	    if(this.contextPath == null) {
-    		Dictionary<?, ?> params = new Properties();
-    		try {
-    			logger.info("Registering UPnP callback servlet as {}", contextPath);
-    			httpService.registerServlet(contextPath, servlet, params, new DisableAuthenticationHttpContext());
-    			this.contextPath = contextPath;
-    		} catch (ServletException e) {
-    			logger.error("Failed to register UPnP servlet!", e);
-    		} catch (NamespaceException e) {
-    			logger.error("Failed to register UPnP servlet!", e);
-    		}
-	    }
+        if (this.contextPath == null) {
+            Dictionary<?, ?> params = new Properties();
+            try {
+                logger.info("Registering UPnP callback servlet as {}", contextPath);
+                httpService.registerServlet(contextPath, servlet, params, new DisableAuthenticationHttpContext());
+                this.contextPath = contextPath;
+            } catch (ServletException | NamespaceException | IllegalStateException e) {
+                logger.error("Failed to register UPnP servlet!", e);
+            }
+        }
 	}
 
 	@Override
