@@ -38,6 +38,7 @@ import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.transport.spi.AbstractStreamClient;
 import org.jupnp.transport.spi.InitializationException;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.util.SpecificationViolationReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -197,6 +198,9 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
             // TODO: Document when/why this happens and why we can ignore it, violating the
             // logging rules of the StreamClient#sendRequest() method
             log.trace("Illegal state: {}", t.getMessage());
+            return true;
+        } else if (t.getMessage().contains("HTTP protocol violation")) {
+            SpecificationViolationReporter.report(t.getMessage());
             return true;
         }
         return false;
