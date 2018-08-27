@@ -43,6 +43,11 @@ public interface StreamClientConfiguration {
     public int getLogWarningSeconds();
 
     /**
+     * @return A request will not be executed again if it has failed in the last X seconds ({@code 0} to disable)
+     */
+    public int getRetryAfterSeconds();
+
+    /**
      * Used for outgoing HTTP requests if no other value was already set on messages.
      *
      * @param majorVersion The UPnP UDA major version.

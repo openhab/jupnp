@@ -17,6 +17,7 @@ package org.jupnp.transport.spi;
 import org.jupnp.model.ServerClientTokens;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Christian Bauer
@@ -26,6 +27,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     protected ExecutorService requestExecutorService;
     protected int timeoutSeconds = 10;
     protected int logWarningSeconds = 5;
+    protected int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
 
     protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService) {
         this.requestExecutorService = requestExecutorService;
@@ -70,6 +72,21 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
 
     public void setLogWarningSeconds(int logWarningSeconds) {
         this.logWarningSeconds = logWarningSeconds;
+    }
+
+    public int getRetryAfterSeconds() {
+        return retryAfterSeconds;
+    }
+
+    /**
+     * @param retryAfterSeconds
+     *            should a positive integer or 0 (to disable the functionality).
+     */
+    public void setRetryAfterSeconds(int retryAfterSeconds) {
+        if (retryAfterSeconds < 0) {
+            throw new IllegalArgumentException("Retry After Seconds can not be null!");
+        }
+        this.retryAfterSeconds = retryAfterSeconds;
     }
 
     /**
