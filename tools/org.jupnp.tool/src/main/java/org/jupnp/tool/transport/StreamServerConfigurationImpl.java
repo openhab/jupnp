@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.jupnp.transport.impl;
+package org.jupnp.tool.transport;
 
 import org.jupnp.transport.spi.StreamServerConfiguration;
 

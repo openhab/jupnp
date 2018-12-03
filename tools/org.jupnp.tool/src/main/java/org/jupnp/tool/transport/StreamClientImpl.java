@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.jupnp.transport.impl;
+package org.jupnp.tool.transport;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,7 +108,7 @@ public class StreamClientImpl implements StreamClient {
                 // loads on Android, even if it doesn't work...
                 URL.setURLStreamHandlerFactory(
                     (URLStreamHandlerFactory) Class.forName(
-                        "org.jupnp.transport.impl.FixedSunURLStreamHandler"
+                        "org.jupnp.tool.transport.FixedSunURLStreamHandler"
                     ).newInstance()
                 );
             } catch (Throwable t) {

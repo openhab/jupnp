@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.jupnp.transport.impl;
+package org.jupnp.tool.transport;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.jupnp.model.message.Connection;
 import org.jupnp.transport.Router;
+import org.jupnp.transport.impl.HttpExchangeUpnpStream;
 import org.jupnp.transport.spi.InitializationException;
 import org.jupnp.transport.spi.StreamServer;
 

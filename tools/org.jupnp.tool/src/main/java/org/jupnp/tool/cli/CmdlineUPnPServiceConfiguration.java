@@ -21,8 +21,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
+import org.jupnp.tool.transport.JDKTransportConfiguration;
 import org.jupnp.transport.TransportConfiguration;
-import org.jupnp.transport.impl.JDKTransportConfiguration;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.StreamClient;

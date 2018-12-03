@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.jupnp.transport.impl;
+package org.jupnp.tool.transport;
 
 import java.io.IOException;
 import java.io.OutputStream;
