@@ -2,14 +2,15 @@
 <?compositeMetadataRepository version='1.0.0'?>
 <repository name='jUPnP Repository' type='org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository' version='1.0.0'>
   <properties size='1'>
-    <property name='p2.timestamp' value='1447572326352'/>
+    <property name='p2.timestamp' value='1447572326353'/>
   </properties>
-  <children size='6'>
+  <children size='7'>
     <child location='2.0.0/'/>
     <child location='2.1.0/'/>
     <child location='2.2.0/'/>
     <child location='2.3.0/'/>
     <child location='2.4.0/'/>
     <child location='2.5.0/'/>
+    <child location='2.5.1/'/>
   </children>
 </repository>
