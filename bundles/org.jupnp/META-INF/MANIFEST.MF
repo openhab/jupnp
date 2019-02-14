@@ -75,3 +75,5 @@ Export-Package: org.jupnp,
  org.jupnp.util.io,
  org.jupnp.util.statemachine,
  org.jupnp.xml
+Provide-Capability: 
+ osgi.service;objectClass:List<String>="org.jupnp.UpnpService"
