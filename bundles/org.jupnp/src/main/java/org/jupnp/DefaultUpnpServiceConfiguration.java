@@ -86,10 +86,16 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     private Logger log = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
-    /** we will use a core pool size of 1 as long as we allow to timeout core threads. */
-    final private static int CORE_THREAD_POOL_SIZE = 1;
+    // set a fairly large core threadpool size, expecting that core timeout policy will
+    // allow the pool to reduce in size after inactivity. note that ThreadPoolExecutor
+    // only adds threads beyond its core size once the backlog is full, so a low value 
+    // core size is a poor choice when there are lots of long-running + idle jobs.
+    // a brief intro to the issue:
+    // http://www.bigsoft.co.uk/blog/2009/11/27/rules-of-a-threadpoolexecutor-pool-size
+    final private static int CORE_THREAD_POOL_SIZE = 16;
     final private static int THREAD_POOL_SIZE = 200;
     final private static int THREAD_QUEUE_SIZE = 1000;
+    final private static boolean THREAD_POOL_CORE_TIMEOUT = true;
 
     final private int streamListenPort;
     final private int multicastResponsePort;
@@ -358,7 +364,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                   threadFactory,
                   rejectedHandler
             );
-            allowCoreThreadTimeOut(true);
+            allowCoreThreadTimeOut(THREAD_POOL_CORE_TIMEOUT);
         }
 
         @Override
