@@ -56,8 +56,7 @@ public class MockRouter implements Router {
     protected UpnpServiceConfiguration configuration;
     protected ProtocolFactory protocolFactory;
 
-    public MockRouter(UpnpServiceConfiguration configuration,
-                      ProtocolFactory protocolFactory) {
+    public MockRouter(UpnpServiceConfiguration configuration, ProtocolFactory protocolFactory) {
         this.configuration = configuration;
         this.protocolFactory = protocolFactory;
     }
@@ -92,6 +91,11 @@ public class MockRouter implements Router {
     }
 
     @Override
+    public boolean autoRestart() throws RouterException {
+        return false;
+    }
+
+    @Override
     public void handleStartFailure(InitializationException ex) throws InitializationException {
     }
 
@@ -100,37 +104,37 @@ public class MockRouter implements Router {
         // Simulate an active stream server, otherwise the notification/search response
         // protocols won't even run
         try {
-            return Arrays.asList(
-                new NetworkAddress(
-                    InetAddress.getByName("127.0.0.1"),
-                    NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT
-                )
-            );
+            return Arrays.asList(new NetworkAddress(InetAddress.getByName("127.0.0.1"),
+                    NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT));
         } catch (UnknownHostException ex) {
             throw new RuntimeException(ex);
         }
     }
 
+    @Override
     public void received(IncomingDatagramMessage msg) {
         incomingDatagramMessages.add(msg);
     }
 
+    @Override
     public void received(UpnpStream stream) {
         receivedUpnpStreams.add(stream);
     }
 
+    @Override
     public void send(OutgoingDatagramMessage msg) throws RouterException {
         outgoingDatagramMessages.add(msg);
     }
 
+    @Override
     public StreamResponseMessage send(StreamRequestMessage msg) throws RouterException {
         sentStreamRequestMessages.add(msg);
         counter++;
-        return getStreamResponseMessages() != null
-            ? getStreamResponseMessages()[counter]
-            : getStreamResponseMessage(msg);
+        return getStreamResponseMessages() != null ? getStreamResponseMessages()[counter]
+                : getStreamResponseMessage(msg);
     }
 
+    @Override
     public void broadcast(byte[] bytes) {
         broadcastedBytes.add(bytes);
     }

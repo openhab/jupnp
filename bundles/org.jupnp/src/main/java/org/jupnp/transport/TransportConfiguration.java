@@ -20,7 +20,6 @@ import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.transport.spi.StreamServerConfiguration;
 
-
 /**
  * Interface to abstract a transport implementation.
  *
@@ -35,9 +34,11 @@ public interface TransportConfiguration<SCC extends StreamClientConfiguration, S
      * Creates a {@link StreamClient} using the given {@link ExecutorService} for async calls.
      *
      * @param executorService used to dispatch request/response processing.
+     * @param retryAfterSeconds should be a positive integer or 0 (to disable the functionality); a negative value will
+     *            be ignored.
      * @return created {@link StreamClient}
      */
-    StreamClient<SCC> createStreamClient(final ExecutorService executorService);
+    StreamClient<SCC> createStreamClient(final ExecutorService executorService, int retryAfterSeconds);
 
     /**
      * Creates a {@link StreamServer} using the given {@code listenerPort}.
