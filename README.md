@@ -1,4 +1,6 @@
-![build status](https://travis-ci.org/jupnp/jupnp.svg)
+![build status](https://travis-ci.com/jupnp/jupnp.svg?branch=master)
+[![CDDL-1.0](https://img.shields.io/badge/license-CDDL%201.0-green.svg)](https://opensource.org/licenses/CDDL-1.0)
+
 
 # Introduction
 
