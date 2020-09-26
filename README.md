@@ -6,8 +6,7 @@ jUPnP is a Java UPnP library and has been forked from the Cling project (https:/
 
 # Build Instructions
 
-Building and running the project is fairly easy if you follow the steps
-detailed below.
+Building and running the project is fairly easy if you follow the steps detailed below.
 
 1\. Prerequisites
 ================
@@ -18,6 +17,7 @@ there won't be any surprises for you. If you have not worked with Maven
 yet, just follow the instructions and everything will miraculously work ;-)
 
 What you need before you start:
+- Java SDK 8 (please note that the build does NOT work with any higher version!)
 - Maven3 from http://maven.apache.org/download.html
 
 Make sure that the "mvn" command is available on your path
