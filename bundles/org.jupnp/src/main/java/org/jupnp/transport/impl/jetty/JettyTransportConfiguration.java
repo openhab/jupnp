@@ -13,28 +13,23 @@ import org.jupnp.transport.spi.StreamServer;
  *
  * @author Victor Toni - initial contribution
  */
-public class JettyTransportConfiguration
-    implements TransportConfiguration {
+public class JettyTransportConfiguration implements TransportConfiguration {
 
     public static final TransportConfiguration INSTANCE = new JettyTransportConfiguration();
 
     @Override
-    public StreamClient createStreamClient(final ExecutorService executorService) {
-        return new JettyStreamClientImpl(
-                new StreamClientConfigurationImpl(
-                        executorService
-                )
-        );
+    public StreamClient createStreamClient(final ExecutorService executorService, int retryAfterSeconds) {
+        StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(executorService);
+        if (retryAfterSeconds >= 0) {
+            clientConfiguration.setRetryAfterSeconds(retryAfterSeconds);
+        }
+        return new JettyStreamClientImpl(clientConfiguration);
     }
 
     @Override
     public StreamServer createStreamServer(final int listenerPort) {
         return new ServletStreamServerImpl(
-                new ServletStreamServerConfigurationImpl(
-                        JettyServletContainer.INSTANCE,
-                        listenerPort
-                )
-            );
+                new ServletStreamServerConfigurationImpl(JettyServletContainer.INSTANCE, listenerPort));
     }
 
 }

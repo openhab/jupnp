@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implements the timeout/callback processing and unifies exception handling.
- * 
+ *
  * @author Christian Bauer
  */
 public abstract class AbstractStreamClient<C extends StreamClientConfiguration, REQUEST> implements StreamClient<C> {
@@ -51,8 +51,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         final Long previeousFailureTime = failedRequests.get(requestMessage.getUri());
         if (getConfiguration().getRetryAfterSeconds() > 0 && previeousFailureTime != null) {
-            if (start - previeousFailureTime < TimeUnit.SECONDS
-                    .toNanos(getConfiguration().getRetryAfterSeconds())) {
+            if (start - previeousFailureTime < TimeUnit.SECONDS.toNanos(getConfiguration().getRetryAfterSeconds())) {
                 log.debug("Will not attempt request because it failed in the last {} seconds: {}",
                         getConfiguration().getRetryAfterSeconds(), requestMessage);
                 return null;
@@ -62,8 +61,9 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         }
 
         REQUEST request = createRequest(requestMessage);
-        if (request == null)
+        if (request == null) {
             return null;
+        }
 
         Callable<StreamResponseMessage> callable = createCallable(requestMessage, request);
         RequestWrapper requestWrapper = new RequestWrapper(callable);
@@ -73,7 +73,8 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         // Wait on the current thread for completion
         try {
-            log.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(), requestMessage);
+            log.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(),
+                    requestMessage);
             StreamResponseMessage response = future.get(getConfiguration().getTimeoutSeconds(), TimeUnit.SECONDS);
 
             // Log a warning if it took too long
@@ -105,12 +106,12 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             if (!logExecutionException(cause)) {
                 String message = "HTTP request failed: " + requestMessage;
 
-                if (log.isDebugEnabled()) {
+                if (log.isDebugEnabled() || log.isTraceEnabled()) {
                     // if debug then the warning will additionally contain the stacktrace of the causing exception
-                    log.warn(message, Exceptions.unwrap(cause));
+                    log.warn(message + " ({})", cause.getMessage(), cause);
                 } else {
                     // compact logging
-                    log.warn(message + " (" + Exceptions.unwrap(cause).getMessage() + ")");
+                    log.warn(message + " ({})", Exceptions.unwrap(cause).getMessage());
                 }
             }
 
@@ -188,7 +189,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         }
     }
 
-    // Wrap the Callables to track if execution started or if it timed out while waiting in the executor queue 
+    // Wrap the Callables to track if execution started or if it timed out while waiting in the executor queue
     private static class RequestWrapper implements Callable<StreamResponseMessage> {
 
         Callable<StreamResponseMessage> task;

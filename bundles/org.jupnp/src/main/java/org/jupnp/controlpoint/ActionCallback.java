@@ -14,6 +14,8 @@
 
 package org.jupnp.controlpoint;
 
+import java.net.URL;
+
 import org.jupnp.model.action.ActionException;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.message.UpnpResponse;
@@ -21,16 +23,16 @@ import org.jupnp.model.message.control.IncomingActionResponseMessage;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.meta.Service;
-import org.jupnp.model.types.ErrorCode;
 import org.jupnp.protocol.sync.SendingAction;
-
-import java.net.URL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Execute actions on any service.
  * <p>
  * Usage example for asynchronous execution in a background thread:
  * </p>
+ *
  * <pre>
  * Service service = device.findService(new UDAServiceId("SwitchPower"));
  * Action getStatusAction = service.getAction("GetStatus");
@@ -56,6 +58,7 @@ import java.net.URL;
  * You can also execute the action synchronously in the same thread using the
  * {@link org.jupnp.controlpoint.ActionCallback.Default} implementation:
  * </p>
+ *
  * <pre>
  * myActionInvocation.setInput("foo", bar);
  * new ActionCallback.Default(myActionInvocation, upnpService.getControlPoint()).run();
@@ -71,6 +74,7 @@ public abstract class ActionCallback implements Runnable {
      * execution of an {@link org.jupnp.model.action.ActionInvocation}.
      */
     public static final class Default extends ActionCallback {
+        final private Logger log = LoggerFactory.getLogger(Default.class);
 
         public Default(ActionInvocation actionInvocation, ControlPoint controlPoint) {
             super(actionInvocation, controlPoint);
@@ -82,7 +86,7 @@ public abstract class ActionCallback implements Runnable {
 
         @Override
         public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-
+            log.debug("Default ActionCallback: {} failed: {}", invocation.getAction().getName(), defaultMsg);
         }
     }
 
@@ -112,12 +116,13 @@ public abstract class ActionCallback implements Runnable {
         return this;
     }
 
+    @Override
     public void run() {
         Service service = actionInvocation.getAction().getService();
 
         // Local execution
         if (service instanceof LocalService) {
-            LocalService localService = (LocalService)service;
+            LocalService localService = (LocalService) service;
 
             // Executor validates input inside the execute() call immediately
             localService.getExecutor(actionInvocation.getAction()).execute(actionInvocation);
@@ -128,26 +133,33 @@ public abstract class ActionCallback implements Runnable {
                 success(actionInvocation);
             }
 
-        // Remote execution
-        } else if (service instanceof RemoteService){
+            // Remote execution
+        } else if (service instanceof RemoteService) {
 
-            if (getControlPoint()  == null) {
+            if (getControlPoint() == null) {
                 throw new IllegalStateException("Callback must be executed through ControlPoint");
             }
 
-            RemoteService remoteService = (RemoteService)service;
+            RemoteService remoteService = (RemoteService) service;
 
             // Figure out the remote URL where we'd like to send the action request to
             URL controLURL;
             try {
-            	controLURL = remoteService.getDevice().normalizeURI(remoteService.getControlURI());
-            } catch(IllegalArgumentException e) {
-            	failure(actionInvocation, null, "bad control URL: " + remoteService.getControlURI());
-            	return ;
+                controLURL = remoteService.getDevice().normalizeURI(remoteService.getControlURI());
+            } catch (IllegalArgumentException e) {
+                failure(actionInvocation, null, "bad control URL: " + remoteService.getControlURI());
+                return;
+            }
+
+            // Ignored HTTPS control URL
+            if ("https".equals(controLURL.getProtocol())) {
+                failure(actionInvocation, null, "ignored action due to HTTPS control URL: " + controLURL);
+                return;
             }
 
             // Do it
-            SendingAction prot = getControlPoint().getProtocolFactory().createSendingAction(actionInvocation, controLURL);
+            SendingAction prot = getControlPoint().getProtocolFactory().createSendingAction(actionInvocation,
+                    controLURL);
             prot.run();
 
             IncomingActionResponseMessage response = prot.getOutputMessage();

@@ -90,6 +90,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
+    private int retryAfterSeconds = -1;
+    private int maxRequests = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -146,7 +148,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected void activate(BundleContext context, Map<String, Object> configProps) throws ConfigurationException {
-
         this.context = context;
 
         createConfiguration(configProps);
@@ -193,7 +194,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), retryAfterSeconds);
     }
 
     @Override
@@ -331,6 +332,11 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     public NetworkAddressFactory createNetworkAddressFactory() {
         return createNetworkAddressFactory(streamListenPort, multicastResponsePort);
+    }
+
+    @Override
+    public int getMaxRequests() {
+        return maxRequests;
     }
 
     @Override
@@ -472,6 +478,30 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             httpProxyPort = (Integer) prop;
         }
+
+        prop = properties.get("retryAfterSeconds");
+        if (prop instanceof String) {
+            try {
+                retryAfterSeconds = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            retryAfterSeconds = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", retryAfterSeconds);
+
+        prop = properties.get("maxRequests");
+        if (prop instanceof String) {
+            try {
+                maxRequests = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for maxRequests - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            maxRequests = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration maxRequests = {}", maxRequests);
     }
 
 }

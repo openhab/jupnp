@@ -108,12 +108,14 @@ public interface UpnpServiceConfiguration {
     public ExecutorService getStreamServerExecutorService();
 
     /**
-     * @return The shared implementation of {@link org.jupnp.binding.xml.DeviceDescriptorBinder} for the UPnP 1.0 Device Architecture..
+     * @return The shared implementation of {@link org.jupnp.binding.xml.DeviceDescriptorBinder} for the UPnP 1.0 Device
+     *         Architecture..
      */
     public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10();
 
     /**
-     * @return The shared implementation of {@link org.jupnp.binding.xml.ServiceDescriptorBinder} for the UPnP 1.0 Device Architecture..
+     * @return The shared implementation of {@link org.jupnp.binding.xml.ServiceDescriptorBinder} for the UPnP 1.0
+     *         Device Architecture..
      */
     public ServiceDescriptorBinder getServiceDescriptorBinderUDA10();
 
@@ -142,7 +144,7 @@ public interface UpnpServiceConfiguration {
      * @return The time in milliseconds to wait between each registry maintenance operation.
      */
     public int getRegistryMaintenanceIntervalMillis();
-    
+
     /**
      * Optional setting for flooding alive NOTIFY messages for local devices.
      * <p>
@@ -228,7 +230,8 @@ public interface UpnpServiceConfiguration {
     public Executor getAsyncProtocolExecutor();
 
     /**
-     * @return The executor service which runs the processing of synchronous aspects of the UPnP stack (description, control, GENA).
+     * @return The executor service which runs the processing of synchronous aspects of the UPnP stack (description,
+     *         control, GENA).
      */
     public ExecutorService getSyncProtocolExecutorService();
 
@@ -246,6 +249,8 @@ public interface UpnpServiceConfiguration {
      * @return The executor which runs the notification threads of registry listeners.
      */
     public Executor getRegistryListenerExecutor();
+
+    public int getMaxRequests();
 
     /**
      * Called by the {@link org.jupnp.UpnpService} on shutdown, useful to e.g. shutdown thread pools.
