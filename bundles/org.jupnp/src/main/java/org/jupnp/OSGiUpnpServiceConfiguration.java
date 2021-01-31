@@ -96,6 +96,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean asyncThreadPool = true;
     private boolean mainThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
+    private int retryAfterSeconds = -1;
+    private int maxRequests = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -199,7 +201,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"));
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),retryAfterSeconds);
     }
 
     @Override
@@ -535,6 +537,18 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             httpProxyPort = (Integer) prop;
         }
+
+        prop = properties.get("retryAfterSeconds");
+        if (prop instanceof String) {
+            try {
+                retryAfterSeconds = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            retryAfterSeconds = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", retryAfterSeconds);
     }
 
 }

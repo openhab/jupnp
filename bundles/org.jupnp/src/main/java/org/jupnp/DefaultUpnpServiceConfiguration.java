@@ -173,7 +173,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"));
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),-1);
     }
 
     @Override

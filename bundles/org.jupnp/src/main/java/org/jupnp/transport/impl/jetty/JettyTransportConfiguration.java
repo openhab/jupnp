@@ -19,12 +19,12 @@ public class JettyTransportConfiguration
     public static final TransportConfiguration INSTANCE = new JettyTransportConfiguration();
 
     @Override
-    public StreamClient createStreamClient(final ExecutorService executorService) {
-        return new JettyStreamClientImpl(
-                new StreamClientConfigurationImpl(
-                        executorService
-                )
-        );
+    public StreamClient createStreamClient(final ExecutorService executorService, int retryAfterSeconds) {
+        StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(executorService);
+        if (retryAfterSeconds >= 0) {
+            clientConfiguration.setRetryAfterSeconds(retryAfterSeconds);
+        }
+        return new JettyStreamClientImpl(clientConfiguration);
     }
 
     @Override
