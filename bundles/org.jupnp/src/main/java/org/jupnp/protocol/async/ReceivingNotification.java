@@ -119,7 +119,7 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
 
             // Unfortunately, we always have to retrieve the descriptor because at this point we
             // have no idea if it's a root or embedded device
-            getUpnpService().getConfiguration().getAsyncProtocolExecutor().execute(
+            getUpnpService().getConfiguration().getAsyncProtocolExecutor("upnp-notification").execute(
                     new RetrieveRemoteDescriptors(getUpnpService(), rd)
             );
 

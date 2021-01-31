@@ -263,7 +263,7 @@ public abstract class SubscriptionCallback implements Runnable {
 
     private void endRemoteSubscription(RemoteGENASubscription subscription) {
         log.trace("Ending remote subscription: " + subscription);
-        getControlPoint().getConfiguration().getSyncProtocolExecutorService().execute(
+        getControlPoint().getConfiguration().getSyncProtocolExecutorService("upnp-remote").execute(
                 getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription)
         );
     }

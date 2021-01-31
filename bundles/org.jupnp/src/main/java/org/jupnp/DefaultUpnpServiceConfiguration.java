@@ -173,7 +173,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"));
     }
 
     @Override
@@ -198,18 +198,18 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
-    public ExecutorService getMulticastReceiverExecutor() {
-        return getDefaultExecutorService();
+    public ExecutorService getMulticastReceiverExecutor(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
-    public ExecutorService getDatagramIOExecutor() {
-        return getDefaultExecutorService();
+    public ExecutorService getDatagramIOExecutor(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
-    public ExecutorService getStreamServerExecutorService() {
-        return getDefaultExecutorService();
+    public ExecutorService getStreamServerExecutorService(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
@@ -267,13 +267,13 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
-    public ExecutorService getAsyncProtocolExecutor() {
-        return getDefaultExecutorService();
+    public ExecutorService getAsyncProtocolExecutor(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
-    public ExecutorService getSyncProtocolExecutorService() {
-        return getDefaultExecutorService();
+    public ExecutorService getSyncProtocolExecutorService(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
@@ -282,13 +282,13 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
-    public Executor getRegistryMaintainerExecutor() {
-        return getDefaultExecutorService();
+    public Executor getRegistryMaintainerExecutor(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
-    public Executor getRegistryListenerExecutor() {
-        return getDefaultExecutorService();
+    public Executor getRegistryListenerExecutor(String threadName) {
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
@@ -299,7 +299,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     @Override
     public void shutdown() {
         log.trace("Shutting down default executor service");
-        getDefaultExecutorService().shutdownNow();
+        getDefaultExecutorService("upnp-default").shutdownNow();
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
@@ -330,7 +330,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         return new Namespace();
     }
 
-    protected ExecutorService getDefaultExecutorService() {
+    protected ExecutorService getDefaultExecutorService(String threadName) {
         return defaultExecutorService;
     }
 

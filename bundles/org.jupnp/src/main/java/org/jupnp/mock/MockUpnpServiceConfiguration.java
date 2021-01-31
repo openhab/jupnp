@@ -82,7 +82,7 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
     }
 
     @Override
-    public Executor getRegistryMaintainerExecutor() {
+    public Executor getRegistryMaintainerExecutor(String threadName) {
         if (isMaintainsRegistry()) {
             return new Executor() {
                 public void execute(Runnable runnable) {
@@ -90,13 +90,13 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
                 }
             };
         }
-        return getDefaultExecutorService();
+        return getDefaultExecutorService(threadName);
     }
 
     @Override
-    protected ExecutorService getDefaultExecutorService() {
+    protected ExecutorService getDefaultExecutorService(String threadName) {
         if (isMultiThreaded()) {
-            return super.getDefaultExecutorService();
+            return super.getDefaultExecutorService(threadName);
         }
         return new AbstractExecutorService() {
 

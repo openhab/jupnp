@@ -54,7 +54,7 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
         try {
             log.debug("Setting executor service on servlet container adapter");
             getConfiguration().getServletContainerAdapter().setExecutorService(
-                    router.getConfiguration().getStreamServerExecutorService());
+                    router.getConfiguration().getStreamServerExecutorService("upnp-stream"));
 
             log.debug("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
             localPort = getConfiguration().getServletContainerAdapter().addConnector(bindAddress.getHostAddress(),

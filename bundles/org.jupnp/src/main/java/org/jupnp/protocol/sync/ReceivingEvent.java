@@ -101,7 +101,7 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
             final RemoteGENASubscription subscription =
                 getUpnpService().getRegistry().getRemoteSubscription(requestMessage.getSubscrptionId());
             if (subscription != null) {
-                getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-receive").execute(
                     new Runnable() {
                         public void run() {
                             subscription.invalidMessage(ex);
@@ -123,7 +123,7 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
             return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.PRECONDITION_FAILED));
         }
 
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+        getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-receive").execute(
                 new Runnable() {
                     public void run() {
                         log.trace("Calling active subscription with event state variable values");

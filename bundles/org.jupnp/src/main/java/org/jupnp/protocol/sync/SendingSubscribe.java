@@ -72,7 +72,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
 
         if (!getInputMessage().hasCallbackURLs()) {
             log.trace("Subscription failed, no active local callback URLs available (network disabled?)");
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+            getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-subscribe").execute(
                 new Runnable() {
                     public void run() {
                         subscription.fail(null);
@@ -106,7 +106,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
 
             if (response.getOperation().isFailed()) {
                 log.trace("Subscription failed, response was: " + responseMessage);
-                getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-subscribe").execute(
                     new Runnable() {
                         public void run() {
                             subscription.fail(responseMessage.getOperation());
@@ -115,7 +115,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
                 );
             } else if (!responseMessage.isValidHeaders()) {
                 log.error("Subscription failed, invalid or missing (SID, Timeout) response headers");
-                getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-subscribe").execute(
                     new Runnable() {
                         public void run() {
                             subscription.fail(responseMessage.getOperation());
@@ -130,7 +130,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
 
                 getUpnpService().getRegistry().addRemoteSubscription(subscription);
 
-                getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-subscribe").execute(
                     new Runnable() {
                         public void run() {
                             subscription.establish();
@@ -147,7 +147,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
 
     protected void onSubscriptionFailure() {
         log.trace("Subscription failed");
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+        getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-subscribe").execute(
             new Runnable() {
                 public void run() {
                     subscription.fail(null);

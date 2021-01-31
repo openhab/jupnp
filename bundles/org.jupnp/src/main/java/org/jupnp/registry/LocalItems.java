@@ -115,7 +115,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
              advertiseAlive(localDevice);
 
         for (final RegistryListener listener : registry.getListeners()) {
-            registry.getConfiguration().getRegistryListenerExecutor().execute(
+            registry.getConfiguration().getRegistryListenerExecutor("upnp-local").execute(
                 new Runnable() {
                     public void run() {
                         listener.localDeviceAdded(registry, localDevice);
@@ -166,7 +166,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
                     log.trace("Removing incoming subscription: " + incomingSubscription.getKey());
                     it.remove();
                     if (!shuttingDown) {
-                        registry.getConfiguration().getRegistryListenerExecutor().execute(
+                        registry.getConfiguration().getRegistryListenerExecutor("upnp-local").execute(
                                 new Runnable() {
                                     public void run() {
                                         incomingSubscription.getItem().end(CancelReason.DEVICE_WAS_REMOVED);
@@ -182,7 +182,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
             if (!shuttingDown) {
                 for (final RegistryListener listener : registry.getListeners()) {
-                    registry.getConfiguration().getRegistryListenerExecutor().execute(
+                    registry.getConfiguration().getRegistryListenerExecutor("upnp-local").execute(
                             new Runnable() {
                                 public void run() {
                                     listener.localDeviceRemoved(registry, localDevice);

@@ -193,7 +193,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService());
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"));
     }
 
     @Override
@@ -235,18 +235,18 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public ExecutorService getMulticastReceiverExecutor() {
-        return getMainExecutorService();
+    public ExecutorService getMulticastReceiverExecutor(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
-    public ExecutorService getDatagramIOExecutor() {
-        return getMainExecutorService();
+    public ExecutorService getDatagramIOExecutor(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
-    public ExecutorService getStreamServerExecutorService() {
-        return getMainExecutorService();
+    public ExecutorService getStreamServerExecutorService(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
@@ -304,13 +304,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public ExecutorService getAsyncProtocolExecutor() {
+    public ExecutorService getAsyncProtocolExecutor(String threadName) {
         return asyncExecutorService;
     }
 
     @Override
-    public ExecutorService getSyncProtocolExecutorService() {
-        return getMainExecutorService();
+    public ExecutorService getSyncProtocolExecutorService(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
@@ -319,13 +319,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public Executor getRegistryMaintainerExecutor() {
-        return getMainExecutorService();
+    public Executor getRegistryMaintainerExecutor(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
-    public Executor getRegistryListenerExecutor() {
-        return getMainExecutorService();
+    public Executor getRegistryListenerExecutor(String threadName) {
+        return getMainExecutorService(threadName);
     }
 
     @Override
@@ -379,7 +379,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         return callbackURI;
     }
 
-    protected ExecutorService getMainExecutorService() {
+    protected ExecutorService getMainExecutorService(String threadName) {
         return mainExecutorService;
     }
 

@@ -95,17 +95,17 @@ public interface UpnpServiceConfiguration {
     /**
      * @return The executor which runs the listening background threads for multicast datagrams.
      */
-    public Executor getMulticastReceiverExecutor();
+    public Executor getMulticastReceiverExecutor(String threadName);
 
     /**
      * @return The executor which runs the listening background threads for unicast datagrams.
      */
-    public Executor getDatagramIOExecutor();
+    public Executor getDatagramIOExecutor(String threadName);
 
     /**
      * @return The executor which runs the listening background threads for HTTP requests.
      */
-    public ExecutorService getStreamServerExecutorService();
+    public ExecutorService getStreamServerExecutorService(String threadName);
 
     /**
      * @return The shared implementation of {@link org.jupnp.binding.xml.DeviceDescriptorBinder} for the UPnP 1.0 Device Architecture..
@@ -225,12 +225,12 @@ public interface UpnpServiceConfiguration {
     /**
      * @return The executor which runs the processing of asynchronous aspects of the UPnP stack (discovery).
      */
-    public Executor getAsyncProtocolExecutor();
+    public Executor getAsyncProtocolExecutor(String threadName);
 
     /**
      * @return The executor service which runs the processing of synchronous aspects of the UPnP stack (description, control, GENA).
      */
-    public ExecutorService getSyncProtocolExecutorService();
+    public ExecutorService getSyncProtocolExecutorService(String threadName);
 
     /**
      * @return An instance of {@link org.jupnp.model.Namespace} for this UPnP stack.
@@ -240,12 +240,12 @@ public interface UpnpServiceConfiguration {
     /**
      * @return The executor which runs the background thread for maintaining the registry.
      */
-    public Executor getRegistryMaintainerExecutor();
+    public Executor getRegistryMaintainerExecutor(String threadName);
 
     /**
      * @return The executor which runs the notification threads of registry listeners.
      */
-    public Executor getRegistryListenerExecutor();
+    public Executor getRegistryListenerExecutor(String threadName);
 
     /**
      * Called by the {@link org.jupnp.UpnpService} on shutdown, useful to e.g. shutdown thread pools.

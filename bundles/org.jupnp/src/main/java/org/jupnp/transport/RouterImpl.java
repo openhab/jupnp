@@ -266,7 +266,7 @@ public class RouterImpl implements Router {
                 return;
             }
             log.debug("Received asynchronous message: " + msg);
-            getConfiguration().getAsyncProtocolExecutor().execute(protocol);
+            getConfiguration().getAsyncProtocolExecutor("upnp-router").execute(protocol);
         } catch (ProtocolCreationException ex) {
             log.warn("Handling received datagram failed - " + Exceptions.unwrap(ex).toString());
         }
@@ -284,7 +284,7 @@ public class RouterImpl implements Router {
             return;
         }
         log.debug("Received synchronous stream: " + stream);
-        getConfiguration().getSyncProtocolExecutorService().execute(stream);
+        getConfiguration().getSyncProtocolExecutorService("upnp-router").execute(stream);
     }
 
     /**
@@ -404,7 +404,7 @@ public class RouterImpl implements Router {
 
         for (Map.Entry<NetworkInterface, MulticastReceiver> entry : multicastReceivers.entrySet()) {
             log.debug("Starting multicast receiver on interface: " + entry.getKey().getDisplayName());
-            getConfiguration().getMulticastReceiverExecutor().execute(entry.getValue());
+            getConfiguration().getMulticastReceiverExecutor("upnp-router").execute(entry.getValue());
         }
     }
 
@@ -463,12 +463,12 @@ public class RouterImpl implements Router {
 
         for (Map.Entry<InetAddress, StreamServer> entry : streamServers.entrySet()) {
             log.debug("Starting stream server on address: " + entry.getKey());
-            getConfiguration().getStreamServerExecutorService().execute(entry.getValue());
+            getConfiguration().getStreamServerExecutorService("upnp-router").execute(entry.getValue());
         }
 
         for (Map.Entry<InetAddress, DatagramIO> entry : datagramIOs.entrySet()) {
             log.debug("Starting datagram I/O on address: " + entry.getKey());
-            getConfiguration().getDatagramIOExecutor().execute(entry.getValue());
+            getConfiguration().getDatagramIOExecutor("upnp-router").execute(entry.getValue());
         }
     }
 

@@ -75,7 +75,7 @@ public class RegistryImpl implements Registry {
         synchronized (lock) {
             registryMaintainer = createRegistryMaintainer();
             if (registryMaintainer != null) {
-                getConfiguration().getRegistryMaintainerExecutor().execute(registryMaintainer);
+                getConfiguration().getRegistryMaintainerExecutor("upnp-registry").execute(registryMaintainer);
             }
         }
     }
@@ -134,7 +134,7 @@ public class RegistryImpl implements Registry {
         }
 
         for (final RegistryListener listener : getListeners()) {
-            getConfiguration().getRegistryListenerExecutor().execute(
+            getConfiguration().getRegistryListenerExecutor("upnp-registry").execute(
                     new Runnable() {
                         public void run() {
                             listener.remoteDeviceDiscoveryStarted(RegistryImpl.this, device);
@@ -148,7 +148,7 @@ public class RegistryImpl implements Registry {
 
     public void notifyDiscoveryFailure(final RemoteDevice device, final Exception ex) {
         for (final RegistryListener listener : getListeners()) {
-            getConfiguration().getRegistryListenerExecutor().execute(
+            getConfiguration().getRegistryListenerExecutor("upnp-registry").execute(
                     new Runnable() {
                         public void run() {
                             listener.remoteDeviceDiscoveryFailed(RegistryImpl.this, device, ex);
@@ -624,7 +624,7 @@ public class RegistryImpl implements Registry {
 
                 registryMaintainer = createRegistryMaintainer();
                 if (registryMaintainer != null) {
-                    getConfiguration().getRegistryMaintainerExecutor().execute(registryMaintainer);
+                    getConfiguration().getRegistryMaintainerExecutor("upnp-registry").execute(registryMaintainer);
                 }
             }
         }
@@ -692,7 +692,7 @@ public class RegistryImpl implements Registry {
             log.trace("Executing pending operations: {}", pendingExecutions.size());
             for (Runnable pendingExecution : pendingExecutions) {
                 if (async)
-                    getConfiguration().getAsyncProtocolExecutor().execute(pendingExecution);
+                    getConfiguration().getAsyncProtocolExecutor("upnp-registry").execute(pendingExecution);
                 else
                     pendingExecution.run();
             }

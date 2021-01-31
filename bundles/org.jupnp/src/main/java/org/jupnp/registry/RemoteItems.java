@@ -108,7 +108,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         // Only notify the listeners when the device is fully usable
         log.trace("Completely hydrated remote device graph available, calling listeners: " + device);
         for (final RegistryListener listener : registry.getListeners()) {
-            registry.getConfiguration().getRegistryListenerExecutor().execute(
+            registry.getConfiguration().getRegistryListenerExecutor("upnp-remote").execute(
                     new Runnable() {
                         public void run() {
                             listener.remoteDeviceAdded(registry, device);
@@ -164,7 +164,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
             log.trace("Remote device updated, calling listeners: " + registeredRemoteDevice);
             for (final RegistryListener listener : registry.getListeners()) {
-                registry.getConfiguration().getRegistryListenerExecutor().execute(
+                registry.getConfiguration().getRegistryListenerExecutor("upnp-remote").execute(
                         new Runnable() {
                             public void run() {
                                 listener.remoteDeviceUpdated(registry, item.getItem());
@@ -214,7 +214,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
                     log.trace("Removing outgoing subscription: " + outgoingSubscription.getKey());
                     it.remove();
                     if (!shuttingDown) {
-                        registry.getConfiguration().getRegistryListenerExecutor().execute(
+                        registry.getConfiguration().getRegistryListenerExecutor("upnp-remote").execute(
                                 new Runnable() {
                                     public void run() {
                                         outgoingSubscription.getItem().end(CancelReason.DEVICE_WAS_REMOVED, null);
@@ -228,7 +228,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             // Only notify listeners if we are NOT in the process of shutting down the registry
             if (!shuttingDown) {
                 for (final RegistryListener listener : registry.getListeners()) {
-                    registry.getConfiguration().getRegistryListenerExecutor().execute(
+                    registry.getConfiguration().getRegistryListenerExecutor("upnp-remote").execute(
                             new Runnable() {
                                 public void run() {
                                     listener.remoteDeviceRemoved(registry, registeredDevice);

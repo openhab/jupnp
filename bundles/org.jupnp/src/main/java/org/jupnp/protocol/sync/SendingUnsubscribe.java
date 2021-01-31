@@ -69,7 +69,7 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
         // Always remove from the registry and end the subscription properly - even if it's failed
         getUpnpService().getRegistry().removeRemoteSubscription(subscription);
 
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+        getUpnpService().getConfiguration().getRegistryListenerExecutor("upnp-unsubscribe").execute(
             new Runnable() {
                 public void run() {
                     if (response == null) {

@@ -103,7 +103,7 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
 
         UpnpServiceConfiguration conf = getUpnpService().getConfiguration();
         if (conf != null) {
-            Executor executor = conf.getAsyncProtocolExecutor();
+            Executor executor = conf.getAsyncProtocolExecutor("upnp-search");
             if (executor != null) {
                 executor.execute(new RetrieveRemoteDescriptors(getUpnpService(), rd));
             }
