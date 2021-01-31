@@ -97,7 +97,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean mainThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
     private int retryAfterSeconds = -1;
-    private int maxRequests = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
