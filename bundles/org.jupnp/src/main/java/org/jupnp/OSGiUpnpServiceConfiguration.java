@@ -16,7 +16,11 @@ package org.jupnp;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
@@ -89,6 +93,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int multicastResponsePort;
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
+    private boolean asyncThreadPool = true;
+    private boolean mainThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
 
     private ExecutorService mainExecutorService;
@@ -305,7 +311,11 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Override
     public ExecutorService getAsyncProtocolExecutor(String threadName) {
-        return asyncExecutorService;
+        if ( asyncThreadPool == true ) {
+                return asyncExecutorService;
+        } else {
+                return createNamedThread(threadName);
+        }
     }
 
     @Override
@@ -380,12 +390,27 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected ExecutorService getMainExecutorService(String threadName) {
-        return mainExecutorService;
+       if ( mainThreadPool == true ) {
+       		return mainExecutorService;
+       } else {
+	       	return createNamedThread(threadName);
+       }
     }
 
     private void createExecutorServices() {
-        mainExecutorService = createMainExecutorService();
-        asyncExecutorService = createAsyncProtocolExecutorService();
+	if ( mainThreadPool == true ) {
+		log.debug("Creating mainThreadPool");
+		mainExecutorService = createMainExecutorService();
+	} else {
+		log.debug("Skipping mainThreadPool creation.");
+	}
+
+	if ( asyncThreadPool == true ) {
+		log.debug("Creating asyncThreadPool");
+        	asyncExecutorService = createAsyncProtocolExecutorService();
+	} else {
+		log.debug("Skipping asyncThreadPool creation.");
+	}
     }
 
     protected ExecutorService createMainExecutorService() {
@@ -394,6 +419,26 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private ExecutorService createAsyncProtocolExecutorService() {
         return QueueingThreadPoolExecutor.createInstance("upnp-async", asyncThreadPoolSize);
+    }
+
+    private ExecutorService createNamedThread(String threadName) {
+        log.debug("Create New Named Thread {}", threadName);
+	final String tName = threadName;
+	return Executors.newSingleThreadExecutor(new ThreadFactory() {
+
+            @Override
+            public Thread newThread(Runnable runnable) {
+                    Thread thread = new Thread(runnable, tName);
+                    thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+
+                    @Override
+                    public void uncaughtException(Thread thread, Throwable exception) {
+                            throw new IllegalStateException(exception);
+                    }
+                    });
+                    return thread;
+            }
+        });
     }
 
     private void createConfiguration(Map<String, Object> properties) throws ConfigurationException {
@@ -423,6 +468,24 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             asyncThreadPoolSize = (Integer) prop;
         }
+
+        prop = properties.get("asyncThreadPool");
+        if (prop instanceof String) {
+            try {
+                asyncThreadPool = Boolean.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for asyncThreadPool - using default value '{}'", prop, asyncThreadPool);
+            }
+        } 
+
+        prop = properties.get("mainThreadPool");
+        if (prop instanceof String) {
+            try {
+                mainThreadPool = Boolean.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for mainThreadPool - using default value '{}'", prop, mainThreadPool);
+            }
+        } 
 
         prop = properties.get("multicastResponsePort");
         if (prop instanceof String) {
