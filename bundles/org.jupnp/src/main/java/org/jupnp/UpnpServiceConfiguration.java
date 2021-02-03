@@ -247,6 +247,8 @@ public interface UpnpServiceConfiguration {
      */
     public Executor getRegistryListenerExecutor(String threadName);
 
+    public int getMaxRequests();
+
     /**
      * Called by the {@link org.jupnp.UpnpService} on shutdown, useful to e.g. shutdown thread pools.
      */

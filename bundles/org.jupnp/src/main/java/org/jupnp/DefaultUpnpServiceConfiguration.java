@@ -297,6 +297,11 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
+    public int getMaxRequests() {
+        return -1;
+    }
+
+    @Override
     public void shutdown() {
         log.trace("Shutting down default executor service");
         getDefaultExecutorService("upnp-default").shutdownNow();

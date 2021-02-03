@@ -92,6 +92,11 @@ public class MockRouter implements Router {
     }
 
     @Override
+    public boolean autoRestart() throws RouterException {
+        return false;
+    }
+    
+    @Override
     public void handleStartFailure(InitializationException ex) throws InitializationException {
     }
 

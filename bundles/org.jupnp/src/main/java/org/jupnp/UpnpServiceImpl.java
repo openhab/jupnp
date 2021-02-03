@@ -71,6 +71,7 @@ public class UpnpServiceImpl implements UpnpService {
     protected ScheduledExecutorService scheduledExecutorService;
 
     protected volatile ScheduledFuture<?> scheduledFuture;
+    protected volatile ScheduledFuture<?> routerScheduledFuture;
 
     public UpnpServiceImpl() {
     }
@@ -80,11 +81,11 @@ public class UpnpServiceImpl implements UpnpService {
     }
 
     private static ScheduledExecutorService createExecutor() {
-        return Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+        return Executors.newScheduledThreadPool(2,new ThreadFactory() {
 
             @Override
             public Thread newThread(Runnable runnable) {
-                Thread thread = new Thread(runnable, "Upnp Service Delayed Startup Thread");
+                Thread thread = new Thread(runnable, "Upnp Service Thread");
                 thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
 
                     @Override
@@ -171,7 +172,11 @@ public class UpnpServiceImpl implements UpnpService {
                 synchronized (lock) {
                     if (isRunning) {
                         log.info("Shutting down UPnP service...");
-                        shutdownRegistry();
+                        if (routerScheduledFuture != null) {
+                            routerScheduledFuture.cancel(true);
+                            routerScheduledFuture = null;
+                        }
+			shutdownRegistry();
                         shutdownConfiguration();
                         shutdownRouter();
                         log.info("UPnP service shutdown completed");
@@ -262,6 +267,11 @@ public class UpnpServiceImpl implements UpnpService {
 
                 this.controlPoint = createControlPoint(protocolFactory, registry);
 
+		if (getConfiguration().getMaxRequests() > 0) {
+                    log.debug("Schedule a job checking if the network router needs to be restarted");
+                    scheduleRouterAutoRestart();
+                }
+
                 log.debug("UPnP service started successfully");
 
                 isRunning = true;
@@ -273,6 +283,28 @@ public class UpnpServiceImpl implements UpnpService {
         }
     }
 
+    private void scheduleRouterAutoRestart() {
+        Runnable autoRestart = new Runnable() {
+            @Override
+            public void run() {
+                log.debug("Checking if the network router needs to be restarted...");
+                try {
+                    if (getRouter().autoRestart()) {
+                        log.info("UPnP network router has been restarted");
+                    }
+                } catch (RouterException ex) {
+                    log.debug("Exception while restarting the network router: " + ex.getMessage());
+                }
+            }
+        };
+
+        if (routerScheduledFuture != null) {
+            routerScheduledFuture.cancel(true);
+        }
+
+        routerScheduledFuture = scheduledExecutorService.scheduleWithFixedDelay(autoRestart, 5, 5, TimeUnit.MINUTES);
+    }
+
     private void setConfigProperties(Map<String, Object> configProperties) {
         Object prop = configProperties.get("initialSearchEnabled");
         if (prop instanceof Boolean) {
@@ -282,6 +314,7 @@ public class UpnpServiceImpl implements UpnpService {
 
     protected void activate(Map<String, Object> configProperties) {
         scheduledFuture = null;
+        routerScheduledFuture = null;
         scheduledExecutorService = createExecutor();
         setConfigProperties(configProperties);
         startup();
@@ -291,7 +324,9 @@ public class UpnpServiceImpl implements UpnpService {
         if (scheduledFuture != null) {
             scheduledFuture.cancel(true);
         }
-
+        if (routerScheduledFuture != null) {
+            routerScheduledFuture.cancel(true);
+        }
         scheduledExecutorService.shutdownNow();
         shutdown();
     }

@@ -77,6 +77,8 @@ public class RouterImpl implements Router {
     protected final Map<InetAddress, DatagramIO> datagramIOs = new HashMap();
     protected final Map<InetAddress, StreamServer> streamServers = new HashMap();
 
+    private int nbfSentRequests;
+
     protected RouterImpl() {
     }
 
@@ -133,7 +135,7 @@ public class RouterImpl implements Router {
 
                     // Start the HTTP client last, we don't even have to try if there is no network
                     streamClient = getConfiguration().createStreamClient();
-
+                    nbfSentRequests = 0;
                     enabled = true;
                     return true;
                 } catch (InitializationException ex) {
@@ -195,6 +197,18 @@ public class RouterImpl implements Router {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override
+    public boolean autoRestart() throws RouterException {
+        int max = getConfiguration().getMaxRequests();
+        if (enabled && max > 0 && nbfSentRequests >= max) {
+            log.info("Restarting the UPnP network router...");
+            disable();
+            enable();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -322,7 +336,8 @@ public class RouterImpl implements Router {
                     log.debug("No StreamClient available, not sending: " + msg);
                     return null;
                 }
-                log.debug("Sending via TCP unicast stream: " + msg);
+                nbfSentRequests++;
+                log.debug("Sending via TCP unicast stream (request number {}): {}", nbfSentRequests, msg);
                 try {
                     return streamClient.sendRequest(msg);
                 } catch (InterruptedException ex) {

@@ -97,6 +97,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean mainThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
     private int retryAfterSeconds = -1;
+    private int maxRequests = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -345,6 +346,11 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
+    public int getMaxRequests() {
+        return maxRequests;
+    }
+
+    @Override
     public void shutdown() {
         log.debug("Shutting down executor services");
         shutdownExecutorServices();
@@ -548,6 +554,18 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             retryAfterSeconds = (Integer) prop;
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", retryAfterSeconds);
+
+        prop = properties.get("maxRequests");
+        if (prop instanceof String) {
+            try {
+                maxRequests = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for maxRequests - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            maxRequests = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration maxRequests = {}", maxRequests);
     }
 
 }
