@@ -146,6 +146,12 @@ public abstract class ActionCallback implements Runnable {
             	return ;
             }
 
+            // Ignored HTTPS control URL
+            if ("https".equals(controLURL.getProtocol())) {
+                failure(actionInvocation, null, "ignored action due to HTTPS control URL: " + controLURL);
+                return;
+	    }
+
             // Do it
             SendingAction prot = getControlPoint().getProtocolFactory().createSendingAction(actionInvocation, controLURL);
             prot.run();
