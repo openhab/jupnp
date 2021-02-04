@@ -247,6 +247,8 @@ public interface UpnpServiceConfiguration {
      */
     public Executor getRegistryListenerExecutor(String threadName);
 
+    public Executor getRemoteListenerExecutor(String threadName);
+
     public int getMaxRequests();
 
     /**
