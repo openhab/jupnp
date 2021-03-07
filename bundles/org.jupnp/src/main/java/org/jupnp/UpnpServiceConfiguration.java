@@ -230,7 +230,6 @@ public interface UpnpServiceConfiguration {
     /**
      * @return The executor service which runs the processing of synchronous aspects of the UPnP stack (description, control, GENA).
      */
-    public ExecutorService getSyncProtocolExecutorService();
     public ExecutorService getSyncProtocolExecutorService(String threadName);
 
     /**

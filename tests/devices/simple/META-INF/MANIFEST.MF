@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Created-By: Apache Maven Bundle Plugin
 Tool: Bnd-1.15.0
-Bnd-LastModified: 1615076882010
+Bnd-LastModified: 1615081607931
 Import-Package: org.osgi.framework;version="[1.5,2)",org.osgi.service.de
  vice;version="[1.1,2)",org.osgi.service.event;version="[1.2,2)",org.osg
  i.service.upnp;version="[1.1,2)",org.osgi.util.tracker;version="[1.4,2)
