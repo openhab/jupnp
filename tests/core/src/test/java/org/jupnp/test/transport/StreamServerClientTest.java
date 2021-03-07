@@ -94,7 +94,7 @@ abstract public class StreamServerClientTest {
     public void start() throws Exception {
         server = createStreamServer(TEST_PORT);
         server.init(InetAddress.getByName(TEST_HOST), router);
-        configuration.getStreamServerExecutorService().execute(server);
+        configuration.getStreamServerExecutorService("upnp-stream").execute(server);
 
         client = createStreamClient(configuration);
         Thread.sleep(1000);

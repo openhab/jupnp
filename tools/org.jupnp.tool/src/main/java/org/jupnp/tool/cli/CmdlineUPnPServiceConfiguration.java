@@ -93,37 +93,37 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 		asyncExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-async", ASYNC_POOL_SIZE);
 	}
 
-	protected ExecutorService getMainExecutorService() {
+	protected ExecutorService getMainExecutorService(String threadName) {
 		return mainExecutorService;
 	}
 
 	@Override
-	public Executor getRegistryMaintainerExecutor() {
-		return getMainExecutorService();
+	public Executor getRegistryMaintainerExecutor(String threadName) {
+		return getMainExecutorService(threadName);
 	}
 
 	@Override
-	public Executor getRegistryListenerExecutor() {
-		return getMainExecutorService();
+	public Executor getRegistryListenerExecutor(String threadName) {
+		return getMainExecutorService(threadName);
 	}
 
 	@Override
-	public ExecutorService getMulticastReceiverExecutor() {
-		return getMainExecutorService();
+	public ExecutorService getMulticastReceiverExecutor(String threadName) {
+		return getMainExecutorService(threadName);
 	}
 
 	@Override
-	public ExecutorService getDatagramIOExecutor() {
-		return getMainExecutorService();
+	public ExecutorService getDatagramIOExecutor(String threadName) {
+		return getMainExecutorService(threadName);
 	}
 
 	@Override
-	public ExecutorService getStreamServerExecutorService() {
-		return getMainExecutorService();
+	public ExecutorService getStreamServerExecutorService(String threadName) {
+		return getMainExecutorService(threadName);
 	}
 
 	@Override
-	public ExecutorService getAsyncProtocolExecutor() {
+	public ExecutorService getAsyncProtocolExecutor(String threadName) {
 		return asyncExecutorService;
 	}
 
@@ -149,7 +149,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
     @Override
     public StreamClient createStreamClient() {
         return transportConfiguration.createStreamClient(
-                getSyncProtocolExecutorService()
+                getSyncProtocolExecutorService("upnp-stream"),-1
         );
     }
 

@@ -277,6 +277,11 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
+    public ExecutorService getSyncProtocolExecutorService() {
+        return getSyncProtocolExecutorService("upnp-sync");
+    }
+
+    @Override
     public Namespace getNamespace() {
         return namespace;
     }
