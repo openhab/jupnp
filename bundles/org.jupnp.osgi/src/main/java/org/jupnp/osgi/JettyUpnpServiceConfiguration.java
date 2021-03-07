@@ -31,7 +31,7 @@ public class JettyUpnpServiceConfiguration extends DefaultUpnpServiceConfigurati
 
     @Override
     public StreamClient<?> createStreamClient() {
-        return new JettyStreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService()));
+        return new JettyStreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService("upnp-jetty")));
     }
 
     @Override
