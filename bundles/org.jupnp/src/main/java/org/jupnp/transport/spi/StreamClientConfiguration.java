@@ -38,6 +38,11 @@ public interface StreamClientConfiguration {
     public int getTimeoutSeconds();
 
     /**
+     * @return Configured value or default of 5 retries.
+     */
+    public int getRetryIterations();
+
+    /**
      * @return If the request completion takes longer than this, a warning will be logged (<code>0</code> to disable)
      */
     public int getLogWarningSeconds();

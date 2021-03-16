@@ -37,7 +37,7 @@ public interface TransportConfiguration<SCC extends StreamClientConfiguration, S
      * @param executorService used to dispatch request/response processing.
      * @return created {@link StreamClient}
      */
-    StreamClient<SCC> createStreamClient(final ExecutorService executorService, int retryAfterSeconds);
+    StreamClient<SCC> createStreamClient(final ExecutorService executorService, int retryAfterSeconds, int retryIterations, int timeoutSeconds);
 
     /**
      * Creates a {@link StreamServer} using the given {@code listenerPort}.

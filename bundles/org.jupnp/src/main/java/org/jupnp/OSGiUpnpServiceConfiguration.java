@@ -99,7 +99,9 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean remoteThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
     private int retryAfterSeconds = -1;
+    private int retryIterations = -1;
     private int maxRequests = -1;
+    private int timeoutSeconds = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -204,7 +206,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),retryAfterSeconds);
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),retryAfterSeconds,retryIterations,timeoutSeconds);
     }
 
     @Override
@@ -605,6 +607,30 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             retryAfterSeconds = (Integer) prop;
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", retryAfterSeconds);
+
+        prop = properties.get("retryIterations");
+        if (prop instanceof String) {
+            try {
+                retryIterations = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for retryIterations - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            retryIterations = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration retryIterations = {}", retryIterations);
+
+        prop = properties.get("timeoutSeconds");
+        if (prop instanceof String) {
+            try {
+                timeoutSeconds = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for timeoutSeconds - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            timeoutSeconds = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration timeoutSeconds = {}", timeoutSeconds);
 
         prop = properties.get("maxRequests");
         if (prop instanceof String) {

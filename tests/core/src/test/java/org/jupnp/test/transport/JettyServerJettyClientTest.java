@@ -37,7 +37,7 @@ public class JettyServerJettyClientTest extends StreamServerClientTest {
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
         return jettyTransportConfiguration.createStreamClient(
-                configuration.getSyncProtocolExecutorService("upnp-jetty"),-1
+                configuration.getSyncProtocolExecutorService("upnp-jetty"),-1,-1,-1
         );
     }
 

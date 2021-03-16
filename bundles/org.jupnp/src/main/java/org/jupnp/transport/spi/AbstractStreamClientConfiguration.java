@@ -28,6 +28,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     protected int timeoutSeconds = 10;
     protected int logWarningSeconds = 5;
     protected int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
+    protected int retryIterations = 5;
 
     protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService) {
         this.requestExecutorService = requestExecutorService;
@@ -61,6 +62,20 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
 
     public void setTimeoutSeconds(int timeoutSeconds) {
         this.timeoutSeconds = timeoutSeconds;
+    }
+
+    /**
+     * @return Configured value or default of 5 retries.
+     */
+    public int getRetryIterations() {
+	return retryIterations;
+    }
+
+    public void setRetryIterations(int retryIterations) {
+	if (retryIterations < 0) {
+		throw new  IllegalArgumentException("Retry iterations can not be null!");
+        }
+        this.retryIterations = retryIterations;
     }
 
     /**
