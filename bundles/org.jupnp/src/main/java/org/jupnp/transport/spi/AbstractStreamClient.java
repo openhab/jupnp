@@ -54,6 +54,14 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 		failedTries.put(requestMessage.getUri(), (long) 0);
 	}
 
+	String[] split = requestMessage.getUri().toString().split(":");
+	String protocol = split[0];
+
+	if (protocol.equals("https")) {
+	    log.debug("HTTPS invalid.  Ignoring call {}.",requestMessage.getUri());
+	    return null;
+	}
+
         final Long previeousFailureTime = failedRequests.get(requestMessage.getUri());
 	final Long numberOfTries = failedTries.get(requestMessage.getUri());
 
