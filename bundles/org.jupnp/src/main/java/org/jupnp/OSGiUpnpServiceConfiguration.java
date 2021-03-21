@@ -334,6 +334,11 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
+    public int getMaxRequests() {
+        return maxRequests;
+    }
+
+    @Override
     public void shutdown() {
         log.debug("Shutting down executor services");
         shutdownExecutorServices();
@@ -472,6 +477,19 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             httpProxyPort = (Integer) prop;
         }
+
+        prop = properties.get("maxRequests");
+        if (prop instanceof String) {
+            try {
+                maxRequests = Integer.valueOf((String) prop);
+            } catch (NumberFormatException e) {
+                log.error("Invalid value '{}' for maxRequests - using default value", prop);
+            }
+        } else if (prop instanceof Integer) {
+            maxRequests = (Integer) prop;
+        }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration maxRequests = {}", maxRequests);
+
     }
 
 }

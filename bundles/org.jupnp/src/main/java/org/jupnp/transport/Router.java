@@ -88,6 +88,8 @@ public interface Router {
      */
     boolean isEnabled() throws RouterException;
 
+    boolean autoRestart() throws RouterException;
+
     /**
      * Called by the {@link #enable()} method before it returns.
      *
