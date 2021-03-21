@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
+import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         String protocol = split[0];
 
         if (protocol.equals("https")) {
-            log.debug("HTTPS invalid.  Ignoring call {}.",requestMessage.getUri());
+            SpecificationViolationReporter.report("HTTPS invalid.  Ignoring call " + requestMessage.getUri());
             return null;
         }
 	
