@@ -100,7 +100,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
     private int retryAfterSeconds = -1;
     private int retryIterations = -1;
-    private int maxRequests = -1;
     private int timeoutSeconds = -1;
 
     private ExecutorService mainExecutorService;
