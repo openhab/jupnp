@@ -321,8 +321,7 @@ public class RouterImpl implements Router {
                     log.debug("No StreamClient available, not sending: " + msg);
                     return null;
                 }
-                nbfSentRequests++;
-                log.debug("Sending via TCP unicast stream (request number {}): {}", nbfSentRequests, msg);
+                log.debug("Sending via TCP unicast stream: " + msg);		
                 try {
                     return streamClient.sendRequest(msg);
                 } catch (InterruptedException ex) {
