@@ -90,6 +90,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
+    private int maxRequests = -1;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
