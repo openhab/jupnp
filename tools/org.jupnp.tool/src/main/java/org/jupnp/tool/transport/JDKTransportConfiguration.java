@@ -17,7 +17,7 @@ public class JDKTransportConfiguration
     public static final TransportConfiguration INSTANCE = new JDKTransportConfiguration();
 
     @Override
-    public StreamClient createStreamClient(final ExecutorService executorService, int retryAfterSeconds, int retryIterations, int timeoutSeconds) {
+    public StreamClient createStreamClient(final ExecutorService executorService) {
         return new StreamClientImpl(
                 new StreamClientConfigurationImpl(
                         executorService

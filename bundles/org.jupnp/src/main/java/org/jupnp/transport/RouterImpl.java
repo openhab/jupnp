@@ -133,6 +133,7 @@ public class RouterImpl implements Router {
 
                     // Start the HTTP client last, we don't even have to try if there is no network
                     streamClient = getConfiguration().createStreamClient();
+
                     enabled = true;
                     return true;
                 } catch (InitializationException ex) {
@@ -321,7 +322,7 @@ public class RouterImpl implements Router {
                     log.debug("No StreamClient available, not sending: " + msg);
                     return null;
                 }
-                log.debug("Sending via TCP unicast stream: " + msg);		
+                log.debug("Sending via TCP unicast stream: " + msg);
                 try {
                     return streamClient.sendRequest(msg);
                 } catch (InterruptedException ex) {
