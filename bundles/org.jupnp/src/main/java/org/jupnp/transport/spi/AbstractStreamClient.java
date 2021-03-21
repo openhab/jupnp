@@ -46,6 +46,14 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {
         log.trace("Preparing HTTP request: " + requestMessage);
 
+        String[] split = requestMessage.getUri().toString().split(":");
+        String protocol = split[0];
+
+        if (protocol.equals("https")) {
+            log.debug("HTTPS invalid.  Ignoring call {}.",requestMessage.getUri());
+            return null;
+        }
+	
         // We want to track how long it takes
         long start = System.nanoTime();
 
