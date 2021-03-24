@@ -59,14 +59,14 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             if (start - previeousFailureTime < TimeUnit.SECONDS
                     .toNanos(getConfiguration().getRetryAfterSeconds()) && 
 		    numberOfTries >= getConfiguration().getRetryIterations()) {
-                log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
-                        numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
+                        log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
+                        		numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
                 return null;
 	    } else if (start - previeousFailureTime < TimeUnit.SECONDS
                     .toNanos(getConfiguration().getRetryAfterSeconds()) &&
                     numberOfTries > 0 ) {
-		log.debug("Previous attempt failed {} times.  Will retry {}",
-				 numberOfTries, requestMessage);
+		        log.debug("Previous attempt failed {} times.  Will retry {}",
+			    		numberOfTries, requestMessage);
             } else {
 		log.debug("Clearing failed attempt after {} tries",
 				numberOfTries);
