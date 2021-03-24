@@ -1,27 +1,27 @@
 Manifest-Version: 1.0
-Bundle-Description: A test device that exposes all the capablities of 
- OSGi UPnP.
-Bundle-License: http://opensource.org/licenses/CDDL-1.0
-Bundle-SymbolicName: org.jupnp.osgi.upnp.test.device.simple
-Built-By: A11202833
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1601123198318
-Embed-Dependency: jupnp-osgi-tests-common,commons-codec
+Created-By: Apache Maven Bundle Plugin
+Tool: Bnd-1.15.0
+Bnd-LastModified: 1616622889009
+Import-Package: org.osgi.framework;version="[1.5,2)",org.osgi.service.de
+ vice;version="[1.1,2)",org.osgi.service.event;version="[1.2,2)",org.osg
+ i.service.upnp;version="[1.1,2)",org.osgi.util.tracker;version="[1.4,2)
+ ",org.slf4j;version="[1.7,2)"
+Bundle-ClassPath: .,jupnp-osgi-tests-common-2.6.0-SNAPSHOT.jar,commons-c
+ odec-1.4.jar
+Embed-Transitive: false
+Bundle-Version: 2.6.0.SNAPSHOT
+Bundle-SymbolicName: org.jupnp.osgi.upnp.test.device.simple
+Bundle-License: http://opensource.org/licenses/CDDL-1.0
 SymbolicName: org.jupnp.osgi.upnp.test.device.simple
 Bundle-DocURL: http://www.jupnp.org
-Bundle-Vendor: jUPnP.org
-Import-Package: org.osgi.framework;version="[1.5,2)",org.osgi.service.
- device;version="[1.1,2)",org.osgi.service.event;version="[1.2,2)",org
- .osgi.service.upnp;version="[1.1,2)",org.osgi.util.tracker;version="[
- 1.4,2)",org.slf4j;version="[1.7,2)"
-Tool: Bnd-1.15.0
-Bundle-Version: 2.6.0.SNAPSHOT
-Bundle-Name: jUPnP OSGi Test Simple Device
-Bundle-ClassPath: .,jupnp-osgi-tests-common-2.6.0-SNAPSHOT.jar,commons
- -codec-1.4.jar
-Bundle-Activator: org.jupnp.osgi.upnp.test.device.simple.Activator
-Embed-Transitive: false
-Created-By: Apache Maven Bundle Plugin
-Build-Jdk: 1.8.0_231
+Bundle-Description: A test device that exposes all the capablities of OS
+ Gi UPnP.
 Bundle-Author: Bruce Green
+Bundle-Activator: org.jupnp.osgi.upnp.test.device.simple.Activator
+Embed-Dependency: jupnp-osgi-tests-common,commons-codec
+Bundle-Vendor: jUPnP.org
+Bundle-Name: jUPnP OSGi Test Simple Device
+Built-By: openhab
+Build-Jdk: 11.0.10
 
