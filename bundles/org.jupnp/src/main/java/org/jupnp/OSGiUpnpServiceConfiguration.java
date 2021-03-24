@@ -98,9 +98,9 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean mainThreadPool = true;
     private boolean remoteThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
-    private int retryAfterSeconds = -1;
-    private int retryIterations = -1;
-    private int timeoutSeconds = -1;
+    private int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
+    private int retryIterations = 5;
+    private int timeoutSeconds = 10;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
