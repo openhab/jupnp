@@ -247,6 +247,10 @@ public interface UpnpServiceConfiguration {
      */
     public Executor getRegistryListenerExecutor(String threadName);
 
+    /**
+     * @return The executor which runs the remote listener threads.
+     */
+
     public Executor getRemoteListenerExecutor(String threadName);
 
     /**

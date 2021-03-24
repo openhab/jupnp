@@ -477,64 +477,46 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         }
 
         Object prop = properties.get("threadPoolSize");
-        if (prop instanceof String) {
+        if (prop instanceof Integer) {
             try {
-                threadPoolSize = Integer.valueOf((String) prop);
+		threadPoolSize = (Integer) prop;
+                if (threadPoolSize == -1) {
+                    mainThreadPool = false;
+                } else {
+                    mainThreadPool = true;
+                }
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
             }
-        } else if (prop instanceof Integer) {
-            threadPoolSize = (Integer) prop;
         }
 
         prop = properties.get("asyncThreadPoolSize");
-        if (prop instanceof String) {
+        if (prop instanceof Integer) {
             try {
-                asyncThreadPoolSize = Integer.valueOf((String) prop);
+		asyncThreadPoolSize = (Integer) prop;
+                if (asyncThreadPoolSize == -1) {
+                    asyncThreadPool = false;
+                } else {
+                    asyncThreadPool = true;
+                }
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for asyncThreadPoolSize - using default value '{}'", prop,
                         asyncThreadPoolSize);
             }
-        } else if (prop instanceof Integer) {
-            asyncThreadPoolSize = (Integer) prop;
         }
 
         prop = properties.get("remoteThreadPoolSize");
-        if (prop instanceof String) {
+        if (prop instanceof Integer) {
             try {
-                remoteThreadPoolSize = Integer.valueOf((String) prop);
+		remoteThreadPoolSize = (Integer) prop;
+                if (remoteThreadPoolSize == -1) {
+                    remoteThreadPool = false;
+                } else {
+                    remoteThreadPool = true;
+                }
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for remoteThreadPoolSize - using default value '{}'", prop,
                         remoteThreadPoolSize);
-            }
-        } else if (prop instanceof Integer) {
-            remoteThreadPoolSize = (Integer) prop;
-        }
-
-        prop = properties.get("asyncThreadPool");
-        if (prop instanceof String) {
-            try {
-                asyncThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for asyncThreadPool - using default value '{}'", prop, asyncThreadPool);
-            }
-        } 
-
-        prop = properties.get("mainThreadPool");
-        if (prop instanceof String) {
-            try {
-                mainThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for mainThreadPool - using default value '{}'", prop, mainThreadPool);
-            }
-        } 
-
-        prop = properties.get("remoteThreadPool");
-        if (prop instanceof String) {
-            try {
-                remoteThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for remoteThreadPool - using default value '{}'", prop, remoteThreadPool);
             }
         }
 
@@ -588,5 +570,4 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         }
 
     }
-
 }

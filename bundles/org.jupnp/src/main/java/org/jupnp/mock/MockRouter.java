@@ -90,7 +90,7 @@ public class MockRouter implements Router {
     public boolean isEnabled() throws RouterException {
         return false;
     }
- 
+
     @Override
     public void handleStartFailure(InitializationException ex) throws InitializationException {
     }
