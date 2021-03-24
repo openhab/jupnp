@@ -73,7 +73,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
 
     public void setRetryIterations(int retryIterations) {
 	if (retryIterations < 0) {
-		throw new  IllegalArgumentException("Retry iterations can not be null!");
+		throw new IllegalArgumentException("Retry iterations can not be less than 0!");
         }
         this.retryIterations = retryIterations;
     }

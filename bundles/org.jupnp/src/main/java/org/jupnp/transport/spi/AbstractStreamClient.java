@@ -50,9 +50,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         // We want to track how long it takes
         long start = System.nanoTime();
 	
-	if (failedTries.get(requestMessage.getUri()) == null) {
-		failedTries.put(requestMessage.getUri(), (long) 0);
-	}
+	failedTries.putIfAbsent(requestMessage.getUri(), (long) 0);
 
         final Long previeousFailureTime = failedRequests.get(requestMessage.getUri());
 	final Long numberOfTries = failedTries.get(requestMessage.getUri());
@@ -170,12 +168,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         final long currentTime = System.nanoTime();
         failedRequests.put(requestMessage.getUri(), currentTime);
-
-	if (failedTries.get(requestMessage.getUri()) == null) {
-	    failedTries.put(requestMessage.getUri(), (long) 1);
-	} else {
-	    failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
-	}
+	failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
         if (failedRequests.size() > FAILED_REQUESTS_MAX_SIZE) {
             cleanOldFailedRequests(currentTime);
         }
@@ -192,12 +185,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             failedRequests.put(requestMessage.getUri(), currentTime);
         }
 
-        if (failedTries.get(requestMessage.getUri()) == null) {
-            failedTries.put(requestMessage.getUri(), (long) 1);
-        } else {
-            failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
-        }
-
+        failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
         cleanOldFailedRequests(currentTime);
     }
 
