@@ -152,7 +152,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
     @Override
     public StreamClient createStreamClient() {
         return transportConfiguration.createStreamClient(
-                getSyncProtocolExecutorService(),configuration
+                getSyncProtocolExecutorService(), configuration
         );
     }
 
