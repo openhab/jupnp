@@ -71,7 +71,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 
     private TransportConfiguration transportConfiguration;
 
-        private StreamClientConfiguration configuration;
+    private StreamClientConfiguration configuration;
 
 	// instance methods
 
