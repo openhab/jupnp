@@ -24,8 +24,8 @@ public class JettyTransportConfiguration
         StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(executorService);
 
         clientConfiguration.setRetryAfterSeconds(configuration.getRetryAfterSeconds());
-	clientConfiguration.setRetryIterations(configuration.getRetryIterations());
-	clientConfiguration.setTimeoutSeconds(configuration.getTimeoutSeconds());
+        clientConfiguration.setRetryIterations(configuration.getRetryIterations());
+        clientConfiguration.setTimeoutSeconds(configuration.getTimeoutSeconds());
 	
         return new JettyStreamClientImpl(clientConfiguration);
     }
