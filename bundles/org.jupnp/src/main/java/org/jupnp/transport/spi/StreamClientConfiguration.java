@@ -55,17 +55,17 @@ public interface StreamClientConfiguration {
     /**
      * Sets the HTTP Timeout in Seconds
      */
-    public void getTimeoutSeconds(int timeoutSeconds);
+    public void setTimeoutSeconds(int timeoutSeconds);
 
     /**
      * Sets the number of iterations before failing for retryAfterSeconds
      */
-    public void getRetryIterations(int retryIterations);
+    public void setRetryIterations(int retryIterations);
 
     /**
      * Sets the wait time after retryIterations expires before reattempting connections
      */
-    public void getRetryAfterSeconds(int retryAfterSeconds);
+    public void setRetryAfterSeconds(int retryAfterSeconds);
 
     /**
      * Used for outgoing HTTP requests if no other value was already set on messages.
