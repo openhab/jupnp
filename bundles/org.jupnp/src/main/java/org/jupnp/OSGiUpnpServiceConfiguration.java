@@ -16,10 +16,7 @@ package org.jupnp;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
@@ -91,13 +88,9 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     // configurable properties
     private int threadPoolSize = 20;
     private int asyncThreadPoolSize = 20;
-    private int remoteThreadPoolSize = 20;
     private int multicastResponsePort;
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
-    private boolean asyncThreadPool = true;
-    private boolean mainThreadPool = true;
-    private boolean remoteThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
     private int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
     private int retryIterations = 5;
@@ -106,7 +99,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
-    private ExecutorService remoteExecutorService;
 
     private DatagramProcessor datagramProcessor;
     private SOAPActionProcessor soapActionProcessor;
@@ -249,18 +241,18 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public ExecutorService getMulticastReceiverExecutor(String threadName) {
-        return getMainExecutorService(threadName);
+    public ExecutorService getMulticastReceiverExecutor() {
+        return getMainExecutorService();
     }
 
     @Override
-    public ExecutorService getDatagramIOExecutor(String threadName) {
-        return getMainExecutorService(threadName);
+    public ExecutorService getDatagramIOExecutor() {
+        return getMainExecutorService();
     }
 
     @Override
-    public ExecutorService getStreamServerExecutorService(String threadName) {
-        return getMainExecutorService(threadName);
+    public ExecutorService getStreamServerExecutorService() {
+        return getMainExecutorService();
     }
 
     @Override
@@ -318,17 +310,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public ExecutorService getAsyncProtocolExecutor(String threadName) {
-        if ( asyncThreadPool == true ) {
-                return asyncExecutorService;
-        } else {
-                return createNamedThread(threadName);
-        }
+    public ExecutorService getAsyncProtocolExecutor() {
+        return asyncExecutorService;
     }
 
     @Override
-    public ExecutorService getSyncProtocolExecutorService(String threadName) {
-        return getMainExecutorService(threadName);
+    public ExecutorService getSyncProtocolExecutorService() {
+        return getMainExecutorService();
     }
 
     @Override
@@ -337,18 +325,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Override
-    public Executor getRegistryMaintainerExecutor(String threadName) {
-        return getMainExecutorService(threadName);
+    public Executor getRegistryMaintainerExecutor() {
+        return getMainExecutorService();
     }
 
     @Override
-    public Executor getRegistryListenerExecutor(String threadName) {
-        return getMainExecutorService(threadName);
-    }
-
-    @Override
-    public Executor getRemoteListenerExecutor(String threadName) {
-        return getRemoteExecutorService(threadName);
+    public Executor getRegistryListenerExecutor() {
+        return getMainExecutorService();
     }
 
     @Override
@@ -372,9 +355,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         if (asyncExecutorService != null) {
             asyncExecutorService.shutdownNow();
         }
-	if (remoteExecutorService != null) {
-	    remoteExecutorService.shutdownNow();
-	}
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
@@ -405,43 +385,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         return callbackURI;
     }
 
-    protected ExecutorService getRemoteExecutorService(String threadName) {
-       if ( remoteThreadPool == true ) {
-       		return remoteExecutorService;
-       } else {
-	       	return createNamedThread(threadName);
-       }
-    }
-
-    protected ExecutorService getMainExecutorService(String threadName) {
-       if ( mainThreadPool == true ) {
-                return mainExecutorService;
-       } else {
-                return createNamedThread(threadName);
-       }
+    protected ExecutorService getMainExecutorService() {
+        return mainExecutorService;
     }
 
     private void createExecutorServices() {
-	if ( mainThreadPool == true ) {
-		log.debug("Creating mainThreadPool");
-		mainExecutorService = createMainExecutorService();
-	} else {
-		log.debug("Skipping mainThreadPool creation.");
-	}
-
-	if ( asyncThreadPool == true ) {
-		log.debug("Creating asyncThreadPool");
-        	asyncExecutorService = createAsyncProtocolExecutorService();
-	} else {
-		log.debug("Skipping asyncThreadPool creation.");
-	}
-
-        if ( remoteThreadPool == true ) {
-                log.debug("Creating remoteThreadPool");
-                remoteExecutorService = createRemoteProtocolExecutorService();
-        } else {
-                log.debug("Skipping remoteThreadPool creation.");
-        }	
+	mainExecutorService = createMainExecutorService();
+       	asyncExecutorService = createAsyncProtocolExecutorService();
     }
 
     protected ExecutorService createMainExecutorService() {
@@ -450,30 +400,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private ExecutorService createAsyncProtocolExecutorService() {
         return QueueingThreadPoolExecutor.createInstance("upnp-async", asyncThreadPoolSize);
-    }
-
-    private ExecutorService createRemoteProtocolExecutorService() {
-        return QueueingThreadPoolExecutor.createInstance("upnp-remotepool", remoteThreadPoolSize);
-    }
-
-    private ExecutorService createNamedThread(String threadName) {
-        log.debug("Create New Named Thread {}", threadName);
-	final String tName = threadName;
-	return Executors.newSingleThreadExecutor(new ThreadFactory() {
-
-            @Override
-            public Thread newThread(Runnable runnable) {
-                    Thread thread = new Thread(runnable, tName);
-                    thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
-                    @Override
-                    public void uncaughtException(Thread thread, Throwable exception) {
-                            throw new IllegalStateException(exception);
-                    }
-                    });
-                    return thread;
-            }
-        });
     }
 
     private void createConfiguration(Map<String, Object> properties) throws ConfigurationException {
@@ -502,45 +428,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             }
         } else if (prop instanceof Integer) {
             asyncThreadPoolSize = (Integer) prop;
-        }
-
-        prop = properties.get("remoteThreadPoolSize");
-        if (prop instanceof String) {
-            try {
-                remoteThreadPoolSize = Integer.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for remoteThreadPoolSize - using default value '{}'", prop,
-                        remoteThreadPoolSize);
-            }
-        } else if (prop instanceof Integer) {
-            remoteThreadPoolSize = (Integer) prop;
-        }
-
-        prop = properties.get("asyncThreadPool");
-        if (prop instanceof String) {
-            try {
-                asyncThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for asyncThreadPool - using default value '{}'", prop, asyncThreadPool);
-            }
-        } 
-
-        prop = properties.get("mainThreadPool");
-        if (prop instanceof String) {
-            try {
-                mainThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for mainThreadPool - using default value '{}'", prop, mainThreadPool);
-            }
-        } 
-
-        prop = properties.get("remoteThreadPool");
-        if (prop instanceof String) {
-            try {
-                remoteThreadPool = Boolean.valueOf((String) prop);
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for remoteThreadPool - using default value '{}'", prop, remoteThreadPool);
-            }
         }
 
         prop = properties.get("multicastResponsePort");
