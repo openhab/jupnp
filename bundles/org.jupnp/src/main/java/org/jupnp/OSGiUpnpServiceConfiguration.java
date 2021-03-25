@@ -482,6 +482,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         if (prop instanceof String) {
             try {
                 retryAfterSeconds = Integer.valueOf((String) prop);
+		configuration.setRetryAfterSeconds(retryAfterSeconds);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
             }
@@ -494,6 +495,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         if (prop instanceof String) {
             try {
                 retryIterations = Integer.valueOf((String) prop);
+		configuration.setRetryIterations(retryIterations);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for retryIterations - using default value", prop);
             }
@@ -506,6 +508,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         if (prop instanceof String) {
             try {
                 timeoutSeconds = Integer.valueOf((String) prop);
+		configuration.setTimeoutSeconds(timeoutSeconds);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for timeoutSeconds - using default value", prop);
             }

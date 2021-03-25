@@ -53,6 +53,21 @@ public interface StreamClientConfiguration {
     public int getRetryAfterSeconds();
 
     /**
+     * Sets the HTTP Timeout in Seconds
+     */
+    public void getTimeoutSeconds(int timeoutSeconds);
+
+    /**
+     * Sets the number of iterations before failing for retryAfterSeconds
+     */
+    public void getRetryIterations(int retryIterations);
+
+    /**
+     * Sets the wait time after retryIterations expires before reattempting connections
+     */
+    public void getRetryAfterSeconds(int retryAfterSeconds);
+
+    /**
      * Used for outgoing HTTP requests if no other value was already set on messages.
      *
      * @param majorVersion The UPnP UDA major version.
