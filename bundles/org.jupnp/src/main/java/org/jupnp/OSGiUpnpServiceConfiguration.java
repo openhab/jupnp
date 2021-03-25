@@ -157,6 +157,10 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
         createConfiguration(configProps);
 
+        configuration.setRetryAfterSeconds(retryAfterSeconds);
+        configuration.setRetryIterations(retryIterations);
+        configuration.setTimeoutSeconds(timeoutSeconds);
+
         createExecutorServices();
 
         datagramProcessor = createDatagramProcessor();
