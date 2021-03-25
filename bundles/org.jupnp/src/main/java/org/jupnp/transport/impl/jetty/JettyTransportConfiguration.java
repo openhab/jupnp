@@ -6,6 +6,7 @@ import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
 import org.jupnp.transport.impl.ServletStreamServerImpl;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 
 /**
@@ -19,7 +20,7 @@ public class JettyTransportConfiguration
     public static final TransportConfiguration INSTANCE = new JettyTransportConfiguration();
 
     @Override
-    public StreamClient createStreamClient(final ExecutorService executorService, int retryAfterSeconds, int retryIterations, int timeoutSeconds) {
+    public StreamClient createStreamClient(final ExecutorService executorService, final StreamClientConfiguration configuration) {
         StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(executorService);
         if (retryAfterSeconds >= 0) {
             clientConfiguration.setRetryAfterSeconds(retryAfterSeconds);

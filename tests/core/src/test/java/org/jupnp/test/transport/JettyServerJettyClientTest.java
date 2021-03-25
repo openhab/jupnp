@@ -19,6 +19,7 @@ import org.jupnp.test.transport.StreamServerClientTest;
 import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 
 /**
@@ -28,6 +29,7 @@ import org.jupnp.transport.spi.StreamServer;
 public class JettyServerJettyClientTest extends StreamServerClientTest {
 
     private TransportConfiguration jettyTransportConfiguration = JettyTransportConfiguration.INSTANCE;
+    private StreamClientConfiguration sccConfiguration;
 
     @Override
     public StreamServer createStreamServer(final int port) {
@@ -37,7 +39,7 @@ public class JettyServerJettyClientTest extends StreamServerClientTest {
     @Override
     public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
         return jettyTransportConfiguration.createStreamClient(
-                configuration.getSyncProtocolExecutorService("upnp-jetty"),-1,-1,-1
+                configuration.getSyncProtocolExecutorService(), sccConfiguration
         );
     }
 

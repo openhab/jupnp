@@ -51,6 +51,7 @@ import org.jupnp.transport.spi.MulticastReceiver;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
 
@@ -110,6 +111,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
     final private Namespace namespace;
+    private StreamClientConfiguration configuration;
 
     @SuppressWarnings("rawtypes")
     final private TransportConfiguration transportConfiguration;
@@ -173,7 +175,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),-1,-1,-1);
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), configuration);
     }
 
     @Override

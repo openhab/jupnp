@@ -52,6 +52,7 @@ import org.jupnp.transport.spi.MulticastReceiver;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -101,6 +102,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
     private int retryIterations = 5;
     private int timeoutSeconds = 10;
+    private StreamClientConfiguration configuration;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -205,7 +207,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"),retryAfterSeconds,retryIterations,timeoutSeconds);
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), configuration);
     }
 
     @Override

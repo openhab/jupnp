@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 
 /**
@@ -15,9 +16,10 @@ public class JDKTransportConfiguration
     implements TransportConfiguration {
 
     public static final TransportConfiguration INSTANCE = new JDKTransportConfiguration();
+    private StreamClientConfiguration configuration;
 
     @Override
-    public StreamClient createStreamClient(final ExecutorService executorService, int retryAfterSeconds, int retryIterations, int timeoutSeconds) {
+    public StreamClient createStreamClient(final ExecutorService executorService, final StreamClientConfiguration configuration) {
         return new StreamClientImpl(
                 new StreamClientConfigurationImpl(
                         executorService
