@@ -478,36 +478,36 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         prop = properties.get("retryAfterSeconds");
         if (prop instanceof String) {
             try {
-                configuration.setRetryAfterSeconds(retryAfterSeconds);
+                configuration.setRetryAfterSeconds(Integer.valueOf((String) prop));
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
             }
         } else if (prop instanceof Integer) {
-            retryAfterSeconds = (Integer) prop;
+            configuration.setRetryAfterSeconds((Integer) prop);
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", configuration.getRetryAfterSeconds());
 
         prop = properties.get("retryIterations");
         if (prop instanceof String) {
             try {
-                configuration.setRetryIterations(retryIterations);
+                configuration.setRetryIterations(Integer.valueOf((String) prop));
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for retryIterations - using default value", prop);
             }
         } else if (prop instanceof Integer) {
-            retryIterations = (Integer) prop;
+            configuration.setRetryIterations((Integer) prop);
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration retryIterations = {}", configuration.getRetryIterations());
 
         prop = properties.get("timeoutSeconds");
         if (prop instanceof String) {
             try {
-                configuration.setTimeoutSeconds(timeoutSeconds);
+                configuration.setTimeoutSeconds(Integer.valueOf((String) prop));
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for timeoutSeconds - using default value", prop);
             }
         } else if (prop instanceof Integer) {
-            timeoutSeconds = (Integer) prop;
+            configuration.setTimeoutSeconds((Integer) prop);
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration timeoutSeconds = {}", configuration.getTimeoutSeconds());
 
