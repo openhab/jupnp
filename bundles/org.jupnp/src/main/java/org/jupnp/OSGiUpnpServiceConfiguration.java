@@ -17,7 +17,6 @@ package org.jupnp;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
@@ -92,9 +91,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
-    private int retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
-    private int retryIterations = 5;
-    private int timeoutSeconds = 10;
     private StreamClientConfiguration configuration;
 
     private ExecutorService mainExecutorService;
@@ -156,10 +152,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         this.context = context;
 
         createConfiguration(configProps);
-
-        configuration.setRetryAfterSeconds(retryAfterSeconds);
-        configuration.setRetryIterations(retryIterations);
-        configuration.setTimeoutSeconds(timeoutSeconds);
 
         createExecutorServices();
 
