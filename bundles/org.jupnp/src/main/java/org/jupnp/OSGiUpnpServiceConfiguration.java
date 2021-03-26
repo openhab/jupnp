@@ -485,7 +485,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             retryAfterSeconds = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", retryAfterSeconds);
+        log.info("OSGiUpnpServiceConfiguration createConfiguration retryAfterSeconds = {}", configuration.getRetryAfterSeconds());
 
         prop = properties.get("retryIterations");
         if (prop instanceof String) {
@@ -497,7 +497,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             retryIterations = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration retryIterations = {}", retryIterations);
+        log.info("OSGiUpnpServiceConfiguration createConfiguration retryIterations = {}", configuration.getRetryIterations());
 
         prop = properties.get("timeoutSeconds");
         if (prop instanceof String) {
@@ -509,7 +509,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         } else if (prop instanceof Integer) {
             timeoutSeconds = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration timeoutSeconds = {}", timeoutSeconds);
+        log.info("OSGiUpnpServiceConfiguration createConfiguration timeoutSeconds = {}", configuration.getTimeoutSeconds());
 
     }
 
