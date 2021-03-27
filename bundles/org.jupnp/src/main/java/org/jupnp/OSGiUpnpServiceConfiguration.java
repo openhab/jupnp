@@ -52,6 +52,7 @@ import org.jupnp.transport.spi.MulticastReceiver;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -98,6 +99,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private boolean mainThreadPool = true;
     private boolean remoteThreadPool = true;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
+    private StreamClientConfiguration configuration;
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
@@ -202,7 +204,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"));
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService("upnp-stream"), configuration);
     }
 
     @Override

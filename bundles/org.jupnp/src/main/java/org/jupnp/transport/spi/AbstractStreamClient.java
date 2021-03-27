@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
+import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,14 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {
         log.trace("Preparing HTTP request: " + requestMessage);
 
+        String[] split = requestMessage.getUri().toString().split(":");
+        String protocol = split[0];
+
+        if (protocol.equals("https")) {
+            SpecificationViolationReporter.report("HTTPS invalid.  Ignoring call " + requestMessage.getUri());
+            return null;
+        }
+	
         // We want to track how long it takes
         long start = System.nanoTime();
 

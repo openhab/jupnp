@@ -26,6 +26,7 @@ import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.StreamClient;
+import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,8 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
     private ExecutorService asyncExecutorService;
 
     private TransportConfiguration transportConfiguration;
+
+    private StreamClientConfiguration configuration;
 
 	// instance methods
 
@@ -149,7 +152,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
     @Override
     public StreamClient createStreamClient() {
         return transportConfiguration.createStreamClient(
-                getSyncProtocolExecutorService("upnp-stream")
+                getSyncProtocolExecutorService("upnp-stream"), configuration
         );
     }
 
