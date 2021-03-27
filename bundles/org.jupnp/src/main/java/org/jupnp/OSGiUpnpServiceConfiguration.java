@@ -40,6 +40,7 @@ import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
 import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
 import org.jupnp.transport.impl.ServletStreamServerImpl;
+import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.impl.osgi.HttpServiceServletContainerAdapter;
 import org.jupnp.transport.spi.DatagramIO;
 import org.jupnp.transport.spi.DatagramProcessor;
@@ -91,7 +92,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
     private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
-    private StreamClientConfiguration configuration;
+    private StreamClientConfiguration configuration = new StreamClientConfigurationImpl(null);
 
     private ExecutorService mainExecutorService;
     private ExecutorService asyncExecutorService;
