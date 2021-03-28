@@ -479,9 +479,9 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         }
 
         Object prop = properties.get("threadPoolSize");
-        if (prop instanceof Integer) {
+        if (prop instanceof String) {
             try {
-		threadPoolSize = (Integer) prop;
+                threadPoolSize = Integer.valueOf((String) prop);
                 if (threadPoolSize == -1) {
                     mainThreadPool = false;
                 } else {
@@ -491,11 +491,12 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                 log.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
             }
         }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration threadPoolSize = {} {}", threadPoolSize, mainThreadPool);
 
         prop = properties.get("asyncThreadPoolSize");
-        if (prop instanceof Integer) {
+        if (prop instanceof String) {
             try {
-		asyncThreadPoolSize = (Integer) prop;
+                asyncThreadPoolSize = Integer.valueOf((String) prop);
                 if (asyncThreadPoolSize == -1) {
                     asyncThreadPool = false;
                 } else {
@@ -506,11 +507,12 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                         asyncThreadPoolSize);
             }
         }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize, asyncThreadPool);
 
         prop = properties.get("remoteThreadPoolSize");
-        if (prop instanceof Integer) {
+        if (prop instanceof String) {
             try {
-		remoteThreadPoolSize = (Integer) prop;
+                remoteThreadPoolSize = Integer.valueOf((String) prop);
                 if (remoteThreadPoolSize == -1) {
                     remoteThreadPool = false;
                 } else {
@@ -521,6 +523,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                         remoteThreadPoolSize);
             }
         }
+        log.info("OSGiUpnpServiceConfiguration createConfiguration remoteThreadPoolSize = {} {}", remoteThreadPoolSize, remoteThreadPool);
 
         prop = properties.get("multicastResponsePort");
         if (prop instanceof String) {
