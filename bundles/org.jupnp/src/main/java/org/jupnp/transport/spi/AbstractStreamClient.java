@@ -80,7 +80,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 		log.debug("Clearing failed attempt after {} tries",
 				numberOfTries);
       	        failedRequests.remove(requestMessage.getUri());
-		failedTries.remove(requestMessage.getUri());
+		failedTries.put(requestMessage.getUri(), (long) 0);
             }
         }
 
