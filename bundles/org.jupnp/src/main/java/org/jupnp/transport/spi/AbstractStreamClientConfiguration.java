@@ -45,6 +45,14 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
         this.logWarningSeconds = logWarningSeconds;
     }
 
+    protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService, int timeoutSeconds, int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
+        this.requestExecutorService = requestExecutorService;
+        this.timeoutSeconds = timeoutSeconds;
+        this.logWarningSeconds = logWarningSeconds;
+        this.retryAfterSeconds = retryAfterSeconds;
+        this.retryIterations = retryIterations;
+    }
+
     public ExecutorService getRequestExecutorService() {
         return requestExecutorService;
     }

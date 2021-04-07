@@ -21,12 +21,14 @@ public class JettyTransportConfiguration
 
     @Override
     public StreamClient createStreamClient(final ExecutorService executorService, final StreamClientConfiguration configuration) {
-        StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(executorService);
+        StreamClientConfigurationImpl clientConfiguration = new StreamClientConfigurationImpl(
+                        executorService,
+                        configuration.getTimeoutSeconds(),
+                        configuration.getLogWarningSeconds(),
+                        configuration.getRetryAfterSeconds(),
+                        configuration.getRetryIterations()
+                        );
 
-        clientConfiguration.setRetryAfterSeconds(configuration.getRetryAfterSeconds());
-        clientConfiguration.setRetryIterations(configuration.getRetryIterations());
-        clientConfiguration.setTimeoutSeconds(configuration.getTimeoutSeconds());
-	
         return new JettyStreamClientImpl(clientConfiguration);
     }
 
