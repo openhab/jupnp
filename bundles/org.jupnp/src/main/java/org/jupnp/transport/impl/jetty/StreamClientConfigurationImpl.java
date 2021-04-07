@@ -34,6 +34,10 @@ public class StreamClientConfigurationImpl extends AbstractStreamClientConfigura
         super(timeoutExecutorService, timeoutSeconds);
     }
 
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService, int timeoutSeconds, int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
+        super(timeoutExecutorService, timeoutSeconds, logWarningSeconds, retryAfterSeconds, retryIterations);
+    }
+
     /**
      * @return By default <code>0</code>.
      */
