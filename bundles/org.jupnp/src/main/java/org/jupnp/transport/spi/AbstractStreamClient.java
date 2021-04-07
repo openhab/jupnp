@@ -58,29 +58,29 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 	
         // We want to track how long it takes
         long start = System.nanoTime();
-	
-	failedTries.putIfAbsent(requestMessage.getUri(), (long) 0);
+
+        failedTries.putIfAbsent(requestMessage.getUri(), (long) 0);
 
         final Long previeousFailureTime = failedRequests.get(requestMessage.getUri());
-	final Long numberOfTries = failedTries.get(requestMessage.getUri());
+        final Long numberOfTries = failedTries.get(requestMessage.getUri());
 
-	if (getConfiguration().getRetryAfterSeconds() > 0 && previeousFailureTime != null) {
+        if (getConfiguration().getRetryAfterSeconds() > 0 && previeousFailureTime != null) {
             if (start - previeousFailureTime < TimeUnit.SECONDS
                     .toNanos(getConfiguration().getRetryAfterSeconds()) && 
-		    numberOfTries >= getConfiguration().getRetryIterations()) {
+                    numberOfTries >= getConfiguration().getRetryIterations()) {
                         log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
-                        		numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
+                                        numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
                 return null;
-	    } else if (start - previeousFailureTime < TimeUnit.SECONDS
+             } else if (start - previeousFailureTime < TimeUnit.SECONDS
                     .toNanos(getConfiguration().getRetryAfterSeconds()) &&
                     numberOfTries > 0 ) {
-		        log.debug("Previous attempt failed {} times.  Will retry {}",
-			    		numberOfTries, requestMessage);
+                        log.debug("Previous attempt failed {} times.  Will retry {}",
+                                        numberOfTries, requestMessage);
             } else {
-		log.debug("Clearing failed attempt after {} tries",
-				numberOfTries);
+                log.debug("Clearing failed attempt after {} tries",
+                                numberOfTries);
       	        failedRequests.remove(requestMessage.getUri());
-		failedTries.put(requestMessage.getUri(), (long) 0);
+                failedTries.put(requestMessage.getUri(), (long) 0);
             }
         }
 
@@ -177,7 +177,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         final long currentTime = System.nanoTime();
         failedRequests.put(requestMessage.getUri(), currentTime);
-	failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
+        failedTries.put(requestMessage.getUri(), failedTries.get(requestMessage.getUri()) + 1);
         if (failedRequests.size() > FAILED_REQUESTS_MAX_SIZE) {
             cleanOldFailedRequests(currentTime);
         }
