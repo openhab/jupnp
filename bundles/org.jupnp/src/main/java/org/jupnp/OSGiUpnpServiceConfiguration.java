@@ -92,7 +92,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     // configurable properties
     private int threadPoolSize = 20;
     private int asyncThreadPoolSize = 20;
-    private int remoteThreadPoolSize = 20;
+    private int remoteThreadPoolSize = 40;
     private int multicastResponsePort;
     private int httpProxyPort = -1;
     private int streamListenPort = 8080;
@@ -162,6 +162,14 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         this.context = context;
 
         createConfiguration(configProps);
+
+        if ( ( mainThreadPool == false ) || ( asyncThreadPool == true ) ) {
+            remoteThreadPool = false;
+            remoteThreadPoolSize = -1;
+        } else {
+            remoteThreadPool = true;
+            remoteThreadPoolSize = threadPoolSize + asyncThreadPoolSize;
+        }
 
         createExecutorServices();
 
@@ -509,22 +517,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             }
         }
         log.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize, asyncThreadPool);
-
-        prop = properties.get("remoteThreadPoolSize");
-        if (prop instanceof String) {
-            try {
-                remoteThreadPoolSize = Integer.valueOf((String) prop);
-                if (remoteThreadPoolSize == -1) {
-                    remoteThreadPool = false;
-                } else {
-                    remoteThreadPool = true;
-                }
-            } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for remoteThreadPoolSize - using default value '{}'", prop,
-                        remoteThreadPoolSize);
-            }
-        }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration remoteThreadPoolSize = {} {}", remoteThreadPoolSize, remoteThreadPool);
 
         prop = properties.get("multicastResponsePort");
         if (prop instanceof String) {
