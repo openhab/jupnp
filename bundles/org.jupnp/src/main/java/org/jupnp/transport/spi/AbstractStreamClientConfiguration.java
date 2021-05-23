@@ -57,19 +57,11 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
         return requestExecutorService;
     }
 
-    public void setRequestExecutorService(ExecutorService requestExecutorService) {
-        this.requestExecutorService = requestExecutorService;
-    }
-
     /**
      * @return Configured value or default of 60 seconds.
      */
     public int getTimeoutSeconds() {
         return timeoutSeconds;
-    }
-
-    public void setTimeoutSeconds(int timeoutSeconds) {
-        this.timeoutSeconds = timeoutSeconds;
     }
 
     /**
@@ -79,13 +71,6 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
 	return retryIterations;
     }
 
-    public void setRetryIterations(int retryIterations) {
-	if (retryIterations < 0) {
-		throw new IllegalArgumentException("Retry iterations can not be less than 0!");
-        }
-        this.retryIterations = retryIterations;
-    }
-
     /**
      * @return Configured value or default of 5 seconds.
      */
@@ -93,23 +78,8 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
         return logWarningSeconds;
     }
 
-    public void setLogWarningSeconds(int logWarningSeconds) {
-        this.logWarningSeconds = logWarningSeconds;
-    }
-
     public int getRetryAfterSeconds() {
         return retryAfterSeconds;
-    }
-
-    /**
-     * @param retryAfterSeconds
-     *            should a positive integer or 0 (to disable the functionality).
-     */
-    public void setRetryAfterSeconds(int retryAfterSeconds) {
-        if (retryAfterSeconds < 0) {
-            throw new IllegalArgumentException("Retry After Seconds can not be null!");
-        }
-        this.retryAfterSeconds = retryAfterSeconds;
     }
 
     /**
