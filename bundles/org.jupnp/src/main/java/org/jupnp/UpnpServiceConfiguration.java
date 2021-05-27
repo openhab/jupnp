@@ -248,6 +248,11 @@ public interface UpnpServiceConfiguration {
     public Executor getRegistryListenerExecutor();
 
     /**
+     * @return The executor which runs the remote listener threads.
+     */
+    public Executor getRemoteListenerExecutor();
+
+    /**
      * Called by the {@link org.jupnp.UpnpService} on shutdown, useful to e.g. shutdown thread pools.
      */
     public void shutdown();

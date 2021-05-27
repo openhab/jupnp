@@ -294,6 +294,11 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     @Override
+    public Executor getRemoteListenerExecutor() {
+        return getDefaultExecutorService();
+    }
+
+    @Override
     public NetworkAddressFactory createNetworkAddressFactory() {
         return createNetworkAddressFactory(streamListenPort, multicastResponsePort);
     }
