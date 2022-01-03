@@ -1,0 +1,8 @@
+title: jUPnP
+description: UPnP/DLNA library for Java
+google_analytics: UA-53876269-1
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
