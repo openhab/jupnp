@@ -7,8 +7,7 @@ jUPnP is a Java UPnP library and has been forked from the Cling project (https:/
 Building and running the project is fairly easy if you follow the steps
 detailed below.
 
-1. Prerequisites
-================
+## Prerequisites
 
 The build infrastructure is based on Maven in order to make it
 as easy as possible to get up to speed. If you know Maven already then
@@ -21,8 +20,7 @@ What you need before you start:
 Make sure that the "mvn" command is available on your path
 
 
-2. Checkout
-===========
+## Checkout
 
 Checkout the source code from GitHub, e.g. by running
 
@@ -30,8 +28,7 @@ Checkout the source code from GitHub, e.g. by running
 git clone https://github.com/openhab/jupnp.git
 ````
 
-3. Building with Maven
-======================
+## Building with Maven
 
 To build jUPnP from the sources, Maven takes care of everything:
 - change into the jupnp directory (`cd jupnp`)
