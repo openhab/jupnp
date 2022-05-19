@@ -16,6 +16,7 @@ package org.jupnp.transport.impl.jetty;
 
 import static org.eclipse.jetty.http.HttpHeader.CONNECTION;
 
+import java.net.URI;
 import java.util.concurrent.Callable;
 
 import org.eclipse.jetty.client.HttpClient;
@@ -94,6 +95,12 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     @Override
     protected Request createRequest(StreamRequestMessage requestMessage) {
         final UpnpRequest upnpRequest = requestMessage.getOperation();
+        URI uri = upnpRequest.getURI();
+
+        if (uri == null) {
+            log.debug("Cannot create request because URI is null.");
+            return null;
+        }
 
         log.trace("Creating HTTP request. URI: '{}' method: '{}'", upnpRequest.getURI(), upnpRequest.getMethod());
         Request request;
@@ -103,7 +110,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
             case UNSUBSCRIBE:
             case POST:
             case NOTIFY:
-                request = httpClient.newRequest(upnpRequest.getURI()).method(upnpRequest.getHttpMethodName());
+                request = httpClient.newRequest(uri).method(upnpRequest.getHttpMethodName());
                 break;
             default:
                 throw new RuntimeException("Unknown HTTP method: " + upnpRequest.getHttpMethodName());
