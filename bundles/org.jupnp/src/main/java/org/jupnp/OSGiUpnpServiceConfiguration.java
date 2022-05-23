@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * <p>
  * The thread <code>Executor</code> is an <code>Executors.newCachedThreadPool()</code> with a custom
- * {@link QueueingThreadFactory}.
+ * QueueingThreadFactory.
  * </p>
  * <p>
  * The default {@link org.jupnp.model.Namespace} is configured without any base path or prefix.

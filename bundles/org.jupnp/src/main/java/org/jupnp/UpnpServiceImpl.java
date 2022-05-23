@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * If no {@link UpnpServiceConfiguration} is provided it will automatically instantiate
  * {@link DefaultUpnpServiceConfiguration}. This configuration <strong>does not work</strong> on Android! Use the
- * {@link org.jupnp.android.AndroidUpnpService} application component instead
+ * AndroidUpnpService application component instead
  * </p>
  * <p>
  * Override the various <tt>create...()</tt> methods to customize instantiation of protocol factory, router, etc.
