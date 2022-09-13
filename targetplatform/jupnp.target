@@ -22,8 +22,8 @@
 <repository location="http://download.eclipse.org/eclipse/updates/4.4"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jetty.bundles.f.feature.group" version="9.3.14.201611021343"/>
-<repository location="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.3.14.v20161028"/>
+<unit id="org.eclipse.jetty.bundles.f.feature.group" version="9.4.48.v20220622"/>
+<repository location="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.4.48.v20220622"/>
 </location>
 </locations>
 </target>
