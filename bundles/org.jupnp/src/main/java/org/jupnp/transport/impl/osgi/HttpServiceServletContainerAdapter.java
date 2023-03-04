@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.jupnp.transport.impl.async.AsyncServlet;
 import org.jupnp.transport.spi.ServletContainerAdapter;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
@@ -77,9 +78,12 @@ public class HttpServiceServletContainerAdapter implements
 	@Override
 	public void registerServlet(String contextPath, Servlet servlet) {
         if (this.contextPath == null) {
-            Dictionary<?, ?> params = new Properties();
+            Dictionary<Object, Object> params = new Properties();
             try {
                 logger.info("Registering UPnP callback servlet as {}", contextPath);
+                if (servlet instanceof AsyncServlet) {
+                    params.put("async-supported", "true");
+                }
                 httpService.registerServlet(contextPath, servlet, params, new DisableAuthenticationHttpContext());
                 this.contextPath = contextPath;
             } catch (ServletException | NamespaceException | IllegalStateException e) {
