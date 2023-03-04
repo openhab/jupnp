@@ -1,4 +1,4 @@
-[![build status](https://travis-ci.com/jupnp/jupnp.svg?branch=master)](https://travis-ci.com/github/jupnp/jupnp)
+[![GitHub Actions Build Status](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml)
 [![CDDL-1.0](https://img.shields.io/badge/license-CDDL%201.0-green.svg)](https://opensource.org/licenses/CDDL-1.0)
 
 
@@ -20,7 +20,7 @@ yet, just follow the instructions and everything will miraculously work ;-)
 
 What you need before you start:
 - Java SDK 8 (please note that the build does NOT work with any higher version!)
-- Maven3 from http://maven.apache.org/download.html
+- Maven3 from https://maven.apache.org/download.html
 
 Make sure that the "mvn" command is available on your path
 

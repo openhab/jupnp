@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        java: [ '8' ]
+        maven: [ '3.8.7' ]
+        os: [ 'ubuntu-22.04' ]
+    name: Build (Java ${{ matrix.java }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        if: github.head_ref == ''
+        uses: actions/checkout@v3
+
+      - name: Checkout merge
+        if: github.head_ref != ''
+        uses: actions/checkout@v3
+        with:
+          ref: refs/pull/${{github.event.pull_request.number}}/merge
+
+      - name: Set up Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Set up Java ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+
+      - name: Set up Maven ${{ matrix.maven }}
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: ${{ matrix.maven }}
+
+      - name: Build
+        id: build
+        run: mvn clean verify -B -U
+        env:
+          MAVEN_OPTS: >-
+            -Xmx2g
+            -Dmaven.wagon.http.retryHandler.count=5
+            -Dmaven.wagon.httpconnectionManager.ttlSeconds=25
+            -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
