@@ -16,12 +16,12 @@ package org.jupnp.osgi.test.data;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-import org.apache.commons.codec.binary.Base64;
 import org.osgi.service.upnp.UPnPLocalStateVariable;
 import org.osgi.service.upnp.UPnPStateVariable;
 
@@ -521,7 +521,7 @@ public class OSGiUPnPStringConverter {
         } else if (value instanceof byte[]) {
 
             if (type.equals(UPnPStateVariable.TYPE_BIN_BASE64)) {
-                value = Base64.encodeBase64((byte[]) value);
+                value = Base64.getEncoder().encode((byte[]) value);
             }
 
             byte[] bytes = ((byte[]) value);

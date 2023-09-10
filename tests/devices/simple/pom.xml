@@ -25,10 +25,6 @@
       <artifactId>jupnp-osgi-tests-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
@@ -65,8 +61,7 @@
               org.slf4j</Import-Package>
             <Export-Package></Export-Package>
             <Embed-Transitive>false</Embed-Transitive>
-            <Embed-Dependency>jupnp-osgi-tests-common,
-              commons-codec</Embed-Dependency>
+            <Embed-Dependency>jupnp-osgi-tests-common</Embed-Dependency>
           </instructions>
         </configuration>
       </plugin>

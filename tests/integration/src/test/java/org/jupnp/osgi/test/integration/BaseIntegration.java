@@ -15,12 +15,12 @@
 package org.jupnp.osgi.test.integration;
 
 import java.io.File;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-import org.apache.commons.codec.binary.Base64;
 import org.osgi.framework.Bundle;
 import org.osgi.service.upnp.UPnPDevice;
 import org.jupnp.UpnpService;
@@ -180,7 +180,7 @@ public class BaseIntegration {
 		}
 		else if (value instanceof Byte[]) {
 			if (type.equals("bin.base64")) {
-				value = Base64.decodeBase64(toBytes((Byte[]) value));
+				value = Base64.getDecoder().decode(toBytes((Byte[]) value));
 			}
 			else {
 				value = toBytes((Byte[]) value);
