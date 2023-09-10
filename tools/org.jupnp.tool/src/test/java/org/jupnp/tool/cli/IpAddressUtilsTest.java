@@ -14,18 +14,18 @@
 
 package org.jupnp.tool.cli;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for IpAddressUtils class.
  * 
  * @author Jochen Hiller - Initial contribution
  */
-public class IpAddressUtilsTest {
+class IpAddressUtilsTest {
 
 	@Test
-	public void testIsSameIpAddressOK() {
+	void testIsSameIpAddressOK() {
 		checkSame("192.168.3.106", "192.168.3.106");
 		checkSame("192.168.0.10", "192.168.0.10");
 		checkSame("192.168.0.0010", "192.168.0.0010");
@@ -33,7 +33,7 @@ public class IpAddressUtilsTest {
 	}
 
 	@Test
-	public void testIsSameIpAddressNull() {
+	void testIsSameIpAddressNull() {
 		checkEX("", "");
 		checkNotSame(null, "");
 		checkNotSame("", null);
@@ -42,7 +42,7 @@ public class IpAddressUtilsTest {
 	}
 
 	@Test
-	public void testIsSameIpAddressDifferent() {
+	void testIsSameIpAddressDifferent() {
 		checkNotSame("192.168.3.106", "192.168.3.107");
 		checkNotSame("192.168.0.10", "192.168.0.11");
 		checkNotSame("192.168.0.0010", "192.168.0.0011");
@@ -50,7 +50,7 @@ public class IpAddressUtilsTest {
 	}
 
 	@Test
-	public void testIsSameIpAddressInvalid() {
+	void testIsSameIpAddressInvalid() {
 		// missing digits ip2
 		checkSame("192.168.1.1", "192.168.1.1");
 		checkEX("192.168.1.1", "192.168.1");
@@ -81,19 +81,19 @@ public class IpAddressUtilsTest {
 	}
 
 	@Test
-	public void testCompareIpAddressEquals() {
+	void testCompareIpAddressEquals() {
 		checkEQ("192.168.3.106", "192.168.3.106");
 		checkEQ("192.168.1.1", "192.168.1.001");
 	}
 
 	@Test
-	public void testCompareIpAddressGreaterThan() {
+	void testCompareIpAddressGreaterThan() {
 		checkGT("192.168.3.106", "192.168.3.105");
 		checkGT("192.168.1.2", "192.168.1.001");
 	}
 
 	@Test
-	public void testCompareIpAddressLessThan() {
+	void testCompareIpAddressLessThan() {
 		checkLT("192.168.3.105", "192.168.3.106");
 		checkLT("192.168.1.001", "192.168.1.2");
 	}
@@ -101,32 +101,27 @@ public class IpAddressUtilsTest {
 	// private methods
 
 	private void checkSame(String s1, String s2) {
-		Assert.assertTrue(IpAddressUtils.isSameIpAddress(s1, s2));
+		assertTrue(IpAddressUtils.isSameIpAddress(s1, s2));
 	}
 
 	private void checkNotSame(String s1, String s2) {
-		Assert.assertFalse(IpAddressUtils.isSameIpAddress(s1, s2));
+		assertFalse(IpAddressUtils.isSameIpAddress(s1, s2));
 	}
 
 	private void checkEX(String s1, String s2) {
-		try {
-			IpAddressUtils.isSameIpAddress(s1, s2);
-			Assert.fail("Oops, IllegalArgumentException expected");
-		} catch (IllegalArgumentException ex) {
-			// OK, expected
-		}
+		assertThrows(IllegalArgumentException.class, () -> IpAddressUtils.isSameIpAddress(s1, s2));
 	}
 
 	private void checkEQ(String s1, String s2) {
-		Assert.assertEquals(0, IpAddressUtils.compareIpAddress(s1, s2));
+		assertEquals(0, IpAddressUtils.compareIpAddress(s1, s2));
 	}
 
 	private void checkGT(String s1, String s2) {
-		Assert.assertEquals(1, IpAddressUtils.compareIpAddress(s1, s2));
+		assertEquals(1, IpAddressUtils.compareIpAddress(s1, s2));
 	}
 
 	private void checkLT(String s1, String s2) {
-		Assert.assertEquals(-1, IpAddressUtils.compareIpAddress(s1, s2));
+		assertEquals(-1, IpAddressUtils.compareIpAddress(s1, s2));
 	}
 
 }

@@ -16,11 +16,10 @@ package org.jupnp.tool.cli;
 
 import java.util.UUID;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jupnp.tool.cli.SearchCommand.SearchResultPrinter;
 
 /**
@@ -28,16 +27,16 @@ import org.jupnp.tool.cli.SearchCommand.SearchResultPrinter;
  * 
  * @author Jochen Hiller - Initial contribution
  */
-public class SearchCommandTest extends AbstractTestCase {
+class SearchCommandTest extends AbstractTestCase {
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		// use standard tool to see output in console
 		this.tool = new JUPnPTool();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterEach
+	void tearDown() {
 		this.tool = null;
 	}
 
@@ -45,7 +44,7 @@ public class SearchCommandTest extends AbstractTestCase {
 	 * Tests whether sorting of IP address will sort in correct order.
 	 */
 	@Test
-	public void testSearchResultSortByIpAddress() {
+	void testSearchResultSortByIpAddress() {
 		// no sort, no verbose
 		SearchResultPrinter res = new SearchCommand(tool).new SearchResultPrinter(
 				"ip", false);
@@ -64,31 +63,31 @@ public class SearchCommandTest extends AbstractTestCase {
 		int index101 = s.indexOf("192.168.3.101");
 		int index15 = s.indexOf("192.168.3.15");
 		int index255 = s.indexOf("192.168.3.255");
-		Assert.assertTrue(index1 < index2);
-		Assert.assertTrue(index2 < index15);
-		Assert.assertTrue(index15 < index100);
-		Assert.assertTrue(index100 < index101);
-		Assert.assertTrue(index101 < index255);
+		assertTrue(index1 < index2);
+		assertTrue(index2 < index15);
+		assertTrue(index15 < index100);
+		assertTrue(index100 < index101);
+		assertTrue(index101 < index255);
 	}
 
 	@Test
-	public void testSearchNoSort() {
+	void testSearchNoSort() {
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search");
 	}
 
 	@Test
-	public void testSearchNoSortWithStatistics() {
+	void testSearchNoSortWithStatistics() {
 		checkCommandLine(tool, JUPnPTool.RC_OK, "--pool=20,40,stats search");
 	}
 
 	@Test
-	public void testSearchSortByIp() {
+	void testSearchSortByIp() {
 		// checkCommandLine(tool, JUPnPTool.RC_OK, "--loglevel=INFO search");
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search --timeout=20 --sort=ip");
 	}
 
 	@Test
-	public void testSearchSortedBy() {
+	void testSearchSortedBy() {
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search --sort=ip");
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search --sort=model");
 		checkCommandLine(tool, JUPnPTool.RC_OK, "search --sort=serialNumber");
@@ -98,18 +97,18 @@ public class SearchCommandTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testSearchWithVerbose() {
+	void testSearchWithVerbose() {
 		checkCommandLine(tool, JUPnPTool.RC_OK, "--verbose search --sort=ip");
 	}
 
 	@Test
-	public void testSearchWithFilter() {
+	void testSearchWithFilter() {
 		checkCommandLine(tool, JUPnPTool.RC_OK,
 				"--verbose --loglevel=INFO search --filter=D-Link");
 	}
 
 	@Test
-	public void testSearchWrongArguments() {
+	void testSearchWrongArguments() {
 		createSilentTool();
 		checkCommandLine(tool, JUPnPTool.RC_INVALID_OPTION,
 				"search --timeout=ABC");

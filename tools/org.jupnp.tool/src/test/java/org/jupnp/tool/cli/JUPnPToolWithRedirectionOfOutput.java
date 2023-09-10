@@ -36,10 +36,6 @@ import ch.qos.logback.core.util.StatusPrinter;
  */
 public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
 
-	public JUPnPToolWithRedirectionOfOutput() {
-		super();
-	}
-
 	public JUPnPToolWithRedirectionOfOutput(PrintStream out, PrintStream err) {
 		super(out, err);
 	}
@@ -61,7 +57,7 @@ public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
 
 		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
 				.getLogger(Logger.ROOT_LOGGER_NAME);
-		OutputStreamAppender<ILoggingEvent> appender = new OutputStreamAppender<ILoggingEvent>();
+		OutputStreamAppender<ILoggingEvent> appender = new OutputStreamAppender<>();
 		// first set encoder, then output stream
 		appender.setEncoder(ple);
 		OutputStream os = new RedirectToOutputStream(this.outputStream);
@@ -74,14 +70,14 @@ public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
 		Level level = Level.valueOf(rootAppenderLogLevel);
 		rootLogger.setLevel(level);
 		// see https://issues.apache.org/jira/browse/SLING-3045
-		// there can by sync issues when reconfiguring logback
+		// there can be sync issues when reconfiguring logback
 		long now = new Date().getTime();
 		StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
 	}
 
-	private class RedirectToOutputStream extends OutputStream {
+	private static class RedirectToOutputStream extends OutputStream {
 
-		private OutputStream outputStream;
+		private final OutputStream outputStream;
 
 		public RedirectToOutputStream(OutputStream os) {
 			this.outputStream = os;
@@ -108,7 +104,7 @@ public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
 		}
 
 		@Override
-		public void close() throws IOException {
+		public void close() {
 			// do NOT close the output stream
 		}
 

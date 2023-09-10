@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Common functionality for test cases using JUPnPTool.
@@ -53,7 +53,7 @@ public abstract class AbstractTestCase {
 	public void checkCommandLine(final JUPnPTool tool, final int rcExpected, final String argsAsString) {
 		final String[] args = argsAsString.split(" ");
 		final int rc = tool.doMain(args);
-		Assert.assertEquals(rcExpected, rc);
+		assertEquals(rcExpected, rc);
 	}
 
 	public void resetStreams() {

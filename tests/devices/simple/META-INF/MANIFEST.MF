@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1694353192580
+Build-Jdk-Spec: 17
+Bundle-Activator: org.jupnp.osgi.upnp.test.device.simple.Activator
+Bundle-Author: Bruce Green
+Bundle-ClassPath: .,jupnp-osgi-tests-common-3.0.0-SNAPSHOT.jar,commons-c
+ odec-1.4.jar
+Bundle-Description: A test device that exposes all the capablities of OS
+ Gi UPnP.
+Bundle-DocURL: https://www.jupnp.org
+Bundle-License: https://opensource.org/licenses/CDDL-1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: jUPnP OSGi Test Simple Device
+Bundle-SymbolicName: org.jupnp.osgi.upnp.test.device.simple
+Bundle-Vendor: jUPnP.org
+Bundle-Version: 3.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin 5.1.9
+Embed-Dependency: jupnp-osgi-tests-common,commons-codec
+Embed-Transitive: false
+Embedded-Artifacts: jupnp-osgi-tests-common-3.0.0-SNAPSHOT.jar;g="org.ju
+ pnp.tests";a="jupnp-osgi-tests-common";v="3.0.0-SNAPSHOT",commons-codec
+ -1.4.jar;g="commons-codec";a="commons-codec";v="1.4"
+Import-Package: org.osgi.framework;version="[1.5,2)",org.osgi.service.ev
+ ent;version="[1.2,2)",org.osgi.service.upnp;version="[1.1,2)",org.osgi.
+ util.tracker;version="[1.4,2)",org.slf4j;version="[1.7,2)",org.osgi.ser
+ vice.device;version="[1.1,2)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=11))"
+SymbolicName: org.jupnp.osgi.upnp.test.device.simple
+Tool: Bnd-6.3.1.202206071316

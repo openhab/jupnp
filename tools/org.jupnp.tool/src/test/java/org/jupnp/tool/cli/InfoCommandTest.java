@@ -14,35 +14,35 @@
 
 package org.jupnp.tool.cli;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * This test cases checks info command.
  * 
  * @author Jochen Hiller - Initial contribution
  */
-public class InfoCommandTest extends AbstractTestCase {
+class InfoCommandTest extends AbstractTestCase {
 
-	@Before
-	public void setUp() {
+	@BeforeEach
+	void setUp() {
 		// use standard tool to see output in console
 		this.tool = new JUPnPTool();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterEach
+	void tearDown() {
 		this.tool = null;
 	}
 
 	@Test
-	public void testInfoArgsMissing() {
+	void testInfoArgsMissing() {
 		checkCommandLine(tool, JUPnPTool.RC_MISSING_ARGUMENTS, "info");
 	}
 
 	@Test
-	public void testInfoIpAddress() {
+	void testInfoIpAddress() {
 		checkCommandLine(tool, JUPnPTool.RC_OK,
 				"--loglevel=INFO --verbose info 192.168.3.106 192.168.3.1");
 		checkCommandLine(tool, JUPnPTool.RC_OK,
@@ -50,7 +50,7 @@ public class InfoCommandTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testInfoUDN() {
+	void testInfoUDN() {
 		checkCommandLine(tool, JUPnPTool.RC_OK,
 				"--verbose info DCS-2332L-123456789012");
 		checkCommandLine(tool, JUPnPTool.RC_OK,

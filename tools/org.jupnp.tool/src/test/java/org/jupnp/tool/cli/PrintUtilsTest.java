@@ -17,19 +17,19 @@ package org.jupnp.tool.cli;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for PrintUtils test class.
  * 
  * @author Jochen Hiller - Initial contribution
  */
-public class PrintUtilsTest {
+class PrintUtilsTest {
 
 	@Test
-	public void testPrintTable() {
-		List<String[]> table = new ArrayList<String[]>();
+	void testPrintTable() {
+		List<String[]> table = new ArrayList<>();
 		table.add(new String[] { "IP", "Model", "SerialNumber" });
 		table.add(new String[] { "==", "=====", "============" });
 		table.add(new String[] { "192.168.2.1", "QIVICON", "1234567890" });
@@ -51,6 +51,6 @@ public class PrintUtilsTest {
 	}
 
 	private void c(String s, String mustContain) {
-		Assert.assertTrue(s.contains(mustContain));
+		assertTrue(s.contains(mustContain));
 	}
 }
