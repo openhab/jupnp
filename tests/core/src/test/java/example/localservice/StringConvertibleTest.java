@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -26,10 +28,8 @@ import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * String value converters
@@ -68,10 +68,9 @@ import static org.testng.Assert.assertEquals;
  * CSV converter class as an input argument type.
  * </p>
  */
-public class StringConvertibleTest {
+class StringConvertibleTest {
 
-        public LocalDevice createTestDevice(Class serviceClass) throws Exception {
-
+        static LocalDevice createTestDevice(Class serviceClass) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
@@ -84,92 +83,82 @@ public class StringConvertibleTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
-
-
-        try {
-            return new LocalDevice[][]{
-                    {createTestDevice(MyServiceWithStringConvertibles.class)},
-            };
-        } catch (Exception ex) {
-            ex.printStackTrace(System.err);
-            // Damn testng swallows exceptions in provider/factory methods
-            throw new RuntimeException(ex);
-        }
+    static Object[][] getDevices() throws Exception {
+        return new LocalDevice[][]{
+                {createTestDevice(MyServiceWithStringConvertibles.class)},
+        };
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
-        assertEquals(svc.getStateVariables().length, 4);
+        assertEquals(4, svc.getStateVariables().length);
         for (StateVariable stateVariable : svc.getStateVariables()) {
-            assertEquals(stateVariable.getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.STRING);
+            assertEquals(Datatype.Builtin.STRING, stateVariable.getTypeDetails().getDatatype().getBuiltin());
         }
 
-        assertEquals(svc.getActions().length, 9); // Has 8 actions plus QueryStateVariableAction!
+        assertEquals(9, svc.getActions().length); // Has 8 actions plus QueryStateVariableAction!
 
-        assertEquals(svc.getAction("SetMyURL").getArguments().length, 1);
-        assertEquals(svc.getAction("SetMyURL").getArguments()[0].getName(), "In");
-        assertEquals(svc.getAction("SetMyURL").getArguments()[0].getDirection(), ActionArgument.Direction.IN);
-        assertEquals(svc.getAction("SetMyURL").getArguments()[0].getRelatedStateVariableName(), "MyURL");
+        assertEquals(1, svc.getAction("SetMyURL").getArguments().length);
+        assertEquals("In", svc.getAction("SetMyURL").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.IN, svc.getAction("SetMyURL").getArguments()[0].getDirection());
+        assertEquals("MyURL", svc.getAction("SetMyURL").getArguments()[0].getRelatedStateVariableName());
         // The others are all the same...
-
     }
 
-    @Test(dataProvider =  "devices")
-    public void invokeActions(LocalDevice device) {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
         ActionInvocation setMyURL = new ActionInvocation(svc.getAction("SetMyURL"));
         setMyURL.setInput("In", "http://foo/bar");
         svc.getExecutor(setMyURL.getAction()).execute(setMyURL);
-        assertEquals(setMyURL.getFailure(), null);
-        assertEquals(setMyURL.getOutput().length, 0);
+        assertNull(setMyURL.getFailure());
+        assertEquals(0, setMyURL.getOutput().length);
 
         ActionInvocation getMyURL = new ActionInvocation(svc.getAction("GetMyURL"));
         svc.getExecutor(getMyURL.getAction()).execute(getMyURL);
-        assertEquals(getMyURL.getFailure(), null);
-        assertEquals(getMyURL.getOutput().length, 1);
-        assertEquals(getMyURL.getOutput()[0].toString(), "http://foo/bar");
+        assertNull(getMyURL.getFailure());
+        assertEquals(1, getMyURL.getOutput().length);
+        assertEquals("http://foo/bar", getMyURL.getOutput()[0].toString());
 
         ActionInvocation setMyURI = new ActionInvocation(svc.getAction("SetMyURI"));
         setMyURI.setInput("In", "http://foo/bar");
         svc.getExecutor(setMyURI.getAction()).execute(setMyURI);
-        assertEquals(setMyURI.getFailure(), null);
-        assertEquals(setMyURI.getOutput().length, 0);
+        assertNull(setMyURI.getFailure());
+        assertEquals(0, setMyURI.getOutput().length);
 
         ActionInvocation getMyURI = new ActionInvocation(svc.getAction("GetMyURI"));
         svc.getExecutor(getMyURI.getAction()).execute(getMyURI);
-        assertEquals(getMyURI.getFailure(), null);
-        assertEquals(getMyURI.getOutput().length, 1);
-        assertEquals(getMyURI.getOutput()[0].toString(), "http://foo/bar");
+        assertNull(getMyURI.getFailure());
+        assertEquals(1, getMyURI.getOutput().length);
+        assertEquals("http://foo/bar", getMyURI.getOutput()[0].toString());
 
         ActionInvocation setMyNumbers = new ActionInvocation(svc.getAction("SetMyNumbers"));
         setMyNumbers.setInput("In", "1,2,3");
         svc.getExecutor(setMyNumbers.getAction()).execute(setMyNumbers);
-        assertEquals(setMyNumbers.getFailure(), null);
-        assertEquals(setMyNumbers.getOutput().length, 0);
+        assertNull(setMyNumbers.getFailure());
+        assertEquals(0, setMyNumbers.getOutput().length);
 
         ActionInvocation getMyNumbers = new ActionInvocation(svc.getAction("GetMyNumbers"));
         svc.getExecutor(getMyNumbers.getAction()).execute(getMyNumbers);
-        assertEquals(getMyNumbers.getFailure(), null);
-        assertEquals(getMyNumbers.getOutput().length, 1);
-        assertEquals(getMyNumbers.getOutput()[0].toString(), "1,2,3");
+        assertNull(getMyNumbers.getFailure());
+        assertEquals(1, getMyNumbers.getOutput().length);
+        assertEquals("1,2,3", getMyNumbers.getOutput()[0].toString());
 
         ActionInvocation setMyStringConvertible = new ActionInvocation(svc.getAction("SetMyStringConvertible"));
         setMyStringConvertible.setInput("In", "foobar");
         svc.getExecutor(setMyStringConvertible.getAction()).execute(setMyStringConvertible);
-        assertEquals(setMyStringConvertible.getFailure(), null);
-        assertEquals(setMyStringConvertible.getOutput().length, 0);
+        assertNull(setMyStringConvertible.getFailure());
+        assertEquals(0, setMyStringConvertible.getOutput().length);
 
         ActionInvocation getMyStringConvertible = new ActionInvocation(svc.getAction("GetMyStringConvertible"));
         svc.getExecutor(getMyStringConvertible.getAction()).execute(getMyStringConvertible);
-        assertEquals(getMyStringConvertible.getFailure(), null);
-        assertEquals(getMyStringConvertible.getOutput().length, 1);
-        assertEquals(getMyStringConvertible.getOutput()[0].toString(), "foobar");
-
+        assertNull(getMyStringConvertible.getFailure());
+        assertEquals(1, getMyStringConvertible.getOutput().length);
+        assertEquals("foobar", getMyStringConvertible.getOutput()[0].toString());
     }
 }

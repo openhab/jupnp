@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class BinaryLightServer implements Runnable {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // Start a user thread that runs the UPnP stack
         Thread serverThread = new Thread(new BinaryLightServer());
         serverThread.setDaemon(false);
@@ -38,12 +38,7 @@ public class BinaryLightServer implements Runnable {
 
             final UpnpService upnpService = new UpnpServiceImpl();
 
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    upnpService.shutdown();
-                }
-            });
+            Runtime.getRuntime().addShutdownHook(new Thread(upnpService::shutdown));
 
             // Add the bound local device to the registry
             upnpService.getRegistry().addDevice(

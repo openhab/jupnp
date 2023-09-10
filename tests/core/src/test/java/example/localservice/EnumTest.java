@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -25,10 +27,8 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Working with enums
@@ -48,10 +48,9 @@ import static org.testng.Assert.assertEquals;
  * set of possible values.
  * </p>
  */
-public class EnumTest {
+class EnumTest {
 
-    public LocalDevice createTestDevice(Class serviceClass) throws Exception {
-
+    static LocalDevice createTestDevice(Class serviceClass) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
@@ -64,8 +63,7 @@ public class EnumTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
+    static Object[][] getDevices() {
 
 
         try {
@@ -79,43 +77,42 @@ public class EnumTest {
         }
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
-        assertEquals(svc.getStateVariables().length, 1);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.STRING);
+        assertEquals(1, svc.getStateVariables().length);
+        assertEquals(Datatype.Builtin.STRING, svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin());
 
         assertEquals(svc.getActions().length, 3); // Has 2 actions plus QueryStateVariableAction!
 
-        assertEquals(svc.getAction("GetColor").getArguments().length, 1);
-        assertEquals(svc.getAction("GetColor").getArguments()[0].getName(), "Out");
-        assertEquals(svc.getAction("GetColor").getArguments()[0].getDirection(), ActionArgument.Direction.OUT);
-        assertEquals(svc.getAction("GetColor").getArguments()[0].getRelatedStateVariableName(), "Color");
+        assertEquals(1, svc.getAction("GetColor").getArguments().length);
+        assertEquals("Out", svc.getAction("GetColor").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.OUT, svc.getAction("GetColor").getArguments()[0].getDirection());
+        assertEquals("Color", svc.getAction("GetColor").getArguments()[0].getRelatedStateVariableName());
 
-        assertEquals(svc.getAction("SetColor").getArguments().length, 1);
-        assertEquals(svc.getAction("SetColor").getArguments()[0].getName(), "In");
-        assertEquals(svc.getAction("SetColor").getArguments()[0].getDirection(), ActionArgument.Direction.IN);
-        assertEquals(svc.getAction("SetColor").getArguments()[0].getRelatedStateVariableName(), "Color");
-
+        assertEquals(1, svc.getAction("SetColor").getArguments().length);
+        assertEquals("In", svc.getAction("SetColor").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.IN, svc.getAction("SetColor").getArguments()[0].getDirection());
+        assertEquals("Color", svc.getAction("SetColor").getArguments()[0].getRelatedStateVariableName());
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
         ActionInvocation setColor = new ActionInvocation(svc.getAction("SetColor"));
         setColor.setInput("In", MyServiceWithEnum.Color.Blue);
         svc.getExecutor(setColor.getAction()).execute(setColor);
-        assertEquals(setColor.getFailure(), null);
-        assertEquals(setColor.getOutput().length, 0);
+        assertNull(setColor.getFailure());
+        assertEquals(0, setColor.getOutput().length);
 
         ActionInvocation getColor = new ActionInvocation(svc.getAction("GetColor"));
         svc.getExecutor(getColor.getAction()).execute(getColor);
-        assertEquals(getColor.getFailure(), null);
-        assertEquals(getColor.getOutput().length, 1);
-        assertEquals(getColor.getOutput()[0].toString(), MyServiceWithEnum.Color.Blue.name());
-
+        assertNull(getColor.getFailure());
+        assertEquals(1, getColor.getOutput().length);
+        assertEquals(MyServiceWithEnum.Color.Blue.name(), getColor.getOutput()[0].toString());
     }
 }

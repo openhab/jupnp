@@ -27,17 +27,17 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.ErrorCode;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class LocalActionInvocationNullTest {
+class LocalActionInvocationNullTest {
 
     @Test
-    public void invokeActions() throws Exception {
+    void invokeActions() throws Exception {
 
         LocalDevice device = new LocalDevice(
                 SampleData.createLocalDeviceIdentity(),
@@ -55,10 +55,10 @@ public class LocalActionInvocationNullTest {
         invocation.setInput("Two", "bar");
         invocation.setInput("Three", "baz");
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(svc.getManager().getImplementation().one, "foo");
-        assertEquals(svc.getManager().getImplementation().two, "bar");
-        assertEquals(svc.getManager().getImplementation().three.toString(), "baz");
+        assertNull(invocation.getFailure());
+        assertEquals("foo", svc.getManager().getImplementation().one);
+        assertEquals("bar", svc.getManager().getImplementation().two);
+        assertEquals("baz", svc.getManager().getImplementation().three.toString());
 
         // Empty string is fine, will be converted into "null"
         invocation = new ActionInvocation(svc.getAction("SetSomeValues"));
@@ -66,19 +66,19 @@ public class LocalActionInvocationNullTest {
         invocation.setInput("Two", "");
         invocation.setInput("Three", null);
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(svc.getManager().getImplementation().one, "foo");
-        assertEquals(svc.getManager().getImplementation().two, null);
-        assertEquals(svc.getManager().getImplementation().three, null);
+        assertNull(invocation.getFailure());
+        assertEquals("foo", svc.getManager().getImplementation().one);
+        assertNull(svc.getManager().getImplementation().two);
+        assertNull(svc.getManager().getImplementation().three);
 
         // Null is not fine for primitive input arguments
         invocation = new ActionInvocation(svc.getAction("SetPrimitive"));
         invocation.setInput("Primitive", "");
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure().getErrorCode(), ErrorCode.ARGUMENT_VALUE_INVALID.getCode());
+        assertEquals(ErrorCode.ARGUMENT_VALUE_INVALID.getCode(), invocation.getFailure().getErrorCode());
         assertEquals(
-                invocation.getFailure().getMessage(),
-                "The argument value is invalid. Primitive action method argument 'Primitive' requires input value, can't be null or empty string."
+                "The argument value is invalid. Primitive action method argument 'Primitive' requires input value, can't be null or empty string.",
+                invocation.getFailure().getMessage()
         );
 
         // We forgot to set one and it's a local invocation (no string conversion)
@@ -87,11 +87,10 @@ public class LocalActionInvocationNullTest {
         // OOPS! invocation.setInput("Two", null);
         invocation.setInput("Three", null);
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(svc.getManager().getImplementation().one, null);
-        assertEquals(svc.getManager().getImplementation().two, null);
-        assertEquals(svc.getManager().getImplementation().three, null);
-
+        assertNull(invocation.getFailure());
+        assertNull(svc.getManager().getImplementation().one);
+        assertNull(svc.getManager().getImplementation().two);
+        assertNull(svc.getManager().getImplementation().three);
     }
 
     @UpnpService(

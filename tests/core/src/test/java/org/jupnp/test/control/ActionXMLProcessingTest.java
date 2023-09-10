@@ -14,11 +14,12 @@
 
 package org.jupnp.test.control;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.action.ActionException;
@@ -43,10 +44,8 @@ import org.jupnp.model.types.SoapActionType;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
 import org.jupnp.transport.spi.SOAPActionProcessor;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-public class ActionXMLProcessingTest {
+class ActionXMLProcessingTest {
 
     public static final String ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" +
             " <s:Envelope\n" +
@@ -70,15 +69,15 @@ public class ActionXMLProcessingTest {
             "   </s:Body>\n" +
             " </s:Envelope>";
 
-    @DataProvider(name = "processors")
-    public SOAPActionProcessor[][] getProcessors() {
+    static SOAPActionProcessor[][] getProcessors() {
         return new SOAPActionProcessor[][] {
             {new SOAPActionProcessorImpl()}
         };
     }
 
-    @Test(dataProvider = "processors")
-    public void writeReadRequest(final SOAPActionProcessor processor) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void writeReadRequest(final SOAPActionProcessor processor) throws Exception {
 
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
@@ -106,12 +105,13 @@ public class ActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().readBody(incomingCall, actionInvocation);
 
-        assertEquals(actionInvocation.getInput().length, 1);
-        assertEquals(actionInvocation.getInput()[0].getArgument().getName(), "NewTargetValue");
+        assertEquals(1, actionInvocation.getInput().length);
+        assertEquals("NewTargetValue", actionInvocation.getInput()[0].getArgument().getName());
     }
 
-    @Test(dataProvider = "processors")
-    public void writeReadResponse(final SOAPActionProcessor processor) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void writeReadResponse(final SOAPActionProcessor processor) throws Exception {
 
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
@@ -137,12 +137,12 @@ public class ActionXMLProcessingTest {
         actionInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(incomingCall, actionInvocation);
 
-        assertEquals(actionInvocation.getOutput()[0].getArgument().getName(), "RetTargetValue");
+        assertEquals("RetTargetValue", actionInvocation.getOutput()[0].getArgument().getName());
     }
 
-    @Test(dataProvider = "processors")
-    public void writeFailureReadFailure(final SOAPActionProcessor processor) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void writeFailureReadFailure(final SOAPActionProcessor processor) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
 
@@ -167,14 +167,14 @@ public class ActionXMLProcessingTest {
         actionInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(incomingCall, actionInvocation);
 
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
+        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         // Note the period at the end of the test string!
-        assertEquals(actionInvocation.getFailure().getMessage(), ErrorCode.ACTION_FAILED.getDescription() + ". A test string.");
+        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". A test string.", actionInvocation.getFailure().getMessage());
     }
 
-    @Test(dataProvider = "processors")
-    public void readEncodedRequest(final SOAPActionProcessor processor) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void readEncodedRequest(final SOAPActionProcessor processor) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
 
@@ -208,13 +208,12 @@ public class ActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().readBody(request, actionInvocation);
 
-        assertEquals(actionInvocation.getInput()[0].toString(), "This is encoded: <");
-
+        assertEquals("This is encoded: <", actionInvocation.getInput()[0].toString());
     }
 
-    @Test(dataProvider = "processors")
-    public void readEncodedRequestWithAlias(final SOAPActionProcessor processor) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void readEncodedRequestWithAlias(final SOAPActionProcessor processor) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
 
@@ -248,14 +247,13 @@ public class ActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().readBody(request, actionInvocation);
 
-        assertEquals(actionInvocation.getInput()[0].toString(), "This is encoded: <");
-        assertEquals(actionInvocation.getInput("SomeValue").toString(), "This is encoded: <");
-
+        assertEquals("This is encoded: <", actionInvocation.getInput()[0].toString());
+        assertEquals("This is encoded: <", actionInvocation.getInput("SomeValue").toString());
     }
 
-    @Test(dataProvider = "processors")
-    public void writeDecodedResponse(final SOAPActionProcessor processor) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getProcessors")
+    void writeDecodedResponse(final SOAPActionProcessor processor) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
         LocalService svc = ld.getServices()[0];
 

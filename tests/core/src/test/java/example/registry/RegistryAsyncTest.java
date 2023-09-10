@@ -1,7 +1,6 @@
 package example.registry;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -14,15 +13,15 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.types.UDN;
 import org.jupnp.registry.Registry;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-public class RegistryAsyncTest {
+class RegistryAsyncTest {
 
     private static final int DEVICE_COUNT = 20;
     private static final String[] UDNS = new String[DEVICE_COUNT];
 
     @Test
-    public void addMultipleLocalDevices() throws ValidationException, InterruptedException {
+    void addMultipleLocalDevices() throws InterruptedException {
 
         for (int i = 0; i < UDNS.length; i++) {
             UDNS[i] = "my-device-" + i;
@@ -44,7 +43,7 @@ public class RegistryAsyncTest {
 
         assertNull(deadlockedThreads);
 
-        assertEquals(registry.getLocalDevices().size() + registry.getRemoteDevices().size(), DEVICE_COUNT);
+        assertEquals(DEVICE_COUNT, registry.getLocalDevices().size() + registry.getRemoteDevices().size());
 
         for (LocalDevice localDevice : registry.getLocalDevices()) {
             RemoteDevice remoteDevice = registry.getRemoteDevice(localDevice.getIdentity().getUdn(), true);
@@ -64,8 +63,8 @@ public class RegistryAsyncTest {
 
     private static class RegistryClient implements Runnable {
 
-        private Registry registry;
-        private int threadNumber;
+        private final Registry registry;
+        private final int threadNumber;
 
         public RegistryClient(Registry registry, int threadNumber) {
             this.registry = registry;

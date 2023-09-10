@@ -33,24 +33,23 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.NotificationSubtype;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class NotifyTest {
+class NotifyTest {
 
     @Test
-    public void receivedByeBye() throws Exception {
-
+    void receivedByeBye() throws Exception {
         UpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
         RemoteDevice rd = SampleData.createRemoteDevice();
         upnpService.getRegistry().addDevice(rd);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         IncomingNotificationRequest msg = createRequestMessage();
         msg.getHeaders().add(UpnpHeader.Type.NT, new RootDeviceHeader());
@@ -59,19 +58,18 @@ public class NotifyTest {
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
+        assertEquals(0, upnpService.getRegistry().getRemoteDevices().size());
     }
 
     @Test
-    public void receivedNoUDN() throws Exception {
-
+    void receivedNoUDN() throws Exception {
         UpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
         RemoteDevice rd = SampleData.createRemoteDevice();
         upnpService.getRegistry().addDevice(rd);
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         IncomingNotificationRequest msg = createRequestMessage();
         msg.getHeaders().add(UpnpHeader.Type.NT, new RootDeviceHeader());
@@ -82,12 +80,11 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         // This should be unchanged from earlier state
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
     }
 
     @Test
-    public void receivedNoLocation() throws Exception {
-
+    void receivedNoLocation() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -104,12 +101,11 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receivedNoMaxAge() throws Exception {
-
+    void receivedNoMaxAge() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -126,12 +122,11 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receivedAlreadyKnownLocalUDN() throws Exception {
-
+    void receivedAlreadyKnownLocalUDN() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -150,12 +145,11 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receiveEmbeddedTriggersUpdate() throws Exception {
-
+    void receiveEmbeddedTriggersUpdate() throws Exception {
         UpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
@@ -166,7 +160,7 @@ public class NotifyTest {
 
         upnpService.getRegistry().addDevice(rd);
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         IncomingNotificationRequest msg = createRequestMessage();
         msg.getHeaders().add(UpnpHeader.Type.NTS, new NTSHeader(NotificationSubtype.ALIVE));
@@ -182,14 +176,14 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(1000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         upnpService.shutdown();
     }
 
     protected IncomingNotificationRequest createRequestMessage() throws UnknownHostException {
         IncomingNotificationRequest msg = new IncomingNotificationRequest(
-                new IncomingDatagramMessage<UpnpRequest>(
+                new IncomingDatagramMessage<>(
                         new UpnpRequest(UpnpRequest.Method.NOTIFY),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,
@@ -199,7 +193,6 @@ public class NotifyTest {
 
         msg.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader());
         return msg;
-
     }
 
 }

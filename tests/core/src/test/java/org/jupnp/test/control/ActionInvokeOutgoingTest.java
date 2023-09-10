@@ -46,15 +46,14 @@ import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.transport.RouterException;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleServiceOne;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
-import java.util.Arrays;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ActionInvokeOutgoingTest {
+class ActionInvokeOutgoingTest {
 
     public static final String RESPONSE_SUCCESSFUL = "<?xml version=\"1.0\"?>\n" +
         " <s:Envelope\n" +
@@ -108,12 +107,12 @@ public class ActionInvokeOutgoingTest {
         " </s:Envelope>";
 
     @Test
-    public void callLocalGet() throws Exception {
+    void callLocalGet() throws Exception {
 
-        // Registery local device and its service
+        // Registry local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
-      LocalDevice ld = ActionSampleData.createTestDevice();
+        LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
         upnpService.getRegistry().addDevice(ld);
 
@@ -136,32 +135,28 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
-        assertEquals(assertions[0], true);
-        assertEquals(actionInvocation.getOutput().length, 1);
-        assertEquals(actionInvocation.getOutput()[0].toString(), "0");
-
+        assertNull(actionInvocation.getFailure());
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
+        assertEquals(1, actionInvocation.getOutput().length);
+        assertEquals("0", actionInvocation.getOutput()[0].toString());
     }
 
-
     @Test
-    public void callLocalWrongAction() throws Exception {
-
-        // Registery local device and its service
+    void callLocalWrongAction() throws Exception {
+        // Registry local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
         LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
         upnpService.getRegistry().addDevice(ld);
 
-        assertEquals(service.getAction("NonExistentAction"), null);
+        assertNull(service.getAction("NonExistentAction"));
     }
 
     @Test
-    public void callLocalSetException() throws Exception {
-
-        // Registery local device and its service
+    void callLocalSetException() throws Exception {
+        // Registry local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceThrowsException.class);
@@ -182,27 +177,26 @@ public class ActionInvokeOutgoingTest {
 
             @Override
             public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                assert operation == null; // Local calls don't have an operation
+                assertNull(operation); // Local calls don't have an operation
                 assertions[0] = true;
             }
         };
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
-        assertEquals(assertions[0], true);
+        assertNotNull(actionInvocation.getFailure());
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
 
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
+        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-            actionInvocation.getFailure().getMessage(),
-            ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong."
+            ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong.",
+            actionInvocation.getFailure().getMessage()
         );
     }
 
     @Test
-    public void callRemoteGet() throws Exception {
-
+    void callRemoteGet() {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -256,40 +250,38 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
-        assertEquals(assertions[0], true);
+        assertNull(actionInvocation.getFailure());
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
 
         StreamRequestMessage request = upnpService.getRouter().getSentStreamRequestMessages().get(0);
 
         // Mandatory headers
         assertEquals(
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.CONTENT_TYPE),
-            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.CONTENT_TYPE)
         );
         assertEquals(
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.SOAPACTION),
-            "\"" + SampleServiceOne.getThisServiceType().toString() + "#GetTarget\""
+            "\"" + SampleServiceOne.getThisServiceType() + "#GetTarget\"",
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.SOAPACTION)
         );
 
         // The extra headers
         assertEquals(
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.USER_AGENT),
-            "MyCustom/Agent"
+            "MyCustom/Agent",
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.USER_AGENT)
         );
         assertEquals(
-            request.getHeaders().getFirstHeader("X-CUSTOM-HEADER"),
-            "foo"
+            "foo",
+            request.getHeaders().getFirstHeader("X-CUSTOM-HEADER")
         );
 
-        assertEquals(actionInvocation.getOutput().length, 1);
-        assertEquals(actionInvocation.getOutput()[0].toString(), "0");
-
+        assertEquals(1, actionInvocation.getOutput().length);
+        assertEquals("0", actionInvocation.getOutput()[0].toString());
     }
 
     @Test
-    public void callRemoteGetFailure() throws Exception {
-
+    void callRemoteGetFailure() {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -322,27 +314,25 @@ public class ActionInvokeOutgoingTest {
 
             @Override
             public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                assertEquals(operation.getStatusCode(), UpnpResponse.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+                assertEquals(UpnpResponse.Status.INTERNAL_SERVER_ERROR.getStatusCode(), operation.getStatusCode());
                 assertions[0] = true;
             }
         };
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
-        assertEquals(assertions[0], true);
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.INVALID_CONTROL_URL.getCode());
+        assertNotNull(actionInvocation.getFailure());
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
+        assertEquals(ErrorCode.INVALID_CONTROL_URL.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-            actionInvocation.getFailure().getMessage(),
-            "A test string"
+            "A test string",
+            actionInvocation.getFailure().getMessage()
         );
-
     }
 
     @Test
-    public void callRemoteGetNotFoundFailure() throws Exception {
-
+    void callRemoteGetNotFoundFailure() {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -358,7 +348,7 @@ public class ActionInvokeOutgoingTest {
         };
         upnpService.startup();
 
-        // Registery remote device and its service
+        // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
         Service service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
@@ -382,24 +372,22 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
-        assertEquals(assertions[0], true);
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
+        assertNotNull(actionInvocation.getFailure());
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
+        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-            actionInvocation.getFailure().getMessage(),
-            ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found."
+            ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found.",
+            actionInvocation.getFailure().getMessage()
         );
-
     }
 
     @Test
-    public void callRemoteGetNoResponse() throws Exception {
-
+    void callRemoteGetNoResponse() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        // Registery remote device and its service
+        // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
         Service service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
@@ -416,26 +404,25 @@ public class ActionInvokeOutgoingTest {
 
             @Override
             public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                assert operation == null;
+                assertNull(operation);
                 assertions[0] = true;
             }
         };
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
-        assertEquals(assertions[0], true);
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
+        assertNotNull(actionInvocation.getFailure());
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
+        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-            actionInvocation.getFailure().getMessage(),
-            ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received."
+            ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received.",
+            actionInvocation.getFailure().getMessage()
         );
     }
 
     @Test
-    public void callRemoteNegativeValue() throws Exception {
-
+    void callRemoteNegativeValue() throws Exception {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -451,7 +438,7 @@ public class ActionInvokeOutgoingTest {
         };
         upnpService.startup();
 
-        // Registery remote device and its service
+        // Registry remote device and its service
         RemoteDevice device = new RemoteDevice(
             SampleData.createRemoteDeviceIdentity(),
             new UDADeviceType("MyDevice"),
@@ -500,16 +487,14 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() == null;
+        assertNull(actionInvocation.getFailure());
         // The illegal "-1" value should have been converted (with warning) to 0
-        assertEquals(actionInvocation.getOutput("Result").getValue(), new UnsignedIntegerFourBytes(0));
+        assertEquals(new UnsignedIntegerFourBytes(0), actionInvocation.getOutput("Result").getValue());
     }
 
     /* TODO: M-POST support
     @Test
-    public void callRemoteGetMethodNotSupported() throws Exception {
-
-
+    void callRemoteGetMethodNotSupported() throws Exception {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             public StreamResponseMessage getStreamResponseMessage(StreamRequestMessage msg) {
@@ -520,11 +505,10 @@ public class ActionInvokeOutgoingTest {
                 } else {
                     throw new RuntimeException("Received unknown msg: " + msg);
                 }
-
             }
         };
 
-        // Registery remote device and its service
+        // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
         Service service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
@@ -545,35 +529,33 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 2);
-        assertEquals(assertions[0], true);
+        assertEquals(2, upnpService.getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
 
-        assertEquals(upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod(), UpnpRequest.Method.POST);
-        assertEquals(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION), null);
+        assertEquals(UpnpRequest.Method.POST, upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod());
+        assertNull(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
         );
 
 
-        assertEquals(upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod(), UpnpRequest.Method.MPOST);
+        assertEquals(UpnpRequest.Method.MPOST, upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod());
         MANHeader manHeader = upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.MAN, MANHeader.class);
-        assert manHeader != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION), manHeader.getNamespace());
+        assertNotNull(manHeader);
+        assertEquals(manHeader.getNamespace(), upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
         );
 
-        assert actionInvocation.getFailure() == null;
-        assertEquals(actionInvocation.getOutput().length, 1);
-        assertEquals(actionInvocation.getOutput()[0].toString(), "0");
-
+        assertNull(actionInvocation.getFailure());
+        assertEquals(1, actionInvocation.getOutput().length);
+        assertEquals("0", actionInvocation.getOutput()[0].toString());
     }
 
     @Test
-    public void callRemoteGetDoubleMethodNotSupported() throws Exception {
-
+    void callRemoteGetDoubleMethodNotSupported() throws Exception {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             public StreamResponseMessage[] getStreamResponseMessages() {
@@ -584,7 +566,7 @@ public class ActionInvokeOutgoingTest {
             }
         };
 
-        // Registery remote device and its service
+        // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
         Service service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
@@ -606,38 +588,37 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 2);
-        assertEquals(assertions[0], true);
+        assertEquals(2, upnpService.getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
 
-        assertEquals(upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod(), UpnpRequest.Method.POST);
-        assertEquals(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION), null);
+        assertEquals(UpnpRequest.Method.POST, upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod());
+        assertNull(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
         );
 
 
-        assertEquals(upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod(), UpnpRequest.Method.MPOST);
+        assertEquals(UpnpRequest.Method.MPOST, upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod());
         MANHeader manHeader = upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.MAN, MANHeader.class);
-        assert manHeader != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION), manHeader.getNamespace());
+        assertNotNull(manHeader);
+        assertEquals(manHeader.getNamespace(), upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
         );
 
-        assert actionInvocation.getFailure() != null;
-        assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
+        assertNotNull(actionInvocation.getFailure());
+        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-                actionInvocation.getFailure().getMessage(),
-                ErrorCode.ACTION_FAILED.getDescription() + ". Second request (with MPOST) also failed, received Method Not Allowed again."
+                ErrorCode.ACTION_FAILED.getDescription() + ". Second request (with MPOST) also failed, received Method Not Allowed again.",
+                actionInvocation.getFailure().getMessage()
         );
     }
     */
 
     @Test
-    public void callRemoteQueryStateVariable() throws Exception {
-
+    void callRemoteQueryStateVariable() {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -677,21 +658,20 @@ public class ActionInvokeOutgoingTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
-        assertEquals(assertions[0], true);
+        assertNull(actionInvocation.getFailure());
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
+        assertTrue(assertions[0]);
         assertEquals(
-            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
         );
         assertEquals(
-            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString(),
-            "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\""
+                "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"",
+                upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString()
         );
-        assertEquals(actionInvocation.getOutput().length, 1);
-        assertEquals(actionInvocation.getOutput()[0].getArgument().getName(), "return");
-        assertEquals(actionInvocation.getOutput()[0].toString(), "0");
+        assertEquals(1, actionInvocation.getOutput().length);
+        assertEquals("return", actionInvocation.getOutput()[0].getArgument().getName());
+        assertEquals("0", actionInvocation.getOutput()[0].toString());
     }
-
 
 }

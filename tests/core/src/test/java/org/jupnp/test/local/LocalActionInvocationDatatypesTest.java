@@ -26,19 +26,20 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class LocalActionInvocationDatatypesTest {
+class LocalActionInvocationDatatypesTest {
 
     @Test
-    public void invokeActions() throws Exception {
+    void invokeActions() throws Exception {
 
         LocalDevice device = new LocalDevice(
                 SampleData.createLocalDeviceIdentity(),
@@ -50,49 +51,49 @@ public class LocalActionInvocationDatatypesTest {
 
         ActionInvocation getDataInvocation = new ActionInvocation(svc.getAction("GetData"));
         svc.getExecutor(getDataInvocation.getAction()).execute(getDataInvocation);
-        assertEquals(getDataInvocation.getFailure(), null);
-        assertEquals(getDataInvocation.getOutput().length, 1);
-        assertEquals(((byte[]) getDataInvocation.getOutput()[0].getValue()).length, 512);
+        assertNull(getDataInvocation.getFailure());
+        assertEquals(1, getDataInvocation.getOutput().length);
+        assertEquals(512, ((byte[]) getDataInvocation.getOutput()[0].getValue()).length);
 
         // This fails, we can't put arbitrary bytes into a String and hope it will be valid unicode characters!
         /* TODO: This now only logs a warning!
         ActionInvocation getStringDataInvocation = new ActionInvocation(svc.getAction("GetDataString"));
         svc.getExecutor(getStringDataInvocation.getAction()).execute(getStringDataInvocation);
-        assertEquals(getStringDataInvocation.getFailure().getErrorCode(), ErrorCode.ARGUMENT_VALUE_INVALID.getCode());
+        assertEquals(ErrorCode.ARGUMENT_VALUE_INVALID.getCode(), getStringDataInvocation.getFailure().getErrorCode());
         assertEquals(
-                getStringDataInvocation.getFailure().getMessage(),
                 "The argument value is invalid. Wrong type or invalid value for 'RandomDataString': " +
-                        "Invalid characters in string value (XML 1.0, section 2.2) produced by (StringDatatype)."
+                        "Invalid characters in string value (XML 1.0, section 2.2) produced by (StringDatatype).",
+                getStringDataInvocation.getFailure().getMessage()
         );
         */
 
         ActionInvocation invocation = new ActionInvocation(svc.getAction("GetStrings"));
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(invocation.getOutput().length, 2);
-        assertEquals(invocation.getOutput("One").toString(), "foo");
-        assertEquals(invocation.getOutput("Two").toString(), "bar");
+        assertNull(invocation.getFailure());
+        assertEquals(2, invocation.getOutput().length);
+        assertEquals("foo", invocation.getOutput("One").toString());
+        assertEquals("bar", invocation.getOutput("Two").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetThree"));
         assertEquals(svc.getAction("GetThree").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "i2");
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(invocation.getOutput().length, 1);
-        assertEquals(invocation.getOutput("three").toString(), "123");
+        assertNull(invocation.getFailure());
+        assertEquals(1, invocation.getOutput().length);
+        assertEquals("123", invocation.getOutput("three").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetFour"));
         assertEquals(svc.getAction("GetFour").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "int");
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(invocation.getOutput().length, 1);
-        assertEquals(invocation.getOutput("four").toString(), "456");
+        assertNull(invocation.getFailure());
+        assertEquals(1, invocation.getOutput().length);
+        assertEquals("456", invocation.getOutput("four").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetFive"));
         assertEquals(svc.getAction("GetFive").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "int");
         svc.getExecutor(invocation.getAction()).execute(invocation);
-        assertEquals(invocation.getFailure(), null);
-        assertEquals(invocation.getOutput().length, 1);
-        assertEquals(invocation.getOutput("five").toString(), "456");
+        assertNull(invocation.getFailure());
+        assertEquals(1, invocation.getOutput().length);
+        assertEquals("456", invocation.getOutput("five").toString());
     }
 
     @UpnpService(
@@ -125,7 +126,7 @@ public class LocalActionInvocationDatatypesTest {
             new Random().nextBytes(data);
 
             try {
-                dataString = new String(data, "UTF-8");
+                dataString = new String(data, StandardCharsets.UTF_8);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

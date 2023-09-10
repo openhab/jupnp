@@ -14,7 +14,6 @@
 
 package example.localservice;
 
-import org.jupnp.binding.AllowedValueProvider;
 import org.jupnp.binding.AllowedValueRangeProvider;
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpInputArgument;

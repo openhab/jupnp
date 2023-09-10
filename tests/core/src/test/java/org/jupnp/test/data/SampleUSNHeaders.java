@@ -29,8 +29,7 @@ import org.jupnp.model.message.header.UpnpHeader;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -55,8 +54,8 @@ public class SampleUSNHeaders {
 
             if (msg.getHeaders().getFirstHeader(ntstHeaderType, RootDeviceHeader.class) != null) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class).getString(),
-                        new USNRootDeviceHeader(rootDevice.getIdentity().getUdn()).getString()
+                        new USNRootDeviceHeader(rootDevice.getIdentity().getUdn()).getString(),
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class).getString()
                 );
                 gotRootDeviceFirstMsg = true;
             }
@@ -64,16 +63,16 @@ public class SampleUSNHeaders {
             UDNHeader foundUDN = msg.getHeaders().getFirstHeader(ntstHeaderType, UDNHeader.class);
             if (foundUDN != null && foundUDN.getString().equals(new UDNHeader(rootDevice.getIdentity().getUdn()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(ntstHeaderType).getString(),
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
+                        msg.getHeaders().getFirstHeader(ntstHeaderType).getString()
                 );
                 gotRootDeviceSecondMsg = true;
             }
 
             if (foundUDN != null && foundUDN.getString().equals(new UDNHeader(embeddedDevice.getIdentity().getUdn()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(ntstHeaderType).getString(),
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
+                        msg.getHeaders().getFirstHeader(ntstHeaderType).getString()
                 );
                 gotEmbeddedDeviceFirstMsg = true;
 
@@ -82,16 +81,16 @@ public class SampleUSNHeaders {
             DeviceTypeHeader foundDeviceNTST = msg.getHeaders().getFirstHeader(ntstHeaderType, DeviceTypeHeader.class);
             if (foundDeviceNTST != null && foundDeviceNTST.getString().equals(new DeviceTypeHeader(rootDevice.getType()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, DeviceUSNHeader.class).getString(),
-                        new DeviceUSNHeader(rootDevice.getIdentity().getUdn(), rootDevice.getType()).getString()
+                        new DeviceUSNHeader(rootDevice.getIdentity().getUdn(), rootDevice.getType()).getString(),
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, DeviceUSNHeader.class).getString()
                 );
                 gotRootDeviceThirdMsg = true;
             }
 
             if (foundDeviceNTST != null && foundDeviceNTST.getString().equals(new DeviceTypeHeader(embeddedDevice.getType()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, DeviceUSNHeader.class).getString(),
-                        new DeviceUSNHeader(embeddedDevice.getIdentity().getUdn(), embeddedDevice.getType()).getString()
+                        new DeviceUSNHeader(embeddedDevice.getIdentity().getUdn(), embeddedDevice.getType()).getString(),
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, DeviceUSNHeader.class).getString()
                 );
                 gotEmbeddedDeviceSecondMsg = true;
             }
@@ -99,16 +98,16 @@ public class SampleUSNHeaders {
             ServiceTypeHeader foundServiceNTST = msg.getHeaders().getFirstHeader(ntstHeaderType, ServiceTypeHeader.class);
             if (foundServiceNTST != null && foundServiceNTST.getString().equals(new ServiceTypeHeader(SampleServiceOne.getThisServiceType()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, ServiceUSNHeader.class).getString(),
-                        new ServiceUSNHeader(rootDevice.getIdentity().getUdn(), SampleServiceOne.getThisServiceType()).getString()
+                        new ServiceUSNHeader(rootDevice.getIdentity().getUdn(), SampleServiceOne.getThisServiceType()).getString(),
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, ServiceUSNHeader.class).getString()
                 );
                 gotFirstServiceMsg = true;
             }
 
             if (foundServiceNTST != null && foundServiceNTST.getString().equals(new ServiceTypeHeader(SampleServiceTwo.getThisServiceType()).getString())) {
                 assertEquals(
-                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, ServiceUSNHeader.class).getString(),
-                        new ServiceUSNHeader(rootDevice.getIdentity().getUdn(), SampleServiceTwo.getThisServiceType()).getString()
+                        new ServiceUSNHeader(rootDevice.getIdentity().getUdn(), SampleServiceTwo.getThisServiceType()).getString(),
+                        msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, ServiceUSNHeader.class).getString()
                 );
                 gotSecondServiceMsg = true;
             }
@@ -123,6 +122,5 @@ public class SampleUSNHeaders {
 
         assertTrue(gotFirstServiceMsg);
         assertTrue(gotSecondServiceMsg);
-
     }
 }

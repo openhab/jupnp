@@ -26,17 +26,15 @@ import org.jupnp.registry.*;
 
 public class BinaryLightClient implements Runnable {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // Start a user thread that runs the UPnP stack
         Thread clientThread = new Thread(new BinaryLightClient());
         clientThread.setDaemon(false);
         clientThread.start();
-
     }
 
     public void run() {
         try {
-
             UpnpService upnpService = new UpnpServiceImpl();
 
             // Add a listener for device registration events
@@ -48,7 +46,6 @@ public class BinaryLightClient implements Runnable {
             upnpService.getControlPoint().search(
                     new STAllHeader()
             );
-
         } catch (Exception ex) {
             System.err.println("Exception occured: " + ex);
             System.exit(1);
@@ -58,20 +55,16 @@ public class BinaryLightClient implements Runnable {
     // DOC: REGISTRYLISTENER
     RegistryListener createRegistryListener(final UpnpService upnpService) {
         return new DefaultRegistryListener() {
-
-            ServiceId serviceId = new UDAServiceId("SwitchPower");
+            final ServiceId serviceId = new UDAServiceId("SwitchPower");
 
             @Override
             public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-
                 Service switchPower;
                 if ((switchPower = device.findService(serviceId)) != null) {
 
                     System.out.println("Service discovered: " + switchPower);
                     executeAction(upnpService, switchPower);
-
                 }
-
             }
 
             @Override
@@ -81,13 +74,11 @@ public class BinaryLightClient implements Runnable {
                     System.out.println("Service disappeared: " + switchPower);
                 }
             }
-
         };
     }
     // DOC: REGISTRYLISTENER
     // DOC: EXECUTEACTION
     void executeAction(UpnpService upnpService, Service switchPowerService) {
-
             ActionInvocation setTargetInvocation =
                     new SetTargetActionInvocation(switchPowerService);
 
@@ -109,11 +100,9 @@ public class BinaryLightClient implements Runnable {
                         }
                     }
             );
-
     }
 
-    class SetTargetActionInvocation extends ActionInvocation {
-
+    static class SetTargetActionInvocation extends ActionInvocation {
         SetTargetActionInvocation(Service service) {
             super(service.getAction("SetTarget"));
             try {

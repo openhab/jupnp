@@ -14,6 +14,8 @@
 
 package org.jupnp.test.model;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
@@ -29,20 +31,17 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.jupnp.util.ByteArray;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import java.util.Random;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class LocalServiceBindingDatatypesTest {
+class LocalServiceBindingDatatypesTest {
 
-    public LocalDevice createTestDevice(LocalService service) throws Exception {
+    static LocalDevice createTestDevice(LocalService service) throws Exception {
         return new LocalDevice(
                 SampleData.createLocalDeviceIdentity(),
                 new UDADeviceType("TestDevice", 1),
@@ -51,9 +50,7 @@ public class LocalServiceBindingDatatypesTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() throws Exception {
-
+    static Object[][] getDevices() throws Exception {
         // This is what we are actually testing
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
 
@@ -62,9 +59,9 @@ public class LocalServiceBindingDatatypesTest {
         };
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = SampleData.getFirstService(device);
 
         //System.out.println("############################################################################");
@@ -72,19 +69,18 @@ public class LocalServiceBindingDatatypesTest {
         //System.out.println(binder.generate(svc));
         //System.out.println("############################################################################");
 
-        assertEquals(svc.getStateVariables().length, 1);
-        assertEquals(svc.getStateVariable("Data").getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.BIN_BASE64);
-        assertEquals(svc.getStateVariable("Data").getEventDetails().isSendEvents(), false);
+        assertEquals(1, svc.getStateVariables().length);
+        assertEquals(Datatype.Builtin.BIN_BASE64, svc.getStateVariable("Data").getTypeDetails().getDatatype().getBuiltin());
+        assertFalse(svc.getStateVariable("Data").getEventDetails().isSendEvents());
 
-        assertEquals(svc.getActions().length, 1);
+        assertEquals(1, svc.getActions().length);
 
-        assertEquals(svc.getAction("GetData").getName(), "GetData");
-        assertEquals(svc.getAction("GetData").getArguments().length, 1);
-        assertEquals(svc.getAction("GetData").getArguments()[0].getName(), "RandomData");
-        assertEquals(svc.getAction("GetData").getArguments()[0].getDirection(), ActionArgument.Direction.OUT);
-        assertEquals(svc.getAction("GetData").getArguments()[0].getRelatedStateVariableName(), "Data");
-        assertEquals(svc.getAction("GetData").getArguments()[0].isReturnValue(), true);
-
+        assertEquals("GetData", svc.getAction("GetData").getName());
+        assertEquals(1, svc.getAction("GetData").getArguments().length);
+        assertEquals("RandomData", svc.getAction("GetData").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.OUT, svc.getAction("GetData").getArguments()[0].getDirection());
+        assertEquals("Data", svc.getAction("GetData").getArguments()[0].getRelatedStateVariableName());
+        assertTrue(svc.getAction("GetData").getArguments()[0].isReturnValue());
     }
 
     /* ####################################################################################################### */

@@ -14,9 +14,10 @@
 
 package org.jupnp.test.model;
 
+import org.junit.jupiter.api.Disabled;
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.XMLUtil;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -32,10 +33,10 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class UtilTest {
+class UtilTest {
 
     final protected DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     final protected DocumentBuilder documentBuilder;
@@ -50,48 +51,45 @@ public class UtilTest {
     }
 
     @Test
-    public void validUDAName() {
-        assertEquals(ModelUtil.isValidUDAName("in-valid"), false);
+    void validUDAName() {
+        assertFalse(ModelUtil.isValidUDAName("in-valid"));
 
-        assertEquals(ModelUtil.isValidUDAName("a_valid"), true);
-        assertEquals(ModelUtil.isValidUDAName("A_valid"), true);
-        assertEquals(ModelUtil.isValidUDAName("1_valid"), true);
-        assertEquals(ModelUtil.isValidUDAName("_valid"), true);
+        assertTrue(ModelUtil.isValidUDAName("a_valid"));
+        assertTrue(ModelUtil.isValidUDAName("A_valid"));
+        assertTrue(ModelUtil.isValidUDAName("1_valid"));
+        assertTrue(ModelUtil.isValidUDAName("_valid"));
 
-        assertEquals(ModelUtil.isValidUDAName("Some_Valid.Name"), true);
-        assertEquals(ModelUtil.isValidUDAName("XML_invalid"), false);
-        assertEquals(ModelUtil.isValidUDAName("xml_invalid"), false);
+        assertTrue(ModelUtil.isValidUDAName("Some_Valid.Name"));
+        assertFalse(ModelUtil.isValidUDAName("XML_invalid"));
+        assertFalse(ModelUtil.isValidUDAName("xml_invalid"));
     }
 
     @Test
-    public void csvToString() {
-
+    void csvToString() {
         Object[] plainStrings = new Object[]{"foo", "bar", "baz"};
-        assertEquals(ModelUtil.toCommaSeparatedList(plainStrings), "foo,bar,baz");
+        assertEquals("foo,bar,baz", ModelUtil.toCommaSeparatedList(plainStrings));
 
         Object[] commaStrings = new Object[]{"foo,", "bar", "b,az"};
-        assertEquals(ModelUtil.toCommaSeparatedList(commaStrings), "foo\\,,bar,b\\,az");
+        assertEquals("foo\\,,bar,b\\,az", ModelUtil.toCommaSeparatedList(commaStrings));
 
         Object[] backslashStrings = new Object[]{"f\\oo", "b,ar", "b\\az"};
-        assertEquals(ModelUtil.toCommaSeparatedList(backslashStrings), "f\\\\oo,b\\,ar,b\\\\az");
+        assertEquals("f\\\\oo,b\\,ar,b\\\\az", ModelUtil.toCommaSeparatedList(backslashStrings));
     }
 
     @Test
-    public void stringToCsv() {
+    void stringToCsv() {
+        String[] plainStrings = new String[]{"foo", "bar", "baz"};
+        assertArrayEquals(ModelUtil.fromCommaSeparatedList("foo,bar,baz"), plainStrings);
 
-        Object[] plainStrings = new Object[]{"foo", "bar", "baz"};
-        assertEquals(ModelUtil.fromCommaSeparatedList("foo,bar,baz"), plainStrings);
+        String[] commaStrings = new String[]{"foo,", "bar", "b,az"};
+        assertArrayEquals(ModelUtil.fromCommaSeparatedList("foo\\,,bar,b\\,az"), commaStrings);
 
-        Object[] commaStrings = new Object[]{"foo,", "bar", "b,az"};
-        assertEquals(ModelUtil.fromCommaSeparatedList("foo\\,,bar,b\\,az"), commaStrings);
-
-        Object[] backslashStrings = new Object[]{"f\\oo", "b,ar", "b\\az"};
-        assertEquals(ModelUtil.fromCommaSeparatedList("f\\\\oo,b\\,ar,b\\\\az"), backslashStrings);
+        String[] backslashStrings = new String[]{"f\\oo", "b,ar", "b\\az"};
+        assertArrayEquals(ModelUtil.fromCommaSeparatedList("f\\\\oo,b\\,ar,b\\\\az"), backslashStrings);
     }
 
-
     @Test
-    public void printDOM1() throws Exception {
+    void printDOM1() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -106,11 +104,11 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
     @Test
-    public void printDOM2() throws Exception {
+    void printDOM2() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -125,11 +123,11 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
     @Test
-    public void printDOM3() throws Exception {
+    void printDOM3() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -144,11 +142,11 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
     @Test
-    public void printDOM4() throws Exception {
+    void printDOM4() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -163,11 +161,11 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
     @Test
-    public void printDOM5() throws Exception {
+    void printDOM5() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -186,17 +184,17 @@ public class UtilTest {
         barEl.appendChild(bazEl);
 
         String dom2XML = XMLUtil.documentToString(dom2);
-        Document dom2Reparesed = documentBuilder.parse(new InputSource(new StringReader(dom2XML)));
-        fooEl.appendChild(dom.importNode(dom2Reparesed.getDocumentElement(), true));
+        Document dom2Reparsed = documentBuilder.parse(new InputSource(new StringReader(dom2XML)));
+        fooEl.appendChild(dom.importNode(dom2Reparsed.getDocumentElement(), true));
 
         String xml = XMLUtil.documentToString(dom);
 
         // We can't really test that, the order of attributes is different
-        assertEquals(xml.length(), documentToString(dom).length());
+        assertEquals(documentToString(dom).length(), xml.length());
     }
 
     @Test
-    public void printDOM6() throws Exception {
+    void printDOM6() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -213,11 +211,11 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
     @Test
-    public void printDOM7() throws Exception {
+    void printDOM7() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -227,12 +225,12 @@ public class UtilTest {
 
         String xml = XMLUtil.documentToString(dom);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
 
-    /* TODO: This is where I give up on Android 2.1
     @Test
-    public void printDOM8() throws Exception {
+    @Disabled("This is where I give up on Android 2.1")
+    void printDOM8() throws Exception {
         Document dom = documentBuilder.newDocument();
         dom.setXmlStandalone(true); // ROTFL
 
@@ -250,9 +248,8 @@ public class UtilTest {
         String xml = XMLUtil.documentToString(dom);
         System.out.println(xml);
 
-        assertEquals(xml, documentToString(dom));
+        assertEquals(documentToString(dom), xml);
     }
-    */
 
     public static String documentToString(Document document) throws Exception {
         TransformerFactory transFactory = TransformerFactory.newInstance();
@@ -267,16 +264,17 @@ public class UtilTest {
     }
 
     @Test
-    public void parseTimeStrings() {
-        assertEquals(ModelUtil.fromTimeString("00:00:11.123"), 11);
-        assertEquals(ModelUtil.fromTimeString("00:00:11"), 11);
-        assertEquals(ModelUtil.fromTimeString("00:01:11"), 71);
-        assertEquals(ModelUtil.fromTimeString("01:01:11"), 3671);
+    void parseTimeStrings() {
+        assertEquals(11, ModelUtil.fromTimeString("00:00:11.123"));
+        assertEquals(11, ModelUtil.fromTimeString("00:00:11"));
+        assertEquals(71, ModelUtil.fromTimeString("00:01:11"));
+        assertEquals(3671, ModelUtil.fromTimeString("01:01:11"));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void parseInvalidTimeString() {
-        assertEquals(ModelUtil.fromTimeString("00-00:11.123"), 11);
+    @Test
+    void parseInvalidTimeString() {
+        assertThrows(IllegalArgumentException.class, () ->
+            ModelUtil.fromTimeString("00-00:11.123"));
     }
 
 }

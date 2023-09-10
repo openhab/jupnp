@@ -25,7 +25,7 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.util.Reflections;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import example.binarylight.BinaryLightSampleData;
 import example.controlpoint.EventSubscriptionTest;
@@ -33,7 +33,7 @@ import example.controlpoint.EventSubscriptionTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Providing events on service state changes
@@ -84,14 +84,14 @@ import static org.testng.Assert.*;
  * </p>
  * <a class="citation" href="javacode://example.localservice.SwitchPowerWithBundledPropertyChange#setTarget(boolean)"/>
  */
-public class EventProviderTest extends EventSubscriptionTest {
+class EventProviderTest extends EventSubscriptionTest {
 
     @Test
-    public void subscriptionLifecycleChangeSupport() throws Exception {
+    void subscriptionLifecycleChangeSupport() throws Exception {
 
         MockUpnpService upnpService = createMockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerWithPropertyChangeSupport.class);
@@ -124,10 +124,10 @@ public class EventProviderTest extends EventSubscriptionTest {
 
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
+                    assertEquals("0", subscription.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else if (subscription.getCurrentSequence().getValue() == 1) {
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "1");
+                    assertEquals("1", subscription.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else {
                     testAssertions.add(false);
@@ -145,26 +145,26 @@ public class EventProviderTest extends EventSubscriptionTest {
         // This triggers the internal PropertyChangeSupport of the service impl!
         service.getManager().getImplementation().setTarget(true);
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
+        assertEquals(2L, callback.getSubscription().getCurrentSequence().getValue()); // It's the NEXT sequence!
         assertTrue(callback.getSubscription().getSubscriptionId().startsWith("uuid:"));
-        assertEquals(callback.getSubscription().getActualDurationSeconds(), Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, callback.getSubscription().getActualDurationSeconds());
 
         callback.end();
 
-        assertEquals(testAssertions.size(), 4);
+        assertEquals(4, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void bundleSeveralVariables() throws Exception {
+    void bundleSeveralVariables() throws Exception {
 
         MockUpnpService upnpService = createMockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerWithBundledPropertyChange.class);
@@ -197,12 +197,12 @@ public class EventProviderTest extends EventSubscriptionTest {
 
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
-                    assertEquals(subscription.getCurrentValues().get("Target").toString(), "0");
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
+                    assertEquals("0", subscription.getCurrentValues().get("Target").toString());
+                    assertEquals("0", subscription.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else if (subscription.getCurrentSequence().getValue() == 1) {
-                    assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "1");
+                    assertEquals("1", subscription.getCurrentValues().get("Target").toString());
+                    assertEquals("1", subscription.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else {
                     testAssertions.add(false);
@@ -220,23 +220,22 @@ public class EventProviderTest extends EventSubscriptionTest {
         // This triggers the internal PropertyChangeSupport of the service impl!
         service.getManager().getImplementation().setTarget(true);
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
+        assertEquals(2L, callback.getSubscription().getCurrentSequence().getValue()); // It's the NEXT sequence!
         assertTrue(callback.getSubscription().getSubscriptionId().startsWith("uuid:"));
-        assertEquals(callback.getSubscription().getActualDurationSeconds(), Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, callback.getSubscription().getActualDurationSeconds());
 
         callback.end();
 
-        assertEquals(testAssertions.size(), 4);
+        assertEquals(4, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void moderateMaxRate() throws Exception {
-
+    void moderateMaxRate() throws Exception {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
@@ -288,11 +287,11 @@ public class EventProviderTest extends EventSubscriptionTest {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
                     // Initial event contains all evented variables, snapshot of the service state
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString(), "1");
+                    assertEquals("0", subscription.getCurrentValues().get("Status").toString());
+                    assertEquals("1", subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString());
 
                     // Initial state
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMaxRateVar").toString(), "one");
+                    assertEquals("one", subscription.getCurrentValues().get("ModeratedMaxRateVar").toString());
 
                     testAssertions.add(true);
                 } else if (subscription.getCurrentSequence().getValue() == 1) {
@@ -302,7 +301,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                     assertNull(subscription.getCurrentValues().get("ModeratedMinDeltaVar"));
 
                     // We didn't see the intermediate values "two" and "three" because it's moderated
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMaxRateVar").toString(), "four");
+                    assertEquals("four", subscription.getCurrentValues().get("ModeratedMaxRateVar").toString());
 
                     testAssertions.add(true);
                 } else {
@@ -337,20 +336,20 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         Thread.sleep(100);
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
+        assertEquals(2L, callback.getSubscription().getCurrentSequence().getValue()); // It's the NEXT sequence!
 
         callback.end();
 
-        assertEquals(testAssertions.size(), 4);
+        assertEquals(4, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void moderateMinDelta() throws Exception {
+    void moderateMinDelta() throws Exception {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
@@ -403,11 +402,11 @@ public class EventProviderTest extends EventSubscriptionTest {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
                     // Initial event contains all evented variables, snapshot of the service state
-                    assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMaxRateVar").toString(), "one");
+                    assertEquals("0", subscription.getCurrentValues().get("Status").toString());
+                    assertEquals("one", subscription.getCurrentValues().get("ModeratedMaxRateVar").toString());
 
                     // Initial state
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString(), "1");
+                    assertEquals("1", subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString());
 
                     testAssertions.add(true);
                 } else if (subscription.getCurrentSequence().getValue() == 1) {
@@ -417,7 +416,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                     assertNull(subscription.getCurrentValues().get("ModeratedMaxRateVar"));
 
                     // We didn't get events for values 2 and 3
-                    assertEquals(subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString(), "4");
+                    assertEquals("4", subscription.getCurrentValues().get("ModeratedMinDeltaVar").toString());
 
                     testAssertions.add(true);
                 } else {
@@ -448,12 +447,12 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         callback.end();
 
-        assertEquals(testAssertions.size(), 4);
+        assertEquals(4, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
 

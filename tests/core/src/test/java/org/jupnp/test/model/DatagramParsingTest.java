@@ -14,6 +14,8 @@
 
 package org.jupnp.test.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.jupnp.model.Constants;
 import org.jupnp.model.Location;
 import org.jupnp.model.NetworkAddress;
@@ -35,21 +37,16 @@ import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
 import org.jupnp.util.io.HexBin;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import static org.testng.Assert.*;
-
-
-public class DatagramParsingTest {
+class DatagramParsingTest {
 
     @Test
-    public void readSource() throws Exception {
-
+    void readSource() throws Exception {
         String source = "NOTIFY * HTTP/1.1\r\n" +
                         "HOST: 239.255.255.250:1900\r\n" +
                         "CACHE-CONTROL: max-age=2000\r\n" +
@@ -60,7 +57,7 @@ public class DatagramParsingTest {
                         "EXT:\r\n" +
                         "SERVER: foo/1 UPnP/1.0" + // FOLDED HEADER LINE!
                         " bar/2\r\n" +
-                        "USN: " + SampleDeviceRoot.getRootUDN().toString()+"::upnp:rootdevice\r\n\r\n";
+                        "USN: " + SampleDeviceRoot.getRootUDN() + "::upnp:rootdevice\r\n\r\n";
 
         DatagramPacket packet = new DatagramPacket(source.getBytes(), source.getBytes().length, new InetSocketAddress("123.123.123.123", 1234));
 
@@ -68,31 +65,30 @@ public class DatagramParsingTest {
 
         UpnpMessage<UpnpRequest> msg = processor.read(InetAddress.getByName("127.0.0.1"), packet);
 
-        assertEquals(msg.getOperation().getMethod(), UpnpRequest.Method.NOTIFY);
+        assertEquals(UpnpRequest.Method.NOTIFY, msg.getOperation().getMethod());
 
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST, HostHeader.class).getValue().getHost(), Constants.IPV4_UPNP_MULTICAST_GROUP);
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST, HostHeader.class).getValue().getPort(), Constants.UPNP_MULTICAST_PORT);
+        assertEquals(Constants.IPV4_UPNP_MULTICAST_GROUP, msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST, HostHeader.class).getValue().getHost());
+        assertEquals(Constants.UPNP_MULTICAST_PORT, msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST, HostHeader.class).getValue().getPort());
         assertEquals(
-            msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class).getValue().getIdentifierString(),
-            SampleDeviceRoot.getRootUDN().getIdentifierString()
+            SampleDeviceRoot.getRootUDN().getIdentifierString(),
+            msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class).getValue().getIdentifierString()
         );
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE, MaxAgeHeader.class).getValue().toString(), "2000");
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getOsName(), "foo");
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getOsVersion(), "1");
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getMajorVersion(), 1);
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getMinorVersion(), 0);
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getProductName(), "bar");
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getProductVersion(), "2");
+        assertEquals("2000", msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE, MaxAgeHeader.class).getValue().toString());
+        assertEquals("foo", msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getOsName());
+        assertEquals("1", msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getOsVersion());
+        assertEquals(1, msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getMajorVersion());
+        assertEquals(0, msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getMinorVersion());
+        assertEquals("bar", msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getProductName());
+        assertEquals("2", msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().getProductVersion());
 
         // Doesn't belong in this message but we need to test empty header values
-        assert msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT) != null;
+        assertNotNull(msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT));
 
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT_IFACE_MAC, InterfaceMacHeader.class).getString(), "00:17:AB:E9:65:A0");
-
+        assertEquals("00:17:AB:E9:65:A0", msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT_IFACE_MAC, InterfaceMacHeader.class).getString());
     }
 
     @Test
-    public void parseRoundtrip() throws Exception {
+    void parseRoundtrip() throws Exception {
         Location location = new Location(
                 new NetworkAddress(
                         InetAddress.getByName("localhost"),
@@ -115,17 +111,17 @@ public class DatagramParsingTest {
 
         DatagramPacket packet = processor.write(msg);
 
-        Assert.assertTrue(new String(packet.getData()).endsWith("\r\n\r\n"));
+        assertTrue(new String(packet.getData()).endsWith("\r\n\r\n"));
 
         UpnpMessage readMsg = processor.read(InetAddress.getByName("127.0.0.1"), packet);
 
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.NT).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.NT).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString());
-        assertEquals(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.NT).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.NT).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(), readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString());
         assertNotNull(readMsg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT));
     }
 

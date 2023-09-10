@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -29,13 +31,11 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Accessing remote client information
@@ -66,9 +66,9 @@ import static org.testng.Assert.assertEquals;
  * <code>setResponseUserAgent()</code> method for your convenience.
  * </p>
  */
-public class RemoteClientInfoTest {
+class RemoteClientInfoTest {
 
-    public LocalDevice createTestDevice(Class serviceClass) throws Exception {
+    static LocalDevice createTestDevice(Class serviceClass) throws Exception {
 
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
@@ -82,24 +82,15 @@ public class RemoteClientInfoTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
-
-
-        try {
-            return new LocalDevice[][]{
-                {createTestDevice(SwitchPowerWithClientInfo.class)}
-            };
-        } catch (Exception ex) {
-            ex.printStackTrace(System.err);
-            // Damn TestNG swallows exceptions in provider/factory methods
-            throw new RuntimeException(ex);
-        }
+    static Object[][] getDevices() throws Exception {
+        return new LocalDevice[][]{
+            {createTestDevice(SwitchPowerWithClientInfo.class)}
+        };
     }
 
-
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
         UpnpHeaders requestHeaders = new UpnpHeaders();
@@ -140,10 +131,10 @@ public class RemoteClientInfoTest {
 
         setTargetInvocation.setInput("NewTargetValue", true);
         svc.getExecutor(setTargetInvocation.getAction()).execute(setTargetInvocation);
-        assertEquals(setTargetInvocation.getFailure(), null);
-        assertEquals(setTargetInvocation.getOutput().length, 0);
+        assertNull(setTargetInvocation.getFailure());
+        assertEquals(0, setTargetInvocation.getOutput().length);
 
-        assertEquals(clientInfo.getExtraResponseHeaders().getFirstHeader("X-MY-HEADER"), "foobar");
+        assertEquals("foobar", clientInfo.getExtraResponseHeaders().getFirstHeader("X-MY-HEADER"));
     }
 
 }

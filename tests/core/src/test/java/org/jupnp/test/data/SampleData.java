@@ -300,21 +300,20 @@ public class SampleData {
             Device sampleDevice = (service.getDeviceService().getDevice().isLocal()) ? getLocalDevice() : getRemoteDevice();
             Service<DeviceService> sampleService = getServiceTwo((Device) sampleDevice.getEmbeddedDevices().get(0));
 
-            assertEquals(service.getActions().size(), sampleService.getActions().size());
+            assertEquals(sampleService.getActions().size(), service.getActions().size());
 
-            assertEquals(service.getActions().get("GetFoo").getName(), sampleService.getActions().get("GetFoo").getName());
-            assertEquals(service.getActions().get("GetFoo").getArguments().size(), sampleService.getActions().get("GetFoo").getArguments().size());
+            assertEquals(sampleService.getActions().get("GetFoo").getName(), service.getActions().get("GetFoo").getName());
+            assertEquals(sampleService.getActions().get("GetFoo").getArguments().size(), service.getActions().get("GetFoo").getArguments().size());
             assertEquals(service.getActions().get("GetFoo").getArguments().get(0).getName(), service.getActions().get("GetFoo").getArguments().get(0).getName());
-            assertEquals(service.getActions().get("GetFoo").getArguments().get(0).getDirection(), sampleService.getActions().get("GetFoo").getArguments().get(0).getDirection());
-            assertEquals(service.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName(), sampleService.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName());
+            assertEquals(sampleService.getActions().get("GetFoo").getArguments().get(0).getDirection(), service.getActions().get("GetFoo").getArguments().get(0).getDirection());
+            assertEquals(sampleService.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName(), service.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName());
 
-            assertEquals(service.getStateVariables().size(), sampleService.getStateVariables().size());
+            assertEquals(sampleService.getStateVariables().size(), service.getStateVariables().size());
             assertTrue(service.getStateVariables().containsKey("Foo"));
 
-            assertEquals(service.getStateVariables().get("Foo").getName(), "Foo");
+            assertEquals("Foo", service.getStateVariables().get("Foo").getName());
             assertTrue(service.getStateVariables().get("Foo").isSendEvents());
-            assertEquals(service.getStateVariables().get("Foo").getDatatype(), Datatype.Builtin.BOOLEAN.getDatatype());
-
+            assertEquals(Datatype.Builtin.BOOLEAN.getDatatype(), service.getStateVariables().get("Foo").getDatatype());
         }
 
         public static void assertTestDataMatchServiceThree(Service svc) {
@@ -326,6 +325,5 @@ public class SampleData {
         DatagramProcessor proc = new DefaultUpnpServiceConfiguration().getDatagramProcessor();
         proc.write(msg);
     }
-
 
 }

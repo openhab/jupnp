@@ -17,23 +17,23 @@ package example.binarylight;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class BinaryLightTest {
+class BinaryLightTest {
 
     @Test
-    public void testServer() throws Exception {
+    void testServer() throws Exception {
         LocalDevice binaryLight = new BinaryLightServer().createDevice();
-        assertEquals(binaryLight.getServices()[0].getAction("SetTarget").getName(), "SetTarget");
+        assertEquals("SetTarget", binaryLight.getServices()[0].getAction("SetTarget").getName());
     }
 
     @Test
-    public void testClient() throws Exception {
+    void testClient() throws Exception {
         // Well we can't really test the listener easily, but the action invocation should work on a local device
 
         MockUpnpService upnpService = new MockUpnpService();
@@ -45,7 +45,7 @@ public class BinaryLightTest {
         LocalService<SwitchPower> service = binaryLight.getServices()[0];
         client.executeAction(upnpService, binaryLight.getServices()[0]);
         Thread.sleep(100);
-        assertEquals(service.getManager().getImplementation().getStatus(), true);
+        assertTrue(service.getManager().getImplementation().getStatus());
     }
 
 }

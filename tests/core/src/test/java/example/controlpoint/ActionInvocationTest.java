@@ -14,6 +14,8 @@
 
 package example.controlpoint;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
@@ -34,11 +36,9 @@ import org.jupnp.model.types.BooleanDatatype;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import example.binarylight.BinaryLightSampleData;
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Invoking an action
@@ -108,9 +108,9 @@ import static org.testng.Assert.assertEquals;
  * thing, an empty XML element. If you forget to set an input argument's value, it will be null/empty element.
  * </div>
  */
-public class ActionInvocationTest {
+class ActionInvocationTest {
 
-    protected LocalService bindService(Class<?> clazz) throws Exception {
+    static LocalService bindService(Class<?> clazz) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         // Let's also test the overloaded reader
         LocalService svc = binder.read(
@@ -126,8 +126,7 @@ public class ActionInvocationTest {
         return svc;
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() throws Exception {
+    static Object[][] getDevices() throws Exception {
         return new LocalDevice[][]{
                 {BinaryLightSampleData.createDevice(bindService(TestServiceOne.class))},
                 {BinaryLightSampleData.createDevice(bindService(TestServiceTwo.class))},
@@ -135,9 +134,9 @@ public class ActionInvocationTest {
         };
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -154,15 +153,15 @@ public class ActionInvocationTest {
             public void success(ActionInvocation invocation) {
                 ActionArgumentValue status  = invocation.getOutput("ResultStatus");
 
-                assert status != null;
+                assertNotNull(status);
 
-                assertEquals(status.getArgument().getName(), "ResultStatus");
+                assertEquals("ResultStatus", status.getArgument().getName());
 
-                assertEquals(status.getDatatype().getClass(), BooleanDatatype.class);
-                assertEquals(status.getDatatype().getBuiltin(), Datatype.Builtin.BOOLEAN);
+                assertEquals(BooleanDatatype.class, status.getDatatype().getClass());
+                assertEquals(Datatype.Builtin.BOOLEAN, status.getDatatype().getBuiltin());
 
-                assertEquals((Boolean) status.getValue(), Boolean.valueOf(false));
-                assertEquals(status.toString(), "0"); // '0' is 'false' in UPnP
+                assertEquals(Boolean.FALSE, status.getValue());
+                assertEquals("0", status.toString()); // '0' is 'false' in UPnP
                 tests[0] = true; // DOC: EXC1
             }
 
@@ -197,7 +196,7 @@ public class ActionInvocationTest {
             @Override
             public void success(ActionInvocation invocation) {
                 ActionArgumentValue[] output = invocation.getOutput();
-                assertEquals(output.length, 0);
+                assertEquals(0, output.length);
                 tests[1] = true; // DOC: EXC2
             }
 
@@ -219,7 +218,7 @@ public class ActionInvocationTest {
         }
 
         for (boolean test : tests) {
-            assertEquals(test, true);
+            assertTrue(test);
         }
 
 
@@ -227,26 +226,26 @@ public class ActionInvocationTest {
 
         ActionInvocation getTargetInvocation = new ActionInvocation(svc.getAction("GetTarget"));
         svc.getExecutor(getTargetInvocation.getAction()).execute(getTargetInvocation);
-        assertEquals(getTargetInvocation.getFailure(), null);
-        assertEquals(getTargetInvocation.getOutput().length, 1);
-        assertEquals(getTargetInvocation.getOutput()[0].toString(), "1");
+        assertNull(getTargetInvocation.getFailure());
+        assertEquals(1, getTargetInvocation.getOutput().length);
+        assertEquals("1", getTargetInvocation.getOutput()[0].toString());
 
         ActionInvocation setMyStringInvocation = new ActionInvocation(svc.getAction("SetMyString"));
         setMyStringInvocation.setInput("MyString", "foo");
         svc.getExecutor(setMyStringInvocation.getAction()).execute(setMyStringInvocation);
-        assertEquals(setMyStringInvocation.getFailure(), null);
-        assertEquals(setMyStringInvocation.getOutput().length, 0);
+        assertNull(setMyStringInvocation.getFailure());
+        assertEquals(0, setMyStringInvocation.getOutput().length);
 
         ActionInvocation getMyStringInvocation = new ActionInvocation(svc.getAction("GetMyString"));
         svc.getExecutor(getMyStringInvocation.getAction()).execute(getMyStringInvocation);
-        assertEquals(getTargetInvocation.getFailure(), null);
-        assertEquals(getMyStringInvocation.getOutput().length, 1);
-        assertEquals(getMyStringInvocation.getOutput()[0].toString(), "foo");
-
+        assertNull(getTargetInvocation.getFailure());
+        assertEquals(1, getMyStringInvocation.getOutput().length);
+        assertEquals("foo", getMyStringInvocation.getOutput()[0].toString());
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActionsWithAlias(LocalDevice device) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActionsWithAlias(LocalDevice device) throws Exception {
 
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -278,29 +277,28 @@ public class ActionInvocationTest {
         upnpService.getControlPoint().execute(setTargetCallback);
 
         for (boolean test : tests) {
-            assertEquals(test, true);
+            assertTrue(test);
         }
 
         LocalService svc = (LocalService) service;
 
         ActionInvocation getTargetInvocation = new ActionInvocation(svc.getAction("GetTarget"));
         svc.getExecutor(getTargetInvocation.getAction()).execute(getTargetInvocation);
-        assertEquals(getTargetInvocation.getFailure(), null);
-        assertEquals(getTargetInvocation.getOutput().length, 1);
-        assertEquals(getTargetInvocation.getOutput()[0].toString(), "1");
+        assertNull(getTargetInvocation.getFailure());
+        assertEquals(1, getTargetInvocation.getOutput().length);
+        assertEquals("1", getTargetInvocation.getOutput()[0].toString());
 
         ActionInvocation setMyStringInvocation = new ActionInvocation(svc.getAction("SetMyString"));
         setMyStringInvocation.setInput("MyString1", "foo");
         svc.getExecutor(setMyStringInvocation.getAction()).execute(setMyStringInvocation);
-        assertEquals(setMyStringInvocation.getFailure(), null);
-        assertEquals(setMyStringInvocation.getOutput().length, 0);
+        assertNull(setMyStringInvocation.getFailure());
+        assertEquals(0, setMyStringInvocation.getOutput().length);
 
         ActionInvocation getMyStringInvocation = new ActionInvocation(svc.getAction("GetMyString"));
         svc.getExecutor(getMyStringInvocation.getAction()).execute(getMyStringInvocation);
-        assertEquals(getTargetInvocation.getFailure(), null);
-        assertEquals(getMyStringInvocation.getOutput().length, 1);
-        assertEquals(getMyStringInvocation.getOutput()[0].toString(), "foo");
-
+        assertNull(getTargetInvocation.getFailure());
+        assertEquals(1, getMyStringInvocation.getOutput().length);
+        assertEquals("foo", getMyStringInvocation.getOutput()[0].toString());
     }
 
     /* ####################################################################################################### */

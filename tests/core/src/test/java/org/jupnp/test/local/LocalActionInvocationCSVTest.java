@@ -14,6 +14,8 @@
 
 package org.jupnp.test.local;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpInputArgument;
@@ -34,16 +36,14 @@ import org.jupnp.model.types.csv.CSVInteger;
 import org.jupnp.model.types.csv.CSVString;
 import org.jupnp.model.types.csv.CSVUnsignedIntegerFourBytes;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LocalActionInvocationCSVTest {
+class LocalActionInvocationCSVTest {
 
-    public LocalDevice createTestDevice(LocalService service) throws Exception {
+    static LocalDevice createTestDevice(LocalService service) throws Exception {
         return new LocalDevice(
                 SampleData.createLocalDeviceIdentity(),
                 new UDADeviceType("TestDevice", 1),
@@ -52,8 +52,7 @@ public class LocalActionInvocationCSVTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() throws Exception {
+    static Object[][] getDevices() throws Exception {
         return new LocalDevice[][]{
                 {createTestDevice(
                         SampleData.readService(
@@ -63,9 +62,9 @@ public class LocalActionInvocationCSVTest {
         };
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) throws Exception {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) throws Exception {
         LocalService svc = SampleData.getFirstService(device);
 
         List<String> testStrings = new CSVString();
@@ -74,10 +73,10 @@ public class LocalActionInvocationCSVTest {
         testStrings.add("b,az");
         String result = executeActions(svc, "SetStringVar", "GetStringVar", testStrings);
         List<String> csvString = new CSVString(result);
-        assert csvString.size() == 3;
-        assertEquals(csvString.get(0), "f\\oo");
-        assertEquals(csvString.get(1), "bar");
-        assertEquals(csvString.get(2), "b,az");
+        assertEquals(3, csvString.size());
+        assertEquals("f\\oo", csvString.get(0));
+        assertEquals("bar", csvString.get(1));
+        assertEquals("b,az", csvString.get(2));
 
         List<Integer> testIntegers = new CSVInteger();
         testIntegers.add(123);
@@ -85,10 +84,10 @@ public class LocalActionInvocationCSVTest {
         testIntegers.add(789);
         result = executeActions(svc, "SetIntVar", "GetIntVar", testIntegers);
         List<Integer> csvInteger = new CSVInteger(result);
-        assert csvInteger.size() == 3;
-        assertEquals(csvInteger.get(0), new Integer(123));
-        assertEquals(csvInteger.get(1), new Integer(-456));
-        assertEquals(csvInteger.get(2), new Integer(789));
+        assertEquals(3, csvInteger.size());
+        assertEquals(123, csvInteger.get(0));
+        assertEquals(-456, csvInteger.get(1));
+        assertEquals(789, csvInteger.get(2));
 
         List<Boolean> testBooleans = new CSVBoolean();
         testBooleans.add(true);
@@ -96,10 +95,10 @@ public class LocalActionInvocationCSVTest {
         testBooleans.add(false);
         result = executeActions(svc, "SetBooleanVar", "GetBooleanVar", testBooleans);
         List<Boolean> csvBoolean = new CSVBoolean(result);
-        assert csvBoolean.size() == 3;
-        assertEquals(csvBoolean.get(0), new Boolean(true));
-        assertEquals(csvBoolean.get(1), new Boolean(true));
-        assertEquals(csvBoolean.get(2), new Boolean(false));
+        assertEquals(3, csvBoolean.size());
+        assertTrue(csvBoolean.get(0));
+        assertTrue(csvBoolean.get(1));
+        assertFalse(csvBoolean.get(2));
 
         List<UnsignedIntegerFourBytes> testUifour = new CSVUnsignedIntegerFourBytes();
         testUifour.add(new UnsignedIntegerFourBytes(123));
@@ -107,23 +106,23 @@ public class LocalActionInvocationCSVTest {
         testUifour.add(new UnsignedIntegerFourBytes(789));
         result = executeActions(svc, "SetUifourVar", "GetUifourVar", testUifour);
         List<UnsignedIntegerFourBytes> csvUifour = new CSVUnsignedIntegerFourBytes(result);
-        assert csvUifour.size() == 3;
-        assertEquals(csvUifour.get(0), new UnsignedIntegerFourBytes(123));
-        assertEquals(csvUifour.get(1), new UnsignedIntegerFourBytes(456));
-        assertEquals(csvUifour.get(2), new UnsignedIntegerFourBytes(789));
+        assertEquals(3, csvUifour.size());
+        assertEquals(new UnsignedIntegerFourBytes(123), csvUifour.get(0));
+        assertEquals(new UnsignedIntegerFourBytes(456), csvUifour.get(1));
+        assertEquals(new UnsignedIntegerFourBytes(789), csvUifour.get(2));
     }
 
-    protected String executeActions(LocalService svc, String setAction, String getAction, List input) throws Exception {
+    protected String executeActions(LocalService svc, String setAction, String getAction, List input) {
         ActionInvocation setActionInvocation = new ActionInvocation(svc.getAction(setAction));
         setActionInvocation.setInput(svc.getAction(setAction).getFirstInputArgument().getName(), input.toString());
         svc.getExecutor(setActionInvocation.getAction()).execute(setActionInvocation);
-        assertEquals(setActionInvocation.getFailure(), null);
-        assertEquals(setActionInvocation.getOutput().length, 0);
+        assertNull(setActionInvocation.getFailure());
+        assertEquals(0, setActionInvocation.getOutput().length);
 
         ActionInvocation getActionInvocation = new ActionInvocation(svc.getAction(getAction));
         svc.getExecutor(getActionInvocation.getAction()).execute(getActionInvocation);
-        assertEquals(getActionInvocation.getFailure(), null);
-        assertEquals(getActionInvocation.getOutput().length, 1);
+        assertNull(getActionInvocation.getFailure());
+        assertEquals(1, getActionInvocation.getOutput().length);
         return getActionInvocation.getOutput(svc.getAction(getAction).getFirstOutputArgument()).toString();
     }
 
@@ -152,10 +151,10 @@ public class LocalActionInvocationCSVTest {
         @UpnpAction
         public void setStringVar(@UpnpInputArgument(name = "StringVar") CSVString stringVar) {
             this.stringVar = stringVar;
-            assertEquals(stringVar.size(), 3);
-            assertEquals(stringVar.get(0), "f\\oo");
-            assertEquals(stringVar.get(1), "bar");
-            assertEquals(stringVar.get(2), "b,az");
+            assertEquals(3, stringVar.size());
+            assertEquals("f\\oo", stringVar.get(0));
+            assertEquals("bar", stringVar.get(1));
+            assertEquals("b,az", stringVar.get(2));
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "StringVar"))
@@ -166,10 +165,10 @@ public class LocalActionInvocationCSVTest {
         @UpnpAction
         public void setIntVar(@UpnpInputArgument(name = "IntVar") CSVInteger intVar) {
             this.intVar = intVar;
-            assertEquals(intVar.size(), 3);
-            assertEquals(intVar.get(0), new Integer(123));
-            assertEquals(intVar.get(1), new Integer(-456));
-            assertEquals(intVar.get(2), new Integer(789));
+            assertEquals(3, intVar.size());
+            assertEquals(123, intVar.get(0));
+            assertEquals(-456, intVar.get(1));
+            assertEquals(789, intVar.get(2));
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "IntVar"))
@@ -180,10 +179,10 @@ public class LocalActionInvocationCSVTest {
         @UpnpAction
         public void setBooleanVar(@UpnpInputArgument(name = "BooleanVar") CSVBoolean booleanVar) {
             this.booleanVar = booleanVar;
-            assertEquals(booleanVar.size(), 3);
-            assertEquals(booleanVar.get(0), new Boolean(true));
-            assertEquals(booleanVar.get(1), new Boolean(true));
-            assertEquals(booleanVar.get(2), new Boolean(false));
+            assertEquals(3, booleanVar.size());
+            assertTrue(booleanVar.get(0));
+            assertTrue(booleanVar.get(1));
+            assertFalse(booleanVar.get(2));
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "BooleanVar"))
@@ -194,17 +193,16 @@ public class LocalActionInvocationCSVTest {
         @UpnpAction
         public void setUifourVar(@UpnpInputArgument(name = "UifourVar") CSVUnsignedIntegerFourBytes uifourVar) {
             this.uifourVar = uifourVar;
-            assertEquals(uifourVar.size(), 3);
-            assertEquals(uifourVar.get(0), new UnsignedIntegerFourBytes(123));
-            assertEquals(uifourVar.get(1), new UnsignedIntegerFourBytes(456));
-            assertEquals(uifourVar.get(2), new UnsignedIntegerFourBytes(789));
+            assertEquals(3, uifourVar.size());
+            assertEquals(new UnsignedIntegerFourBytes(123), uifourVar.get(0));
+            assertEquals(new UnsignedIntegerFourBytes(456), uifourVar.get(1));
+            assertEquals(new UnsignedIntegerFourBytes(789), uifourVar.get(2));
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "UifourVar"))
         public CSV<UnsignedIntegerFourBytes> getUifourVar() {
             return uifourVar;
         }
-
     }
 
 }

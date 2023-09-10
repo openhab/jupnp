@@ -27,16 +27,14 @@ import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.protocol.sync.ReceivingRetrieval;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class DeviceDescriptorRetrievalTest {
+class DeviceDescriptorRetrievalTest {
 
     @Test
-    public void registerAndRetrieveDescriptor() throws Exception {
-
+    void registerAndRetrieveDescriptor() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -51,10 +49,10 @@ public class DeviceDescriptorRetrievalTest {
         prot.run();
         StreamResponseMessage descriptorMessage = prot.getOutputMessage();
 
-        // UDA 1.0 spec days this musst be 'text/xml'
+        // UDA 1.0 spec days this must be 'text/xml'
         assertEquals(
-                descriptorMessage.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE).getValue(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE
+                ContentTypeHeader.DEFAULT_CONTENT_TYPE,
+                descriptorMessage.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE).getValue()
         );
 
         // Read the response and compare the returned device descriptor (test with LocalDevice for correct assertions)
@@ -70,8 +68,7 @@ public class DeviceDescriptorRetrievalTest {
     }
 
     @Test
-    public void retrieveNonExistentDescriptor() throws Exception {
-
+    void retrieveNonExistentDescriptor() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 

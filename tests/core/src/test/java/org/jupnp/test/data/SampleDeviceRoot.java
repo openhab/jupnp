@@ -23,7 +23,6 @@ import org.jupnp.model.meta.ModelDetails;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.meta.Service;
-import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.profile.DeviceDetailsProvider;
 import org.jupnp.model.resource.Resource;
 import org.jupnp.model.resource.ServiceEventCallbackResource;
@@ -37,8 +36,7 @@ import org.jupnp.util.URIUtil;
 import java.net.URI;
 import java.net.URL;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -74,11 +72,7 @@ public class SampleDeviceRoot extends SampleDevice {
     }
 
     public DeviceDetailsProvider getDeviceDetailsProvider() {
-        return new DeviceDetailsProvider() {
-            public DeviceDetails provide(RemoteClientInfo info) {
-                return getDeviceDetails();
-            }
-        };
+        return info -> getDeviceDetails();
     }
 
     @Override
@@ -116,17 +110,17 @@ public class SampleDeviceRoot extends SampleDevice {
 
     public static void assertLocalResourcesMatch(Resource[] resources){
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")).getClass(),
-                ServiceEventCallbackResource.class
+                ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")).getClass()
         );
 
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb")).getClass(),
-                ServiceEventCallbackResource.class
+                ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb")).getClass(),
-                ServiceEventCallbackResource.class
+                ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb")).getClass()
         );
     }
 
@@ -142,9 +136,8 @@ public class SampleDeviceRoot extends SampleDevice {
         assertDeviceMatch(a,b,true);
     }
     protected static void assertDeviceMatch(Device a, Device b, boolean checkType) {
-
-        assert (a.validate().size() == 0);
-        assert (b.validate().size() == 0);
+        assertEquals(0, a.validate().size());
+        assertEquals(0, b.validate().size());
 
         if (checkType)
             assertEquals(a, b); // Checking equals() method
@@ -218,11 +211,9 @@ public class SampleDeviceRoot extends SampleDevice {
             for (int i = 0; i < a.getEmbeddedDevices().length; i++) {
                 Device aEmbedded = a.getEmbeddedDevices()[i];
                 assertDeviceMatch(aEmbedded, b.getEmbeddedDevices()[i],checkType);
-
             }
         }
 
     }
-
 
 }

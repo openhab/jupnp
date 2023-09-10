@@ -14,10 +14,11 @@
 
 package org.jupnp.test.transport;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.jupnp.UpnpServiceConfiguration;
-import org.jupnp.test.transport.StreamServerClientTest;
 import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
+import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
@@ -26,18 +27,21 @@ import org.jupnp.transport.spi.StreamServer;
  * @author Christian Bauer - initial contribution
  * @author Victor Toni - adapted to JUPnP
  */
-public class JettyServerJettyClientTest extends StreamServerClientTest {
+class JettyServerJettyClientTest extends StreamServerClientTest {
 
-    private TransportConfiguration jettyTransportConfiguration = JettyTransportConfiguration.INSTANCE;
-    private StreamClientConfiguration sccConfiguration;
+    private static final TransportConfiguration jettyTransportConfiguration = JettyTransportConfiguration.INSTANCE;
+    private static final StreamClientConfiguration sccConfiguration = new StreamClientConfigurationImpl(null, 3, 0, 0 ,0);
 
-    @Override
-    public StreamServer createStreamServer(final int port) {
+    @BeforeAll
+    static void start() throws Exception {
+        start(JettyServerJettyClientTest::createStreamServer, JettyServerJettyClientTest::createStreamClient);
+    }
+
+    public static StreamServer createStreamServer(final int port) {
         return jettyTransportConfiguration.createStreamServer(port);
     }
 
-    @Override
-    public StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
+    public static StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
         return jettyTransportConfiguration.createStreamClient(
                 configuration.getSyncProtocolExecutorService(), sccConfiguration
         );

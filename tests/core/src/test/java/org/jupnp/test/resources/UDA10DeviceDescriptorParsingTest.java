@@ -24,17 +24,14 @@ import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
 import org.jupnp.util.io.IO;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class UDA10DeviceDescriptorParsingTest {
+class UDA10DeviceDescriptorParsingTest {
 
     @Test
-    public void readUDA10DescriptorDOM() throws Exception {
-
+    void readUDA10DescriptorDOM() throws Exception {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
 
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
@@ -44,12 +41,10 @@ public class UDA10DeviceDescriptorParsingTest {
                 new MockUpnpService().getConfiguration().getNamespace().getResources(device)
         );
         SampleDeviceRoot.assertMatch(device, SampleData.createRemoteDevice());
-
     }
 
     @Test
-    public void readUDA10DescriptorSAX() throws Exception {
-
+    void readUDA10DescriptorSAX() throws Exception {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderSAXImpl();
 
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
@@ -59,12 +54,10 @@ public class UDA10DeviceDescriptorParsingTest {
                 new MockUpnpService().getConfiguration().getNamespace().getResources(device)
         );
         SampleDeviceRoot.assertMatch(device, SampleData.createRemoteDevice());
-
     }
 
     @Test
-    public void writeUDA10Descriptor() throws Exception {
-
+    void writeUDA10Descriptor() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
         
@@ -89,12 +82,10 @@ public class UDA10DeviceDescriptorParsingTest {
 
         );
         SampleDeviceRoot.assertMatch(hydratedDevice, device);
-
     }
 
     @Test
-    public void writeUDA10DescriptorWithProvider() throws Exception {
-
+    void writeUDA10DescriptorWithProvider() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
 
@@ -105,11 +96,9 @@ public class UDA10DeviceDescriptorParsingTest {
                 upnpService.getConfiguration().getNamespace()
         );
 
-
         //System.out.println("#######################################################################################");
         //System.out.println(descriptorXml);
         //System.out.println("#######################################################################################");
-
 
         RemoteDevice hydratedDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         hydratedDevice = binder.describe(hydratedDevice, descriptorXml);
@@ -119,11 +108,10 @@ public class UDA10DeviceDescriptorParsingTest {
 
         );
         //SampleDeviceRoot.assertMatch(hydratedDevice, device, false);
-
     }
 
     @Test
-    public void readUDA10DescriptorWithURLBase() throws Exception {
+    void readUDA10DescriptorWithURLBase() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         DeviceDescriptorBinder binder = upnpService.getConfiguration().getDeviceDescriptorBinderUDA10();
 
@@ -134,41 +122,41 @@ public class UDA10DeviceDescriptorParsingTest {
         );
 
         assertEquals(
-                device.normalizeURI(device.getDetails().getManufacturerDetails().getManufacturerURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "mfc.html"
+                SampleData.getLocalBaseURL() + "mfc.html",
+                device.normalizeURI(device.getDetails().getManufacturerDetails().getManufacturerURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getDetails().getModelDetails().getModelURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "someotherbase/MY-DEVICE-123/model.html"
+                SampleData.getLocalBaseURL() + "someotherbase/MY-DEVICE-123/model.html",
+                device.normalizeURI(device.getDetails().getModelDetails().getModelURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getDetails().getPresentationURI()).toString(),
-                "http://www.4thline.org/some_ui"
+                "http://www.4thline.org/some_ui",
+                device.normalizeURI(device.getDetails().getPresentationURI()).toString()
         );
 
         assertEquals(
-                device.normalizeURI(device.getIcons()[0].getUri()).toString(),
-                SampleData.getLocalBaseURL().toString() + "someotherbase/MY-DEVICE-123/icon.png"
+                SampleData.getLocalBaseURL() + "someotherbase/MY-DEVICE-123/icon.png",
+                device.normalizeURI(device.getIcons()[0].getUri()).toString()
         );
 
-        assertEquals(device.normalizeURI(
-                device.getServices()[0].getDescriptorURI()).toString(),
-                     SampleData.getLocalBaseURL().toString() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc.xml"
+        assertEquals(SampleData.getLocalBaseURL() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc.xml",
+                     device.normalizeURI(
+                device.getServices()[0].getDescriptorURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getServices()[0].getControlURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/control"
+                SampleData.getLocalBaseURL() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/control",
+                device.normalizeURI(device.getServices()[0].getControlURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getServices()[0].getEventSubscriptionURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/events"
+                SampleData.getLocalBaseURL() + "someotherbase/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/events",
+                device.normalizeURI(device.getServices()[0].getEventSubscriptionURI()).toString()
         );
 
         assertTrue(device.isRoot());
     }
 
     @Test
-    public void readUDA10DescriptorWithURLBase2() throws Exception {
+    void readUDA10DescriptorWithURLBase2() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         DeviceDescriptorBinder binder = upnpService.getConfiguration().getDeviceDescriptorBinderUDA10();
 
@@ -179,42 +167,42 @@ public class UDA10DeviceDescriptorParsingTest {
         );
 
         assertEquals(
-                device.normalizeURI(device.getDetails().getManufacturerDetails().getManufacturerURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "mfc.html"
+                SampleData.getLocalBaseURL() + "mfc.html",
+                device.normalizeURI(device.getDetails().getManufacturerDetails().getManufacturerURI()).toString()
         );
 
         assertEquals(
-                device.normalizeURI(device.getDetails().getModelDetails().getModelURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "model.html"
+                SampleData.getLocalBaseURL() + "model.html",
+                device.normalizeURI(device.getDetails().getModelDetails().getModelURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getDetails().getPresentationURI()).toString(),
-                "http://www.4thline.org/some_ui"
+                "http://www.4thline.org/some_ui",
+                device.normalizeURI(device.getDetails().getPresentationURI()).toString()
         );
 
         assertEquals(
-                device.normalizeURI(device.getIcons()[0].getUri()).toString(),
-                SampleData.getLocalBaseURL().toString() + "icon.png"
+                SampleData.getLocalBaseURL() + "icon.png",
+                device.normalizeURI(device.getIcons()[0].getUri()).toString()
         );
 
-        assertEquals(device.normalizeURI(
-                device.getServices()[0].getDescriptorURI()).toString(),
-                     SampleData.getLocalBaseURL().toString() + "svc.xml"
+        assertEquals(SampleData.getLocalBaseURL() + "svc.xml",
+                     device.normalizeURI(
+                device.getServices()[0].getDescriptorURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getServices()[0].getControlURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "control"
+                SampleData.getLocalBaseURL() + "control",
+                device.normalizeURI(device.getServices()[0].getControlURI()).toString()
         );
         assertEquals(
-                device.normalizeURI(device.getServices()[0].getEventSubscriptionURI()).toString(),
-                SampleData.getLocalBaseURL().toString() + "events"
+                SampleData.getLocalBaseURL() + "events",
+                device.normalizeURI(device.getServices()[0].getEventSubscriptionURI()).toString()
         );
 
         assertTrue(device.isRoot());
     }
 
     @Test
-    public void readUDA10DescriptorWithEmptyURLBase() throws Exception {
+    void readUDA10DescriptorWithEmptyURLBase() throws Exception {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
 
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
@@ -223,6 +211,8 @@ public class UDA10DeviceDescriptorParsingTest {
         SampleDeviceRoot.assertLocalResourcesMatch(
                 new MockUpnpService().getConfiguration().getNamespace().getResources(device)
         );
-        SampleDeviceRoot.assertMatch(device, SampleData.createRemoteDevice());    }
+        SampleDeviceRoot.assertMatch(device, SampleData.createRemoteDevice());
+    }
+
 }
 

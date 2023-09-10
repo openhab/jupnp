@@ -57,11 +57,7 @@ public class SampleDeviceEmbeddedOne extends SampleDevice {
 
     @Override
     public DeviceDetailsProvider getDeviceDetailsProvider() {
-        return new DeviceDetailsProvider() {
-            public DeviceDetails provide(RemoteClientInfo info) {
-                return getDeviceDetails();
-            }
-        };
+        return info -> getDeviceDetails();
     }
 
     @Override

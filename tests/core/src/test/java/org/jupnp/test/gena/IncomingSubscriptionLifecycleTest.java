@@ -33,19 +33,17 @@ import org.jupnp.protocol.sync.ReceivingSubscribe;
 import org.jupnp.protocol.sync.ReceivingUnsubscribe;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.util.URIUtil;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class IncomingSubscriptionLifecycleTest {
+class IncomingSubscriptionLifecycleTest {
 
     @Test
-    public void subscriptionLifecycle() throws Exception {
-
+    void subscriptionLifecycle() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -60,7 +58,6 @@ public class IncomingSubscriptionLifecycleTest {
                 SampleData.getLocalBaseURL(), ns.getEventCallbackPath(service)
         );
 
-
         StreamRequestMessage subscribeRequestMessage =
                 new StreamRequestMessage(UpnpRequest.Method.SUBSCRIBE, ns.getEventSubscriptionPath(service));
 
@@ -74,11 +71,11 @@ public class IncomingSubscriptionLifecycleTest {
         subscribeProt.run();
         OutgoingSubscribeResponseMessage subscribeResponseMessage = subscribeProt.getOutputMessage();
 
-        assertEquals(subscribeResponseMessage.getOperation().getStatusCode(), UpnpResponse.Status.OK.getStatusCode());
+        assertEquals(UpnpResponse.Status.OK.getStatusCode(), subscribeResponseMessage.getOperation().getStatusCode());
         String subscriptionId = subscribeResponseMessage.getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue();
-        assert subscriptionId.startsWith("uuid:");
-        assertEquals(subscribeResponseMessage.getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue(), new Integer(1800));
-        assertEquals(upnpService.getRegistry().getLocalSubscription(subscriptionId).getActualDurationSeconds(), 1800);
+        assertTrue(subscriptionId.startsWith("uuid:"));
+        assertEquals(1800, subscribeResponseMessage.getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue());
+        assertEquals(1800, upnpService.getRegistry().getLocalSubscription(subscriptionId).getActualDurationSeconds());
 
         // Now send the initial event
         subscribeProt.responseSent(subscribeResponseMessage);
@@ -93,45 +90,41 @@ public class IncomingSubscriptionLifecycleTest {
         ReceivingUnsubscribe unsubscribeProt = new ReceivingUnsubscribe(upnpService, unsubscribeRequestMessage);
         unsubscribeProt.run();
         StreamResponseMessage unsubscribeResponseMessage = unsubscribeProt.getOutputMessage();
-        assertEquals(unsubscribeResponseMessage.getOperation().getStatusCode(), UpnpResponse.Status.OK.getStatusCode());
-        assert(upnpService.getRegistry().getLocalSubscription(subscriptionId) == null);
+        assertEquals(UpnpResponse.Status.OK.getStatusCode(), unsubscribeResponseMessage.getOperation().getStatusCode());
+        assertNull(upnpService.getRegistry().getLocalSubscription(subscriptionId));
 
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
-        assertEquals(sentMessages.size(), 2);
+        assertEquals(2, sentMessages.size());
+        for (int i = 0; i < 2; i++) {
+            assertEquals(
+                    UpnpRequest.Method.NOTIFY,
+                    (sentMessages.get(i).getOperation()).getMethod()
+            );
+        }
         assertEquals(
-                (sentMessages.get(0).getOperation()).getMethod(),
-                UpnpRequest.Method.NOTIFY
+                subscriptionId,
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue()
         );
         assertEquals(
-                (sentMessages.get(1).getOperation()).getMethod(),
-                UpnpRequest.Method.NOTIFY
+                subscriptionId,
+                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue()
         );
         assertEquals(
-                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
-                subscriptionId
+                callbackURL.toString(),
+                (sentMessages.get(0).getOperation()).getURI().toString()
         );
         assertEquals(
-                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
-                subscriptionId
+                0L,
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue()
         );
         assertEquals(
-                (sentMessages.get(0).getOperation()).getURI().toString(),
-                callbackURL.toString()
+                1L,
+                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue()
         );
-        assertEquals(
-                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
-                new Long(0)
-        );
-        assertEquals(
-                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
-                new Long(1)
-        );
-
     }
 
     @Test
-    public void subscriptionLifecycleFailedResponse() throws Exception {
-
+    void subscriptionLifecycleFailedResponse() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -158,7 +151,7 @@ public class IncomingSubscriptionLifecycleTest {
         ReceivingSubscribe subscribeProt = new ReceivingSubscribe(upnpService, subscribeRequestMessage);
         subscribeProt.run();
 
-        // From the response the subsciber _should_ receive, keep the identifier for later
+        // From the response the subscriber _should_ receive, keep the identifier for later
         OutgoingSubscribeResponseMessage subscribeResponseMessage = subscribeProt.getOutputMessage();
         String subscriptionId = subscribeResponseMessage.getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue();
 
@@ -166,7 +159,6 @@ public class IncomingSubscriptionLifecycleTest {
         subscribeProt.responseSent(null);
 
         // The subscription should be removed from the registry!
-        assert upnpService.getRegistry().getLocalSubscription(subscriptionId) == null;
-
+        assertNull(upnpService.getRegistry().getLocalSubscription(subscriptionId));
     }
 }

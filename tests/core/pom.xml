@@ -35,25 +35,18 @@
       <artifactId>org.jupnp</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-
-      <!-- Unit tests -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <suiteXmlFiles>
-            <suiteXmlFile>src/test/AllTests.tng.xml</suiteXmlFile>
-          </suiteXmlFiles>
+          <includes>
+            <include>**/*Suite.java</include>
+          </includes>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 

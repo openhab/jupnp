@@ -16,7 +16,6 @@ package org.jupnp.test.data;
 
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.DeviceDetails;
-import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.profile.DeviceDetailsProvider;
 import org.jupnp.model.meta.DeviceIdentity;
 import org.jupnp.model.meta.Icon;
@@ -55,11 +54,7 @@ public class SampleDeviceEmbeddedTwo extends SampleDevice {
 
     @Override
     public DeviceDetailsProvider getDeviceDetailsProvider() {
-        return new DeviceDetailsProvider() {
-            public DeviceDetails provide(RemoteClientInfo info) {
-                return getDeviceDetails();
-            }
-        };
+        return info -> getDeviceDetails();
     }
 
     @Override

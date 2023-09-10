@@ -14,13 +14,11 @@
 
 package org.jupnp.test.gena;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -42,21 +40,21 @@ import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.transport.impl.GENAEventProcessorImpl;
 import org.jupnp.transport.spi.GENAEventProcessor;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class EventXMLProcessingTest {
+class EventXMLProcessingTest {
 
     public static final String EVENT_MSG = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
             + "<e:propertyset xmlns:e=\"urn:schemas-upnp-org:event-1-0\">" + "<e:property>" + "<Status>0</Status>"
             + "</e:property>" + "<e:property>" + "<SomeVar></SomeVar>" + "</e:property>" + "</e:propertyset>";
 
     @Test
-    public void writeReadRequest() throws Exception {
+    void writeReadRequest() throws Exception {
         MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration() {
             @Override
             public GENAEventProcessor getGenaEventProcessor() {
@@ -66,19 +64,15 @@ public class EventXMLProcessingTest {
         writeReadRequest(upnpService);
     }
 
-    public void writeReadRequest(MockUpnpService upnpService) throws Exception {
+    void writeReadRequest(MockUpnpService upnpService) throws Exception {
 
         LocalDevice localDevice = GenaSampleData.createTestDevice(GenaSampleData.LocalTestService.class);
         LocalService localService = localDevice.getServices()[0];
 
-        List<URL> urls = new ArrayList() {
-            {
-                add(SampleData.getLocalBaseURL());
-            }
-        };
+        List<URL> urls = List.of(SampleData.getLocalBaseURL());
 
         LocalGENASubscription subscription = new LocalGENASubscription(localService, 1800, urls) {
-            public void failed(Exception ex) {
+            void failed(Exception ex) {
                 throw new RuntimeException("TEST SUBSCRIPTION FAILED: " + ex);
             }
 
@@ -111,7 +105,7 @@ public class EventXMLProcessingTest {
 
         upnpService.getConfiguration().getGenaEventProcessor().readBody(incomingCall);
 
-        assertEquals(incomingCall.getStateVariableValues().size(), 2);
+        assertEquals(2, incomingCall.getStateVariableValues().size());
 
         boolean gotValueOne = false;
         boolean gotValueTwo = false;
@@ -187,7 +181,7 @@ public class EventXMLProcessingTest {
             }
 
         }
-        
+
         return true;
     }
 

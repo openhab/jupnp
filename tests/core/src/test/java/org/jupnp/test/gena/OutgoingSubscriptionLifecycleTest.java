@@ -37,31 +37,28 @@ import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.util.URIUtil;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class OutgoingSubscriptionLifecycleTest {
+class OutgoingSubscriptionLifecycleTest {
 
     @Test
-    public void subscriptionLifecycle() throws Exception {
-
+    void subscriptionLifecycle() throws Exception {
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                 @Override
                 public StreamResponseMessage[] getStreamResponseMessages() {
-
                     return new StreamResponseMessage[]{
                             createSubscribeResponseMessage(),
                             createUnsubscribeResponseMessage()
-
                     };
                 }
                 };
@@ -69,7 +66,7 @@ public class OutgoingSubscriptionLifecycleTest {
         };
         upnpService.startup();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
@@ -78,7 +75,6 @@ public class OutgoingSubscriptionLifecycleTest {
         RemoteService service = SampleData.getFirstService(device);
 
         SubscriptionCallback callback = new SubscriptionCallback(service) {
-
             @Override
             protected void failed(GENASubscription subscription,
                                   UpnpResponse responseStatus,
@@ -94,28 +90,27 @@ public class OutgoingSubscriptionLifecycleTest {
 
             @Override
             public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
-                assert reason == null;
+                assertNull(reason);
                 assertEquals(responseStatus.getStatusCode(), UpnpResponse.Status.OK.getStatusCode());
                 testAssertions.add(true);
             }
 
             public void eventReceived(GENASubscription subscription) {
-                assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
-                assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
+                assertEquals("0", subscription.getCurrentValues().get("Status").toString());
+                assertEquals("1", subscription.getCurrentValues().get("Target").toString());
                 testAssertions.add(true);
             }
 
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
 
         // Subscription process OK?
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
         // Simulate received event
@@ -123,46 +118,46 @@ public class OutgoingSubscriptionLifecycleTest {
                 createEventRequestMessage(upnpService, callback)
         ).run();
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(0));
-        assertEquals(callback.getSubscription().getSubscriptionId(), "uuid:1234");
-        assertEquals(callback.getSubscription().getActualDurationSeconds(), 180);
+        assertEquals(0L, callback.getSubscription().getCurrentSequence().getValue());
+        assertEquals("uuid:1234", callback.getSubscription().getSubscriptionId());
+        assertEquals(180, callback.getSubscription().getActualDurationSeconds());
 
         List<URL> callbackURLs = ((RemoteGENASubscription) callback.getSubscription())
                 .getEventCallbackURLs(upnpService.getRouter().getActiveStreamServers(null), upnpService.getConfiguration().getNamespace());
 
         callback.end();
 
-        assert callback.getSubscription() == null;
+        assertNull(callback.getSubscription());
 
-        assertEquals(testAssertions.size(), 3);
+        assertEquals(3, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
-        assertEquals(sentMessages.size(), 2);
+        assertEquals(2, sentMessages.size());
         assertEquals(
-                (sentMessages.get(0).getOperation()).getMethod(),
-                UpnpRequest.Method.SUBSCRIBE
+                UpnpRequest.Method.SUBSCRIBE,
+                (sentMessages.get(0).getOperation()).getMethod()
         );
         assertEquals(
-            sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue(),
-                Integer.valueOf(1800)
-        );
-
-        assertEquals(callbackURLs.size(), 1);
-        assertEquals(
-            sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0),
-                callbackURLs.get(0)
+            1800,
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue()
         );
 
+        assertEquals(1, callbackURLs.size());
         assertEquals(
-                (sentMessages.get(1).getOperation()).getMethod(),
-                UpnpRequest.Method.UNSUBSCRIBE
+            callbackURLs.get(0),
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0)
+        );
+
+        assertEquals(
+                UpnpRequest.Method.UNSUBSCRIBE,
+                (sentMessages.get(1).getOperation()).getMethod()
         );
         assertEquals(
-            sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
-                "uuid:1234"
+            "uuid:1234",
+                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue()
         );
     }
 

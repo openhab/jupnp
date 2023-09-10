@@ -24,509 +24,520 @@ import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.util.MimeType;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.Locale;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class HeaderParsingTest {
+class HeaderParsingTest {
 
     @Test
-    public void parseContentTypeHeader() {
+    void parseContentTypeHeader() {
         ContentTypeHeader header = new ContentTypeHeader(MimeType.valueOf("foo/bar;charset=\"utf-8\""));
-        assertEquals(header.getString(), "foo/bar;charset=\"utf-8\"");
+        assertEquals("foo/bar;charset=\"utf-8\"", header.getString());
     }
 
     @Test
-    public void parseDeviceType() {
+    void parseDeviceType() {
         DeviceType deviceType = DeviceType.valueOf("urn:foo-bar:device:MyDeviceType:123");
-        assertEquals(deviceType.getNamespace(), "foo-bar");
-        assertEquals(deviceType.getType(), "MyDeviceType");
-        assertEquals(deviceType.getVersion(), 123);
+        assertEquals("foo-bar", deviceType.getNamespace());
+        assertEquals("MyDeviceType", deviceType.getType());
+        assertEquals(123, deviceType.getVersion());
     }
 
     @Test
-    public void parseUDADeviceType() {
+    void parseUDADeviceType() {
         UDADeviceType deviceType = (UDADeviceType)DeviceType.valueOf("urn:schemas-upnp-org:device:MyDeviceType:123");
-        assertEquals(deviceType.getType(), "MyDeviceType");
-        assertEquals(deviceType.getVersion(), 123);
+        assertEquals("MyDeviceType", deviceType.getType());
+        assertEquals(123, deviceType.getVersion());
     }
 
     @Test
-    public void parseInvalidDeviceTypeHeader() {
+    void parseInvalidDeviceTypeHeader() {
         DeviceTypeHeader header = new DeviceTypeHeader();
         header.setString("urn:foo-bar:device:!@#:123");
-        assertEquals(header.getValue().getNamespace(), "foo-bar");
-        assertEquals(header.getValue().getType(), "---");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:foo-bar:device:---:123");
+        assertEquals("foo-bar", header.getValue().getNamespace());
+        assertEquals("---", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:foo-bar:device:---:123", header.getString());
     }
 
     @Test
-    public void parseDeviceTypeHeaderURI() {
+    void parseDeviceTypeHeaderURI() {
         DeviceTypeHeader header = new DeviceTypeHeader(URI.create("urn:schemas-upnp-org:device:MyDeviceType:123"));
-        assertEquals(header.getValue().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getType(), "MyDeviceType");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:schemas-upnp-org:device:MyDeviceType:123");
-
+        assertEquals("schemas-upnp-org", header.getValue().getNamespace());
+        assertEquals("MyDeviceType", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:schemas-upnp-org:device:MyDeviceType:123", header.getString());
     }
 
     @Test
-    public void parseDeviceUSNHeader() {
+    void parseDeviceUSNHeader() {
         DeviceUSNHeader header = new DeviceUSNHeader();
         header.setString("uuid:MY-DEVICE-123::urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1");
-        assertEquals(header.getValue().getUdn().getIdentifierString(), "MY-DEVICE-123");
-        assert header.getValue().getDeviceType() instanceof UDADeviceType;
+        assertEquals("MY-DEVICE-123", header.getValue().getUdn().getIdentifierString());
+        assertTrue(header.getValue().getDeviceType() instanceof UDADeviceType);
     }
 
     @Test
-    public void parseDeviceUSNHeaderStatic() {
+    void parseDeviceUSNHeaderStatic() {
         DeviceUSNHeader header = new DeviceUSNHeader(
                 NamedDeviceType.valueOf("uuid:MY-DEVICE-123::urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1")
         );
-        assertEquals(header.getValue().getUdn().getIdentifierString(), "MY-DEVICE-123");
-        assert header.getValue().getDeviceType() instanceof UDADeviceType;
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidDeviceUSNHeader() {
-        DeviceUSNHeader header = new DeviceUSNHeader();
-        header.setString("uuid:MY-DEVICE-123--urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1");
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidEXTHeader() {
-        EXTHeader header = new EXTHeader();
-        header.setString("MUST BE EMPTY STRING");
+        assertEquals("MY-DEVICE-123", header.getValue().getUdn().getIdentifierString());
+        assertTrue(header.getValue().getDeviceType() instanceof UDADeviceType);
     }
 
     @Test
-    public void parseHostHeaderConstructor() {
+    void parseInvalidDeviceUSNHeader() {
+        DeviceUSNHeader header = new DeviceUSNHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+            header.setString("uuid:MY-DEVICE-123--urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1"));
+    }
+
+    @Test
+    void parseInvalidEXTHeader() {
+        EXTHeader header = new EXTHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("MUST BE EMPTY STRING"));
+    }
+
+    @Test
+    void parseHostHeaderConstructor() {
         HostHeader header = new HostHeader("foo.bar", 1234);
-        assertEquals(header.getValue().getHost(), "foo.bar");
-        assertEquals(header.getValue().getPort(), 1234);
+        assertEquals("foo.bar", header.getValue().getHost());
+        assertEquals(1234, header.getValue().getPort());
 
         header = new HostHeader(1234);
-        assertEquals(header.getValue().getHost(), Constants.IPV4_UPNP_MULTICAST_GROUP);
-        assertEquals(header.getValue().getPort(), 1234);
+        assertEquals(Constants.IPV4_UPNP_MULTICAST_GROUP, header.getValue().getHost());
+        assertEquals(1234, header.getValue().getPort());
     }
 
     @Test
-    public void parseHostHeader() {
+    void parseHostHeader() {
         HostHeader header = new HostHeader();
-        assertEquals(header.getValue().getHost(), Constants.IPV4_UPNP_MULTICAST_GROUP);
-        assertEquals(header.getValue().getPort(), Constants.UPNP_MULTICAST_PORT);
+        assertEquals(Constants.IPV4_UPNP_MULTICAST_GROUP, header.getValue().getHost());
+        assertEquals(Constants.UPNP_MULTICAST_PORT, header.getValue().getPort());
 
         header = new HostHeader();
         header.setString("foo.bar:1234");
-        assertEquals(header.getValue().getHost(), "foo.bar");
-        assertEquals(header.getValue().getPort(), 1234);
+        assertEquals("foo.bar", header.getValue().getHost());
+        assertEquals(1234, header.getValue().getPort());
 
         header = new HostHeader();
         header.setString("foo.bar");
-        assertEquals(header.getValue().getHost(), "foo.bar");
-        assertEquals(header.getValue().getPort(), Constants.UPNP_MULTICAST_PORT);
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidHostHeader() {
-        HostHeader header = new HostHeader();
-        header.setString("foo.bar:abc");
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidLocationHeader() {
-        LocationHeader header = new LocationHeader();
-        header.setString("this://is.not...a valid URL");
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidMANHeader() {
-        MANHeader header = new MANHeader("abc");
-        header.setString("\"foo.bar\"; ns = baz"); // Not valid
+        assertEquals("foo.bar", header.getValue().getHost());
+        assertEquals(Constants.UPNP_MULTICAST_PORT, header.getValue().getPort());
     }
 
     @Test
-    public void parseMANHeaderNoNS() {
+    void parseInvalidHostHeader() {
+        HostHeader header = new HostHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("foo.bar:abc"));
+    }
+
+    @Test
+    void parseInvalidLocationHeader() {
+        LocationHeader header = new LocationHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("this://is.not...a valid URL"));
+    }
+
+    @Test
+    void parseInvalidMANHeader() {
+        MANHeader header = new MANHeader("abc");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("\"foo.bar\"; ns = baz"));
+    }
+
+    @Test
+    void parseMANHeaderNoNS() {
         MANHeader header = new MANHeader("abc");
         header.setString("\"foo.bar\"");
-        assert header.getValue().equals("foo.bar");
-        assert header.getNamespace() == null;
-        assert header.getString().equals("\"foo.bar\"");
+        assertEquals("foo.bar", header.getValue());
+        assertNull(header.getNamespace());
+        assertEquals("\"foo.bar\"", header.getString());
     }
 
     @Test
-    public void parseMANHeaderNS() {
+    void parseMANHeaderNS() {
         MANHeader header = new MANHeader("abc");
         header.setString("\"foo.bar\"; ns =12");
-        assert header.getValue().equals("foo.bar");
-        assert header.getNamespace().equals("12");
-        assert header.getString().equals("\"foo.bar\"; ns=12");
+        assertEquals("foo.bar", header.getValue());
+        assertEquals("12", header.getNamespace());
+        assertEquals("\"foo.bar\"; ns=12", header.getString());
     }
 
     @Test
-    public void parseMaxAgeHeader() {
+    void parseMaxAgeHeader() {
         MaxAgeHeader header = new MaxAgeHeader();
         header.setString("max-age=1234, foobar=baz");
-        assertEquals(header.getValue(), new Integer(1234));
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidMaxAgeHeader() {
-        MaxAgeHeader header = new MaxAgeHeader();
-        header.setString("max-foo=123");
+        assertEquals(1234, header.getValue());
     }
 
     @Test
-    public void parseMXHeader() {
+    void parseInvalidMaxAgeHeader() {
+        MaxAgeHeader header = new MaxAgeHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("max-foo=123"));
+    }
+
+    @Test
+    void parseMXHeader() {
         MXHeader header = new MXHeader();
         header.setString("111");
-        assertEquals(header.getValue(), new Integer(111));
+        assertEquals(111, header.getValue());
         
         header = new MXHeader();
         header.setString("123");
-        assertEquals(header.getValue(), MXHeader.DEFAULT_VALUE);
-
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidMXHeader() {
-        MXHeader header = new MXHeader();
-        header.setString("abc");
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidNTSHeader() {
-        NTSHeader header = new NTSHeader();
-        header.setString("foo");
-    }
-
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidRootDeviceHeader() {
-        RootDeviceHeader header = new RootDeviceHeader();
-        header.setString("upnp:foodevice");
+        assertEquals(MXHeader.DEFAULT_VALUE, header.getValue());
     }
 
     @Test
-    public void parseServerHeader() {
+    void parseInvalidMXHeader() {
+        MXHeader header = new MXHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("abc"));
+    }
+
+    @Test
+    void parseInvalidNTSHeader() {
+        NTSHeader header = new NTSHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("foo"));
+    }
+
+    @Test
+    void parseInvalidRootDeviceHeader() {
+        RootDeviceHeader header = new RootDeviceHeader();
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("upnp:foodevice"));
+    }
+
+    @Test
+    void parseServerHeader() {
         ServerHeader header = new ServerHeader();
         header.setString("foo/1 UPnP/1.1 bar/2");
-        assertEquals(header.getValue().getOsName(), "foo");
-        assertEquals(header.getValue().getOsVersion(), "1");
-        assertEquals(header.getValue().getProductName(), "bar");
-        assertEquals(header.getValue().getProductVersion(), "2");
-        assertEquals(header.getValue().getMajorVersion(), 1);
-        assertEquals(header.getValue().getMinorVersion(), 1);
+        assertEquals("foo", header.getValue().getOsName());
+        assertEquals("1", header.getValue().getOsVersion());
+        assertEquals("bar", header.getValue().getProductName());
+        assertEquals("2", header.getValue().getProductVersion());
+        assertEquals(1, header.getValue().getMajorVersion());
+        assertEquals(1, header.getValue().getMinorVersion());
 
         // Commas...
         header = new ServerHeader();
         header.setString("foo/1, UPnP/1.1, bar/2");
-        assertEquals(header.getValue().getOsName(), "foo");
-        assertEquals(header.getValue().getOsVersion(), "1");
-        assertEquals(header.getValue().getProductName(), "bar");
-        assertEquals(header.getValue().getProductVersion(), "2");
-        assertEquals(header.getValue().getMajorVersion(), 1);
-        assertEquals(header.getValue().getMinorVersion(), 1);
+        assertEquals("foo", header.getValue().getOsName());
+        assertEquals("1", header.getValue().getOsVersion());
+        assertEquals("bar", header.getValue().getProductName());
+        assertEquals("2", header.getValue().getProductVersion());
+        assertEquals(1, header.getValue().getMajorVersion());
+        assertEquals(1, header.getValue().getMinorVersion());
 
         // Whitespace in tokens
         header = new ServerHeader();
         header.setString("foo baz/1 UPnP/1.1 bar abc/2");
-        assertEquals(header.getValue().getOsName(), "foo baz");
-        assertEquals(header.getValue().getOsVersion(), "1");
-        assertEquals(header.getValue().getProductName(), "bar abc");
-        assertEquals(header.getValue().getProductVersion(), "2");
-        assertEquals(header.getValue().getMajorVersion(), 1);
-        assertEquals(header.getValue().getMinorVersion(), 1);
+        assertEquals("foo baz", header.getValue().getOsName());
+        assertEquals("1", header.getValue().getOsVersion());
+        assertEquals("bar abc", header.getValue().getProductName());
+        assertEquals("2", header.getValue().getProductVersion());
+        assertEquals(1, header.getValue().getMajorVersion());
+        assertEquals(1, header.getValue().getMinorVersion());
 
         // Commas and whitespace!
         header = new ServerHeader();
         header.setString("foo baz/1, UPnP/1.1, bar abc/2");
-        assertEquals(header.getValue().getOsName(), "foo baz");
-        assertEquals(header.getValue().getOsVersion(), "1");
-        assertEquals(header.getValue().getProductName(), "bar abc");
-        assertEquals(header.getValue().getProductVersion(), "2");
-        assertEquals(header.getValue().getMajorVersion(), 1);
-        assertEquals(header.getValue().getMinorVersion(), 1);
+        assertEquals("foo baz", header.getValue().getOsName());
+        assertEquals("1", header.getValue().getOsVersion());
+        assertEquals("bar abc", header.getValue().getProductName());
+        assertEquals("2", header.getValue().getProductVersion());
+        assertEquals(1, header.getValue().getMajorVersion());
+        assertEquals(1, header.getValue().getMinorVersion());
 
         // Absolutely not valid!
         header = new ServerHeader();
         header.setString("foo/1 UPnP/1.");
-        assertEquals(header.getValue().getOsName(), ServerClientTokens.UNKNOWN_PLACEHOLDER);
-        assertEquals(header.getValue().getOsVersion(), ServerClientTokens.UNKNOWN_PLACEHOLDER);
-        assertEquals(header.getValue().getProductName(), ServerClientTokens.UNKNOWN_PLACEHOLDER);
-        assertEquals(header.getValue().getProductVersion(), ServerClientTokens.UNKNOWN_PLACEHOLDER);
-        assertEquals(header.getValue().getMajorVersion(), 1);
-        assertEquals(header.getValue().getMinorVersion(), 0); // Assume UDA 1.0
-
+        assertEquals(ServerClientTokens.UNKNOWN_PLACEHOLDER, header.getValue().getOsName());
+        assertEquals(ServerClientTokens.UNKNOWN_PLACEHOLDER, header.getValue().getOsVersion());
+        assertEquals(ServerClientTokens.UNKNOWN_PLACEHOLDER, header.getValue().getProductName());
+        assertEquals(ServerClientTokens.UNKNOWN_PLACEHOLDER, header.getValue().getProductVersion());
+        assertEquals(1, header.getValue().getMajorVersion());
+        assertEquals(0, header.getValue().getMinorVersion()); // Assume UDA 1.0
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidServerHeader() {
+    @Test
+    void parseInvalidServerHeader() {
         ServerHeader header = new ServerHeader();
-        header.setString("foo/1 baz/123 bar/2");
+        assertThrows(InvalidHeaderException.class, () ->
+        header.setString("foo/1 baz/123 bar/2"));
     }
 
     @Test
-    public void parseServiceType() {
+    void parseServiceType() {
         ServiceType serviceType = ServiceType.valueOf("urn:foo-bar:service:MyServiceType:123");
-        assertEquals(serviceType.getNamespace(), "foo-bar");
-        assertEquals(serviceType.getType(), "MyServiceType");
-        assertEquals(serviceType.getVersion(), 123);
+        assertEquals("foo-bar", serviceType.getNamespace());
+        assertEquals("MyServiceType", serviceType.getType());
+        assertEquals(123, serviceType.getVersion());
     }
 
     @Test
-    public void parseUDAServiceType() {
+    void parseUDAServiceType() {
         UDAServiceType serviceType = (UDAServiceType)ServiceType.valueOf("urn:schemas-upnp-org:service:MyServiceType:123");
-        assertEquals(serviceType.getType(), "MyServiceType");
-        assertEquals(serviceType.getVersion(), 123);
+        assertEquals("MyServiceType", serviceType.getType());
+        assertEquals(123, serviceType.getVersion());
     }
 
     @Test
-    public void parseInvalidServiceTypeHeader() {
+    void parseInvalidServiceTypeHeader() {
         ServiceTypeHeader header = new ServiceTypeHeader();
         header.setString("urn:foo-bar:service:!@#:123");
-        assertEquals(header.getValue().getNamespace(), "foo-bar");
-        assertEquals(header.getValue().getType(), "---");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:foo-bar:service:---:123");
+        assertEquals("foo-bar", header.getValue().getNamespace());
+        assertEquals("---", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:foo-bar:service:---:123", header.getString());
     }
 
     @Test
-    public void parseServiceTypeHeaderURI() {
+    void parseServiceTypeHeaderURI() {
         ServiceTypeHeader header = new ServiceTypeHeader(URI.create("urn:schemas-upnp-org:service:MyServiceType:123"));
-        assertEquals(header.getValue().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getType(), "MyServiceType");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:schemas-upnp-org:service:MyServiceType:123");
+        assertEquals("schemas-upnp-org", header.getValue().getNamespace());
+        assertEquals("MyServiceType", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:schemas-upnp-org:service:MyServiceType:123", header.getString());
     }
 
     @Test
-    public void parseServiceUSNHeader() {
+    void parseServiceUSNHeader() {
         ServiceUSNHeader header = new ServiceUSNHeader();
         header.setString("uuid:MY-SERVICE-123::urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1");
-        assertEquals(header.getValue().getUdn().getIdentifierString(), "MY-SERVICE-123");
-        assert header.getValue().getServiceType() instanceof UDAServiceType;
+        assertEquals("MY-SERVICE-123", header.getValue().getUdn().getIdentifierString());
+        assertTrue(header.getValue().getServiceType() instanceof UDAServiceType);
     }
 
     @Test
-    public void parseServiceUSNHeaderStatic() {
+    void parseServiceUSNHeaderStatic() {
         ServiceUSNHeader header = new ServiceUSNHeader(
                 NamedServiceType.valueOf("uuid:MY-SERVICE-123::urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1")
         );
-        assertEquals(header.getValue().getUdn().getIdentifierString(), "MY-SERVICE-123");
-        assert header.getValue().getServiceType() instanceof UDAServiceType;
+        assertEquals("MY-SERVICE-123", header.getValue().getUdn().getIdentifierString());
+        assertTrue(header.getValue().getServiceType() instanceof UDAServiceType);
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidServiceUSNHeader() {
+    @Test
+    void parseInvalidServiceUSNHeader() {
         ServiceUSNHeader header = new ServiceUSNHeader();
-        header.setString("uuid:MY-SERVICE-123--urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("uuid:MY-SERVICE-123--urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1"));
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidSTAllHeader() {
+    @Test
+    void parseInvalidSTAllHeader() {
         STAllHeader header = new STAllHeader();
-        header.setString("ssdp:foo");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("ssdp:foo"));
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidUDADeviceTypeHeader() {
+    @Test
+    void parseInvalidUDADeviceTypeHeader() {
         UDADeviceTypeHeader header = new UDADeviceTypeHeader();
-        header.setString("urn:foo-bar:device:!@#:123");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("urn:foo-bar:device:!@#:123"));
     }
 
     @Test
-    public void parseUDADeviceTypeHeaderURI() {
+    void parseUDADeviceTypeHeaderURI() {
         UDADeviceTypeHeader header = new UDADeviceTypeHeader(URI.create("urn:schemas-upnp-org:device:MyDeviceType:123"));
-        assertEquals(header.getValue().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getType(), "MyDeviceType");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:schemas-upnp-org:device:MyDeviceType:123");
+        assertEquals("schemas-upnp-org", header.getValue().getNamespace());
+        assertEquals("MyDeviceType", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:schemas-upnp-org:device:MyDeviceType:123", header.getString());
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidUDAServiceTypeHeader() {
+    @Test
+    void parseInvalidUDAServiceTypeHeader() {
         UDAServiceTypeHeader header = new UDAServiceTypeHeader();
-        header.setString("urn:foo-bar:service:!@#:123");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("urn:foo-bar:service:!@#:123"));
     }
 
     @Test
-    public void parseUDAServiceTypeHeaderURI() {
+    void parseUDAServiceTypeHeaderURI() {
         UDAServiceTypeHeader header = new UDAServiceTypeHeader(URI.create("urn:schemas-upnp-org:service:MyServiceType:123"));
-        assertEquals(header.getValue().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getType(), "MyServiceType");
-        assertEquals(header.getValue().getVersion(), 123);
-        assertEquals(header.getString(), "urn:schemas-upnp-org:service:MyServiceType:123");
-
+        assertEquals("schemas-upnp-org", header.getValue().getNamespace());
+        assertEquals("MyServiceType", header.getValue().getType());
+        assertEquals(123, header.getValue().getVersion());
+        assertEquals("urn:schemas-upnp-org:service:MyServiceType:123", header.getString());
     }
 
     @Test
-    public void parseUDNHeader() {
+    void parseUDNHeader() {
         UDNHeader header = new UDNHeader();
         header.setString("uuid:MY-UUID-1234");
-        assertEquals(header.getValue().getIdentifierString(), "MY-UUID-1234");
+        assertEquals("MY-UUID-1234", header.getValue().getIdentifierString());
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidUDNHeaderPrefix() {
+    @Test
+    void parseInvalidUDNHeaderPrefix() {
         UDNHeader header = new UDNHeader();
-        header.setString("MY-UUID-1234");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("MY-UUID-1234"));
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidUDNHeaderURN() {
+    @Test
+    void parseInvalidUDNHeaderURN() {
         UDNHeader header = new UDNHeader();
-        header.setString("uuid:MY-UUID-1234::urn:foo-bar:baz");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("uuid:MY-UUID-1234::urn:foo-bar:baz"));
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidUSNRootDeviceHeader() {
+    @Test
+    void parseInvalidUSNRootDeviceHeader() {
         USNRootDeviceHeader header = new USNRootDeviceHeader();
-        header.setString("uuid:MY-UUID-1234::upnp:rootfoo");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("uuid:MY-UUID-1234::upnp:rootfoo"));
     }
 
     @Test
-    public void parseSoapActionHeader() {
+    void parseSoapActionHeader() {
         SoapActionHeader header = new SoapActionHeader(URI.create("urn:schemas-upnp-org:service:MyServiceType:1#MyAction"));
-        assertEquals(header.getValue().getServiceType().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getServiceType().getType(), "MyServiceType");
-        assertEquals(header.getValue().getServiceType().getVersion(), 1);
-        assertEquals(header.getValue().getActionName(), "MyAction");
-        assertEquals(header.getString(), "\"urn:schemas-upnp-org:service:MyServiceType:1#MyAction\"");
-
+        assertEquals("schemas-upnp-org", header.getValue().getServiceType().getNamespace());
+        assertEquals("MyServiceType", header.getValue().getServiceType().getType());
+        assertEquals(1, header.getValue().getServiceType().getVersion());
+        assertEquals("MyAction", header.getValue().getActionName());
+        assertEquals("\"urn:schemas-upnp-org:service:MyServiceType:1#MyAction\"", header.getString());
     }
 
     @Test
-    public void parseSoapActionHeaderString() {
+    void parseSoapActionHeaderString() {
         SoapActionHeader header = new SoapActionHeader();
         header.setString("\"urn:schemas-upnp-org:service:MyServiceType:1#MyAction\"");
-        assertEquals(header.getValue().getServiceType().getNamespace(), "schemas-upnp-org");
-        assertEquals(header.getValue().getServiceType().getType(), "MyServiceType");
-        assertEquals(header.getValue().getServiceType().getVersion(), 1);
-        assertEquals(header.getValue().getActionName(), "MyAction");
-        assertEquals(header.getString(), "\"urn:schemas-upnp-org:service:MyServiceType:1#MyAction\"");
+        assertEquals("schemas-upnp-org", header.getValue().getServiceType().getNamespace());
+        assertEquals("MyServiceType", header.getValue().getServiceType().getType());
+        assertEquals(1, header.getValue().getServiceType().getVersion());
+        assertEquals("MyAction", header.getValue().getActionName());
+        assertEquals("\"urn:schemas-upnp-org:service:MyServiceType:1#MyAction\"", header.getString());
     }
 
     @Test
-    public void parseSoapActionHeaderQueryString() {
+    void parseSoapActionHeaderQueryString() {
         SoapActionHeader header = new SoapActionHeader();
         header.setString("\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"");
-        assertEquals(header.getValue().getServiceType(), null);
-        assertEquals(header.getValue().getType(), "control-1-0");
-        assertEquals(header.getValue().getVersion(), null);
-        assertEquals(header.getValue().getActionName(), "QueryStateVariable");
-        assertEquals(header.getString(), "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"");
+        assertNull(header.getValue().getServiceType());
+        assertEquals("control-1-0", header.getValue().getType());
+        assertNull(header.getValue().getVersion());
+        assertEquals("QueryStateVariable", header.getValue().getActionName());
+        assertEquals("\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"", header.getString());
     }
 
     @Test
-    public void parseEventSequenceHeaderString() {
+    void parseEventSequenceHeaderString() {
         EventSequenceHeader header = new EventSequenceHeader();
         header.setString("0");
-        assertEquals(header.getValue().getValue(), Long.valueOf(0));
+        assertEquals(0L, header.getValue().getValue());
         header.setString("001");
-        assertEquals(header.getValue().getValue(), Long.valueOf(1));
+        assertEquals(1L, header.getValue().getValue());
         header.setString("123");
-        assertEquals(header.getValue().getValue(), Long.valueOf(123));
-
+        assertEquals(123L, header.getValue().getValue());
     }
 
     @Test
-    public void parseTimeoutHeaderString() {
+    void parseTimeoutHeaderString() {
         TimeoutHeader header = new TimeoutHeader();
         header.setString("Second-123");
-        assertEquals(header.getValue(), Integer.valueOf(123));
+        assertEquals(123, header.getValue());
         header.setString("Second-infinite");
-        assertEquals(header.getValue(), TimeoutHeader.INFINITE_VALUE);
+        assertEquals(TimeoutHeader.INFINITE_VALUE, header.getValue());
     }
 
     @Test
-    public void parseCallbackHeaderString() {
+    void parseCallbackHeaderString() {
         CallbackHeader header = new CallbackHeader();
         header.setString("<http://127.0.0.1/foo>");
-        assertEquals(header.getValue().size(), 1);
-        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
+        assertEquals(1, header.getValue().size());
+        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
 
         header.setString("<http://127.0.0.1/foo><http://127.0.0.1/bar>");
-        assertEquals(header.getValue().size(), 2);
-        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
-        assertEquals(header.getValue().get(1).toString(), "http://127.0.0.1/bar");
+        assertEquals(2, header.getValue().size());
+        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
+        assertEquals("http://127.0.0.1/bar", header.getValue().get(1).toString());
 
         header.setString("<http://127.0.0.1/foo> <http://127.0.0.1/bar>");
-        assertEquals(header.getValue().size(), 2);
-        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
-        assertEquals(header.getValue().get(1).toString(), "http://127.0.0.1/bar");
+        assertEquals(2, header.getValue().size());
+        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
+        assertEquals("http://127.0.0.1/bar", header.getValue().get(1).toString());
     }
 
     @Test
-    public void parseInvalidCallbackHeaderString() {
+    void parseInvalidCallbackHeaderString() {
         CallbackHeader header = new CallbackHeader();
         header.setString("<http://127.0.0.1/foo> <ftp://127.0.0.1/bar>");
-        assertEquals(header.getValue().size(), 1);
-        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
+        assertEquals(1, header.getValue().size());
+        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
 
         /* TODO: I'm having trouble finding a valid URL that is
            an invalid URI in the standard JDK...
         header.setString("<http://127.0.0.1/foo> <http://we_need_a_valid_URL_but_invalid_URI>");
-        assertEquals(header.getValue().size(), 1);
-        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
+        assertEquals(1, header.getValue().size());
+        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
         */
     }
 
     @Test
-    public void parseSubscriptionIdHeaderString() {
+    void parseSubscriptionIdHeaderString() {
         SubscriptionIdHeader header = new SubscriptionIdHeader();
         header.setString("uuid:123-123-123-123");
-        assertEquals(header.getValue(), "uuid:123-123-123-123");
+        assertEquals("uuid:123-123-123-123", header.getValue());
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
-    public void parseInvalidSubscriptionIdHeaderString() {
+    @Test
+    void parseInvalidSubscriptionIdHeaderString() {
         SubscriptionIdHeader header = new SubscriptionIdHeader();
-        header.setString("abc:123-123-123-123");
+        assertThrows(InvalidHeaderException.class, () ->
+                header.setString("abc:123-123-123-123"));
     }
 
     @Test
-    public void parseInterfaceMacAddress() {
+    void parseInterfaceMacAddress() {
         InterfaceMacHeader header = new InterfaceMacHeader("00:17:ab:e9:65:a0");
-        assertEquals(header.getValue().length, 6);
-        assertEquals(header.getString().toUpperCase(Locale.ENGLISH), "00:17:AB:E9:65:A0");
+        assertEquals(6, header.getValue().length);
+        assertEquals("00:17:AB:E9:65:A0", header.getString().toUpperCase(Locale.ENGLISH));
     }
 
     @Test
-    public void parseRange() {
+    void parseRange() {
         RangeHeader header = new RangeHeader("bytes=1539686400-1540210688");
-        assertEquals(header.getValue().getFirstByte(),new Long(1539686400));
-        assertEquals(header.getValue().getLastByte(), new Long(1540210688));
-        assertEquals(header.getString(), "bytes=1539686400-1540210688");
+        assertEquals(1539686400L, header.getValue().getFirstByte());
+        assertEquals(1540210688L, header.getValue().getLastByte());
+        assertEquals("bytes=1539686400-1540210688", header.getString());
     }
     
     @Test
-    public void parseContentRange() {
+    void parseContentRange() {
         ContentRangeHeader header = new ContentRangeHeader("bytes 1539686400-1540210688/21323123");
-        assertEquals(header.getValue().getFirstByte(),new Long(1539686400));
-        assertEquals(header.getValue().getLastByte(), new Long(1540210688));
-        assertEquals(header.getValue().getByteLength(), new Long(21323123));
-        assertEquals(header.getString(), "bytes 1539686400-1540210688/21323123");
+        assertEquals(1539686400L, header.getValue().getFirstByte());
+        assertEquals(1540210688L, header.getValue().getLastByte());
+        assertEquals(21323123L, header.getValue().getByteLength());
+        assertEquals("bytes 1539686400-1540210688/21323123", header.getString());
     }
     
     @Test
-    public void parsePragma() {
+    void parsePragma() {
         PragmaHeader header = new PragmaHeader("no-cache");
-        assertEquals(header.getValue().getValue(),"no-cache");
-        assertEquals(header.getString(), "no-cache");
+        assertEquals("no-cache", header.getValue().getValue());
+        assertEquals("no-cache", header.getString());
         
         header.setString("token=value");
-        assertEquals(header.getValue().getToken(),"token");
-        assertEquals(header.getValue().getValue(),"value");
-        assertEquals(header.getString(), "token=value");
+        assertEquals("token", header.getValue().getToken());
+        assertEquals("value", header.getValue().getValue());
+        assertEquals("token=value", header.getString());
         
         header.setString("token=\"value\"");
-        assertEquals(header.getValue().getToken(),"token");
-        assertEquals(header.getValue().getValue(),"value");
-        assertEquals(header.getString(), "token=\"value\"");
+        assertEquals("token", header.getValue().getToken());
+        assertEquals("value", header.getValue().getValue());
+        assertEquals("token=\"value\"", header.getString());
     }
 }

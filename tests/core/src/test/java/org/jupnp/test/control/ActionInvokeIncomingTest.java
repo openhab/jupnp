@@ -40,18 +40,18 @@ import org.jupnp.model.types.ErrorCode;
 import org.jupnp.model.types.SoapActionType;
 import org.jupnp.protocol.sync.ReceivingAction;
 import org.jupnp.util.MimeType;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class ActionInvokeIncomingTest {
+class ActionInvokeIncomingTest {
 
     public static final String SET_REQUEST = "<?xml version=\"1.0\"?>\n" +
             " <s:Envelope\n" +
@@ -85,20 +85,20 @@ public class ActionInvokeIncomingTest {
             " </s:Envelope>";
 
     @Test
-    public void incomingRemoteCallGet() throws Exception {
+    void incomingRemoteCallGet() throws Exception {
         incomingRemoteCallGet(ActionSampleData.createTestDevice());
     }
 
     @Test
-    public void incomingRemoteCallClientInfo() throws Exception {
+    void incomingRemoteCallClientInfo() throws Exception {
         UpnpMessage response =
                 incomingRemoteCallGet(ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceWithClientInfo.class));
 
-        assertEquals(response.getHeaders().size(), 4);
-        assertEquals(response.getHeaders().getFirstHeader("X-MY-HEADER"), "foobar");
+        assertEquals(4, response.getHeaders().size());
+        assertEquals("foobar", response.getHeaders().getFirstHeader("X-MY-HEADER"));
     }
 
-    public IncomingActionResponseMessage incomingRemoteCallGet(LocalDevice ld) throws Exception {
+    public IncomingActionResponseMessage incomingRemoteCallGet(LocalDevice ld) {
 
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -147,8 +147,8 @@ public class ActionInvokeIncomingTest {
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-            new ServerHeader().getValue()
+            new ServerHeader().getValue(),
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
@@ -160,7 +160,7 @@ public class ActionInvokeIncomingTest {
     }
 
     @Test
-    public void incomingRemoteCallGetConcurrent() throws Exception {
+    void incomingRemoteCallGetConcurrent() throws Exception {
 
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService(false, false, true);
@@ -181,8 +181,8 @@ public class ActionInvokeIncomingTest {
     }
 
     static class ConcurrentGetTest implements Runnable {
-        private UpnpService upnpService;
-        private LocalService service;
+        private final UpnpService upnpService;
+        private final LocalService service;
 
         ConcurrentGetTest(UpnpService upnpService, LocalService service) {
             this.upnpService = upnpService;
@@ -214,8 +214,8 @@ public class ActionInvokeIncomingTest {
             assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
             assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
             assertEquals(
-                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-                new ServerHeader().getValue()
+                new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
             );
 
             IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
@@ -228,8 +228,7 @@ public class ActionInvokeIncomingTest {
 
 
     @Test
-    public void incomingRemoteCallSet() throws Exception {
-
+    void incomingRemoteCallSet() throws Exception {
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -255,21 +254,19 @@ public class ActionInvokeIncomingTest {
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-            new ServerHeader().getValue()
+            new ServerHeader().getValue(),
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
-        assertEquals(responseInvocation.getOutput().length, 0);
-
+        assertEquals(0, responseInvocation.getOutput().length);
     }
 
     @Test
-    public void incomingRemoteCallControlURINotFound() throws Exception {
-
+    void incomingRemoteCallControlURINotFound() throws Exception {
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -294,8 +291,7 @@ public class ActionInvokeIncomingTest {
     }
 
     @Test
-    public void incomingRemoteCallMethodException() throws Exception {
-
+    void incomingRemoteCallMethodException() throws Exception {
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -322,8 +318,8 @@ public class ActionInvokeIncomingTest {
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-            new ServerHeader().getValue()
+            new ServerHeader().getValue(),
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
@@ -333,12 +329,11 @@ public class ActionInvokeIncomingTest {
         ActionException ex = responseInvocation.getFailure();
         assertNotNull(ex);
 
-        assertEquals(ex.getMessage(), ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong.");
-
+        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong.", ex.getMessage());
     }
 
     @Test
-    public void incomingRemoteCallNoContentType() throws Exception {
+    void incomingRemoteCallNoContentType() throws Exception {
 
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
@@ -367,8 +362,8 @@ public class ActionInvokeIncomingTest {
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-            new ServerHeader().getValue()
+            new ServerHeader().getValue(),
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
@@ -376,12 +371,10 @@ public class ActionInvokeIncomingTest {
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
         assertNotNull(responseInvocation.getOutput("RetTargetValue"));
-
     }
 
     @Test
-    public void incomingRemoteCallWrongContentType() throws Exception {
-
+    void incomingRemoteCallWrongContentType() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -399,12 +392,11 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
-        assertEquals(response.getOperation().getStatusCode(), UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode());
+        assertEquals(UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode(), response.getOperation().getStatusCode());
     }
 
     @Test
-    public void incomingRemoteCallQueryStateVariable() throws Exception {
-
+    void incomingRemoteCallQueryStateVariable() throws Exception {
         // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
@@ -442,18 +434,17 @@ public class ActionInvokeIncomingTest {
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
-            new ServerHeader().getValue()
+            new ServerHeader().getValue(),
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
-        assertEquals(responseInvocation.getOutput()[0].getArgument().getName(), "return");
-        assertEquals(responseInvocation.getOutput()[0].toString(), "0");
+        assertEquals("return", responseInvocation.getOutput()[0].getArgument().getName());
+        assertEquals("0", responseInvocation.getOutput()[0].toString());
     }
-
 
     protected void addMandatoryRequestHeaders(Service service, Action action, StreamRequestMessage request) {
         request.getHeaders().add(

@@ -26,7 +26,7 @@ import org.jupnp.model.meta.LocalService;
 
 import java.net.URI;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -39,56 +39,56 @@ public class SampleDeviceRootLocal extends SampleDeviceRoot {
 
     public static void assertLocalResourcesMatch(Resource[] resources){
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/desc")).getClass(),
-                DeviceDescriptorResource.class
+                DeviceDescriptorResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/desc")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/icon.png")).getClass(),
-                IconResource.class
+                IconResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/icon.png")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/icon2.png")).getClass(),
-                IconResource.class
+                IconResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/icon2.png")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc")).getClass(),
-                ServiceDescriptorResource.class
+                ServiceDescriptorResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/action")).getClass(),
-                ServiceControlResource.class
+                ServiceControlResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/action")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event")).getClass(),
-                ServiceEventSubscriptionResource.class
+                ServiceEventSubscriptionResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/icon3.png")).getClass(),
-                IconResource.class
+                IconResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/icon3.png")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/desc")).getClass(),
-                ServiceDescriptorResource.class
+                ServiceDescriptorResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/desc")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/action")).getClass(),
-                ServiceControlResource.class
+                ServiceControlResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/action")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event")).getClass(),
-                ServiceEventSubscriptionResource.class
+                ServiceEventSubscriptionResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/desc")).getClass(),
-                ServiceDescriptorResource.class
+                ServiceDescriptorResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/desc")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/action")).getClass(),
-                ServiceControlResource.class
+                ServiceControlResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/action")).getClass()
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event")).getClass(),
-                ServiceEventSubscriptionResource.class
+                ServiceEventSubscriptionResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event")).getClass()
         );
 
     }

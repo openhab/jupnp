@@ -15,7 +15,7 @@
 package org.jupnp.test.ssdp;
 
 
-public class NotifyAliveConcurrentTest {
+class NotifyAliveConcurrentTest {
 
 /* TODO: Fixme
 
@@ -26,7 +26,7 @@ public class NotifyAliveConcurrentTest {
 
             // GET request for the device descriptor must arrive here
             UpnpRequest request = msg.getOperation();
-            Assert.assertEquals(request.getMethod(), UpnpRequest.Method.GET);
+            assertEquals(request.getMethod(), UpnpRequest.Method.GET);
             if (request.getURI().toString().equals(TestModel.getDeviceDescriptorURL().toString())) {
 
                 // Now, to simulate concurrency, we send another notify before the descriptor retrieval completes
@@ -57,7 +57,7 @@ public class NotifyAliveConcurrentTest {
     };
 
     @Test
-    public void notifyAliveConcurrent() throws Exception {
+    void notifyAliveConcurrent() throws Exception {
 
         TestListener listener = new TestListener();
 
@@ -69,7 +69,7 @@ public class NotifyAliveConcurrentTest {
         upnpService.received(createMessage());
 
         Thread.sleep(1000); // TODO: This is pretty random but I don't see how we can simulate concurrency otherwise
-        assert listener.valid;
+        assertTrue(listener.valid);
     }
 
     protected IncomingDatagramMessage createMessage() {
@@ -106,31 +106,31 @@ public class NotifyAliveConcurrentTest {
 
         public boolean valid = false;
 
-        public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-            assert !valid;
-            assert !device.isLocal();
-            assert device.isDescribed();
+        void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+            assertFalse(valid);
+            assertFalse(device.isLocal());
+            assertTrue(device.isDescribed());
             TestModel.assertTestDataMatch(device);
             TestModel.assertTestDataMatchServiceOne(device.getDeviceServices().get(0).getService());
             TestModel.assertTestDataMatchServiceTwo(device.getEmbeddedDevices().get(0).getDeviceServices().get(0).getService());
             TestModel.assertTestDataMatchServiceThree(device.getEmbeddedDevices().get(0).getEmbeddedDevices().get(0).getDeviceServices().get(0).getService());
-            Assert.assertEquals(device.getMaxAge(), new Integer(2000));
+            assertEquals(2000, device.getMaxAge());
             valid = true;
         }
 
-        public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
+        void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
 
         }
 
-        public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
+        void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
 
         }
 
-        public void localDeviceAdded(Registry registry, LocalDevice device) {
+        void localDeviceAdded(Registry registry, LocalDevice device) {
 
         }
 
-        public void localDeviceRemoved(Registry registry, LocalDevice device) {
+        void localDeviceRemoved(Registry registry, LocalDevice device) {
 
         }
     }

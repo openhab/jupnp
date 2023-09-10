@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -23,10 +25,8 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Restricting numeric value ranges
@@ -51,10 +51,9 @@ import static org.testng.Assert.assertEquals;
  * once when your service is bound in jUPnP.
  * </p>
  */
-public class AllowedValueRangeTest {
+class AllowedValueRangeTest {
 
-    public LocalDevice createTestDevice(Class serviceClass) throws Exception {
-
+    static LocalDevice createTestDevice(Class serviceClass) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
@@ -67,8 +66,7 @@ public class AllowedValueRangeTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
+    static Object[][] getDevices() {
         try {
             return new LocalDevice[][]{
                 {createTestDevice(MyServiceWithAllowedValueRange.class)},
@@ -81,14 +79,15 @@ public class AllowedValueRangeTest {
         }
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
-        assertEquals(svc.getStateVariables().length, 1);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.I4);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getMinimum(), 10);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getMaximum(), 100);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getStep(), 5);
+        assertEquals(1, svc.getStateVariables().length);
+        assertEquals(Datatype.Builtin.I4, svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin());
+        assertEquals(10, svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getMinimum());
+        assertEquals(100, svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getMaximum());
+        assertEquals(5, svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getStep());
     }
 
 }

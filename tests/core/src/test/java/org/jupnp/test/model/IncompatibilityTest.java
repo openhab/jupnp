@@ -37,65 +37,63 @@ import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDN;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import java.net.URI;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.testng.Assert.*;
-
-public class IncompatibilityTest {
+class IncompatibilityTest {
 
     @Test
-    public void validateMSFTServiceType() {
+    void validateMSFTServiceType() {
         // TODO: UPNP VIOLATION: Microsoft violates the spec and sends periods in domain names instead of hyphens!
         ServiceType serviceType = ServiceType.valueOf("urn:microsoft.com:service:X_MS_MediaReceiverRegistrar:1");
-        assertEquals(serviceType.getNamespace(), "microsoft.com");
-        assertEquals(serviceType.getType(), "X_MS_MediaReceiverRegistrar");
-        assertEquals(serviceType.getVersion(), 1);
+        assertEquals("microsoft.com", serviceType.getNamespace());
+        assertEquals("X_MS_MediaReceiverRegistrar", serviceType.getType());
+        assertEquals(1, serviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: Azureus sends a URN as the service ID suffix. This doesn't violate the spec but it's unusual...
     @Test
-    public void validateAzureusServiceId() {
+    void validateAzureusServiceId() {
         ServiceId serviceId = ServiceId.valueOf("urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager");
-        assertEquals(serviceId.getNamespace(), "upnp-org");
-        assertEquals(serviceId.getId(), "urn:schemas-upnp-org:service:ConnectionManager");
+        assertEquals("upnp-org", serviceId.getNamespace());
+        assertEquals("urn:schemas-upnp-org:service:ConnectionManager", serviceId.getId());
     }
 
     // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
     @Test
-    public void validatePSAudioBridgeServiceId() {
+    void validatePSAudioBridgeServiceId() {
         ServiceId serviceId = ServiceId.valueOf("urn:foo:ThisSegmentShouldBeNamed'service':baz");
-        assertEquals(serviceId.getNamespace(), "foo");
-        assertEquals(serviceId.getId(), "baz");
+        assertEquals("foo", serviceId.getNamespace());
+        assertEquals("baz", serviceId.getId());
     }
 
     // TODO: UPNP VIOLATION: Some devices send spaces in URNs
     @Test
-    public void validateSpacesInServiceType() {
+    void validateSpacesInServiceType() {
         String st = "urn:schemas-upnp-org:service: WANDSLLinkConfig:1";
         ServiceType serviceType = ServiceType.valueOf(st);
-        assertEquals(serviceType.getNamespace(), "schemas-upnp-org");
-        assertEquals(serviceType.getType(), "WANDSLLinkConfig");
-        assertEquals(serviceType.getVersion(), 1);
+        assertEquals("schemas-upnp-org", serviceType.getNamespace());
+        assertEquals("WANDSLLinkConfig", serviceType.getType());
+        assertEquals(1, serviceType.getVersion());
     }
 
 
     @Test
-    public void validateIntelServiceId() {
+    void validateIntelServiceId() {
         // The Intel UPnP tools NetworkLight sends a valid but weird identifier with a dot
         ServiceId serviceId = ServiceId.valueOf("urn:upnp-org:serviceId:DimmingService.0001");
-        assertEquals(serviceId.getNamespace(), "upnp-org");
-        assertEquals(serviceId.getId(), "DimmingService.0001");
+        assertEquals("upnp-org", serviceId.getNamespace());
+        assertEquals("DimmingService.0001", serviceId.getId());
 
         // TODO: UPNP VIOLATION: The Intel UPnP tools MediaRenderer sends an invalid identifier, we need to deal
         serviceId = ServiceId.valueOf("urn:schemas-upnp-org:service:AVTransport");
-        assertEquals(serviceId.getNamespace(), "upnp-org");
-        assertEquals(serviceId.getId(), "AVTransport");
+        assertEquals("upnp-org", serviceId.getNamespace());
+        assertEquals("AVTransport", serviceId.getId());
     }
 
     @Test
-    public void readColonRelativePaths() throws Exception {
+    void readColonRelativePaths() throws Exception {
         // Funny URI paths for services, breaks the java.net.URI parser so we deal with this special, see UDA10DeviceDescriptorBinderImpl
         String descriptor =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -153,12 +151,12 @@ public class IncompatibilityTest {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         device = binder.describe(device, descriptor);
-        assertEquals(device.findServices().length, 2);
+        assertEquals(2, device.findServices().length);
     }
 
     // TODO: UPNP VIOLATION: Roku Soundbridge cuts off callback URI path after 100 characters.
     @Test
-    public void validateCallbackURILength() throws Exception {
+    void validateCallbackURILength() throws Exception {
         UpnpService upnpService = new MockUpnpService();
         Device dev = SampleData.createRemoteDevice(
                 new RemoteDeviceIdentity(
@@ -181,27 +179,27 @@ public class IncompatibilityTest {
 
     // TODO: UPNP VIOLATION: Some devices use non-integer service/device type versions
     @Test
-    public void parseUDADeviceTypeFractions() {
+    void parseUDADeviceTypeFractions() {
         UDADeviceType deviceType = (UDADeviceType) DeviceType.valueOf("urn:schemas-upnp-org:device:MyDeviceType:1.0");
-        assertEquals(deviceType.getType(), "MyDeviceType");
-        assertEquals(deviceType.getVersion(), 1);
+        assertEquals("MyDeviceType", deviceType.getType());
+        assertEquals(1, deviceType.getVersion());
         deviceType = (UDADeviceType) DeviceType.valueOf("urn:schemas-upnp-org:device:MyDeviceType:2.5");
-        assertEquals(deviceType.getType(), "MyDeviceType");
-        assertEquals(deviceType.getVersion(), 2);
+        assertEquals("MyDeviceType", deviceType.getType());
+        assertEquals(2, deviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: Of course, adding more rules makes more devices compatible! DLNA genuises ftw!
     @Test
-    public void parseInvalidDLNADoc() {
+    void parseInvalidDLNADoc() {
         DLNADoc doc = DLNADoc.valueOf("DMS 1.50"); // No hyphen
-        assertEquals(doc.getDevClass(), "DMS");
-        assertEquals(doc.getVersion(), DLNADoc.Version.V1_5.toString());
-        assertEquals(doc.toString(), "DMS-1.50");
+        assertEquals("DMS", doc.getDevClass());
+        assertEquals(DLNADoc.Version.V1_5.toString(), doc.getVersion());
+        assertEquals("DMS-1.50", doc.toString());
     }
 
     // TODO: UPNP VIOLATION: DirecTV HR23/700 High Definition DVR Receiver has invalid default value for statevar
     @Test
-    public void invalidStateVarDefaultValue() {
+    void invalidStateVarDefaultValue() {
         StateVariable stateVariable = new StateVariable(
                 "Test",
                 new StateVariableTypeDetails(
@@ -216,14 +214,14 @@ public class IncompatibilityTest {
         for (String s : stateVariable.getTypeDetails().getAllowedValues()) {
             if (s.equals("A")) foundA = true;
         }
-        assertEquals(foundA, true);
-        assertEquals(stateVariable.getTypeDetails().getAllowedValues().length, 3);
-        assertEquals(stateVariable.validate().size(), 0);
+        assertTrue(foundA);
+        assertEquals(3, stateVariable.getTypeDetails().getAllowedValues().length);
+        assertEquals(0, stateVariable.validate().size());
     }
 
     // TODO: UPNP VIOLATION: Onkyo NR-TX808 has a bug in RenderingControl service, switching maximum/minimum value range
     @Test
-    public void switchedMinimumMaximumValueRange() {
+    void switchedMinimumMaximumValueRange() {
         StateVariable stateVariable = new StateVariable(
                 "Test",
                 new StateVariableTypeDetails(
@@ -234,111 +232,111 @@ public class IncompatibilityTest {
                 )
         );
 
-        assertEquals(stateVariable.validate().size(), 0);
-        assertEquals(stateVariable.getTypeDetails().getAllowedValueRange().getMinimum(), 0);
-        assertEquals(stateVariable.getTypeDetails().getAllowedValueRange().getMaximum(), 100);
+        assertEquals(0, stateVariable.validate().size());
+        assertEquals(0, stateVariable.getTypeDetails().getAllowedValueRange().getMinimum());
+        assertEquals(100, stateVariable.getTypeDetails().getAllowedValueRange().getMaximum());
     }
 
     // TODO: UPNP VIOLATION: Some renderers (like PacketVideo TMM Player) send
     // RelCount and AbsCount as "NOT_IMPLEMENTED" in GetPositionInfoResponse action.
     @Test
-    public void invalidIntegerValue() {
-        assertEquals(new IntegerDatatype(1).valueOf("NOT_IMPLEMENTED").intValue(), Byte.MAX_VALUE);
-        assertEquals(new IntegerDatatype(2).valueOf("NOT_IMPLEMENTED").intValue(), Short.MAX_VALUE);
-        assertEquals(new IntegerDatatype(4).valueOf("NOT_IMPLEMENTED").intValue(), Integer.MAX_VALUE);
+    void invalidIntegerValue() {
+        assertEquals(Byte.MAX_VALUE, new IntegerDatatype(1).valueOf("NOT_IMPLEMENTED").intValue());
+        assertEquals(Short.MAX_VALUE, new IntegerDatatype(2).valueOf("NOT_IMPLEMENTED").intValue());
+        assertEquals(Integer.MAX_VALUE, new IntegerDatatype(4).valueOf("NOT_IMPLEMENTED").intValue());
     }
 
     @Test
-    public void parseBrokenServiceType() {
+    void parseBrokenServiceType() {
         ServiceType serviceType = ServiceType.valueOf("urn:schemas-upnp-org:serviceId:Foo:1");
-        assertEquals(serviceType.getNamespace(), "schemas-upnp-org");
-        assertEquals(serviceType.getType(), "Foo");
-        assertEquals(serviceType.getVersion(), 1);
+        assertEquals("schemas-upnp-org", serviceType.getNamespace());
+        assertEquals("Foo", serviceType.getType());
+        assertEquals(1, serviceType.getVersion());
     }
 
     @Test
-    public void parseBrokenServiceId() {
+    void parseBrokenServiceId() {
         ServiceId serviceId = ServiceId.valueOf("urn:my-domain-namespace:service:MyService123");
-        assertEquals(serviceId.getNamespace(), "my-domain-namespace");
-        assertEquals(serviceId.getId(), "MyService123");
-        assertEquals(serviceId.toString(), "urn:my-domain-namespace:serviceId:MyService123");
+        assertEquals("my-domain-namespace", serviceId.getNamespace());
+        assertEquals("MyService123", serviceId.getId());
+        assertEquals("urn:my-domain-namespace:serviceId:MyService123", serviceId.toString());
     }
 
     @Test
-    public void parseServiceNameAsServiceId() {
+    void parseServiceNameAsServiceId() {
         UDAServiceId serviceId = UDAServiceId.valueOf("ContentDirectory");
-        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
-        assertEquals(serviceId.getId(), "ContentDirectory");
-        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ContentDirectory");
+        assertEquals(UDAServiceId.DEFAULT_NAMESPACE, serviceId.getNamespace());
+        assertEquals("ContentDirectory", serviceId.getId());
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ContentDirectory", serviceId.toString());
 
         serviceId = UDAServiceId.valueOf("ConnectionManager");
-        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
-        assertEquals(serviceId.getId(), "ConnectionManager");
-        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ConnectionManager");
+        assertEquals(UDAServiceId.DEFAULT_NAMESPACE, serviceId.getNamespace());
+        assertEquals("ConnectionManager", serviceId.getId());
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ConnectionManager", serviceId.toString());
 
         serviceId = UDAServiceId.valueOf("RenderingControl");
-        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
-        assertEquals(serviceId.getId(), "RenderingControl");
-        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:RenderingControl");
+        assertEquals(UDAServiceId.DEFAULT_NAMESPACE, serviceId.getNamespace());
+        assertEquals("RenderingControl", serviceId.getId());
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:RenderingControl", serviceId.toString());
 
         serviceId = UDAServiceId.valueOf("AVTransport");
-        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
-        assertEquals(serviceId.getId(), "AVTransport");
-        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:AVTransport");
+        assertEquals(UDAServiceId.DEFAULT_NAMESPACE, serviceId.getNamespace());
+        assertEquals("AVTransport", serviceId.getId());
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:AVTransport", serviceId.toString());
     }
 
     // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in device type token
     @Test
-    public void parseEyeTVDeviceType() {
+    void parseEyeTVDeviceType() {
         DeviceType deviceType= DeviceType.valueOf("urn:schemas-microsoft-com:device:pbda:tuner:1");
-        assertEquals(deviceType.getNamespace(), "schemas-microsoft-com");
-        assertEquals(deviceType.getType(), "pbda-tuner");
-        assertEquals(deviceType.getVersion(), 1);
+        assertEquals("schemas-microsoft-com", deviceType.getNamespace());
+        assertEquals("pbda-tuner", deviceType.getType());
+        assertEquals(1, deviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in service type token
     @Test
-    public void parseEyeTVServiceType() {
+    void parseEyeTVServiceType() {
         ServiceType serviceType= ServiceType.valueOf("urn:schemas-microsoft-com:service:pbda:tuner:1");
-        assertEquals(serviceType.getNamespace(), "schemas-microsoft-com");
-        assertEquals(serviceType.getType(), "pbda-tuner");
-        assertEquals(serviceType.getVersion(), 1);
+        assertEquals("schemas-microsoft-com", serviceType.getNamespace());
+        assertEquals("pbda-tuner", serviceType.getType());
+        assertEquals(1, serviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of 'service'
     @Test
-    public void parseCeytonInfiniTVServiceType() {
+    void parseCeytonInfiniTVServiceType() {
         ServiceType serviceType= ServiceType.valueOf("urn:schemas-opencable-com:serviceId:dri2:debug:1");
-        assertEquals(serviceType.getNamespace(), "schemas-opencable-com");
-        assertEquals(serviceType.getType(), "dri2-debug");
-        assertEquals(serviceType.getVersion(), 1);
+        assertEquals("schemas-opencable-com", serviceType.getNamespace());
+        assertEquals("dri2-debug", serviceType.getType());
+        assertEquals(1, serviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: Handle garbage sent by Eyecon Android app
     @Test
-    public void parseEyeconServiceId() {
+    void parseEyeconServiceId() {
         ServiceId serviceId = ServiceId.valueOf("urn:upnp-orgerviceId:urnchemas-upnp-orgervice:Foo");
-        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
-        assertEquals(serviceId.getId(), "Foo");
-        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:Foo");
+        assertEquals(UDAServiceId.DEFAULT_NAMESPACE, serviceId.getNamespace());
+        assertEquals("Foo", serviceId.getId());
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:Foo", serviceId.toString());
     }
 
     // TODO: UPNP VIOLATION: Escient doesn't provide any device type token
     @Test
-    public void parseEscientDeviceType() {
+    void parseEscientDeviceType() {
         DeviceType deviceType= DeviceType.valueOf("urn:schemas-upnp-org:device::1");
-        assertEquals(deviceType.getNamespace(), "schemas-upnp-org");
-        assertEquals(deviceType.getType(), DeviceType.UNKNOWN);
-        assertEquals(deviceType.getVersion(), 1);
+        assertEquals("schemas-upnp-org", deviceType.getNamespace());
+        assertEquals(DeviceType.UNKNOWN, deviceType.getType());
+        assertEquals(1, deviceType.getVersion());
     }
 
     // TODO: UPNP VIOLATION: Kodak Media Server doesn't provide any service ID token
     @Test
-    public void parseKodakServiceId() {
+    void parseKodakServiceId() {
         ServiceId serviceId = ServiceId.valueOf("urn:upnp-org:serviceId:");
-        assertEquals(serviceId.getNamespace(), "upnp-org");
-        assertEquals(serviceId.getId(), ServiceId.UNKNOWN);
-        assertEquals(serviceId.toString(), "urn:upnp-org:serviceId:" + ServiceId.UNKNOWN);
+        assertEquals("upnp-org", serviceId.getNamespace());
+        assertEquals(ServiceId.UNKNOWN, serviceId.getId());
+        assertEquals("urn:upnp-org:serviceId:" + ServiceId.UNKNOWN, serviceId.toString());
     }
 
 }

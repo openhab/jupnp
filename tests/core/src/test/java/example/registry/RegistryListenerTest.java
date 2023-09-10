@@ -22,16 +22,14 @@ import org.jupnp.model.message.header.ContentTypeHeader;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
-import org.jupnp.model.meta.Service;
 import org.jupnp.model.profile.RemoteClientInfo;
-import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.protocol.RetrieveRemoteDescriptors;
 import org.jupnp.registry.DefaultRegistryListener;
 import org.jupnp.registry.Registry;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Listening to registry changes
@@ -54,24 +52,24 @@ import static org.testng.Assert.assertEquals;
  * <a class="citation" href="javadoc://this#quickstartListener" style="read-title: false"/>
  * <a class="citation" href="javadoc://this#regularListener" style="read-title: false"/>
  */
-public class RegistryListenerTest {
+class RegistryListenerTest {
 
     // Just for documentation inclusion!
     public interface RegistryListener {
 
-        public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
+        void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
 
-        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
+        void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
 
-        public void remoteDeviceAdded(Registry registry, RemoteDevice device);
+        void remoteDeviceAdded(Registry registry, RemoteDevice device);
 
-        public void remoteDeviceUpdated(Registry registry, RemoteDevice device);
+        void remoteDeviceUpdated(Registry registry, RemoteDevice device);
 
-        public void remoteDeviceRemoved(Registry registry, RemoteDevice device);
+        void remoteDeviceRemoved(Registry registry, RemoteDevice device);
 
-        public void localDeviceAdded(Registry registry, LocalDevice device);
+        void localDeviceAdded(Registry registry, LocalDevice device);
 
-        public void localDeviceRemoved(Registry registry, LocalDevice device);
+        void localDeviceRemoved(Registry registry, LocalDevice device);
 
     }
 
@@ -93,7 +91,7 @@ public class RegistryListenerTest {
      * <a class="citation" href="javacode://this" style="include: INC1"/>
      */
     @Test
-    public void quickstartListener() throws Exception {
+    void quickstartListener() throws Exception {
 
         final RemoteDevice discoveredDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         final RemoteDevice hydratedDevice = SampleData.createRemoteDevice();
@@ -138,12 +136,11 @@ public class RegistryListenerTest {
         RetrieveRemoteDescriptors retrieveDescriptors = new RetrieveRemoteDescriptors(upnpService, discoveredDevice);
         retrieveDescriptors.run();
 
-        assertEquals(listener.valid, true);
+        assertTrue(listener.valid);
     }
 
     @Test
-    public void failureQuickstartListener() throws Exception {
-
+    void failureQuickstartListener() throws Exception {
         final RemoteDevice discoveredDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         final RemoteDevice hydratedDevice = SampleData.createRemoteDevice();
 
@@ -183,7 +180,7 @@ public class RegistryListenerTest {
         RetrieveRemoteDescriptors retrieveDescriptors = new RetrieveRemoteDescriptors(upnpService, discoveredDevice);
         retrieveDescriptors.run();
 
-        assertEquals(listener.valid, true);
+        assertTrue(listener.valid);
     }
 
     public class QuickstartRegistryListener extends DefaultRegistryListener {
@@ -193,12 +190,12 @@ public class RegistryListenerTest {
         public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
 
             // You can already use the device here and you can see which services it will have
-            assertEquals(device.findServices().length, 3);
+            assertEquals(3, device.findServices().length);
 
             // But you can't use the services
             for (RemoteService service : device.findServices()) {
-                assertEquals(service.getActions().length, 0);
-                assertEquals(service.getStateVariables().length, 0);
+                assertEquals(0, service.getActions().length);
+                assertEquals(0, service.getStateVariables().length);
             }
             valid = true; // DOC: EXC2
         }
@@ -232,7 +229,7 @@ public class RegistryListenerTest {
      * </p>
      */
     @Test
-    public void regularListener() throws Exception {
+    void regularListener() throws Exception {
 
         final RemoteDevice discoveredDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         final RemoteDevice hydratedDevice = SampleData.createRemoteDevice();
@@ -279,13 +276,12 @@ public class RegistryListenerTest {
 
         upnpService.getRegistry().removeAllRemoteDevices();
 
-        assertEquals(listener.added, true);
-        assertEquals(listener.removed, true);
+        assertTrue(listener.added);
+        assertTrue(listener.removed);
     }
 
     @Test
-    public void ipAddressChangeOnRegisteredDevice() throws Exception {
-
+    void ipAddressChangeOnRegisteredDevice() throws Exception {
         final RemoteDevice discoveredDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         final RemoteDevice hydratedDevice = SampleData.createRemoteDevice();
 
@@ -329,26 +325,26 @@ public class RegistryListenerTest {
         RetrieveRemoteDescriptors retrieveDescriptors = new RetrieveRemoteDescriptors(upnpService, discoveredDevice);
         retrieveDescriptors.run();
 
-        assertEquals(listener.added, true);
-        assertEquals(listener.removed, false);        
+        assertTrue(listener.added);
+        assertFalse(listener.removed);
         
         listener.reset();
 
         upnpService.getRegistry().addDevice(new RemoteDevice(SampleData.createSecondRemoteDeviceIdentity(1800)));
 
-        assertEquals(listener.added, true);
-        assertEquals(listener.removed, true); 
-        assertEquals(listener.deviceAdded.getIdentity().getDescriptorURL().getHost(), "127.0.0.2"); 
-        assertEquals(listener.deviceRemoved.getIdentity().getDescriptorURL().getHost(), "127.0.0.1"); 
+        assertTrue(listener.added);
+        assertTrue(listener.removed);
+        assertEquals("127.0.0.2", listener.deviceAdded.getIdentity().getDescriptorURL().getHost());
+        assertEquals("127.0.0.1", listener.deviceRemoved.getIdentity().getDescriptorURL().getHost());
         
         listener.reset();
         
         upnpService.getRegistry().removeAllRemoteDevices();
-        assertEquals(listener.added, false);
-        assertEquals(listener.removed, true);        
+        assertFalse(listener.added);
+        assertTrue(listener.removed);
     }
     
-    public class MyListener extends DefaultRegistryListener {
+    public static class MyListener extends DefaultRegistryListener {
         public boolean added = false; // DOC: EXC1
         public boolean removed = false; // DOC: EXC1
         public RemoteDevice deviceAdded = null; 
@@ -367,7 +363,7 @@ public class RegistryListenerTest {
             deviceRemoved = device; 
         }
         
-        public void reset() {
+        void reset() {
             added = false; 
             removed = false; 
             deviceAdded = null; 

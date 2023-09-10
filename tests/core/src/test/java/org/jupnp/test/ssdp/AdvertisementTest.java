@@ -26,16 +26,14 @@ import org.jupnp.protocol.async.SendingNotificationByebye;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
 import org.jupnp.test.data.SampleUSNHeaders;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class AdvertisementTest {
+class AdvertisementTest {
 
     @Test
-    public void sendAliveMessages() throws Exception {
-
+    void sendAliveMessages() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -56,8 +54,7 @@ public class AdvertisementTest {
     }
 
     @Test
-    public void sendByebyeMessages() throws Exception {
-
+    void sendByebyeMessages() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -78,14 +75,14 @@ public class AdvertisementTest {
     }
 
     protected void assertAliveMsgBasics(UpnpMessage msg) {
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue(), NotificationSubtype.ALIVE);
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString(), SampleDeviceRoot.getDeviceDescriptorURL().toString());
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getValue(), 1800);
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getValue(), new ServerClientTokens());
+        assertEquals(NotificationSubtype.ALIVE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
+        assertEquals(SampleDeviceRoot.getDeviceDescriptorURL().toString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString());
+        assertEquals(1800, msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getValue());
+        assertEquals(new ServerClientTokens(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getValue());
     }
 
     protected void assertByebyeMsgBasics(UpnpMessage msg) {
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue(), NotificationSubtype.BYEBYE);
+        assertEquals(NotificationSubtype.BYEBYE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
     }
 
 }

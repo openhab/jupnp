@@ -14,6 +14,8 @@
 
 package example.controlpoint;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.controlpoint.ActionCallback;
@@ -26,14 +28,12 @@ import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDAServiceId;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import example.binarylight.BinaryLightSampleData;
 
 import java.util.concurrent.Future;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Cancelling an action invocation
@@ -110,9 +110,9 @@ import static org.testng.Assert.assertEquals;
  * silently ignore the interruption and continue waiting for the server to respond.
  * </p>
  */
-public class ActionCancellationTest {
+class ActionCancellationTest {
 
-    protected LocalService bindService(Class<?> clazz) throws Exception {
+    static LocalService bindService(Class<?> clazz) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(clazz);
         svc.setManager(
@@ -121,15 +121,15 @@ public class ActionCancellationTest {
         return svc;
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() throws Exception {
+    static Object[][] getDevices() throws Exception {
         return new LocalDevice[][]{
             {BinaryLightSampleData.createDevice(bindService(SwitchPowerWithInterruption.class))},
         };
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) throws Exception {
         final boolean[] tests = new boolean[1];
 
         MockUpnpService upnpService = new MockUpnpService(false, false, true);
@@ -168,7 +168,7 @@ public class ActionCancellationTest {
 
         Thread.sleep(500);
         for (boolean test : tests) {
-            assertEquals(test, true);
+            assertTrue(test);
         }
     }
 }

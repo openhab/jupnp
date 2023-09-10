@@ -14,6 +14,8 @@
 
 package org.jupnp.test.resources;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.UpnpService;
 import org.jupnp.binding.xml.DescriptorBindingException;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
@@ -24,18 +26,15 @@ import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.util.io.IO;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class InvalidUDA10DeviceDescriptorParsingTest {
+class InvalidUDA10DeviceDescriptorParsingTest {
 
-    @DataProvider(name = "strict")
-    public String[][] getStrict() throws Exception {
+    static String[][] getStrict() {
         return new String[][]{
             {"/invalidxml/device/atb_miviewtv.xml"},
             {"/invalidxml/device/doubletwist.xml"},
@@ -54,19 +53,17 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
         };
     }
 
-    @DataProvider(name = "recoverable")
-    public String[][] getRecoverable() throws Exception {
+    static String[][] getRecoverable() {
         return new String[][]{
-        		// TODO: These tests are currently failing!
-//            {"/invalidxml/device/missing_namespaces.xml"},
-//            {"/invalidxml/device/ushare.xml"},
-//            {"/invalidxml/device/lg.xml"},
-//            {"/invalidxml/device/readydlna.xml"},
+            {"/invalidxml/device/missing_namespaces.xml"},
+            {"/invalidxml/device/ushare.xml"},
+            {"/invalidxml/device/lg.xml"},
+            // TODO: This test is currently failing!
+            // {"/invalidxml/device/readydlna.xml"},
         };
     }
 
-    @DataProvider(name = "unrecoverable")
-    public String[][] getUnrecoverable() throws Exception {
+    static String[][] getUnrecoverable() {
         return new String[][]{
             {"/invalidxml/device/unrecoverable/pms.xml"},
             {"/invalidxml/device/unrecoverable/awox.xml"},
@@ -78,33 +75,39 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
 
     /* ############################## TEST FAILURE ############################ */
 
-    @Test(dataProvider = "recoverable", expectedExceptions = DescriptorBindingException.class)
-    public void readFailure(String recoverable) throws Exception {
-        readDevice(recoverable, new MockUpnpService());
+    @ParameterizedTest
+    @MethodSource("getRecoverable")
+    void readFailure(String recoverable) {
+        assertThrows(DescriptorBindingException.class, () ->
+            readDevice(recoverable, new MockUpnpService()));
     }
 
-    @Test(dataProvider = "unrecoverable", expectedExceptions = Exception.class)
-    public void readRecoveringFailure(String unrecoverable) throws Exception {
-        readDevice(
-            unrecoverable,
-            new MockUpnpService(new MockUpnpServiceConfiguration() {
-                @Override
-                public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
-                    return new RecoveringUDA10DeviceDescriptorBinderImpl();
-                }
-            })
-        );
+    @ParameterizedTest
+    @MethodSource("getUnrecoverable")
+    void readRecoveringFailure(String unrecoverable) {
+        assertThrows(Exception.class, () ->
+            readDevice(
+                unrecoverable,
+                new MockUpnpService(new MockUpnpServiceConfiguration() {
+                    @Override
+                    public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
+                        return new RecoveringUDA10DeviceDescriptorBinderImpl();
+                    }
+                })
+        ));
     }
 
     /* ############################## TEST SUCCESS ############################ */
 
-    @Test(dataProvider = "strict")
-    public void readDefault(String strict) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getStrict")
+    void readDefault(String strict) throws Exception {
         readDevice(strict, new MockUpnpService());
     }
 
-    @Test(dataProvider = "strict")
-    public void readSAX(String strict) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getStrict")
+    void readSAX(String strict) throws Exception {
         readDevice(
             strict,
             new MockUpnpService(new MockUpnpServiceConfiguration() {
@@ -116,8 +119,9 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
         );
     }
 
-    @Test(dataProvider = "strict")
-    public void readRecoveringStrict(String strict) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getStrict")
+    void readRecoveringStrict(String strict) throws Exception {
         readDevice(
             strict,
             new MockUpnpService(new MockUpnpServiceConfiguration() {
@@ -129,8 +133,9 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
         );
     }
 
-    @Test(dataProvider = "recoverable")
-    public void readRecovering(String recoverable) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getRecoverable")
+    void readRecovering(String recoverable) throws Exception {
         readDevice(
             recoverable,
             new MockUpnpService(new MockUpnpServiceConfiguration() {

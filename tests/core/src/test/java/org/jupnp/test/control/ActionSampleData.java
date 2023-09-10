@@ -28,7 +28,7 @@ import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -145,9 +145,9 @@ public class ActionSampleData {
         @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))
         public boolean getTarget(RemoteClientInfo clientInfo) {
             assertNotNull(clientInfo);
-            assertEquals(clientInfo.getRemoteAddress().getHostAddress(), "10.0.0.1");
-            assertEquals(clientInfo.getLocalAddress().getHostAddress(), "10.0.0.2");
-            assertEquals(clientInfo.getRequestUserAgent(), "foo/bar");
+            assertEquals("10.0.0.1", clientInfo.getRemoteAddress().getHostAddress());
+            assertEquals("10.0.0.2", clientInfo.getLocalAddress().getHostAddress());
+            assertEquals("foo/bar", clientInfo.getRequestUserAgent());
             clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
             return target;
         }

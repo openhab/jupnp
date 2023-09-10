@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -23,10 +25,8 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Exclusive list of string values
@@ -51,9 +51,9 @@ import static org.testng.Assert.assertEquals;
  * once when your service is bound in jUPnP.
  * </p>
  */
-public class AllowedValueTest {
+class AllowedValueTest {
 
-    public LocalDevice createTestDevice(Class serviceClass) throws Exception {
+    public static LocalDevice createTestDevice(Class serviceClass) throws Exception {
 
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
@@ -67,8 +67,7 @@ public class AllowedValueTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
+    public static Object[][] getDevices() {
         try {
             return new LocalDevice[][]{
                 {createTestDevice(MyServiceWithAllowedValues.class)},
@@ -81,15 +80,16 @@ public class AllowedValueTest {
         }
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
-        assertEquals(svc.getStateVariables().length, 1);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.STRING);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValues().length, 3);
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[0], "Foo");
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[1], "Bar");
-        assertEquals(svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[2], "Baz");
+        assertEquals(1, svc.getStateVariables().length);
+        assertEquals(Datatype.Builtin.STRING, svc.getStateVariables()[0].getTypeDetails().getDatatype().getBuiltin());
+        assertEquals(3, svc.getStateVariables()[0].getTypeDetails().getAllowedValues().length);
+        assertEquals("Foo", svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[0]);
+        assertEquals("Bar", svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[1]);
+        assertEquals("Baz", svc.getStateVariables()[0].getTypeDetails().getAllowedValues()[2]);
     }
 
 }

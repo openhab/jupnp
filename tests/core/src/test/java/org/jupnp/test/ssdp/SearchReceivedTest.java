@@ -45,18 +45,17 @@ import org.jupnp.mock.MockUpnpService;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleUSNHeaders;
 import org.jupnp.util.URIUtil;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SearchReceivedTest {
+class SearchReceivedTest {
 
     @Test
-    public void receivedSearchAll() throws Exception {
-
+    void receivedSearchAll() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -73,7 +72,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 10);
+        assertEquals(10, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         for (OutgoingDatagramMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             //SampleData.debugMsg(msg);
@@ -84,8 +83,7 @@ public class SearchReceivedTest {
     }
 
     @Test
-    public void receivedSearchRoot() throws Exception {
-
+    void receivedSearchRoot() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -101,7 +99,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 1);
+        assertEquals(1, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         assertSearchResponseBasics(
             upnpService.getConfiguration().getNamespace(),
@@ -109,18 +107,17 @@ public class SearchReceivedTest {
             localDevice
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(),
-                new RootDeviceHeader().getString()
+                new RootDeviceHeader().getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString()
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
-                localDevice.getIdentity().getUdn().toString() + USNRootDeviceHeader.ROOT_DEVICE_SUFFIX
+                localDevice.getIdentity().getUdn().toString() + USNRootDeviceHeader.ROOT_DEVICE_SUFFIX,
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
         );
     }
 
     @Test
-    public void receivedSearchUDN() throws Exception {
-
+    void receivedSearchUDN() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -136,7 +133,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 1);
+        assertEquals(1, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
@@ -144,18 +141,17 @@ public class SearchReceivedTest {
                 localDevice
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(),
-                new UDNHeader(localDevice.getIdentity().getUdn()).getString()
+                new UDNHeader(localDevice.getIdentity().getUdn()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString()
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
-                new UDNHeader(localDevice.getIdentity().getUdn()).getString()
+                new UDNHeader(localDevice.getIdentity().getUdn()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
         );
     }
 
     @Test
-    public void receivedSearchDeviceType() throws Exception {
-
+    void receivedSearchDeviceType() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -171,7 +167,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 1);
+        assertEquals(1, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
@@ -179,18 +175,17 @@ public class SearchReceivedTest {
                 localDevice
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(),
-                new DeviceTypeHeader(localDevice.getType()).getString()
+                new DeviceTypeHeader(localDevice.getType()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString()
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
-                new DeviceUSNHeader(localDevice.getIdentity().getUdn(), localDevice.getType()).getString()
+                new DeviceUSNHeader(localDevice.getIdentity().getUdn(), localDevice.getType()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
         );
     }
 
     @Test
-    public void receivedSearchServiceType() throws Exception {
-
+    void receivedSearchServiceType() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -207,7 +202,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 1);
+        assertEquals(1, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
@@ -215,18 +210,17 @@ public class SearchReceivedTest {
                 localDevice
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(),
-                new ServiceTypeHeader(service.getServiceType()).getString()
+                new ServiceTypeHeader(service.getServiceType()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString()
         );
         assertEquals(
-                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
-                new ServiceUSNHeader(localDevice.getIdentity().getUdn(), service.getServiceType()).getString()
+                new ServiceUSNHeader(localDevice.getIdentity().getUdn(), service.getServiceType()).getString(),
+                upnpService.getRouter().getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString()
         );
     }
 
     @Test
-    public void receivedInvalidST() throws Exception {
-
+    void receivedInvalidST() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -238,12 +232,11 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getOutgoingDatagramMessages().size());
     }
 
     @Test
-    public void receivedInvalidMX() throws Exception {
-
+    void receivedInvalidMX() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -255,12 +248,11 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getOutgoingDatagramMessages().size());
     }
 
     @Test
-    public void receivedNonAdvertised() throws Exception {
-
+    void receivedNonAdvertised() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -278,7 +270,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getOutgoingDatagramMessages().size());
 
         // Enable advertising
         upnpService.getRegistry().setDiscoveryOptions(
@@ -289,36 +281,35 @@ public class SearchReceivedTest {
         prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 10);
+        assertEquals(10, upnpService.getRouter().getOutgoingDatagramMessages().size());
     }
 
-    protected ReceivingSearch createProtocol(UpnpService upnpService, IncomingSearchRequest searchMsg) throws Exception {
+    protected ReceivingSearch createProtocol(UpnpService upnpService, IncomingSearchRequest searchMsg) {
         return new ReceivingSearch(upnpService, searchMsg);
     }
 
     protected void assertSearchResponseBasics(Namespace namespace, UpnpMessage msg, LocalDevice rootDevice) {
         assertEquals(
-                msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString(),
-                new MaxAgeHeader(rootDevice.getIdentity().getMaxAgeSeconds()).getString()
+                new MaxAgeHeader(rootDevice.getIdentity().getMaxAgeSeconds()).getString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getString()
         );
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT).getString(), new EXTHeader().getString());
+        assertEquals(new EXTHeader().getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.EXT).getString());
         assertEquals(
-                msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString(),
-                URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(rootDevice)).toString()
+                URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(rootDevice)).toString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString()
         );
         assertNotNull(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString());
     }
 
     protected IncomingSearchRequest createRequestMessage() throws UnknownHostException {
         return new IncomingSearchRequest(
-                new IncomingDatagramMessage<UpnpRequest>(
+                new IncomingDatagramMessage<>(
                         new UpnpRequest(UpnpRequest.Method.MSEARCH),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,
                         InetAddress.getByName("127.0.0.1")
                 )
         );
-
     }
 
 }

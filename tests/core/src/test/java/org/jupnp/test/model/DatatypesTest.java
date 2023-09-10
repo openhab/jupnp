@@ -27,115 +27,110 @@ import org.jupnp.model.types.UnsignedIntegerOneByteDatatype;
 import org.jupnp.model.types.UnsignedIntegerTwoBytesDatatype;
 import org.jupnp.model.types.csv.CSVBoolean;
 import org.jupnp.model.types.csv.CSVString;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class DatatypesTest {
+class DatatypesTest {
 
     @Test
-    public void upperLowerCase() {
+    void upperLowerCase() {
         // Broken devices do this
-        assertEquals(Datatype.Builtin.getByDescriptorName("String"), Datatype.Builtin.STRING);
-        assertEquals(Datatype.Builtin.getByDescriptorName("strinG"), Datatype.Builtin.STRING);
-        assertEquals(Datatype.Builtin.getByDescriptorName("STRING"), Datatype.Builtin.STRING);
-        assertEquals(Datatype.Builtin.getByDescriptorName("string"), Datatype.Builtin.STRING);
+        assertEquals(Datatype.Builtin.STRING, Datatype.Builtin.getByDescriptorName("String"));
+        assertEquals(Datatype.Builtin.STRING, Datatype.Builtin.getByDescriptorName("strinG"));
+        assertEquals(Datatype.Builtin.STRING, Datatype.Builtin.getByDescriptorName("STRING"));
+        assertEquals(Datatype.Builtin.STRING, Datatype.Builtin.getByDescriptorName("string"));
     }
 
     @Test
-    public void validUnsignedIntegers() {
+    void validUnsignedIntegers() {
 
         UnsignedIntegerOneByteDatatype typeOne = new UnsignedIntegerOneByteDatatype();
-        assertEquals(typeOne.valueOf("123").getValue(), Long.valueOf(123l));
+        assertEquals(123L, typeOne.valueOf("123").getValue());
 
         UnsignedIntegerTwoBytesDatatype typeTwo = new UnsignedIntegerTwoBytesDatatype();
-        assertEquals(typeTwo.valueOf("257").getValue(), Long.valueOf(257l));
+        assertEquals(257L, typeTwo.valueOf("257").getValue());
 
         UnsignedIntegerFourBytesDatatype typeFour = new UnsignedIntegerFourBytesDatatype();
-        assertEquals(typeFour.valueOf("65536").getValue(), Long.valueOf(65536l));
-        assertEquals(typeFour.valueOf("4294967295").getValue(), Long.valueOf(4294967295l));
+        assertEquals(65536L, typeFour.valueOf("65536").getValue());
+        assertEquals(4294967295L, typeFour.valueOf("4294967295").getValue());
 
         // Well, no need to write another test for that
-        assertEquals(typeFour.valueOf("4294967295").increment(true).getValue(), Long.valueOf(1));
-
-    }
-
-    @Test(expectedExceptions = InvalidValueException.class)
-    public void invalidUnsignedIntegersOne() {
-        UnsignedIntegerOneByteDatatype typeOne = new UnsignedIntegerOneByteDatatype();
-        typeOne.valueOf("256");
-    }
-
-    @Test(expectedExceptions = InvalidValueException.class)
-    public void invalidUnsignedIntegersTwo() {
-        UnsignedIntegerTwoBytesDatatype typeTwo = new UnsignedIntegerTwoBytesDatatype();
-        typeTwo.valueOf("65536");
+        assertEquals(1L, typeFour.valueOf("4294967295").increment(true).getValue());
     }
 
     @Test
-    public void signedIntegers() {
+    void invalidUnsignedIntegersOne() {
+        UnsignedIntegerOneByteDatatype typeOne = new UnsignedIntegerOneByteDatatype();
+        assertThrows(InvalidValueException.class, () -> typeOne.valueOf("256"));
+    }
 
+    @Test
+    void invalidUnsignedIntegersTwo() {
+        UnsignedIntegerTwoBytesDatatype typeTwo = new UnsignedIntegerTwoBytesDatatype();
+        assertThrows(InvalidValueException.class, () -> typeTwo.valueOf("65536"));
+    }
+
+    @Test
+    void signedIntegers() {
         IntegerDatatype type = new IntegerDatatype(1);
-        assert type.isValid(123);
-        assert type.isValid(-124);
-        assert type.valueOf("123") == 123;
-        assert type.valueOf("-124") == -124;
-        assert !type.isValid(256);
+        assertTrue(type.isValid(123));
+        assertTrue(type.isValid(-124));
+        assertEquals(123, type.valueOf("123"));
+        assertEquals(-124, type.valueOf("-124"));
+        assertFalse(type.isValid(256));
 
         type = new IntegerDatatype(2);
-        assert type.isValid(257);
-        assert type.isValid(-257);
-        assert type.valueOf("257") == 257;
-        assert type.valueOf("-257") == -257;
-        assert !type.isValid(32768);
-
+        assertTrue(type.isValid(257));
+        assertTrue(type.isValid(-257));
+        assertEquals(257, type.valueOf("257"));
+        assertEquals(-257, type.valueOf("-257"));
+        assertFalse(type.isValid(32768));
     }
 
     @Test
-    public void dateAndTime() {
+    void dateAndTime() {
         DateTimeDatatype type = (DateTimeDatatype) Datatype.Builtin.DATE.getDatatype();
 
-        Calendar expexted = Calendar.getInstance();
-        expexted.set(Calendar.YEAR, 2010);
-        expexted.set(Calendar.MONTH, 10);
-        expexted.set(Calendar.DAY_OF_MONTH, 3);
-        expexted.set(Calendar.HOUR_OF_DAY, 8);
-        expexted.set(Calendar.MINUTE, 9);
-        expexted.set(Calendar.SECOND, 10);
+        Calendar expected = Calendar.getInstance();
+        expected.set(Calendar.YEAR, 2010);
+        expected.set(Calendar.MONTH, 10);
+        expected.set(Calendar.DAY_OF_MONTH, 3);
+        expected.set(Calendar.HOUR_OF_DAY, 8);
+        expected.set(Calendar.MINUTE, 9);
+        expected.set(Calendar.SECOND, 10);
 
         Calendar parsedDate = type.valueOf("2010-11-03");
-        assertEquals(parsedDate.get(Calendar.YEAR), expexted.get(Calendar.YEAR));
-        assertEquals(parsedDate.get(Calendar.MONTH), expexted.get(Calendar.MONTH));
-        assertEquals(parsedDate.get(Calendar.DAY_OF_MONTH), expexted.get(Calendar.DAY_OF_MONTH));
-        assertEquals(type.getString(expexted), "2010-11-03");
+        assertEquals(expected.get(Calendar.YEAR), parsedDate.get(Calendar.YEAR));
+        assertEquals(expected.get(Calendar.MONTH), parsedDate.get(Calendar.MONTH));
+        assertEquals(expected.get(Calendar.DAY_OF_MONTH), parsedDate.get(Calendar.DAY_OF_MONTH));
+        assertEquals("2010-11-03", type.getString(expected));
 
         type = (DateTimeDatatype) Datatype.Builtin.DATETIME.getDatatype();
 
         parsedDate = type.valueOf("2010-11-03");
-        assertEquals(parsedDate.get(Calendar.YEAR), expexted.get(Calendar.YEAR));
-        assertEquals(parsedDate.get(Calendar.MONTH), expexted.get(Calendar.MONTH));
-        assertEquals(parsedDate.get(Calendar.DAY_OF_MONTH), expexted.get(Calendar.DAY_OF_MONTH));
+        assertEquals(expected.get(Calendar.YEAR), parsedDate.get(Calendar.YEAR));
+        assertEquals(expected.get(Calendar.MONTH), parsedDate.get(Calendar.MONTH));
+        assertEquals(expected.get(Calendar.DAY_OF_MONTH), parsedDate.get(Calendar.DAY_OF_MONTH));
 
         parsedDate = type.valueOf("2010-11-03T08:09:10");
-        assertEquals(parsedDate.get(Calendar.YEAR), expexted.get(Calendar.YEAR));
-        assertEquals(parsedDate.get(Calendar.MONTH), expexted.get(Calendar.MONTH));
-        assertEquals(parsedDate.get(Calendar.DAY_OF_MONTH), expexted.get(Calendar.DAY_OF_MONTH));
-        assertEquals(parsedDate.get(Calendar.HOUR_OF_DAY), expexted.get(Calendar.HOUR_OF_DAY));
-        assertEquals(parsedDate.get(Calendar.MINUTE), expexted.get(Calendar.MINUTE));
-        assertEquals(parsedDate.get(Calendar.SECOND), expexted.get(Calendar.SECOND));
+        assertEquals(expected.get(Calendar.YEAR), parsedDate.get(Calendar.YEAR));
+        assertEquals(expected.get(Calendar.MONTH), parsedDate.get(Calendar.MONTH));
+        assertEquals(expected.get(Calendar.DAY_OF_MONTH), parsedDate.get(Calendar.DAY_OF_MONTH));
+        assertEquals(expected.get(Calendar.HOUR_OF_DAY), parsedDate.get(Calendar.HOUR_OF_DAY));
+        assertEquals(expected.get(Calendar.MINUTE), parsedDate.get(Calendar.MINUTE));
+        assertEquals(expected.get(Calendar.SECOND), parsedDate.get(Calendar.SECOND));
 
-        assertEquals(type.getString(expexted), "2010-11-03T08:09:10");
+        assertEquals("2010-11-03T08:09:10", type.getString(expected));
     }
 
     @Test
-    public void dateAndTimeWithZone() {
+    void dateAndTimeWithZone() {
         DateTimeDatatype type =
                 new DateTimeDatatype(
                         new String[]{"yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZ"},
@@ -158,27 +153,27 @@ public class DatatypesTest {
         expected.set(Calendar.SECOND, 10);
 
         Calendar parsedDate = type.valueOf("2010-11-03T08:09:10");
-        assertEquals(parsedDate.get(Calendar.YEAR), expected.get(Calendar.YEAR));
-        assertEquals(parsedDate.get(Calendar.MONTH), expected.get(Calendar.MONTH));
-        assertEquals(parsedDate.get(Calendar.DAY_OF_MONTH), expected.get(Calendar.DAY_OF_MONTH));
-        assertEquals(parsedDate.get(Calendar.HOUR_OF_DAY), expected.get(Calendar.HOUR_OF_DAY));
-        assertEquals(parsedDate.get(Calendar.MINUTE), expected.get(Calendar.MINUTE));
-        assertEquals(parsedDate.get(Calendar.SECOND), expected.get(Calendar.SECOND));
+        assertEquals(expected.get(Calendar.YEAR), parsedDate.get(Calendar.YEAR));
+        assertEquals(expected.get(Calendar.MONTH), parsedDate.get(Calendar.MONTH));
+        assertEquals(expected.get(Calendar.DAY_OF_MONTH), parsedDate.get(Calendar.DAY_OF_MONTH));
+        assertEquals(expected.get(Calendar.HOUR_OF_DAY), parsedDate.get(Calendar.HOUR_OF_DAY));
+        assertEquals(expected.get(Calendar.MINUTE), parsedDate.get(Calendar.MINUTE));
+        assertEquals(expected.get(Calendar.SECOND), parsedDate.get(Calendar.SECOND));
 
         parsedDate = type.valueOf("2010-11-03T08:09:10+0100");
-        assertEquals(parsedDate.get(Calendar.YEAR), expected.get(Calendar.YEAR));
-        assertEquals(parsedDate.get(Calendar.MONTH), expected.get(Calendar.MONTH));
-        assertEquals(parsedDate.get(Calendar.DAY_OF_MONTH), expected.get(Calendar.DAY_OF_MONTH));
-        assertEquals(parsedDate.get(Calendar.HOUR_OF_DAY), expected.get(Calendar.HOUR_OF_DAY));
-        assertEquals(parsedDate.get(Calendar.MINUTE), expected.get(Calendar.MINUTE));
-        assertEquals(parsedDate.get(Calendar.SECOND), expected.get(Calendar.SECOND));
-        assertEquals(parsedDate.getTimeZone(), expected.getTimeZone());
+        assertEquals(expected.get(Calendar.YEAR), parsedDate.get(Calendar.YEAR));
+        assertEquals(expected.get(Calendar.MONTH), parsedDate.get(Calendar.MONTH));
+        assertEquals(expected.get(Calendar.DAY_OF_MONTH), parsedDate.get(Calendar.DAY_OF_MONTH));
+        assertEquals(expected.get(Calendar.HOUR_OF_DAY), parsedDate.get(Calendar.HOUR_OF_DAY));
+        assertEquals(expected.get(Calendar.MINUTE), parsedDate.get(Calendar.MINUTE));
+        assertEquals(expected.get(Calendar.SECOND), parsedDate.get(Calendar.SECOND));
+        assertEquals(expected.getTimeZone(), parsedDate.getTimeZone());
 
-        assertEquals(type.getString(expected), "2010-11-03T08:09:10+0100");
+        assertEquals("2010-11-03T08:09:10+0100", type.getString(expected));
     }
 
     @Test
-    public void time() {
+    void time() {
         DateTimeDatatype type = (DateTimeDatatype) Datatype.Builtin.TIME.getDatatype();
 
         Calendar expected = Calendar.getInstance();
@@ -188,15 +183,14 @@ public class DatatypesTest {
         expected.set(Calendar.SECOND, 10);
 
         Calendar parsedTime = type.valueOf("08:09:10");
-        assertEquals(parsedTime.get(Calendar.HOUR_OF_DAY), expected.get(Calendar.HOUR_OF_DAY));
-        assertEquals(parsedTime.get(Calendar.MINUTE), expected.get(Calendar.MINUTE));
-        assertEquals(parsedTime.get(Calendar.SECOND), expected.get(Calendar.SECOND));
-        assertEquals(type.getString(expected), "08:09:10");
+        assertEquals(expected.get(Calendar.HOUR_OF_DAY), parsedTime.get(Calendar.HOUR_OF_DAY));
+        assertEquals(expected.get(Calendar.MINUTE), parsedTime.get(Calendar.MINUTE));
+        assertEquals(expected.get(Calendar.SECOND), parsedTime.get(Calendar.SECOND));
+        assertEquals("08:09:10", type.getString(expected));
     }
 
     @Test
-    public void timeWithZone() {
-
+    void timeWithZone() {
         DateTimeDatatype type = new DateTimeDatatype(new String[]{"HH:mm:ssZ", "HH:mm:ss"}, "HH:mm:ssZ") {
             @Override
             protected TimeZone getTimeZone() {
@@ -212,77 +206,77 @@ public class DatatypesTest {
         expected.set(Calendar.MINUTE, 9);
         expected.set(Calendar.SECOND, 10);
 
-        assertEquals(type.valueOf("08:09:10").getTimeInMillis(), expected.getTimeInMillis());
-        assertEquals(type.valueOf("08:09:10+0100").getTimeInMillis(), expected.getTimeInMillis());
-        assertEquals(type.getString(expected), "08:09:10+0100");
+        assertEquals(expected.getTimeInMillis(), type.valueOf("08:09:10").getTimeInMillis());
+        assertEquals(expected.getTimeInMillis(), type.valueOf("08:09:10+0100").getTimeInMillis());
+        assertEquals("08:09:10+0100", type.getString(expected));
 
     }
 
     @Test
-    public void base64() {
+    void base64() {
         Base64Datatype type = (Base64Datatype) Datatype.Builtin.BIN_BASE64.getDatatype();
-        assert Arrays.equals(type.valueOf("a1b2"), new byte[]{107, 86, -10});
-        assert type.getString(new byte[]{107, 86, -10}).equals("a1b2");
+        assertArrayEquals(new byte[]{107, 86, -10}, type.valueOf("a1b2"));
+        assertEquals("a1b2", type.getString(new byte[]{107, 86, -10}));
     }
 
     @Test
-    public void simpleCSV() {
+    void simpleCSV() {
         List<String> csv = new CSVString("foo,bar,baz");
-        assert csv.size() == 3;
-        assert csv.get(0).equals("foo");
-        assert csv.get(1).equals("bar");
-        assert csv.get(2).equals("baz");
-        assert csv.toString().equals("foo,bar,baz");
+        assertEquals(3, csv.size());
+        assertEquals("foo", csv.get(0));
+        assertEquals("bar", csv.get(1));
+        assertEquals("baz", csv.get(2));
+        assertEquals("foo,bar,baz", csv.toString());
 
         csv = new CSVString("f\\\\oo,b\\,ar,b\\\\az");
-        assert csv.size() == 3;
-        assertEquals(csv.get(0), "f\\oo");
-        assertEquals(csv.get(1), "b,ar");
-        assertEquals(csv.get(2), "b\\az");
+        assertEquals(3, csv.size());
+        assertEquals("f\\oo", csv.get(0));
+        assertEquals("b,ar", csv.get(1));
+        assertEquals("b\\az", csv.get(2));
 
         List<Boolean> csvBoolean = new CSVBoolean("1,1,0");
-        assert csvBoolean.size() == 3;
-        assertEquals(csvBoolean.get(0), new Boolean(true));
-        assertEquals(csvBoolean.get(1), new Boolean(true));
-        assertEquals(csvBoolean.get(2), new Boolean(false));
-        assertEquals(csvBoolean.toString(), "1,1,0");
+        assertEquals(3, csvBoolean.size());
+        assertEquals(true, csvBoolean.get(0));
+        assertEquals(true, csvBoolean.get(1));
+        assertEquals(false, csvBoolean.get(2));
+        assertEquals("1,1,0", csvBoolean.toString());
     }
 
     @Test
-    public void parseDLNADoc() {
+    void parseDLNADoc() {
         DLNADoc doc = DLNADoc.valueOf("DMS-1.50");
-        assertEquals(doc.getDevClass(), "DMS");
-        assertEquals(doc.getVersion(), DLNADoc.Version.V1_5.toString());
-        assertEquals(doc.toString(), "DMS-1.50");
+        assertEquals("DMS", doc.getDevClass());
+        assertEquals(DLNADoc.Version.V1_5.toString(), doc.getVersion());
+        assertEquals("DMS-1.50", doc.toString());
 
         doc = DLNADoc.valueOf("M-DMS-1.50");
-        assertEquals(doc.getDevClass(), "M-DMS");
-        assertEquals(doc.getVersion(), DLNADoc.Version.V1_5.toString());
-        assertEquals(doc.toString(), "M-DMS-1.50");
+        assertEquals("M-DMS", doc.getDevClass());
+        assertEquals(DLNADoc.Version.V1_5.toString(), doc.getVersion());
+        assertEquals("M-DMS-1.50", doc.toString());
     }
 
     @Test
-    public void caseSensitivity() {
+    void caseSensitivity() {
         Datatype.Builtin dt = Datatype.Builtin.getByDescriptorName("datetime");
-        assert dt != null;
+        assertNotNull(dt);
         dt = Datatype.Builtin.getByDescriptorName("dateTime");
-        assert dt != null;
+        assertNotNull(dt);
         dt = Datatype.Builtin.getByDescriptorName("DATETIME");
-        assert dt != null;
+        assertNotNull(dt);
     }
 
     @Test
-    public void valueOfDouble() {
+    void valueOfDouble() {
         DoubleDatatype dt = (DoubleDatatype)Datatype.Builtin.R8.getDatatype();
         Double d = dt.valueOf("1.23");
-        assertEquals(d, 1.23d);
+        assertEquals(1.23d, d);
     }
 
     @Test
-    public void valueOfFloat() {
+    void valueOfFloat() {
         FloatDatatype dt = (FloatDatatype)Datatype.Builtin.R4.getDatatype();
         Float f = dt.valueOf("1.23456");
-        assertEquals(f, 1.23456f);
+        assertEquals(1.23456f, f);
     }
 
 }

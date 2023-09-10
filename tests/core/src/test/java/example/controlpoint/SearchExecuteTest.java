@@ -34,11 +34,11 @@ import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.model.types.UDN;
 import org.jupnp.protocol.async.SendingSearch;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Searching the network
@@ -59,7 +59,7 @@ import static org.testng.Assert.*;
  * <a class="citation" href="javadoc://this#searchDeviceType" style="read-title: false;"/>
  * <a class="citation" href="javadoc://this#searchServiceType" style="read-title: false;"/>
  */
-public class SearchExecuteTest {
+class SearchExecuteTest {
 
     /**
      * <p>
@@ -74,7 +74,7 @@ public class SearchExecuteTest {
      * </p>
      */
     @Test
-    public void searchAll() throws Exception {
+    void searchAll() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -99,7 +99,7 @@ public class SearchExecuteTest {
      * </p>
      */
     @Test
-    public void searchUDN() throws Exception {
+    void searchUDN() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -123,7 +123,7 @@ public class SearchExecuteTest {
      * <a class="citation" id="javacode_dt_search_custom" href="javacode://this" style="include: SEARCH_CUSTOM"/>
      */
     @Test
-    public void searchDeviceType() throws Exception {
+    void searchDeviceType() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -152,7 +152,7 @@ public class SearchExecuteTest {
      * <a class="citation" id="javacode_st_search_custom" href="javacode://this" style="include: SEARCH_CUSTOM"/>
      */
     @Test
-    public void searchServiceType() throws Exception {
+    void searchServiceType() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -175,7 +175,7 @@ public class SearchExecuteTest {
 
 
     @Test
-    public void searchRoot() throws Exception {
+    void searchRoot() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
         upnpService.getControlPoint().search(new RootDeviceHeader());
@@ -184,27 +184,28 @@ public class SearchExecuteTest {
 
 
     @Test
-    public void searchDefaults() {
+    void searchDefaults() {
         SendingSearch search = new SendingSearch(new MockUpnpService());
-        assertEquals(search.getSearchTarget().getString(), new STAllHeader().getString());
+        assertEquals(new STAllHeader().getString(), search.getSearchTarget().getString());
     }
 
-    @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
-    public void searchInvalidST() {
-        SendingSearch search = new SendingSearch(new MockUpnpService(), new MXHeader());
+    @Test
+    void searchInvalidST() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new SendingSearch(new MockUpnpService(), new MXHeader()));
     }
 
-    protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) throws Exception {
-        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 3);
+    protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) {
+        assertEquals(3, upnpService.getRouter().getOutgoingDatagramMessages().size());
         for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertSearchMessage(msg, header);
         }
     }
 
     protected void assertSearchMessage(UpnpMessage msg, UpnpHeader searchTarget) {
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString(), new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString());
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MX).getString(), new MXHeader().getString());
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(), searchTarget.getString());
-        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString(), new HostHeader().getString());
+        assertEquals(new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString());
+        assertEquals(new MXHeader().getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.MX).getString());
+        assertEquals(searchTarget.getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString());
+        assertEquals(new HostHeader().getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString());
     }
 }

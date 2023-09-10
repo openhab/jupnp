@@ -32,21 +32,20 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceRoot;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class SearchResponseTest {
+class SearchResponseTest {
 
     @Test
-    public void receivedValidResponse() throws Exception {
-
+    void receivedValidResponse() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -59,12 +58,11 @@ public class SearchResponseTest {
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
+        assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receivedInvalidSearchResponses() throws Exception {
-
+    void receivedInvalidSearchResponses() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -74,14 +72,14 @@ public class SearchResponseTest {
         IncomingSearchResponse msg = createResponseMessage(new STAllHeader());
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
 
         // Missing location header
         msg = createResponseMessage(new STAllHeader());
         msg.getHeaders().add(UpnpHeader.Type.USN, new USNRootDeviceHeader(rd.getIdentity().getUdn()));
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
 
         // Missing max age header
         msg = createResponseMessage(new STAllHeader());
@@ -89,13 +87,11 @@ public class SearchResponseTest {
         msg.getHeaders().add(UpnpHeader.Type.LOCATION, new LocationHeader(SampleDeviceRoot.getDeviceDescriptorURL()));
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
-
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receivedAlreadyKnownLocalUDN() throws Exception {
-
+    void receivedAlreadyKnownLocalUDN() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -111,12 +107,11 @@ public class SearchResponseTest {
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     @Test
-    public void receiveEmbeddedTriggersUpdate() throws Exception {
-
+    void receiveEmbeddedTriggersUpdate() throws Exception {
         UpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
@@ -125,7 +120,7 @@ public class SearchResponseTest {
 
         upnpService.getRegistry().addDevice(rd);
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         IncomingSearchResponse msg = createResponseMessage(new STAllHeader());
         msg.getHeaders().add(UpnpHeader.Type.USN, new UDNHeader(embedded.getIdentity().getUdn()));
@@ -139,14 +134,14 @@ public class SearchResponseTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(1000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         upnpService.shutdown();
     }
 
     protected IncomingSearchResponse createResponseMessage(UpnpHeader stHeader) throws UnknownHostException {
         IncomingSearchResponse msg = new IncomingSearchResponse(
-                new IncomingDatagramMessage<UpnpResponse>(
+                new IncomingDatagramMessage<>(
                         new UpnpResponse(UpnpResponse.Status.OK),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,
@@ -158,7 +153,6 @@ public class SearchResponseTest {
         msg.getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
         msg.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader());
         return msg;
-
     }
     
 }

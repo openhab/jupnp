@@ -14,6 +14,8 @@
 
 package org.jupnp.test.local;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
@@ -29,14 +31,12 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LocalActionInvocationEnumTest {
+class LocalActionInvocationEnumTest {
 
-    public LocalDevice createTestDevice(LocalService service) throws Exception {
+    static LocalDevice createTestDevice(LocalService service) throws Exception {
         return new LocalDevice(
                 SampleData.createLocalDeviceIdentity(),
                 new UDADeviceType("BinaryLight", 1),
@@ -45,8 +45,7 @@ public class LocalActionInvocationEnumTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() throws Exception {
+    static Object[][] getDevices() throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         return new LocalDevice[][]{
                 {createTestDevice(SampleData.readService(binder, TestServiceOne.class))},
@@ -55,35 +54,35 @@ public class LocalActionInvocationEnumTest {
         };
     }
 
-    @Test(dataProvider = "devices")
-    public void invokeActions(LocalDevice device) throws Exception {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) throws Exception {
 
         LocalService svc = SampleData.getFirstService(device);
 
         ActionInvocation checkTargetInvocation = new ActionInvocation(svc.getAction("GetTarget"));
         svc.getExecutor(checkTargetInvocation.getAction()).execute(checkTargetInvocation);
-        assertEquals(checkTargetInvocation.getFailure(), null);
-        assertEquals(checkTargetInvocation.getOutput().length, 1);
-        assertEquals(checkTargetInvocation.getOutput()[0].toString(), "UNKNOWN");
+        assertNull(checkTargetInvocation.getFailure());
+        assertEquals(1, checkTargetInvocation.getOutput().length);
+        assertEquals("UNKNOWN", checkTargetInvocation.getOutput()[0].toString());
 
         ActionInvocation setTargetInvocation = new ActionInvocation(svc.getAction("SetTarget"));
         setTargetInvocation.setInput("NewTargetValue", "ON");
         svc.getExecutor(setTargetInvocation.getAction()).execute(setTargetInvocation);
-        assertEquals(setTargetInvocation.getFailure(), null);
-        assertEquals(setTargetInvocation.getOutput().length, 0);
+        assertNull(setTargetInvocation.getFailure());
+        assertEquals(0, setTargetInvocation.getOutput().length);
 
         ActionInvocation getTargetInvocation = new ActionInvocation(svc.getAction("GetTarget"));
         svc.getExecutor(getTargetInvocation.getAction()).execute(getTargetInvocation);
-        assertEquals(getTargetInvocation.getFailure(), null);
-        assertEquals(getTargetInvocation.getOutput().length, 1);
-        assertEquals(getTargetInvocation.getOutput()[0].toString(), "ON");
+        assertNull(getTargetInvocation.getFailure());
+        assertEquals(1, getTargetInvocation.getOutput().length);
+        assertEquals("ON", getTargetInvocation.getOutput()[0].toString());
 
         ActionInvocation getStatusInvocation = new ActionInvocation(svc.getAction("GetStatus"));
         svc.getExecutor(getStatusInvocation.getAction()).execute(getStatusInvocation);
-        assertEquals(getStatusInvocation.getFailure(), null);
-        assertEquals(getStatusInvocation.getOutput().length, 1);
-        assertEquals(getStatusInvocation.getOutput()[0].toString(), "1");
-
+        assertNull(getStatusInvocation.getFailure());
+        assertEquals(1, getStatusInvocation.getOutput().length);
+        assertEquals("1", getStatusInvocation.getOutput()[0].toString());
     }
 
     /* ####################################################################################################### */
@@ -180,7 +179,7 @@ public class LocalActionInvocationEnumTest {
             UNKNOWN
         }
 
-        public class TargetHolder {
+        public static class TargetHolder {
             private Target t;
 
             public TargetHolder(Target t) {
@@ -230,7 +229,7 @@ public class LocalActionInvocationEnumTest {
             UNKNOWN
         }
 
-        public class TargetHolder {
+        public static class TargetHolder {
             private Target t;
 
             public TargetHolder(Target t) {

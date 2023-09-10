@@ -22,33 +22,32 @@ import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleDeviceEmbeddedOne;
 import org.jupnp.test.data.SampleDeviceEmbeddedTwo;
 import org.jupnp.test.data.SampleDeviceRootLocal;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class DeviceGraphTest {
+class DeviceGraphTest {
 
     @Test
-    public void findRoot() throws Exception {
+    void findRoot() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         LocalDevice root = ld.getEmbeddedDevices()[0].getRoot();
-        assertEquals(root.getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), root.getIdentity().getUdn());
 
         root = ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getRoot();
-        assertEquals(root.getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
-
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), root.getIdentity().getUdn());
     }
 
     @Test
-    public void findEmbeddedDevices() throws Exception {
+    void findEmbeddedDevices() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         LocalDevice[] embedded = ld.findEmbeddedDevices();
-        assertEquals(embedded.length, 2);
+        assertEquals(2, embedded.length);
 
         boolean haveOne = false, haveTwo = false;
 
@@ -58,70 +57,68 @@ public class DeviceGraphTest {
                 haveTwo = true;
         }
 
-        assert haveOne;
-        assert haveTwo;
+        assertTrue(haveOne);
+        assertTrue(haveTwo);
     }
 
     @Test
-    public void findDevicesWithUDN() throws Exception {
+    void findDevicesWithUDN() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         LocalDevice ldOne = ld.findDevice(SampleDeviceRootLocal.getRootUDN());
-        assertEquals(ldOne.getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), ldOne.getIdentity().getUdn());
 
         LocalDevice ldTwo = ld.findDevice(SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
-        assertEquals(ldTwo.getIdentity().getUdn(), SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
+        assertEquals(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), ldTwo.getIdentity().getUdn());
 
         LocalDevice ldThree = ld.findDevice(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
-        assertEquals(ldThree.getIdentity().getUdn(), SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
+        assertEquals(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), ldThree.getIdentity().getUdn());
 
         RemoteDevice rd = SampleData.createRemoteDevice();
 
         RemoteDevice rdOne = rd.findDevice(SampleDeviceRootLocal.getRootUDN());
-        assertEquals(rdOne.getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), rdOne.getIdentity().getUdn());
 
         RemoteDevice rdTwo = rd.findDevice(SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
-        assertEquals(rdTwo.getIdentity().getUdn(), SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
+        assertEquals(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), rdTwo.getIdentity().getUdn());
 
         RemoteDevice rdThree = rd.findDevice(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
-        assertEquals(rdThree.getIdentity().getUdn(), SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
-
+        assertEquals(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), rdThree.getIdentity().getUdn());
     }
 
     @Test
-    public void findDevicesWithDeviceType() throws Exception {
+    void findDevicesWithDeviceType() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         LocalDevice[] ldOne = ld.findDevices(ld.getType());
-        assertEquals(ldOne.length, 1);
-        assertEquals(ldOne[0].getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
+        assertEquals(1, ldOne.length);
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), ldOne[0].getIdentity().getUdn());
 
         LocalDevice[] ldTwo = ld.findDevices(ld.getEmbeddedDevices()[0].getType());
-        assertEquals(ldTwo.length, 1);
-        assertEquals(ldTwo[0].getIdentity().getUdn(), SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
+        assertEquals(1, ldTwo.length);
+        assertEquals(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), ldTwo[0].getIdentity().getUdn());
 
         LocalDevice[] ldThree = ld.findDevices(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getType());
-        assertEquals(ldThree.length, 1);
-        assertEquals(ldThree[0].getIdentity().getUdn(), SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
+        assertEquals(1, ldThree.length);
+        assertEquals(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), ldThree[0].getIdentity().getUdn());
 
         RemoteDevice rd = SampleData.createRemoteDevice();
 
         RemoteDevice[] rdOne = rd.findDevices(rd.getType());
-        assertEquals(rdOne.length, 1);
-        assertEquals(rdOne[0].getIdentity().getUdn(), SampleDeviceRootLocal.getRootUDN());
+        assertEquals(1, rdOne.length);
+        assertEquals(SampleDeviceRootLocal.getRootUDN(), rdOne[0].getIdentity().getUdn());
 
         RemoteDevice[] rdTwo = rd.findDevices(rd.getEmbeddedDevices()[0].getType());
-        assertEquals(rdTwo.length, 1);
-        assertEquals(rdTwo[0].getIdentity().getUdn(), SampleDeviceEmbeddedOne.getEmbeddedOneUDN());
+        assertEquals(1, rdTwo.length);
+        assertEquals(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), rdTwo[0].getIdentity().getUdn());
 
         RemoteDevice[] rdThree = rd.findDevices(rd.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getType());
-        assertEquals(rdThree.length, 1);
-        assertEquals(rdThree[0].getIdentity().getUdn(), SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN());
-
+        assertEquals(1, rdThree.length);
+        assertEquals(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), rdThree[0].getIdentity().getUdn());
     }
 
     @Test
-    public void findServicesAll() throws Exception {
+    void findServicesAll() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         Service one = ld.getServices()[0];
@@ -136,13 +133,13 @@ public class DeviceGraphTest {
             if (service.getServiceId().equals(two.getServiceId())) haveTwo = true;
             if (service.getServiceId().equals(three.getServiceId())) haveThree = true;
         }
-        assert haveOne;
-        assert haveTwo;
-        assert haveThree;
+        assertTrue(haveOne);
+        assertTrue(haveTwo);
+        assertTrue(haveThree);
     }
 
     @Test
-    public void findServicesType() throws Exception {
+    void findServicesType() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         Service one = ld.getServices()[0];
@@ -150,20 +147,20 @@ public class DeviceGraphTest {
         Service three = ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0];
 
         Service[] services = ld.findServices(one.getServiceType());
-        assertEquals(services.length, 1);
-        assertEquals(services[0].getServiceId(), one.getServiceId());
+        assertEquals(1, services.length);
+        assertEquals(one.getServiceId(), services[0].getServiceId());
 
         services = ld.findServices(two.getServiceType());
-        assertEquals(services.length, 1);
-        assertEquals(services[0].getServiceId(), two.getServiceId());
+        assertEquals(1, services.length);
+        assertEquals(two.getServiceId(), services[0].getServiceId());
 
         services = ld.findServices(three.getServiceType());
-        assertEquals(services.length, 1);
-        assertEquals(services[0].getServiceId(), three.getServiceId());
+        assertEquals(1, services.length);
+        assertEquals(three.getServiceId(), services[0].getServiceId());
     }
 
     @Test
-    public void findServicesId() throws Exception {
+    void findServicesId() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         Service one = ld.getServices()[0];
@@ -171,17 +168,17 @@ public class DeviceGraphTest {
         Service three = ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0];
 
         Service service = ld.findService(one.getServiceId());
-        assertEquals(service.getServiceId(), one.getServiceId());
+        assertEquals(one.getServiceId(), service.getServiceId());
 
         service = ld.findService(two.getServiceId());
-        assertEquals(service.getServiceId(), two.getServiceId());
+        assertEquals(two.getServiceId(), service.getServiceId());
 
         service = ld.findService(three.getServiceId());
-        assertEquals(service.getServiceId(), three.getServiceId());
+        assertEquals(three.getServiceId(), service.getServiceId());
     }
 
     @Test
-    public void findServicesFirst() throws Exception {
+    void findServicesFirst() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         Service one = ld.getServices()[0];
@@ -189,21 +186,21 @@ public class DeviceGraphTest {
         Service three = ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0];
 
         Service service = ld.findService(one.getServiceType());
-        assertEquals(service.getServiceId(), one.getServiceId());
+        assertEquals(one.getServiceId(), service.getServiceId());
 
         service = ld.findService(two.getServiceType());
-        assertEquals(service.getServiceId(), two.getServiceId());
+        assertEquals(two.getServiceId(), service.getServiceId());
 
         service = ld.findService(three.getServiceType());
-        assertEquals(service.getServiceId(), three.getServiceId());
+        assertEquals(three.getServiceId(), service.getServiceId());
     }
 
     @Test
-    public void findServiceTypes() throws Exception {
+    void findServiceTypes() {
         LocalDevice ld = SampleData.createLocalDevice();
 
         ServiceType[] svcTypes = ld.findServiceTypes();
-        assertEquals(svcTypes.length, 3);
+        assertEquals(3, svcTypes.length);
 
         boolean haveOne = false, haveTwo = false, haveThree = false;
 
@@ -214,9 +211,8 @@ public class DeviceGraphTest {
                 haveThree = true;
         }
 
-        assert haveOne;
-        assert haveTwo;
-        assert haveThree;
-
+        assertTrue(haveOne);
+        assertTrue(haveTwo);
+        assertTrue(haveThree);
     }
 }

@@ -18,7 +18,9 @@ import javax.servlet.Servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -62,6 +64,10 @@ public class JettyServletContainer implements ServletContainerAdapter {
 
     @Override
     public synchronized int addConnector(String host, int port) throws IOException {
+        ServerConnector connector = new ServerConnector(server);
+        connector.setHost(host);
+        connector.setPort(port);
+        server.addConnector(connector);
         return port;
     }
 

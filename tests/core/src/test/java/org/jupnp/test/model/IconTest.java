@@ -20,19 +20,19 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class IconTest {
+class IconTest {
 
     @Test
-    public void validIcons() throws Exception {
+    void validIcons() throws Exception {
         RemoteDevice rd = new RemoteDevice(
             SampleData.createRemoteDeviceIdentity(),
             new UDADeviceType("Foo", 1),
@@ -44,11 +44,11 @@ public class IconTest {
             },
             new RemoteService[0]
         );
-        assertEquals(rd.findIcons().length, 3);
+        assertEquals(3, rd.findIcons().length);
     }
 
     @Test
-    public void invalidIcons() throws Exception {
+    void invalidIcons() throws Exception {
         RemoteDevice rd = new RemoteDevice(
             SampleData.createRemoteDeviceIdentity(),
             new UDADeviceType("Foo", 1),
@@ -58,6 +58,6 @@ public class IconTest {
             },
             new RemoteService[0]
         );
-        assertEquals(rd.findIcons().length, 0);
+        assertEquals(0, rd.findIcons().length);
     }
 }

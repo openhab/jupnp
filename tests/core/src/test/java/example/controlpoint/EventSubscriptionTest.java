@@ -32,7 +32,7 @@ import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.BooleanDatatype;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.util.Reflections;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import example.binarylight.BinaryLightSampleData;
 import example.binarylight.SwitchPower;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Receiving events from services
@@ -95,11 +95,11 @@ import static org.testng.Assert.*;
 public class EventSubscriptionTest {
 
     @Test
-    public void subscriptionLifecycle() throws Exception {
+    void subscriptionLifecycle() throws Exception {
 
         MockUpnpService upnpService = createMockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPower.class);
@@ -142,16 +142,16 @@ public class EventSubscriptionTest {
                 Map<String, StateVariableValue> values = sub.getCurrentValues();
                 StateVariableValue status = values.get("Status");
 
-                assertEquals(status.getDatatype().getClass(), BooleanDatatype.class);
-                assertEquals(status.getDatatype().getBuiltin(), Datatype.Builtin.BOOLEAN);
+                assertEquals(BooleanDatatype.class, status.getDatatype().getClass());
+                assertEquals(Datatype.Builtin.BOOLEAN, status.getDatatype().getBuiltin());
 
-                System.out.println("Status is: " + status.toString());
+                System.out.println("Status is: " + status);
 
                 if (sub.getCurrentSequence().getValue() == 0) {                             // DOC: EXC4
-                    assertEquals(sub.getCurrentValues().get("Status").toString(), "0");
+                    assertEquals("0", sub.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else if (sub.getCurrentSequence().getValue() == 1) {
-                    assertEquals(sub.getCurrentValues().get("Status").toString(), "1");
+                    assertEquals("1", sub.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else {
                     testAssertions.add(false);
@@ -178,20 +178,20 @@ public class EventSubscriptionTest {
         Reflections.set(Reflections.getField(serviceImpl.getClass(), "status"), serviceImpl, true);
         service.getManager().getPropertyChangeSupport().firePropertyChange("Status", false, true);
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
-        assert callback.getSubscription().getSubscriptionId().startsWith("uuid:");
+        assertEquals(2L, callback.getSubscription().getCurrentSequence().getValue()); // It's the NEXT sequence!
+        assertTrue(callback.getSubscription().getSubscriptionId().startsWith("uuid:"));
 
         // Actually, the local subscription we are testing here has an "unlimited" duration
-        assertEquals(callback.getSubscription().getActualDurationSeconds(), Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, callback.getSubscription().getActualDurationSeconds());
 
         callback.end();
 
-        assertEquals(testAssertions.size(), 4);
+        assertEquals(4, testAssertions.size());
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
+        assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
 
     protected MockUpnpService createMockUpnpService() {

@@ -22,40 +22,29 @@ import org.jupnp.model.meta.RemoteService;
 import org.jupnp.test.data.SampleData;
 import org.jupnp.test.data.SampleServiceOne;
 import org.jupnp.util.io.IO;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-
-public class UDA10ServiceDescriptorParsingTest {
+class UDA10ServiceDescriptorParsingTest {
 
     @Test
-    public void readUDA10DescriptorDOM() throws Exception {
-
+    void readUDA10DescriptorDOM() throws Exception {
         ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderImpl();
-
         RemoteService service = SampleData.createUndescribedRemoteService();
-
         service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
-
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }
 
     @Test
-    public void readUDA10DescriptorSAX() throws Exception {
-
+    void readUDA10DescriptorSAX() throws Exception {
         ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderSAXImpl();
-
         RemoteService service = SampleData.createUndescribedRemoteService();
-
         service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
-
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }
 
     @Test
-    public void writeUDA10Descriptor() throws Exception {
-
+    void writeUDA10Descriptor() throws Exception {
         ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderImpl();
-
         RemoteDevice rd = SampleData.createRemoteDevice();
         String descriptorXml = binder.generate(SampleData.getFirstService(rd));
 
@@ -63,7 +52,6 @@ public class UDA10ServiceDescriptorParsingTest {
         System.out.println("#######################################################################################");
         System.out.println(descriptorXml);
         System.out.println("#######################################################################################");
-
 */
 
         RemoteService service = SampleData.createUndescribedRemoteService();

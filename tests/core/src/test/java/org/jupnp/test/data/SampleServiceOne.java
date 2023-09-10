@@ -31,8 +31,7 @@ import org.jupnp.util.URIUtil;
 import java.net.URI;
 import java.net.URL;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -161,12 +160,12 @@ public class SampleServiceOne extends SampleService {
         // assertEquals(a.getAction("GetTarget").getArguments()[0].isReturnValue(), b.getAction("GetTarget").getArguments()[0].isReturnValue());
 
         assertEquals(a.getStateVariables().length, b.getStateVariables().length);
-        assertTrue(a.getStateVariable("Target") != null);
-        assertTrue(b.getStateVariable("Target") != null);
-        assertTrue(a.getStateVariable("Status") != null);
-        assertTrue(b.getStateVariable("Status") != null);
-        assertTrue(a.getStateVariable("SomeVar") != null);
-        assertTrue(b.getStateVariable("SomeVar") != null);
+        assertNotNull(a.getStateVariable("Target"));
+        assertNotNull(b.getStateVariable("Target"));
+        assertNotNull(a.getStateVariable("Status"));
+        assertNotNull(b.getStateVariable("Status"));
+        assertNotNull(a.getStateVariable("SomeVar"));
+        assertNotNull(b.getStateVariable("SomeVar"));
 
         assertEquals(a.getStateVariable("Target").getName(), "Target");
         assertEquals(a.getStateVariable("Target").getEventDetails().isSendEvents(), b.getStateVariable("Target").getEventDetails().isSendEvents());

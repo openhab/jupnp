@@ -18,35 +18,36 @@ import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.UpnpRequest;
+import org.jupnp.protocol.ProtocolCreationException;
 import org.jupnp.protocol.ReceivingSync;
 import org.jupnp.protocol.sync.ReceivingEvent;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 
-import static org.testng.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
-public class ProtocolFactoryTest {
+class ProtocolFactoryTest {
 
-    @Test(expectedExceptions = org.jupnp.protocol.ProtocolCreationException.class)
-    public void noSyncProtocol() throws Exception {
+    @Test
+    void noSyncProtocol() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        ReceivingSync protocol = upnpService.getProtocolFactory().createReceivingSync(
+        assertThrows(ProtocolCreationException.class, () -> upnpService.getProtocolFactory().createReceivingSync(
             new StreamRequestMessage(
                 UpnpRequest.Method.NOTIFY,
                 URI.create("/dev/1234/upnp-org/SwitchPower/invalid"),
                 ""
             )
-        );
+        ));
     }
 
     @Test
-    public void receivingEvent() throws Exception {
+    void receivingEvent() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
@@ -67,6 +68,5 @@ public class ProtocolFactoryTest {
         );
         protocol = upnpService.getProtocolFactory().createReceivingSync(message);
         assertTrue(protocol instanceof ReceivingEvent);
-
     }
 }

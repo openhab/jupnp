@@ -20,18 +20,17 @@ import org.jupnp.model.ExpirationDetails;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.resource.Resource;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RegistryExpirationTest {
+class RegistryExpirationTest {
 
     @Test
-    public void addAndExpire() throws Exception {
-
+    void addAndExpire() throws Exception {
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
@@ -40,18 +39,17 @@ public class RegistryExpirationTest {
         );
         upnpService.getRegistry().addDevice(rd);
         
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         Thread.sleep(3000);
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
+        assertEquals(0, upnpService.getRegistry().getRemoteDevices().size());
 
         upnpService.shutdown();
     }
 
     @Test
-    public void overrideAgeThenAddAndExpire() throws Exception {
-
+    void overrideAgeThenAddAndExpire() throws Exception {
         MockUpnpService upnpService = new MockUpnpService(
             new MockUpnpServiceConfiguration(true) {
 
@@ -68,12 +66,12 @@ public class RegistryExpirationTest {
         );
         upnpService.getRegistry().addDevice(rd);
 
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         Thread.sleep(3000);
 
         // Still registered!
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         // Update should not change the expiration time
         upnpService.getRegistry().update(rd.getIdentity());
@@ -81,13 +79,13 @@ public class RegistryExpirationTest {
         Thread.sleep(3000);
 
         // Still registered!
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         upnpService.shutdown();
     }
 
     @Test
-    public void addAndUpdateAndExpire() throws Exception {
+    void addAndUpdateAndExpire() throws Exception {
 
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
@@ -99,53 +97,50 @@ public class RegistryExpirationTest {
         // Add it to registry
         upnpService.getRegistry().addDevice(rd);
         Thread.sleep(1000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         // Update it in registry
         upnpService.getRegistry().addDevice(rd);
         Thread.sleep(1000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         // Update again
         upnpService.getRegistry().update(rd.getIdentity());
         Thread.sleep(1000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         // Wait for expiration
         Thread.sleep(3000);
-        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
-
+        assertEquals(0, upnpService.getRegistry().getRemoteDevices().size());
 
         upnpService.shutdown();
     }
 
     @Test
-    public void addResourceAndExpire() throws Exception {
-
+    void addResourceAndExpire() throws Exception {
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
-        Resource resource = new Resource(URI.create("/this/is/a/test"), "foo");
+        Resource<String> resource = new Resource<>(URI.create("/this/is/a/test"), "foo");
         upnpService.getRegistry().addResource(resource, 2);
 
-        assertEquals(upnpService.getRegistry().getResources().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getResources().size());
 
         Thread.sleep(4000);
 
-        assertEquals(upnpService.getRegistry().getResources().size(), 0);
+        assertEquals(0, upnpService.getRegistry().getResources().size());
 
         upnpService.shutdown();
     }
 
     @Test
-    public void addResourceAndMaintain() throws Exception {
-
+    void addResourceAndMaintain() throws Exception {
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
         final TestRunnable testRunnable = new TestRunnable();
 
-        Resource resource = new Resource<String>(URI.create("/this/is/a/test"), "foo") {
+        Resource<String> resource = new Resource<>(URI.create("/this/is/a/test"), "foo") {
             @Override
             public void maintain(List<Runnable> pendingExecutions, ExpirationDetails expirationDetails) {
                 if (expirationDetails.getSecondsUntilExpiration() == 1) {
@@ -155,16 +150,16 @@ public class RegistryExpirationTest {
         };
         upnpService.getRegistry().addResource(resource, 2);
 
-        assertEquals(upnpService.getRegistry().getResources().size(), 1);
+        assertEquals(1, upnpService.getRegistry().getResources().size());
 
         Thread.sleep(2000);
 
-        assertEquals(testRunnable.wasExecuted, true);
+        assertTrue(testRunnable.wasExecuted);
 
         upnpService.shutdown();
     }
 
-    protected class TestRunnable implements Runnable {
+    protected static class TestRunnable implements Runnable {
         boolean wasExecuted = false;
 
         public void run() {

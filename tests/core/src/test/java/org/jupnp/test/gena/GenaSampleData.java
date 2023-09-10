@@ -90,7 +90,7 @@ public class GenaSampleData {
         }
     }
 
-    public static enum Foo {
+    public enum Foo {
         foo, bar
     }
 

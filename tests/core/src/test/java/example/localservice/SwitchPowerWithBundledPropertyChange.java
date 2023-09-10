@@ -21,7 +21,6 @@ import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
-import org.jupnp.model.ModelUtil;
 
 import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 

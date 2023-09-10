@@ -14,10 +14,12 @@
 
 package org.jupnp.test.control;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.UpnpService;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.UnsupportedDataException;
@@ -33,16 +35,13 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.SoapActionType;
 import org.jupnp.util.io.IO;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * @author Christian Bauer
  */
-public class InvalidActionXMLProcessingTest {
+class InvalidActionXMLProcessingTest {
 
-    @DataProvider(name = "invalidXMLFile")
-    public String[][] getInvalidXMLFile() throws Exception {
+    static String[][] getInvalidXMLFile() {
         return new String[][]{
             {"/invalidxml/control/request_missing_envelope.xml"},
             {"/invalidxml/control/request_missing_action_namespace.xml"},
@@ -50,16 +49,14 @@ public class InvalidActionXMLProcessingTest {
         };
     }
 
-    @DataProvider(name = "invalidRecoverableXMLFile")
-    public String[][] getInvalidRecoverableXMLFile() throws Exception {
+    static String[][] getInvalidRecoverableXMLFile() {
         return new String[][]{
             {"/invalidxml/control/request_no_entityencoding.xml"},
             {"/invalidxml/control/request_wrong_termination.xml"},
         };
     }
 
-    @DataProvider(name = "invalidUnrecoverableXMLFile")
-    public String[][] getInvalidUnrecoverableXMLFile() throws Exception {
+    static String[][] getInvalidUnrecoverableXMLFile() {
         return new String[][]{
             {"/invalidxml/control/unrecoverable/naim_unity.xml"},
         };
@@ -67,18 +64,19 @@ public class InvalidActionXMLProcessingTest {
 
     /* ############################## TEST FAILURE ############################ */
 
-    @Test(dataProvider = "invalidXMLFile", expectedExceptions = UnsupportedDataException.class)
-    public void readRequestDefaultFailure(String invalidXMLFile) throws Exception {
-        // This should always fail!
-        readRequest(invalidXMLFile, new MockUpnpService());
+    @ParameterizedTest
+    @MethodSource("getInvalidXMLFile")
+    void readRequestDefaultFailure(String invalidXMLFile) {
+        assertThrows(UnsupportedDataException.class, () ->
+            readRequest(invalidXMLFile, new MockUpnpService()));
     }
 
-    @Test(dataProvider = "invalidRecoverableXMLFile", expectedExceptions = UnsupportedDataException.class)
-    public void readRequestRecoverableFailure(String invalidXMLFile) throws Exception {
-        // This should always fail!
-        readRequest(invalidXMLFile, new MockUpnpService());
+    @ParameterizedTest
+    @MethodSource("getInvalidRecoverableXMLFile")
+    void readRequestRecoverableFailure(String invalidXMLFile) {
+        assertThrows(UnsupportedDataException.class, () ->
+            readRequest(invalidXMLFile, new MockUpnpService()));
     }
-
 
     protected void readRequest(String invalidXMLFile, UpnpService upnpService) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);
@@ -92,7 +90,7 @@ public class InvalidActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().readBody(request, actionInvocation);
 
-        assertEquals(actionInvocation.getInput()[0].toString(), "foo&bar");
+        assertEquals("foo&bar", actionInvocation.getInput()[0].toString());
     }
 
     public StreamRequestMessage createRequestMessage(Action action, String xmlFile) throws Exception {

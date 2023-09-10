@@ -14,6 +14,8 @@
 
 package example.localservice;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
@@ -27,10 +29,8 @@ import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.test.data.SampleData;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Annotating a service implementation
@@ -75,9 +75,9 @@ import static org.testng.Assert.assertEquals;
  * <a class="citation" href="javadoc://example.localservice.SwitchPowerBeanReturn"/>
  * </div>
  */
-public class BasicBindingTest {
+class BasicBindingTest {
 
-    public LocalDevice createTestDevice(Class serviceClass) throws Exception {
+    static LocalDevice createTestDevice(Class serviceClass) throws Exception {
 
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
@@ -91,10 +91,7 @@ public class BasicBindingTest {
         );
     }
 
-    @DataProvider(name = "devices")
-    public Object[][] getDevices() {
-
-
+    static Object[][] getDevices() {
         try {
             return new LocalDevice[][]{
                     {createTestDevice(SwitchPowerNamedStateVariable.class)},
@@ -109,9 +106,9 @@ public class BasicBindingTest {
         }
     }
 
-    @Test(dataProvider = "devices")
-    public void validateBinding(LocalDevice device) {
-
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
 /*
@@ -125,72 +122,71 @@ public class BasicBindingTest {
         System.out.println("############################################################################");
 
 */
-        assertEquals(svc.getServiceId().toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:SwitchPower");
-        assertEquals(svc.getServiceType().toString(), "urn:" + UDAServiceType.DEFAULT_NAMESPACE + ":service:SwitchPower:1");
+        assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:SwitchPower", svc.getServiceId().toString());
+        assertEquals("urn:" + UDAServiceType.DEFAULT_NAMESPACE + ":service:SwitchPower:1", svc.getServiceType().toString());
 
-        assertEquals(svc.getStateVariables().length, 2);
-        assertEquals(svc.getStateVariable("Target").getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.BOOLEAN);
-        assertEquals(svc.getStateVariable("Target").getTypeDetails().getDefaultValue(), "0");
-        assertEquals(svc.getStateVariable("Target").getEventDetails().isSendEvents(), false);
+        assertEquals(2, svc.getStateVariables().length);
+        assertEquals(Datatype.Builtin.BOOLEAN, svc.getStateVariable("Target").getTypeDetails().getDatatype().getBuiltin());
+        assertEquals("0", svc.getStateVariable("Target").getTypeDetails().getDefaultValue());
+        assertFalse(svc.getStateVariable("Target").getEventDetails().isSendEvents());
 
-        assertEquals(svc.getStateVariable("Status").getTypeDetails().getDatatype().getBuiltin(), Datatype.Builtin.BOOLEAN);
-        assertEquals(svc.getStateVariable("Status").getTypeDetails().getDefaultValue(), "0");
-        assertEquals(svc.getStateVariable("Status").getEventDetails().isSendEvents(), true);
+        assertEquals(Datatype.Builtin.BOOLEAN, svc.getStateVariable("Status").getTypeDetails().getDatatype().getBuiltin());
+        assertEquals("0", svc.getStateVariable("Status").getTypeDetails().getDefaultValue());
+        assertTrue(svc.getStateVariable("Status").getEventDetails().isSendEvents());
 
-        assertEquals(svc.getActions().length, 4); // Has 3 actions plus QueryStateVariableAction!
+        assertEquals(4, svc.getActions().length); // Has 3 actions plus QueryStateVariableAction!
 
-        assertEquals(svc.getAction("SetTarget").getName(), "SetTarget");
-        assertEquals(svc.getAction("SetTarget").getArguments().length, 1);
-        assertEquals(svc.getAction("SetTarget").getArguments()[0].getName(), "NewTargetValue");
-        assertEquals(svc.getAction("SetTarget").getArguments()[0].getDirection(), ActionArgument.Direction.IN);
-        assertEquals(svc.getAction("SetTarget").getArguments()[0].getRelatedStateVariableName(), "Target");
+        assertEquals("SetTarget", svc.getAction("SetTarget").getName());
+        assertEquals(1, svc.getAction("SetTarget").getArguments().length);
+        assertEquals("NewTargetValue", svc.getAction("SetTarget").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.IN, svc.getAction("SetTarget").getArguments()[0].getDirection());
+        assertEquals("Target", svc.getAction("SetTarget").getArguments()[0].getRelatedStateVariableName());
 
-        assertEquals(svc.getAction("GetTarget").getName(), "GetTarget");
-        assertEquals(svc.getAction("GetTarget").getArguments().length, 1);
-        assertEquals(svc.getAction("GetTarget").getArguments()[0].getName(), "RetTargetValue");
-        assertEquals(svc.getAction("GetTarget").getArguments()[0].getDirection(), ActionArgument.Direction.OUT);
-        assertEquals(svc.getAction("GetTarget").getArguments()[0].getRelatedStateVariableName(), "Target");
-        assertEquals(svc.getAction("GetTarget").getArguments()[0].isReturnValue(), true);
+        assertEquals("GetTarget", svc.getAction("GetTarget").getName());
+        assertEquals(1, svc.getAction("GetTarget").getArguments().length);
+        assertEquals("RetTargetValue", svc.getAction("GetTarget").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.OUT, svc.getAction("GetTarget").getArguments()[0].getDirection());
+        assertEquals("Target", svc.getAction("GetTarget").getArguments()[0].getRelatedStateVariableName());
+        assertTrue(svc.getAction("GetTarget").getArguments()[0].isReturnValue());
 
-        assertEquals(svc.getAction("GetStatus").getName(), "GetStatus");
-        assertEquals(svc.getAction("GetStatus").getArguments().length, 1);
-        assertEquals(svc.getAction("GetStatus").getArguments()[0].getName(), "ResultStatus");
-        assertEquals(svc.getAction("GetStatus").getArguments()[0].getDirection(), ActionArgument.Direction.OUT);
-        assertEquals(svc.getAction("GetStatus").getArguments()[0].getRelatedStateVariableName(), "Status");
-        assertEquals(svc.getAction("GetStatus").getArguments()[0].isReturnValue(), true);
-
+        assertEquals("GetStatus", svc.getAction("GetStatus").getName());
+        assertEquals(1, svc.getAction("GetStatus").getArguments().length);
+        assertEquals("ResultStatus", svc.getAction("GetStatus").getArguments()[0].getName());
+        assertEquals(ActionArgument.Direction.OUT, svc.getAction("GetStatus").getArguments()[0].getDirection());
+        assertEquals("Status", svc.getAction("GetStatus").getArguments()[0].getRelatedStateVariableName());
+        assertTrue(svc.getAction("GetStatus").getArguments()[0].isReturnValue());
     }
 
-    @Test(dataProvider =  "devices")
-    public void invokeActions(LocalDevice device) {
+    @ParameterizedTest
+    @MethodSource("getDevices")
+    void invokeActions(LocalDevice device) {
         // We mostly care about the binding without exceptions, but let's also test invocation
         LocalService svc = device.getServices()[0];
 
         ActionInvocation setTargetInvocation = new ActionInvocation(svc.getAction("SetTarget"));
         setTargetInvocation.setInput("NewTargetValue", true);
         svc.getExecutor(setTargetInvocation.getAction()).execute(setTargetInvocation);
-        assertEquals(setTargetInvocation.getFailure(), null);
-        assertEquals(setTargetInvocation.getOutput().length, 0);
+        assertNull(setTargetInvocation.getFailure());
+        assertEquals(0, setTargetInvocation.getOutput().length);
 
         ActionInvocation getStatusInvocation = new ActionInvocation(svc.getAction("GetStatus"));
         svc.getExecutor(getStatusInvocation.getAction()).execute(getStatusInvocation);
-        assertEquals(getStatusInvocation.getFailure(), null);
-        assertEquals(getStatusInvocation.getOutput().length, 1);
-        assertEquals(getStatusInvocation.getOutput()[0].toString(), "1");
+        assertNull(getStatusInvocation.getFailure());
+        assertEquals(1, getStatusInvocation.getOutput().length);
+        assertEquals("1", getStatusInvocation.getOutput()[0].toString());
 
         setTargetInvocation = new ActionInvocation(svc.getAction("SetTarget"));
         setTargetInvocation.setInput("NewTargetValue", false);
         svc.getExecutor(setTargetInvocation.getAction()).execute(setTargetInvocation);
-        assertEquals(setTargetInvocation.getFailure(), null);
-        assertEquals(setTargetInvocation.getOutput().length, 0);
+        assertNull(setTargetInvocation.getFailure());
+        assertEquals(0, setTargetInvocation.getOutput().length);
 
         ActionInvocation queryStateVariableInvocation = new ActionInvocation(svc.getAction("QueryStateVariable"));
         queryStateVariableInvocation.setInput("varName", "Status");
         svc.getExecutor(queryStateVariableInvocation.getAction()).execute(queryStateVariableInvocation);
-        assertEquals(queryStateVariableInvocation.getFailure(), null);
-        assertEquals(queryStateVariableInvocation.getOutput().length, 1);
-        assertEquals(queryStateVariableInvocation.getOutput()[0].toString(), "0");
-
+        assertNull(queryStateVariableInvocation.getFailure());
+        assertEquals(1, queryStateVariableInvocation.getOutput().length);
+        assertEquals("0", queryStateVariableInvocation.getOutput()[0].toString());
     }
 
 }
