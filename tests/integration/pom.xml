@@ -1,143 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jupnp.pom</groupId>
-        <artifactId>tests</artifactId>
-        <version>2.8.0-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.jupnp.pom</groupId>
+    <artifactId>tests</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+  </parent>
 
-    <name>jUPnP OSGi Test Integration</name>
-    <artifactId>jupnp-osgi-tests-integration</artifactId>
-    <groupId>org.jupnp.tests</groupId>
-    <packaging>jar</packaging>
+  <groupId>org.jupnp.tests</groupId>
+  <artifactId>jupnp-osgi-tests-integration</artifactId>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
+  <name>jUPnP OSGi Test Integration</name>
 
-            <!--
-            OSGi testing uses JUnit, of course to make everything work we have to exclude
-            the outdated JUnit 3.x in TestNG (what a fantastic idea that is) and rely on
-            the JUnit 4.x dependency of the Pax Exam. And force Maven to use JUnit directly,
-            not through TestNG. Automagic configuration is just wonderful.
-             -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit4</artifactId>
-                        <version>2.9</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <!--
-                    You need to run the tests manually because the Maven
-                    dependency resolution of Pax Exam doesn't resolve "in-build", it
-                    wants to lookup all dependencies. It has no idea that we just built what
-                    it is looking for. I like how the ShrinkWrap clowns try to
-                    solve the same problem. Who would've thought that a build system needs
-                    dependency resolution within integration tests!
-                    -->
-                    <!-- TODO: Also, the test code is only half-done -->
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
+  <dependencies>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-client</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jupnp</groupId>
+      <artifactId>org.jupnp</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jupnp.tests</groupId>
+      <artifactId>jupnp-osgi-tests-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam-container-default</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam-junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-            <plugin>
-                <groupId>org.ops4j.pax.exam</groupId>
-                <artifactId>maven-paxexam-plugin</artifactId>
-                <version>${paxexam.version}</version>
-            </plugin>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
 
-        </plugins>
-    </build>
+      <!--
+      OSGi testing uses JUnit, of course to make everything work we have to exclude
+      the outdated JUnit 3.x in TestNG (what a fantastic idea that is) and rely on
+      the JUnit 4.x dependency of the Pax Exam. And force Maven to use JUnit directly,
+      not through TestNG. Automagic configuration is just wonderful.
+       -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!--
+          You need to run the tests manually because the Maven
+          dependency resolution of Pax Exam doesn't resolve "in-build", it
+          wants to lookup all dependencies. It has no idea that we just built what
+          it is looking for. I like how the ShrinkWrap clowns try to
+          solve the same problem. Who would've thought that a build system needs
+          dependency resolution within integration tests!
+          -->
+          <!-- TODO: Also, the test code is only half-done -->
+          <skipTests>true</skipTests>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit4</artifactId>
+            <version>2.9</version>
+          </dependency>
+        </dependencies>
+      </plugin>
 
-    <dependencies>
+      <plugin>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>maven-paxexam-plugin</artifactId>
+        <version>${paxexam.version}</version>
+      </plugin>
 
-        <dependency>
-            <groupId>org.jupnp.tests</groupId>
-            <artifactId>jupnp-osgi-tests-common</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jupnp</groupId>
-            <artifactId>org.jupnp</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam</artifactId>
-            <version>${paxexam.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-container-default</artifactId>
-            <version>${paxexam.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-junit</artifactId>
-            <version>${paxexam.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons.codec.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-client</artifactId>
-            <version>${jetty.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <version>${felix.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
+    </plugins>
+  </build>
 
 </project>
-        

@@ -1,0 +1,6 @@
+-include: ../../bnd.bnd
+
+Import-Package: com.sun.net.httpserver;resolution:=optional,\
+ org.eclipse.jetty.server;resolution:=optional,\
+ org.eclipse.jetty.servlet;resolution:=optional,\
+ *

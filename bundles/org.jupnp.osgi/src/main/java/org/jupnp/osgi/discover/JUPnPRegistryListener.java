@@ -28,6 +28,10 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.service.upnp.UPnPEventListener;
 import org.osgi.util.tracker.ServiceTracker;
@@ -54,13 +58,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Bruce Green
  */
+@Component
 class JUPnPRegistryListener extends DefaultRegistryListener {
 
     private final Logger log = LoggerFactory.getLogger(JUPnPRegistryListener.class);
 
-    private Map<Device, UPnPDeviceBinding> deviceBindings = new Hashtable<Device, UPnPDeviceBinding>();
-    private BundleContext context;
-    private UpnpService upnpService;
+    private Map<Device, UPnPDeviceBinding> deviceBindings = new Hashtable<>();
+    private final BundleContext context;
+    private final UpnpService upnpService;
 
     class UPnPDeviceBinding {
         private ServiceRegistration reference;
@@ -80,9 +85,16 @@ class JUPnPRegistryListener extends DefaultRegistryListener {
         }
     }
 
-    public JUPnPRegistryListener(BundleContext context, UpnpService upnpService) {
+    @Activate
+    public JUPnPRegistryListener(BundleContext context, @Reference UpnpService upnpService) {
         this.context = context;
         this.upnpService = upnpService;
+        upnpService.getControlPoint().getRegistry().addListener(this);
+    }
+
+    @Deactivate
+    public void deactivate() {
+        upnpService.getControlPoint().getRegistry().removeListener(this);
     }
 
     /*

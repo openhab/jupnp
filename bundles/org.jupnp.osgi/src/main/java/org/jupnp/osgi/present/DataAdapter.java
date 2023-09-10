@@ -22,7 +22,7 @@ import java.util.List;
 import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
-import org.jupnp.osgi.Activator;
+import org.jupnp.osgi.util.OSGiContext;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -57,10 +57,10 @@ public class DataAdapter implements UPnPEventListener {
         log.trace("filter: {}", string);
 
         try {
-            BundleContext context = Activator.getPlugin().getContext();
+            BundleContext context = OSGiContext.getBundleContext();
             Filter filter = context.createFilter(string);
 
-            Dictionary<String, Object> properties = new Hashtable<String, Object>();
+            Dictionary<String, Object> properties = new Hashtable<>();
             properties.put(UPnPEventListener.UPNP_FILTER, filter);
             context.registerService(UPnPEventListener.class.getName(), this, properties);
         } catch (InvalidSyntaxException e) {

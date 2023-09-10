@@ -27,7 +27,7 @@ import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.ActionArgument;
 import org.jupnp.model.meta.StateVariable;
-import org.jupnp.osgi.Activator;
+import org.jupnp.osgi.util.OSGiContext;
 import org.jupnp.osgi.util.OSGiDataConverter;
 import org.osgi.service.upnp.UPnPAction;
 import org.osgi.service.upnp.UPnPStateVariable;
@@ -129,7 +129,7 @@ public class UPnPActionImpl implements UPnPAction {
             }
         }
 
-        ControlPoint controlPoint = Activator.getPlugin().getUpnpService().getControlPoint();
+        ControlPoint controlPoint = OSGiContext.getUpnpService().getControlPoint();
         ActionInvocation<?> actionInvocation =
                 new ActionInvocation(action, input.toArray(new ActionArgumentValue<?>[input.size()]));
 

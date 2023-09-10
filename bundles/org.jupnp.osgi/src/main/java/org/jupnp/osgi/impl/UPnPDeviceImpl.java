@@ -34,7 +34,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	private UPnPServiceImpl[] services;
 	private Hashtable<String, UPnPService> servicesIndex;
 	private UPnPIconImpl[] icons;
-	private Dictionary<String, Object> descriptions = new Hashtable<String, Object>();
+	private Dictionary<String, Object> descriptions = new Hashtable<>();
 	
 	public UPnPDeviceImpl(Device<?, ?, ?> device) {
 		this.device = device;
@@ -55,13 +55,13 @@ public class UPnPDeviceImpl implements UPnPDevice {
 		}
 		
 		if (device.getEmbeddedDevices() != null) {
-			List<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<>();
 			
 			for (Device<?, ?, ?> embedded : device.getEmbeddedDevices()) {
 				list.add(embedded.getIdentity().getUdn().toString());
 			}
 			
-			descriptions.put(UPnPDevice.CHILDREN_UDN, list.toArray(new String[list.size()]));
+			descriptions.put(UPnPDevice.CHILDREN_UDN, list.toArray(new String[0]));
 		}
 		
 		descriptions.put(UPnPDevice.FRIENDLY_NAME, deviceDetails.getFriendlyName());
@@ -98,8 +98,8 @@ public class UPnPDeviceImpl implements UPnPDevice {
 		}
 		
 		if (device.getServices() != null && device.getServices().length != 0) {
-			List<UPnPServiceImpl> list = new ArrayList<UPnPServiceImpl>();
-			servicesIndex = new Hashtable<String, UPnPService>();
+			List<UPnPServiceImpl> list = new ArrayList<>();
+			servicesIndex = new Hashtable<>();
 	
 			for (Service<?, ?> service : device.getServices()) {
 				UPnPServiceImpl item = new UPnPServiceImpl(service);
@@ -107,18 +107,18 @@ public class UPnPDeviceImpl implements UPnPDevice {
 				servicesIndex.put(item.getId(), item);
 			}
 			
-			services = list.toArray(new UPnPServiceImpl[list.size()]);
+			services = list.toArray(new UPnPServiceImpl[0]);
 		}
 		
 		if (device.getIcons() != null && device.getIcons().length != 0) {
-			List<UPnPIconImpl> list = new ArrayList<UPnPIconImpl>();
+			List<UPnPIconImpl> list = new ArrayList<>();
 	
 			for (Icon icon : device.getIcons()) {
 				UPnPIconImpl item = new UPnPIconImpl(icon);
 				list.add(item);
 			}
 			
-			icons = list.toArray(new UPnPIconImpl[list.size()]);
+			icons = list.toArray(new UPnPIconImpl[0]);
 		}
 	}
 
@@ -138,7 +138,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	}
 
 	@Override
-	public Dictionary<String, Object> getDescriptions(String locale) {
+	public Dictionary getDescriptions(String locale) {
 		return descriptions;
 	}
 

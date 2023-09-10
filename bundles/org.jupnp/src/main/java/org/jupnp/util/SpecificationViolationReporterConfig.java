@@ -13,12 +13,12 @@
  */
 package org.jupnp.util;
 
-import java.util.Dictionary;
-import java.util.Map;
-
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,40 +27,30 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Andre Fuechsel 
  */
-@SuppressWarnings("rawtypes")
-public class SpecificationViolationReporterConfig implements ManagedService {
+@Component(configurationPid = "org.jupnp.util", property = "specificationViolationReporterEnabled:Boolean=true" )
+@Designate(ocd = SpecificationViolationReporterConfig.Config.class)
+public class SpecificationViolationReporterConfig {
 
-    private static final String SPECIFICATION_VIOLATION_REPORTER_ENABLED = "specificationViolationReporterEnabled";
+    @ObjectClassDefinition(id = "org.jupnp.util", name = "jUPnP specification violation reporting configuration", description = "Configuration for jUPnP specification violation reporting")
+    public @interface Config {
+        @AttributeDefinition(name = "specificationViolationReporterEnabled", description = "Enable specification violation reporting.")
+        boolean specificationViolationReporterEnabled() default true;
+    }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private volatile boolean specificationViolationReportingEnabled = true;
-
-    public void activate(ComponentContext ctx) {
-        // get default configuration
-        configure(ctx.getProperties());
-        configureReporter();
+    @Activate
+    public void activate(final Config config) {
+        reconfigure(config);
     }
 
-    public void modified(Map<String, Object> config) {
-        configureReporter();
+    @Modified
+    public void modified(final Config config) {
+        reconfigure(config);
     }
 
-    @Override
-    public void updated(Dictionary properties) throws ConfigurationException {
-        // get updated configuration
-        configure(properties);
-    }
-
-    private void configure(Dictionary config) {
-        Object enabledObj = config.get(SPECIFICATION_VIOLATION_REPORTER_ENABLED);
-        if (enabledObj != null && enabledObj instanceof Boolean) {
-            specificationViolationReportingEnabled = (Boolean) enabledObj;
-        }
-    }
-
-    private void configureReporter() {
-        if (specificationViolationReportingEnabled) {
+    private void reconfigure(Config config) {
+        if (config.specificationViolationReporterEnabled()) {
             logger.info("Enabling jUPnP specification violation reporter");
             SpecificationViolationReporter.enableReporting();
         } else {

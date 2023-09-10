@@ -14,12 +14,10 @@
 
 package org.jupnp;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.jupnp.controlpoint.ControlPoint;
@@ -33,7 +31,14 @@ import org.jupnp.transport.Router;
 import org.jupnp.transport.RouterException;
 import org.jupnp.transport.RouterImpl;
 import org.jupnp.util.Exceptions;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.HttpService;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,12 +56,20 @@ import org.slf4j.LoggerFactory;
  * @author Christian Bauer
  * @author Kai Kreuzer - OSGiified the service
  */
+@Component(configurationPid = "org.jupnp.upnpservice")
+@Designate(ocd = UpnpServiceImpl.Config.class)
 public class UpnpServiceImpl implements UpnpService {
+
+    @ObjectClassDefinition(id = "org.jupnp.upnpservice", name = "jUPnP service configuration", description = "Configuration for jUPnP OSGi service")
+    public @interface Config {
+        @AttributeDefinition(name = "initialSearchEnabled", description = "Enable initial search when starting jUPnP service.")
+        boolean initialSearchEnabled() default true;
+    }
 
     private final Logger log = LoggerFactory.getLogger(UpnpServiceImpl.class);
 
     protected boolean isConfigured = false;
-    protected Boolean isRunning = false;
+    protected boolean isRunning = false;
     private volatile boolean isInitialSearchEnabled = true;
 
     private final Object lock = new Object();
@@ -79,36 +92,48 @@ public class UpnpServiceImpl implements UpnpService {
         this.configuration = configuration;
     }
 
+    @Activate
+    public void activate(Config config) {
+        scheduledFuture = null;
+        scheduledExecutorService = createExecutor();
+        isInitialSearchEnabled = config.initialSearchEnabled();
+        startup();
+    }
+
+    @Deactivate
+    public void deactivate() {
+        if (scheduledFuture != null) {
+            scheduledFuture.cancel(true);
+        }
+
+        scheduledExecutorService.shutdownNow();
+        shutdown();
+    }
+
     private static ScheduledExecutorService createExecutor() {
-        return Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
-
-            @Override
-            public Thread newThread(Runnable runnable) {
-                Thread thread = new Thread(runnable, "Upnp Service Delayed Startup Thread");
-                thread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-
-                    @Override
-                    public void uncaughtException(Thread thread, Throwable exception) {
-                        throw new IllegalStateException(exception);
-                    }
-                });
-                return thread;
-            }
+        return Executors.newSingleThreadScheduledExecutor(runnable -> {
+            Thread thread = new Thread(runnable, "Upnp Service Delayed Startup Thread");
+            thread.setUncaughtExceptionHandler((thread1, exception) -> {
+                throw new IllegalStateException(exception);
+            });
+            return thread;
         });
     }
 
-    protected void setOSGiUpnpServiceConfiguration(OSGiUpnpServiceConfiguration configuration) {
+    @Reference
+    public void setUpnpServiceConfiguration(UpnpServiceConfiguration configuration) {
         this.configuration = configuration;
         if (isRunning) {
             restart(true);
         }
     }
 
-    protected void unsetOSGiUpnpServiceConfiguration(OSGiUpnpServiceConfiguration configuration) {
+    public void unsetUpnpServiceConfiguration(UpnpServiceConfiguration configuration) {
         this.configuration = null;
     }
 
-    protected void setHttpService(HttpService httpService) {
+    @Reference
+    public void setHttpService(HttpService httpService) {
         // Only need to restart jupnp after/if HttpService appears
         if (isRunning) {
             shutdown(false);
@@ -116,7 +141,7 @@ public class UpnpServiceImpl implements UpnpService {
         }
     }
 
-    protected void unsetHttpService(HttpService httpService) {
+    public void unsetHttpService(HttpService httpService) {
         // Only need to restart jupnp after/if HttpService disappears
         if (isRunning) {
             shutdown(false);
@@ -165,18 +190,15 @@ public class UpnpServiceImpl implements UpnpService {
     }
 
     protected void shutdown(boolean separateThread) {
-        Runnable shutdown = new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock) {
-                    if (isRunning) {
-                        log.info("Shutting down UPnP service...");
-                        shutdownRegistry();
-                        shutdownConfiguration();
-                        shutdownRouter();
-                        log.info("UPnP service shutdown completed");
-                        isRunning = false;
-                    }
+        Runnable shutdown = () -> {
+            synchronized (lock) {
+                if (isRunning) {
+                    log.info("Shutting down UPnP service...");
+                    shutdownRegistry();
+                    shutdownConfiguration();
+                    shutdownRouter();
+                    log.info("UPnP service shutdown completed");
+                    isRunning = false;
                 }
             }
         };
@@ -189,12 +211,9 @@ public class UpnpServiceImpl implements UpnpService {
     }
 
     private void restart(boolean separateThread) {
-        Runnable restart = new Runnable() {
-            @Override
-            public void run() {
-                shutdown();
-                startup();
-            }
+        Runnable restart = () -> {
+            shutdown();
+            startup();
         };
         if (separateThread) {
             // This is not a daemon thread, it has to complete!
@@ -227,12 +246,7 @@ public class UpnpServiceImpl implements UpnpService {
 
     private void delayedStartup(int msDelay) {
 
-        Runnable startup = new Runnable() {
-            @Override
-            public void run() {
-                startup();
-            }
-        };
+        Runnable startup = this::startup;
 
         if (scheduledFuture != null) {
             scheduledFuture.cancel(true);
@@ -248,7 +262,7 @@ public class UpnpServiceImpl implements UpnpService {
 
                 // Instantiation order is important: Router needs to start its network services after registry is ready
 
-                log.debug("Using configuration: " + getConfiguration().getClass().getName());
+                log.debug("Using configuration: {}", getConfiguration().getClass().getName());
 
                 this.protocolFactory = createProtocolFactory();
                 this.registry = createRegistry(protocolFactory);
@@ -271,29 +285,6 @@ public class UpnpServiceImpl implements UpnpService {
                 }
             }
         }
-    }
-
-    private void setConfigProperties(Map<String, Object> configProperties) {
-        Object prop = configProperties.get("initialSearchEnabled");
-        if (prop instanceof Boolean) {
-            isInitialSearchEnabled = (boolean) prop;
-        }
-    }
-
-    protected void activate(Map<String, Object> configProperties) {
-        scheduledFuture = null;
-        scheduledExecutorService = createExecutor();
-        setConfigProperties(configProperties);
-        startup();
-    }
-
-    protected void deactivate() {
-        if (scheduledFuture != null) {
-            scheduledFuture.cancel(true);
-        }
-
-        scheduledExecutorService.shutdownNow();
-        shutdown();
     }
 
 }

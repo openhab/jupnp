@@ -1,89 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.jupnp</groupId>
-		<artifactId>jupnp</artifactId>
-		<version>2.8.0-SNAPSHOT</version>
-	</parent>
+  <parent>
+    <groupId>org.jupnp</groupId>
+    <artifactId>jupnp</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+  </parent>
 
-	<groupId>org.jupnp.pom</groupId>
-	<artifactId>tools</artifactId>
-	<packaging>pom</packaging>
-	<name>jUPnP Tools</name>
+  <groupId>org.jupnp.pom</groupId>
+  <artifactId>tools</artifactId>
+  <packaging>pom</packaging>
 
-	<modules>
-		<module>org.jupnp.tool</module>
-	</modules>
+  <name>jUPnP Tools</name>
 
-	<build>
-        <plugins>
+  <modules>
+    <module>org.jupnp.tool</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>attach-artifacts</id>
+              <goals>
+                <goal>attach-artifact</goal>
+              </goals>
+              <phase>install</phase>
+              <configuration>
+                <artifacts>
+                  <artifact>
+                    <file>${project.build.outputDirectory}/${project.artifactId}-${project.version}.jar</file>
+                    <type>jar</type>
+                    <classifier>javadoc</classifier>
+                  </artifact>
+                </artifacts>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
         <executions>
           <execution>
             <id>attach-sources</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
+            <phase>verify</phase>
           </execution>
         </executions>
       </plugin>
-          <!--
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.3</version>
-            <executions>
-              <execution>
-                <id>jar</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              -->
-              <!-- 'javadoc.opts' project property is set by the 'doclint-java8-disable' profile. It is important to keep 'javadoc' profile declaration after the declaration of 'doclint-java8-disable' profile. -->
-              <!--
-              <additionalparam>${javadoc.opts}</additionalparam>
-              <excludePackageNames>*.internal.*,nl.*</excludePackageNames>
-            </configuration>
-          </plugin>
-          -->
-        </plugins>
-        <pluginManagement>
-          <plugins>
-                <plugin>
-                  <groupId>org.codehaus.mojo</groupId>
-                  <artifactId>build-helper-maven-plugin</artifactId>
-                  <version>1.8</version>
-                  <executions>
-                    <execution>
-                      <id>attach-artifacts</id>
-                      <phase>install</phase>
-                      <goals>
-                        <goal>attach-artifact</goal>
-                      </goals>
-                      <configuration>
-                        <artifacts>
-                          <artifact>
-                            <file>${project.build.outputDirectory}/${project.artifactId}-${project.version}.jar</file>
-                            <type>jar</type>
-                            <classifier>javadoc</classifier>
-                          </artifact>
-                        </artifacts>
-                      </configuration>
-                    </execution>
-                  </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-	</build>	
+    </plugins>
+  </build>
 
 </project>

@@ -19,8 +19,8 @@ there won't be any surprises for you. If you have not worked with Maven
 yet, just follow the instructions and everything will miraculously work ;-)
 
 What you need before you start:
-- Java SDK 8 (please note that the build does NOT work with any higher version!)
-- Maven3 from https://maven.apache.org/download.html
+- Java SDK 11 (please note that the build does NOT work with any higher version!)
+- Maven 3 from https://maven.apache.org/download.html
 
 Make sure that the "mvn" command is available on your path
 

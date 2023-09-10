@@ -1,5 +1,8 @@
-*.iml
+.classpath
+.idea
+.project
+.DS_Store
+.settings
+.vscode
 target
-out
-/tmp/
-/.settings/
+*.iml

@@ -57,6 +57,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +85,7 @@ import org.slf4j.LoggerFactory;
  * @author Kai Kreuzer - introduced bounded thread pool and http service streaming server
  * @author Victor Toni - consolidated transport abstraction into one interface
  */
+@Component(configurationPid = "org.jupnp", configurationPolicy = ConfigurationPolicy.REQUIRE)
 public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private static final String OSGI_SERVICE_HTTP_PORT = "org.osgi.service.http.port";
@@ -158,8 +163,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         this.transportConfiguration = TransportConfigurationProvider.getDefaultTransportConfiguration();
     }
 
+    @Activate
     protected void activate(BundleContext context, Map<String, Object> configProps) throws ConfigurationException {
-
         this.context = context;
 
         setConfigValues(configProps);
@@ -176,6 +181,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         namespace = createNamespace();
     }
 
+    @Deactivate
     protected void deactivate() {
         if (serviceReg != null) {
             serviceReg.unregister();

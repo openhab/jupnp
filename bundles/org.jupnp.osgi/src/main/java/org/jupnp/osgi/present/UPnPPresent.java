@@ -22,6 +22,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.upnp.UPnPDevice;
@@ -54,6 +58,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Bruce Green
  */
+@Component
 public class UPnPPresent {
 
     private final Logger log = LoggerFactory.getLogger(UPnPPresent.class);
@@ -61,7 +66,8 @@ public class UPnPPresent {
     private static final String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
     private UPnPDeviceTracker deviceTracker;
 
-    public UPnPPresent(BundleContext context, UpnpService upnpService) {
+    @Activate
+    public UPnPPresent(BundleContext context, @Reference UpnpService upnpService) {
         /*
            * Track all UPnPDevices registered for export.
            */
@@ -83,12 +89,19 @@ public class UPnPPresent {
            * Track OSGi UPnP events. Local devices fire a UPnP event when
            * a state variable that sends an event when changed.
            */
-        Dictionary<String, String> properties = new Hashtable<String, String>();
+        Dictionary<String, String> properties = new Hashtable<>();
         properties.put(EventConstants.EVENT_TOPIC, UPNP_EVENT_TOPIC);
         context.registerService(
                 EventHandler.class.getName(),
                 new UPnPEventHandler(context),
                 properties
         );
+    }
+
+    @Deactivate
+    public void deactivate() {
+        if (deviceTracker != null) {
+            deviceTracker.close();
+        }
     }
 }

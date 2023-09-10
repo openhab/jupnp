@@ -1,6 +1,7 @@
-# JUPnPTool
+# jUPnP Tool
 
-JUPnPTool is a command line tool using JUPnP library. It will provide options to search and query UPnP devices.
+jUPnP Tool is a command line tool using jUPnP library.
+It will provide options to search and query UPnP devices.
 
 ## How to build the tool
 
@@ -15,7 +16,7 @@ It will generate all required jar files in `target` folder.
 You can start this tool with:
 
 ```shell
-$ alias jupnptool="java -jar jupnp-tool-2.0.0-SNAPSHOT-jar-with-dependencies.jar"
+$ alias jupnptool="java -jar jupnptool-3.0.0-SNAPSHOT.jar"
 $ jupnptool
 
 Usage: jupnptool [options] [command] [command options]
@@ -24,8 +25,15 @@ Usage: jupnptool [options] [command] [command options]
        Help how to use this tool
        Default: false
     --loglevel, -l
-       Set LogLevel to {DEBUG|INFO|WARN|ERROR|OFF}
+       Set LogLevel to {OFF|ERROR|WARN|INFO|DEBUG|TRACE}
        Default: DISABLED
+    --multicastResponsePort, -m
+       Specify Multicast Response Port
+       Default: 0
+    --pool, -p
+       Configure thread pools and enable pool statistic
+       (mainPoolSize,asyncPoolSize[,stats])
+       Default: 20,20
     --verbose, -v
        Enable verbose messages
        Default: false
@@ -37,11 +45,17 @@ Usage: jupnptool [options] [command] [command options]
              Filter for devices containing this text (in some description)
              Default: *
           --sort, -s
-             Sort using {ip|model|serialNumber|manufacturer|udn}
-             Default: ip
+             Sort using {none|ip|model|serialNumber|manufacturer|udn}
+             Default: none
           --timeout, -t
              The timeout when search will be finished
              Default: 10
+
+    info      Show UPnP device information
+      Usage: info [options] IP address or UDN
+
+    nop      No operation
+      Usage: nop [options]
 ```
 
 ### Samples:
@@ -50,9 +64,7 @@ Usage: jupnptool [options] [command] [command options]
 $ jupnptool --help
 ...
 $ jupnptool search
-jupnptool (2.0.0.SNAPSHOT): Search for UPnP devices for 10 seconds sorted by ip and filtered by *
-Aug 26, 2014 11:09:46 PM org.jupnp.transport.impl.apache.StreamServerImpl init
-INFO: Created socket (for receiving TCP streams) on: /192.168.3.112:50610
+jUPnP Commandline Tool (3.0.0-SNAPSHOT): Search for UPnP devices for 10 seconds sorted by none and filtered by * (poolConfiguration='20,20', multicastResponsePort=0)
 IP address       Model                      SerialNumber    
 192.168.3.1      FRITZ!Box Fon WLAN 7390    -               
 192.168.3.106    QIVICON                    3691234567      
@@ -61,9 +73,7 @@ IP address       Model                      SerialNumber
 $ jupnptool search --timeout=30 --filter=QIVICON
 ...
 $ jupnptool search --sort udn
-jupnptool (2.0.0.SNAPSHOT): Search for UPnP devices for 10 seconds sorted by udn and filtered by *
-Aug 26, 2014 11:10:17 PM org.jupnp.transport.impl.apache.StreamServerImpl init
-INFO: Created socket (for receiving TCP streams) on: /192.168.3.112:50647
+jUPnP Commandline Tool (3.0.0-SNAPSHOT): Search for UPnP devices for 10 seconds sorted by udn and filtered by * (poolConfiguration='20,20', multicastResponsePort=0)
 IP address       Model                      Manufacturer           SerialNumber    UDN                                     
 192.168.3.1      FRITZ!Box Fon WLAN 7390    AVM Berlin             -               12345678-1234-40e7-8e6c-246511DDBE2E    
 192.168.3.106    QIVICON                    Deutsche Telekom AG    3693BADCC3      861ee488-22b3-11e4-bbea-123456789123    
@@ -77,6 +87,3 @@ $ jupnptool --verbose --loglevel=DEBUG search --timeout=60 --filter=Philips
 * Seldom the ThreadPool is not able to process received packets
 TODO here message
 * Move build to distribution
-
-
-

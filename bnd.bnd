@@ -1,0 +1,6 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.name}
+Automatic-Module-Name: ${def;bsn}
+
+-exportcontents: org.jupnp.*
+-noimportjava: true

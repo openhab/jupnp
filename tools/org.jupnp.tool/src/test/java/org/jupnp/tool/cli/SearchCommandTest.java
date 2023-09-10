@@ -14,6 +14,8 @@
 
 package org.jupnp.tool.cli;
 
+import java.util.UUID;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,12 +49,12 @@ public class SearchCommandTest extends AbstractTestCase {
 		// no sort, no verbose
 		SearchResultPrinter res = new SearchCommand(tool).new SearchResultPrinter(
 				"ip", false);
-		res.add("192.168.3.101", "", "", "", "");
-		res.add("192.168.3.1", "", "", "", "");
-		res.add("192.168.3.100", "", "", "", "");
-		res.add("192.168.3.2", "", "", "", "");
-		res.add("192.168.3.15", "", "", "", "");
-		res.add("192.168.3.255", "", "", "", "");
+		res.add("192.168.3.101", "", "", "", "uuid:" + UUID.randomUUID());
+		res.add("192.168.3.1", "", "", "", "uuid:" + UUID.randomUUID());
+		res.add("192.168.3.100", "", "", "", "uuid:" + UUID.randomUUID());
+		res.add("192.168.3.2", "", "", "", "uuid:" + UUID.randomUUID());
+		res.add("192.168.3.15", "", "", "", "uuid:" + UUID.randomUUID());
+		res.add("192.168.3.255", "", "", "", "uuid:" + UUID.randomUUID());
 		String s = res.asBody();
 		// System.out.println(s);
 		

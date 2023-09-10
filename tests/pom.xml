@@ -1,56 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.jupnp</groupId>
-        <artifactId>jupnp</artifactId>
-        <version>2.8.0-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.jupnp</groupId>
+    <artifactId>jupnp</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+  </parent>
 
-    <name>jUPnP Tests</name>
-    <artifactId>tests</artifactId>
-    <groupId>org.jupnp.pom</groupId>
-    <packaging>pom</packaging>
+  <groupId>org.jupnp.pom</groupId>
+  <artifactId>tests</artifactId>
+  <packaging>pom</packaging>
 
-    <modules>
-        <module>common</module>
-        <module>devices/simple</module>
-        <module>integration</module>
-        <module>core</module>
-    </modules>
+  <name>jUPnP Tests</name>
 
-    <properties>
-        <!-- This module (and its sub-modules) doesn't have a manual -->
-        <lemma.manual>false</lemma.manual>
-    </properties>
+  <modules>
+    <module>common</module>
+    <module>devices/simple</module>
+    <module>integration</module>
+    <module>core</module>
+  </modules>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <properties>
+    <!-- This module (and its sub-modules) doesn't have a manual -->
+    <lemma.manual>false</lemma.manual>
+  </properties>
 
-    <dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.cmpn</artifactId>
+    </dependency>
+  </dependencies>
 
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>${osgi.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <version>${osgi.version}</version>
-        </dependency>
-
-    </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
