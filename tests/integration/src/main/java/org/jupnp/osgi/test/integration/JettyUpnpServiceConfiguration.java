@@ -15,6 +15,7 @@
 package org.jupnp.osgi.test.integration;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
+import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.impl.jetty.JettyServletContainer;
 import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
@@ -23,15 +24,17 @@ import org.jupnp.transport.impl.ServletStreamServerImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service = UpnpServiceConfiguration.class)
 public class JettyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration  {
 
-	@Override
+    @Override
     public StreamClient<?> createStreamClient() {
         return new JettyStreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService()));
     }
 
-	@Override
+    @Override
     public StreamServer<?> createStreamServer(NetworkAddressFactory networkAddressFactory) {
         return new ServletStreamServerImpl(
                 new ServletStreamServerConfigurationImpl(

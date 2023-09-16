@@ -17,6 +17,7 @@ package org.jupnp.osgi.upnp.test.device.simple;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osgi.annotation.bundle.Header;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -31,6 +32,7 @@ import org.jupnp.osgi.upnp.test.device.simple.devices.BaseUPnPDevice;
 import org.jupnp.osgi.upnp.test.device.simple.devices.SimpleTestDevice;
 import org.jupnp.osgi.upnp.test.device.simple.model.Simple;
 
+@Header(name = Constants.BUNDLE_ACTIVATOR, value = "${@class}")
 public class Activator implements BundleActivator {
 	private static Activator plugin;
 	private static BundleContext context;

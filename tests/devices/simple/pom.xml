@@ -10,14 +10,10 @@
   </parent>
 
   <groupId>org.jupnp.tests</groupId>
-  <artifactId>jupnp-osgi-tests-devices-simple</artifactId>
-  <packaging>bundle</packaging>
+  <artifactId>org.jupnp.osgi.upnp.test.device.simple</artifactId>
 
   <name>jUPnP OSGi Test Simple Device</name>
-
-  <properties>
-    <SymbolicName>org.jupnp.osgi.upnp.test.device.simple</SymbolicName>
-  </properties>
+  <description>A test device that exposes all the capabilities of OSGi UPnP</description>
 
   <dependencies>
     <dependency>
@@ -28,51 +24,26 @@
   </dependencies>
 
   <build>
-    <finalName>${SymbolicName}.${project.version}</finalName>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bnd-process</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <manifestLocation>META-INF</manifestLocation>
-          <instructions>
-            <Bundle-SymbolicName>${SymbolicName}</Bundle-SymbolicName>
-            <Bundle-Name>${project.name}</Bundle-Name>
-            <Bundle-Activator>org.jupnp.osgi.upnp.test.device.simple.Activator</Bundle-Activator>
-            <Bundle-Author>Bruce Green</Bundle-Author>
-            <Bundle-Description>A test device that exposes all the capablities of OSGi UPnP.</Bundle-Description>
-            <Import-Package>org.osgi.framework,
-              org.osgi.service.event,
-              org.osgi.service.upnp,
-              org.osgi.service.device,
-              org.osgi.util.tracker,
-              org.slf4j</Import-Package>
-            <Export-Package></Export-Package>
-            <Embed-Transitive>false</Embed-Transitive>
-            <Embed-Dependency>jupnp-osgi-tests-common</Embed-Dependency>
-          </instructions>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>META-INF</directory>
-            </fileset>
-          </filesets>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+          <skipIfEmpty>true</skipIfEmpty>
         </configuration>
       </plugin>
     </plugins>
