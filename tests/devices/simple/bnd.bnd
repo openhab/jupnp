@@ -1,3 +1,0 @@
--include: ../../../bnd.bnd
-
--includeresource: jupnp-osgi-tests-common-*.jar;lib:=true

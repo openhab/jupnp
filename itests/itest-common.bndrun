@@ -1,0 +1,40 @@
+-standalone: \
+	../../bom/runtime-index/target/index.xml;name="org.jupnp.bom.runtime-index",\
+	../../bom/test-index/target/index.xml;name="org.jupnp.bom.test-index",\
+	target/index.xml;name="self"
+
+-resolve.effective: active
+
+-tester: biz.aQute.tester.junit-platform
+
+# Run all integration tests which are named xyzTest
+Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
+
+-runfw: org.eclipse.osgi
+-runee: JavaSE-11
+
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Name: ${project.name}
+Automatic-Module-Name: ${def;bsn}
+
+# The integration test itself does not export anything.
+Export-Package:
+-exportcontents:
+
+-runblacklist: \
+	bnd.identity;id='osgi.cmpn',\
+	bnd.identity;id='slf4j.api',\
+	bnd.identity;id='slf4j.simple'
+
+-runrequires.container: \
+	bnd.identity;id='org.osgi.service.event',\
+	bnd.identity;id='org.eclipse.equinox.event',\
+	bnd.identity;id='org.ops4j.pax.web.pax-web-jetty',\
+	bnd.identity;id='org.ops4j.pax.web.pax-web-runtime'
+
+-runrequires.junit: \
+	bnd.identity;id='biz.aQute.tester.junit-platform',\
+	bnd.identity;id='junit-jupiter-engine'
+
+-runproperties: \
+	org.ops4j.pax.logging.DefaultServiceLog.level=WARN

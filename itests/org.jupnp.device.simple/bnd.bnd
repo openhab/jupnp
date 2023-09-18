@@ -1,0 +1,3 @@
+-include: ../../bnd.bnd
+
+-includeresource: org.jupnp.common-*.jar;lib:=true
