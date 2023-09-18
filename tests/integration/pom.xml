@@ -13,11 +13,6 @@
 
   <name>jUPnP OSGi Test Integration</name>
 
-  <properties>
-    <pax.logging.version>2.2.4</pax.logging.version>
-    <pax.web.version>8.0.22</pax.web.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.jupnp</groupId>
@@ -33,120 +28,6 @@
       <groupId>org.jupnp.tests</groupId>
       <artifactId>org.jupnp.osgi.upnp.test.device.simple</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>biz.aQute.bnd</groupId>
-      <artifactId>biz.aQute.tester.junit-platform</artifactId>
-      <version>${bnd.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.platform</groupId>
-      <artifactId>junit-platform-launcher</artifactId>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.platform</groupId>
-      <artifactId>org.eclipse.osgi</artifactId>
-      <version>3.17.200</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.configadmin</artifactId>
-      <version>1.9.26</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.upnp</artifactId>
-      <version>1.2.1</version>
-    </dependency>
-
-    <!-- Event Admin -->
-    <dependency>
-      <groupId>org.eclipse.platform</groupId>
-      <artifactId>org.eclipse.equinox.event</artifactId>
-      <version>1.4.300</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.event</artifactId>
-      <version>1.4.1</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- Declarative Services -->
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.component</artifactId>
-      <version>1.5.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.scr</artifactId>
-      <version>2.2.6</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>animal-sniffer-annotations</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- Pax Logging -->
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-api</artifactId>
-      <version>${pax.logging.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-logback</artifactId>
-      <version>${pax.logging.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- Pax Web -->
-    <dependency>
-      <groupId>org.ops4j.pax.web</groupId>
-      <artifactId>pax-web-jetty</artifactId>
-      <version>${pax.web.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.web</groupId>
-      <artifactId>pax-web-runtime</artifactId>
-      <version>${pax.web.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.web</groupId>
-      <artifactId>pax-web-spi</artifactId>
-      <version>${pax.web.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.web</groupId>
-      <artifactId>pax-web-tomcat-common</artifactId>
-      <version>${pax.web.version}</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 
@@ -244,33 +125,4 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>with-bnd-resolver-resolve</id>
-      <activation>
-        <property>
-          <name>withResolver</name>
-        </property>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>biz.aQute.bnd</groupId>
-              <artifactId>bnd-resolver-maven-plugin</artifactId>
-              <version>${bnd.version}</version>
-              <executions>
-                <execution>
-                  <goals>
-                    <goal>resolve</goal>
-                  </goals>
-                  <phase>package</phase>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-  </profiles>
 </project>

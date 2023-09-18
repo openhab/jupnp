@@ -21,25 +21,59 @@
   </modules>
 
   <properties>
-    <!-- This module (and its sub-modules) doesn't have a manual -->
-    <lemma.manual>false</lemma.manual>
     <maven.deploy.skip>true</maven.deploy.skip>
     <maven.javadoc.skip>true</maven.javadoc.skip>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.core</artifactId>
+      <groupId>org.jupnp.bom</groupId>
+      <artifactId>org.jupnp.bom.compile</artifactId>
+      <type>pom</type>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.annotation</artifactId>
+      <groupId>org.jupnp.bom</groupId>
+      <artifactId>org.jupnp.bom.test</artifactId>
+      <type>pom</type>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.cmpn</artifactId>
+      <groupId>org.jupnp.bom</groupId>
+      <artifactId>org.jupnp.bom.runtime</artifactId>
+      <type>pom</type>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>with-bnd-resolver-resolve</id>
+      <activation>
+        <property>
+          <name>withResolver</name>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>biz.aQute.bnd</groupId>
+              <artifactId>bnd-resolver-maven-plugin</artifactId>
+              <version>${bnd.version}</version>
+              <executions>
+                <execution>
+                  <goals>
+                    <goal>resolve</goal>
+                  </goals>
+                  <phase>package</phase>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

@@ -18,6 +18,21 @@
     <module>org.jupnp.tool</module>
   </modules>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.jupnp.bom</groupId>
+      <artifactId>org.jupnp.bom.compile</artifactId>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jupnp.bom</groupId>
+      <artifactId>org.jupnp.bom.test</artifactId>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <pluginManagement>
       <plugins>
