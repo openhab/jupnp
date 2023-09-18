@@ -13,6 +13,10 @@ Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
 -runfw: org.eclipse.osgi
 -runee: JavaSE-11
 
+# An unused random HTTP port is used during tests to prevent resource conflicts
+# This property is set by the build-helper-maven-plugin in the itests pom.xml
+-runvm: -Dorg.osgi.service.http.port=${org.osgi.service.http.port}
+
 Bundle-SymbolicName: ${project.artifactId}
 Bundle-Name: ${project.name}
 Automatic-Module-Name: ${def;bsn}
