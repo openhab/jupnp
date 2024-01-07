@@ -13,4 +13,8 @@
 
   <name>jUPnP Integration Tests Common Library</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
 </project>

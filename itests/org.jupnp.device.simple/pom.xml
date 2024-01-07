@@ -14,6 +14,10 @@
   <name>jUPnP Integration Tests Simple Device</name>
   <description>A test device that exposes all the capabilities of OSGi UPnP</description>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp.itests</groupId>

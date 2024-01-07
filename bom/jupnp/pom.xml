@@ -13,6 +13,10 @@
 
   <name>jUPnP BOM</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp</groupId>

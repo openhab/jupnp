@@ -13,6 +13,10 @@
 
   <name>jUPnP Test BOM</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>ch.qos.logback</groupId>

@@ -40,6 +40,23 @@ To build jUPnP from the sources, Maven takes care of everything:
 
 The build result will be available in the folder `target`.
 
+## Code style
+
+The code style used by jUPnP is available as an Eclipse XML configuration in [codestyle.xml](tools/spotless/codestyle.xml).
+To use this configuration while coding, import the code style configuration into an IDE such as Eclipse or IntelliJ.
+
+To check if your code is following the code style run:
+
+```shell
+mvn spotless:check
+```
+
+To reformat your code so it conforms to the code style you can run:
+
+```shell
+mvn spotless:apply
+```
+
 ## Integration tests
 
 The OSGi integration tests in the "itests" directory use specific versions of bundles in the runbundles of `itest.bndrun`.

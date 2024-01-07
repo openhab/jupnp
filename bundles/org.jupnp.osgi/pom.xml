@@ -13,6 +13,10 @@
 
   <name>jUPnP OSGi UPnP Service</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp</groupId>

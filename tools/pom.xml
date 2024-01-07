@@ -18,6 +18,10 @@
     <module>org.jupnp.tool</module>
   </modules>
 
+  <properties>
+    <basedirRoot>..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp.bom</groupId>

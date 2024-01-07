@@ -13,6 +13,10 @@
 
   <name>jUPnP Compile BOM</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>javax.servlet</groupId>

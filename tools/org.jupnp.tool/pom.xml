@@ -13,6 +13,10 @@
 
   <name>jUPnP Commandline Tool</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.beust</groupId>

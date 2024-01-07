@@ -20,6 +20,10 @@
     <module>org.jupnp.support</module>
   </modules>
 
+  <properties>
+    <basedirRoot>..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp.bom</groupId>

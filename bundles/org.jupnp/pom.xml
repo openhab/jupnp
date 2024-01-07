@@ -13,6 +13,10 @@
 
   <name>jUPnP Core Library</name>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <build>
     <plugins>
       <plugin>

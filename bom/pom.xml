@@ -24,6 +24,7 @@
   </modules>
 
   <properties>
+    <basedirRoot>..</basedirRoot>
     <maven.javadoc.skip>true</maven.javadoc.skip>
   </properties>
 

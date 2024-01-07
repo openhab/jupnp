@@ -14,6 +14,10 @@
   <name>jUPnP Extra Support Library</name>
   <description>It includes support for UPnP-AV, DLNA, Microsoft Devices such as XBox 360</description>
 
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jupnp</groupId>

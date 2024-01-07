@@ -59,8 +59,10 @@
   </distributionManagement>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <basedirRoot>.</basedirRoot>
+    <bndFile>${basedirRoot}/bnd.bnd</bndFile>
     <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <args4j.version>2.0.12</args4j.version>
     <bnd.version>6.4.0</bnd.version>
@@ -72,7 +74,10 @@
     <slf4j.version>1.7.36</slf4j.version>
     <osgi.version>7.0.0</osgi.version>
 
-    <basedirRoot>.</basedirRoot>
+    <spotless.version>2.38.0</spotless.version>
+    <!-- Eclipse Java formatter version 4.26+ does not check test files -->
+    <spotless.eclipse.version>4.25</spotless.eclipse.version>
+    <spotless.eclipse.wtp.version>4.21.0</spotless.eclipse.wtp.version>
   </properties>
 
   <dependencyManagement>
@@ -114,7 +119,7 @@
           <artifactId>bnd-maven-plugin</artifactId>
           <version>${bnd.version}</version>
           <configuration>
-            <bndfile>${basedirRoot}/bnd.bnd</bndfile>
+            <bndfile>${bndFile}</bndfile>
           </configuration>
         </plugin>
         <plugin>
@@ -204,6 +209,50 @@
           <version>1.0</version>
         </plugin>
         <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${spotless.version}</version>
+          <configuration>
+            <java>
+              <eclipse>
+                <file>${basedirRoot}/tools/spotless/codestyle.xml</file>
+                <version>${spotless.eclipse.version}</version>
+              </eclipse>
+              <removeUnusedImports></removeUnusedImports>
+              <importOrder>
+                <file>${basedirRoot}/tools/spotless/import-order</file>
+              </importOrder>
+              <endWithNewline></endWithNewline>
+            </java>
+            <formats>
+              <format>
+                <!-- pom.xml -->
+                <includes>
+                  <include>pom.xml</include>
+                </includes>
+                <eclipseWtp>
+                  <type>XML</type>
+                  <files>
+                    <file>${basedirRoot}/tools/spotless/wst-pom-file.prefs</file>
+                  </files>
+                  <version>${spotless.eclipse.wtp.version}</version>
+                </eclipseWtp>
+                <trimTrailingWhitespace></trimTrailingWhitespace>
+                <endWithNewline></endWithNewline>
+              </format>
+            </formats>
+          </configuration>
+          <executions>
+            <execution>
+              <id>codestyle-check</id>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <phase>initialize</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
           <groupId>com.github.ekryd.sortpom</groupId>
           <artifactId>sortpom-maven-plugin</artifactId>
           <version>3.3.0</version>
@@ -256,22 +305,6 @@
 
     <plugins>
       <plugin>
-        <groupId>org.commonjava.maven.plugins</groupId>
-        <artifactId>directory-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>directories</id>
-            <goals>
-              <goal>highest-basedir</goal>
-            </goals>
-            <phase>initialize</phase>
-            <configuration>
-              <property>basedirRoot</property>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.github.ekryd.sortpom</groupId>
         <artifactId>sortpom-maven-plugin</artifactId>
         <executions>
@@ -287,10 +320,25 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
 
   <profiles>
+    <profile>
+      <id>bnd-specific-profile</id>
+      <activation>
+        <file>
+          <exists>bnd.bnd</exists>
+        </file>
+      </activation>
+      <properties>
+        <bndFile>bnd.bnd</bndFile>
+      </properties>
+    </profile>
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
