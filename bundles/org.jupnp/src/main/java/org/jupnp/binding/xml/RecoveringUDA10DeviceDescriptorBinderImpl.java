@@ -44,7 +44,6 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         D device = null;
         DescriptorBindingException originalException = null;
         try {
-
             try {
                 if (descriptorXml != null)
                     descriptorXml = descriptorXml.trim(); // Always trim whitespace

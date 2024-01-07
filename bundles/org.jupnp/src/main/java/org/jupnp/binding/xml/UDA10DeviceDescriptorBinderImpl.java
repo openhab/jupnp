@@ -20,6 +20,7 @@ import static org.jupnp.model.XMLUtil.appendNewElementIfNotNull;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -88,6 +89,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
+            factory.setAttribute("http://apache.org/xml/properties/locale", Locale.ROOT);
             DocumentBuilder documentBuilder = factory.newDocumentBuilder();
             documentBuilder.setErrorHandler(this);
 
