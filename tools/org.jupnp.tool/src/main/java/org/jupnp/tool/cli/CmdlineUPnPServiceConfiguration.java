@@ -68,7 +68,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 
 	private ExecutorService mainExecutorService;
 
-    private ExecutorService asyncExecutorService;
+	private ExecutorService asyncExecutorService;
 
 	private final StreamClientConfiguration configuration;
 	private final TransportConfiguration transportConfiguration;

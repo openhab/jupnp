@@ -1,7 +1,6 @@
 [![GitHub Actions Build Status](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml)
 [![CDDL-1.0](https://img.shields.io/badge/license-CDDL%201.0-green.svg)](https://opensource.org/licenses/CDDL-1.0)
 
-
 # Introduction
 
 jUPnP is a Java UPnP library and has been forked from the no-longer maintained [Cling project](https://github.com/4thline/cling).
@@ -10,8 +9,7 @@ jUPnP is a Java UPnP library and has been forked from the no-longer maintained [
 
 Building and running the project is fairly easy if you follow the steps detailed below.
 
-1\. Prerequisites
-================
+## Prerequisites
 
 The build infrastructure is based on Maven in order to make it
 as easy as possible to get up to speed. If you know Maven already then
@@ -24,18 +22,15 @@ What you need before you start:
 
 Make sure that the "mvn" command is available on your path
 
+## Checkout
 
-2\. Checkout
-===========
+Checkout the source code from GitHub, e.g. by running:
 
-Checkout the source code from GitHub, e.g. by running
-
-````
+```shell
 git clone https://github.com/jupnp/jupnp.git
-````
+```
 
-3\. Building with Maven
-======================
+## Building with Maven
 
 To build jUPnP from the sources, Maven takes care of everything:
 - change into the jupnp directory (`cd jupnp`)
@@ -43,9 +38,17 @@ To build jUPnP from the sources, Maven takes care of everything:
 
 The build result will be available in the folder `target`.
 
+## Integration tests
 
-4\. Working with Eclipse
-=======================
+The OSGi integration tests in the "itests" directory use specific versions of bundles in the runbundles of `itest.bndrun`.
+You may need to update these runbundles after creating a new jupnp release or when changing dependencies.
+Maven can resolve the runbundles automatically by executing:
+
+```shell
+mvn clean install -DwithResolver
+```
+
+## Working with Eclipse
 
 When using Eclipse ensure that the JDK is set via the `-vm` option in `eclipse.ini`.
 Otherwise m2e might fail to resolve the system scoped dependency to `tools.jar`.
