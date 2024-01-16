@@ -18,11 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.InetAddress;
 import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.mock.MockProtocolFactory;
 import org.jupnp.mock.MockRouter;
@@ -220,11 +223,21 @@ public abstract class StreamServerClientTest {
         assertFalse(lastExecutedServerProtocol.isComplete);
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"", "http:///", "http:///descriptor.xml", "http://:8081/descriptor.xml"})
+    void returnNullForInvalidURI(String uri) throws Exception {
+        assertNull(client.sendRequest(createRequestMessage(new URI(uri))));
+    }
+
     protected StreamRequestMessage createRequestMessage(String path) {
         return new StreamRequestMessage(
             UpnpRequest.Method.GET,
             URI.create("http://" + TEST_HOST + ":" + TEST_PORT + path)
         );
+    }
+
+    protected StreamRequestMessage createRequestMessage(URI uri) {
+        return new StreamRequestMessage(UpnpRequest.Method.GET, uri);
     }
 
     public static abstract class TestProtocol extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
