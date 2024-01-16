@@ -20,9 +20,10 @@ import org.jupnp.support.model.AVTransport;
 import org.jupnp.support.model.TransportAction;
 import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -30,14 +31,14 @@ import java.util.logging.Logger;
  */
 public abstract class NoMediaPresent<T extends AVTransport> extends AbstractState<T> {
 
-    private final Logger logger = Logger.getLogger(NoMediaPresent.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(NoMediaPresent.class);
 
     public NoMediaPresent(T transport) {
         super(transport);
     }
 
     public void onEntry() {
-        logger.fine("Setting transport state to NO_MEDIA_PRESENT");
+        logger.debug("Setting transport state to NO_MEDIA_PRESENT");
         getTransport().setTransportInfo(
                 new TransportInfo(
                         TransportState.NO_MEDIA_PRESENT,

@@ -21,8 +21,8 @@ import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.model.types.UnsignedIntegerTwoBytes;
 import org.jupnp.support.model.Channel;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public abstract class SetVolume extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(SetVolume.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(SetVolume.class);
 
     public SetVolume(Service<?, ?> service, long newVolume) {
         this(new UnsignedIntegerFourBytes(0), service, newVolume);
@@ -45,7 +45,6 @@ public abstract class SetVolume extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Executed successfully");
-
+        logger.debug("Executed successfully");
     }
 }

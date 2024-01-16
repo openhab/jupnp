@@ -21,9 +21,10 @@ import org.jupnp.support.model.SeekMode;
 import org.jupnp.support.model.TransportAction;
 import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -31,14 +32,14 @@ import java.util.logging.Logger;
  */
 public abstract class Stopped<T extends AVTransport> extends AbstractState<T> {
 
-    private final Logger log = Logger.getLogger(Stopped.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Stopped.class);
 
     public Stopped(T transport) {
         super(transport);
     }
 
     public void onEntry() {
-        log.fine("Setting transport state to STOPPED");
+        logger.debug("Setting transport state to STOPPED");
         getTransport().setTransportInfo(
                 new TransportInfo(
                         TransportState.STOPPED,

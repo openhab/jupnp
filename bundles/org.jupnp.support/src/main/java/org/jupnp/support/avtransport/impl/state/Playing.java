@@ -21,9 +21,10 @@ import org.jupnp.support.model.SeekMode;
 import org.jupnp.support.model.TransportAction;
 import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -31,14 +32,14 @@ import java.util.logging.Logger;
  */
 public abstract class Playing<T extends AVTransport> extends AbstractState<T> {
 
-    private final Logger logger = Logger.getLogger(Playing.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Playing.class);
 
     public Playing(T transport) {
         super(transport);
     }
 
     public void onEntry() {
-        logger.fine("Setting transport state to PLAYING");
+        logger.debug("Setting transport state to PLAYING");
         getTransport().setTransportInfo(
                 new TransportInfo(
                         TransportState.PLAYING,

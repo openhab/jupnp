@@ -20,8 +20,8 @@ import org.jupnp.controlpoint.ControlPoint;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public abstract class Pause extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(Pause.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Pause.class);
 
     protected Pause(ActionInvocation<?> actionInvocation, ControlPoint controlPoint) {
         super(actionInvocation, controlPoint);
@@ -50,6 +50,6 @@ public abstract class Pause extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Execution successful");
+        logger.debug("Execution successful");
     }
 }

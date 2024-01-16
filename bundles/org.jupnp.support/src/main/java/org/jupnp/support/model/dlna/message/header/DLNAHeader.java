@@ -18,12 +18,12 @@ package org.jupnp.support.model.dlna.message.header;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jupnp.model.message.header.InvalidHeaderException;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.util.Exceptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transforms known and standardized DLNA/HTTP headers from/to string representation.
@@ -38,7 +38,7 @@ import org.jupnp.util.Exceptions;
  */
 public abstract class DLNAHeader<T> extends UpnpHeader<T> {
 
-    private static final Logger logger = Logger.getLogger(DLNAHeader.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DLNAHeader.class);
 
     /**
      * Maps a standardized DLNA header to potential header subtypes.
@@ -136,17 +136,16 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
         for (int i = 0; i < type.getHeaderTypes().length && upnpHeader == null; i++) {
             Class<? extends DLNAHeader<?>> headerClass = type.getHeaderTypes()[i];
             try {
-                logger.finest("Trying to parse '" + type + "' with class: " + headerClass.getSimpleName());
+                logger.trace("Trying to parse '{}' with class: {}", type, headerClass.getSimpleName());
                 upnpHeader = headerClass.newInstance();
                 if (headerValue != null) {
                     upnpHeader.setString(headerValue);
                 }
             } catch (InvalidHeaderException ex) {
-                logger.finest("Invalid header value for tested type: " + headerClass.getSimpleName() + " - " + ex.getMessage());
+                logger.trace("Invalid header value for tested type: {}", headerClass.getSimpleName() + " - " + ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
-                logger.severe("Error instantiating header of type '" + type + "' with value: " + headerValue);
-                logger.log(Level.SEVERE, "Exception root cause: ", Exceptions.unwrap(ex));
+                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue, Exceptions.unwrap(ex));
             }
 
         }

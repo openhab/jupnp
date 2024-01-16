@@ -15,8 +15,6 @@
 
 package org.jupnp.support.connectionmanager;
 
-import java.util.logging.Logger;
-
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpInputArgument;
 import org.jupnp.binding.annotations.UpnpOutputArgument;
@@ -35,6 +33,8 @@ import org.jupnp.support.connectionmanager.callback.PrepareForConnection;
 import org.jupnp.support.model.ConnectionInfo;
 import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.ProtocolInfos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Support for setup and teardown of an arbitrary number of connections with a manager peer.
@@ -45,7 +45,7 @@ import org.jupnp.support.model.ProtocolInfos;
  */
 public abstract class AbstractPeeringConnectionManagerService extends ConnectionManagerService {
 
-    private final Logger logger = Logger.getLogger(AbstractPeeringConnectionManagerService.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(AbstractPeeringConnectionManagerService.class);
 
     protected AbstractPeeringConnectionManagerService(ConnectionInfo... activeConnections) {
         super(activeConnections);
@@ -73,7 +73,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
     protected synchronized void storeConnection(ConnectionInfo info) {
         CSV<UnsignedIntegerFourBytes> oldConnectionIDs = getCurrentConnectionIDs();
         activeConnections.put(info.getConnectionID(), info);
-        logger.fine("Connection stored, firing event: " + info.getConnectionID());
+        logger.debug("Connection stored, firing event: {}", info.getConnectionID());
         CSV<UnsignedIntegerFourBytes> newConnectionIDs = getCurrentConnectionIDs();
         getPropertyChangeSupport().firePropertyChange("CurrentConnectionIDs", oldConnectionIDs, newConnectionIDs);
     }
@@ -81,7 +81,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
     protected synchronized void removeConnection(int connectionID) {
         CSV<UnsignedIntegerFourBytes> oldConnectionIDs = getCurrentConnectionIDs();
         activeConnections.remove(connectionID);
-        logger.fine("Connection removed, firing event: " + connectionID);
+        logger.debug("Connection removed, firing event: {}", connectionID);
         CSV<UnsignedIntegerFourBytes> newConnectionIDs = getCurrentConnectionIDs();
         getPropertyChangeSupport().firePropertyChange("CurrentConnectionIDs", oldConnectionIDs, newConnectionIDs);
     }
@@ -107,7 +107,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
             throw new ConnectionManagerException(ErrorCode.ARGUMENT_VALUE_INVALID, "Unsupported direction: " + direction);
         }
 
-        logger.fine("Preparing for connection with local new ID " + connectionId + " and peer connection ID: " + peerConnectionId);
+        logger.debug("Preparing for connection with local new ID {} and peer connection ID: {}", connectionId, peerConnectionId);
 
         ConnectionInfo newConnectionInfo = createConnection(
                 connectionId,
@@ -126,7 +126,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
     public synchronized void connectionComplete(@UpnpInputArgument(name = "ConnectionID", stateVariable = "A_ARG_TYPE_ConnectionID") int connectionID)
             throws ActionException {
         ConnectionInfo info = getCurrentConnectionInfo(connectionID);
-        logger.fine("Closing connection ID " + connectionID);
+        logger.debug("Closing connection ID {}", connectionID);
         closeConnection(info);
         removeConnection(connectionID);
     }
@@ -148,7 +148,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
 
         final int localConnectionID = getNewConnectionId();
 
-        logger.fine("Creating new connection ID " + localConnectionID + " with peer: " + peerService);
+        logger.debug("Creating new connection ID {} with peer: {}", localConnectionID, peerService);
         final boolean[] failed = new boolean[1];
         new PrepareForConnection(
                 peerService,
@@ -202,7 +202,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
                                                      final ConnectionInfo connectionInfo) throws ActionException {
 
         // It is important that you synchronize the whole procedure
-        logger.fine("Closing connection ID " + connectionInfo.getConnectionID() + " with peer: " + peerService);
+        logger.debug("Closing connection ID {} with peer: {}", connectionInfo.getConnectionID(), peerService);
         new ConnectionComplete(
                 peerService,
                 controlPoint,

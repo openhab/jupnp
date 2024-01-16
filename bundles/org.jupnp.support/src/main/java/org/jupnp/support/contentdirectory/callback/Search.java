@@ -25,8 +25,8 @@ import org.jupnp.support.contentdirectory.DIDLParser;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.SearchResult;
 import org.jupnp.support.model.SortCriterion;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Invokes a "Search" action, parses the result.
@@ -55,7 +55,7 @@ public abstract class Search extends ActionCallback {
         }
     }
 
-    private final Logger logger = Logger.getLogger(Search.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Search.class);
 
     /**
      * Search with first result 0 and {@link #getDefaultMaxResults()}, filters with {@link #CAPS_WILDCARD}.
@@ -71,7 +71,7 @@ public abstract class Search extends ActionCallback {
                   long firstResult, Long maxResults, SortCriterion... orderBy) {
         super(new ActionInvocation<>(service.getAction("Search")));
 
-        logger.fine("Creating browse action for container ID: " + containerId);
+        logger.debug("Creating browse action for container ID: {}", containerId);
 
         getActionInvocation().setInput("ContainerID", containerId);
         getActionInvocation().setInput("SearchCriteria", searchCriteria);
@@ -92,7 +92,7 @@ public abstract class Search extends ActionCallback {
 
     @Override
     public void success(ActionInvocation actionInvocation) {
-        logger.fine("Successful search action, reading output argument values");
+        logger.debug("Successful search action, reading output argument values");
 
         SearchResult result = new SearchResult(
                 actionInvocation.getOutput("Result").getValue().toString(),

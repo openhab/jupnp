@@ -16,13 +16,14 @@
 package org.jupnp.support.avtransport.impl.state;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 import org.jupnp.support.avtransport.lastchange.AVTransportVariable;
 import org.jupnp.support.model.AVTransport;
 import org.jupnp.support.model.TransportAction;
 import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -31,14 +32,14 @@ import org.jupnp.support.model.TransportState;
 public abstract class PausedPlay<T extends AVTransport> extends AbstractState<T>
 {
 
-    private final Logger logger = Logger.getLogger(PausedPlay.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(PausedPlay.class);
 
     public PausedPlay(T transport) {
         super(transport);
     }
 
     public void onEntry() {
-        logger.fine("Setting transport state to PAUSED_PLAYBACK");
+        logger.debug("Setting transport state to PAUSED_PLAYBACK");
         getTransport().setTransportInfo(
                 new TransportInfo(
                         TransportState.PAUSED_PLAYBACK,

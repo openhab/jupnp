@@ -17,7 +17,6 @@ package org.jupnp.support.connectionmanager;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpInputArgument;
@@ -36,6 +35,8 @@ import org.jupnp.model.types.csv.CSVUnsignedIntegerFourBytes;
 import org.jupnp.support.model.ConnectionInfo;
 import org.jupnp.support.model.ProtocolInfo;
 import org.jupnp.support.model.ProtocolInfos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base for connection management, implements the connection ID "0" behavior.
@@ -63,7 +64,7 @@ import org.jupnp.support.model.ProtocolInfos;
 })
 public class ConnectionManagerService {
 
-    private final Logger logger = Logger.getLogger(ConnectionManagerService.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(ConnectionManagerService.class.getName());
 
     protected final PropertyChangeSupport propertyChangeSupport;
     protected final Map<Integer, ConnectionInfo> activeConnections = new ConcurrentHashMap<>();
@@ -122,7 +123,7 @@ public class ConnectionManagerService {
     })
     public synchronized ConnectionInfo getCurrentConnectionInfo(@UpnpInputArgument(name = "ConnectionID") int connectionId)
             throws ActionException {
-        logger.fine("Getting connection information of connection ID: " + connectionId);
+        logger.debug("Getting connection information of connection ID: {}", connectionId);
         ConnectionInfo info;
         if ((info = activeConnections.get(connectionId)) == null) {
             throw new ConnectionManagerException(
@@ -141,7 +142,7 @@ public class ConnectionManagerService {
         for (Integer connectionID : activeConnections.keySet()) {
             csv.add(new UnsignedIntegerFourBytes(connectionID));
         }
-        logger.fine("Returning current connection IDs: " + csv.size());
+        logger.debug("Returning current connection IDs: {}", csv.size());
         return csv;
     }
 

@@ -18,7 +18,6 @@ package org.jupnp.support.avtransport.impl;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 import org.jupnp.model.types.ErrorCode;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
@@ -40,6 +39,8 @@ import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportSettings;
 import org.jupnp.util.statemachine.StateMachineBuilder;
 import org.jupnp.util.statemachine.TransitionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * State-machine based implementation of AVTransport service.
@@ -79,7 +80,7 @@ import org.jupnp.util.statemachine.TransitionException;
  */
 public class AVTransportService<T extends AVTransport> extends AbstractAVTransportService {
 
-    private final Logger logger = Logger.getLogger(AVTransportService.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(AVTransportService.class);
 
     private final Map<Long, AVTransportStateMachine> stateMachines = new ConcurrentHashMap<>();
 
@@ -292,13 +293,13 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
             long id = instanceId.getValue();
             AVTransportStateMachine stateMachine = stateMachines.get(id);
             if (stateMachine == null && id == 0 && createDefaultTransport) {
-                logger.fine("Creating default transport instance with ID '0'");
+                logger.debug("Creating default transport instance with ID '0'");
                 stateMachine = createStateMachine(instanceId);
                 stateMachines.put(id, stateMachine);
             } else if (stateMachine == null) {
                 throw new AVTransportException(AVTransportErrorCode.INVALID_INSTANCE_ID);
             }
-            logger.fine("Found transport control with ID '" + id + "'");
+            logger.debug("Found transport control with ID '{}'", id);
             return stateMachine;
         }
     }

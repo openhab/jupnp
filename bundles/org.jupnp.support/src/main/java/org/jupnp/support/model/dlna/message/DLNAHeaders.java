@@ -22,10 +22,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jupnp.model.message.UpnpHeaders;
 import org.jupnp.support.model.dlna.message.header.DLNAHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides UPnP header API in addition to plain multi-map HTTP header access.
@@ -36,7 +36,7 @@ import org.jupnp.support.model.dlna.message.header.DLNAHeader;
  */
 public class DLNAHeaders extends UpnpHeaders {
 
-    private final Logger logger = Logger.getLogger(DLNAHeaders.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(DLNAHeaders.class.getName());
 
     protected Map<DLNAHeader.Type, List<UpnpHeader<?>>> parsedDLNAHeaders;
 
@@ -59,7 +59,7 @@ public class DLNAHeaders extends UpnpHeaders {
         
         // This runs as late as possible and only when necessary (getter called and map is dirty)
         parsedDLNAHeaders = new LinkedHashMap<>();
-        logger.log(Level.FINE, "Parsing all HTTP headers for known UPnP headers: {0}", size());
+        logger.debug("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
             if (entry.getKey() == null) {
                 continue; // Oh yes, the JDK has 'null' HTTP headers
@@ -67,14 +67,14 @@ public class DLNAHeaders extends UpnpHeaders {
 
             DLNAHeader.Type type = DLNAHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
-                logger.log(Level.FINE, "Ignoring non-UPNP HTTP header: {0}", entry.getKey());
+                logger.debug("Ignoring non-UPNP HTTP header: {}", entry.getKey());
                 continue;
             }
 
             for (String value : entry.getValue()) {
                 UpnpHeader<?> upnpHeader = DLNAHeader.newInstance(type, value);
                 if (upnpHeader == null || upnpHeader.getValue() == null) {
-                    logger.log(Level.FINE, "Ignoring known but non-parsable header (value violates the UDA specification?) '{0}': {1}", new Object[]{type.getHttpName(), value});
+                    logger.debug("Ignoring known but non-parsable header (value violates the UDA specification?) '{}': {}", type.getHttpName(), value);
                 } else {
                     addParsedValue(type, upnpHeader);
                 }
@@ -83,7 +83,7 @@ public class DLNAHeaders extends UpnpHeaders {
     }
 
     protected void addParsedValue(DLNAHeader.Type type, UpnpHeader<?> value) {
-        logger.log(Level.FINE, "Adding parsed header: {0}", value);
+        logger.debug("Adding parsed header: {}", value);
         List<UpnpHeader<?>> list = parsedDLNAHeaders.get(type);
         if (list == null) {
             list = new LinkedList<>();
@@ -166,18 +166,18 @@ public class DLNAHeaders extends UpnpHeaders {
 
     @Override
     public void log() {
-        if (logger.isLoggable(Level.FINE)) {
+        if (logger.isTraceEnabled()) {
             super.log();
             if (parsedDLNAHeaders != null && parsedDLNAHeaders.size() > 0) {
-                logger.fine("########################## PARSED DLNA HEADERS ##########################");
+                logger.trace("########################## PARSED DLNA HEADERS ##########################");
                 for (Map.Entry<DLNAHeader.Type, List<UpnpHeader<?>>> entry : parsedDLNAHeaders.entrySet()) {
-                    logger.log(Level.FINE, "=== TYPE: {0}", entry.getKey());
+                    logger.trace("=== TYPE: {}", entry.getKey());
                     for (UpnpHeader<?> upnpHeader : entry.getValue()) {
-                        logger.log(Level.FINE, "HEADER: {0}", upnpHeader);
+                        logger.trace("HEADER: {}", upnpHeader);
                     }
                 }
             }
-            logger.fine("####################################################################");
+            logger.trace("####################################################################");
         }
     }
 

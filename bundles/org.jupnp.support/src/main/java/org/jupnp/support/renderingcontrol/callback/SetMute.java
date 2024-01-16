@@ -20,8 +20,8 @@ import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.support.model.Channel;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public abstract class SetMute extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(SetMute.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(SetMute.class.getName());
 
     public SetMute(Service<?, ?> service, boolean desiredMute) {
         this(new UnsignedIntegerFourBytes(0), service, desiredMute);
@@ -44,7 +44,6 @@ public abstract class SetMute extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Executed successfully");
-
+        logger.debug("Executed successfully");
     }
 }

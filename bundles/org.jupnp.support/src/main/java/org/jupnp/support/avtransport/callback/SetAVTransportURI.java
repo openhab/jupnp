@@ -19,8 +19,8 @@ import org.jupnp.controlpoint.ActionCallback;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public abstract class SetAVTransportURI extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(SetAVTransportURI.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(SetAVTransportURI.class);
 
     public SetAVTransportURI(Service<?, ?> service, String uri) {
         this(new UnsignedIntegerFourBytes(0), service, uri, null);
@@ -44,7 +44,7 @@ public abstract class SetAVTransportURI extends ActionCallback {
 
     public SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String uri, String metadata) {
         super(new ActionInvocation<>(service.getAction("SetAVTransportURI")));
-        logger.fine("Creating SetAVTransportURI action for URI: " + uri);
+        logger.debug("Creating SetAVTransportURI action for URI: {}", uri);
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("CurrentURI", uri);
         getActionInvocation().setInput("CurrentURIMetaData", metadata);
@@ -52,6 +52,6 @@ public abstract class SetAVTransportURI extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Execution successful");
+        logger.debug("Execution successful");
     }
 }

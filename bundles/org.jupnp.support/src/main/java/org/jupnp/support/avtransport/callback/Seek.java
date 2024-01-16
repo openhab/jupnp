@@ -20,8 +20,8 @@ import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.support.model.SeekMode;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public abstract class Seek extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(Seek.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Seek.class);
 
     public Seek(Service<?, ?> service, String relativeTimeTarget) {
         this(new UnsignedIntegerFourBytes(0), service, SeekMode.REL_TIME, relativeTimeTarget);
@@ -52,6 +52,6 @@ public abstract class Seek extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Execution successful");
+        logger.debug("Execution successful");
     }
 }

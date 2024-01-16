@@ -18,9 +18,11 @@ package org.jupnp.support.lastchange;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.util.Exceptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -28,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class EventedValueURI extends EventedValue<URI> {
 
-    private final Logger logger = Logger.getLogger(EventedValueURI.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(EventedValueURI.class);
 
     public EventedValueURI(URI value) {
         super(value);
@@ -45,7 +47,7 @@ public class EventedValueURI extends EventedValue<URI> {
             // to parse whatever devices give us, like the Roku which sends "unknown url".
             return super.valueOf(s);
         } catch (InvalidValueException ex) {
-            logger.info("Ignoring invalid URI in evented value '" + s +"': " + Exceptions.unwrap(ex));
+            logger.debug("Ignoring invalid URI in evented value '{}'", s, Exceptions.unwrap(ex));
             return null;
         }
     }

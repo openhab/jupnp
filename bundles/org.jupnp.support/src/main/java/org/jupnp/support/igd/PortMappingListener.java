@@ -28,13 +28,14 @@ import org.jupnp.registry.Registry;
 import org.jupnp.support.igd.callback.PortMappingAdd;
 import org.jupnp.support.igd.callback.PortMappingDelete;
 import org.jupnp.support.model.PortMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Maintains UPnP port mappings on an InternetGatewayDevice automatically.
@@ -70,7 +71,7 @@ import java.util.logging.Logger;
  */
 public class PortMappingListener extends DefaultRegistryListener {
 
-    private final Logger logger = Logger.getLogger(PortMappingListener.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(PortMappingListener.class);
 
     public static final DeviceType IGD_DEVICE_TYPE = new UDADeviceType("InternetGatewayDevice", 1);
     public static final DeviceType CONNECTION_DEVICE_TYPE = new UDADeviceType("WANConnectionDevice", 1);
@@ -97,7 +98,7 @@ public class PortMappingListener extends DefaultRegistryListener {
         Service<?, ?> connectionService;
         if ((connectionService = discoverConnectionService(device)) == null) return;
 
-        logger.fine("Activating port mappings on: " + connectionService);
+        logger.debug("Activating port mappings on: {}", connectionService);
 
         final List<PortMapping> activeForService = new ArrayList<>();
         for (final PortMapping pm : portMappings) {
@@ -105,7 +106,7 @@ public class PortMappingListener extends DefaultRegistryListener {
 
                 @Override
                 public void success(ActionInvocation invocation) {
-                    logger.fine("Port mapping added: " + pm);
+                    logger.debug("Port mapping added: {}", pm);
                     activeForService.add(pm);
                 }
 
@@ -143,12 +144,12 @@ public class PortMappingListener extends DefaultRegistryListener {
             final Iterator<PortMapping> it = activeEntry.getValue().iterator();
             while (it.hasNext()) {
                 final PortMapping pm = it.next();
-                logger.fine("Trying to delete port mapping on IGD: " + pm);
+                logger.debug("Trying to delete port mapping on IGD: {}", pm);
                 new PortMappingDelete(activeEntry.getKey(), registry.getUpnpService().getControlPoint(), pm) {
 
                     @Override
                     public void success(ActionInvocation invocation) {
-                        logger.fine("Port mapping deleted: " + pm);
+                        logger.debug("Port mapping deleted: {}", pm);
                         it.remove();
                     }
 
@@ -170,25 +171,25 @@ public class PortMappingListener extends DefaultRegistryListener {
 
         Device<?, ?, ?>[] connectionDevices = device.findDevices(CONNECTION_DEVICE_TYPE);
         if (connectionDevices.length == 0) {
-            logger.fine("IGD doesn't support '" + CONNECTION_DEVICE_TYPE + "': " + device);
+            logger.debug("IGD doesn't support '{}': {}", CONNECTION_DEVICE_TYPE, device);
             return null;
         }
 
         Device<?, ?, ?> connectionDevice = connectionDevices[0];
-        logger.fine("Using first discovered WAN connection device: " + connectionDevice);
+        logger.debug("Using first discovered WAN connection device: {}", connectionDevice);
 
         Service<?, ?> ipConnectionService = connectionDevice.findService(IP_SERVICE_TYPE);
         Service<?, ?> pppConnectionService = connectionDevice.findService(PPP_SERVICE_TYPE);
 
         if (ipConnectionService == null && pppConnectionService == null) {
-            logger.fine("IGD doesn't support IP or PPP WAN connection service: " + device);
+            logger.debug("IGD doesn't support IP or PPP WAN connection service: {}", device);
         }
 
         return ipConnectionService != null ? ipConnectionService : pppConnectionService;
     }
 
     protected void handleFailureMessage(String s) {
-        logger.warning(s);
+        logger.warn(s);
     }
 
 }

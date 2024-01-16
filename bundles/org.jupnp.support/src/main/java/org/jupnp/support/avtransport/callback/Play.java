@@ -19,8 +19,8 @@ import org.jupnp.controlpoint.ActionCallback;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public abstract class Play extends ActionCallback {
 
-    private final Logger logger = Logger.getLogger(Play.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Play.class);
 
     public Play(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service, "1");
@@ -50,6 +50,6 @@ public abstract class Play extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        logger.fine("Execution successful");
+        logger.debug("Execution successful");
     }
 }

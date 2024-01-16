@@ -26,8 +26,8 @@ import org.jupnp.support.model.BrowseFlag;
 import org.jupnp.support.model.BrowseResult;
 import org.jupnp.support.model.DIDLContent;
 import org.jupnp.support.model.SortCriterion;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Invokes a "Browse" action, parses the result.
@@ -56,7 +56,7 @@ public abstract class Browse extends ActionCallback {
         }
     }
 
-    private final Logger logger = Logger.getLogger(Browse.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(Browse.class);
 
     /**
      * Browse with first result 0 and {@link #getDefaultMaxResults()}, filters with {@link #CAPS_WILDCARD}.
@@ -73,7 +73,7 @@ public abstract class Browse extends ActionCallback {
 
         super(new ActionInvocation<>(service.getAction("Browse")));
 
-        logger.fine("Creating browse action for object ID: " + objectID);
+        logger.debug("Creating browse action for object ID: {}", objectID);
 
         getActionInvocation().setInput("ObjectID", objectID);
         getActionInvocation().setInput("BrowseFlag", flag.toString());
@@ -92,7 +92,7 @@ public abstract class Browse extends ActionCallback {
     }
 
     public void success(ActionInvocation invocation) {
-        logger.fine("Successful browse action, reading output argument values");
+        logger.debug("Successful browse action, reading output argument values");
 
         BrowseResult result = new BrowseResult(
                 invocation.getOutput("Result").getValue().toString(),
@@ -135,13 +135,6 @@ public abstract class Browse extends ActionCallback {
     }
 
     public boolean receivedRaw(ActionInvocation<?> actionInvocation, BrowseResult browseResult) {
-        /*
-        if (log.isLoggable(Level.FINER)) {
-            log.finer("-------------------------------------------------------------------------------------");
-            log.finer("\n" + XML.pretty(browseResult.getDidl()));
-            log.finer("-------------------------------------------------------------------------------------");
-        }
-        */
         return true;
     }
 

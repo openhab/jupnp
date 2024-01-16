@@ -17,10 +17,10 @@ package org.jupnp.support.model.dlna;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jupnp.util.Exceptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transforms known and standardized DLNA attributes from/to string representation.
@@ -35,7 +35,7 @@ import org.jupnp.util.Exceptions;
  */
 public abstract class DLNAAttribute<T> {
 
-    private static final Logger logger = Logger.getLogger(DLNAAttribute.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DLNAAttribute.class);
 
     /**
      * Maps a standardized DLNA attribute to potential attribute subtypes.
@@ -129,17 +129,16 @@ public abstract class DLNAAttribute<T> {
         for (int i = 0; i < type.getAttributeTypes().length && attr == null; i++) {
             Class<? extends DLNAAttribute<?>> attributeClass = type.getAttributeTypes()[i];
             try {
-                logger.finest("Trying to parse DLNA '" + type + "' with class: " + attributeClass.getSimpleName());
+                logger.trace("Trying to parse DLNA '{}' with class: {}", type, attributeClass.getSimpleName());
                 attr = attributeClass.newInstance();
                 if (attributeValue != null) {
                     attr.setString(attributeValue, contentFormat);
                 }
             } catch (InvalidDLNAProtocolAttributeException ex) {
-                logger.finest("Invalid DLNA attribute value for tested type: " + attributeClass.getSimpleName() + " - " + ex.getMessage());
+                logger.trace("Invalid DLNA attribute value for tested type: {} - {}", attributeClass.getSimpleName(), ex.getMessage());
                 attr = null;
             } catch (Exception ex) {
-                logger.severe("Error instantiating DLNA attribute of type '" + type + "' with value: " + attributeValue);
-                logger.log(Level.SEVERE, "Exception root cause: ", Exceptions.unwrap(ex));
+                logger.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue, Exceptions.unwrap(ex));
             }
         }
         return attr;

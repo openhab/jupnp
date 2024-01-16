@@ -15,7 +15,8 @@
 
 package org.jupnp.support.model;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -31,7 +32,7 @@ public enum Protocol {
     XBMC_GET("xbmc-get"),
     OTHER("other");
 
-    private static final Logger logger = Logger.getLogger(Protocol.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Protocol.class);
 
     private String protocolString;
 
@@ -50,7 +51,7 @@ public enum Protocol {
                 return protocol;
             }
         }
-        logger.info("Unsupported OTHER protocol string: " + s);
+        logger.info("Unsupported OTHER protocol string: {}", s);
         return OTHER;
     }
 
