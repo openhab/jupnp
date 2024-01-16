@@ -16,7 +16,10 @@ package org.jupnp.transport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -45,7 +48,15 @@ public abstract class StreamServerClientTest {
     final private static Logger log = LoggerFactory.getLogger(StreamServerClientTest.class);
 
     public static final String TEST_HOST = "localhost";
-    public static final int TEST_PORT = 8081;
+    public static final int TEST_PORT = getAvailablePort();
+
+    private static int getAvailablePort() {
+        try (ServerSocket serverSocket = new ServerSocket(0)) {
+            return serverSocket.getLocalPort();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     public static UpnpServiceConfiguration configuration = new MockUpnpServiceConfiguration(false, true);
 
