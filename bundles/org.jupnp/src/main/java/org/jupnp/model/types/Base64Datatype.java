@@ -14,7 +14,7 @@
 
 package org.jupnp.model.types;
 
-import org.jupnp.util.io.Base64Coder;
+import java.util.Base64;
 
 /**
  * @author Christian Bauer
@@ -31,7 +31,7 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     public byte[] valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) return null;
         try {
-            return Base64Coder.decode(s);
+            return Base64.getDecoder().decode(s);
         } catch (Exception ex) {
             throw new InvalidValueException(ex.getMessage(), ex);
         }
@@ -41,7 +41,7 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     public String getString(byte[] value) throws InvalidValueException {
         if (value == null) return "";
         try {
-            return new String(Base64Coder.encode(value));
+            return Base64.getEncoder().encodeToString(value);
         } catch (Exception ex) {
             throw new InvalidValueException(ex.getMessage(), ex);
         }
