@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import org.jupnp.http.Headers;
@@ -101,19 +102,13 @@ public class DatagramProcessorImpl implements DatagramProcessor {
             log.trace("---------------------------------------------------------------------------------");
         }
 
-        try {
-            // According to HTTP 1.0 RFC, headers and their values are US-ASCII
-            // TODO: Probably should look into escaping rules, too
-            byte[] data = messageData.toString().getBytes("US-ASCII");
+        // According to HTTP 1.0 RFC, headers and their values are US-ASCII
+        // TODO: Probably should look into escaping rules, too
+        byte[] data = messageData.toString().getBytes(StandardCharsets.US_ASCII);
 
-            log.trace("Writing new datagram packet with " + data.length + " bytes for: " + message);
-            return new DatagramPacket(data, data.length, message.getDestinationAddress(), message.getDestinationPort());
+        log.trace("Writing new datagram packet with " + data.length + " bytes for: " + message);
+        return new DatagramPacket(data, data.length, message.getDestinationAddress(), message.getDestinationPort());
 
-        } catch (UnsupportedEncodingException ex) {
-            throw new UnsupportedDataException(
-                "Can't convert message content to US-ASCII: " + ex.getMessage(), ex, messageData
-            );
-        }
     }
 
     protected IncomingDatagramMessage readRequestMessage(InetAddress receivedOnAddress,

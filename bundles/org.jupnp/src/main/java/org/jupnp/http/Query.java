@@ -17,6 +17,7 @@ package org.jupnp.http;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,13 +74,8 @@ public class Query {
                 name = pair;
                 value = null;
             } else {
-                try {
-                    name = URLDecoder.decode(pair.substring(0, pos), "UTF-8");
-                    value = URLDecoder.decode(pair.substring(pos + 1, pair.length()), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    // Not really possible, throw unchecked
-                    throw new IllegalStateException("Query string is not UTF-8");
-                }
+                name = URLDecoder.decode(pair.substring(0, pos), StandardCharsets.UTF_8);
+                value = URLDecoder.decode(pair.substring(pos + 1, pair.length()), StandardCharsets.UTF_8);
             }
             List<String> list = parameters.get(name);
             if (list == null) {

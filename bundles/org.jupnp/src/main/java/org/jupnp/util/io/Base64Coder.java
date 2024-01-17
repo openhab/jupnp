@@ -15,6 +15,7 @@
 package org.jupnp.util.io;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
@@ -1602,7 +1603,7 @@ public class Base64Coder
         try{
             out = new java.io.BufferedOutputStream(
                   new java.io.FileOutputStream( outfile ) );
-            out.write( encoded.getBytes("US-ASCII") ); // Strict, 7-bit output.
+            out.write( encoded.getBytes(StandardCharsets.US_ASCII) ); // Strict, 7-bit output.
         }   // end try
         catch( java.io.IOException e ) {
             throw e; // Catch and release to execute finally{}

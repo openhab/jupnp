@@ -18,6 +18,7 @@ import org.jupnp.model.message.header.ContentTypeHeader;
 import org.jupnp.model.message.header.UpnpHeader;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A non-streaming message, the interface between the transport layer and the protocols.
@@ -142,7 +143,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
                     }
                     return body;
                 } else {
-                    return new String((byte[]) getBody(), "UTF-8");
+                    return new String((byte[]) getBody(), StandardCharsets.UTF_8);
                 }
         } catch (Exception ex) {
             throw new RuntimeException(ex);

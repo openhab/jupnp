@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -117,7 +118,7 @@ public class HeaderUtil {
             final byte[] bytes = new byte[next.capacity()];
             next.get( bytes );
             // Should by "payload"
-            final String content = new String( bytes, Charset.forName( "UTF-8" ) );
+            final String content = new String( bytes, StandardCharsets.UTF_8);
             sb.append(content);
         }
 

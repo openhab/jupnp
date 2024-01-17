@@ -27,6 +27,7 @@
 package org.jupnp.util.io;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * format validation
@@ -167,11 +168,7 @@ public final class HexBin {
             return null;
 
         byte[] decoded = null;
-        try {
-            decoded = decode(binaryData.getBytes("utf-8"));
-        }
-        catch (UnsupportedEncodingException e) {
-        }
+        decoded = decode(binaryData.getBytes(StandardCharsets.UTF_8));
         return decoded == null ? null : new String(decoded);
     }
 
@@ -186,11 +183,7 @@ public final class HexBin {
             return null;
 
         byte[] encoded = null;
-        try {
-            encoded = encode(binaryData.getBytes("utf-8"));
-        }
-        catch (UnsupportedEncodingException e) {
-        }
+        encoded = encode(binaryData.getBytes(StandardCharsets.UTF_8));
         return encoded == null ? null : new String(encoded);
     }
 
