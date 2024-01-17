@@ -534,7 +534,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
                 for (int i = 0; i < group.length(); i++) {
                     spaces.append("&#160;");
                 }
-                matcher.appendReplacement(temp, "$1" + spaces.toString() + "$3");
+                matcher.appendReplacement(temp, "$1" + spaces + "$3");
             }
             matcher.appendTail(temp);
             result = temp.toString();

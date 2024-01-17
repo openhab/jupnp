@@ -82,7 +82,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         } catch (ValidationException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse service descriptor: " + ex.toString(), ex);
+            throw new DescriptorBindingException("Could not parse service descriptor", ex);
         }
     }
 

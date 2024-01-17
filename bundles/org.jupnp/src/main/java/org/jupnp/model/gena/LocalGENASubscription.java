@@ -85,7 +85,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         for (StateVariableValue value : values) {
             this.currentValues.put(value.getStateVariable().getName(), value);
 
-            log.trace("Read state variable value '" + value.getStateVariable().getName() + "': " + value.toString());
+            log.trace("Read state variable value '{}': {}", value.getStateVariable().getName(), value);
 
             // Preserve "last sent" state for future moderation
             lastSentTimestamp.put(value.getStateVariable().getName(), currentTime);

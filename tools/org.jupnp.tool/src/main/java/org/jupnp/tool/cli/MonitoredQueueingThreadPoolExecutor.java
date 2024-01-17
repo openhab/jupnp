@@ -148,7 +148,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 			statsLogger.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
 			for (Iterator<Statistics.PoolStatPoint> iter = points.iterator(); iter.hasNext();) {
 				Statistics.PoolStatPoint p = iter.next();
-				statsLogger.info("" + p.timestamp + "," + p.corePoolSize + "," + p.poolSize + "," + p.maxPoolSize + ","
+				statsLogger.info(p.timestamp + "," + p.corePoolSize + "," + p.poolSize + "," + p.maxPoolSize + ","
 						+ p.activeCounts + "," + p.queueSize + "," + p.completedTasks);
 			}
 			statsLogger.info(" ");

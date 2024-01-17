@@ -254,10 +254,10 @@ public class AnnotationStateVariableBinder {
             Object o = enumType.getEnumConstants()[i];
             if (o.toString().length() > 32) {
                 throw new LocalServiceBindingException(
-                        "Allowed value string (that is, Enum constant name) is longer than 32 characters: " + o.toString()
+                        "Allowed value string (that is, Enum constant name) is longer than 32 characters: " + o
                 );
             }
-            log.trace("Adding allowed value (converted to string): " + o.toString());
+            log.trace("Adding allowed value (converted to string): {}", o);
             allowedValueStrings[i] = o.toString();
         }
 

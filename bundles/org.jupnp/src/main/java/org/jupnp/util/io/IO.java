@@ -195,7 +195,7 @@ public class IO {
         StringBuilder input = new StringBuilder();
         String inputLine;
         while ((inputLine = inputReader.readLine()) != null) {
-            input.append(inputLine).append(System.getProperty("line.separator"));
+            input.append(inputLine).append(System.lineSeparator());
         }
 
         return input.length() > 0 ? input.toString() : "";

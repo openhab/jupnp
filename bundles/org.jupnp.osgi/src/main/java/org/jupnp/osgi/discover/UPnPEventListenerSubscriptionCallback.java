@@ -90,7 +90,7 @@ public class UPnPEventListenerSubscriptionCallback extends SubscriptionCallback 
             );
         } else {
 			log.error("Subscription {} for device {} service {} ended with reason {}.",
-					subscription.getSubscriptionId(), getDeviceId(), getServiceId(), reason.toString());
+					subscription.getSubscriptionId(), getDeviceId(), getServiceId(), reason);
         }
     }
 

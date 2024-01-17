@@ -52,10 +52,11 @@ public class PragmaHeader extends DLNAHeader<List<PragmaType>> {
     @Override
     public String getString() {
         List<PragmaType> v = getValue();
-        String r = "";
+        StringBuilder sb = new StringBuilder();
         for (PragmaType pragma : v) {
-            r += (r.length() == 0 ? "": "," )+  pragma.getString();
+            sb.append(sb.length() == 0 ? "" : ",");
+            sb.append(pragma.getString());
         }
-        return r;
+        return sb.toString();
     }
 }

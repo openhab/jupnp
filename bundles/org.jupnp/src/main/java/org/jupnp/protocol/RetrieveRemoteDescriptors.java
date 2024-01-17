@@ -240,14 +240,12 @@ public class RetrieveRemoteDescriptors implements Runnable {
         	}
 
         } catch (DescriptorBindingException ex) {
-            log.warn("Could not hydrate device or its services from descriptor: " + rd);
-            log.warn("Cause was: " + Exceptions.unwrap(ex));
+            log.warn("Could not hydrate device or its services from descriptor: {}", rd, ex);
             if (describedDevice != null && notifiedStart)
                 getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
 
         } catch (RegistrationException ex) {
-            log.warn("Adding hydrated device to registry failed: " + rd);
-            log.warn("Cause was: " + ex.toString());
+            log.warn("Adding hydrated device to registry failed: {}", rd, ex);
             if (describedDevice != null && notifiedStart)
                 getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
         }

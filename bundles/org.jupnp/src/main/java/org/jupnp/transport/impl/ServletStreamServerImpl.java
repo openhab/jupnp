@@ -73,7 +73,7 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
             getConfiguration().getServletContainerAdapter().registerServlet(contextPath, servlet);
         } catch (Exception ex) {
             throw new InitializationException(
-                    "Could not initialize " + getClass().getSimpleName() + ": " + ex.toString(), ex);
+                    "Could not initialize " + getClass().getSimpleName(), ex);
         }
     }
 

@@ -216,6 +216,6 @@ public class Namespace {
         s.append(service.getServiceId().getNamespace());
         s.append("/");
         s.append(service.getServiceId().getId());
-        return getDevicePath(service.getDevice()) + s.toString();
+        return getDevicePath(service.getDevice()) + s;
     }
 }

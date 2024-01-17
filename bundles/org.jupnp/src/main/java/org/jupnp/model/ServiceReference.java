@@ -85,7 +85,7 @@ public class ServiceReference {
 
     @Override
     public String toString() {
-        return udn == null || serviceId == null ? "" : udn.toString() + DELIMITER + serviceId.toString();
+        return udn == null || serviceId == null ? "" : udn + DELIMITER + serviceId;
     }
 
 }

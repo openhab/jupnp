@@ -86,8 +86,8 @@ public class SoapActionType {
 
         } catch(RuntimeException e) {
         	throw new InvalidValueException(String.format(
-                "Can't parse action type string (namespace/type/version#actionName) '%s': %s", s, e.toString()
-            ));
+                "Can't parse action type string (namespace/type/version#actionName) '%s'", s
+            ), e);
         }
         throw new InvalidValueException("Can't parse action type string (namespace/type/version#actionName): " + s);
     }

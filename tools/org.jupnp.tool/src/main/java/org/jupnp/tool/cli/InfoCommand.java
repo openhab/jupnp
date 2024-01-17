@@ -92,7 +92,8 @@ public class InfoCommand {
 	private void showDeviceInfo(RemoteDevice device, String searchCriteria, boolean verbose) {
 		logger.info(device.toString());
 		sb = new StringBuilder();
-		sb.append("Device info for " + searchCriteria);
+		sb.append("Device info for ");
+		sb.append(searchCriteria);
 		print("UDN", device.getIdentity().getUdn().getIdentifierString());
 		print("Display", device.getDisplayString());
 		print("Model.Name", device.getDetails().getModelDetails().getModelName());
@@ -110,8 +111,8 @@ public class InfoCommand {
 			print("Type", device.getType().getType());
 			print("Type.Display", device.getType().getDisplayString());
 			print("Type.Version", String.valueOf(device.getType().getVersion()));
-			print("UDA.Version", String.valueOf(device.getVersion().getMajor()) + "."
-					+ String.valueOf(device.getVersion().getMinor()));
+			print("UDA.Version", device.getVersion().getMajor() + "."
+					+ device.getVersion().getMinor());
 			print("isRootDevice", String.valueOf(device.isRoot()));
 			print("isFullyHydrated", String.valueOf(device.isFullyHydrated()));
 		}
@@ -135,14 +136,18 @@ public class InfoCommand {
 			} else {
 				s = String.valueOf(o);
 			}
-			sb.append("\n" + desc + "\t\t\t\t".substring(0, 3 - (desc.length() / 8)) + s);
+			sb.append("\n");
+			sb.append(desc);
+			sb.append("\t\t\t\t", 0, 3 - (desc.length() / 8));
+			sb.append(s);
 		}
 	}
 
 	private String flatList(List<String> l) {
 		StringBuilder sb = new StringBuilder();
 		for (Iterator<String> iter = l.iterator(); iter.hasNext();) {
-			sb.append(iter.next() + " ");
+			sb.append(iter.next());
+			sb.append(" ");
 		}
 		return sb.toString();
 	}

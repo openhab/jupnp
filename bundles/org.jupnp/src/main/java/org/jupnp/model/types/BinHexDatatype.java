@@ -29,7 +29,7 @@ public class BinHexDatatype extends AbstractDatatype<byte[]> {
     }
 
     public byte[] valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s.isEmpty()) return null;
         try {
             return HexBin.stringToBytes(s);
         } catch (Exception ex) {

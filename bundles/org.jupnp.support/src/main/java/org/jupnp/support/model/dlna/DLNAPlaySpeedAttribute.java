@@ -63,13 +63,13 @@ public class DLNAPlaySpeedAttribute extends DLNAAttribute<TransportPlaySpeed[]> 
     }
 
     public String getString() {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         for (TransportPlaySpeed speed : getValue()) {
             if (speed.getValue().equals("1"))
                 continue;
-            s += (s.length() == 0 ? "" : ",") + speed;
+            sb.append(sb.length() == 0 ? "" : ",").append(speed);
         }
-        return s;
+        return sb.toString();
     }
     
 }

@@ -106,7 +106,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             return new LocalService(type, id, actions, stateVariables, stringConvertibleTypes, supportsQueryStateVariables);
 
         } catch (ValidationException ex) {
-            log.error("Could not validate device model: " + ex.toString());
+            log.error("Could not validate device model", ex);
             for (ValidationError validationError : ex.getErrors()) {
                 log.error(validationError.toString());
             }

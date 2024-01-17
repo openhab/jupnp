@@ -40,10 +40,11 @@ public class SupportedHeader extends DLNAHeader<String[]> {
     @Override
     public String getString() {
         String[] v = getValue();
-        String r = v.length>0 ? v[0] : "";
+        StringBuilder sb = new StringBuilder(v.length > 0 ? v[0] : "");
         for (int i = 1; i < v.length; i++) {
-            r += ","+v[i];
+            sb.append(",");
+            sb.append(v[i]);
         }
-        return r;
+        return sb.toString();
     }
 }

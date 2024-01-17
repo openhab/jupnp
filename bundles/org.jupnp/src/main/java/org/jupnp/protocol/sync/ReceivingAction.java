@@ -126,13 +126,13 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             }
 
         } catch (ActionException ex) {
-            log.trace("Error executing local action: " + ex);
+            log.trace("Error executing local action", ex);
 
             invocation = new RemoteActionInvocation(ex, getRemoteClientInfo());
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
         } catch (UnsupportedDataException ex) {
-        	log.warn("Error reading action request XML body: " + ex.toString(), Exceptions.unwrap(ex));
+            log.warn("Error reading action request XML body", ex);
 
             invocation =
                     new RemoteActionInvocation(

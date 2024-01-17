@@ -109,7 +109,7 @@ public class Icon implements Validatable {
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, String binHexEncoded) {
         this(
                 mimeType, width, height, depth, uniqueName,
-                binHexEncoded != null && !binHexEncoded.equals("") ? new BinHexDatatype().valueOf(binHexEncoded) : null
+                binHexEncoded != null && !binHexEncoded.isEmpty() ? new BinHexDatatype().valueOf(binHexEncoded) : null
         );
     }
 

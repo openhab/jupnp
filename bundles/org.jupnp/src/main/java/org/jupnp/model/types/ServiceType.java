@@ -129,8 +129,8 @@ public class ServiceType {
             }
         } catch (RuntimeException e) {
             throw new InvalidValueException(String.format(
-                "Can't parse service type string (namespace/type/version) '%s': %s", s, e.toString()
-            ));
+                "Can't parse service type string (namespace/type/version) '%s'", s
+            ), e);
         }
 
         throw new InvalidValueException("Can't parse service type string (namespace/type/version): " + s);

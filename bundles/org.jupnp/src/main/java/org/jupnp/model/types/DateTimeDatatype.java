@@ -34,7 +34,7 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
     }
 
     public Calendar valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s.isEmpty()) return null;
 
         Date d = getDateValue(s, readFormats);
         if (d == null) {

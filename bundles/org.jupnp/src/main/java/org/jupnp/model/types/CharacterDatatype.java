@@ -28,7 +28,7 @@ public class CharacterDatatype extends AbstractDatatype<Character> {
     }
 
     public Character valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s.isEmpty()) return null;
         return s.charAt(0);
     }
 

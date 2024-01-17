@@ -30,7 +30,7 @@ public class CustomDatatype extends AbstractDatatype<String> {
     }
 
     public String valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s.isEmpty()) return null;
         return s;
     }
 

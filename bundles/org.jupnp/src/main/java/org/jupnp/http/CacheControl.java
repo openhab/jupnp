@@ -148,12 +148,12 @@ public class CacheControl {
             String lowercase = name.toLowerCase();
             if ("no-cache".equals(lowercase)) {
                 result.setNoCache(true);
-                if (value != null && !"".equals(value)) {
+                if (value != null && !value.isEmpty()) {
                     result.getNoCacheFields().add(value);
                 }
             } else if ("private".equals(lowercase)) {
                 result.setPrivateFlag(true);
-                if (value != null && !"".equals(value)) {
+                if (value != null && !value.isEmpty()) {
                     result.getPrivateFields().add(value);
                 }
             } else if ("no-store".equals(lowercase)) {
@@ -213,7 +213,7 @@ public class CacheControl {
         for (String key : getCacheExtensions().keySet()) {
             String val = getCacheExtensions().get(key);
             append(key, sb);
-            if (val != null && !"".equals(val)) {
+            if (val != null && !val.isEmpty()) {
                 sb.append("=\"").append(val).append("\"");
             }
         }

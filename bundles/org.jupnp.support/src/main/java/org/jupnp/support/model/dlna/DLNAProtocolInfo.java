@@ -87,13 +87,17 @@ public class DLNAProtocolInfo extends ProtocolInfo {
     }
 
     protected String getAttributesString() {
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         for (DLNAAttribute.Type type : DLNAAttribute.Type.values() ) {
-            String value = attributes.containsKey(type)?attributes.get(type).getString():null;
-            if (value!=null && value.length() != 0)
-                s += (s.length() == 0 ? "" : ";") + type.getAttributeName() + "=" + value;
+            String value = attributes.containsKey(type) ? attributes.get(type).getString() : null;
+            if (value != null && !value.isEmpty()) {
+                sb.append(sb.length() == 0 ? "" : ";");
+                sb.append(type.getAttributeName());
+                sb.append("=");
+                sb.append(value);
+            }
         }
-        return s;
+        return sb.toString();
     }
 
     protected void parseAdditionalInfo() {

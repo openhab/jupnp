@@ -60,7 +60,7 @@ public class SpecificationViolationReporter {
             if (device == null) {
                 logger.warn("{}: " + format, "UPnP specification violation", arguments);
             } else {
-                logger.warn("{} of device '{}': " + format, "UPnP specification violation", device.toString(), arguments);
+                logger.warn("{} of device '{}': " + format, "UPnP specification violation", device, arguments);
             }
         }
     }

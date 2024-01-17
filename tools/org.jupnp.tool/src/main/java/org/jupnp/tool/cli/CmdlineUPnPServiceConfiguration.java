@@ -204,8 +204,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 						// same runnable class name, increment number of calls
 						noOfRejects = noOfRejects + 1;
 						if (noOfRejects >= MAX_NO_OF_REJECTS_TO_LOG) {
-							logger.warn("Thread pool rejected execution of (" + noOfRejects + " times) "
-									+ runnable.toString());
+							logger.warn("Thread pool rejected execution of ({} times) {}", noOfRejects, runnable);
 							noOfRejects = 0;
 						}
 					}

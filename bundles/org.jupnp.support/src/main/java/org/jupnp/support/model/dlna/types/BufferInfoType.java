@@ -77,7 +77,7 @@ public class BufferInfoType {
             s += ";CDB=" + cdb.getSize().toString() + ";BTM=" + cdb.getTranfer().ordinal();
         }
         if (targetDuration != null) {
-            s += ";TD=" + targetDuration.toString();
+            s += ";TD=" + targetDuration;
         }
         if (fullnessReports != null) {
             s += ";BFR=" + (fullnessReports?"1":"0");

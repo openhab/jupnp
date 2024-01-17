@@ -105,7 +105,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         } catch (ValidationException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse device descriptor: " + ex.toString(), ex);
+            throw new DescriptorBindingException("Could not parse device descriptor", ex);
         }
     }
 
@@ -124,7 +124,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         } catch (ValidationException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse device DOM: " + ex.toString(), ex);
+            throw new DescriptorBindingException("Could not parse device DOM", ex);
         }
     }
 

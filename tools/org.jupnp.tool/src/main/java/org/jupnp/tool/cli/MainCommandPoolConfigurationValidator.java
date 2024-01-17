@@ -37,8 +37,8 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
 				throw new ParameterException(ERROR_MSG + " (not 2 or 3 parameters)");
 			} else {
 				try {
-					int mainPoolSize = new Integer(tokenizer.nextToken()).intValue();
-					int asyncPoolSize = new Integer(tokenizer.nextToken()).intValue();
+					int mainPoolSize = Integer.parseInt(tokenizer.nextToken());
+					int asyncPoolSize = Integer.parseInt(tokenizer.nextToken());
 
 					// all >0
 					if ((mainPoolSize <= 0) || (asyncPoolSize <= 0)) {

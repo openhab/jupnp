@@ -174,7 +174,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
             try {
                 return config.getNamespace().getResources(device);
             } catch (ValidationException ex) {
-                throw new RegistrationException("Resource discover error: " + ex.toString(), ex);
+                throw new RegistrationException("Resource discover error", ex);
             }
         } else {
             return new Resource[0];

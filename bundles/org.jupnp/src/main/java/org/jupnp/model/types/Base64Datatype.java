@@ -29,7 +29,7 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     }
 
     public byte[] valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s.isEmpty()) return null;
         try {
             return Base64Coder.decode(s);
         } catch (Exception ex) {
