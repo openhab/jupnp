@@ -271,60 +271,6 @@ class QueueingThreadPoolExecutorTest {
 	}
 
 	/**
-	 * Tests using security manager with high max thread group priority.
-	 */
-	@Test
-	void testPoolSize2ThreadSettingsWithSecurityManagerThreadGroupMaxPriority() throws InterruptedException {
-		SecurityManager sm = System.getSecurityManager();
-		try {
-			System.setSecurityManager(new SecurityManager() {
-				@Override
-				public void checkPermission(Permission perm) {
-				}
-
-				@Override
-				public ThreadGroup getThreadGroup() {
-					ThreadGroup g = new ThreadGroup("TestMaxThreadGroup");
-					g.setDaemon(true);
-					g.setMaxPriority(Thread.MAX_PRIORITY);
-					return g;
-				}
-			});
-			String poolName = "testPoolSize2ThreadSettingsWithSecurityManagerThreadGroupMaxPriority";
-			basicTestPoolSize2ThreadSettings(poolName);
-		} finally {
-			System.setSecurityManager(sm);
-		}
-	}
-
-	/**
-	 * Tests using security manager with low min thread group priority.
-	 */
-	@Test
-	void testPoolSize2ThreadSettingsWithSecurityManagerThreadGroupMinPriority() throws InterruptedException {
-		SecurityManager sm = System.getSecurityManager();
-		try {
-			System.setSecurityManager(new SecurityManager() {
-				@Override
-				public void checkPermission(Permission perm) {
-				}
-
-				@Override
-				public ThreadGroup getThreadGroup() {
-					ThreadGroup g = new ThreadGroup("TestMinThreadGroup");
-					g.setDaemon(true);
-					g.setMaxPriority(Thread.MIN_PRIORITY);
-					return g;
-				}
-			});
-			String poolName = "testPoolSize2ThreadSettingsWithSecurityManagerThreadGroupMinPriority";
-			basicTestPoolSize2ThreadSettings(poolName);
-		} finally {
-			System.setSecurityManager(sm);
-		}
-	}
-
-	/**
 	 * Test basic thread creation, including thread settings (name, prio,
 	 * daemon).
 	 */

@@ -400,8 +400,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         protected final String namePrefix = "jupnp-";
 
         public JUPnPThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            group = Thread.currentThread().getThreadGroup();
         }
 
         @Override
