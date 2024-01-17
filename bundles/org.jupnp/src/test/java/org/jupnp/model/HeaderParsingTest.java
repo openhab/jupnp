@@ -78,7 +78,7 @@ class HeaderParsingTest {
         DeviceUSNHeader header = new DeviceUSNHeader();
         header.setString("uuid:MY-DEVICE-123::urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1");
         assertEquals("MY-DEVICE-123", header.getValue().getUdn().getIdentifierString());
-        assertTrue(header.getValue().getDeviceType() instanceof UDADeviceType);
+        assertInstanceOf(UDADeviceType.class, header.getValue().getDeviceType());
     }
 
     @Test
@@ -87,7 +87,7 @@ class HeaderParsingTest {
                 NamedDeviceType.valueOf("uuid:MY-DEVICE-123::urn:schemas-upnp-org:device:MY-DEVICE-TYPE:1")
         );
         assertEquals("MY-DEVICE-123", header.getValue().getUdn().getIdentifierString());
-        assertTrue(header.getValue().getDeviceType() instanceof UDADeviceType);
+        assertInstanceOf(UDADeviceType.class, header.getValue().getDeviceType());
     }
 
     @Test
@@ -315,7 +315,7 @@ class HeaderParsingTest {
         ServiceUSNHeader header = new ServiceUSNHeader();
         header.setString("uuid:MY-SERVICE-123::urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1");
         assertEquals("MY-SERVICE-123", header.getValue().getUdn().getIdentifierString());
-        assertTrue(header.getValue().getServiceType() instanceof UDAServiceType);
+        assertInstanceOf(UDAServiceType.class, header.getValue().getServiceType());
     }
 
     @Test
@@ -324,7 +324,7 @@ class HeaderParsingTest {
                 NamedServiceType.valueOf("uuid:MY-SERVICE-123::urn:schemas-upnp-org:service:MY-SERVICE-TYPE:1")
         );
         assertEquals("MY-SERVICE-123", header.getValue().getUdn().getIdentifierString());
-        assertTrue(header.getValue().getServiceType() instanceof UDAServiceType);
+        assertInstanceOf(UDAServiceType.class, header.getValue().getServiceType());
     }
 
     @Test

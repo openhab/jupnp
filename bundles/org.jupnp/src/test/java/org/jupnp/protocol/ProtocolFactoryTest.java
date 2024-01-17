@@ -57,7 +57,7 @@ class ProtocolFactoryTest {
             ""
         );
         ReceivingSync protocol = upnpService.getProtocolFactory().createReceivingSync(message);
-        assertTrue(protocol instanceof ReceivingEvent);
+        assertInstanceOf(ReceivingEvent.class, protocol);
 
         // TODO: UPNP VIOLATION: Onkyo devices send event messages with trailing garbage characters
         // dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
@@ -67,6 +67,6 @@ class ProtocolFactoryTest {
             ""
         );
         protocol = upnpService.getProtocolFactory().createReceivingSync(message);
-        assertTrue(protocol instanceof ReceivingEvent);
+        assertInstanceOf(ReceivingEvent.class, protocol);
     }
 }
