@@ -183,13 +183,11 @@ public class URIUtil {
     }
 
     public static String percentEncode(String s) {
-        if (s == null) return "";
-        return URLEncoder.encode(s, StandardCharsets.UTF_8);
+        return s == null ? "" : URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
     public static String percentDecode(String s) {
-        if (s == null) return "";
-        return URLDecoder.decode(s, StandardCharsets.UTF_8);
+        return s == null ? "" : URLDecoder.decode(s, StandardCharsets.UTF_8);
     }
 
     /**
