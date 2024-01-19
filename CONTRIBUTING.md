@@ -55,7 +55,7 @@ Fork the repo and make changes on your fork in a feature branch:
 - If it's a feature branch, create an enhancement issue to announce your
   intentions, and name it XXX-something where XXX is the number of the issue.
 
-Submit unit tests for your changes.  openHAB has a great test framework built in; use
+Submit unit tests for your changes.  jUPnP has a great test framework built in; use
 it! Take a look at existing tests for inspiration. Run the full test suite on
 your branch before submitting a pull request.
 
