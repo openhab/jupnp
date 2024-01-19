@@ -109,18 +109,6 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 }
             }
 
-            // TODO: This code used kxml, which probably should not be the case
-
-            // fixedXml = XmlPullParserUtils.fixXMLEntities(descriptorXml);
-            // if(!fixedXml.equals(descriptorXml)) {
-            // try {
-            // device = super.describe(undescribedDevice, fixedXml);
-            // return device;
-            // } catch (DescriptorBindingException ex) {
-            // log.warn("Fixing XML entities didn't work: " + Exceptions.unwrap(ex).getMessage());
-            // }
-            // }
-
             handleInvalidDescriptor(descriptorXml, originalException);
 
         } catch (ValidationException ex) {

@@ -48,12 +48,6 @@ class UDA10ServiceDescriptorParsingTest {
         RemoteDevice rd = SampleData.createRemoteDevice();
         String descriptorXml = binder.generate(SampleData.getFirstService(rd));
 
-/*
-        System.out.println("#######################################################################################");
-        System.out.println(descriptorXml);
-        System.out.println("#######################################################################################");
-*/
-
         RemoteService service = SampleData.createUndescribedRemoteService();
         service = binder.describe(service, descriptorXml);
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(rd));

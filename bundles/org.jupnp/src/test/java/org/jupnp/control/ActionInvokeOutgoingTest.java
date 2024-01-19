@@ -55,6 +55,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ActionInvokeOutgoingTest {
 
+    // @formatter:off
     public static final String RESPONSE_SUCCESSFUL = "<?xml version=\"1.0\"?>\n" +
         " <s:Envelope\n" +
         "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
@@ -105,6 +106,7 @@ class ActionInvokeOutgoingTest {
         "     </u:GetNegativeValueResponse>\n" +
         "   </s:Body>\n" +
         " </s:Envelope>";
+    // @formatter:on
 
     @Test
     void callLocalGet() throws Exception {
@@ -491,131 +493,6 @@ class ActionInvokeOutgoingTest {
         // The illegal "-1" value should have been converted (with warning) to 0
         assertEquals(new UnsignedIntegerFourBytes(0), actionInvocation.getOutput("Result").getValue());
     }
-
-    /* TODO: M-POST support
-    @Test
-    void callRemoteGetMethodNotSupported() throws Exception {
-        MockUpnpService upnpService = new MockUpnpService() {
-            @Override
-            public StreamResponseMessage getStreamResponseMessage(StreamRequestMessage msg) {
-                if (msg.getOperation().getMethod().equals(UpnpRequest.Method.POST)) {
-                    return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.METHOD_NOT_SUPPORTED));
-                } else if (msg.getOperation().getMethod().equals(UpnpRequest.Method.MPOST)) {
-                    return new StreamResponseMessage(RESPONSE_SUCCESSFUL);
-                } else {
-                    throw new RuntimeException("Received unknown msg: " + msg);
-                }
-            }
-        };
-
-        // Registry remote device and its service
-        RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
-        upnpService.getRegistry().addDevice(device);
-
-        Action action = service.getAction("GetTarget");
-
-        ActionInvocation actionInvocation = new ActionInvocation(action);
-        final boolean[] assertions = new boolean[1];
-        ActionCallback callback = new ActionCallback(actionInvocation) {
-            public void failure(ActionInvocation invocation, UpnpResponse operation) {
-                assertions[0] = false;
-            }
-
-            public void success(ActionInvocation invocation) {
-                assertions[0] = true;
-            }
-        };
-
-        upnpService.getControlPoint().execute(callback);
-
-        assertEquals(2, upnpService.getSentStreamRequestMessages().size());
-        assertTrue(assertions[0]);
-
-        assertEquals(UpnpRequest.Method.POST, upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod());
-        assertNull(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
-        assertEquals(
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
-        );
-
-
-        assertEquals(UpnpRequest.Method.MPOST, upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod());
-        MANHeader manHeader = upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.MAN, MANHeader.class);
-        assertNotNull(manHeader);
-        assertEquals(manHeader.getNamespace(), upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
-        assertEquals(
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
-        );
-
-        assertNull(actionInvocation.getFailure());
-        assertEquals(1, actionInvocation.getOutput().length);
-        assertEquals("0", actionInvocation.getOutput()[0].toString());
-    }
-
-    @Test
-    void callRemoteGetDoubleMethodNotSupported() throws Exception {
-        MockUpnpService upnpService = new MockUpnpService() {
-            @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[] {
-                    new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.METHOD_NOT_SUPPORTED)),
-                    new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.METHOD_NOT_SUPPORTED))
-                };
-            }
-        };
-
-        // Registry remote device and its service
-        RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
-        upnpService.getRegistry().addDevice(device);
-
-        Action action = service.getAction("GetTarget");
-
-        ActionInvocation actionInvocation = new ActionInvocation(action);
-        final boolean[] assertions = new boolean[1];
-        ActionCallback callback = new ActionCallback(actionInvocation) {
-            public void failure(ActionInvocation invocation, UpnpResponse operation) {
-                assertEquals(operation.getStatusCode(), UpnpResponse.Status.METHOD_NOT_SUPPORTED.getStatusCode());
-                assertions[0] = true;
-            }
-
-            public void success(ActionInvocation invocation) {
-                assertions[0] = false;
-            }
-        };
-
-        upnpService.getControlPoint().execute(callback);
-
-        assertEquals(2, upnpService.getSentStreamRequestMessages().size());
-        assertTrue(assertions[0]);
-
-        assertEquals(UpnpRequest.Method.POST, upnpService.getSentStreamRequestMessages().get(0).getOperation().getMethod());
-        assertNull(upnpService.getSentStreamRequestMessages().get(0).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
-        assertEquals(
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
-        );
-
-
-        assertEquals(UpnpRequest.Method.MPOST, upnpService.getSentStreamRequestMessages().get(1).getOperation().getMethod());
-        MANHeader manHeader = upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.MAN, MANHeader.class);
-        assertNotNull(manHeader);
-        assertEquals(manHeader.getNamespace(), upnpService.getSentStreamRequestMessages().get(1).getHeaders().getPrefix(UpnpHeader.Type.SOAPACTION));
-        assertEquals(
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
-        );
-
-        assertNotNull(actionInvocation.getFailure());
-        assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
-        assertEquals(
-                ErrorCode.ACTION_FAILED.getDescription() + ". Second request (with MPOST) also failed, received Method Not Allowed again.",
-                actionInvocation.getFailure().getMessage()
-        );
-    }
-    */
 
     @Test
     void callRemoteQueryStateVariable() {

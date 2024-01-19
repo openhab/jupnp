@@ -95,6 +95,7 @@ class IncompatibilityTest {
     @Test
     void readColonRelativePaths() throws Exception {
         // Funny URI paths for services, breaks the java.net.URI parser so we deal with this special, see UDA10DeviceDescriptorBinderImpl
+        // @formatter:off
         String descriptor =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<root xmlns=\"urn:schemas-upnp-org:device-1-0\">\n" +
@@ -147,6 +148,7 @@ class IncompatibilityTest {
                         "      </serviceList>\n" +
                         "   </device>\n" +
                         "</root>";
+        // @formatter:on
 
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());

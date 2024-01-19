@@ -159,26 +159,24 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         }
     }
 
+    /* @formatter:off
+     * - send request
+     *    - UnsupportedDataException: Can't write body
+     *
+     * - streamResponseMessage is null: No response received, return null to client
+     *
+     * - streamResponseMessage >= 300 && !(405 || 500): Response was HTTP failure, set on anemic response and return
+     *
+     * - streamResponseMessage >= 300 && 405: Try request again with different headers
+     *    - UnsupportedDataException: Can't write body
+     *    - (The whole streamResponse conditions apply again but this time, ignore 405)
+     *
+     * - streamResponseMessage >= 300 && 500 && lastExecutionFailure != null: Try to read SOAP failure body
+     *    - UnsupportedDataException: Can't read body
+     *
+     * - streamResponseMessage < 300: Response was OK, try to read response body
+     *    - UnsupportedDataException: Can't read body
+     * @formatter:on
+     */
 }
 
-/*
-
-- send request
-   - UnsupportedDataException: Can't write body
-
-- streamResponseMessage is null: No response received, return null to client
-
-- streamResponseMessage >= 300 && !(405 || 500): Response was HTTP failure, set on anemic response and return
-
-- streamResponseMessage >= 300 && 405: Try request again with different headers
-   - UnsupportedDataException: Can't write body
-   - (The whole streamResponse conditions apply again but this time, ignore 405)
-
-- streamResponseMessage >= 300 && 500 && lastExecutionFailure != null: Try to read SOAP failure body
-   - UnsupportedDataException: Can't read body
-
-- streamResponseMessage < 300: Response was OK, try to read response body
-   - UnsupportedDataException: Can't read body
-
-
-*/

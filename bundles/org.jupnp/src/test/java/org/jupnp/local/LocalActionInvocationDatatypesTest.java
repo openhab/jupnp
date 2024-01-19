@@ -55,18 +55,6 @@ class LocalActionInvocationDatatypesTest {
         assertEquals(1, getDataInvocation.getOutput().length);
         assertEquals(512, ((byte[]) getDataInvocation.getOutput()[0].getValue()).length);
 
-        // This fails, we can't put arbitrary bytes into a String and hope it will be valid unicode characters!
-        /* TODO: This now only logs a warning!
-        ActionInvocation getStringDataInvocation = new ActionInvocation(svc.getAction("GetDataString"));
-        svc.getExecutor(getStringDataInvocation.getAction()).execute(getStringDataInvocation);
-        assertEquals(ErrorCode.ARGUMENT_VALUE_INVALID.getCode(), getStringDataInvocation.getFailure().getErrorCode());
-        assertEquals(
-                "The argument value is invalid. Wrong type or invalid value for 'RandomDataString': " +
-                        "Invalid characters in string value (XML 1.0, section 2.2) produced by (StringDatatype).",
-                getStringDataInvocation.getFailure().getMessage()
-        );
-        */
-
         ActionInvocation invocation = new ActionInvocation(svc.getAction("GetStrings"));
         svc.getExecutor(invocation.getAction()).execute(invocation);
         assertNull(invocation.getFailure());

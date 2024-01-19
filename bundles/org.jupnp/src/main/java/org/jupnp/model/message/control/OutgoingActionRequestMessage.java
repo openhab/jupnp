@@ -86,20 +86,8 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
         actionNamespace = soapActionHeader.getValue().getTypeString();
 
         if (getOperation().getMethod().equals(UpnpRequest.Method.POST)) {
-
             getHeaders().add(UpnpHeader.Type.SOAPACTION, soapActionHeader);
             log.trace("Added SOAP action header: " + soapActionHeader);
-
-        /* TODO: Finish the M-POST crap (or not)
-        } else if (getOperation().getMethod().equals(UpnpRequest.Method.MPOST)) {
-
-            getHeaders().add(UpnpHeader.Type.MAN, new MANHeader(Constants.SOAP_NS_ENVELOPE, "01"));
-
-            getHeaders().add(UpnpHeader.Type.SOAPACTION, soapActionHeader);
-            getHeaders().setPrefix(UpnpHeader.Type.SOAPACTION, "01");
-            log.trace("Added SOAP action header with prefix '01': " + getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION).getString());
-            */
-
         } else {
             throw new IllegalArgumentException("Can't send action with request method: " + getOperation().getMethod());
         }

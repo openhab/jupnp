@@ -163,16 +163,9 @@ public abstract class Service<D extends Device, S extends Service> {
         // TODO: If the service has no evented variables, it should not have an event subscription URL, which means
         // the url element in the device descriptor must be present, but empty!!!!
 
-        /* TODO: This doesn't fit into our meta model, we don't know if a service has state variables until
-         we completely hydrate it from a service descriptor
-        if (getStateVariables().length == 0) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "stateVariables",
-                    "Service must have at least one state variable"
-            ));
-        }
-         */
+        // TODO: This doesn't fit into our meta model, we don't know if a service has state variables until
+        // we completely hydrate it from a service descriptor
+
         if (hasStateVariables()) {
             for (StateVariable stateVariable : getStateVariables()) {
                 errors.addAll(stateVariable.validate());

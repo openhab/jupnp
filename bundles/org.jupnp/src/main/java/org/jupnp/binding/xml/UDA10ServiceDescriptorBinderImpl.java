@@ -149,41 +149,17 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 continue;
 
             if (ELEMENT.specVersion.equals(rootChild)) {
-                // We don't care about UDA major/minor specVersion anymore - whoever had the brilliant idea that
-                // the spec versions can be declared on devices _AND_ on their services should have their fingers
-                // broken so they never touch a keyboard again.
-                // hydrateSpecVersion(descriptor, rootChild);
+                log.trace("Ignoring UDA major/minor specVersion");
             } else if (ELEMENT.actionList.equals(rootChild)) {
                 hydrateActionList(descriptor, rootChild);
             } else if (ELEMENT.serviceStateTable.equals(rootChild)) {
                 hydrateServiceStateTableList(descriptor, rootChild);
             } else {
-                log.trace("Ignoring unknown element: " + rootChild.getNodeName());
+                log.trace("Ignoring unknown element: {}", rootChild.getNodeName());
             }
         }
 
     }
-
-    /*
-    public void hydrateSpecVersion(MutableService descriptor, Node specVersionNode)
-            throws DescriptorBindingException {
-
-        NodeList specVersionChildren = specVersionNode.getChildNodes();
-        for (int i = 0; i < specVersionChildren.getLength(); i++) {
-            Node specVersionChild = specVersionChildren.item(i);
-
-            if (specVersionChild.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-
-            MutableUDAVersion version = new MutableUDAVersion();
-            if (ELEMENT.major.equals(specVersionChild)) {
-                version.major = Integer.valueOf(XMLUtil.getTextContent(specVersionChild));
-            } else if (ELEMENT.minor.equals(specVersionChild)) {
-                version.minor = Integer.valueOf(XMLUtil.getTextContent(specVersionChild));
-            }
-        }
-    }
-    */
 
     public void hydrateActionList(MutableService descriptor, Node actionListNode) throws DescriptorBindingException {
 

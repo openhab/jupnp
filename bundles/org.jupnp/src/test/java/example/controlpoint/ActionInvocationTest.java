@@ -182,15 +182,6 @@ class ActionInvocationTest {
 
         setTargetInvocation.setInput("NewTargetValue", true); // Can throw InvalidValueException
 
-        // Alternative:
-        //
-        // setTargetInvocation.setInput(
-        //         new ActionArgumentValue(
-        //                 action.getInputArgument("NewTargetValue"),
-        //                 true
-        //         )
-        // );
-
         ActionCallback setTargetCallback = new ActionCallback(setTargetInvocation) {
 
             @Override

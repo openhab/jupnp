@@ -94,15 +94,6 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
 
         @Override
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
-
-            /*
-            if (element.equals(SpecVersionHandler.EL)) {
-                MutableUDAVersion udaVersion = new MutableUDAVersion();
-                getInstance().udaVersion = udaVersion;
-                new SpecVersionHandler(udaVersion, this);
-            }
-            */
-
             if (element.equals(ActionListHandler.EL)) {
                 List<MutableAction> actions = new ArrayList();
                 getInstance().actions = actions;
@@ -114,37 +105,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 getInstance().stateVariables = stateVariables;
                 new StateVariableListHandler(stateVariables, this);
             }
-
         }
     }
-
-    /*
-    protected static class SpecVersionHandler extends ServiceDescriptorHandler<MutableUDAVersion> {
-
-        public static final ELEMENT EL = ELEMENT.specVersion;
-
-        public SpecVersionHandler(MutableUDAVersion instance, ServiceDescriptorHandler parent) {
-            super(instance, parent);
-        }
-
-        @Override
-        public void endElement(ELEMENT element) throws SAXException {
-            switch (element) {
-                case major:
-                    getInstance().major = Integer.valueOf(getCharacters());
-                    break;
-                case minor:
-                    getInstance().minor = Integer.valueOf(getCharacters());
-                    break;
-            }
-        }
-
-        @Override
-        public boolean isLastElement(ELEMENT element) {
-            return element.equals(EL);
-        }
-    }
-    */
 
     protected static class ActionListHandler extends ServiceDescriptorHandler<List<MutableAction>> {
 

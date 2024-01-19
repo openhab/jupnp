@@ -68,12 +68,6 @@ class UDA10DeviceDescriptorParsingTest {
                 upnpService.getConfiguration().getNamespace()
         );
 
-/*
-        System.out.println("#######################################################################################");
-        System.out.println(descriptorXml);
-        System.out.println("#######################################################################################");
-*/
-
         RemoteDevice hydratedDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         hydratedDevice = binder.describe(hydratedDevice, descriptorXml);
 
@@ -95,10 +89,6 @@ class UDA10DeviceDescriptorParsingTest {
                 new RemoteClientInfo(),
                 upnpService.getConfiguration().getNamespace()
         );
-
-        //System.out.println("#######################################################################################");
-        //System.out.println(descriptorXml);
-        //System.out.println("#######################################################################################");
 
         RemoteDevice hydratedDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         hydratedDevice = binder.describe(hydratedDevice, descriptorXml);

@@ -375,30 +375,15 @@ public class RouterImpl implements Router {
             if (multicastReceiver == null) {
                 log.info("Configuration did not create a MulticastReceiver for: " + networkInterface);
             } else {
-                try {
-                    log.debug("Init multicast receiver on interface: " + networkInterface.getDisplayName());
-                    multicastReceiver.init(
-                        networkInterface,
-                        this,
-                        networkAddressFactory,
-                        getConfiguration().getDatagramProcessor()
-                    );
+                log.debug("Init multicast receiver on interface: " + networkInterface.getDisplayName());
+                multicastReceiver.init(
+                    networkInterface,
+                    this,
+                    networkAddressFactory,
+                    getConfiguration().getDatagramProcessor()
+                );
 
-                    multicastReceivers.put(networkInterface, multicastReceiver);
-                } catch (InitializationException ex) {
-                    /* TODO: What are some recoverable exceptions for this?
-                    log.warn(
-                        "Ignoring network interface '"
-                            + networkInterface.getDisplayName()
-                            + "' init failure of MulticastReceiver: " + ex.toString());
-                    if (log.isTraceEnabled())
-                        log.log(Level.FINE, "Initialization exception root cause", Exceptions.unwrap(ex));
-                    log.warn("Removing unusable interface " + interface);
-                    it.remove();
-                    continue; // Don't need to try anything else on this interface
-                    */
-                    throw ex;
-                }
+                multicastReceivers.put(networkInterface, multicastReceiver);
             }
         }
 
@@ -440,24 +425,9 @@ public class RouterImpl implements Router {
             if (datagramIO == null) {
                 log.info("Configuration did not create a StreamServer for: " + address);
             } else {
-                try {
-                    log.debug("Init datagram I/O on address: " + address);
-                    datagramIO.init(address, networkAddressFactory.getMulticastResponsePort(), this, getConfiguration().getDatagramProcessor());
-                    datagramIOs.put(address, datagramIO);
-                } catch (InitializationException ex) {
-                    /* TODO: What are some recoverable exceptions for this?
-                    Throwable cause = Exceptions.unwrap(ex);
-                    if (cause instanceof BindException) {
-                        log.warn("Failed to init datagram I/O: " + cause);
-                        if (log.isTraceEnabled())
-                            log.log(Level.FINE, "Initialization exception root cause", cause);
-                        log.warn("Removing unusable address: " + address);
-                        addresses.remove();
-                        continue; // Don't try anything else with this address
-                    }
-                    */
-                    throw ex;
-                }
+                log.debug("Init datagram I/O on address: " + address);
+                datagramIO.init(address, networkAddressFactory.getMulticastResponsePort(), this, getConfiguration().getDatagramProcessor());
+                datagramIOs.put(address, datagramIO);
             }
         }
 

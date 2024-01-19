@@ -34,20 +34,6 @@ import java.util.Set;
  */
 public class XMLUtil {
 
-    /* TODO: How it should be done (nice API, eh?)
-    public static String documentToString(Document document) throws Exception {
-        TransformerFactory transFactory = TransformerFactory.newInstance();
-        transFactory.setAttribute("indent-number", 4);
-        Transformer transformer = transFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-        StringWriter out = new StringWriter();
-        transformer.transform(new DOMSource(d), new StreamResult(out));
-        return out.toString();
-    }
-    */
-
     // TODO: Evil methods to print XML on Android 2.1 (there is no TransformerFactory)
 
     public static String documentToString(Document document) throws Exception {

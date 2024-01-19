@@ -477,13 +477,6 @@ class HeaderParsingTest {
         header.setString("<http://127.0.0.1/foo> <ftp://127.0.0.1/bar>");
         assertEquals(1, header.getValue().size());
         assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
-
-        /* TODO: I'm having trouble finding a valid URL that is
-           an invalid URI in the standard JDK...
-        header.setString("<http://127.0.0.1/foo> <http://we_need_a_valid_URL_but_invalid_URI>");
-        assertEquals(1, header.getValue().size());
-        assertEquals("http://127.0.0.1/foo", header.getValue().get(0).toString());
-        */
     }
 
     @Test

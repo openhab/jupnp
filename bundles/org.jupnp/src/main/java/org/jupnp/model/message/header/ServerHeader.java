@@ -103,15 +103,17 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
 
 
             /* These are the rules:
-
-              Many HTTP/1.1 header field values consist of words separated by LWS or special characters. These special
-              characters MUST be in a quoted string to be used within a parameter value (as defined in section 3.6).
-
-               token          = 1*<any CHAR except CTLs or separators>
-               separators     = "(" | ")" | "<" | ">" | "@"
-                              | "," | ";" | ":" | "\" | <">
-                              | "/" | "[" | "]" | "?" | "="
-                              | "{" | "}" | SP | HT
+             *
+             * Many HTTP/1.1 header field values consist of words separated by LWS or special characters. These special
+             * characters MUST be in a quoted string to be used within a parameter value (as defined in section 3.6).
+             *
+             * @formatter:off
+             * token          = 1*<any CHAR except CTLs or separators>
+             * separators     = "(" | ")" | "<" | ">" | "@"
+             *                | "," | ";" | ":" | "\" | <">
+             *                | "/" | "[" | "]" | "?" | "="
+             *                | "{" | "}" | SP | HT
+             * @formatter:on
              */
         }
 

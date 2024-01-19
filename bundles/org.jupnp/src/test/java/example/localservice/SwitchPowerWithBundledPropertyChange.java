@@ -59,11 +59,6 @@ public class SwitchPowerWithBundledPropertyChange {
         getPropertyChangeSupport().firePropertyChange(
             "Target, Status", null, null
         );
-
-        // Or if you don't like string manipulation:
-        // getPropertyChangeSupport().firePropertyChange(
-        //    ModelUtil.toCommaSeparatedList(new String[]{"Target", "Status"}), null, null
-        //);
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))

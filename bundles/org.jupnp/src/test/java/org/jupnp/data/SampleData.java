@@ -21,11 +21,9 @@ import java.net.URI;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.model.DefaultServiceManager;
-import org.jupnp.model.message.OutgoingDatagramMessage;
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.DeviceIdentity;
@@ -41,14 +39,11 @@ import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
-import org.jupnp.transport.spi.DatagramProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 public class SampleData {
-
-    private static Logger log = LoggerFactory.getLogger(SampleData.class);
 
     /* ###################################################################################### */
 
@@ -246,15 +241,6 @@ public class SampleData {
             ).newInstance(ctor);
 
         } catch (Exception e) {
-/*
-            Throwable cause = Exceptions.unwrap(e);
-            if (cause instanceof ValidationException) {
-                ValidationException ex = (ValidationException) cause;
-                for (ValidationError validationError : ex.getErrors()) {
-                    log.error(validationError.toString());
-                }
-            }
-*/
             throw new RuntimeException(e);
         }
     }
@@ -289,41 +275,6 @@ public class SampleData {
                 new DefaultServiceManager(service, clazz)
         );
         return service;
-    }
-
-    /* ###################################################################################### */
-
-    /*   public static void assertTestDataMatchServiceTwo(Service svc) {
-
-            Service<DeviceService> service = svc;
-
-            Device sampleDevice = (service.getDeviceService().getDevice().isLocal()) ? getLocalDevice() : getRemoteDevice();
-            Service<DeviceService> sampleService = getServiceTwo((Device) sampleDevice.getEmbeddedDevices().get(0));
-
-            assertEquals(sampleService.getActions().size(), service.getActions().size());
-
-            assertEquals(sampleService.getActions().get("GetFoo").getName(), service.getActions().get("GetFoo").getName());
-            assertEquals(sampleService.getActions().get("GetFoo").getArguments().size(), service.getActions().get("GetFoo").getArguments().size());
-            assertEquals(service.getActions().get("GetFoo").getArguments().get(0).getName(), service.getActions().get("GetFoo").getArguments().get(0).getName());
-            assertEquals(sampleService.getActions().get("GetFoo").getArguments().get(0).getDirection(), service.getActions().get("GetFoo").getArguments().get(0).getDirection());
-            assertEquals(sampleService.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName(), service.getActions().get("GetFoo").getArguments().get(0).getRelatedStateVariableName());
-
-            assertEquals(sampleService.getStateVariables().size(), service.getStateVariables().size());
-            assertTrue(service.getStateVariables().containsKey("Foo"));
-
-            assertEquals("Foo", service.getStateVariables().get("Foo").getName());
-            assertTrue(service.getStateVariables().get("Foo").isSendEvents());
-            assertEquals(Datatype.Builtin.BOOLEAN.getDatatype(), service.getStateVariables().get("Foo").getDatatype());
-        }
-
-        public static void assertTestDataMatchServiceThree(Service svc) {
-            assertTestDataMatchServiceTwo(svc);
-        }
-    */
-
-    public static void debugMsg(OutgoingDatagramMessage msg) {
-        DatagramProcessor proc = new DefaultUpnpServiceConfiguration().getDatagramProcessor();
-        proc.write(msg);
     }
 
 }

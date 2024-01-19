@@ -79,13 +79,15 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
         try {
             log.trace("Populating device from XML descriptor: " + undescribedDevice);
-            // We can not validate the XML document. There is no possible XML schema (maybe RELAX NG) that would properly
-            // constrain the UDA 1.0 device descriptor documents: Any unknown element or attribute must be ignored, order of elements
-            // is not guaranteed. Try to write a schema for that! No combination of <xsd:any namespace="##any"> and <xsd:choice>
-            // works with that... But hey, MSFT sure has great tech guys! So what we do here is just parsing out the known elements
-            // and ignoring the other shit. We'll also do some very very basic validation of required elements, but that's it.
+            // We can not validate the XML document. There is no possible XML schema (maybe RELAX NG) that would
+            // properly constrain the UDA 1.0 device descriptor documents: Any unknown element or attribute must be
+            // ignored, order of elements is not guaranteed. Try to write a schema for that! No combination of <xsd:any
+            // namespace="##any"> and <xsd:choice> works with that... But hey, MSFT sure has great tech guys! So what we
+            // do here is just parsing out the known elements and ignoring the other shit. We'll also do some very very
+            // basic validation of required elements, but that's it.
 
-            // And by the way... try this with JAXB instead of manual DOM processing! And you thought it couldn't get worse....
+            // And by the way... try this with JAXB instead of manual DOM processing! And you thought it couldn't get
+            // worse....
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -600,21 +602,10 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
         try {
             return URI.create(uri);
-        } catch (Throwable ex) {
-            /*
-            catch Throwable because on Android 2.2, parsing some invalid URI like "http://..."  gives:
-                        java.lang.NullPointerException
-                             at java.net.URI$Helper.isValidDomainName(URI.java:631)
-                             at java.net.URI$Helper.isValidHost(URI.java:595)
-                             at java.net.URI$Helper.parseAuthority(URI.java:544)
-                             at java.net.URI$Helper.parseURI(URI.java:404)
-                             at java.net.URI$Helper.access$100(URI.java:302)
-                             at java.net.URI.<init>(URI.java:87)
-                             at java.net.URI.create(URI.java:968)
-            */
+        } catch (IllegalArgumentException | NullPointerException  ex) {
+            // Parsing invalid URIs like "http://..." throw a NullPointerException on Android 2.2
             Logger log = LoggerFactory.getLogger(DeviceDescriptorBinder.class);
-            log.trace("Illegal URI, trying with ./ prefix: " + Exceptions.unwrap(ex));
-            // Ignore
+            log.trace("Illegal URI, trying with ./ prefix", ex);
         }
         try {
             // The java.net.URI class can't deal with "_urn:foobar" (yeah, great idea Intel UPnP tools guy), as

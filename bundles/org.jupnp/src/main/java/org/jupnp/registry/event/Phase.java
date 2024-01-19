@@ -27,19 +27,6 @@ import java.lang.annotation.Target;
 
 public interface Phase {
 
-//    public static AnnotationLiteral<Alive> ALIVE = new AnnotationLiteral<Alive>() {
-//    };
-//
-//    public static AnnotationLiteral<Complete> COMPLETE = new AnnotationLiteral<Complete>() {
-//    };
-//
-//    public static AnnotationLiteral<Byebye> BYEBYE = new AnnotationLiteral<Byebye>() {
-//    };
-//
-//    public static AnnotationLiteral<Updated> UPDATED = new AnnotationLiteral<Updated>() {
-//    };
-//
-
     @Target({FIELD, PARAMETER})
     @Retention(RUNTIME)
     public @interface Alive {

@@ -44,12 +44,6 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
         Calendar c = Calendar.getInstance(getTimeZone());
         c.setTime(d);
 
-        /*
-        // TODO: I'm not sure this is necessary and I don't remember why I wrote it
-        if (readFormats[0].equals("HH:mm:ssZ") && (getTimeZone().inDaylightTime(d)))
-            c.add(Calendar.MILLISECOND, 3600000);
-        */
-
         return c;
     }
 

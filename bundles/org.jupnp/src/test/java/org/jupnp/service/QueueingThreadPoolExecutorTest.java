@@ -752,9 +752,6 @@ class QueueingThreadPoolExecutorTest {
 			// otherwise there will be threads found (handles poolName="")
 			if (!poolName.isEmpty()) {
 				if (l[i].getName().startsWith(poolName)) {
-					// enable printout to see threads
-					// System.out.println("areThreadsFromPoolRunning: " +
-					// l[i].toString());
 					foundThreads = true;
 				}
 			}

@@ -111,17 +111,6 @@ class BasicBindingTest {
     void validateBinding(LocalDevice device) {
         LocalService svc = device.getServices()[0];
 
-/*
-        System.out.println("############################################################################");
-        ServiceDescriptorBinder binder = new DefaultUpnpServiceConfiguration().getServiceDescriptorBinderUDA10();
-        try {
-            System.out.println(binder.generate(svc));
-        } catch (DescriptorBindingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("############################################################################");
-
-*/
         assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:SwitchPower", svc.getServiceId().toString());
         assertEquals("urn:" + UDAServiceType.DEFAULT_NAMESPACE + ":service:SwitchPower:1", svc.getServiceType().toString());
 

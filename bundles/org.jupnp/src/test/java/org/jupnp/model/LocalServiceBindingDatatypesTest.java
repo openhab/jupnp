@@ -64,11 +64,6 @@ class LocalServiceBindingDatatypesTest {
     void validateBinding(LocalDevice device) {
         LocalService svc = SampleData.getFirstService(device);
 
-        //System.out.println("############################################################################");
-        //ServiceDescriptorBinder binder = new DefaultRouterConfiguration().getServiceDescriptorBinderUDA10();
-        //System.out.println(binder.generate(svc));
-        //System.out.println("############################################################################");
-
         assertEquals(1, svc.getStateVariables().length);
         assertEquals(Datatype.Builtin.BIN_BASE64, svc.getStateVariable("Data").getTypeDetails().getDatatype().getBuiltin());
         assertFalse(svc.getStateVariable("Data").getEventDetails().isSendEvents());

@@ -180,11 +180,6 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
     public void setVolumeDB(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
                             @UpnpInputArgument(name = "Channel") String channelName,
                             @UpnpInputArgument(name = "DesiredVolume", stateVariable = "VolumeDB") Integer  desiredVolumeDB) throws RenderingControlException {
-        /*
-        VolumeDB volumeDB = new VolumeDB();
-        volumeDB.setChannel(channelName);
-        volumeDB.setVal(new BigInteger(desiredVolumeDB.toString()));
-        */
     }
 
     @UpnpAction(out = {
@@ -206,11 +201,6 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
     public void setLoudness(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
                             @UpnpInputArgument(name = "Channel") String channelName,
                             @UpnpInputArgument(name = "DesiredLoudness", stateVariable = "Loudness") boolean desiredLoudness) throws RenderingControlException {
-/*
-        Loudness loudness = new Loudness();
-        loudness.setChannel(channelName);
-        loudness.setVal(desiredLoudness);
-*/
     }
 
     protected abstract Channel[] getCurrentChannels();
