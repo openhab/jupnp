@@ -51,16 +51,19 @@ public class SpecificationViolationReporter {
 
     private void _report(String format, Object... arguments) {
         if (enabled) {
-            logger.warn("{}: " + format, "UPnP specification violation", arguments);
+            String logFormat = "{}: " + format;
+            logger.warn(logFormat, "UPnP specification violation", arguments);
         }
     }
 
     private void _report(Device<DeviceIdentity, Device, Service> device, String format, Object... arguments) {
         if (enabled) {
             if (device == null) {
-                logger.warn("{}: " + format, "UPnP specification violation", arguments);
+                String logFormat = "{}: " + format;
+                logger.warn(logFormat, "UPnP specification violation", arguments);
             } else {
-                logger.warn("{} of device '{}': " + format, "UPnP specification violation", device, arguments);
+                String logFormat = "{} of device '{}': " + format;
+                logger.warn(logFormat, "UPnP specification violation", device, arguments);
             }
         }
     }

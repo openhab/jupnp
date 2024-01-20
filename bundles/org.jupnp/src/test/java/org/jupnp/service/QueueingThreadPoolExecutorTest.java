@@ -672,10 +672,10 @@ class QueueingThreadPoolExecutorTest {
 
 		// wait until processed
 		while (pool.getCompletedTaskCount() < 100) {
-			logger.info("getCompletedTaskCount: " + pool.getCompletedTaskCount());
+			logger.info("getCompletedTaskCount: {}", pool.getCompletedTaskCount());
 			Thread.sleep(1000);
 		}
-		logger.info("getCompletedTaskCount: " + pool.getCompletedTaskCount());
+		logger.info("getCompletedTaskCount: {}", pool.getCompletedTaskCount());
 		assertEquals(100, pool.getCompletedTaskCount(), "Completed tasks must match");
 		// check runs too
 		assertEquals(100, AbstractRunnable.getRuns(), "Number of executors runs must match");
@@ -768,7 +768,7 @@ class QueueingThreadPoolExecutorTest {
 		for (int i = 1; i <= max; i++) {
 			if (!sequence.contains("," + i + ",")) {
 				Logger logger = LoggerFactory.getLogger(this.getClass());
-				logger.error("isSequenceComplete: missed " + i + " in " + sequence);
+				logger.error("isSequenceComplete: missed {} in {}", i, sequence);
 				return false;
 			}
 		}
@@ -783,7 +783,7 @@ class QueueingThreadPoolExecutorTest {
 			String val = tokenizer.nextToken();
 			if (!val.equals(String.valueOf(i))) {
 				Logger logger = LoggerFactory.getLogger(this.getClass());
-				logger.error("isSequenceOrdered: missed " + i + " in " + sequence);
+				logger.error("isSequenceOrdered: missed {} in {}", i, sequence);
 				return false;
 			}
 		}

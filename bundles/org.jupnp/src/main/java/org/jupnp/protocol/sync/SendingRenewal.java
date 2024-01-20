@@ -55,7 +55,7 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
     }
 
     protected IncomingSubscribeResponseMessage executeSync() throws RouterException {
-        log.trace("Sending subscription renewal request: " + getInputMessage());
+        log.trace("Sending subscription renewal request: {}", getInputMessage());
 
         StreamResponseMessage response;
         try {
@@ -73,7 +73,7 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
         final IncomingSubscribeResponseMessage responseMessage = new IncomingSubscribeResponseMessage(response);
 
         if (response.getOperation().isFailed()) {
-            log.trace("Subscription renewal failed, response was: " + response);
+            log.trace("Subscription renewal failed, response was: {}", response);
             getUpnpService().getRegistry().removeRemoteSubscription(subscription);
             getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
                     new Runnable() {
@@ -92,7 +92,7 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
                     }
             );
         } else {
-            log.trace("Subscription renewed, updating in registry, response was: " + response);
+            log.trace("Subscription renewed, updating in registry, response was: {}", response);
             subscription.setActualSubscriptionDurationSeconds(responseMessage.getSubscriptionDurationSeconds());
             getUpnpService().getRegistry().updateRemoteSubscription(subscription);
         }

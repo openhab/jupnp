@@ -43,7 +43,7 @@ public class RegistryMaintainer implements Runnable {
 
     public void run() {
         stopped = false;
-        log.trace("Running registry maintenance loop every milliseconds: " + sleepIntervalMillis);
+        log.trace("Running registry maintenance loop every milliseconds: {}", sleepIntervalMillis);
         while (!stopped) {
 
             try {

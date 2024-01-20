@@ -67,7 +67,7 @@ public class RegistryImpl implements Registry {
      * Starts background maintenance immediately.
      */
     public RegistryImpl(UpnpService upnpService) {
-        log.trace("Creating Registry: " + getClass().getName());
+        log.trace("Creating Registry: {}", getClass().getName());
 
         this.upnpService = upnpService;
 
@@ -129,7 +129,7 @@ public class RegistryImpl implements Registry {
     public boolean notifyDiscoveryStart(final RemoteDevice device) {
         // Exit if we have it already, this is atomic inside this method, finally
         if (getRemoteDevice(device.getIdentity().getUdn(), true) != null) {
-            log.trace("Not notifying listeners, already registered: " + device);
+            log.trace("Not notifying listeners, already registered: {}", device);
             return false;
         }
 
@@ -647,7 +647,7 @@ public class RegistryImpl implements Registry {
         while (it.hasNext()) {
             RegistryItem<URI, Resource> item = it.next();
             if (item.getExpirationDetails().hasExpired()) {
-                log.trace("Removing expired resource: " + item);
+                log.trace("Removing expired resource: {}", item);
                 it.remove();
             }
         }

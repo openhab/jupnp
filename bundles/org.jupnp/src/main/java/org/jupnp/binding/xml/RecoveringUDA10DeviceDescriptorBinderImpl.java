@@ -62,7 +62,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 return device;
                 
             } catch (DescriptorBindingException ex) {
-                log.warn("Regular parsing failed: " + Exceptions.unwrap(ex).getMessage());
+                log.warn("Regular parsing failed: {}", Exceptions.unwrap(ex).getMessage());
                 originalException = ex;
             } catch (IllegalArgumentException e) {
                 handleInvalidDescriptor(descriptorXml, new DescriptorBindingException(e.getMessage()));
@@ -77,7 +77,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
                 } catch (DescriptorBindingException ex) {
-                    log.warn("Removing leading garbage didn't work: " + Exceptions.unwrap(ex).getMessage());
+                    log.warn("Removing leading garbage didn't work: {}", Exceptions.unwrap(ex).getMessage());
                 }
             }
 
@@ -87,7 +87,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
                 } catch (DescriptorBindingException ex) {
-                    log.warn("Removing trailing garbage didn't work: " + Exceptions.unwrap(ex).getMessage());
+                    log.warn("Removing trailing garbage didn't work: {}", Exceptions.unwrap(ex).getMessage());
                 }
             }
 
@@ -101,7 +101,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                         device = super.describe(undescribedDevice, fixedXml);
                         return device;
                     } catch (DescriptorBindingException ex) {
-                        log.warn("Fixing namespace prefix didn't work: " + Exceptions.unwrap(ex).getMessage());
+                        log.warn("Fixing namespace prefix didn't work: {}", Exceptions.unwrap(ex).getMessage());
                         lastException = ex;
                     }
                 } else {
@@ -213,7 +213,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         }
 
         String rootAttributes = matcher.group(1);
-        log.trace("Preserving existing <root> element attributes/namespace declarations: " + matcher.group(0));
+        log.trace("Preserving existing <root> element attributes/namespace declarations: {}", matcher.group(0));
 
         // Extract <root> body
         pattern = Pattern.compile("<root[^>]*>(.*)</root>", Pattern.DOTALL);

@@ -63,7 +63,7 @@ public class AsyncServlet extends HttpServlet {
         final long startTime = System.currentTimeMillis();
         final int counter = mCounter++;
         log.info("{}", String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
-        log.debug("Handling Servlet request asynchronously: " + req);
+        log.debug("Handling Servlet request asynchronously: {}", req);
 
         AsyncContext async = req.startAsync();
         async.setTimeout(configuration.getAsyncTimeoutSeconds() * 1000);

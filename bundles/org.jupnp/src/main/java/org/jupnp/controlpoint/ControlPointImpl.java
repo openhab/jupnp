@@ -49,7 +49,7 @@ public class ControlPointImpl implements ControlPoint {
     }
 
     public ControlPointImpl(UpnpServiceConfiguration configuration, ProtocolFactory protocolFactory, Registry registry) {
-        log.trace("Creating ControlPoint: " + getClass().getName());
+        log.trace("Creating ControlPoint: {}", getClass().getName());
         
         this.configuration = configuration;
         this.protocolFactory = protocolFactory;
@@ -85,7 +85,7 @@ public class ControlPointImpl implements ControlPoint {
     }
 
     public void search(UpnpHeader searchType, int mxSeconds) {
-        log.trace("Sending asynchronous search for: " + searchType.getString());
+        log.trace("Sending asynchronous search for: {}", searchType.getString());
         getConfiguration().getAsyncProtocolExecutor().execute(
                 getProtocolFactory().createSendingSearch(searchType, mxSeconds)
         );
@@ -96,14 +96,14 @@ public class ControlPointImpl implements ControlPoint {
     }
 
     public Future execute(ActionCallback callback) {
-        log.trace("Invoking action in background: " + callback);
+        log.trace("Invoking action in background: {}", callback);
         callback.setControlPoint(this);
         ExecutorService executor = getConfiguration().getSyncProtocolExecutorService();
         return executor.submit(callback);
     }
 
     public void execute(SubscriptionCallback callback) {
-        log.trace("Invoking subscription in background: " + callback);
+        log.trace("Invoking subscription in background: {}", callback);
         callback.setControlPoint(this);
         getConfiguration().getSyncProtocolExecutorService().execute(callback);
     }

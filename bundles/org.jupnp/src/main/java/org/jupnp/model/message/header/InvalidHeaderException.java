@@ -21,8 +21,12 @@ package org.jupnp.model.message.header;
  */
 public class InvalidHeaderException extends RuntimeException {
 
-    public InvalidHeaderException(String s) {
-        super(s);
+    public InvalidHeaderException(String message) {
+        super(message);
+    }
+
+    public InvalidHeaderException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

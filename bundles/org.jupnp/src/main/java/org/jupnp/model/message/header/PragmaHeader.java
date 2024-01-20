@@ -38,8 +38,8 @@ public class PragmaHeader extends UpnpHeader<PragmaType> {
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(PragmaType.valueOf(s));
-        } catch (InvalidValueException invalidValueException) {
-            throw new InvalidHeaderException("Invalid Range Header: " + invalidValueException.getMessage());
+        } catch (InvalidValueException ex) {
+            throw new InvalidHeaderException("Invalid Range Header: " + ex.getMessage(), ex);
         }
     }
 

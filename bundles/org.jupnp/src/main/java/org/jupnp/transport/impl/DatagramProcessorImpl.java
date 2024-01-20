@@ -96,7 +96,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
         messageData.append(message.getHeaders().toString()).append("\r\n");
 
         if (log.isTraceEnabled()) {
-            log.trace("Writing message data for: " + message);
+            log.trace("Writing message data for: {}", message);
             log.trace("---------------------------------------------------------------------------------");
             log.trace(messageData.toString().substring(0, messageData.length() - 2)); // Don't print the blank lines
             log.trace("---------------------------------------------------------------------------------");
@@ -106,7 +106,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
         // TODO: Probably should look into escaping rules, too
         byte[] data = messageData.toString().getBytes(StandardCharsets.US_ASCII);
 
-        log.trace("Writing new datagram packet with " + data.length + " bytes for: " + message);
+        log.trace("Writing new datagram packet with {} bytes for: {}", data.length, message);
         return new DatagramPacket(data, data.length, message.getDestinationAddress(), message.getDestinationPort());
 
     }

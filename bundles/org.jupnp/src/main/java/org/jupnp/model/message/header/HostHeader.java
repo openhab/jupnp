@@ -46,7 +46,7 @@ public class HostHeader extends UpnpHeader<HostPort> {
                 this.group = s.substring(0, s.indexOf(":"));
                 setValue(new HostPort(group, port));
             } catch (NumberFormatException ex) {
-                throw new InvalidHeaderException("Invalid HOST header value, can't parse port: " + s + " - " + ex.getMessage());
+                throw new InvalidHeaderException("Invalid HOST header value, can't parse port: " + s + " - " + ex.getMessage(), ex);
             }
         } else {
             this.group = s;

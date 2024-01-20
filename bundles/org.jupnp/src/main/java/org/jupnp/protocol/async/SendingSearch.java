@@ -79,7 +79,7 @@ public class SendingSearch extends SendingAsync {
 
     protected void execute() throws RouterException {
 
-        log.trace("Executing search for target: " + searchTarget.getString() + " with MX seconds: " + getMxSeconds());
+        log.trace("Executing search for target: {} with MX seconds: {}", searchTarget.getString(), getMxSeconds());
 
         OutgoingSearchRequest msg = new OutgoingSearchRequest(searchTarget, getMxSeconds());
         prepareOutgoingSearchRequest(msg);
@@ -90,7 +90,7 @@ public class SendingSearch extends SendingAsync {
                 getUpnpService().getRouter().send(msg);
 
                 // UDA 1.0 is silent about this but UDA 1.1 recommends "a few hundred milliseconds"
-                log.trace("Sleeping " + getBulkIntervalMilliseconds() + " milliseconds");
+                log.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
                 Thread.sleep(getBulkIntervalMilliseconds());
 
             } catch (InterruptedException ex) {

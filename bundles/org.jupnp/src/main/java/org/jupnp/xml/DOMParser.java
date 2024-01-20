@@ -273,13 +273,13 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     public void validate(URL url) throws ParserException {
         if (url == null) throw new IllegalArgumentException("Can't validate null URL");
-        log.trace("Validating XML of URL: " + url);
+        log.trace("Validating XML of URL: {}", url);
         validate(new StreamSource(url.toString()));
     }
 
     public void validate(String string) throws ParserException {
         if (string == null) throw new IllegalArgumentException("Can't validate null string");
-        log.trace("Validating XML string characters: " + string.length());
+        log.trace("Validating XML string characters: {}", string.length());
         validate(new SAXSource(new InputSource(new StringReader(string))));
     }
 
@@ -329,7 +329,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     public Object getXPathResult(Node context, XPath xpath, String expr, QName result) {
         try {
-            log.trace("Evaluating xpath query: " + expr);
+            log.trace("Evaluating xpath query: {}", expr);
             return xpath.evaluate(expr, context, result);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

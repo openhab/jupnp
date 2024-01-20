@@ -175,8 +175,7 @@ public abstract class UpnpHeader<T> {
                 log.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(), ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
-                log.error("Error instantiating header of type '" + type + "' with value: " + headerValue);
-                log.error("Exception root cause: ", Exceptions.unwrap(ex));
+                log.error("Error instantiating header of type '{}' with value: {}", type, headerValue, ex);
             }
 
         }

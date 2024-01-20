@@ -87,7 +87,7 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
 
         if (getOperation().getMethod().equals(UpnpRequest.Method.POST)) {
             getHeaders().add(UpnpHeader.Type.SOAPACTION, soapActionHeader);
-            log.trace("Added SOAP action header: " + soapActionHeader);
+            log.trace("Added SOAP action header: {}", soapActionHeader);
         } else {
             throw new IllegalArgumentException("Can't send action with request method: " + getOperation().getMethod());
         }

@@ -233,9 +233,9 @@ public class UpnpServiceImpl implements UpnpService {
         } catch (RouterException ex) {
             Throwable cause = Exceptions.unwrap(ex);
             if (cause instanceof InterruptedException) {
-                log.debug("Router shutdown was interrupted: " + ex, cause);
+                log.debug("Router shutdown was interrupted", ex);
             } else {
-                throw new RuntimeException("Router error on shutdown: " + ex, ex);
+                throw new RuntimeException("Router error on shutdown", ex);
             }
         }
     }

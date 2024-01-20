@@ -40,7 +40,7 @@ public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
         try {
             setValue(new UnsignedIntegerFourBytes(s));
         } catch (NumberFormatException ex) {
-            throw new InvalidHeaderException("Invalid event sequence, " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid event sequence, " + ex.getMessage(), ex);
         }
 
     }

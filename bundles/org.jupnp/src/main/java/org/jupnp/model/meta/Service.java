@@ -181,11 +181,11 @@ public abstract class Service<D extends Device, S extends Service> {
                 List<ValidationError> actionErrors = action.validate();
                 if (actionErrors.size() > 0) {
                     actions.remove(action.getName()); // Remove it
-                    log.warn("Discarding invalid action of service '" + getServiceId() + "': " + action.getName());
+                    log.warn("Discarding invalid action of service '{}': {}", getServiceId(), action.getName());
                     // log details only in debug level
                     if (log.isDebugEnabled()) {
                         for (ValidationError actionError : actionErrors) {
-                            log.debug("Invalid action '" + action.getName() + "': " + actionError);
+                            log.debug("Invalid action '{}': {}", action.getName(), actionError);
                         }
                     }
                 }

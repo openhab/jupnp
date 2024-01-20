@@ -161,7 +161,7 @@ public class Namespace {
         log.trace("Discovering local resources of device graph");
         Resource[] discoveredResources = device.discoverResources(this);
         for (Resource resource : discoveredResources) {
-            log.trace("Discovered: " + resource);
+            log.trace("Discovered: {}", resource);
             if (!resources.add(resource)) {
                 log.trace("Local resource already exists, queueing validation error");
                 errors.add(new ValidationError(

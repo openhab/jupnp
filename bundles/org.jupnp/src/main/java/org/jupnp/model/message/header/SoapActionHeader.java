@@ -47,7 +47,7 @@ public class SoapActionHeader extends UpnpHeader<SoapActionType> {
             SoapActionType t = SoapActionType.valueOf(s.substring(1, s.length()-1));
             setValue(t);
         } catch (RuntimeException ex) {
-            throw new InvalidHeaderException("Invalid SOAP action header value, " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid SOAP action header value, " + ex.getMessage(), ex);
         }
     }
 

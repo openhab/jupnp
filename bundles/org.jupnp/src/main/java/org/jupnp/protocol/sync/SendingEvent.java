@@ -70,22 +70,22 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
 
     protected StreamResponseMessage executeSync() throws RouterException {
 
-        log.trace("Sending event for subscription: " + subscriptionId);
+        log.trace("Sending event for subscription: {}", subscriptionId);
 
         StreamResponseMessage lastResponse = null;
 
         for (OutgoingEventRequestMessage requestMessage : requestMessages) {
 
             if (currentSequence.getValue() == 0) {
-                log.trace("Sending initial event message to callback URL: " + requestMessage.getUri());
+                log.trace("Sending initial event message to callback URL: {}", requestMessage.getUri());
             } else {
-                log.trace("Sending event message '"+currentSequence+"' to callback URL: " + requestMessage.getUri());
+                log.trace("Sending event message '{}' to callback URL: {}", currentSequence, requestMessage.getUri());
             }
 
 
             // Send request
             lastResponse = getUpnpService().getRouter().send(requestMessage);
-            log.trace("Received event callback response: " + lastResponse);
+            log.trace("Received event callback response: {}", lastResponse);
 
         }
 

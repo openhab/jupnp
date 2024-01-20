@@ -60,7 +60,7 @@ public class BlockingServlet extends HttpServlet {
         final long startTime = System.currentTimeMillis();
         final int counter = mCounter++;
         log.trace("{}", String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
-        log.trace("Handling Servlet request synchronously: " + req);
+        log.trace("Handling Servlet request synchronously: {}", req);
 
         FauxAsyncContext asyncContext = new FauxAsyncContext(req, resp);
         asyncContext.setTimeout(configuration.getAsyncTimeoutSeconds() * 1000);

@@ -68,25 +68,25 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         // Simple case: no output arguments
         if (!actionInvocation.getAction().hasOutputArguments()) {
-            log.trace("Calling local service method with no output arguments: " + method);
+            log.trace("Calling local service method with no output arguments: {}", method);
             Reflections.invoke(method, serviceImpl, inputArgumentValues);
             return;
         }
 
         boolean isVoid = method.getReturnType().equals(Void.TYPE);
 
-        log.trace("Calling local service method with output arguments: " + method);
+        log.trace("Calling local service method with output arguments: {}", method);
         Object result;
         boolean isArrayResultProcessed = true;
         if (isVoid) {
 
-            log.trace("Action method is void, calling declared accessors(s) on service instance to retrieve ouput argument(s)");
+            log.trace("Action method is void, calling declared accessors(s) on service instance to retrieve output argument(s)");
             Reflections.invoke(method, serviceImpl, inputArgumentValues);
             result = readOutputArgumentValues(actionInvocation.getAction(), serviceImpl);
 
         } else if (isUseOutputArgumentAccessors(actionInvocation)) {
 
-            log.trace("Action method is not void, calling declared accessor(s) on returned instance to retrieve ouput argument(s)");
+            log.trace("Action method is not void, calling declared accessor(s) on returned instance to retrieve output argument(s)");
             Object returnedInstance = Reflections.invoke(method, serviceImpl, inputArgumentValues);
             result = readOutputArgumentValues(actionInvocation.getAction(), returnedInstance);
 
@@ -101,7 +101,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         if (isArrayResultProcessed && result instanceof Object[]) {
             Object[] results = (Object[]) result;
-            log.trace("Accessors returned Object[], setting output argument values: " + results.length);
+            log.trace("Accessors returned Object[], setting output argument values: {}", results.length);
             for (int i = 0; i < outputArgs.length; i++) {
                 setOutputArgumentValue(actionInvocation, outputArgs[i], results[i]);
             }
@@ -157,12 +157,12 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             if (inputCallValueString.length() > 0 && service.isStringConvertibleType(methodParameterType) && !methodParameterType.isEnum()) {
                 try {
                     Constructor<String> ctor = methodParameterType.getConstructor(String.class);
-                    log.trace("Creating new input argument value instance with String.class constructor of type: " + methodParameterType);
+                    log.trace("Creating new input argument value instance with String.class constructor of type: {}", methodParameterType);
                     Object o = ctor.newInstance(inputCallValueString);
                     values.add(i++, o);
                 } catch (Exception ex) {
-                    log.warn("Error preparing action method call: " + method);
-                    log.warn("Can't convert input argument string to desired type of '" + argument.getName() + "': " + ex);
+                    log.warn("Error preparing action method call: {}. Can't convert input argument string to desired type of '{}'",
+                            method, argument.getName(), ex);
                     throw new ActionException(
                             ErrorCode.ARGUMENT_VALUE_INVALID, "Can't convert input argument string to desired type of '" + argument.getName() + "': " + ex
                     );
@@ -177,7 +177,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             && RemoteClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
             if (actionInvocation instanceof RemoteActionInvocation &&
                 ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo() != null) {
-                log.trace("Providing remote client info as last action method input argument: " + method);
+                log.trace("Providing remote client info as last action method input argument: {}", method);
                 values.add(i, ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo());
             } else {
                 // Local call, no client info available

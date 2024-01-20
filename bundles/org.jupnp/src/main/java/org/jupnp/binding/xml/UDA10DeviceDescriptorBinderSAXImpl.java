@@ -60,7 +60,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         }
 
         try {
-            log.trace("Populating device from XML descriptor: " + undescribedDevice);
+            log.trace("Populating device from XML descriptor: {}", undescribedDevice);
 
             // Read the XML into a mutable descriptor graph
 

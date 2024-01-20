@@ -80,18 +80,18 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
 
         UDN udn = getInputMessage().getUDN();
         if (udn == null) {
-            log.trace("Ignoring notification message without UDN: " + getInputMessage());
+            log.trace("Ignoring notification message without UDN: {}", getInputMessage());
             return;
         }
 
         RemoteDeviceIdentity rdIdentity = new RemoteDeviceIdentity(getInputMessage());
-        log.trace("Received device notification: " + rdIdentity);
+        log.trace("Received device notification: {}", rdIdentity);
 
         RemoteDevice rd;
         try {
             rd = new RemoteDevice(rdIdentity);
         } catch (ValidationException ex) {
-            log.warn("Validation errors of device during discovery: " + rdIdentity);
+            log.warn("Validation errors of device during discovery: {}", rdIdentity);
             for (ValidationError validationError : ex.getErrors()) {
                 log.warn(validationError.toString());
             }
@@ -100,20 +100,20 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
 
         if (getInputMessage().isAliveMessage()) {
 
-            log.trace("Received device ALIVE advertisement, descriptor location is: " + rdIdentity.getDescriptorURL());
+            log.trace("Received device ALIVE advertisement, descriptor location is: {}", rdIdentity.getDescriptorURL());
 
             if (rdIdentity.getDescriptorURL() == null) {
-                log.trace("Ignoring message without location URL header: " + getInputMessage());
+                log.trace("Ignoring message without location URL header: {}", getInputMessage());
                 return;
             }
 
             if (rdIdentity.getMaxAgeSeconds() == null) {
-                log.trace("Ignoring message without max-age header: " + getInputMessage());
+                log.trace("Ignoring message without max-age header: {}", getInputMessage());
                 return;
             }
 
             if (getUpnpService().getRegistry().update(rdIdentity)) {
-                log.trace("Remote device was already known: " + udn);
+                log.trace("Remote device was already known: {}", udn);
                 return;
             }
 
@@ -128,11 +128,11 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
             log.trace("Received device BYEBYE advertisement");
             boolean removed = getUpnpService().getRegistry().removeDevice(rd);
             if (removed) {
-                log.trace("Removed remote device from registry: " + rd);
+                log.trace("Removed remote device from registry: {}", rd);
             }
 
         } else {
-            log.trace("Ignoring unknown notification message: " + getInputMessage());
+            log.trace("Ignoring unknown notification message: {}", getInputMessage());
         }
 
     }

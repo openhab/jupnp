@@ -42,7 +42,7 @@ public class LocationHeader extends UpnpHeader<URL> {
             URL url = new URL(s);
             setValue(url);
         } catch (MalformedURLException ex) {
-            throw new InvalidHeaderException("Invalid URI: " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid URI: " + ex.getMessage(), ex);
         }
     }
 

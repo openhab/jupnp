@@ -82,7 +82,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
             return null;
         }
 
-        log.trace("Sending subscription request: " + getInputMessage());
+        log.trace("Sending subscription request: {}", getInputMessage());
 
         try {
             // register this pending Subscription to bloc if the notification is received before the
@@ -105,7 +105,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
             final IncomingSubscribeResponseMessage responseMessage = new IncomingSubscribeResponseMessage(response);
 
             if (response.getOperation().isFailed()) {
-                log.trace("Subscription failed, response was: " + responseMessage);
+                log.trace("Subscription failed, response was: {}", responseMessage);
                 getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
                     new Runnable() {
                         public void run() {
@@ -124,7 +124,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
                 );
             } else {
 
-                log.trace("Subscription established, adding to registry, response was: " + response);
+                log.trace("Subscription established, adding to registry, response was: {}", response);
                 subscription.setSubscriptionId(responseMessage.getSubscriptionId());
                 subscription.setActualSubscriptionDurationSeconds(responseMessage.getSubscriptionDurationSeconds());
 

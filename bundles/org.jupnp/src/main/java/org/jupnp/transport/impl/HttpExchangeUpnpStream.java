@@ -155,7 +155,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
             responseSent(responseMessage);
 
-        } catch (Throwable t) {
+        } catch (Exception ex) {
 
             // You definitely want to catch all Exceptions here, otherwise the server will
             // simply close the socket and you get an "unexpected end of file" on the client.
@@ -166,17 +166,17 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
             // TODO: We should only send an error if the problem was on our side
             // You don't have to catch Throwable unless, like we do here in unit tests,
             // you might run into Errors as well (assertions).
-            log.trace("Exception occured during UPnP stream processing: {}", t);
+            log.trace("Exception occured during UPnP stream processing: {}", ex);
             if (log.isTraceEnabled()) {
-                log.trace("Cause: {}", Exceptions.unwrap(t), Exceptions.unwrap(t));
+                log.trace("Cause: {}", Exceptions.unwrap(ex), Exceptions.unwrap(ex));
             }
             try {
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-            } catch (IOException ex) {
-                log.warn("Couldn't send error response: {}", ex.getMessage(), ex);
+            } catch (IOException ioe) {
+                log.warn("Couldn't send error response: {}", ioe.getMessage(), ioe);
             }
 
-            responseException(t);
+            responseException(ex);
         }
     }
 

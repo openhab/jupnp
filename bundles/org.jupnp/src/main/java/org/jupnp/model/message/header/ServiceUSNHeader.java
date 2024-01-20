@@ -38,7 +38,7 @@ public class ServiceUSNHeader extends UpnpHeader<NamedServiceType> {
         try {
             setValue(NamedServiceType.valueOf(s));
         } catch (Exception ex) {
-            throw new InvalidHeaderException("Invalid service USN header value, " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid service USN header value, " + ex.getMessage(), ex);
         }
     }
 

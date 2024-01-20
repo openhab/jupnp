@@ -59,30 +59,28 @@ public abstract class ServletUpnpStream extends UpnpStream {
     public void run() {
         try {
             StreamRequestMessage requestMessage = readRequestMessage();
-            log.trace("Processing new request message: " + requestMessage);
+            log.trace("Processing new request message: {}", requestMessage);
 
             responseMessage = process(requestMessage);
 
             if (responseMessage != null) {
-                log.trace("Preparing HTTP response message: " + responseMessage);
+                log.trace("Preparing HTTP response message: {}", responseMessage);
                 writeResponseMessage(responseMessage);
             } else {
                 // If it's null, it's 404
-                log.trace("Sending HTTP response status: " + HttpURLConnection.HTTP_NOT_FOUND);
+                log.trace("Sending HTTP response status: {}", HttpURLConnection.HTTP_NOT_FOUND);
                 getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
 
-        } catch (Throwable t) {
-            log.info("Exception occurred during UPnP stream processing: " + t);
-            t.printStackTrace();
-            log.trace("Cause: " + Exceptions.unwrap(t), Exceptions.unwrap(t));
+        } catch (Exception ex) {
+            log.info("Exception occurred during UPnP stream processing: {}", ex);
             if (!getResponse().isCommitted()) {
                 log.trace("Response hasn't been committed, returning INTERNAL SERVER ERROR to client");
                 getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } else {
                 log.info("Could not return INTERNAL SERVER ERROR to client, response was already committed");
             }
-            responseException(t);
+            responseException(ex);
         } finally {
             complete();
         }
@@ -93,7 +91,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
         String requestMethod = getRequest().getMethod();
         String requestURI = getRequest().getRequestURI();
 
-        log.trace("Processing HTTP request: " + requestMethod + " " + requestURI);
+        log.trace("Processing HTTP request: {} {} ", requestMethod, requestURI);
 
         StreamRequestMessage requestMessage;
         try {
@@ -140,7 +138,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
             if (is != null)
                 is.close();
         }
-        log.trace("Reading request body bytes: " + bodyBytes.length);
+        log.trace("Reading request body bytes: {}", bodyBytes.length);
 
         if (bodyBytes.length > 0 && requestMessage.isContentTypeMissingOrText()) {
             log.trace("Request contains textual entity body, converting then setting string on message");
@@ -158,7 +156,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
     }
 
     protected void writeResponseMessage(StreamResponseMessage responseMessage) throws IOException {
-        log.trace("Sending HTTP response status: " + responseMessage.getOperation().getStatusCode());
+        log.trace("Sending HTTP response status: {}", responseMessage.getOperation().getStatusCode());
 
         getResponse().setStatus(responseMessage.getOperation().getStatusCode());
 

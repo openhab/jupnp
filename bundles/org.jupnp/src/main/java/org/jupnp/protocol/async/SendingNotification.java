@@ -85,11 +85,11 @@ public abstract class SendingNotification extends SendingAsync {
                 }
 
                 // UDA 1.0 is silent about this but UDA 1.1 recomments "a few hundred milliseconds"
-                log.trace("Sleeping " + getBulkIntervalMilliseconds() + " milliseconds");
+                log.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
                 Thread.sleep(getBulkIntervalMilliseconds());
 
             } catch (InterruptedException ex) {
-                log.warn("Advertisement thread was interrupted: " + ex);
+                log.warn("Advertisement thread was interrupted", ex);
             }
         }
     }
@@ -103,7 +103,7 @@ public abstract class SendingNotification extends SendingAsync {
     }
 
     public void sendMessages(Location descriptorLocation) throws RouterException {
-        log.trace("Sending root device messages: " + getDevice());
+        log.trace("Sending root device messages: {}", getDevice());
         List<OutgoingNotificationRequest> rootDeviceMsgs =
                 createDeviceMessages(getDevice(), descriptorLocation);
         for (OutgoingNotificationRequest upnpMessage : rootDeviceMsgs) {
@@ -112,7 +112,7 @@ public abstract class SendingNotification extends SendingAsync {
 
         if (getDevice().hasEmbeddedDevices()) {
             for (LocalDevice embeddedDevice : getDevice().findEmbeddedDevices()) {
-                log.trace("Sending embedded device messages: " + embeddedDevice);
+                log.trace("Sending embedded device messages: {}", embeddedDevice);
                 List<OutgoingNotificationRequest> embeddedDeviceMsgs =
                         createDeviceMessages(embeddedDevice, descriptorLocation);
                 for (OutgoingNotificationRequest upnpMessage : embeddedDeviceMsgs) {

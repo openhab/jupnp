@@ -80,11 +80,11 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                 );
 
         if (resource == null) {
-            log.trace("No local resource found: " + getInputMessage());
+            log.trace("No local resource found: {}", getInputMessage());
             return null;
         }
 
-        log.trace("Found local action resource matching relative request URI: " + getInputMessage().getUri());
+        log.trace("Found local action resource matching relative request URI: {}", getInputMessage().getUri());
 
         RemoteActionInvocation invocation;
         OutgoingActionResponseMessage responseMessage = null;
@@ -95,14 +95,14 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             IncomingActionRequestMessage requestMessage =
                     new IncomingActionRequestMessage(getInputMessage(), resource.getModel());
 
-            log.trace("Created incoming action request message: " + requestMessage);
+            log.trace("Created incoming action request message: {}", requestMessage);
             invocation = new RemoteActionInvocation(requestMessage.getAction(), getRemoteClientInfo());
 
             // Throws UnsupportedDataException if the body can't be read
             log.trace("Reading body of request message");
             getUpnpService().getConfiguration().getSoapActionProcessor().readBody(requestMessage, invocation);
 
-            log.trace("Executing on local service: " + invocation);
+            log.trace("Executing on local service: {}", invocation);
             resource.getModel().getExecutor(invocation.getAction()).execute(invocation);
 
             if (invocation.getFailure() == null) {
@@ -150,12 +150,11 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             log.trace("Writing body of response message");
             getUpnpService().getConfiguration().getSoapActionProcessor().writeBody(responseMessage, invocation);
 
-            log.trace("Returning finished response message: " + responseMessage);
+            log.trace("Returning finished response message: {}", responseMessage);
             return responseMessage;
 
         } catch (UnsupportedDataException ex) {
-            log.warn("Failure writing body of response message, sending '500 Internal Server Error' without body");
-            log.warn("Exception root cause: ", Exceptions.unwrap(ex));
+            log.warn("Failure writing body of response message, sending '500 Internal Server Error' without body", ex);
             return new StreamResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
     }

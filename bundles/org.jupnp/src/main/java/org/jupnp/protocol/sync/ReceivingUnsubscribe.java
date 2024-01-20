@@ -48,11 +48,11 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
         );
 
         if (resource == null) {
-            log.trace("No local resource found: " + getInputMessage());
+            log.trace("No local resource found: {}", getInputMessage());
             return null;
         }
 
-        log.trace("Found local event subscription matching relative request URI: " + getInputMessage().getUri());
+        log.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
 
         IncomingUnsubscribeRequestMessage requestMessage =
                 new IncomingUnsubscribeRequestMessage(getInputMessage(), resource.getModel());
@@ -60,7 +60,7 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
         // Error conditions UDA 1.0 section 4.1.3
         if (requestMessage.getSubscriptionId() != null &&
                 (requestMessage.hasNotificationHeader() || requestMessage.hasCallbackHeader())) {
-            log.trace("Subscription ID and NT or Callback in unsubcribe request: " + getInputMessage());
+            log.trace("Subscription ID and NT or Callback in unsubcribe request: {}", getInputMessage());
             return new StreamResponseMessage(UpnpResponse.Status.BAD_REQUEST);
         }
 
@@ -68,11 +68,11 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
                 getUpnpService().getRegistry().getLocalSubscription(requestMessage.getSubscriptionId());
 
         if (subscription == null) {
-            log.trace("Invalid subscription ID for unsubscribe request: " + getInputMessage());
+            log.trace("Invalid subscription ID for unsubscribe request: {}", getInputMessage());
             return new StreamResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
-        log.trace("Unregistering subscription: " + subscription);
+        log.trace("Unregistering subscription: {}", subscription);
         if (getUpnpService().getRegistry().removeLocalSubscription(subscription)) {
             subscription.end(null); // No reason, just an unsubscribe
         } else {

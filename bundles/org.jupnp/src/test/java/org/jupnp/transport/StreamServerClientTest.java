@@ -315,7 +315,7 @@ public abstract class StreamServerClientTest {
         @Override
         protected StreamResponseMessage executeSync() {
             try {
-                log.info("Sleeping for " + SLEEP_MS + "ms before completion...");
+                log.info("Sleeping for {}ms before completion...", SLEEP_MS);
                 Thread.sleep(SLEEP_MS);
             } catch (InterruptedException ex) {
                 fail("Interrupted while sleeping in DelayedResponse", ex);
@@ -337,7 +337,7 @@ public abstract class StreamServerClientTest {
         @Override
         protected StreamResponseMessage executeSync() {
             try {
-                log.info("Sleeping for " + SLEEP_MS + " before completion...");
+                log.info("Sleeping for {} before completion...", SLEEP_MS);
                 Thread.sleep(SLEEP_MS);
             } catch (InterruptedException ex) {
                 fail("Interrupted while sleeping in TooLongResponse", ex);

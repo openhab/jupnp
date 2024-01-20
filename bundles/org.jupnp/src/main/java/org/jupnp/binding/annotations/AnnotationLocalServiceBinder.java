@@ -58,7 +58,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
     private Logger log = LoggerFactory.getLogger(AnnotationLocalServiceBinder.class);
 
     public LocalService read(Class<?> clazz) throws LocalServiceBindingException {
-        log.trace("Reading and binding annotations of service implementation class: " + clazz);
+        log.trace("Reading and binding annotations of service implementation class: {}", clazz);
 
         // Read the service ID and service type from the annotation
         if (clazz.isAnnotationPresent(UpnpService.class)) {
@@ -168,7 +168,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
                 } else if (getter != null) {
                     accessor = new GetterStateVariableAccessor(getter);
                 } else {
-                    log.trace("No field or getter found for state variable, skipping accessor: " + v.name());
+                    log.trace("No field or getter found for state variable, skipping accessor: {}", v.name());
                 }
 
                 StateVariable stateVar =

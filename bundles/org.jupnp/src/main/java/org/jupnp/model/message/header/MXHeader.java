@@ -38,7 +38,7 @@ public class MXHeader extends UpnpHeader<Integer> {
         try {
             value = Integer.parseInt(s);
         } catch (Exception ex) {
-            throw new InvalidHeaderException("Can't parse MX seconds integer from: " + s);
+            throw new InvalidHeaderException("Can't parse MX seconds integer from: " + s, ex);
         }
 
         // UDA 1.0, section 1.2.3: "If the MX header specifies a value greater than 120, the device

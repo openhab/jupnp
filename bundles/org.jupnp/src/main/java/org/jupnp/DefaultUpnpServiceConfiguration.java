@@ -354,7 +354,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                      @Override
                      public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
                          // Log and discard
-                         LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of " + runnable.getClass());
+                         LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of {}", runnable.getClass());
                          super.rejectedExecution(runnable, threadPoolExecutor);
                      }
                  }
@@ -386,8 +386,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                     return;
                 }
                 // Log only
-                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Root cause: " + cause);
+                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated {} abruptly", runnable, throwable);
             }
         }
     }

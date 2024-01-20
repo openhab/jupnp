@@ -38,7 +38,7 @@ public class DeviceUSNHeader extends UpnpHeader<NamedDeviceType> {
         try {
             setValue(NamedDeviceType.valueOf(s));
         } catch (Exception ex) {
-            throw new InvalidHeaderException("Invalid device USN header value, " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid device USN header value, " + ex.getMessage(), ex);
         }
     }
 

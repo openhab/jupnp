@@ -46,7 +46,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
     @Override
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {
-        log.trace("Preparing HTTP request: " + requestMessage);
+        log.trace("Preparing HTTP request: {}", requestMessage);
 
         String[] split = requestMessage.getUri().toString().split(":");
         String protocol = split[0];
@@ -110,7 +110,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             return response;
 
         } catch (InterruptedException ex) {
-            log.trace("Interruption, aborting request: " + requestMessage);
+            log.trace("Interruption, aborting request: {}", requestMessage);
             abort(request);
             throw new InterruptedException("HTTP request interrupted and aborted");
 
@@ -133,7 +133,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
                     log.warn(message, Exceptions.unwrap(cause));
                 } else {
                     // compact logging
-                    log.warn(message + " (" + Exceptions.unwrap(cause).getMessage() + ")");
+                    log.warn("{} ({})", message, Exceptions.unwrap(cause).getMessage());
                 }
             }
 

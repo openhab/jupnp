@@ -62,14 +62,14 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
     void add(final RemoteDevice device) {
 
         if (update(device.getIdentity())) {
-            log.trace("Ignoring addition, device already registered: " + device);
+            log.trace("Ignoring addition, device already registered: {}", device);
             return;
         }
 
         Resource[] resources = getResources(device);
 
         for (Resource deviceResource : resources) {
-            log.trace("Validating remote device resource; " + deviceResource);
+            log.trace("Validating remote device resource; {}", deviceResource);
             if (registry.getResource(deviceResource.getPathQuery()) != null) {
                 throw new RegistrationException("URI namespace conflict with already registered resource: " + deviceResource);
             }
@@ -77,7 +77,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
         for (Resource validatedResource : resources) {
             registry.addResource(validatedResource);
-            log.trace("Added remote device resource: " + validatedResource);
+            log.trace("Added remote device resource: {}", validatedResource);
         }
 
         // Override the device's maximum age if configured (systems without multicast support)
@@ -90,8 +90,8 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
 
         RegistryItem item = new RegistryItem(device.getIdentity().getUdn(), device, maxAgeSeconds);
-        log.trace("Adding hydrated remote device to registry with " + item.getExpirationDetails().getMaxAgeSeconds()
-                + " seconds expiration: " + device);
+        log.trace("Adding hydrated remote device to registry with {} seconds expiration: {}",
+                item.getExpirationDetails().getMaxAgeSeconds() , device);
         getDeviceItems().add(item);
 
         if (log.isTraceEnabled()) {
@@ -106,7 +106,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
 
         // Only notify the listeners when the device is fully usable
-        log.trace("Completely hydrated remote device graph available, calling listeners: " + device);
+        log.trace("Completely hydrated remote device graph available, calling listeners: {}", device);
         for (final RegistryListener listener : registry.getListeners()) {
             registry.getConfiguration().getRemoteListenerExecutor().execute(
                     new Runnable() {
@@ -145,7 +145,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
             
             if (!registeredRemoteDevice.isRoot()) {
-                log.trace("Updating root device of embedded: " + registeredRemoteDevice);
+                log.trace("Updating root device of embedded: {}", registeredRemoteDevice);
                 registeredRemoteDevice = registeredRemoteDevice.getRoot();
             }
 
@@ -158,11 +158,11 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
                             : rdIdentity.getMaxAgeSeconds()
             );
 
-            log.trace("Updating expiration of: " + registeredRemoteDevice);
+            log.trace("Updating expiration of: {}", registeredRemoteDevice);
             getDeviceItems().remove(item);
             getDeviceItems().add(item);
 
-            log.trace("Remote device updated, calling listeners: " + registeredRemoteDevice);
+            log.trace("Remote device updated, calling listeners: {}", registeredRemoteDevice);
             for (final RegistryListener listener : registry.getListeners()) {
                 registry.getConfiguration().getRemoteListenerExecutor().execute(
                         new Runnable() {
@@ -193,12 +193,12 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         final RemoteDevice registeredDevice = get(remoteDevice.getIdentity().getUdn(), true);
         if (registeredDevice != null) {
 
-            log.trace("Removing remote device from registry: " + remoteDevice);
+            log.trace("Removing remote device from registry: {}", remoteDevice);
 
             // Resources
             for (Resource deviceResource : getResources(registeredDevice)) {
                 if (registry.removeResource(deviceResource)) {
-                    log.trace("Unregistered resource: " + deviceResource);
+                    log.trace("Unregistered resource: {}", deviceResource);
                 }
             }
 
@@ -211,7 +211,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
                         outgoingSubscription.getItem().getService().getDevice().getIdentity().getUdn();
 
                 if (subscriptionForUDN.equals(registeredDevice.getIdentity().getUdn())) {
-                    log.trace("Removing outgoing subscription: " + outgoingSubscription.getKey());
+                    log.trace("Removing outgoing subscription: {}", outgoingSubscription.getKey());
                     it.remove();
                     if (!shuttingDown) {
                         registry.getConfiguration().getRemoteListenerExecutor().execute(
@@ -278,7 +278,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
         }
         for (RemoteDevice remoteDevice : expiredRemoteDevices.values()) {
-            log.trace("Removing expired: " + remoteDevice);
+            log.trace("Removing expired: {}", remoteDevice);
             remove(remoteDevice);
         }
 
@@ -292,7 +292,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
         }
         for (RemoteGENASubscription subscription : expiredOutgoingSubscriptions) {
-            log.trace("Renewing outgoing subscription: " + subscription);
+            log.trace("Renewing outgoing subscription: {}", subscription);
             renewOutgoingSubscription(subscription);
         }
     }

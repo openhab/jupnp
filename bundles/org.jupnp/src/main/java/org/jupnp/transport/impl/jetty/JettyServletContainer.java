@@ -77,7 +77,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             log.trace("Server handler is already set: {}", server.getHandler() );
             return;
         }
-        log.info("Registering UPnP servlet under context path: " + contextPath);
+        log.info("Registering UPnP servlet under context path: {}", contextPath);
         ServletContextHandler servletHandler =
             new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         if (contextPath != null && contextPath.length() > 0) {
@@ -95,7 +95,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 server.start();
             } catch (Exception ex) {
-                log.error("Couldn't start Jetty server: {}", ex);
+                log.error("Couldn't start Jetty server", ex);
                 throw new RuntimeException(ex);
             }
         }
@@ -108,7 +108,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 server.stop();
             } catch (Exception ex) {
-                log.error("Couldn't stop Jetty server: [}", ex);
+                log.error("Couldn't stop Jetty server", ex);
                 throw new RuntimeException(ex);
             } finally {
                 resetServer();

@@ -54,7 +54,7 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
 
     protected StreamResponseMessage executeSync() throws RouterException {
 
-        log.trace("Sending unsubscribe request: " + getInputMessage());
+        log.trace("Sending unsubscribe request: {}", getInputMessage());
 
         StreamResponseMessage response = null;
         try {
@@ -76,10 +76,10 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
                         log.trace("Unsubscribe failed, no response received");
                         subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
                     } else if (response.getOperation().isFailed()) {
-                        log.trace("Unsubscribe failed, response was: " + response);
+                        log.trace("Unsubscribe failed, response was: {}", response);
                         subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
                     } else {
-                        log.trace("Unsubscribe successful, response was: " + response);
+                        log.trace("Unsubscribe successful, response was: {}", response);
                         subscription.end(null, response.getOperation());
                     }
                 }

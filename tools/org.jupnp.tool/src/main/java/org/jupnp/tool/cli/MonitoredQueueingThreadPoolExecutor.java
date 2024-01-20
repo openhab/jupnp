@@ -31,8 +31,8 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 
 	public MonitoredQueueingThreadPoolExecutor(String poolName, int threadPoolSize) {
 		super(poolName, threadPoolSize);
-		logger.debug("Created MonitoredQueueingThreadPoolExecutor with poolName=" + poolName + " and poolSize="
-				+ threadPoolSize);
+		logger.debug("Created MonitoredQueueingThreadPoolExecutor with poolName={} and poolSize={}", poolName,
+				threadPoolSize);
 		if (DEBUG_STATISTICS) {
 			stats = new Statistics(poolName);
 		}
@@ -64,8 +64,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 				return;
 			}
 			// Log only
-			logger.warn("Thread terminated " + runnable + " abruptly with exception: " + throwable);
-			logger.warn("  Root cause: " + cause);
+			logger.warn("Thread terminated {} abruptly with exception", runnable, throwable);
 		}
 	}
 
@@ -144,18 +143,18 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 		}
 
 		public void dumpPoolStats() {
-			statsLogger.info("Dump Pool Statistics for poolName: " + poolName);
+			statsLogger.info("Dump Pool Statistics for poolName: {}", poolName);
 			statsLogger.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
 			for (Iterator<Statistics.PoolStatPoint> iter = points.iterator(); iter.hasNext();) {
 				Statistics.PoolStatPoint p = iter.next();
-				statsLogger.info(p.timestamp + "," + p.corePoolSize + "," + p.poolSize + "," + p.maxPoolSize + ","
-						+ p.activeCounts + "," + p.queueSize + "," + p.completedTasks);
+				statsLogger.info("{},{},{},{},{},{},{}", p.timestamp, p.corePoolSize, p.poolSize, p.maxPoolSize,
+						p.activeCounts, p.queueSize, p.completedTasks);
 			}
 			statsLogger.info(" ");
 		}
 
 		public void dumpExecutorsStats() {
-			statsLogger.info("Dump Pool Executors for poolName: " + poolName);
+			statsLogger.info("Dump Pool Executors for poolName: {}", poolName);
 
 			List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<ConcurrentHashMap.Entry<String, AtomicInteger>>(
 					executors.entrySet());
@@ -169,7 +168,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 
 			statsLogger.info("[executorClassName,numberOfExecutes]");
 			for (ConcurrentHashMap.Entry<String, AtomicInteger> e : entries) {
-				statsLogger.info(e.getKey() + "," + e.getValue().get());
+				statsLogger.info("{},{}", e.getKey(), e.getValue().get());
 			}
 			statsLogger.info(" ");
 		}

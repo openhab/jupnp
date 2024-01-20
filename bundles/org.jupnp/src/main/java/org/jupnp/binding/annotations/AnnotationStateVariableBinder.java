@@ -67,7 +67,7 @@ public class AnnotationStateVariableBinder {
 
     protected StateVariable createStateVariable() throws LocalServiceBindingException {
 
-        log.trace("Creating state variable '" + getName() + "' with accessor: " + getAccessor());
+        log.trace("Creating state variable '{}' with accessor: {}", getName(), getAccessor());
 
         // Datatype
         Datatype datatype = createDatatype();
@@ -88,7 +88,7 @@ public class AnnotationStateVariableBinder {
             } else if (getAccessor() != null && getAccessor().getReturnType().isEnum()) {
                 allowedValues = getAllowedValues(getAccessor().getReturnType());
             } else {
-                log.trace("Not restricting allowed values (of string typed state var): " + getName());
+                log.trace("Not restricting allowed values (of string typed state var): {}", getName());
             }
 
             if (allowedValues != null && defaultValue != null) {
@@ -122,7 +122,7 @@ public class AnnotationStateVariableBinder {
                     getAnnotation().allowedValueStep()
                 );
             } else {
-                log.trace("Not restricting allowed value range (of numeric typed state var): " + getName());
+                log.trace("Not restricting allowed value range (of numeric typed state var): {}", getName());
             }
 
             // Check if the default value is an allowed value
@@ -157,13 +157,13 @@ public class AnnotationStateVariableBinder {
         int eventMinimumDelta = 0;
         if (sendEvents) {
             if (getAnnotation().eventMaximumRateMilliseconds() > 0) {
-                log.trace("Moderating state variable events using maximum rate (milliseconds): " + getAnnotation().eventMaximumRateMilliseconds());
+                log.trace("Moderating state variable events using maximum rate (milliseconds): {}", getAnnotation().eventMaximumRateMilliseconds());
                 eventMaximumRateMillis = getAnnotation().eventMaximumRateMilliseconds();
             }
 
             if (getAnnotation().eventMinimumDelta() > 0 && Datatype.Builtin.isNumeric(datatype.getBuiltin())) {
                 // TODO: Doesn't consider floating point types!
-                log.trace("Moderating state variable events using minimum delta: " + getAnnotation().eventMinimumDelta());
+                log.trace("Moderating state variable events using minimum delta: {}", getAnnotation().eventMinimumDelta());
                 eventMinimumDelta = getAnnotation().eventMinimumDelta();
             }
         }
@@ -183,7 +183,7 @@ public class AnnotationStateVariableBinder {
 
         if (declaredDatatype.length() == 0 && getAccessor() != null) {
             Class returnType = getAccessor().getReturnType();
-            log.trace("Using accessor return type as state variable type: " + returnType);
+            log.trace("Using accessor return type as state variable type: {}", returnType);
 
             if (ModelUtil.isStringConvertibleType(getStringConvertibleTypes(), returnType)) {
                 // Enums and toString() convertible types are always state variables with type STRING
@@ -192,7 +192,7 @@ public class AnnotationStateVariableBinder {
             } else {
                 Datatype.Default defaultDatatype = Datatype.Default.getByJavaType(returnType);
                 if (defaultDatatype != null) {
-                    log.trace("Return type has default UPnP datatype: " + defaultDatatype);
+                    log.trace("Return type has default UPnP datatype: {}", defaultDatatype);
                     return defaultDatatype.getBuiltinType().getDatatype();
                 }
             }
@@ -210,12 +210,12 @@ public class AnnotationStateVariableBinder {
             throw new LocalServiceBindingException("Could not detect datatype of state variable: " + getName());
         }
 
-        log.trace("Trying to find built-in UPnP datatype for detected name: " + declaredDatatype);
+        log.trace("Trying to find built-in UPnP datatype for detected name: {}", declaredDatatype);
 
         // Now try to find the actual UPnP datatype by mapping the Default to Builtin
         Datatype.Builtin builtin = Datatype.Builtin.getByDescriptorName(declaredDatatype);
         if (builtin != null) {
-            log.trace("Found built-in UPnP datatype: " + builtin);
+            log.trace("Found built-in UPnP datatype: {}", builtin);
             return builtin.getDatatype();
         } else {
             // TODO
@@ -230,7 +230,7 @@ public class AnnotationStateVariableBinder {
             // The declared default value needs to match the datatype
             try {
                 datatype.valueOf(getAnnotation().defaultValue());
-                log.trace("Found state variable default value: " + getAnnotation().defaultValue());
+                log.trace("Found state variable default value: {}", getAnnotation().defaultValue());
                 return getAnnotation().defaultValue();
             } catch (Exception ex) {
                 throw new LocalServiceBindingException(
@@ -248,7 +248,7 @@ public class AnnotationStateVariableBinder {
             throw new LocalServiceBindingException("Allowed values type is not an Enum: " + enumType);
         }
 
-        log.trace("Restricting allowed values of state variable to Enum: " + getName());
+        log.trace("Restricting allowed values of state variable to Enum: {}", getName());
         String[] allowedValueStrings = new String[enumType.getEnumConstants().length];
         for (int i = 0; i < enumType.getEnumConstants().length; i++) {
             Object o = enumType.getEnumConstants()[i];

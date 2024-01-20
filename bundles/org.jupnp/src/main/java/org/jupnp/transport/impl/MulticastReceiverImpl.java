@@ -73,14 +73,14 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
         try {
 
-            log.debug("Creating wildcard socket (for receiving multicast datagrams) on port: " + configuration.getPort());
+            log.debug("Creating wildcard socket (for receiving multicast datagrams) on port: {}", configuration.getPort());
             multicastAddress = new InetSocketAddress(configuration.getGroup(), configuration.getPort());
 
             socket = new MulticastSocket(configuration.getPort());
             socket.setReuseAddress(true);
             socket.setReceiveBufferSize(32768); // Keep a backlog of incoming datagrams if we are not fast enough
 
-            log.debug("Joining multicast group: " + multicastAddress + " on network interface: " + multicastInterface.getDisplayName());
+            log.debug("Joining multicast group: {} on network interface: {}", multicastAddress, multicastInterface.getDisplayName());
             socket.joinGroup(multicastAddress, multicastInterface);
 
         } catch (Exception ex) {
@@ -95,7 +95,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
                 socket.leaveGroup(multicastAddress, multicastInterface);
                 // Well this doesn't work and I have no idea why I get "java.net.SocketException: Can't assign requested address"
             } catch (Exception ex) {
-                log.debug("Could not leave multicast group: " + ex);
+                log.debug("Could not leave multicast group", ex);
             }
             // So... just close it and ignore the log messages
             socket.close();
@@ -104,7 +104,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
     public void run() {
 
-        log.debug("Entering blocking receiving loop, listening for UDP datagrams on: " + socket.getLocalAddress());
+        log.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}", socket.getLocalAddress());
         while (true) {
 
             try {
@@ -121,10 +121,9 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
                         );
 
                 log.debug(
-                        "UDP datagram received from: " + datagram.getAddress().getHostAddress() 
-                                + ":" + datagram.getPort()
-                                + " on local interface: " + multicastInterface.getDisplayName()
-                                + " and address: " + receivedOnLocalAddress.getHostAddress()
+                        "UDP datagram received from: {}:{} on local interface: {} and address: {}",
+                        datagram.getAddress().getHostAddress(), datagram.getPort(), multicastInterface.getDisplayName(),
+                        receivedOnLocalAddress.getHostAddress()
                 );
 
                 router.received(datagramProcessor.read(receivedOnLocalAddress, datagram));
@@ -133,7 +132,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
                 log.debug("Socket closed");
                 break;
             } catch (UnsupportedDataException ex) {
-                log.info("Could not read datagram: " + ex.getMessage());
+                log.info("Could not read datagram: {}", ex.getMessage());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

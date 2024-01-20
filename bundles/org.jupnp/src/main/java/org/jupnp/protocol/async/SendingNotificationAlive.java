@@ -36,7 +36,7 @@ public class SendingNotificationAlive extends SendingNotification {
 
     @Override
     protected void execute() throws RouterException {
-        log.trace("Sending alive messages ("+getBulkRepeat()+" times) for: " + getDevice());
+        log.trace("Sending alive messages ({} times) for: {}", getBulkRepeat(), getDevice());
         super.execute();
     }
 

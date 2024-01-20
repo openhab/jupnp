@@ -65,7 +65,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
     protected IncomingActionResponseMessage invokeRemote(OutgoingActionRequestMessage requestMessage) throws RouterException {
         Device device = actionInvocation.getAction().getService().getDevice();
 
-        log.trace("Sending outgoing action call '" + actionInvocation.getAction().getName() + "' to remote service of: " + device);
+        log.trace("Sending outgoing action call '{}' to remote service of: {}", actionInvocation.getAction().getName(), device);
         IncomingActionResponseMessage responseMessage = null;
         try {
 
@@ -80,7 +80,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
             responseMessage = new IncomingActionResponseMessage(streamResponse);
 
             if (responseMessage.isFailedNonRecoverable()) {
-                log.trace("Response was a non-recoverable failure: " + responseMessage);
+                log.trace("Response was a non-recoverable failure: {}", responseMessage);
                 throw new ActionException(
                         ErrorCode.ACTION_FAILED, "Non-recoverable remote execution failure: " + responseMessage.getOperation().getResponseDetails()
                 );
@@ -94,7 +94,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
 
 
         } catch (ActionException ex) {
-            log.trace("Remote action invocation failed, returning Internal Server Error message: " + ex.getMessage());
+            log.trace("Remote action invocation failed, returning Internal Server Error message", ex);
             actionInvocation.setFailure(ex);
             if (responseMessage == null || !responseMessage.getOperation().isFailed()) {
                 return new IncomingActionResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR));
@@ -108,7 +108,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         throws ActionException, RouterException {
 
         try {
-            log.trace("Writing SOAP request body of: " + requestMessage);
+            log.trace("Writing SOAP request body of: {}", requestMessage);
             getUpnpService().getConfiguration().getSoapActionProcessor().writeBody(requestMessage, actionInvocation);
 
             log.trace("Sending SOAP body of message as stream to remote device");
@@ -116,13 +116,12 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         } catch (RouterException ex) {
             Throwable cause = Exceptions.unwrap(ex);
             if (cause instanceof InterruptedException) {
-                log.trace("Sending action request message was interrupted: " + cause);
+                log.trace("Sending action request message was interrupted", ex);
                 throw new ActionCancelledException((InterruptedException)cause);
             }
             throw ex;
         } catch (UnsupportedDataException ex) {
-            log.trace("Error writing SOAP body: " + ex);
-            log.trace("Exception root cause: ", Exceptions.unwrap(ex));
+            log.trace("Error writing SOAP body", ex);
             throw new ActionException(ErrorCode.ACTION_FAILED, "Error writing request message. " + ex.getMessage());
         }
     }
@@ -130,11 +129,10 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
     protected void handleResponse(IncomingActionResponseMessage responseMsg) throws ActionException {
 
         try {
-            log.trace("Received response for outgoing call, reading SOAP response body: " + responseMsg);
+            log.trace("Received response for outgoing call, reading SOAP response body: {}", responseMsg);
             getUpnpService().getConfiguration().getSoapActionProcessor().readBody(responseMsg, actionInvocation);
         } catch (UnsupportedDataException ex) {
-            log.trace("Error reading SOAP body: " + ex);
-            log.trace("Exception root cause: ", Exceptions.unwrap(ex));
+            log.trace("Error reading SOAP body", ex);
             throw new ActionException(
                 ErrorCode.ACTION_FAILED,
                 "Error reading SOAP response message. " + ex.getMessage(),
@@ -149,8 +147,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
             log.trace("Received response with Internal Server Error, reading SOAP failure message");
             getUpnpService().getConfiguration().getSoapActionProcessor().readBody(responseMsg, actionInvocation);
         } catch (UnsupportedDataException ex) {
-            log.trace("Error reading SOAP body: " + ex);
-            log.trace("Exception root cause: ", Exceptions.unwrap(ex));
+            log.trace("Error reading SOAP body", ex);
             throw new ActionException(
                 ErrorCode.ACTION_FAILED,
                 "Error reading SOAP response failure message. " + ex.getMessage(),

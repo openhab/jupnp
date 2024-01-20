@@ -39,7 +39,7 @@ public class UDAServiceTypeHeader extends ServiceTypeHeader {
         try {
             setValue(UDAServiceType.valueOf(s));
         } catch (Exception ex) {
-            throw new InvalidHeaderException("Invalid UDA service type header value, " + ex.getMessage());
+            throw new InvalidHeaderException("Invalid UDA service type header value, " + ex.getMessage(), ex);
         }
     }
 

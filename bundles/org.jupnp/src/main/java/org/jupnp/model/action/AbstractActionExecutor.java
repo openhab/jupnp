@@ -57,7 +57,7 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
      */
     public void execute(final ActionInvocation<LocalService> actionInvocation) {
 
-        log.trace("Invoking on local service: " + actionInvocation);
+        log.trace("Invoking on local service: {}", actionInvocation);
 
         final LocalService service = actionInvocation.getAction().getService();
 
@@ -82,17 +82,14 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
             });
 
         } catch (ActionException ex) {
-            log.trace("ActionException thrown by service, wrapping in invocation and returning: " + ex);
-            log.trace("Exception root cause: ", Exceptions.unwrap(ex));
+            log.trace("ActionException thrown by service, wrapping in invocation and returning", ex);
             actionInvocation.setFailure(ex);
         } catch (InterruptedException ex) {
-            log.trace("InterruptedException thrown by service, wrapping in invocation and returning: " + ex);
-            log.trace("Exception root cause: ", Exceptions.unwrap(ex));
+            log.trace("InterruptedException thrown by service, wrapping in invocation and returning", ex);
             actionInvocation.setFailure(new ActionCancelledException(ex));
-        } catch (Throwable t) {
-            Throwable rootCause = Exceptions.unwrap(t);
-            log.trace("Execution has thrown, wrapping root cause in ActionException and returning: " + t);
-            log.trace("Exception root cause: ", rootCause);
+        } catch (Exception ex) {
+            Throwable rootCause = Exceptions.unwrap(ex);
+            log.trace("Execution has thrown, wrapping root cause in ActionException and returning", ex);
             actionInvocation.setFailure(
                 new ActionException(
                     ErrorCode.ACTION_FAILED,
@@ -116,15 +113,15 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
      */
     protected Object readOutputArgumentValues(Action<LocalService> action, Object instance) throws Exception {
         Object[] results = new Object[action.getOutputArguments().length];
-        log.trace("Attempting to retrieve output argument values using accessor: " + results.length);
+        log.trace("Attempting to retrieve output argument values using accessor: {}", results.length);
 
         int i = 0;
         for (ActionArgument outputArgument : action.getOutputArguments()) {
-            log.trace("Calling acccessor method for: " + outputArgument);
+            log.trace("Calling acccessor method for: {}", outputArgument);
 
             StateVariableAccessor accessor = getOutputArgumentAccessors().get(outputArgument);
             if (accessor != null) {
-                log.trace("Calling accessor to read output argument value: " + accessor);
+                log.trace("Calling accessor to read output argument value: {}", accessor);
                 results[i++] = accessor.read(instance);
             } else {
                 throw new IllegalStateException("No accessor bound for: " + outputArgument);

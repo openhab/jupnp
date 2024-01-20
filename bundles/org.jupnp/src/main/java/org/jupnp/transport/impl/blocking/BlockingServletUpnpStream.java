@@ -55,12 +55,12 @@ public abstract class BlockingServletUpnpStream extends ServletUpnpStream {
     protected void complete() {
         try {
             asyncContext.complete();
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             // If Jetty's connection, for whatever reason, is in an illegal
             // state, this will be thrown
             // and we can "probably" ignore it. The request is complete, no
             // matter how it ended.
-            log.info("Error calling servlet container's AsyncContext#complete() method: " + ex);
+            log.info("Error calling servlet container's AsyncContext#complete() method", ex);
         }
     }
 }

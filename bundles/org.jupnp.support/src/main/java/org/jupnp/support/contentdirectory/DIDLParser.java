@@ -465,7 +465,7 @@ public class DIDLParser extends SAXParser {
 
         String title = item.getTitle();
         if (title == null) {
-            logger.warn("Missing 'dc:title' element for item: {}" + item.getId());
+            logger.warn("Missing 'dc:title' element for item: {}", item.getId());
             title = UNKNOWN_TITLE;
         }
 
@@ -675,7 +675,7 @@ public class DIDLParser extends SAXParser {
                             WriteStatus.valueOf(getCharacters())
                         );
                     } catch (Exception ex) {
-                        logger.info("Ignoring invalid writeStatus value: " + getCharacters());
+                        logger.info("Ignoring invalid writeStatus value: {}", getCharacters());
                     }
                 } else if ("class".equals(localName)) {
                     getInstance().setClazz(

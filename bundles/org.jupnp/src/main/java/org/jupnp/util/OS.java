@@ -44,7 +44,7 @@ public class OS {
             String tmp = System.getProperty(key);
             return tmp != null && tmp.trim().toLowerCase().startsWith(value);
         }
-        catch (Throwable t) {
+        catch (Exception ex) {
             return false;
         }
     }

@@ -73,7 +73,7 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
         } catch (IllegalStateException ex) {
             // If Jetty's connection, for whatever reason, is in an illegal state, this will be thrown
             // and we can "probably" ignore it. The request is complete, no matter how it ended.
-            log.info("Error calling servlet container's AsyncContext#complete() method: " + ex);
+            log.info("Error calling servlet container's AsyncContext#complete() method", ex);
         }
     }
 
@@ -85,19 +85,19 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
 
     @Override
     public void onComplete(AsyncEvent event) throws IOException {
-        log.trace("Completed asynchronous processing of HTTP request: " + event.getSuppliedRequest());
+        log.trace("Completed asynchronous processing of HTTP request: {}", event.getSuppliedRequest());
         responseSent(responseMessage);
     }
 
     @Override
     public void onTimeout(AsyncEvent event) throws IOException {
-        log.trace("Asynchronous processing of HTTP request timed out: " + event.getSuppliedRequest());
+        log.trace("Asynchronous processing of HTTP request timed out: {}", event.getSuppliedRequest());
         responseException(new Exception("Asynchronous request timed out"));
     }
 
     @Override
     public void onError(AsyncEvent event) throws IOException {
-        log.trace("Asynchronous processing of HTTP request error: " + event.getThrowable());
+        log.trace("Asynchronous processing of HTTP request error", event.getThrowable());
         responseException(event.getThrowable());
     }
 

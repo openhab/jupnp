@@ -55,14 +55,14 @@ public class UpnpHeaders extends Headers {
     protected void parseHeaders() {
         // This runs as late as possible and only when necessary (getter called and map is dirty)
         parsedHeaders = new LinkedHashMap();
-        log.trace("Parsing all HTTP headers for known UPnP headers: " + size());
+        log.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
             if (entry.getKey() == null) continue; // Oh yes, the JDK has 'null' HTTP headers
 
             UpnpHeader.Type type = UpnpHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
-                log.trace("Ignoring non-UPNP HTTP header: " + entry.getKey());
+                log.trace("Ignoring non-UPNP HTTP header: {}", entry.getKey());
                 continue;
             }
 
@@ -80,7 +80,7 @@ public class UpnpHeaders extends Headers {
     }
 
     protected void addParsedValue(UpnpHeader.Type type, UpnpHeader value) {
-        log.trace("Adding parsed header: " + value);
+        log.trace("Adding parsed header: {}", value);
         List<UpnpHeader> list = parsedHeaders.get(type);
         if (list == null) {
             list = new LinkedList();
@@ -169,17 +169,17 @@ public class UpnpHeaders extends Headers {
         if (log.isTraceEnabled()) {
             log.trace("############################ RAW HEADERS ###########################");
             for (Entry<String, List<String>> entry : entrySet()) {
-                log.trace("=== NAME : " + entry.getKey());
+                log.trace("=== NAME : {}", entry.getKey());
                 for (String v : entry.getValue()) {
-                    log.trace("VALUE: " + v);
+                    log.trace("VALUE: {}", v);
                 }
             }
             if (parsedHeaders != null && parsedHeaders.size() > 0) {
                 log.trace("########################## PARSED HEADERS ##########################");
                 for (Map.Entry<UpnpHeader.Type, List<UpnpHeader>> entry : parsedHeaders.entrySet()) {
-                    log.trace("=== TYPE: " + entry.getKey());
+                    log.trace("=== TYPE: {}", entry.getKey());
                     for (UpnpHeader upnpHeader : entry.getValue()) {
-                        log.trace("HEADER: " + upnpHeader);
+                        log.trace("HEADER: {}", upnpHeader);
                     }
                 }
             }

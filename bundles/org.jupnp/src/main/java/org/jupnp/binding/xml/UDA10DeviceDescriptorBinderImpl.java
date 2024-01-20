@@ -78,7 +78,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         }
 
         try {
-            log.trace("Populating device from XML descriptor: " + undescribedDevice);
+            log.trace("Populating device from XML descriptor: {}", undescribedDevice);
             // We can not validate the XML document. There is no possible XML schema (maybe RELAX NG) that would
             // properly constrain the UDA 1.0 device descriptor documents: Any unknown element or attribute must be
             // ignored, order of elements is not guaranteed. Try to write a schema for that! No combination of <xsd:any
@@ -113,7 +113,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     public <D extends Device> D describe(D undescribedDevice, Document dom) throws DescriptorBindingException, ValidationException {
         try {
-            log.trace("Populating device from DOM: " + undescribedDevice);
+            log.trace("Populating device from DOM: {}", undescribedDevice);
 
             // Read the XML into a mutable descriptor graph
             MutableDevice descriptor = new MutableDevice();
@@ -173,7 +173,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     throw new DescriptorBindingException("Found multiple <device> elements in <root>");
                 deviceNode = rootChild;
             } else {
-                log.trace("Ignoring unknown element: " + rootChild.getNodeName());
+                log.trace("Ignoring unknown element: {}", rootChild.getNodeName());
             }
         }
 
@@ -259,7 +259,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 try {
                     descriptor.dlnaDocs.add(DLNADoc.valueOf(txt));
                 } catch (InvalidValueException ex) {
-                    log.info("Invalid X_DLNADOC value, ignoring value: " + txt);
+                    log.info("Invalid X_DLNADOC value, ignoring value: {}", txt);
                 }
             } else if (ELEMENT.X_DLNACAP.equals(deviceNodeChild) &&
                 Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
@@ -389,7 +389,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     public String generate(Device deviceModel, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException {
         try {
-            log.trace("Generating XML descriptor from device model: " + deviceModel);
+            log.trace("Generating XML descriptor from device model: {}", deviceModel);
 
             return XMLUtil.documentToString(buildDOM(deviceModel, info, namespace));
 
@@ -401,7 +401,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
     public Document buildDOM(Device deviceModel, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException {
 
         try {
-            log.trace("Generating DOM from device model: " + deviceModel);
+            log.trace("Generating DOM from device model: {}", deviceModel);
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);

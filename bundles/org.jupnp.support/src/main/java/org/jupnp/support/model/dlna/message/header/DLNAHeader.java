@@ -142,7 +142,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
                     upnpHeader.setString(headerValue);
                 }
             } catch (InvalidHeaderException ex) {
-                logger.trace("Invalid header value for tested type: {}", headerClass.getSimpleName() + " - " + ex.getMessage());
+                logger.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(), ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
                 logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue, Exceptions.unwrap(ex));

@@ -53,21 +53,21 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
     protected void execute() throws RouterException {
 
         if (!getInputMessage().isSearchResponseMessage()) {
-            log.trace("Ignoring invalid search response message: " + getInputMessage());
+            log.trace("Ignoring invalid search response message: {}", getInputMessage());
             return;
         }
 
         UDN udn = getInputMessage().getRootDeviceUDN();
         if (udn == null) {
-            log.trace("Ignoring search response message without UDN: " + getInputMessage());
+            log.trace("Ignoring search response message without UDN: {}", getInputMessage());
             return;
         }
 
         RemoteDeviceIdentity rdIdentity = new RemoteDeviceIdentity(getInputMessage());
-        log.trace("Received device search response: " + rdIdentity);
+        log.trace("Received device search response: {}", rdIdentity);
 
         if (getUpnpService().getRegistry().update(rdIdentity)) {
-            log.trace("Remote device was already known: " + udn);
+            log.trace("Remote device was already known: {}", udn);
             return;
         }
 
@@ -75,7 +75,7 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
         try {
             rd = new RemoteDevice(rdIdentity);
         } catch (ValidationException ex) {
-            log.warn("Validation errors of device during discovery: " + rdIdentity);
+            log.warn("Validation errors of device during discovery: {}", rdIdentity);
             for (ValidationError validationError : ex.getErrors()) {
                 log.warn(validationError.toString());
             }
@@ -83,12 +83,12 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
         }
 
         if (rdIdentity.getDescriptorURL() == null) {
-            log.trace("Ignoring message without location URL header: " + getInputMessage());
+            log.trace("Ignoring message without location URL header: {}", getInputMessage());
             return;
         }
 
         if (rdIdentity.getMaxAgeSeconds() == null) {
-            log.trace("Ignoring message without max-age header: " + getInputMessage());
+            log.trace("Ignoring message without max-age header: {}", getInputMessage());
             return;
         }
 
@@ -96,7 +96,7 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
         // have no idea if it's a root or embedded device
 
         if (RetrieveRemoteDescriptors.isRetrievalInProgress(rd)) {
-            log.trace("Skip submitting task, active retrieval for URL already in progress:{}",
+            log.trace("Skip submitting task, active retrieval for URL already in progress: {}",
                     rd.getIdentity().getDescriptorURL());
             return;
         }

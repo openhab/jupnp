@@ -54,7 +54,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
     }
 
     public void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException {
-        log.trace("Writing body of: " + requestMessage);
+        log.trace("Writing body of: {}", requestMessage);
 
         try {
 
@@ -78,7 +78,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
     public void readBody(IncomingEventRequestMessage requestMessage) throws UnsupportedDataException {
 
-        log.trace("Reading body of: " + requestMessage);
+        log.trace("Reading body of: {}", requestMessage);
         if (log.isTraceEnabled()) {
             log.trace("===================================== GENA BODY BEGIN ============================================");
             log.trace(requestMessage.getBody() != null ? requestMessage.getBody().toString() : "null");
@@ -156,7 +156,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                     String stateVariableName = getUnprefixedNodeName(propertyChild);
                     for (StateVariable stateVariable : stateVariables) {
                         if (stateVariable.getName().equals(stateVariableName)) {
-                            log.trace("Reading state variable value: " + stateVariableName);
+                            log.trace("Reading state variable value: {}", stateVariableName);
                             String value = XMLUtil.getTextContent(propertyChild);
                             try {
                                 message.getStateVariableValues().add(

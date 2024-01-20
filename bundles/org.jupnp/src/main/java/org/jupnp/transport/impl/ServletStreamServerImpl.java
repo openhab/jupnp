@@ -56,7 +56,7 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
             getConfiguration().getServletContainerAdapter().setExecutorService(
                     router.getConfiguration().getStreamServerExecutorService());
 
-            log.debug("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
+            log.debug("Adding connector: {}:{}", bindAddress, getConfiguration().getListenPort());
             localPort = getConfiguration().getServletContainerAdapter().addConnector(bindAddress.getHostAddress(),
                     getConfiguration().getListenPort());
 

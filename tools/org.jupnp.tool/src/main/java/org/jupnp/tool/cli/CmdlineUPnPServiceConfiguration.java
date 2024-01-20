@@ -187,7 +187,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 		public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
 			if (threadPoolExecutor.isTerminating()) {
 				// do log rejects during shutdown in debug level only
-				logger.debug("Thread pool rejected during termination execution of " + runnable.toString());
+				logger.debug("Thread pool rejected during termination execution of {}", runnable.toString());
 			} else {
 				try {
 					rejectLock.lock();
@@ -197,7 +197,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 					}
 					// check for changed runnable class names
 					if ((lastRejectedClass == null) || (!lastRejectedClass.equals(runnable.getClass().getName()))) {
-						logger.warn("Thread pool rejected execution of " + runnable.toString());
+						logger.warn("Thread pool rejected execution of {}", runnable);
 						noOfRejects = 0;
 						lastRejectedClass = runnable.getClass().getName();
 					} else {

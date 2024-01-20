@@ -189,7 +189,7 @@ public class SAXParser {
                                  Attributes attributes) throws SAXException {
             this.characters = new StringBuilder();
             this.attributes = new AttributesImpl(attributes); // see http://docstore.mik.ua/orelly/xml/sax2/ch05_01.htm, section 5.1.1
-            log.trace(getClass().getSimpleName() + " starting: " + localName);
+            log.trace("{} starting: {}", getClass().getSimpleName(), localName);
         }
 
         @Override
@@ -202,12 +202,12 @@ public class SAXParser {
                                String qName) throws SAXException {
 
             if (isLastElement(uri, localName, qName)) {
-                log.trace(getClass().getSimpleName() + ": last element, switching to parent: " + localName);
+                log.trace("{}: last element, switching to parent: {}", getClass().getSimpleName(), localName);
                 switchToParent();
                 return;
             }
 
-            log.trace(getClass().getSimpleName() + " ending: " + localName);
+            log.trace("{} ending: {}", getClass().getSimpleName(), localName);
         }
 
         protected boolean isLastElement(String uri, String localName, String qName) {

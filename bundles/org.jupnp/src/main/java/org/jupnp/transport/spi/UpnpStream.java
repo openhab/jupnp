@@ -66,18 +66,18 @@ public abstract class UpnpStream implements Runnable {
      * @return The TCP (HTTP) stream response message, or <code>null</code> if a 404 should be send to the client.
      */
     public StreamResponseMessage process(StreamRequestMessage requestMsg) {
-        log.trace("Processing stream request message: " + requestMsg);
+        log.trace("Processing stream request message: {}", requestMsg);
 
         try {
             // Try to get a protocol implementation that matches the request message
             syncProtocol = getProtocolFactory().createReceivingSync(requestMsg);
         } catch (ProtocolCreationException ex) {
-            log.warn("Processing stream request failed - " + Exceptions.unwrap(ex).toString());
+            log.warn("Processing stream request failed - {}", Exceptions.unwrap(ex).toString());
             return new StreamResponseMessage(UpnpResponse.Status.NOT_IMPLEMENTED);
         }
 
         // Run it
-        log.trace("Running protocol for synchronous message processing: " + syncProtocol);
+        log.trace("Running protocol for synchronous message processing: {}", syncProtocol);
         syncProtocol.run();
 
         // ... then grab the response
@@ -88,7 +88,7 @@ public abstract class UpnpStream implements Runnable {
             log.trace("Protocol did not return any response message");
             return null;
         }
-        log.trace("Protocol returned response: " + responseMsg);
+        log.trace("Protocol returned response: {}", responseMsg);
         return responseMsg;
     }
 
