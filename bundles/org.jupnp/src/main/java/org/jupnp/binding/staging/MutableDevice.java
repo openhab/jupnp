@@ -14,6 +14,11 @@
 
 package org.jupnp.binding.staging;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.DeviceDetails;
@@ -26,11 +31,6 @@ import org.jupnp.model.types.DLNACaps;
 import org.jupnp.model.types.DLNADoc;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.UDN;
-
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Christian Bauer
@@ -69,15 +69,8 @@ public class MutableDevice {
         for (MutableDevice embeddedDevice : embeddedDevices) {
             embeddedDevicesList.add(embeddedDevice.build(prototype, deviceVersion, baseURL));
         }
-        return prototype.newInstance(
-                udn,
-                deviceVersion,
-                createDeviceType(),
-                createDeviceDetails(baseURL),
-                createIcons(),
-                createServices(prototype),
-                embeddedDevicesList
-        );
+        return prototype.newInstance(udn, deviceVersion, createDeviceType(), createDeviceDetails(baseURL),
+                createIcons(), createServices(prototype), embeddedDevicesList);
     }
 
     public UDAVersion createDeviceVersion() {
@@ -89,13 +82,9 @@ public class MutableDevice {
     }
 
     public DeviceDetails createDeviceDetails(URL baseURL) {
-        return new DeviceDetails(
-                baseURL,
-                friendlyName,
-                new ManufacturerDetails(manufacturer, manufacturerURI),
-                new ModelDetails(modelName, modelDescription, modelNumber, modelURI),
-                serialNumber, upc, presentationURI, dlnaDocs.toArray(new DLNADoc[dlnaDocs.size()]), dlnaCaps
-        );
+        return new DeviceDetails(baseURL, friendlyName, new ManufacturerDetails(manufacturer, manufacturerURI),
+                new ModelDetails(modelName, modelDescription, modelNumber, modelURI), serialNumber, upc,
+                presentationURI, dlnaDocs.toArray(new DLNADoc[dlnaDocs.size()]), dlnaCaps);
     }
 
     public Icon[] createIcons() {
@@ -115,5 +104,4 @@ public class MutableDevice {
         }
         return services;
     }
-
 }

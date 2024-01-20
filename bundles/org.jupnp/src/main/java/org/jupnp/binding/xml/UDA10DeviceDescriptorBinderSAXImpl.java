@@ -53,7 +53,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
     private final Logger log = LoggerFactory.getLogger(DeviceDescriptorBinder.class);
 
     @Override
-    public <D extends Device> D describe(D undescribedDevice, String descriptorXml) throws DescriptorBindingException, ValidationException {
+    public <D extends Device> D describe(D undescribedDevice, String descriptorXml)
+            throws DescriptorBindingException, ValidationException {
 
         if (descriptorXml == null || descriptorXml.length() == 0) {
             throw new DescriptorBindingException("Null or empty descriptor");
@@ -69,12 +70,10 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
             MutableDevice descriptor = new MutableDevice();
             new RootHandler(descriptor, parser);
 
-            parser.parse(
-                    new InputSource(
-                            // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML element, need to trim()
-                            new StringReader(descriptorXml.trim())
-                    )
-            );
+            parser.parse(new InputSource(
+                    // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML
+                    // element, need to trim()
+                    new StringReader(descriptorXml.trim())));
 
             // Build the immutable descriptor graph
             return (D) descriptor.build(undescribedDevice);
@@ -104,7 +103,6 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
             if (element.equals(DeviceHandler.EL)) {
                 new DeviceHandler(getInstance(), this);
             }
-
         }
 
         @Override
@@ -114,7 +112,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     try {
                         String urlString = getCharacters();
                         if (urlString != null && urlString.length() > 0) {
-                            // We hope it's  RFC 2396 and RFC 2732 compliant
+                            // We hope it's RFC 2396 and RFC 2732 compliant
                             getInstance().baseURL = new URL(urlString);
                         }
                     } catch (Exception ex) {
@@ -237,8 +235,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     try {
                         getInstance().dlnaDocs.add(DLNADoc.valueOf(txt));
                     } catch (InvalidValueException ex) {
-                        SpecificationViolationReporter.report(
-                                "Invalid X_DLNADOC value, ignoring value: {}", txt);
+                        SpecificationViolationReporter.report("Invalid X_DLNADOC value, ignoring value: {}", txt);
                     }
                     break;
                 case X_DLNACAP:
@@ -296,9 +293,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 case depth:
                     try {
                         getInstance().depth = Integer.valueOf(getCharacters());
-                    } catch(NumberFormatException ex) {
-                        SpecificationViolationReporter.report(
-                                "Invalid icon depth '{}', using 16 as default: {}", getCharacters(), ex);
+                    } catch (NumberFormatException ex) {
+                        SpecificationViolationReporter.report("Invalid icon depth '{}', using 16 as default: {}",
+                                getCharacters(), ex);
                         getInstance().depth = 16;
                     }
                     break;
@@ -309,9 +306,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     try {
                         getInstance().mimeType = getCharacters();
                         MimeType.valueOf(getInstance().mimeType);
-                    } catch(IllegalArgumentException ex) {
-                        SpecificationViolationReporter
-                                .report("Ignoring invalid icon mime type: {}", getInstance().mimeType);
+                    } catch (IllegalArgumentException ex) {
+                        SpecificationViolationReporter.report("Ignoring invalid icon mime type: {}",
+                                getInstance().mimeType);
                         getInstance().mimeType = "";
                     }
                     break;
@@ -385,8 +382,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                         break;
                 }
             } catch (InvalidValueException ex) {
-                SpecificationViolationReporter
-                        .report("Skipping invalid service declaration. " + ex.getMessage(), null);
+                SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage(), null);
             }
         }
 
@@ -438,10 +434,12 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+                throws SAXException {
             super.startElement(uri, localName, qName, attributes);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null) return;
+            if (el == null)
+                return;
             startElement(el, attributes);
         }
 
@@ -449,7 +447,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void endElement(String uri, String localName, String qName) throws SAXException {
             super.endElement(uri, localName, qName);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null) return;
+            if (el == null)
+                return;
             endElement(el);
         }
 
@@ -460,11 +459,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         }
 
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
-
         }
 
         public void endElement(ELEMENT element) throws SAXException {
-
         }
 
         public boolean isLastElement(ELEMENT element) {

@@ -15,15 +15,15 @@
 
 package org.jupnp.support.renderingcontrol.lastchange;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.jupnp.model.types.UnsignedIntegerTwoBytes;
 import org.jupnp.support.lastchange.EventedValue;
 import org.jupnp.support.lastchange.EventedValueShort;
 import org.jupnp.support.lastchange.EventedValueString;
 import org.jupnp.support.lastchange.EventedValueUnsignedIntegerTwoBytes;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -34,25 +34,26 @@ public class RenderingControlVariable {
     public static final Set<Class<? extends EventedValue<?>>> ALL = new HashSet<Class<? extends EventedValue<?>>>() {
         private static final long serialVersionUID = 2062504242615209977L;
 
-    {
-        add(PresetNameList.class);
-        add(Brightness.class);
-        add(Contrast.class);
-        add(Sharpness.class);
-        add(RedVideoGain.class);
-        add(BlueVideoGain.class);
-        add(GreenVideoGain.class);
-        add(RedVideoBlackLevel.class);
-        add(BlueVideoBlackLevel.class);
-        add(GreenVideoBlackLevel.class);
-        add(ColorTemperature.class);
-        add(HorizontalKeystone.class);
-        add(VerticalKeystone.class);
-        add(Mute.class);
-        add(VolumeDB.class);
-        add(Volume.class);
-        add(Loudness.class);
-    }};
+        {
+            add(PresetNameList.class);
+            add(Brightness.class);
+            add(Contrast.class);
+            add(Sharpness.class);
+            add(RedVideoGain.class);
+            add(BlueVideoGain.class);
+            add(GreenVideoGain.class);
+            add(RedVideoBlackLevel.class);
+            add(BlueVideoBlackLevel.class);
+            add(GreenVideoBlackLevel.class);
+            add(ColorTemperature.class);
+            add(HorizontalKeystone.class);
+            add(VerticalKeystone.class);
+            add(Mute.class);
+            add(VolumeDB.class);
+            add(Volume.class);
+            add(Loudness.class);
+        }
+    };
 
     public static class PresetNameList extends EventedValueString {
         public PresetNameList(String s) {

@@ -14,9 +14,9 @@
 
 package org.jupnp.transport.impl.jetty;
 
-import org.jupnp.transport.spi.AbstractStreamClientConfiguration;
-
 import java.util.concurrent.ExecutorService;
+
+import org.jupnp.transport.spi.AbstractStreamClientConfiguration;
 
 /**
  * Settings for the Jetty 9.3.x implementation.
@@ -34,7 +34,8 @@ public class StreamClientConfigurationImpl extends AbstractStreamClientConfigura
         super(timeoutExecutorService, timeoutSeconds);
     }
 
-    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService, int timeoutSeconds, int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService, int timeoutSeconds,
+            int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
         super(timeoutExecutorService, timeoutSeconds, logWarningSeconds, retryAfterSeconds, retryIterations);
     }
 
@@ -53,5 +54,4 @@ public class StreamClientConfigurationImpl extends AbstractStreamClientConfigura
     public int getSocketBufferSize() {
         return -1;
     }
-
 }

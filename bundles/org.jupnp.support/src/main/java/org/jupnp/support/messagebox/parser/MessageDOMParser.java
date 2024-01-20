@@ -50,5 +50,4 @@ public class MessageDOMParser extends DOMParser<MessageDOM> {
     public XPath createXPath() {
         return super.createXPath(createDefaultNamespaceContext(MessageElement.XPATH_PREFIX));
     }
-
 }

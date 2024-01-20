@@ -14,9 +14,9 @@
 
 package org.jupnp.transport.spi;
 
-import org.jupnp.transport.Router;
-
 import java.net.NetworkInterface;
+
+import org.jupnp.transport.Router;
 
 /**
  * Service for receiving multicast UDP datagrams, one per bound network interface.
@@ -47,14 +47,13 @@ public interface MulticastReceiver<C extends MulticastReceiverConfiguration> ext
      *
      * @param networkInterface The network interface on which to join the multicast group on.
      * @param router The router which handles received {@link org.jupnp.model.message.IncomingDatagramMessage}s.
-     * @param networkAddressFactory The network address factory to use for local address lookup given a local interface and a remote address.
+     * @param networkAddressFactory The network address factory to use for local address lookup given a local interface
+     *            and a remote address.
      * @param datagramProcessor Reads and writes datagrams.
      * @throws InitializationException If the service could not be initialized or started.
      */
-    public void init(NetworkInterface networkInterface,
-                     Router router,
-                     NetworkAddressFactory networkAddressFactory,
-                     DatagramProcessor datagramProcessor) throws InitializationException;
+    public void init(NetworkInterface networkInterface, Router router, NetworkAddressFactory networkAddressFactory,
+            DatagramProcessor datagramProcessor) throws InitializationException;
 
     /**
      * Stops the service, closes any listening sockets.
@@ -65,5 +64,4 @@ public interface MulticastReceiver<C extends MulticastReceiverConfiguration> ext
      * @return This service's configuration.
      */
     public C getConfiguration();
-
 }

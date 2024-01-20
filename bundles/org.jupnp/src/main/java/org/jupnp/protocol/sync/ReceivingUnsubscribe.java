@@ -41,11 +41,8 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
 
     protected StreamResponseMessage executeSync() throws RouterException {
 
-        ServiceEventSubscriptionResource resource =
-                getUpnpService().getRegistry().getResource(
-                        ServiceEventSubscriptionResource.class,
-                        getInputMessage().getUri()
-        );
+        ServiceEventSubscriptionResource resource = getUpnpService().getRegistry()
+                .getResource(ServiceEventSubscriptionResource.class, getInputMessage().getUri());
 
         if (resource == null) {
             log.trace("No local resource found: {}", getInputMessage());
@@ -54,18 +51,18 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
 
         log.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
 
-        IncomingUnsubscribeRequestMessage requestMessage =
-                new IncomingUnsubscribeRequestMessage(getInputMessage(), resource.getModel());
+        IncomingUnsubscribeRequestMessage requestMessage = new IncomingUnsubscribeRequestMessage(getInputMessage(),
+                resource.getModel());
 
         // Error conditions UDA 1.0 section 4.1.3
-        if (requestMessage.getSubscriptionId() != null &&
-                (requestMessage.hasNotificationHeader() || requestMessage.hasCallbackHeader())) {
+        if (requestMessage.getSubscriptionId() != null
+                && (requestMessage.hasNotificationHeader() || requestMessage.hasCallbackHeader())) {
             log.trace("Subscription ID and NT or Callback in unsubcribe request: {}", getInputMessage());
             return new StreamResponseMessage(UpnpResponse.Status.BAD_REQUEST);
         }
 
-        LocalGENASubscription subscription =
-                getUpnpService().getRegistry().getLocalSubscription(requestMessage.getSubscriptionId());
+        LocalGENASubscription subscription = getUpnpService().getRegistry()
+                .getLocalSubscription(requestMessage.getSubscriptionId());
 
         if (subscription == null) {
             log.trace("Invalid subscription ID for unsubscribe request: {}", getInputMessage());

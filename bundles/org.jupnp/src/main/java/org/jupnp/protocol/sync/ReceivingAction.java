@@ -54,30 +54,26 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         super(upnpService, inputMessage);
     }
 
-    protected StreamResponseMessage executeSync() throws RouterException{
+    protected StreamResponseMessage executeSync() throws RouterException {
 
-        ContentTypeHeader contentTypeHeader =
-                getInputMessage().getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class);
+        ContentTypeHeader contentTypeHeader = getInputMessage().getHeaders()
+                .getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class);
 
         // Special rules for action messages! UDA 1.0 says:
         // 'If the CONTENT-TYPE header specifies an unsupported value (other then "text/xml") the
         // device must return an HTTP status code "415 Unsupported Media Type".'
         if (contentTypeHeader != null && !contentTypeHeader.isUDACompliantXML()) {
-            SpecificationViolationReporter.report(
-                    "Received invalid Content-Type '{}': {}", contentTypeHeader, getInputMessage());
+            SpecificationViolationReporter.report("Received invalid Content-Type '{}': {}", contentTypeHeader,
+                    getInputMessage());
             return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE));
         }
 
         if (contentTypeHeader == null) {
-            SpecificationViolationReporter
-                    .report("Received without Content-Type: {}", getInputMessage());
+            SpecificationViolationReporter.report("Received without Content-Type: {}", getInputMessage());
         }
 
-        ServiceControlResource resource =
-                getUpnpService().getRegistry().getResource(
-                        ServiceControlResource.class,
-                        getInputMessage().getUri()
-                );
+        ServiceControlResource resource = getUpnpService().getRegistry().getResource(ServiceControlResource.class,
+                getInputMessage().getUri());
 
         if (resource == null) {
             log.trace("No local resource found: {}", getInputMessage());
@@ -92,8 +88,8 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         try {
 
             // Throws ActionException if the action can't be found
-            IncomingActionRequestMessage requestMessage =
-                    new IncomingActionRequestMessage(getInputMessage(), resource.getModel());
+            IncomingActionRequestMessage requestMessage = new IncomingActionRequestMessage(getInputMessage(),
+                    resource.getModel());
 
             log.trace("Created incoming action request message: {}", requestMessage);
             invocation = new RemoteActionInvocation(requestMessage.getAction(), getRemoteClientInfo());
@@ -106,8 +102,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             resource.getModel().getExecutor(invocation.getAction()).execute(invocation);
 
             if (invocation.getFailure() == null) {
-                responseMessage =
-                        new OutgoingActionResponseMessage(invocation.getAction());
+                responseMessage = new OutgoingActionResponseMessage(invocation.getAction());
             } else {
 
                 if (invocation.getFailure() instanceof ActionCancelledException) {
@@ -117,11 +112,8 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                     // has been dropped, so it doesn't really matter what we return here anyway.
                     return null;
                 } else {
-                    responseMessage =
-                            new OutgoingActionResponseMessage(
-                                UpnpResponse.Status.INTERNAL_SERVER_ERROR,
-                                invocation.getAction()
-                            );
+                    responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR,
+                            invocation.getAction());
                 }
             }
 
@@ -134,13 +126,10 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         } catch (UnsupportedDataException ex) {
             log.warn("Error reading action request XML body", ex);
 
-            invocation =
-                    new RemoteActionInvocation(
-                        Exceptions.unwrap(ex) instanceof ActionException
-                                ? (ActionException)Exceptions.unwrap(ex)
-                                : new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage()),
-                        getRemoteClientInfo()
-                    );
+            invocation = new RemoteActionInvocation(
+                    Exceptions.unwrap(ex) instanceof ActionException ? (ActionException) Exceptions.unwrap(ex)
+                            : new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage()),
+                    getRemoteClientInfo());
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
         }
@@ -158,5 +147,4 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             return new StreamResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

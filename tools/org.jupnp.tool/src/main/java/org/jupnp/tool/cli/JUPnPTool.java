@@ -44,226 +44,226 @@ import ch.qos.logback.core.util.StatusPrinter;
  */
 public class JUPnPTool {
 
-	public static final int RC_OK = 0;
-	public static final int RC_HELP = 1;
-	public static final int RC_INVALID_OPTION = 2;
-	public static final int RC_MISSING_ARGUMENTS = 3;
+    public static final int RC_OK = 0;
+    public static final int RC_HELP = 1;
+    public static final int RC_INVALID_OPTION = 2;
+    public static final int RC_MISSING_ARGUMENTS = 3;
 
-	public static final String TOOL_NAME = "jupnptool";
+    public static final String TOOL_NAME = "jupnptool";
 
-	private static final String COMMAND_SEARCH = "search";
-	private static final String COMMAND_INFO = "info";
-	private static final String COMMAND_NOP = "nop";
+    private static final String COMMAND_SEARCH = "search";
+    private static final String COMMAND_INFO = "info";
+    private static final String COMMAND_NOP = "nop";
 
-	private static final long DEFAULT_TIMEOUT = 10L;
+    private static final long DEFAULT_TIMEOUT = 10L;
 
-	private Logger logger = LoggerFactory.getLogger(JUPnPTool.class);
+    private Logger logger = LoggerFactory.getLogger(JUPnPTool.class);
 
-	protected PrintStream outputStream;
-	protected PrintStream errorStream;
+    protected PrintStream outputStream;
+    protected PrintStream errorStream;
 
-	/** Local created service, make it available for testing purposes. */
-	protected UpnpService upnpService;
+    /** Local created service, make it available for testing purposes. */
+    protected UpnpService upnpService;
 
-	/** Holds the pool configuration. */
-	private String poolConfiguration;
+    /** Holds the pool configuration. */
+    private String poolConfiguration;
 
-	/** Holds the multicastResponsePort. */
-	private Integer multicastResponsePort;
+    /** Holds the multicastResponsePort. */
+    private Integer multicastResponsePort;
 
-	public static void main(String[] args) {
-		JUPnPTool tool = new JUPnPTool();
-		int rc = tool.doMain(args);
-		System.exit(rc);
-	}
+    public static void main(String[] args) {
+        JUPnPTool tool = new JUPnPTool();
+        int rc = tool.doMain(args);
+        System.exit(rc);
+    }
 
-	public JUPnPTool() {
-		this(System.out, System.err);
-	}
+    public JUPnPTool() {
+        this(System.out, System.err);
+    }
 
-	public JUPnPTool(PrintStream out, PrintStream err) {
-		this.outputStream = out;
-		this.errorStream = err;
-	}
+    public JUPnPTool(PrintStream out, PrintStream err) {
+        this.outputStream = out;
+        this.errorStream = err;
+    }
 
-	public int doMain(String[] args) {
-		// parse command line arguments with jCommander
-		JCommander commander = new JCommander(new CommandLineArgs());
-		commander.addCommand(COMMAND_SEARCH, new SearchCommandArgs());
-		commander.addCommand(COMMAND_INFO, new InfoCommandArgs());
-		commander.addCommand(COMMAND_NOP, new NopCommandArgs());
-		commander.setProgramName(TOOL_NAME);
-		try {
-			commander.parse(args);
-		} catch (ParameterException ex) {
-			printStderr(ex.getLocalizedMessage());
-			printToolUsage(commander);
-			return RC_INVALID_OPTION;
-		}
-		List<Object> objs = commander.getObjects();
-		CommandLineArgs cmdLineArgs = (CommandLineArgs) objs.get(0);
+    public int doMain(String[] args) {
+        // parse command line arguments with jCommander
+        JCommander commander = new JCommander(new CommandLineArgs());
+        commander.addCommand(COMMAND_SEARCH, new SearchCommandArgs());
+        commander.addCommand(COMMAND_INFO, new InfoCommandArgs());
+        commander.addCommand(COMMAND_NOP, new NopCommandArgs());
+        commander.setProgramName(TOOL_NAME);
+        try {
+            commander.parse(args);
+        } catch (ParameterException ex) {
+            printStderr(ex.getLocalizedMessage());
+            printToolUsage(commander);
+            return RC_INVALID_OPTION;
+        }
+        List<Object> objs = commander.getObjects();
+        CommandLineArgs cmdLineArgs = (CommandLineArgs) objs.get(0);
 
-		// if logging enabled, use other logback XML file
-		if (cmdLineArgs.isLoggingEnabled()) {
-			setLogging("logback-enabled.xml", cmdLineArgs.logLevel);
-		} else {
-			setLogging("logback.xml", "OFF");
-		}
+        // if logging enabled, use other logback XML file
+        if (cmdLineArgs.isLoggingEnabled()) {
+            setLogging("logback-enabled.xml", cmdLineArgs.logLevel);
+        } else {
+            setLogging("logback.xml", "OFF");
+        }
 
-		// check if pool has been configured, preserve that
-		if (cmdLineArgs.poolConfig != null) {
-			poolConfiguration = cmdLineArgs.poolConfig;
-		}
-		// multicast response port
-		if (cmdLineArgs.multicastResponsePort != null) {
-			multicastResponsePort = cmdLineArgs.multicastResponsePort;
-		}
+        // check if pool has been configured, preserve that
+        if (cmdLineArgs.poolConfig != null) {
+            poolConfiguration = cmdLineArgs.poolConfig;
+        }
+        // multicast response port
+        if (cmdLineArgs.multicastResponsePort != null) {
+            multicastResponsePort = cmdLineArgs.multicastResponsePort;
+        }
 
-		// dispatch commands
-		if (cmdLineArgs.doHelp) {
-			printToolUsage(commander);
-			return RC_HELP;
-		} else if (COMMAND_SEARCH.equals(commander.getParsedCommand())) {
-			JCommander searchCommander = commander.getCommands().get(COMMAND_SEARCH);
-			SearchCommandArgs searchArgs = (SearchCommandArgs) searchCommander.getObjects().get(0);
-			int timeout = searchArgs.timeout;
-			String sortBy = searchArgs.sortBy;
-			String filter = searchArgs.filter;
-			boolean verbose = cmdLineArgs.verbose;
-			// if udn or manufacturer will be specified: auto-enable verbose
-			if (("udn".equals(sortBy)) || ("manufacturer".equals(sortBy))) {
-				verbose = true;
-			}
+        // dispatch commands
+        if (cmdLineArgs.doHelp) {
+            printToolUsage(commander);
+            return RC_HELP;
+        } else if (COMMAND_SEARCH.equals(commander.getParsedCommand())) {
+            JCommander searchCommander = commander.getCommands().get(COMMAND_SEARCH);
+            SearchCommandArgs searchArgs = (SearchCommandArgs) searchCommander.getObjects().get(0);
+            int timeout = searchArgs.timeout;
+            String sortBy = searchArgs.sortBy;
+            String filter = searchArgs.filter;
+            boolean verbose = cmdLineArgs.verbose;
+            // if udn or manufacturer will be specified: auto-enable verbose
+            if (("udn".equals(sortBy)) || ("manufacturer".equals(sortBy))) {
+                verbose = true;
+            }
 
-			printToolStartMessage("Search for UPnP devices for " + timeout + " seconds sorted by " + sortBy
-					+ " and filtered by " + filter);
-			SearchCommand cmd = new SearchCommand(this);
-			int rc = cmd.run(timeout, sortBy, filter, verbose);
-			return rc;
-		} else if (COMMAND_INFO.equals(commander.getParsedCommand())) {
-			JCommander infoCommander = commander.getCommands().get(COMMAND_INFO);
-			InfoCommandArgs infoArgs = (InfoCommandArgs) infoCommander.getObjects().get(0);
-			List<String> ipAddressOrUdns = infoArgs.ipAddressOrUdnList;
-			boolean verbose = cmdLineArgs.verbose;
+            printToolStartMessage("Search for UPnP devices for " + timeout + " seconds sorted by " + sortBy
+                    + " and filtered by " + filter);
+            SearchCommand cmd = new SearchCommand(this);
+            int rc = cmd.run(timeout, sortBy, filter, verbose);
+            return rc;
+        } else if (COMMAND_INFO.equals(commander.getParsedCommand())) {
+            JCommander infoCommander = commander.getCommands().get(COMMAND_INFO);
+            InfoCommandArgs infoArgs = (InfoCommandArgs) infoCommander.getObjects().get(0);
+            List<String> ipAddressOrUdns = infoArgs.ipAddressOrUdnList;
+            boolean verbose = cmdLineArgs.verbose;
 
-			if ((ipAddressOrUdns == null) || (ipAddressOrUdns.size() == 0)) {
-				return RC_MISSING_ARGUMENTS;
-			}
+            if ((ipAddressOrUdns == null) || (ipAddressOrUdns.size() == 0)) {
+                return RC_MISSING_ARGUMENTS;
+            }
 
-			printToolStartMessage("Info for UPnP devices for " + ipAddressOrUdns);
-			InfoCommand cmd = new InfoCommand(this);
-			int rc = cmd.run(ipAddressOrUdns, verbose);
-			return rc;
-		} else if (COMMAND_NOP.equals(commander.getParsedCommand())) {
-			// for NOP command we create a UPnP service, start and shutdown
-			// immediately. This helps during testing
-			logger.debug("Starting jUPnP...");
-			printToolStartMessage("No operation");
+            printToolStartMessage("Info for UPnP devices for " + ipAddressOrUdns);
+            InfoCommand cmd = new InfoCommand(this);
+            int rc = cmd.run(ipAddressOrUdns, verbose);
+            return rc;
+        } else if (COMMAND_NOP.equals(commander.getParsedCommand())) {
+            // for NOP command we create a UPnP service, start and shutdown
+            // immediately. This helps during testing
+            logger.debug("Starting jUPnP...");
+            printToolStartMessage("No operation");
 
-			upnpService = createUpnpService();
-			upnpService.startup();
-			try {
-				logger.debug("Stopping jUPnP...");
-				upnpService.shutdown();
-			} catch (Exception ex) {
-				logger.error("Error during shutdown", ex);
-			}
-			return RC_OK;
-		} else {
-			printToolUsage(commander);
-			return RC_HELP;
-		}
-	}
+            upnpService = createUpnpService();
+            upnpService.startup();
+            try {
+                logger.debug("Stopping jUPnP...");
+                upnpService.shutdown();
+            } catch (Exception ex) {
+                logger.error("Error during shutdown", ex);
+            }
+            return RC_OK;
+        } else {
+            printToolUsage(commander);
+            return RC_HELP;
+        }
+    }
 
-	// protected methods
+    // protected methods
 
-	protected UpnpService createUpnpService() {
-		return createUpnpService(DEFAULT_TIMEOUT);
-	}
+    protected UpnpService createUpnpService() {
+        return createUpnpService(DEFAULT_TIMEOUT);
+    }
 
-	protected UpnpService createUpnpService(long timeoutSeconds) {
-		// sets the pool configuration
-		if (poolConfiguration != null) {
-			StringTokenizer tokenizer = new StringTokenizer(poolConfiguration, ",");
-			int mainPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
-			int asyncPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
+    protected UpnpService createUpnpService(long timeoutSeconds) {
+        // sets the pool configuration
+        if (poolConfiguration != null) {
+            StringTokenizer tokenizer = new StringTokenizer(poolConfiguration, ",");
+            int mainPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
+            int asyncPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
 
-			CmdlineUPnPServiceConfiguration.setPoolConfiguration(mainPoolSize, asyncPoolSize);
-			// one token left for stats option?
-			String stats = tokenizer.countTokens() == 1 ? tokenizer.nextToken() : null;
-			if (CommandLineArgs.POOL_CONFIG_STATS_OPTION.equalsIgnoreCase(stats)) {
-				CmdlineUPnPServiceConfiguration.setDebugStatistics(true);
-			}
-		}
-		if (multicastResponsePort != null) {
-			CmdlineUPnPServiceConfiguration.setMulticastResponsePort(multicastResponsePort);
-		}
+            CmdlineUPnPServiceConfiguration.setPoolConfiguration(mainPoolSize, asyncPoolSize);
+            // one token left for stats option?
+            String stats = tokenizer.countTokens() == 1 ? tokenizer.nextToken() : null;
+            if (CommandLineArgs.POOL_CONFIG_STATS_OPTION.equalsIgnoreCase(stats)) {
+                CmdlineUPnPServiceConfiguration.setDebugStatistics(true);
+            }
+        }
+        if (multicastResponsePort != null) {
+            CmdlineUPnPServiceConfiguration.setMulticastResponsePort(multicastResponsePort);
+        }
 
-		return new UpnpServiceImpl(new CmdlineUPnPServiceConfiguration());
-	}
+        return new UpnpServiceImpl(new CmdlineUPnPServiceConfiguration());
+    }
 
-	/**
-	 * Sets the logger to the resource name, and reset logback configuration.
-	 * 
-	 * @param resourceName
-	 *            either logback.xml, or logback-enabled.xml
-	 */
-	protected void setLogging(String resourceName, String rootAppenderLogLevel) {
-		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-		try {
-			// will assume to find logback XML files in root of JAR file
-			URL url = this.getClass().getResource("/" + resourceName);
-			JoranConfigurator configurator = new JoranConfigurator();
-			configurator.setContext(context);
+    /**
+     * Sets the logger to the resource name, and reset logback configuration.
+     * 
+     * @param resourceName
+     *            either logback.xml, or logback-enabled.xml
+     */
+    protected void setLogging(String resourceName, String rootAppenderLogLevel) {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        try {
+            // will assume to find logback XML files in root of JAR file
+            URL url = this.getClass().getResource("/" + resourceName);
+            JoranConfigurator configurator = new JoranConfigurator();
+            configurator.setContext(context);
 
-			// Call context.reset() to clear any previous configuration, e.g.
-			// default configuration
-			context.reset();
-			configurator.doConfigure(url);
+            // Call context.reset() to clear any previous configuration, e.g.
+            // default configuration
+            context.reset();
+            configurator.doConfigure(url);
 
-			ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
-					.getLogger(Logger.ROOT_LOGGER_NAME);
-			Level level = Level.valueOf(rootAppenderLogLevel);
-			rootLogger.setLevel(level);
+            ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
+                    .getLogger(Logger.ROOT_LOGGER_NAME);
+            Level level = Level.valueOf(rootAppenderLogLevel);
+            rootLogger.setLevel(level);
 
-		} catch (JoranException je) {
-			// StatusPrinter will handle this
-		}
-		// see https://issues.apache.org/jira/browse/SLING-3045
-		// there can by sync issues when reconfiguring logback
-		long now = new Date().getTime();
-		StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
-	}
+        } catch (JoranException je) {
+            // StatusPrinter will handle this
+        }
+        // see https://issues.apache.org/jira/browse/SLING-3045
+        // there can by sync issues when reconfiguring logback
+        long now = new Date().getTime();
+        StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
+    }
 
-	// package methods
+    // package methods
 
-	void printStdout(String msg) {
-		this.outputStream.println(msg);
-	}
+    void printStdout(String msg) {
+        this.outputStream.println(msg);
+    }
 
-	void printStderr(String msg) {
-		this.errorStream.println(msg);
-	}
+    void printStderr(String msg) {
+        this.errorStream.println(msg);
+    }
 
-	// private methods
+    // private methods
 
-	private void printToolStartMessage(String msg) {
-		printStdout(getToolNameVersion() + ": " + msg
-				+ ((poolConfiguration != null) ? (" (poolConfiguration='" + poolConfiguration + "'") : "")
-				+ ((multicastResponsePort != null) ? (", multicastResponsePort=" + multicastResponsePort.intValue())
-						: "")
-				+ ")");
-	}
+    private void printToolStartMessage(String msg) {
+        printStdout(getToolNameVersion() + ": " + msg
+                + ((poolConfiguration != null) ? (" (poolConfiguration='" + poolConfiguration + "'") : "")
+                + ((multicastResponsePort != null) ? (", multicastResponsePort=" + multicastResponsePort.intValue())
+                        : "")
+                + ")");
+    }
 
-	private void printToolUsage(JCommander commander) {
-		StringBuilder sb = new StringBuilder();
-		commander.usage(sb);
-		printStdout(sb.toString());
-	}
+    private void printToolUsage(JCommander commander) {
+        StringBuilder sb = new StringBuilder();
+        commander.usage(sb);
+        printStdout(sb.toString());
+    }
 
-	private String getToolNameVersion() {
-		String name = getClass().getPackage().getImplementationTitle();
-		String version = getClass().getPackage().getImplementationVersion();
-		return name + " (" + version + ")";
-	}
+    private String getToolNameVersion() {
+        String name = getClass().getPackage().getImplementationTitle();
+        String version = getClass().getPackage().getImplementationVersion();
+        return name + " (" + version + ")";
+    }
 }

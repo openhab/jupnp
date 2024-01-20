@@ -23,53 +23,52 @@ import org.slf4j.LoggerFactory;
 
 public class TestData {
     private static final Logger log = LoggerFactory.getLogger(TestData.class);
-	private String file;
-	private Properties properties;
-	
-	public TestData(String file) {
-		this.file = file;
-	}
-	
-	private Properties getProperties() {
-		if (properties == null) {
-			properties = new Properties();
-			InputStream in = this.getClass().getResourceAsStream(file);
-			if (in == null) {
-				log.error("No test data file {}.", file);
-			}
-			else {
-				try {
-					properties.load(in);
-					in.close();
-				} catch (IOException e) {
-					log.error("Cannot read test data file {}.", file);
-				}
-			}
-		}
-		
-		return properties;
-	}
+    private String file;
+    private Properties properties;
 
-	public String getStringValue(String name) {
-		String value;
-		
-		value = getProperties().getProperty(name);
-		if (value == null) {
-			log.error("No test data for type {}.", name);
-		}
-		
-		return value;
-	}
-	
-	public Object getOSGiUPnPValue(String name, String type, Object value) {
-		return OSGiUPnPStringConverter.toOSGiUPnPValue(type, getStringValue(name), value);
-	}
-	
-	public Object getOSGiUPnPValue(String name, String type) {
-		return getOSGiUPnPValue(name, type, null);
-	}
-	
-	public Object getjUPnPUPnPValue(String type, Object value) {
-		return OSGiUPnPStringConverter.tojUPnPUPnPValue(type, value);
-	}
+    public TestData(String file) {
+        this.file = file;
+    }
+
+    private Properties getProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            InputStream in = this.getClass().getResourceAsStream(file);
+            if (in == null) {
+                log.error("No test data file {}.", file);
+            } else {
+                try {
+                    properties.load(in);
+                    in.close();
+                } catch (IOException e) {
+                    log.error("Cannot read test data file {}.", file);
+                }
+            }
+        }
+
+        return properties;
+    }
+
+    public String getStringValue(String name) {
+        String value;
+
+        value = getProperties().getProperty(name);
+        if (value == null) {
+            log.error("No test data for type {}.", name);
+        }
+
+        return value;
+    }
+
+    public Object getOSGiUPnPValue(String name, String type, Object value) {
+        return OSGiUPnPStringConverter.toOSGiUPnPValue(type, getStringValue(name), value);
+    }
+
+    public Object getOSGiUPnPValue(String name, String type) {
+        return getOSGiUPnPValue(name, type, null);
+    }
+
+    public Object getjUPnPUPnPValue(String type, Object value) {
+        return OSGiUPnPStringConverter.tojUPnPUPnPValue(type, value);
+    }
 }

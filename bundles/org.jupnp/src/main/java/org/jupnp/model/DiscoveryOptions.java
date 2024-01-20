@@ -26,7 +26,7 @@ public class DiscoveryOptions {
 
     /**
      * @param advertised If <code>false</code>, no alive notifications will be announced for
-     *                   this device and it will not appear in search responses.
+     *            this device and it will not appear in search responses.
      */
     public DiscoveryOptions(boolean advertised) {
         this.advertised = advertised;
@@ -35,9 +35,9 @@ public class DiscoveryOptions {
     /**
      *
      * @param advertised If <code>false</code>, no alive notifications will be announced for
-     *                   this device and it will not appear in search responses.
+     *            this device and it will not appear in search responses.
      * @param byeByeBeforeFirstAlive If <code>true</code>, a byebye NOTIFY message will be send before the
-     *                               first alive NOTIFY message.
+     *            first alive NOTIFY message.
      */
     public DiscoveryOptions(boolean advertised, boolean byeByeBeforeFirstAlive) {
         this.advertised = advertised;
@@ -62,8 +62,10 @@ public class DiscoveryOptions {
 
     // Performance optimization on Android
     private static String simpleName = DiscoveryOptions.class.getSimpleName();
-	@Override
+
+    @Override
     public String toString() {
-        return "(" + simpleName + ")" + " advertised: " + isAdvertised() + " byebyeBeforeFirstAlive: " + isByeByeBeforeFirstAlive();
+        return "(" + simpleName + ")" + " advertised: " + isAdvertised() + " byebyeBeforeFirstAlive: "
+                + isByeByeBeforeFirstAlive();
     }
 }

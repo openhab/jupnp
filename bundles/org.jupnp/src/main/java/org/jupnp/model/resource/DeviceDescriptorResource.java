@@ -14,9 +14,9 @@
 
 package org.jupnp.model.resource;
 
-import org.jupnp.model.meta.LocalDevice;
-
 import java.net.URI;
+
+import org.jupnp.model.meta.LocalDevice;
 
 /**
  * @author Christian Bauer

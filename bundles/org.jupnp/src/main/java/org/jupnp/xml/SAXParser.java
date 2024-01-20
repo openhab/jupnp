@@ -42,10 +42,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class SAXParser {
 
-    public static final URI XML_SCHEMA_NAMESPACE =
-            URI.create("http://www.w3.org/2001/xml.xsd");
-    public static final URL XML_SCHEMA_RESOURCE =
-            Thread.currentThread().getContextClassLoader().getResource("org.jupnp/schemas/xml.xsd");
+    public static final URI XML_SCHEMA_NAMESPACE = URI.create("http://www.w3.org/2001/xml.xsd");
+    public static final URL XML_SCHEMA_RESOURCE = Thread.currentThread().getContextClassLoader()
+            .getResource("org.jupnp/schemas/xml.xsd");
 
     final private XMLReader xr;
 
@@ -85,11 +84,11 @@ public class SAXParser {
     protected Schema createSchema(Source[] schemaSources) {
         try {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            schemaFactory.setResourceResolver(new CatalogResourceResolver(
-                    new HashMap<URI, URL>() {{
-                        put(XML_SCHEMA_NAMESPACE, XML_SCHEMA_RESOURCE);
-                    }}
-            ));
+            schemaFactory.setResourceResolver(new CatalogResourceResolver(new HashMap<URI, URL>() {
+                {
+                    put(XML_SCHEMA_NAMESPACE, XML_SCHEMA_RESOURCE);
+                }
+            }));
             return schemaFactory.newSchema(schemaSources);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -128,8 +127,6 @@ public class SAXParser {
             throw new SAXException(e);
         }
     }
-
-
 
     public static class Handler<I> extends DefaultHandler {
         private final Logger log = LoggerFactory.getLogger(SAXParser.class);
@@ -185,10 +182,11 @@ public class SAXParser {
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName,
-                                 Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+                throws SAXException {
             this.characters = new StringBuilder();
-            this.attributes = new AttributesImpl(attributes); // see http://docstore.mik.ua/orelly/xml/sax2/ch05_01.htm, section 5.1.1
+            this.attributes = new AttributesImpl(attributes); // see http://docstore.mik.ua/orelly/xml/sax2/ch05_01.htm,
+                                                              // section 5.1.1
             log.trace("{} starting: {}", getClass().getSimpleName(), localName);
         }
 
@@ -198,8 +196,7 @@ public class SAXParser {
         }
 
         @Override
-        public void endElement(String uri, String localName,
-                               String qName) throws SAXException {
+        public void endElement(String uri, String localName, String qName) throws SAXException {
 
             if (isLastElement(uri, localName, qName)) {
                 log.trace("{}: last element, switching to parent: {}", getClass().getSimpleName(), localName);
@@ -218,5 +215,4 @@ public class SAXParser {
             return attributes;
         }
     }
-
 }

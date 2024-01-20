@@ -43,10 +43,8 @@ public class OS {
         try {
             String tmp = System.getProperty(key);
             return tmp != null && tmp.trim().toLowerCase().startsWith(value);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return false;
         }
     }
-
 }

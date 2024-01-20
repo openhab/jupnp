@@ -15,11 +15,11 @@
 
 package org.jupnp.support.lastchange;
 
-import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.jupnp.model.types.UnsignedIntegerFourBytes;
 
 /**
  * @author Christian Bauer
@@ -42,7 +42,8 @@ public class Event {
 
     public InstanceID getInstanceID(UnsignedIntegerFourBytes id) {
         for (InstanceID instanceID : instanceIDs) {
-            if (instanceID.getId().equals(id)) return instanceID;
+            if (instanceID.getId().equals(id))
+                return instanceID;
         }
         return null;
     }
@@ -87,9 +88,9 @@ public class Event {
 
     public boolean hasChanges() {
         for (InstanceID instanceID : instanceIDs) {
-            if (instanceID.getValues().size() > 0) return true;
+            if (instanceID.getValues().size() > 0)
+                return true;
         }
         return false;
     }
-    
 }

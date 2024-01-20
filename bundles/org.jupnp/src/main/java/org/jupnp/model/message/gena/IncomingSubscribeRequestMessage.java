@@ -14,6 +14,9 @@
 
 package org.jupnp.model.message.gena;
 
+import java.net.URL;
+import java.util.List;
+
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.header.CallbackHeader;
 import org.jupnp.model.message.header.NTEventHeader;
@@ -22,9 +25,6 @@ import org.jupnp.model.message.header.TimeoutHeader;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.meta.LocalService;
 
-import java.net.URL;
-import java.util.List;
-
 /**
  * @author Christian Bauer
  */
@@ -32,7 +32,7 @@ public class IncomingSubscribeRequestMessage extends StreamRequestMessage {
 
     final private LocalService service;
 
-    public IncomingSubscribeRequestMessage(StreamRequestMessage source, LocalService  service) {
+    public IncomingSubscribeRequestMessage(StreamRequestMessage source, LocalService service) {
         super(source);
         this.service = service;
     }

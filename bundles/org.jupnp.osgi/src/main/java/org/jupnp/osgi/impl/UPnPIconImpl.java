@@ -14,14 +14,14 @@
 
 package org.jupnp.osgi.impl;
 
-import org.osgi.service.upnp.UPnPIcon;
-import org.jupnp.model.meta.Device;
-import org.jupnp.model.meta.Icon;
-import org.jupnp.model.meta.RemoteDevice;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import org.jupnp.model.meta.Device;
+import org.jupnp.model.meta.Icon;
+import org.jupnp.model.meta.RemoteDevice;
+import org.osgi.service.upnp.UPnPIcon;
 
 /**
  * @author Bruce Green
@@ -71,5 +71,4 @@ public class UPnPIconImpl implements UPnPIcon {
 
         return in;
     }
-
 }

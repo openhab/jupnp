@@ -14,9 +14,9 @@
 
 package org.jupnp.model.message.header;
 
-import org.jupnp.model.types.UDAServiceType;
-
 import java.net.URI;
+
+import org.jupnp.model.types.UDAServiceType;
 
 /**
  * @author Christian Bauer
@@ -42,5 +42,4 @@ public class UDAServiceTypeHeader extends ServiceTypeHeader {
             throw new InvalidHeaderException("Invalid UDA service type header value, " + ex.getMessage(), ex);
         }
     }
-
 }

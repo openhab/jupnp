@@ -42,5 +42,4 @@ public abstract class GetTransportInfo extends ActionCallback {
     }
 
     public abstract void received(ActionInvocation<?> invocation, TransportInfo transportInfo);
-
 }

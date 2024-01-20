@@ -40,7 +40,6 @@ public abstract class Service<D extends Device, S extends Service> {
     final private ServiceType serviceType;
     final private ServiceId serviceId;
 
-
     final private Map<String, Action> actions = new HashMap();
     final private Map<String, StateVariable> stateVariables = new HashMap();
 
@@ -51,8 +50,8 @@ public abstract class Service<D extends Device, S extends Service> {
         this(serviceType, serviceId, null, null);
     }
 
-    public Service(ServiceType serviceType, ServiceId serviceId,
-                   Action<S>[] actions, StateVariable<S>[] stateVariables) throws ValidationException {
+    public Service(ServiceType serviceType, ServiceId serviceId, Action<S>[] actions, StateVariable<S>[] stateVariables)
+            throws ValidationException {
 
         this.serviceType = serviceType;
         this.serviceId = serviceId;
@@ -70,7 +69,6 @@ public abstract class Service<D extends Device, S extends Service> {
                 stateVariable.setService(this);
             }
         }
-
     }
 
     public ServiceType getServiceType() {
@@ -95,7 +93,8 @@ public abstract class Service<D extends Device, S extends Service> {
     }
 
     public StateVariable<S>[] getStateVariables() {
-        return stateVariables == null ? null : stateVariables.values().toArray(new StateVariable[stateVariables.values().size()]);
+        return stateVariables == null ? null
+                : stateVariables.values().toArray(new StateVariable[stateVariables.values().size()]);
     }
 
     public D getDevice() {
@@ -115,16 +114,12 @@ public abstract class Service<D extends Device, S extends Service> {
     public StateVariable<S> getStateVariable(String name) {
         // Some magic necessary for the deprecated 'query state variable' action stuff
         if (QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT.equals(name)) {
-            return new StateVariable(
-                    QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT,
-                    new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype())
-            );
+            return new StateVariable(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT,
+                    new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype()));
         }
         if (QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT.equals(name)) {
-            return new StateVariable(
-                    QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT,
-                    new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype())
-            );
+            return new StateVariable(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT,
+                    new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype()));
         }
         return stateVariables == null ? null : stateVariables.get(name);
     }
@@ -145,19 +140,11 @@ public abstract class Service<D extends Device, S extends Service> {
         List<ValidationError> errors = new ArrayList();
 
         if (getServiceType() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "serviceType",
-                    "Service type/info is required"
-            ));
+            errors.add(new ValidationError(getClass(), "serviceType", "Service type/info is required"));
         }
 
         if (getServiceId() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "serviceId",
-                    "Service ID is required"
-            ));
+            errors.add(new ValidationError(getClass(), "serviceId", "Service ID is required"));
         }
 
         // TODO: If the service has no evented variables, it should not have an event subscription URL, which means

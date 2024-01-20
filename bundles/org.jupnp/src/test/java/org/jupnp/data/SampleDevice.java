@@ -14,6 +14,8 @@
 
 package org.jupnp.data;
 
+import java.lang.reflect.Constructor;
+
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.DeviceIdentity;
@@ -21,8 +23,6 @@ import org.jupnp.model.meta.Icon;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.profile.DeviceDetailsProvider;
 import org.jupnp.model.types.DeviceType;
-
-import java.lang.reflect.Constructor;
 
 /**
  * @author Christian Bauer
@@ -52,8 +52,11 @@ public abstract class SampleDevice {
     }
 
     public abstract DeviceType getDeviceType();
+
     public abstract DeviceDetails getDeviceDetails();
+
     public abstract DeviceDetailsProvider getDeviceDetailsProvider();
+
     public abstract Icon[] getIcons();
 
     public <D extends Device> D newInstance(Constructor<D> deviceConstructor) {
@@ -63,15 +66,11 @@ public abstract class SampleDevice {
     public <D extends Device> D newInstance(Constructor<D> deviceConstructor, boolean useProvider) {
         try {
             if (useProvider) {
-                return deviceConstructor.newInstance(
-                        getIdentity(), getDeviceType(), getDeviceDetailsProvider(),
-                        getIcons(), getService(), getEmbeddedDevice()
-                );
+                return deviceConstructor.newInstance(getIdentity(), getDeviceType(), getDeviceDetailsProvider(),
+                        getIcons(), getService(), getEmbeddedDevice());
             }
-            return deviceConstructor.newInstance(
-                    getIdentity(), getDeviceType(), getDeviceDetails(),
-                    getIcons(), getService(), getEmbeddedDevice()
-            );
+            return deviceConstructor.newInstance(getIdentity(), getDeviceType(), getDeviceDetails(), getIcons(),
+                    getService(), getEmbeddedDevice());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

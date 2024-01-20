@@ -15,10 +15,10 @@
 
 package org.jupnp.support.lastchange;
 
-import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jupnp.model.types.UnsignedIntegerFourBytes;
 
 /**
  * @author Christian Bauer

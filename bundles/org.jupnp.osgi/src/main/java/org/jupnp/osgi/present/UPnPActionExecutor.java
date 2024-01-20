@@ -46,7 +46,7 @@ class UPnPActionExecutor implements ActionExecutor {
 
     @Override
     public void execute(ActionInvocation<LocalService> actionInvocation) {
-		log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "execute", actionInvocation);
+        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "execute", actionInvocation);
 
         ActionArgumentValue<LocalService>[] inputs = actionInvocation.getInput();
 
@@ -69,7 +69,7 @@ class UPnPActionExecutor implements ActionExecutor {
                         value = OSGiDataConverter.tojUPnPValue(variable.getUPnPDataType(), value);
 
                         try {
-                            //System.out.printf("*** key: %s  value: %s [%s]\n", key, value, value);
+                            // System.out.printf("*** key: %s value: %s [%s]\n", key, value, value);
                             actionInvocation.setOutput(key, value);
                         } catch (InvalidValueException e) {
                             log.error("Error executing action {} variable {}.", action.getName(), key);

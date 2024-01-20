@@ -14,6 +14,12 @@
 
 package org.jupnp.ssdp;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleDeviceRoot;
+import org.jupnp.data.SampleUSNHeaders;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.ServerClientTokens;
 import org.jupnp.model.message.OutgoingDatagramMessage;
@@ -23,12 +29,6 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.types.NotificationSubtype;
 import org.jupnp.protocol.async.SendingNotificationAlive;
 import org.jupnp.protocol.async.SendingNotificationByebye;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleDeviceRoot;
-import org.jupnp.data.SampleUSNHeaders;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AdvertisementTest {
 
@@ -45,12 +45,11 @@ class AdvertisementTest {
 
         for (OutgoingDatagramMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(msg);
-            //SampleData.debugMsg(msg);
+            // SampleData.debugMsg(msg);
         }
 
-        SampleUSNHeaders.assertUSNHeaders(
-            upnpService.getRouter().getOutgoingDatagramMessages(),
-            rootDevice, embeddedDevice, UpnpHeader.Type.NT);
+        SampleUSNHeaders.assertUSNHeaders(upnpService.getRouter().getOutgoingDatagramMessages(), rootDevice,
+                embeddedDevice, UpnpHeader.Type.NT);
     }
 
     @Test
@@ -66,17 +65,17 @@ class AdvertisementTest {
 
         for (OutgoingDatagramMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertByebyeMsgBasics(msg);
-            //SampleData.debugMsg(msg);
+            // SampleData.debugMsg(msg);
         }
 
-        SampleUSNHeaders.assertUSNHeaders(
-            upnpService.getRouter().getOutgoingDatagramMessages(),
-            rootDevice, embeddedDevice, UpnpHeader.Type.NT);
+        SampleUSNHeaders.assertUSNHeaders(upnpService.getRouter().getOutgoingDatagramMessages(), rootDevice,
+                embeddedDevice, UpnpHeader.Type.NT);
     }
 
     protected void assertAliveMsgBasics(UpnpMessage msg) {
         assertEquals(NotificationSubtype.ALIVE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
-        assertEquals(SampleDeviceRoot.getDeviceDescriptorURL().toString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString());
+        assertEquals(SampleDeviceRoot.getDeviceDescriptorURL().toString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString());
         assertEquals(1800, msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getValue());
         assertEquals(new ServerClientTokens(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getValue());
     }
@@ -84,5 +83,4 @@ class AdvertisementTest {
     protected void assertByebyeMsgBasics(UpnpMessage msg) {
         assertEquals(NotificationSubtype.BYEBYE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
     }
-
 }

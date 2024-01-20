@@ -16,18 +16,18 @@ package org.jupnp.osgi.tests;
 
 import org.jupnp.DefaultUpnpServiceConfiguration;
 import org.jupnp.UpnpServiceConfiguration;
-import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
-import org.jupnp.transport.impl.jetty.JettyServletContainer;
-import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
 import org.jupnp.transport.impl.ServletStreamServerConfigurationImpl;
 import org.jupnp.transport.impl.ServletStreamServerImpl;
+import org.jupnp.transport.impl.jetty.JettyServletContainer;
+import org.jupnp.transport.impl.jetty.JettyStreamClientImpl;
+import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.NetworkAddressFactory;
 import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamServer;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = UpnpServiceConfiguration.class)
-public class JettyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration  {
+public class JettyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
     @Override
     public StreamClient<?> createStreamClient() {
@@ -36,11 +36,7 @@ public class JettyUpnpServiceConfiguration extends DefaultUpnpServiceConfigurati
 
     @Override
     public StreamServer<?> createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new ServletStreamServerImpl(
-                new ServletStreamServerConfigurationImpl(
-                    JettyServletContainer.INSTANCE,
-                    networkAddressFactory.getStreamListenPort()
-                )
-            );
+        return new ServletStreamServerImpl(new ServletStreamServerConfigurationImpl(JettyServletContainer.INSTANCE,
+                networkAddressFactory.getStreamListenPort()));
     }
 }

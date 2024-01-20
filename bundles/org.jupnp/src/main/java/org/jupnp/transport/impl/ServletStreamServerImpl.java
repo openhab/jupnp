@@ -53,8 +53,8 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
     public synchronized void init(InetAddress bindAddress, final Router router) throws InitializationException {
         try {
             log.debug("Setting executor service on servlet container adapter");
-            getConfiguration().getServletContainerAdapter().setExecutorService(
-                    router.getConfiguration().getStreamServerExecutorService());
+            getConfiguration().getServletContainerAdapter()
+                    .setExecutorService(router.getConfiguration().getStreamServerExecutorService());
 
             log.debug("Adding connector: {}:{}", bindAddress, getConfiguration().getListenPort());
             localPort = getConfiguration().getServletContainerAdapter().addConnector(bindAddress.getHostAddress(),
@@ -72,8 +72,7 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
 
             getConfiguration().getServletContainerAdapter().registerServlet(contextPath, servlet);
         } catch (Exception ex) {
-            throw new InitializationException(
-                    "Could not initialize " + getClass().getSimpleName(), ex);
+            throw new InitializationException("Could not initialize " + getClass().getSimpleName(), ex);
         }
     }
 
@@ -98,6 +97,5 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
 
     protected Servlet createBlockingServlet(final Router router) {
         return new BlockingServlet(router, getConfiguration());
-
     }
 }

@@ -22,8 +22,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
 import org.jupnp.binding.xml.UDA10DeviceDescriptorBinderImpl;
@@ -54,6 +53,8 @@ import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.util.Exceptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default configuration data of a typical UPnP stack.
@@ -89,7 +90,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     // set a fairly large core threadpool size, expecting that core timeout policy will
     // allow the pool to reduce in size after inactivity. note that ThreadPoolExecutor
-    // only adds threads beyond its core size once the backlog is full, so a low value 
+    // only adds threads beyond its core size once the backlog is full, so a low value
     // core size is a poor choice when there are lots of long-running + idle jobs.
     // a brief intro to the issue:
     // http://www.bigsoft.co.uk/blog/2009/11/27/rules-of-a-threadpoolexecutor-pool-size
@@ -132,7 +133,8 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     protected DefaultUpnpServiceConfiguration(boolean checkRuntime) {
-        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, checkRuntime);
+        this(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
+                NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT, checkRuntime);
     }
 
     protected DefaultUpnpServiceConfiguration(int streamListenPort, int multicastResponsePort, boolean checkRuntime) {
@@ -186,12 +188,8 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     @Override
     public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
-        return new MulticastReceiverImpl(
-                new MulticastReceiverConfigurationImpl(
-                        networkAddressFactory.getMulticastGroup(),
-                        networkAddressFactory.getMulticastPort()
-                )
-        );
+        return new MulticastReceiverImpl(new MulticastReceiverConfigurationImpl(
+                networkAddressFactory.getMulticastGroup(), networkAddressFactory.getMulticastPort()));
     }
 
     @Override
@@ -348,29 +346,22 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     public static class JUPnPExecutor extends ThreadPoolExecutor {
 
         public JUPnPExecutor() {
-            this(new JUPnPThreadFactory(),
-                 new ThreadPoolExecutor.DiscardPolicy() {
-                     // The pool is bounded and rejections will happen during shutdown
-                     @Override
-                     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-                         // Log and discard
-                         LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread pool rejected execution of {}", runnable.getClass());
-                         super.rejectedExecution(runnable, threadPoolExecutor);
-                     }
-                 }
-            );
+            this(new JUPnPThreadFactory(), new ThreadPoolExecutor.DiscardPolicy() {
+                // The pool is bounded and rejections will happen during shutdown
+                @Override
+                public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+                    // Log and discard
+                    LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class)
+                            .warn("Thread pool rejected execution of {}", runnable.getClass());
+                    super.rejectedExecution(runnable, threadPoolExecutor);
+                }
+            });
         }
 
         public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
             // This is the same as Executors.newCachedThreadPool
-            super(CORE_THREAD_POOL_SIZE,
-                  THREAD_POOL_SIZE,
-                  10L,
-                  TimeUnit.SECONDS,
-                  new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE),
-                  threadFactory,
-                  rejectedHandler
-            );
+            super(CORE_THREAD_POOL_SIZE, THREAD_POOL_SIZE, 10L, TimeUnit.SECONDS,
+                    new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE), threadFactory, rejectedHandler);
             allowCoreThreadTimeOut(THREAD_POOL_CORE_TIMEOUT);
         }
 
@@ -386,7 +377,8 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                     return;
                 }
                 // Log only
-                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated {} abruptly", runnable, throwable);
+                LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class).warn("Thread terminated {} abruptly",
+                        runnable, throwable);
             }
         }
     }
@@ -404,11 +396,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
         @Override
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(
-                    group, r,
-                    namePrefix + threadNumber.getAndIncrement(),
-                    0
-            );
+            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -417,5 +405,4 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
             return t;
         }
     }
-
 }

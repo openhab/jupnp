@@ -42,11 +42,12 @@ public class HostHeader extends UpnpHeader<HostPort> {
         if (s.contains(":")) {
             // We have a port in the header, so we have to use that instead of the UDA default
             try {
-                this.port = Integer.valueOf(s.substring(s.indexOf(":")+1));
+                this.port = Integer.valueOf(s.substring(s.indexOf(":") + 1));
                 this.group = s.substring(0, s.indexOf(":"));
                 setValue(new HostPort(group, port));
             } catch (NumberFormatException ex) {
-                throw new InvalidHeaderException("Invalid HOST header value, can't parse port: " + s + " - " + ex.getMessage(), ex);
+                throw new InvalidHeaderException(
+                        "Invalid HOST header value, can't parse port: " + s + " - " + ex.getMessage(), ex);
             }
         } else {
             this.group = s;

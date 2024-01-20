@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * </ul>
  * <p>
  * UPnPPresent tracks UPnPDevice services registered for export. When a service
- * is registered/unregistered  UPnPPresent will add/remove it with jUPnP.
+ * is registered/unregistered UPnPPresent will add/remove it with jUPnP.
  * </p>
  * <p>
  * When a service changes a state variable that sends events UPnPPresent will
@@ -69,11 +69,10 @@ public class UPnPPresent {
     @Activate
     public UPnPPresent(BundleContext context, @Reference UpnpService upnpService) {
         /*
-           * Track all UPnPDevices registered for export.
-           */
-        String string = String.format("(&(%s=%s)(%s=%s))",
-                                      Constants.OBJECTCLASS, UPnPDevice.class.getName(),
-                                      UPnPDevice.UPNP_EXPORT, "*");
+         * Track all UPnPDevices registered for export.
+         */
+        String string = String.format("(&(%s=%s)(%s=%s))", Constants.OBJECTCLASS, UPnPDevice.class.getName(),
+                UPnPDevice.UPNP_EXPORT, "*");
         try {
             Filter filter = context.createFilter(string);
 
@@ -86,16 +85,12 @@ public class UPnPPresent {
         }
 
         /*
-           * Track OSGi UPnP events. Local devices fire a UPnP event when
-           * a state variable that sends an event when changed.
-           */
+         * Track OSGi UPnP events. Local devices fire a UPnP event when
+         * a state variable that sends an event when changed.
+         */
         Dictionary<String, String> properties = new Hashtable<>();
         properties.put(EventConstants.EVENT_TOPIC, UPNP_EVENT_TOPIC);
-        context.registerService(
-                EventHandler.class.getName(),
-                new UPnPEventHandler(context),
-                properties
-        );
+        context.registerService(EventHandler.class.getName(), new UPnPEventHandler(context), properties);
     }
 
     @Deactivate

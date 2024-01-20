@@ -42,7 +42,7 @@ public class DeviceDetails implements Validatable {
     final private URI presentationURI;
     final private DLNADoc[] dlnaDocs;
     final private DLNACaps dlnaCaps;
-    final private DLNACaps secProductCaps; 
+    final private DLNACaps secProductCaps;
 
     public DeviceDetails(String friendlyName) {
         this(null, friendlyName, null, null, null, null, null);
@@ -56,32 +56,33 @@ public class DeviceDetails implements Validatable {
         this(null, friendlyName, manufacturerDetails, null, null, null, null);
     }
 
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, DLNADoc[] dlnaDocs,
+            DLNACaps dlnaCaps) {
         this(null, friendlyName, manufacturerDetails, null, null, null, null, dlnaDocs, dlnaCaps);
     }
 
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails,
-                         ModelDetails modelDetails) {
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails) {
         this(null, friendlyName, manufacturerDetails, modelDetails, null, null, null);
     }
 
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails,
-                         ModelDetails modelDetails, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
+            DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
         this(null, friendlyName, manufacturerDetails, modelDetails, null, null, null, dlnaDocs, dlnaCaps);
-    }
-    
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails,
-            ModelDetails modelDetails, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps, DLNACaps secProductCaps) {
-    	this(null, friendlyName, manufacturerDetails, modelDetails, null, null, null, dlnaDocs, dlnaCaps, secProductCaps);
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc) {
+            DLNADoc[] dlnaDocs, DLNACaps dlnaCaps, DLNACaps secProductCaps) {
+        this(null, friendlyName, manufacturerDetails, modelDetails, null, null, null, dlnaDocs, dlnaCaps,
+                secProductCaps);
+    }
+
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
+            String serialNumber, String upc) {
         this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, null);
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
+            String serialNumber, String upc, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
         this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, null, dlnaDocs, dlnaCaps);
     }
 
@@ -93,56 +94,54 @@ public class DeviceDetails implements Validatable {
         this(null, friendlyName, null, null, null, null, presentationURI, dlnaDocs, dlnaCaps);
     }
 
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails,
-                         ModelDetails modelDetails, URI presentationURI) {
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
+            URI presentationURI) {
         this(null, friendlyName, manufacturerDetails, modelDetails, null, null, presentationURI);
     }
 
-    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails,
-                         ModelDetails modelDetails, URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
+    public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
+            URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
         this(null, friendlyName, manufacturerDetails, modelDetails, null, null, presentationURI, dlnaDocs, dlnaCaps);
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc, URI presentationURI) {
+            String serialNumber, String upc, URI presentationURI) {
         this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI);
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc, URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
-        this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI, dlnaDocs, dlnaCaps);
+            String serialNumber, String upc, URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
+        this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI, dlnaDocs,
+                dlnaCaps);
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc, String presentationURI)
-            throws IllegalArgumentException {
+            String serialNumber, String upc, String presentationURI) throws IllegalArgumentException {
         this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, URI.create(presentationURI));
     }
 
     public DeviceDetails(String friendlyName, ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc, String presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps)
+            String serialNumber, String upc, String presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps)
             throws IllegalArgumentException {
-        this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, URI.create(presentationURI), dlnaDocs, dlnaCaps);
+        this(null, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, URI.create(presentationURI),
+                dlnaDocs, dlnaCaps);
     }
 
-    public DeviceDetails(URL baseURL, String friendlyName,
-                         ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc,
-                         URI presentationURI) {
+    public DeviceDetails(URL baseURL, String friendlyName, ManufacturerDetails manufacturerDetails,
+            ModelDetails modelDetails, String serialNumber, String upc, URI presentationURI) {
         this(baseURL, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI, null, null);
     }
 
-    public DeviceDetails(URL baseURL, String friendlyName,
-            ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-            String serialNumber, String upc,
-            URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps) {
-    	 this(baseURL, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI, dlnaDocs, dlnaCaps, null);
+    public DeviceDetails(URL baseURL, String friendlyName, ManufacturerDetails manufacturerDetails,
+            ModelDetails modelDetails, String serialNumber, String upc, URI presentationURI, DLNADoc[] dlnaDocs,
+            DLNACaps dlnaCaps) {
+        this(baseURL, friendlyName, manufacturerDetails, modelDetails, serialNumber, upc, presentationURI, dlnaDocs,
+                dlnaCaps, null);
     }
-    
-    public DeviceDetails(URL baseURL, String friendlyName,
-                         ManufacturerDetails manufacturerDetails, ModelDetails modelDetails,
-                         String serialNumber, String upc,
-                         URI presentationURI, DLNADoc[] dlnaDocs, DLNACaps dlnaCaps, DLNACaps secProductCaps) {
+
+    public DeviceDetails(URL baseURL, String friendlyName, ManufacturerDetails manufacturerDetails,
+            ModelDetails modelDetails, String serialNumber, String upc, URI presentationURI, DLNADoc[] dlnaDocs,
+            DLNACaps dlnaCaps, DLNACaps secProductCaps) {
         this.baseURL = baseURL;
         this.friendlyName = friendlyName;
         this.manufacturerDetails = manufacturerDetails == null ? new ManufacturerDetails() : manufacturerDetails;
@@ -190,7 +189,7 @@ public class DeviceDetails implements Validatable {
     public DLNACaps getDlnaCaps() {
         return dlnaCaps;
     }
-    
+
     public DLNACaps getSecProductCaps() {
         return secProductCaps;
     }
@@ -201,14 +200,14 @@ public class DeviceDetails implements Validatable {
         if (getUpc() != null) {
             // This is broken in more than half of the devices I've tested, so let's not even bother with a warning
             if (getUpc().length() != 12) {
-                SpecificationViolationReporter
-                        .report("UPC must be 12 digits: '" + getUpc() + "' for device '" + getFriendlyName() + "'", null);
+                SpecificationViolationReporter.report(
+                        "UPC must be 12 digits: '" + getUpc() + "' for device '" + getFriendlyName() + "'", null);
             } else {
                 try {
                     Long.parseLong(getUpc());
                 } catch (NumberFormatException ex) {
-					SpecificationViolationReporter.report("UPC must be 12 digits all-numeric: '{}' for device '{}'",
-							getUpc(), getFriendlyName());
+                    SpecificationViolationReporter.report("UPC must be 12 digits all-numeric: '{}' for device '{}'",
+                            getUpc(), getFriendlyName());
                 }
             }
         }

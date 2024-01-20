@@ -45,5 +45,4 @@ public class DeviceUSNHeader extends UpnpHeader<NamedDeviceType> {
     public String getString() {
         return getValue().toString();
     }
-
 }

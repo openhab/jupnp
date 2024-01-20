@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
+import org.junit.jupiter.api.Test;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.meta.DeviceIdentity;
@@ -13,7 +14,6 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.types.UDN;
 import org.jupnp.registry.Registry;
-import org.junit.jupiter.api.Test;
 
 class RegistryAsyncTest {
 
@@ -75,7 +75,8 @@ class RegistryAsyncTest {
         public void run() {
             try {
                 /*
-                 * Each thread has a different starting point and tries to add each device multiple times as both local and
+                 * Each thread has a different starting point and tries to add each device multiple times as both local
+                 * and
                  * remote device.
                  */
                 for (int i = threadNumber * 7; i < 100; i++) {

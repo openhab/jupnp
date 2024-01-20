@@ -20,9 +20,9 @@ package org.jupnp.binding.staging;
 public class MutableAllowedValueRange {
 
     // TODO: UPNP VIOLATION: Some devices (Netgear Router again...) send empty elements, so use some sane defaults
-    // TODO: UPNP VIOLATION: The WANCommonInterfaceConfig example XML is even wrong, it does not include a <maximum> element!
+    // TODO: UPNP VIOLATION: The WANCommonInterfaceConfig example XML is even wrong, it does not include a <maximum>
+    // element!
     public Long minimum = 0l;
     public Long maximum = Long.MAX_VALUE;
     public Long step = 1l;
-
 }

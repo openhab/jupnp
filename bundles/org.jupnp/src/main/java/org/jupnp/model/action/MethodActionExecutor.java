@@ -51,7 +51,8 @@ public class MethodActionExecutor extends AbstractActionExecutor {
         this.method = method;
     }
 
-    public MethodActionExecutor(Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors, Method method) {
+    public MethodActionExecutor(Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors,
+            Method method) {
         super(outputArgumentAccessors);
         this.method = method;
     }
@@ -80,13 +81,15 @@ public class MethodActionExecutor extends AbstractActionExecutor {
         boolean isArrayResultProcessed = true;
         if (isVoid) {
 
-            log.trace("Action method is void, calling declared accessors(s) on service instance to retrieve output argument(s)");
+            log.trace(
+                    "Action method is void, calling declared accessors(s) on service instance to retrieve output argument(s)");
             Reflections.invoke(method, serviceImpl, inputArgumentValues);
             result = readOutputArgumentValues(actionInvocation.getAction(), serviceImpl);
 
         } else if (isUseOutputArgumentAccessors(actionInvocation)) {
 
-            log.trace("Action method is not void, calling declared accessor(s) on returned instance to retrieve output argument(s)");
+            log.trace(
+                    "Action method is not void, calling declared accessor(s) on returned instance to retrieve output argument(s)");
             Object returnedInstance = Reflections.invoke(method, serviceImpl, inputArgumentValues);
             result = readOutputArgumentValues(actionInvocation.getAction(), returnedInstance);
 
@@ -108,12 +111,9 @@ public class MethodActionExecutor extends AbstractActionExecutor {
         } else if (outputArgs.length == 1) {
             setOutputArgumentValue(actionInvocation, outputArgs[0], result);
         } else {
-            throw new ActionException(
-                    ErrorCode.ACTION_FAILED,
-                    "Method return does not match required number of output arguments: " + outputArgs.length
-            );
+            throw new ActionException(ErrorCode.ACTION_FAILED,
+                    "Method return does not match required number of output arguments: " + outputArgs.length);
         }
-
     }
 
     protected boolean isUseOutputArgumentAccessors(ActionInvocation<LocalService> actionInvocation) {
@@ -126,7 +126,8 @@ public class MethodActionExecutor extends AbstractActionExecutor {
         return false;
     }
 
-    protected Object[] createInputArgumentValues(ActionInvocation<LocalService> actionInvocation, Method method) throws ActionException {
+    protected Object[] createInputArgumentValues(ActionInvocation<LocalService> actionInvocation, Method method)
+            throws ActionException {
 
         LocalService service = actionInvocation.getAction().getService();
 
@@ -140,10 +141,8 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
             // If it's a primitive argument, we need a value
             if (methodParameterType.isPrimitive() && (inputValue == null || inputValue.toString().length() == 0))
-                throw new ActionException(
-                        ErrorCode.ARGUMENT_VALUE_INVALID,
-                        "Primitive action method argument '" + argument.getName() + "' requires input value, can't be null or empty string"
-                );
+                throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID, "Primitive action method argument '"
+                        + argument.getName() + "' requires input value, can't be null or empty string");
 
             // It's not primitive and we have no value, that's fine too
             if (inputValue == null) {
@@ -154,18 +153,21 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             // If it's not null, maybe it was a string-convertible type, if so, try to instantiate it
             String inputCallValueString = inputValue.toString();
             // Empty string means null and we can't instantiate Enums!
-            if (inputCallValueString.length() > 0 && service.isStringConvertibleType(methodParameterType) && !methodParameterType.isEnum()) {
+            if (inputCallValueString.length() > 0 && service.isStringConvertibleType(methodParameterType)
+                    && !methodParameterType.isEnum()) {
                 try {
                     Constructor<String> ctor = methodParameterType.getConstructor(String.class);
-                    log.trace("Creating new input argument value instance with String.class constructor of type: {}", methodParameterType);
+                    log.trace("Creating new input argument value instance with String.class constructor of type: {}",
+                            methodParameterType);
                     Object o = ctor.newInstance(inputCallValueString);
                     values.add(i++, o);
                 } catch (Exception ex) {
-                    log.warn("Error preparing action method call: {}. Can't convert input argument string to desired type of '{}'",
+                    log.warn(
+                            "Error preparing action method call: {}. Can't convert input argument string to desired type of '{}'",
                             method, argument.getName(), ex);
-                    throw new ActionException(
-                            ErrorCode.ARGUMENT_VALUE_INVALID, "Can't convert input argument string to desired type of '" + argument.getName() + "': " + ex
-                    );
+                    throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
+                            "Can't convert input argument string to desired type of '" + argument.getName() + "': "
+                                    + ex);
                 }
             } else {
                 // Or if it wasn't, just use the value without any conversion
@@ -173,12 +175,12 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             }
         }
 
-        if (method.getParameterTypes().length > 0
-            && RemoteClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
-            if (actionInvocation instanceof RemoteActionInvocation &&
-                ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo() != null) {
+        if (method.getParameterTypes().length > 0 && RemoteClientInfo.class
+                .isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length - 1])) {
+            if (actionInvocation instanceof RemoteActionInvocation
+                    && ((RemoteActionInvocation) actionInvocation).getRemoteClientInfo() != null) {
                 log.trace("Providing remote client info as last action method input argument: {}", method);
-                values.add(i, ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo());
+                values.add(i, ((RemoteActionInvocation) actionInvocation).getRemoteClientInfo());
             } else {
                 // Local call, no client info available
                 values.add(i, null);
@@ -187,5 +189,4 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         return values.toArray(new Object[values.size()]);
     }
-
 }

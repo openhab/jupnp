@@ -15,10 +15,10 @@
 
 package org.jupnp.support.model;
 
-import org.jupnp.model.ModelUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jupnp.model.ModelUtil;
 
 /**
  * @author Christian Bauer
@@ -35,7 +35,8 @@ public enum TransportAction {
 
     public static TransportAction[] valueOfCommaSeparatedList(String s) {
         String[] strings = ModelUtil.fromCommaSeparatedList(s);
-        if (strings == null) return new TransportAction[0];
+        if (strings == null)
+            return new TransportAction[0];
         List<TransportAction> result = new ArrayList<>();
         for (String taString : strings) {
             for (TransportAction ta : values()) {

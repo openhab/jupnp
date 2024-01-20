@@ -19,13 +19,13 @@ package org.jupnp.support.model.dlna.types;
  * @author Mario Franco
  */
 public class CodedDataBuffer {
-    
+
     public enum TransferMechanism {
         IMMEDIATELY,
         TIMESTAMP,
         OTHER;
     }
-    
+
     private Long size;
     private TransferMechanism tranfer;
 
@@ -33,7 +33,7 @@ public class CodedDataBuffer {
         this.size = size;
         this.tranfer = transfer;
     }
-    
+
     /**
      * @return the size
      */

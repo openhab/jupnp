@@ -14,13 +14,13 @@
 
 package org.jupnp.model.types.csv;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.util.Reflections;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Transforms a state variable value from/to strings of comma-separated elements.

@@ -16,7 +16,6 @@ package org.jupnp.transport;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.jupnp.UpnpServiceConfiguration;
-import org.jupnp.transport.TransportConfiguration;
 import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.jupnp.transport.spi.StreamClient;
@@ -30,7 +29,8 @@ import org.jupnp.transport.spi.StreamServer;
 class JettyServerJettyClientTest extends StreamServerClientTest {
 
     private static final TransportConfiguration jettyTransportConfiguration = JettyTransportConfiguration.INSTANCE;
-    private static final StreamClientConfiguration sccConfiguration = new StreamClientConfigurationImpl(null, 3, 0, 0 ,0);
+    private static final StreamClientConfiguration sccConfiguration = new StreamClientConfigurationImpl(null, 3, 0, 0,
+            0);
 
     @BeforeAll
     static void start() throws Exception {
@@ -42,9 +42,7 @@ class JettyServerJettyClientTest extends StreamServerClientTest {
     }
 
     public static StreamClient createStreamClient(UpnpServiceConfiguration configuration) {
-        return jettyTransportConfiguration.createStreamClient(
-                configuration.getSyncProtocolExecutorService(), sccConfiguration
-        );
+        return jettyTransportConfiguration.createStreamClient(configuration.getSyncProtocolExecutorService(),
+                sccConfiguration);
     }
-
 }

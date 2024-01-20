@@ -52,5 +52,4 @@ public class SendingNotificationByebye extends SendingNotification {
     protected NotificationSubtype getNotificationSubtype() {
         return NotificationSubtype.BYEBYE;
     }
-
 }

@@ -48,13 +48,14 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
     private Logger log = LoggerFactory.getLogger(DatagramIOImpl.class);
 
-    /* Implementation notes for unicast/multicast UDP:
-
-    http://forums.sun.com/thread.jspa?threadID=771852
-    http://mail.openjdk.java.net/pipermail/net-dev/2008-December/000497.html
-    https://jira.jboss.org/jira/browse/JGRP-978
-    http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4701650
-
+    /*
+     * Implementation notes for unicast/multicast UDP:
+     * 
+     * http://forums.sun.com/thread.jspa?threadID=771852
+     * http://mail.openjdk.java.net/pipermail/net-dev/2008-December/000497.html
+     * https://jira.jboss.org/jira/browse/JGRP-978
+     * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4701650
+     * 
      */
 
     final protected DatagramIOConfigurationImpl configuration;
@@ -73,7 +74,8 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         return configuration;
     }
 
-    synchronized public void init(InetAddress bindAddress, int bindPort, Router router, DatagramProcessor datagramProcessor) throws InitializationException {
+    synchronized public void init(InetAddress bindAddress, int bindPort, Router router,
+            DatagramProcessor datagramProcessor) throws InitializationException {
 
         this.router = router;
         this.datagramProcessor = datagramProcessor;
@@ -100,7 +102,8 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
     }
 
     public void run() {
-        log.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}:{}", socket.getLocalAddress(), socket.getPort());
+        log.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}:{}", socket.getLocalAddress(),
+                socket.getPort());
 
         while (true) {
 
@@ -110,11 +113,8 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
                 socket.receive(datagram);
 
-                log.debug(
-                        "UDP datagram received from: {}:{} on: {}",
-                                datagram.getAddress().getHostAddress(), datagram.getPort(), localAddress
-                );
-
+                log.debug("UDP datagram received from: {}:{} on: {}", datagram.getAddress().getHostAddress(),
+                        datagram.getPort(), localAddress);
 
                 router.received(datagramProcessor.read(localAddress.getAddress(), datagram));
 
@@ -142,14 +142,15 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
         DatagramPacket packet = datagramProcessor.write(message);
 
-        log.debug("Sending UDP datagram packet to: {}:{}", message.getDestinationAddress(), message.getDestinationPort());
-        
+        log.debug("Sending UDP datagram packet to: {}:{}", message.getDestinationAddress(),
+                message.getDestinationPort());
+
         send(packet);
     }
 
     synchronized public void send(DatagramPacket datagram) {
         log.debug("Sending message from address: {}", localAddress);
-            
+
         try {
             socket.send(datagram);
         } catch (SocketException ex) {
@@ -157,18 +158,18 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
-			log.error("Exception sending datagram to: {}", datagram.getAddress(), ex);
-			log.error("  Details: datagram.socketAddress={}, length={}, offset={}, data.bytes={}",
-					datagram.getSocketAddress(), datagram.getLength(), datagram.getOffset(), datagram.getData().length);
-			try {
-				log.error(
-						"  Details: socket={}, closed={}, bound={}, inetAddress={}, "
-								+ "remoteSocketAddress={}, networkInterface={}",
+            log.error("Exception sending datagram to: {}", datagram.getAddress(), ex);
+            log.error("  Details: datagram.socketAddress={}, length={}, offset={}, data.bytes={}",
+                    datagram.getSocketAddress(), datagram.getLength(), datagram.getOffset(), datagram.getData().length);
+            try {
+                log.error(
+                        "  Details: socket={}, closed={}, bound={}, inetAddress={}, "
+                                + "remoteSocketAddress={}, networkInterface={}",
                         socket.toString(), socket.isClosed(), socket.isBound(), socket.getInetAddress(),
                         socket.getRemoteSocketAddress(), socket.getNetworkInterface());
-			} catch (SocketException ex2) {
-				log.error("  Details: could not get network interface", ex2);
-			}
-		}
+            } catch (SocketException ex2) {
+                log.error("  Details: could not get network interface", ex2);
+            }
+        }
     }
 }

@@ -19,7 +19,6 @@ import org.jupnp.model.ServiceManager;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.StateVariable;
 
-
 /**
  * Reads the value of a state variable, given an instance that implements the service.
  *
@@ -29,10 +28,12 @@ import org.jupnp.model.meta.StateVariable;
  */
 public abstract class StateVariableAccessor {
 
-    public StateVariableValue read(final StateVariable<LocalService> stateVariable, final Object serviceImpl) throws Exception {
+    public StateVariableValue read(final StateVariable<LocalService> stateVariable, final Object serviceImpl)
+            throws Exception {
 
         class AccessCommand implements Command {
             Object result;
+
             public void execute(ServiceManager serviceManager) throws Exception {
                 result = read(serviceImpl);
                 if (stateVariable.getService().isStringConvertibleType(result)) {

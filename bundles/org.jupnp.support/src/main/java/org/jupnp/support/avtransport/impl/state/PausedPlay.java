@@ -29,8 +29,7 @@ import org.slf4j.LoggerFactory;
  * @author Christian Bauer - Initial Contribution
  * @author Amit Kumar Mondal - Code Refactoring
  */
-public abstract class PausedPlay<T extends AVTransport> extends AbstractState<T>
-{
+public abstract class PausedPlay<T extends AVTransport> extends AbstractState<T> {
 
     private final Logger logger = LoggerFactory.getLogger(PausedPlay.class);
 
@@ -40,29 +39,21 @@ public abstract class PausedPlay<T extends AVTransport> extends AbstractState<T>
 
     public void onEntry() {
         logger.debug("Setting transport state to PAUSED_PLAYBACK");
-        getTransport().setTransportInfo(
-                new TransportInfo(
-                        TransportState.PAUSED_PLAYBACK,
-                        getTransport().getTransportInfo().getCurrentTransportStatus(),
-                        getTransport().getTransportInfo().getCurrentSpeed()
-                )
-        );
-        getTransport().getLastChange().setEventedValue(
-                getTransport().getInstanceId(),
+        getTransport().setTransportInfo(new TransportInfo(TransportState.PAUSED_PLAYBACK,
+                getTransport().getTransportInfo().getCurrentTransportStatus(),
+                getTransport().getTransportInfo().getCurrentSpeed()));
+        getTransport().getLastChange().setEventedValue(getTransport().getInstanceId(),
                 new AVTransportVariable.TransportState(TransportState.PAUSED_PLAYBACK),
-                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions())
-        );
+                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions()));
     }
 
     public abstract Class<? extends AbstractState<?>> setTransportURI(URI uri, String metaData);
+
     public abstract Class<? extends AbstractState<?>> stop();
+
     public abstract Class<? extends AbstractState<?>> play(String speed);
 
     public TransportAction[] getCurrentTransportActions() {
-        return new TransportAction[] {
-                TransportAction.Stop,
-                TransportAction.Play
-        };
+        return new TransportAction[] { TransportAction.Stop, TransportAction.Play };
     }
-
 }

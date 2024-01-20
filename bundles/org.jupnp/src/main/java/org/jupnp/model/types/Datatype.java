@@ -16,8 +16,8 @@ package org.jupnp.model.types;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * The type of a state variable value, able to convert to/from string representation.
@@ -111,40 +111,30 @@ public interface Datatype<V> {
         FLOAT("float", new DoubleDatatype()), // TODO: Is that Double or Float?
         CHAR("char", new CharacterDatatype()),
         STRING("string", new StringDatatype()),
-        DATE("date", new DateTimeDatatype(
-                new String[]{"yyyy-MM-dd"},
-                "yyyy-MM-dd"
-        )),
-        DATETIME("dateTime", new DateTimeDatatype(
-                new String[]{"yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss"},
-                "yyyy-MM-dd'T'HH:mm:ss"
-        )),
-        DATETIME_TZ("dateTime.tz", new DateTimeDatatype(
-                new String[]{"yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZ"},
-                "yyyy-MM-dd'T'HH:mm:ssZ"
-        )),
-        TIME("time", new DateTimeDatatype(
-                new String[]{"HH:mm:ss"},
-                "HH:mm:ss"
-        )),
-        TIME_TZ("time.tz", new DateTimeDatatype(
-                new String[]{"HH:mm:ssZ", "HH:mm:ss"},
-                "HH:mm:ssZ"
-        )),
+        DATE("date", new DateTimeDatatype(new String[] { "yyyy-MM-dd" }, "yyyy-MM-dd")),
+        DATETIME("dateTime",
+                new DateTimeDatatype(new String[] { "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss" }, "yyyy-MM-dd'T'HH:mm:ss")),
+        DATETIME_TZ("dateTime.tz",
+                new DateTimeDatatype(new String[] { "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZ" },
+                        "yyyy-MM-dd'T'HH:mm:ssZ")),
+        TIME("time", new DateTimeDatatype(new String[] { "HH:mm:ss" }, "HH:mm:ss")),
+        TIME_TZ("time.tz", new DateTimeDatatype(new String[] { "HH:mm:ssZ", "HH:mm:ss" }, "HH:mm:ssZ")),
         BOOLEAN("boolean", new BooleanDatatype()),
         BIN_BASE64("bin.base64", new Base64Datatype()),
         BIN_HEX("bin.hex", new BinHexDatatype()),
         URI("uri", new URIDatatype()),
         UUID("uuid", new StringDatatype());
 
-        private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {{
-            for (Builtin b : Builtin.values()) {
-                // Lowercase descriptor name!
-                if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH)))
-                    continue; // Ignore double-declarations, take first one only
-                put(b.getDescriptorName().toLowerCase(Locale.ENGLISH), b);
+        private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {
+            {
+                for (Builtin b : Builtin.values()) {
+                    // Lowercase descriptor name!
+                    if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH)))
+                        continue; // Ignore double-declarations, take first one only
+                    put(b.getDescriptorName().toLowerCase(Locale.ENGLISH), b);
+                }
             }
-        }};
+        };
 
         private String descriptorName;
         private Datatype datatype;
@@ -167,19 +157,14 @@ public interface Datatype<V> {
             // The UPnP spec clearly says "must be one of these values", so I'm assuming
             // they are case sensitive. But we want to work with broken devices, which of
             // course produce mixed upper/lowercase values.
-            if (descriptorName == null) return null;
+            if (descriptorName == null)
+                return null;
             return byName.get(descriptorName.toLowerCase(Locale.ENGLISH));
         }
 
         public static boolean isNumeric(Builtin builtin) {
-            return builtin != null &&
-                    (builtin.equals(UI1) ||
-                            builtin.equals(UI2) ||
-                            builtin.equals(UI4) ||
-                            builtin.equals(I1) ||
-                            builtin.equals(I2) ||
-                            builtin.equals(I4) ||
-                            builtin.equals(INT));
+            return builtin != null && (builtin.equals(UI1) || builtin.equals(UI2) || builtin.equals(UI4)
+                    || builtin.equals(I1) || builtin.equals(I2) || builtin.equals(I4) || builtin.equals(INT));
         }
     }
 
@@ -208,7 +193,8 @@ public interface Datatype<V> {
      * </p>
      *
      * @param value The value to transform.
-     * @return The transformed value as a string, or an empty string when the value is null, never returns <code>null</code>.
+     * @return The transformed value as a string, or an empty string when the value is null, never returns
+     *         <code>null</code>.
      * @throws InvalidValueException
      */
     public String getString(V value) throws InvalidValueException;
@@ -227,6 +213,4 @@ public interface Datatype<V> {
      *         this datatype (e.g. concrete class name).
      */
     public String getDisplayString();
-
-
 }

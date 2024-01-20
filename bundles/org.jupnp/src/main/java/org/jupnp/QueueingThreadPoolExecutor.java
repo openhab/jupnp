@@ -80,7 +80,8 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      * Allows to subclass QueueingThreadPoolExecutor.
      */
     protected QueueingThreadPoolExecutor(String name, int threadPoolSize) {
-        this(name, new CommonThreadFactory(name), threadPoolSize, new QueueingThreadPoolExecutor.QueueingRejectionHandler());
+        this(name, new CommonThreadFactory(name), threadPoolSize,
+                new QueueingThreadPoolExecutor.QueueingRejectionHandler());
     }
 
     private QueueingThreadPoolExecutor(String threadPoolName, ThreadFactory threadFactory, int threadPoolSize,
@@ -99,7 +100,7 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      * @return the {@link QueueingThreadPoolExecutor} instance
      */
     public static QueueingThreadPoolExecutor createInstance(String name, int threadPoolSize) {
-        if(name==null || name.trim().isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("A thread pool name must be provided!");
         }
         return new QueueingThreadPoolExecutor(name, new CommonThreadFactory(name), threadPoolSize,
@@ -155,26 +156,24 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
     public void setRejectedExecutionHandler(RejectedExecutionHandler handler) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public BlockingQueue<Runnable> getQueue() {
         return taskQueue;
     }
-    
-    
 
     @Override
     public void execute(Runnable command) {
         // make sure that rejected tasks are executed before any new concurrently incoming tasks
-        if(taskQueue.isEmpty()) {
+        if (taskQueue.isEmpty()) {
             super.execute(command);
         } else {
             if (command == null) {
                 throw new NullPointerException();
             }
-            
-            // ignore incoming tasks when the executor is shutdown 
-            if(!isShutdown()) {
+
+            // ignore incoming tasks when the executor is shutdown
+            if (!isShutdown()) {
                 addToQueue(command);
             }
         }

@@ -14,6 +14,13 @@
 
 package example.controlpoint;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.controlpoint.SubscriptionCallback;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
@@ -32,16 +39,9 @@ import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.BooleanDatatype;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.util.Reflections;
-import org.junit.jupiter.api.Test;
 
 import example.binarylight.BinaryLightSampleData;
 import example.binarylight.SwitchPower;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Receiving events from services
@@ -59,7 +59,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * <code>Status</code> (e.g. the previously shown <a href="#section.SwitchPower">SwitchPower</a>
  * service). The subscription's refresh and timeout period is 600 seconds:
  * </p>
- * <a class="citation" href="javacode://this#subscriptionLifecycle" style="include: SUBSCRIBE; exclude: EXC1, EXC2, EXC3, EXC4, EXC5;"/>
+ * <a class="citation" href="javacode://this#subscriptionLifecycle" style="include: SUBSCRIBE; exclude: EXC1, EXC2,
+ * EXC3, EXC4, EXC5;"/>
  * <p>
  * The <code>SubscriptionCallback</code> offers the methods <code>failed()</code>,
  * <code>established()</code>, and <code>ended()</code> which are called during a subscription's lifecycle.
@@ -107,7 +108,7 @@ public class EventSubscriptionTest {
 
         LocalService service = device.getServices()[0];
 
-        SubscriptionCallback callback = new SubscriptionCallback(service, 600) {            // DOC: SUBSCRIBE
+        SubscriptionCallback callback = new SubscriptionCallback(service, 600) { // DOC: SUBSCRIBE
 
             @Override
             public void established(GENASubscription sub) {
@@ -116,22 +117,18 @@ public class EventSubscriptionTest {
             }
 
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 System.err.println(defaultMsg);
                 testAssertions.add(false); // DOC: EXC1
             }
 
             @Override
-            public void ended(GENASubscription sub,
-                              CancelReason reason,
-                              UpnpResponse response) {
+            public void ended(GENASubscription sub, CancelReason reason, UpnpResponse response) {
                 assertNull(reason);
                 assertNotNull(sub); // DOC: EXC3
                 assertNull(response);
-                testAssertions.add(true);     // DOC: EXC3
+                testAssertions.add(true); // DOC: EXC3
             }
 
             @Override
@@ -147,7 +144,7 @@ public class EventSubscriptionTest {
 
                 System.out.println("Status is: " + status);
 
-                if (sub.getCurrentSequence().getValue() == 0) {                             // DOC: EXC4
+                if (sub.getCurrentSequence().getValue() == 0) { // DOC: EXC4
                     assertEquals("0", sub.getCurrentValues().get("Status").toString());
                     testAssertions.add(true);
                 } else if (sub.getCurrentSequence().getValue() == 1) {
@@ -155,23 +152,22 @@ public class EventSubscriptionTest {
                     testAssertions.add(true);
                 } else {
                     testAssertions.add(false);
-                }                                                                           // DOC: EXC4
+                } // DOC: EXC4
             }
 
             @Override
             public void eventsMissed(GENASubscription sub, int numberOfMissedEvents) {
                 System.out.println("Missed events: " + numberOfMissedEvents);
-                testAssertions.add(false);                                                  // DOC: EXC5
+                testAssertions.add(false); // DOC: EXC5
             }
 
             @Override
-            protected void invalidMessage(RemoteGENASubscription sub,
-                                          UnsupportedDataException ex) {
+            protected void invalidMessage(RemoteGENASubscription sub, UnsupportedDataException ex) {
                 // Log/send an error report?
             }
         };
 
-        upnpService.getControlPoint().execute(callback);                                    // DOC: SUBSCRIBE
+        upnpService.getControlPoint().execute(callback); // DOC: SUBSCRIBE
 
         // Modify the state of the service and trigger event
         Object serviceImpl = service.getManager().getImplementation();
@@ -195,16 +191,14 @@ public class EventSubscriptionTest {
     }
 
     protected MockUpnpService createMockUpnpService() {
-        MockUpnpService mock =  new MockUpnpService() {
+        MockUpnpService mock = new MockUpnpService() {
             @Override
             protected MockRouter createRouter() {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                                createSubscribeResponseMessage(),
-                                createUnsubscribeResponseMessage()
-                        };
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage() };
                     }
                 };
             }
@@ -215,18 +209,12 @@ public class EventSubscriptionTest {
 
     protected StreamResponseMessage createSubscribeResponseMessage() {
         StreamResponseMessage msg = new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
-        msg.getHeaders().add(
-                UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234")
-        );
-        msg.getHeaders().add(
-                UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180)
-        );
+        msg.getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234"));
+        msg.getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180));
         return msg;
     }
 
     protected StreamResponseMessage createUnsubscribeResponseMessage() {
         return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
     }
-
-
 }

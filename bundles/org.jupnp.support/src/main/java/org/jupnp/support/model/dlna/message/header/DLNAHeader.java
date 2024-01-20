@@ -15,7 +15,6 @@
 
 package org.jupnp.support.model.dlna.message.header;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,15 +68,16 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
         RTPAMRDeInterleaving("rtp-amr-deint-buf-cap.dlna.org", BufferBytesHeader.class),
         RTPAMRWBPlusDeInterleaving("rtp-amrwbplus-deint-buf-cap.dlna.org", BufferBytesHeader.class),
         PRAGMA("PRAGMA", PragmaHeader.class);
-            
+
         private static Map<String, Type> byName = new HashMap<String, Type>() {
             private static final long serialVersionUID = 2786641076120338594L;
 
-        {
-            for (Type t : Type.values()) {
-                put(t.getHttpName(), t);
+            {
+                for (Type t : Type.values()) {
+                    put(t.getHttpName(), t);
+                }
             }
-        }};
+        };
 
         private String httpName;
         private Class<? extends DLNAHeader<?>>[] headerTypes;
@@ -109,12 +109,11 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
          * @param httpName A case-insensitive HTTP header name.
          */
         public static Type getByHttpName(String httpName) {
-            if (httpName == null) return null;
-        	return byName.get(httpName);
+            if (httpName == null)
+                return null;
+            return byName.get(httpName);
         }
     }
-
-
 
     /**
      * Create a new instance of a {@link DLNAHeader} subtype that matches the given type and value.
@@ -142,10 +141,12 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
                     upnpHeader.setString(headerValue);
                 }
             } catch (InvalidHeaderException ex) {
-                logger.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(), ex.getMessage());
+                logger.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(),
+                        ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
-                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue, Exceptions.unwrap(ex));
+                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue,
+                        Exceptions.unwrap(ex));
             }
 
         }

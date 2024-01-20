@@ -16,10 +16,7 @@ package example.binarylight;
 
 import org.jupnp.binding.annotations.*;
 
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPower {
 
     @UpnpStateVariable(defaultValue = "0", sendEvents = false)
@@ -29,8 +26,7 @@ public class SwitchPower {
     private boolean status = false;
 
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
         target = newTargetValue;
         status = newTargetValue;
         System.out.println("Switch is: " + status);
@@ -45,5 +41,4 @@ public class SwitchPower {
     public boolean getStatus() {
         return status;
     }
-
 }

@@ -39,7 +39,7 @@ public class PlaySpeedHeader extends DLNAHeader<TransportPlaySpeed> {
                 setValue(t);
                 return;
             } catch (InvalidValueException invalidValueException) {
-              //no need to take any precaution measure
+                // no need to take any precaution measure
             }
         }
         throw new InvalidHeaderException("Invalid PlaySpeed header value: " + s);

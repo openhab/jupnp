@@ -15,21 +15,21 @@
 
 package org.jupnp.support.model.item;
 
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.jupnp.support.model.Person;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.container.Container;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
-
 /**
  * @author Christian Bauer
  */
-public class ImageItem extends Item{
+public class ImageItem extends Item {
 
     public static final Class CLASS = new Class("object.item.imageItem");
 

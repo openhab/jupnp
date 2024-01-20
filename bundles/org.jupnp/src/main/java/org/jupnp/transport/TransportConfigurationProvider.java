@@ -13,10 +13,9 @@
  */
 package org.jupnp.transport;
 
+import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServerConfiguration;
-
-import org.jupnp.transport.impl.jetty.JettyTransportConfiguration;
 
 /**
  * This is the central place to switch between transport implementations.

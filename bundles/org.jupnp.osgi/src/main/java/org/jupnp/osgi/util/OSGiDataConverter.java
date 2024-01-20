@@ -14,18 +14,18 @@
 
 package org.jupnp.osgi.util;
 
-import org.osgi.service.upnp.UPnPLocalStateVariable;
-import org.osgi.service.upnp.UPnPStateVariable;
-import org.jupnp.model.types.Datatype;
-import org.jupnp.model.types.UnsignedVariableInteger;
-import org.jupnp.model.types.Datatype.Builtin;
-
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+
+import org.jupnp.model.types.Datatype;
+import org.jupnp.model.types.Datatype.Builtin;
+import org.jupnp.model.types.UnsignedVariableInteger;
+import org.osgi.service.upnp.UPnPLocalStateVariable;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 /**
  * @author Bruce Green
@@ -39,48 +39,32 @@ public class OSGiDataConverter {
     private static final SimpleDateFormat timeTZFormat = new SimpleDateFormat("HH:mm:ssZ");
 
     /*
-	 *  Integer              ui1, ui2, i1, i2, i4, int
-	 *  Long                 ui4, time, time.tz
-	 *  Float                r4, float
-	 *  Double               r8, number, fixed.14.4
-	 *  Character            char
-	 *  String               string, uri, uuid
-	 *  Date                 date, dateTime, dateTime.tz
-	 *  Boolean              boolean
-	 *  byte[]               bin.base64, bin.hex
-	 */
+     * Integer ui1, ui2, i1, i2, i4, int
+     * Long ui4, time, time.tz
+     * Float r4, float
+     * Double r8, number, fixed.14.4
+     * Character char
+     * String string, uri, uuid
+     * Date date, dateTime, dateTime.tz
+     * Boolean boolean
+     * byte[] bin.base64, bin.hex
+     */
 
     private static boolean isInteger(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.UI1) ||
-                        builtin.equals(Builtin.UI2) ||
-                        builtin.equals(Builtin.I1) ||
-                        builtin.equals(Builtin.I2) ||
-                        builtin.equals(Builtin.I4) ||
-                        builtin.equals(Builtin.INT)
-        );
+        return (builtin.equals(Builtin.UI1) || builtin.equals(Builtin.UI2) || builtin.equals(Builtin.I1)
+                || builtin.equals(Builtin.I2) || builtin.equals(Builtin.I4) || builtin.equals(Builtin.INT));
     }
 
     private static boolean isLong(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.UI4) ||
-                        builtin.equals(Builtin.TIME) ||
-                        builtin.equals(Builtin.TIME_TZ)
-        );
+        return (builtin.equals(Builtin.UI4) || builtin.equals(Builtin.TIME) || builtin.equals(Builtin.TIME_TZ));
     }
 
     private static boolean isFloat(Builtin builtin) {
-        return (builtin.equals(Builtin.R4) ||
-                builtin.equals(Builtin.FLOAT)
-        );
+        return (builtin.equals(Builtin.R4) || builtin.equals(Builtin.FLOAT));
     }
 
     private static boolean isDouble(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.R8) ||
-                        builtin.equals(Builtin.NUMBER) ||
-                        builtin.equals(Builtin.FIXED144)
-        );
+        return (builtin.equals(Builtin.R8) || builtin.equals(Builtin.NUMBER) || builtin.equals(Builtin.FIXED144));
     }
 
     private static boolean isCharacter(Builtin builtin) {
@@ -88,38 +72,24 @@ public class OSGiDataConverter {
     }
 
     private static boolean isString(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.STRING) ||
-                        builtin.equals(Builtin.URI) ||
-                        builtin.equals(Builtin.UUID)
-        );
+        return (builtin.equals(Builtin.STRING) || builtin.equals(Builtin.URI) || builtin.equals(Builtin.UUID));
     }
 
     private static boolean isDate(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.DATE) ||
-                        builtin.equals(Builtin.DATETIME) ||
-                        builtin.equals(Builtin.DATETIME_TZ)
-        );
+        return (builtin.equals(Builtin.DATE) || builtin.equals(Builtin.DATETIME)
+                || builtin.equals(Builtin.DATETIME_TZ));
     }
 
     private static boolean isBoolean(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.BOOLEAN)
-        );
+        return (builtin.equals(Builtin.BOOLEAN));
     }
 
     private static boolean isByte(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.BIN_HEX)
-        );
+        return (builtin.equals(Builtin.BIN_HEX));
     }
 
-
     private static boolean isBase64(Builtin builtin) {
-        return (
-                builtin.equals(Builtin.BIN_BASE64)
-        );
+        return (builtin.equals(Builtin.BIN_BASE64));
     }
 
     static public Object toOSGiValue(Datatype type, Object input) {
@@ -151,8 +121,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Integer              ui1, ui2, i1, i2, i4, int
-      */
+     * Integer ui1, ui2, i1, i2, i4, int
+     */
     private static Integer toInteger(Object input) {
         Integer output = null;
 
@@ -170,8 +140,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Long                 ui4, time, time.tz
-      */
+     * Long ui4, time, time.tz
+     */
     private static Long toLong(Object input) {
         Long output = null;
 
@@ -181,11 +151,8 @@ public class OSGiDataConverter {
             output = (long) ((UnsignedVariableInteger) input).getValue().intValue();
         } else if (input instanceof Calendar) {
             Calendar calendar = (Calendar) input;
-            output = toMilliseconds(
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE),
-                    calendar.get(Calendar.SECOND)
-            );
+            output = toMilliseconds(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+                    calendar.get(Calendar.SECOND));
 
         }
 
@@ -193,8 +160,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Float                r4, float
-      */
+     * Float r4, float
+     */
     private static Float toFloat(Object input) {
         Float output = null;
 
@@ -208,8 +175,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Double               r8, number, fixed.14.4
-      */
+     * Double r8, number, fixed.14.4
+     */
     private static Double toDouble(Object input) {
         Double output = null;
 
@@ -221,8 +188,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Character            char
-      */
+     * Character char
+     */
     private static Character toCharacter(Object input) {
         Character output = null;
 
@@ -234,8 +201,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  String               string, uri, uuid
-      */
+     * String string, uri, uuid
+     */
     private static String toString(Object input) {
         String output = null;
 
@@ -251,8 +218,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Date                 date, dateTime, dateTime.tz
-      */
+     * Date date, dateTime, dateTime.tz
+     */
     private static Date toDate(Object input) {
         Date output = null;
 
@@ -266,8 +233,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  Boolean              boolean
-      */
+     * Boolean boolean
+     */
     private static Boolean toBoolean(Object input) {
         Boolean output = null;
 
@@ -279,8 +246,8 @@ public class OSGiDataConverter {
     }
 
     /*
-      *  byte[]               bin.base64, bin.hex
-      */
+     * byte[] bin.base64, bin.hex
+     */
     private static byte[] toByte(Object input) {
         byte[] output = null;
 
@@ -315,7 +282,6 @@ public class OSGiDataConverter {
 
         return output;
     }
-
 
     static public Object tojUPnPValue(String type, Object value) {
         if (value instanceof Date) {

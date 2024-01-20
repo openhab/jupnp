@@ -21,16 +21,16 @@ import org.jupnp.model.message.header.InvalidHeaderException;
  * @author Amit Kumar Mondal - Code Refactoring
  */
 public class SupportedHeader extends DLNAHeader<String[]> {
-    
+
     public SupportedHeader() {
-        setValue(new String[]{});
+        setValue(new String[] {});
     }
 
     @Override
     public void setString(String s) {
         if (s.length() != 0) {
             if (s.endsWith(";"))
-                s = s.substring(0, s.length()-1);
+                s = s.substring(0, s.length() - 1);
             setValue(s.split("\\s*,\\s*"));
             return;
         }

@@ -47,7 +47,8 @@ public class SortCriterion {
     }
 
     public static SortCriterion[] valueOf(String s) {
-        if (s == null || s.length() == 0) return new SortCriterion[0];
+        if (s == null || s.length() == 0)
+            return new SortCriterion[0];
         List<SortCriterion> list = new ArrayList<>();
         String[] criteria = s.split(",");
         for (String criterion : criteria) {
@@ -57,12 +58,14 @@ public class SortCriterion {
     }
 
     public static String toString(SortCriterion[] criteria) {
-        if (criteria == null) return "";
+        if (criteria == null)
+            return "";
         StringBuilder sb = new StringBuilder();
         for (SortCriterion sortCriterion : criteria) {
             sb.append(sortCriterion.toString()).append(",");
         }
-        if (sb.toString().endsWith(",")) sb.deleteCharAt(sb.length()-1);
+        if (sb.toString().endsWith(","))
+            sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
 

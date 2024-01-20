@@ -14,7 +14,14 @@
 
 package example.localservice;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.controlpoint.SubscriptionCallback;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.gena.CancelReason;
@@ -23,17 +30,10 @@ import org.jupnp.model.message.StreamResponseMessage;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
-import org.jupnp.data.SampleData;
 import org.jupnp.util.Reflections;
-import org.junit.jupiter.api.Test;
 
 import example.binarylight.BinaryLightSampleData;
 import example.controlpoint.EventSubscriptionTest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Providing events on service state changes
@@ -102,10 +102,8 @@ class EventProviderTest extends EventSubscriptionTest {
         SubscriptionCallback callback = new SubscriptionCallback(service, 180) {
 
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -137,7 +135,6 @@ class EventProviderTest extends EventSubscriptionTest {
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -175,10 +172,8 @@ class EventProviderTest extends EventSubscriptionTest {
         SubscriptionCallback callback = new SubscriptionCallback(service, 180) {
 
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -212,7 +207,6 @@ class EventProviderTest extends EventSubscriptionTest {
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -242,10 +236,8 @@ class EventProviderTest extends EventSubscriptionTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            createSubscribeResponseMessage(),
-                            createUnsubscribeResponseMessage()
-                        };
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage() };
                     }
                 };
             }
@@ -263,10 +255,8 @@ class EventProviderTest extends EventSubscriptionTest {
         SubscriptionCallback callback = new SubscriptionCallback(service) {
 
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -312,7 +302,6 @@ class EventProviderTest extends EventSubscriptionTest {
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -357,10 +346,8 @@ class EventProviderTest extends EventSubscriptionTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            createSubscribeResponseMessage(),
-                            createUnsubscribeResponseMessage()
-                        };
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage() };
                     }
                 };
             }
@@ -378,10 +365,8 @@ class EventProviderTest extends EventSubscriptionTest {
         SubscriptionCallback callback = new SubscriptionCallback(service) {
 
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -427,7 +412,6 @@ class EventProviderTest extends EventSubscriptionTest {
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -443,7 +427,8 @@ class EventProviderTest extends EventSubscriptionTest {
         Reflections.set(Reflections.getField(serviceImpl.getClass(), "moderatedMinDeltaVar"), serviceImpl, 4);
         service.getManager().getPropertyChangeSupport().firePropertyChange("ModeratedMinDeltaVar", 3, 4);
 
-        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
+        assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT
+                                                                                                   // sequence!
 
         callback.end();
 
@@ -454,6 +439,4 @@ class EventProviderTest extends EventSubscriptionTest {
 
         assertEquals(0, upnpService.getRouter().getSentStreamRequestMessages().size());
     }
-
-
 }

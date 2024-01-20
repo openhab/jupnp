@@ -14,14 +14,11 @@
 
 package org.jupnp.model.meta;
 
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jupnp.model.Validatable;
 import org.jupnp.model.ValidationError;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Version of the UPnP Device Architecture (UDA), defaults to 1.0.
@@ -29,7 +26,7 @@ import java.util.ArrayList;
  * @author Christian Bauer
  */
 public class UDAVersion implements Validatable {
-    
+
     private int major = 1;
     private int minor = 0;
 
@@ -53,18 +50,10 @@ public class UDAVersion implements Validatable {
         List<ValidationError> errors = new ArrayList();
 
         if (getMajor() != 1) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "major",
-                    "UDA major spec version must be 1"
-            ));
+            errors.add(new ValidationError(getClass(), "major", "UDA major spec version must be 1"));
         }
         if (getMajor() < 0) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "minor",
-                    "UDA minor spec version must be equal or greater 0"
-            ));
+            errors.add(new ValidationError(getClass(), "minor", "UDA minor spec version must be equal or greater 0"));
         }
 
         return errors;

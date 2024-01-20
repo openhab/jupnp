@@ -39,46 +39,40 @@ import org.slf4j.LoggerFactory;
 
 class UPnPEventHandler implements EventHandler {
     private final Logger logger = LoggerFactory.getLogger(UPnPEventHandler.class);
-	private ServiceTracker tracker;
-	
-	public UPnPEventHandler(BundleContext context) {
-		String string = String.format("(%s=%s)", 
-			Constants.OBJECTCLASS , UPnPEventListener.class.getName()
-			);
-		try {
-			Filter filter = context.createFilter(string);
-			
-			tracker = new ServiceTracker(context, filter, null);
-			tracker.open();
-		} catch (InvalidSyntaxException e) {
-			logger.error("Cannot create UPnPEventListener tracker.");
-			logger.error(e.getMessage());
-		}
-	}
+    private ServiceTracker tracker;
 
-	@Override
-	public void handleEvent(Event event) {
-		logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "handleEvent", event);
-		
-		ServiceReference[] references = tracker.getServiceReferences();
-		if (references != null) {
-			for (ServiceReference reference : references) {
-				boolean matches = true;
-				Filter filter = (Filter) reference.getProperty(UPnPEventListener.UPNP_FILTER);
-				if (filter != null) {
-					matches = event.matches(filter);
-				}
-				
-				if (matches) {
-					UPnPEventListener listener = (UPnPEventListener) tracker.getService(reference);
-					listener.notifyUPnPEvent(
-						(String) event.getProperty(UPnPDevice.UDN),
-						(String) event.getProperty(UPnPService.ID),
-						(Dictionary) event.getProperty("upnp.events")
-						);
-				}
-			}
-		}
-	}
+    public UPnPEventHandler(BundleContext context) {
+        String string = String.format("(%s=%s)", Constants.OBJECTCLASS, UPnPEventListener.class.getName());
+        try {
+            Filter filter = context.createFilter(string);
+
+            tracker = new ServiceTracker(context, filter, null);
+            tracker.open();
+        } catch (InvalidSyntaxException e) {
+            logger.error("Cannot create UPnPEventListener tracker.");
+            logger.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void handleEvent(Event event) {
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "handleEvent", event);
+
+        ServiceReference[] references = tracker.getServiceReferences();
+        if (references != null) {
+            for (ServiceReference reference : references) {
+                boolean matches = true;
+                Filter filter = (Filter) reference.getProperty(UPnPEventListener.UPNP_FILTER);
+                if (filter != null) {
+                    matches = event.matches(filter);
+                }
+
+                if (matches) {
+                    UPnPEventListener listener = (UPnPEventListener) tracker.getService(reference);
+                    listener.notifyUPnPEvent((String) event.getProperty(UPnPDevice.UDN),
+                            (String) event.getProperty(UPnPService.ID), (Dictionary) event.getProperty("upnp.events"));
+                }
+            }
+        }
+    }
 }
-

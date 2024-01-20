@@ -25,7 +25,7 @@ public class FriendlyNameHeader extends DLNAHeader<String> {
     public FriendlyNameHeader() {
         setValue("");
     }
-    
+
     public FriendlyNameHeader(String name) {
         setValue(name);
     }

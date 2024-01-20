@@ -15,9 +15,9 @@
 
 package org.jupnp.support.model;
 
-import org.jupnp.model.action.ActionArgumentValue;
-
 import java.util.Map;
+
+import org.jupnp.model.action.ActionArgumentValue;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -33,11 +33,9 @@ public class TransportInfo {
     }
 
     public TransportInfo(Map<String, ActionArgumentValue<?>> args) {
-        this(
-                TransportState.valueOrCustomOf((String) args.get("CurrentTransportState").getValue()),
+        this(TransportState.valueOrCustomOf((String) args.get("CurrentTransportState").getValue()),
                 TransportStatus.valueOrCustomOf((String) args.get("CurrentTransportStatus").getValue()),
-                (String) args.get("CurrentSpeed").getValue()
-        );
+                (String) args.get("CurrentSpeed").getValue());
     }
 
     public TransportInfo(TransportState currentTransportState) {
@@ -54,7 +52,8 @@ public class TransportInfo {
         this.currentTransportStatus = currentTransportStatus;
     }
 
-    public TransportInfo(TransportState currentTransportState, TransportStatus currentTransportStatus, String currentSpeed) {
+    public TransportInfo(TransportState currentTransportState, TransportStatus currentTransportStatus,
+            String currentSpeed) {
         this.currentTransportState = currentTransportState;
         this.currentTransportStatus = currentTransportStatus;
         this.currentSpeed = currentSpeed;

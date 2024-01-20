@@ -14,14 +14,14 @@
 
 package org.jupnp.model.meta;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.model.ValidationError;
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The metadata of a service discovered on a remote device.
@@ -38,14 +38,14 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
     final private URI controlURI;
     final private URI eventSubscriptionURI;
 
-    public RemoteService(ServiceType serviceType, ServiceId serviceId,
-                         URI descriptorURI, URI controlURI, URI eventSubscriptionURI) throws ValidationException {
+    public RemoteService(ServiceType serviceType, ServiceId serviceId, URI descriptorURI, URI controlURI,
+            URI eventSubscriptionURI) throws ValidationException {
         this(serviceType, serviceId, descriptorURI, controlURI, eventSubscriptionURI, null, null);
     }
 
-    public RemoteService(ServiceType serviceType, ServiceId serviceId,
-                         URI descriptorURI, URI controlURI, URI eventSubscriptionURI,
-                         Action<RemoteService>[] actions, StateVariable<RemoteService>[] stateVariables) throws ValidationException {
+    public RemoteService(ServiceType serviceType, ServiceId serviceId, URI descriptorURI, URI controlURI,
+            URI eventSubscriptionURI, Action<RemoteService>[] actions, StateVariable<RemoteService>[] stateVariables)
+            throws ValidationException {
         super(serviceType, serviceId, actions, stateVariables);
 
         this.descriptorURI = descriptorURI;
@@ -79,27 +79,15 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
         List<ValidationError> errors = new ArrayList();
 
         if (getDescriptorURI() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "descriptorURI",
-                    "Descriptor location (SCPDURL) is required"
-            ));
+            errors.add(new ValidationError(getClass(), "descriptorURI", "Descriptor location (SCPDURL) is required"));
         }
 
         if (getControlURI() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "controlURI",
-                    "Control URL is required"
-            ));
+            errors.add(new ValidationError(getClass(), "controlURI", "Control URL is required"));
         }
 
         if (getEventSubscriptionURI() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "eventSubscriptionURI",
-                    "Event subscription URL is required"
-            ));
+            errors.add(new ValidationError(getClass(), "eventSubscriptionURI", "Event subscription URL is required"));
         }
 
         return errors;
@@ -109,5 +97,4 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
     public String toString() {
         return "(" + getClass().getSimpleName() + ") Descriptor: " + getDescriptorURI();
     }
-
 }

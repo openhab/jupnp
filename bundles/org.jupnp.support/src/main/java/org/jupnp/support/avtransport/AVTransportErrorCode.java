@@ -24,14 +24,16 @@ public enum AVTransportErrorCode {
     TRANSITION_NOT_AVAILABLE(701, "The immediate transition from current to desired state not supported"),
     NO_CONTENTS(702, "The media does not contain any contents that can be played"),
     READ_ERROR(703, "The media cannot be read"),
-    PLAYBACK_FORMAT_NOT_SUPPORTED(704, "The storage format of the currently loaded media is not supported for playback"),
+    PLAYBACK_FORMAT_NOT_SUPPORTED(704,
+            "The storage format of the currently loaded media is not supported for playback"),
     TRANSPORT_LOCKED(705, "The transport is 'hold locked', e.g. with a keyboard lock"),
     WRITE_ERROR(706, "The media cannot be written"),
     MEDIA_PROTECTED(707, "The media is write-protected or is of a not writable type"),
     RECORD_FORMAT_NOT_SUPPORTED(708, "The storage format of the currently loaded media is not supported for recording"),
     MEDIA_FULL(709, "There is no free space left on the loaded media"),
     SEEKMODE_NOT_SUPPORTED(710, "The specified seek mode is not supported by the device"),
-    ILLEGAL_SEEK_TARGET(711, "The specified seek target is not specified in terms of the seek mode, or is not present on the media"),
+    ILLEGAL_SEEK_TARGET(711,
+            "The specified seek target is not specified in terms of the seek mode, or is not present on the media"),
     PLAYMODE_NOT_SUPPORTED(712, "The specified play mode is not supported by the device"),
     RECORDQUALITYMODE_NOT_SUPPORTED(713, "The specified record quality mode is not supported by the device"),
     ILLEGAL_MIME_TYPE(714, "The specified resource has a MIME-type which is not supported"),
@@ -62,5 +64,4 @@ public enum AVTransportErrorCode {
         }
         return null;
     }
-
 }

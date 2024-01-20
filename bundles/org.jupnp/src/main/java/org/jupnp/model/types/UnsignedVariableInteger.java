@@ -54,8 +54,8 @@ public abstract class UnsignedVariableInteger {
         if (s.startsWith("-")) {
             // Don't throw exception, just cut it!
             // TODO: UPNP VIOLATION: Twonky Player returns "-1" as the track number
-            SpecificationViolationReporter
-                    .report("Invalid negative integer value '" + s + "', assuming value 0!", null);
+            SpecificationViolationReporter.report("Invalid negative integer value '" + s + "', assuming value 0!",
+                    null);
             s = "0";
         }
         setValue(Long.parseLong(s.trim()));
@@ -73,7 +73,8 @@ public abstract class UnsignedVariableInteger {
 
     public void isInRange(long value) throws NumberFormatException {
         if (value < getMinValue() || value > getBits().getMaxValue()) {
-            throw new NumberFormatException("Value must be between " + getMinValue() + " and " + getBits().getMaxValue() + ": " + value);
+            throw new NumberFormatException(
+                    "Value must be between " + getMinValue() + " and " + getBits().getMaxValue() + ": " + value);
         }
     }
 
@@ -94,12 +95,15 @@ public abstract class UnsignedVariableInteger {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         UnsignedVariableInteger that = (UnsignedVariableInteger) o;
 
-        if (value != that.value) return false;
+        if (value != that.value)
+            return false;
 
         return true;
     }
@@ -113,5 +117,4 @@ public abstract class UnsignedVariableInteger {
     public String toString() {
         return Long.toString(value);
     }
-
 }

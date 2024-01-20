@@ -14,11 +14,11 @@
 
 package org.jupnp.binding.staging;
 
-import org.jupnp.model.meta.Action;
-import org.jupnp.model.meta.ActionArgument;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jupnp.model.meta.Action;
+import org.jupnp.model.meta.ActionArgument;
 
 /**
  * @author Christian Bauer
@@ -40,5 +40,4 @@ public class MutableAction {
         }
         return array;
     }
-
 }

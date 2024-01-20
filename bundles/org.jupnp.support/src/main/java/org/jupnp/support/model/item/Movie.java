@@ -15,13 +15,13 @@
 
 package org.jupnp.support.model.item;
 
-import org.jupnp.support.model.Res;
-import org.jupnp.support.model.StorageMedium;
-import org.jupnp.support.model.container.Container;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 import java.util.List;
 
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.Res;
+import org.jupnp.support.model.StorageMedium;
+import org.jupnp.support.model.container.Container;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -108,5 +108,4 @@ public class Movie extends VideoItem {
         }
         return this;
     }
-
 }

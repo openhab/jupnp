@@ -27,6 +27,5 @@ package org.jupnp.internal.compat.java.beans;
  */
 public interface PropertyChangeListener {
 
-	void propertyChange(PropertyChangeEvent event);
-
+    void propertyChange(PropertyChangeEvent event);
 }

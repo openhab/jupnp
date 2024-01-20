@@ -38,5 +38,4 @@ public class MovieGenre extends GenreContainer {
         super(id, parentID, title, creator, childCount);
         setClazz(CLASS);
     }
-
 }

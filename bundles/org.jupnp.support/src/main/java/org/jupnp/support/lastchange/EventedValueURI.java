@@ -15,14 +15,14 @@
 
 package org.jupnp.support.lastchange;
 
+import java.net.URI;
+import java.util.Map;
+
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URI;
-import java.util.Map;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -39,7 +39,7 @@ public class EventedValueURI extends EventedValue<URI> {
     public EventedValueURI(Map.Entry<String, String>[] attributes) {
         super(attributes);
     }
-    
+
     @Override
     protected URI valueOf(String s) {
         try {

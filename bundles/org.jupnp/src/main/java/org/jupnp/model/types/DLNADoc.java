@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * Representing the DLNA document and its version.
  * <p>
  * Someone ignored the device and service type construct of UPnP
- * and invented a new and of course much better device type/version  * construct.
+ * and invented a new and of course much better device type/version * construct.
  * </p>
  *
  * @author Christian Bauer
@@ -39,7 +39,6 @@ public class DLNADoc {
         Version(String s) {
             this.s = s;
         }
-
 
         @Override
         public String toString() {
@@ -79,13 +78,17 @@ public class DLNADoc {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DLNADoc dlnaDoc = (DLNADoc) o;
 
-        if (!devClass.equals(dlnaDoc.devClass)) return false;
-        if (!version.equals(dlnaDoc.version)) return false;
+        if (!devClass.equals(dlnaDoc.devClass))
+            return false;
+        if (!version.equals(dlnaDoc.version))
+            return false;
 
         return true;
     }

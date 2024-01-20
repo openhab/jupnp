@@ -15,16 +15,16 @@
 
 package org.jupnp.support.model.container;
 
-import org.jupnp.support.model.Person;
-import org.jupnp.support.model.PersonWithRole;
-import org.jupnp.support.model.item.Item;
-import org.jupnp.support.model.item.MusicTrack;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.Person;
+import org.jupnp.support.model.PersonWithRole;
+import org.jupnp.support.model.item.Item;
+import org.jupnp.support.model.item.MusicTrack;
 
 /**
  * @author Christian Bauer
@@ -45,7 +45,8 @@ public class MusicAlbum extends Album {
         this(id, parent.getId(), title, creator, childCount, new ArrayList<MusicTrack>());
     }
 
-    public MusicAlbum(String id, Container parent, String title, String creator, Integer childCount, List<MusicTrack> musicTracks) {
+    public MusicAlbum(String id, Container parent, String title, String creator, Integer childCount,
+            List<MusicTrack> musicTracks) {
         this(id, parent.getId(), title, creator, childCount, musicTracks);
     }
 
@@ -53,7 +54,8 @@ public class MusicAlbum extends Album {
         this(id, parentID, title, creator, childCount, new ArrayList<MusicTrack>());
     }
 
-    public MusicAlbum(String id, String parentID, String title, String creator, Integer childCount, List<MusicTrack> musicTracks) {
+    public MusicAlbum(String id, String parentID, String title, String creator, Integer childCount,
+            List<MusicTrack> musicTracks) {
         super(id, parentID, title, creator, childCount);
         setClazz(CLASS);
         addMusicTracks(musicTracks);
@@ -139,7 +141,8 @@ public class MusicAlbum extends Album {
     public MusicTrack[] getMusicTracks() {
         List<MusicTrack> list = new ArrayList<>();
         for (Item item : getItems()) {
-            if (item instanceof MusicTrack) list.add((MusicTrack)item);
+            if (item instanceof MusicTrack)
+                list.add((MusicTrack) item);
         }
         return list.toArray(new MusicTrack[list.size()]);
     }
@@ -156,5 +159,4 @@ public class MusicAlbum extends Album {
             }
         }
     }
-
 }

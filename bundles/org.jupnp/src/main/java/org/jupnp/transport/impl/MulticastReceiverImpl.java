@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
  * Thread-safety is guaranteed through synchronization of methods of this service and
  * by the thread-safe underlying socket.
  * </p>
+ * 
  * @author Christian Bauer
  */
 public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceiverConfigurationImpl> {
@@ -61,10 +62,9 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
         return configuration;
     }
 
-    synchronized public void init(NetworkInterface networkInterface,
-                                  Router router,
-                                  NetworkAddressFactory networkAddressFactory,
-                                  DatagramProcessor datagramProcessor) throws InitializationException {
+    synchronized public void init(NetworkInterface networkInterface, Router router,
+            NetworkAddressFactory networkAddressFactory, DatagramProcessor datagramProcessor)
+            throws InitializationException {
 
         this.router = router;
         this.networkAddressFactory = networkAddressFactory;
@@ -73,14 +73,16 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
         try {
 
-            log.debug("Creating wildcard socket (for receiving multicast datagrams) on port: {}", configuration.getPort());
+            log.debug("Creating wildcard socket (for receiving multicast datagrams) on port: {}",
+                    configuration.getPort());
             multicastAddress = new InetSocketAddress(configuration.getGroup(), configuration.getPort());
 
             socket = new MulticastSocket(configuration.getPort());
             socket.setReuseAddress(true);
             socket.setReceiveBufferSize(32768); // Keep a backlog of incoming datagrams if we are not fast enough
 
-            log.debug("Joining multicast group: {} on network interface: {}", multicastAddress, multicastInterface.getDisplayName());
+            log.debug("Joining multicast group: {} on network interface: {}", multicastAddress,
+                    multicastInterface.getDisplayName());
             socket.joinGroup(multicastAddress, multicastInterface);
 
         } catch (Exception ex) {
@@ -93,7 +95,8 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
             try {
                 log.debug("Leaving multicast group");
                 socket.leaveGroup(multicastAddress, multicastInterface);
-                // Well this doesn't work and I have no idea why I get "java.net.SocketException: Can't assign requested address"
+                // Well this doesn't work and I have no idea why I get "java.net.SocketException: Can't assign requested
+                // address"
             } catch (Exception ex) {
                 log.debug("Could not leave multicast group", ex);
             }
@@ -113,18 +116,12 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
                 socket.receive(datagram);
 
-                InetAddress receivedOnLocalAddress =
-                        networkAddressFactory.getLocalAddress(
-                            multicastInterface,
-                            multicastAddress.getAddress() instanceof Inet6Address,
-                            datagram.getAddress()
-                        );
+                InetAddress receivedOnLocalAddress = networkAddressFactory.getLocalAddress(multicastInterface,
+                        multicastAddress.getAddress() instanceof Inet6Address, datagram.getAddress());
 
-                log.debug(
-                        "UDP datagram received from: {}:{} on local interface: {} and address: {}",
+                log.debug("UDP datagram received from: {}:{} on local interface: {} and address: {}",
                         datagram.getAddress().getHostAddress(), datagram.getPort(), multicastInterface.getDisplayName(),
-                        receivedOnLocalAddress.getHostAddress()
-                );
+                        receivedOnLocalAddress.getHostAddress());
 
                 router.received(datagramProcessor.read(receivedOnLocalAddress, datagram));
 
@@ -146,7 +143,4 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
             throw new RuntimeException(ex);
         }
     }
-
-
 }
-

@@ -14,8 +14,17 @@
 
 package org.jupnp.gena;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
 import org.jupnp.controlpoint.SubscriptionCallback;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.gena.CancelReason;
@@ -35,16 +44,7 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-import org.jupnp.data.SampleData;
 import org.jupnp.util.URIUtil;
-import org.junit.jupiter.api.Test;
-
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class OutgoingSubscriptionLifecycleTest {
 
@@ -54,13 +54,11 @@ class OutgoingSubscriptionLifecycleTest {
             @Override
             protected MockRouter createRouter() {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
-                @Override
-                public StreamResponseMessage[] getStreamResponseMessages() {
-                    return new StreamResponseMessage[]{
-                            createSubscribeResponseMessage(),
-                            createUnsubscribeResponseMessage()
-                    };
-                }
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage() };
+                    }
                 };
             }
         };
@@ -76,10 +74,8 @@ class OutgoingSubscriptionLifecycleTest {
 
         SubscriptionCallback callback = new SubscriptionCallback(service) {
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -114,16 +110,14 @@ class OutgoingSubscriptionLifecycleTest {
         }
 
         // Simulate received event
-        upnpService.getProtocolFactory().createReceivingSync(
-                createEventRequestMessage(upnpService, callback)
-        ).run();
+        upnpService.getProtocolFactory().createReceivingSync(createEventRequestMessage(upnpService, callback)).run();
 
         assertEquals(0L, callback.getSubscription().getCurrentSequence().getValue());
         assertEquals("uuid:1234", callback.getSubscription().getSubscriptionId());
         assertEquals(180, callback.getSubscription().getActualDurationSeconds());
 
-        List<URL> callbackURLs = ((RemoteGENASubscription) callback.getSubscription())
-                .getEventCallbackURLs(upnpService.getRouter().getActiveStreamServers(null), upnpService.getConfiguration().getNamespace());
+        List<URL> callbackURLs = ((RemoteGENASubscription) callback.getSubscription()).getEventCallbackURLs(
+                upnpService.getRouter().getActiveStreamServers(null), upnpService.getConfiguration().getNamespace());
 
         callback.end();
 
@@ -136,39 +130,23 @@ class OutgoingSubscriptionLifecycleTest {
 
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
         assertEquals(2, sentMessages.size());
-        assertEquals(
-                UpnpRequest.Method.SUBSCRIBE,
-                (sentMessages.get(0).getOperation()).getMethod()
-        );
-        assertEquals(
-            1800,
-                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue()
-        );
+        assertEquals(UpnpRequest.Method.SUBSCRIBE, (sentMessages.get(0).getOperation()).getMethod());
+        assertEquals(1800, sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class)
+                .getValue());
 
         assertEquals(1, callbackURLs.size());
-        assertEquals(
-            callbackURLs.get(0),
-                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0)
-        );
+        assertEquals(callbackURLs.get(0), sentMessages.get(0).getHeaders()
+                .getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0));
 
-        assertEquals(
-                UpnpRequest.Method.UNSUBSCRIBE,
-                (sentMessages.get(1).getOperation()).getMethod()
-        );
-        assertEquals(
-            "uuid:1234",
-                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue()
-        );
+        assertEquals(UpnpRequest.Method.UNSUBSCRIBE, (sentMessages.get(1).getOperation()).getMethod());
+        assertEquals("uuid:1234", sentMessages.get(1).getHeaders()
+                .getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue());
     }
 
     protected StreamResponseMessage createSubscribeResponseMessage() {
         StreamResponseMessage msg = new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
-        msg.getHeaders().add(
-                UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234")
-        );
-        msg.getHeaders().add(
-                UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180)
-        );
+        msg.getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234"));
+        msg.getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180));
         return msg;
     }
 
@@ -176,29 +154,22 @@ class OutgoingSubscriptionLifecycleTest {
         return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
     }
 
-    protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService, final SubscriptionCallback callback) {
+    protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService,
+            final SubscriptionCallback callback) {
 
         List<StateVariableValue> values = new ArrayList();
-        values.add(
-                new StateVariableValue(callback.getService().getStateVariable("Status"), false)
-        );
-        values.add(
-                new StateVariableValue(callback.getService().getStateVariable("Target"), true)
-        );
+        values.add(new StateVariableValue(callback.getService().getStateVariable("Status"), false));
+        values.add(new StateVariableValue(callback.getService().getStateVariable("Target"), true));
 
-        OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
-                callback.getSubscription(),
-                URIUtil.toURL(URI.create("http://10.0.0.123/this/is/ignored/anyway")),
-                new UnsignedIntegerFourBytes(0),
-                values
-        );
-        outgoing.getOperation().setUri(
-                upnpService.getConfiguration().getNamespace().getEventCallbackPath(callback.getService())
-        );
+        OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(callback.getSubscription(),
+                URIUtil.toURL(URI.create("http://10.0.0.123/this/is/ignored/anyway")), new UnsignedIntegerFourBytes(0),
+                values);
+        outgoing.getOperation()
+                .setUri(upnpService.getConfiguration().getNamespace().getEventCallbackPath(callback.getService()));
 
         upnpService.getConfiguration().getGenaEventProcessor().writeBody(outgoing);
 
-        return new IncomingEventRequestMessage(outgoing, ((RemoteGENASubscription)callback.getSubscription()).getService());
+        return new IncomingEventRequestMessage(outgoing,
+                ((RemoteGENASubscription) callback.getSubscription()).getService());
     }
-
 }

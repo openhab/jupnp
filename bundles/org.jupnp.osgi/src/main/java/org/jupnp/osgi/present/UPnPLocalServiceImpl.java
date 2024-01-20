@@ -14,6 +14,9 @@
 
 package org.jupnp.osgi.present;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.action.ActionExecutor;
 import org.jupnp.model.meta.Action;
@@ -23,27 +26,21 @@ import org.jupnp.model.state.StateVariableAccessor;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * @author Bruce Green
  */
 public class UPnPLocalServiceImpl<T> extends LocalService<T> {
 
-    public UPnPLocalServiceImpl(ServiceType serviceType, ServiceId serviceId,
-                                Action[] actions, StateVariable[] stateVariables)
-            throws ValidationException {
+    public UPnPLocalServiceImpl(ServiceType serviceType, ServiceId serviceId, Action[] actions,
+            StateVariable[] stateVariables) throws ValidationException {
         super(serviceType, serviceId, actions, stateVariables);
     }
 
-
     public UPnPLocalServiceImpl(ServiceType serviceType, ServiceId serviceId,
-                                Map<Action, ActionExecutor> actionExecutors,
-                                Map<StateVariable, StateVariableAccessor> stateVariableAccessors,
-                                Set<Class> stringConvertibleTypes,
-                                boolean supportsQueryStateVariables) throws ValidationException {
-        super(serviceType, serviceId, actionExecutors, stateVariableAccessors,
-              stringConvertibleTypes, supportsQueryStateVariables);
+            Map<Action, ActionExecutor> actionExecutors,
+            Map<StateVariable, StateVariableAccessor> stateVariableAccessors, Set<Class> stringConvertibleTypes,
+            boolean supportsQueryStateVariables) throws ValidationException {
+        super(serviceType, serviceId, actionExecutors, stateVariableAccessors, stringConvertibleTypes,
+                supportsQueryStateVariables);
     }
 }

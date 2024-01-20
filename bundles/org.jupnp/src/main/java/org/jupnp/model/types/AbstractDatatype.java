@@ -46,7 +46,8 @@ public abstract class AbstractDatatype<V> implements Datatype<V> {
     }
 
     public String getString(V value) throws InvalidValueException {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         if (!isValid(value)) {
             throw new InvalidValueException("Value is not valid: " + value);
         }
@@ -64,12 +65,11 @@ public abstract class AbstractDatatype<V> implements Datatype<V> {
 
     public String getDisplayString() {
         if (this instanceof CustomDatatype) {
-            return ((CustomDatatype)this).getName();
+            return ((CustomDatatype) this).getName();
         } else if (getBuiltin() != null) {
             return getBuiltin().getDescriptorName();
         } else {
             return getValueType().getSimpleName();
         }
     }
-
 }

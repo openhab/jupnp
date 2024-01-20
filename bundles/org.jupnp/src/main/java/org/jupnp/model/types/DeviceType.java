@@ -34,8 +34,8 @@ public class DeviceType {
 
     public static final String UNKNOWN = "UNKNOWN";
 
-    public static final Pattern PATTERN =
-            Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
+    public static final Pattern PATTERN = Pattern
+            .compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
     private String namespace;
     private String type;
@@ -101,8 +101,8 @@ public class DeviceType {
             // urn:schemas-upnp-org:device::1
             matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device::([0-9]+).*").matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 2) {
-                SpecificationViolationReporter
-                        .report("No device type token, defaulting to " + UNKNOWN + ": " + s, null);
+                SpecificationViolationReporter.report("No device type token, defaulting to " + UNKNOWN + ": " + s,
+                        null);
                 return new DeviceType(matcher.group(1), UNKNOWN, Integer.valueOf(matcher.group(2)));
             }
 
@@ -111,23 +111,25 @@ public class DeviceType {
             matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(.+?):([0-9]+).*").matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 3) {
                 String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-                SpecificationViolationReporter.report(
-                        "Replacing invalid device type token '{}' with: {}", matcher.group(2), cleanToken);
+                SpecificationViolationReporter.report("Replacing invalid device type token '{}' with: {}",
+                        matcher.group(2), cleanToken);
                 return new DeviceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
             }
         } catch (RuntimeException e) {
-            throw new InvalidValueException(String.format(
-                "Can't parse device type string (namespace/type/version) '%s'", s), e
-            );
+            throw new InvalidValueException(
+                    String.format("Can't parse device type string (namespace/type/version) '%s'", s), e);
         }
 
         throw new InvalidValueException("Can't parse device type string (namespace/type/version): " + s);
     }
 
     public boolean implementsVersion(DeviceType that) {
-        if (!namespace.equals(that.namespace)) return false;
-        if (!type.equals(that.type)) return false;
-        if (version < that.version) return false;
+        if (!namespace.equals(that.namespace))
+            return false;
+        if (!type.equals(that.type))
+            return false;
+        if (version < that.version)
+            return false;
         return true;
     }
 
@@ -137,19 +139,24 @@ public class DeviceType {
 
     @Override
     public String toString() {
-        return "urn:" + getNamespace() + ":device:" + getType()+ ":" + getVersion();
+        return "urn:" + getNamespace() + ":device:" + getType() + ":" + getVersion();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof DeviceType)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof DeviceType))
+            return false;
 
         DeviceType that = (DeviceType) o;
 
-        if (version != that.version) return false;
-        if (!namespace.equals(that.namespace)) return false;
-        if (!type.equals(that.type)) return false;
+        if (version != that.version)
+            return false;
+        if (!namespace.equals(that.namespace))
+            return false;
+        if (!type.equals(that.type))
+            return false;
 
         return true;
     }

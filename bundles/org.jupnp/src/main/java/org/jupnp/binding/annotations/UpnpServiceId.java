@@ -14,17 +14,17 @@
 
 package org.jupnp.binding.annotations;
 
-import org.jupnp.model.types.UDAServiceId;
-
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jupnp.model.types.UDAServiceId;
 
 @Target({})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpnpServiceId {
 
     String namespace() default UDAServiceId.DEFAULT_NAMESPACE;
+
     String value();
 }

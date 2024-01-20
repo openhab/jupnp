@@ -14,9 +14,14 @@
 
 package org.jupnp.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.UDA10DeviceDescriptorBinderImpl;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleDeviceRoot;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.RemoteDevice;
@@ -35,11 +40,6 @@ import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDN;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleDeviceRoot;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class IncompatibilityTest {
 
@@ -52,10 +52,12 @@ class IncompatibilityTest {
         assertEquals(1, serviceType.getVersion());
     }
 
-    // TODO: UPNP VIOLATION: Azureus sends a URN as the service ID suffix. This doesn't violate the spec but it's unusual...
+    // TODO: UPNP VIOLATION: Azureus sends a URN as the service ID suffix. This doesn't violate the spec but it's
+    // unusual...
     @Test
     void validateAzureusServiceId() {
-        ServiceId serviceId = ServiceId.valueOf("urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager");
+        ServiceId serviceId = ServiceId
+                .valueOf("urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager");
         assertEquals("upnp-org", serviceId.getNamespace());
         assertEquals("urn:schemas-upnp-org:service:ConnectionManager", serviceId.getId());
     }
@@ -78,7 +80,6 @@ class IncompatibilityTest {
         assertEquals(1, serviceType.getVersion());
     }
 
-
     @Test
     void validateIntelServiceId() {
         // The Intel UPnP tools NetworkLight sends a valid but weird identifier with a dot
@@ -94,7 +95,8 @@ class IncompatibilityTest {
 
     @Test
     void readColonRelativePaths() throws Exception {
-        // Funny URI paths for services, breaks the java.net.URI parser so we deal with this special, see UDA10DeviceDescriptorBinderImpl
+        // Funny URI paths for services, breaks the java.net.URI parser so we deal with this special, see
+        // UDA10DeviceDescriptorBinderImpl
         // @formatter:off
         String descriptor =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -160,21 +162,17 @@ class IncompatibilityTest {
     @Test
     void validateCallbackURILength() throws Exception {
         UpnpService upnpService = new MockUpnpService();
-        Device dev = SampleData.createRemoteDevice(
-                new RemoteDeviceIdentity(
-                UDN.uniqueSystemIdentifier("I'mARokuSoundbridge"),
-                1800,
-                SampleDeviceRoot.getDeviceDescriptorURL(),
-                null,
-                SampleData.getLocalBaseAddress()
-        ));
+        Device dev = SampleData
+                .createRemoteDevice(new RemoteDeviceIdentity(UDN.uniqueSystemIdentifier("I'mARokuSoundbridge"), 1800,
+                        SampleDeviceRoot.getDeviceDescriptorURL(), null, SampleData.getLocalBaseAddress()));
         Resource[] resources = upnpService.getConfiguration().getNamespace().getResources(dev);
         boolean test = false;
         for (Resource resource : resources) {
             if (!(resource instanceof ServiceEventCallbackResource)) {
                 continue;
             }
-            if (resource.getPathQuery().toString().length() < 100) test = true;
+            if (resource.getPathQuery().toString().length() < 100)
+                test = true;
         }
         assertTrue(test);
     }
@@ -202,19 +200,13 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: DirecTV HR23/700 High Definition DVR Receiver has invalid default value for statevar
     @Test
     void invalidStateVarDefaultValue() {
-        StateVariable stateVariable = new StateVariable(
-                "Test",
-                new StateVariableTypeDetails(
-                        Datatype.Builtin.STRING.getDatatype(),
-                        "A",
-                        new String[] {"B", "C"},
-                        null
-                )
-        );
+        StateVariable stateVariable = new StateVariable("Test", new StateVariableTypeDetails(
+                Datatype.Builtin.STRING.getDatatype(), "A", new String[] { "B", "C" }, null));
 
         boolean foundA = false;
         for (String s : stateVariable.getTypeDetails().getAllowedValues()) {
-            if (s.equals("A")) foundA = true;
+            if (s.equals("A"))
+                foundA = true;
         }
         assertTrue(foundA);
         assertEquals(3, stateVariable.getTypeDetails().getAllowedValues().length);
@@ -224,15 +216,8 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: Onkyo NR-TX808 has a bug in RenderingControl service, switching maximum/minimum value range
     @Test
     void switchedMinimumMaximumValueRange() {
-        StateVariable stateVariable = new StateVariable(
-                "Test",
-                new StateVariableTypeDetails(
-                        Datatype.Builtin.I2.getDatatype(),
-                        null,
-                        null,
-                        new StateVariableAllowedValueRange(100, 0)
-                )
-        );
+        StateVariable stateVariable = new StateVariable("Test", new StateVariableTypeDetails(
+                Datatype.Builtin.I2.getDatatype(), null, null, new StateVariableAllowedValueRange(100, 0)));
 
         assertEquals(0, stateVariable.validate().size());
         assertEquals(0, stateVariable.getTypeDetails().getAllowedValueRange().getMinimum());
@@ -290,7 +275,7 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in device type token
     @Test
     void parseEyeTVDeviceType() {
-        DeviceType deviceType= DeviceType.valueOf("urn:schemas-microsoft-com:device:pbda:tuner:1");
+        DeviceType deviceType = DeviceType.valueOf("urn:schemas-microsoft-com:device:pbda:tuner:1");
         assertEquals("schemas-microsoft-com", deviceType.getNamespace());
         assertEquals("pbda-tuner", deviceType.getType());
         assertEquals(1, deviceType.getVersion());
@@ -299,7 +284,7 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in service type token
     @Test
     void parseEyeTVServiceType() {
-        ServiceType serviceType= ServiceType.valueOf("urn:schemas-microsoft-com:service:pbda:tuner:1");
+        ServiceType serviceType = ServiceType.valueOf("urn:schemas-microsoft-com:service:pbda:tuner:1");
         assertEquals("schemas-microsoft-com", serviceType.getNamespace());
         assertEquals("pbda-tuner", serviceType.getType());
         assertEquals(1, serviceType.getVersion());
@@ -308,7 +293,7 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of 'service'
     @Test
     void parseCeytonInfiniTVServiceType() {
-        ServiceType serviceType= ServiceType.valueOf("urn:schemas-opencable-com:serviceId:dri2:debug:1");
+        ServiceType serviceType = ServiceType.valueOf("urn:schemas-opencable-com:serviceId:dri2:debug:1");
         assertEquals("schemas-opencable-com", serviceType.getNamespace());
         assertEquals("dri2-debug", serviceType.getType());
         assertEquals(1, serviceType.getVersion());
@@ -326,7 +311,7 @@ class IncompatibilityTest {
     // TODO: UPNP VIOLATION: Escient doesn't provide any device type token
     @Test
     void parseEscientDeviceType() {
-        DeviceType deviceType= DeviceType.valueOf("urn:schemas-upnp-org:device::1");
+        DeviceType deviceType = DeviceType.valueOf("urn:schemas-upnp-org:device::1");
         assertEquals("schemas-upnp-org", deviceType.getNamespace());
         assertEquals(DeviceType.UNKNOWN, deviceType.getType());
         assertEquals(1, deviceType.getVersion());
@@ -340,5 +325,4 @@ class IncompatibilityTest {
         assertEquals(ServiceId.UNKNOWN, serviceId.getId());
         assertEquals("urn:upnp-org:serviceId:" + ServiceId.UNKNOWN, serviceId.toString());
     }
-
 }

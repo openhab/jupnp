@@ -15,9 +15,9 @@
 
 package org.jupnp.support.model.item;
 
-import org.jupnp.support.model.Res;
-
 import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import org.jupnp.support.model.Res;
 
 /**
  * @author Christian Bauer

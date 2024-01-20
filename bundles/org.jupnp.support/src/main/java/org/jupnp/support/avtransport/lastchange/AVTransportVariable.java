@@ -15,18 +15,6 @@
 
 package org.jupnp.support.avtransport.lastchange;
 
-import org.jupnp.model.types.UnsignedIntegerFourBytes;
-import org.jupnp.support.model.PlayMode;
-import org.jupnp.support.model.RecordQualityMode;
-import org.jupnp.support.model.TransportAction;
-import org.jupnp.support.model.StorageMedium;
-import org.jupnp.support.lastchange.EventedValue;
-import org.jupnp.support.lastchange.EventedValueEnum;
-import org.jupnp.support.lastchange.EventedValueEnumArray;
-import org.jupnp.support.lastchange.EventedValueString;
-import org.jupnp.support.lastchange.EventedValueURI;
-import org.jupnp.support.lastchange.EventedValueUnsignedIntegerFourBytes;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,7 +22,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.jupnp.model.types.InvalidValueException;
+import org.jupnp.model.types.UnsignedIntegerFourBytes;
+import org.jupnp.support.lastchange.EventedValue;
+import org.jupnp.support.lastchange.EventedValueEnum;
+import org.jupnp.support.lastchange.EventedValueEnumArray;
+import org.jupnp.support.lastchange.EventedValueString;
+import org.jupnp.support.lastchange.EventedValueURI;
+import org.jupnp.support.lastchange.EventedValueUnsignedIntegerFourBytes;
+import org.jupnp.support.model.PlayMode;
+import org.jupnp.support.model.RecordQualityMode;
+import org.jupnp.support.model.StorageMedium;
+import org.jupnp.support.model.TransportAction;
 
 /**
  * @author Christian Bauer
@@ -44,33 +44,34 @@ public class AVTransportVariable {
 
     public static Set<Class<? extends EventedValue<?>>> ALL = new HashSet<Class<? extends EventedValue<?>>>() {
         private static final long serialVersionUID = 4641676953130701810L;
-    {
-        add(TransportState.class);
-        add(TransportStatus.class);
-        add(RecordStorageMedium.class);
-        add(PossibleRecordStorageMedia.class);
-        add(PossiblePlaybackStorageMedia.class);
-        add(CurrentPlayMode.class);
-        add(TransportPlaySpeed.class);
-        add(RecordMediumWriteStatus.class);
-        add(CurrentRecordQualityMode.class);
-        add(PossibleRecordQualityModes.class);
-        add(NumberOfTracks.class);
-        add(CurrentTrack.class);
-        add(CurrentTrackDuration.class);
-        add(CurrentMediaDuration.class);
-        add(CurrentTrackMetaData.class);
-        add(CurrentTrackURI.class);
-        add(AVTransportURI.class);
-        add(NextAVTransportURI.class);
-        add(AVTransportURIMetaData.class);
-        add(NextAVTransportURIMetaData.class);
-        add(CurrentTransportActions.class);
-        add(RelativeTimePosition.class);
-        add(AbsoluteTimePosition.class);
-        add(RelativeCounterPosition.class);
-        add(AbsoluteCounterPosition.class);
-    }};
+        {
+            add(TransportState.class);
+            add(TransportStatus.class);
+            add(RecordStorageMedium.class);
+            add(PossibleRecordStorageMedia.class);
+            add(PossiblePlaybackStorageMedia.class);
+            add(CurrentPlayMode.class);
+            add(TransportPlaySpeed.class);
+            add(RecordMediumWriteStatus.class);
+            add(CurrentRecordQualityMode.class);
+            add(PossibleRecordQualityModes.class);
+            add(NumberOfTracks.class);
+            add(CurrentTrack.class);
+            add(CurrentTrackDuration.class);
+            add(CurrentMediaDuration.class);
+            add(CurrentTrackMetaData.class);
+            add(CurrentTrackURI.class);
+            add(AVTransportURI.class);
+            add(NextAVTransportURI.class);
+            add(AVTransportURIMetaData.class);
+            add(NextAVTransportURIMetaData.class);
+            add(CurrentTransportActions.class);
+            add(RelativeTimePosition.class);
+            add(AbsoluteTimePosition.class);
+            add(RelativeCounterPosition.class);
+            add(AbsoluteCounterPosition.class);
+        }
+    };
 
     public static class TransportState extends EventedValueEnum<org.jupnp.support.model.TransportState> {
         public TransportState(org.jupnp.support.model.TransportState avTransportState) {
@@ -177,7 +178,8 @@ public class AVTransportVariable {
         }
     }
 
-    public static class RecordMediumWriteStatus extends EventedValueEnum<org.jupnp.support.model.RecordMediumWriteStatus> {
+    public static class RecordMediumWriteStatus
+            extends EventedValueEnum<org.jupnp.support.model.RecordMediumWriteStatus> {
         public RecordMediumWriteStatus(org.jupnp.support.model.RecordMediumWriteStatus recordMediumWriteStatus) {
             super(recordMediumWriteStatus);
         }
@@ -326,7 +328,7 @@ public class AVTransportVariable {
         }
     }
 
-    public static class CurrentTransportActions extends EventedValueEnumArray<TransportAction>{
+    public static class CurrentTransportActions extends EventedValueEnumArray<TransportAction> {
         public CurrentTransportActions(TransportAction[] e) {
             super(e);
         }
@@ -337,7 +339,8 @@ public class AVTransportVariable {
 
         @Override
         protected TransportAction[] enumValueOf(String[] names) {
-            if (names == null) return new TransportAction[0];
+            if (names == null)
+                return new TransportAction[0];
             List<TransportAction> list = new ArrayList<>();
             for (String s : names) {
                 list.add(TransportAction.valueOf(s));
@@ -346,7 +349,7 @@ public class AVTransportVariable {
         }
     }
 
-	public static class RelativeTimePosition extends EventedValueString {
+    public static class RelativeTimePosition extends EventedValueString {
         public RelativeTimePosition(String value) {
             super(value);
         }
@@ -385,5 +388,4 @@ public class AVTransportVariable {
             super(attributes);
         }
     }
-
 }

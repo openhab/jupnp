@@ -62,59 +62,105 @@ import org.jupnp.binding.annotations.*;
  * and UPnP datatypes are shown in the following table:
  * </p>
  * <table class="infotable halfwidth" border="1">
- * <thead><tr>
+ * <thead>
+ * <tr>
  * <th>Java Type</th>
  * <th class="halfwidth">UPnP Datatype</th>
- * </tr></thead>
+ * </tr>
+ * </thead>
  * <tbody>
- * <tr><td><code>java.lang.Boolean</code></td><td><code>boolean</code></td></tr>
- * <tr><td><code>boolean</code></td><td><code>boolean</code></td></tr>
- * <tr><td><code>java.lang.Short</code></td><td><code>i2</code></td></tr>
- * <tr><td><code>short</code></td><td><code>i2</code></td></tr>
- * <tr><td><code>java.lang.Integer</code></td><td><code>i4</code></td></tr>
- * <tr><td><code>int</code></td><td><code>i4</code></td></tr>
- * <tr><td><code>org.jupnp.model.types.UnsignedIntegerOneByte</code></td><td><code>ui1</code></td></tr>
- * <tr><td><code>org.jupnp.model.types.UnsignedIntegerTwoBytes</code></td><td><code>ui2</code></td></tr>
- * <tr><td><code>org.jupnp.model.types.UnsignedIntegerFourBytes</code></td><td><code>ui4</code></td></tr>
- * <tr><td><code>java.lang.Float</code></td><td><code>r4</code></td></tr>
- * <tr><td><code>float</code></td><td><code>r4</code></td></tr>
- * <tr><td><code>java.lang.Double</code></td><td><code>float</code></td></tr>
- * <tr><td><code>double</code></td><td><code>float</code></td></tr>
- * <tr><td><code>java.lang.Character</code></td><td><code>char</code></td></tr>
- * <tr><td><code>char</code></td><td><code>char</code></td></tr>
- * <tr><td><code>java.lang.String</code></td><td><code>string</code></td></tr>
- * <tr><td><code>java.util.Calendar</code></td><td><code>datetime</code></td></tr>
- * <tr><td><code>byte[]</code></td><td><code>bin.base64</code></td></tr>
- * <tr><td><code>java.net.URI</code></td><td><code>uri</code></td></tr>
+ * <tr>
+ * <td><code>java.lang.Boolean</code></td>
+ * <td><code>boolean</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>boolean</code></td>
+ * <td><code>boolean</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.Short</code></td>
+ * <td><code>i2</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>short</code></td>
+ * <td><code>i2</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.Integer</code></td>
+ * <td><code>i4</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>int</code></td>
+ * <td><code>i4</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>org.jupnp.model.types.UnsignedIntegerOneByte</code></td>
+ * <td><code>ui1</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>org.jupnp.model.types.UnsignedIntegerTwoBytes</code></td>
+ * <td><code>ui2</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>org.jupnp.model.types.UnsignedIntegerFourBytes</code></td>
+ * <td><code>ui4</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.Float</code></td>
+ * <td><code>r4</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>float</code></td>
+ * <td><code>r4</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.Double</code></td>
+ * <td><code>float</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>double</code></td>
+ * <td><code>float</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.Character</code></td>
+ * <td><code>char</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>char</code></td>
+ * <td><code>char</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.lang.String</code></td>
+ * <td><code>string</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.util.Calendar</code></td>
+ * <td><code>datetime</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>byte[]</code></td>
+ * <td><code>bin.base64</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>java.net.URI</code></td>
+ * <td><code>uri</code></td>
+ * </tr>
  * </tbody>
  * </table>
  *
  */
-@UpnpService(                                                                   // DOC:INC1
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
+@UpnpService( // DOC:INC1
+        serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
 
 )
-@UpnpStateVariables(
-        {
-                @UpnpStateVariable(
-                        name = "Target",
-                        defaultValue = "0",
-                        sendEvents = false
-                ),
-                @UpnpStateVariable(
-                        name = "Status",
-                        defaultValue = "0"
-                )
-        }
-)
+@UpnpStateVariables({ @UpnpStateVariable(name = "Target", defaultValue = "0", sendEvents = false),
+        @UpnpStateVariable(name = "Status", defaultValue = "0") })
 public class SwitchPowerAnnotatedClass {
 
     private boolean power;
 
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
         power = newTargetValue;
         System.out.println("Switch is: " + power);
     }
@@ -128,4 +174,4 @@ public class SwitchPowerAnnotatedClass {
     public boolean getStatus() {
         return power;
     }
-}                                                                               // DOC:INC1
+} // DOC:INC1

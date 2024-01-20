@@ -53,16 +53,9 @@ public class EventedValueChannelLoudness extends EventedValue<ChannelLoudness> {
     @SuppressWarnings("unchecked")
     @Override
     public Map.Entry<String, String>[] getAttributes() {
-        return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<>(
-                        "val",
-                        new BooleanDatatype().getString(getValue().getLoudness())
-                ),
-                new AbstractMap.SimpleEntry<>(
-                        "channel",
-                        getValue().getChannel().name()
-                )
-        };
+        return new Map.Entry[] {
+                new AbstractMap.SimpleEntry<>("val", new BooleanDatatype().getString(getValue().getLoudness())),
+                new AbstractMap.SimpleEntry<>("channel", getValue().getChannel().name()) };
     }
 
     @Override

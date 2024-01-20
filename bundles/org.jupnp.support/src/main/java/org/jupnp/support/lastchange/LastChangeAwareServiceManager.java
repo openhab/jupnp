@@ -15,14 +15,14 @@
 
 package org.jupnp.support.lastchange;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.jupnp.model.DefaultServiceManager;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Handles the "initial" event state for GENA subscriptions to services using LastChange.
@@ -45,14 +45,12 @@ public class LastChangeAwareServiceManager<T extends LastChangeDelegator> extend
 
     protected final LastChangeParser lastChangeParser;
 
-    public LastChangeAwareServiceManager(LocalService<T> localService,
-                                         LastChangeParser lastChangeParser) {
+    public LastChangeAwareServiceManager(LocalService<T> localService, LastChangeParser lastChangeParser) {
         this(localService, null, lastChangeParser);
     }
 
-    public LastChangeAwareServiceManager(LocalService<T> localService,
-                                         Class<T> serviceClass,
-                                         LastChangeParser lastChangeParser) {
+    public LastChangeAwareServiceManager(LocalService<T> localService, Class<T> serviceClass,
+            LastChangeParser lastChangeParser) {
         super(localService, serviceClass);
         this.lastChangeParser = lastChangeParser;
     }
@@ -70,12 +68,12 @@ public class LastChangeAwareServiceManager<T extends LastChangeDelegator> extend
         // 1. The lock() of the DefaultServiceManager
         // 2. The monitor/synchronized of the LastChange.fire() method
 
-    	lock();
-    	try {
+        lock();
+        try {
             getImplementation().getLastChange().fire(getPropertyChangeSupport());
-    	} finally {
-    		unlock();
-    	}
+        } finally {
+            unlock();
+        }
     }
 
     @Override
@@ -104,5 +102,4 @@ public class LastChangeAwareServiceManager<T extends LastChangeDelegator> extend
         values.add(new StateVariableValue(variable, lc.toString()));
         return values;
     }
-
 }

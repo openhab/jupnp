@@ -14,8 +14,17 @@
 
 package org.jupnp.gena;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.InetAddress;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
 import org.jupnp.controlpoint.SubscriptionCallback;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.NetworkAddress;
@@ -36,16 +45,7 @@ import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.protocol.ReceivingSync;
-import org.jupnp.data.SampleData;
 import org.jupnp.util.URIUtil;
-import org.junit.jupiter.api.Test;
-
-import java.net.InetAddress;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class OutgoingSubscriptionFailureTest {
 
@@ -60,11 +60,10 @@ class OutgoingSubscriptionFailureTest {
                         // Simulate network switched off
                         return List.of();
                     }
+
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                                createSubscribeResponseMessage()
-                        };
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage() };
                     }
                 };
             }
@@ -81,10 +80,8 @@ class OutgoingSubscriptionFailureTest {
 
         SubscriptionCallback callback = new SubscriptionCallback(service) {
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 // Should fail without response and exception (only TRACE log message)
                 assertNull(responseStatus);
                 assertNull(exception);
@@ -108,7 +105,6 @@ class OutgoingSubscriptionFailureTest {
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -125,10 +121,8 @@ class OutgoingSubscriptionFailureTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            createSubscribeResponseMessage(),
-                            createUnsubscribeResponseMessage()
-                        };
+                        return new StreamResponseMessage[] { createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage() };
                     }
                 };
             }
@@ -145,10 +139,8 @@ class OutgoingSubscriptionFailureTest {
 
         SubscriptionCallback callback = new SubscriptionCallback(service) {
             @Override
-            protected void failed(GENASubscription subscription,
-                                  UpnpResponse responseStatus,
-                                  Exception exception,
-                                  String defaultMsg) {
+            protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+                    String defaultMsg) {
                 testAssertions.add(false);
             }
 
@@ -176,18 +168,19 @@ class OutgoingSubscriptionFailureTest {
                 assertEquals(2, numberOfMissedEvents);
                 testAssertions.add(true);
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
 
-        ReceivingSync prot = upnpService.getProtocolFactory().createReceivingSync(
-                createEventRequestMessage(upnpService, callback, 0)
-        );
+        ReceivingSync prot = upnpService.getProtocolFactory()
+                .createReceivingSync(createEventRequestMessage(upnpService, callback, 0));
         prot.run();
 
-        prot = upnpService.getProtocolFactory().createReceivingSync(
-                createEventRequestMessage(upnpService, callback, 3) // Note the missing event messages
+        prot = upnpService.getProtocolFactory().createReceivingSync(createEventRequestMessage(upnpService, callback, 3) // Note
+                                                                                                                        // the
+                                                                                                                        // missing
+                                                                                                                        // event
+                                                                                                                        // messages
         );
         prot.run();
 
@@ -201,34 +194,19 @@ class OutgoingSubscriptionFailureTest {
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
 
         assertEquals(2, sentMessages.size());
-        assertEquals(
-                UpnpRequest.Method.SUBSCRIBE,
-                sentMessages.get(0).getOperation().getMethod()
-        );
-        assertEquals(
-                Integer.valueOf(1800),
-                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue()
-        );
+        assertEquals(UpnpRequest.Method.SUBSCRIBE, sentMessages.get(0).getOperation().getMethod());
+        assertEquals(Integer.valueOf(1800), sentMessages.get(0).getHeaders()
+                .getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue());
 
-        assertEquals(
-                UpnpRequest.Method.UNSUBSCRIBE,
-                sentMessages.get(1).getOperation().getMethod()
-        );
-        assertEquals(
-                "uuid:1234",
-                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue()
-        );
-
+        assertEquals(UpnpRequest.Method.UNSUBSCRIBE, sentMessages.get(1).getOperation().getMethod());
+        assertEquals("uuid:1234", sentMessages.get(1).getHeaders()
+                .getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue());
     }
 
     protected StreamResponseMessage createSubscribeResponseMessage() {
         StreamResponseMessage msg = new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
-        msg.getHeaders().add(
-                UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234")
-        );
-        msg.getHeaders().add(
-                UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180)
-        );
+        msg.getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader("uuid:1234"));
+        msg.getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(180));
         return msg;
     }
 
@@ -236,29 +214,22 @@ class OutgoingSubscriptionFailureTest {
         return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
     }
 
-    protected IncomingEventRequestMessage createEventRequestMessage(UpnpService upnpService, SubscriptionCallback callback, int sequence) {
+    protected IncomingEventRequestMessage createEventRequestMessage(UpnpService upnpService,
+            SubscriptionCallback callback, int sequence) {
 
         List<StateVariableValue> values = new ArrayList();
-        values.add(
-                new StateVariableValue(callback.getService().getStateVariable("Status"), false)
-        );
-        values.add(
-                new StateVariableValue(callback.getService().getStateVariable("Target"), true)
-        );
+        values.add(new StateVariableValue(callback.getService().getStateVariable("Status"), false));
+        values.add(new StateVariableValue(callback.getService().getStateVariable("Target"), true));
 
-        OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
-                callback.getSubscription(),
-                URIUtil.toURL(URI.create("http://10.0.0.123/some/callback")),
-                new UnsignedIntegerFourBytes(sequence),
-                values
-        );
-        outgoing.getOperation().setUri(
-                upnpService.getConfiguration().getNamespace().getEventCallbackPath(callback.getService())
-        );
+        OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(callback.getSubscription(),
+                URIUtil.toURL(URI.create("http://10.0.0.123/some/callback")), new UnsignedIntegerFourBytes(sequence),
+                values);
+        outgoing.getOperation()
+                .setUri(upnpService.getConfiguration().getNamespace().getEventCallbackPath(callback.getService()));
 
         upnpService.getConfiguration().getGenaEventProcessor().writeBody(outgoing);
 
-        return new IncomingEventRequestMessage(outgoing, ((RemoteGENASubscription) callback.getSubscription()).getService());
+        return new IncomingEventRequestMessage(outgoing,
+                ((RemoteGENASubscription) callback.getSubscription()).getService());
     }
-
 }

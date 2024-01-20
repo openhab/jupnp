@@ -15,9 +15,9 @@
 
 package org.jupnp.support.lastchange;
 
-import org.jupnp.model.types.Datatype;
-
 import java.util.Map;
+
+import org.jupnp.model.types.Datatype;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -37,5 +37,4 @@ public class EventedValueString extends EventedValue<String> {
     protected Datatype<?> getDatatype() {
         return Datatype.Builtin.STRING.getDatatype();
     }
-
 }

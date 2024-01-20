@@ -71,7 +71,8 @@ import org.slf4j.LoggerFactory;
  * <code>AVTransport</code>.
  * </p>
  * <p>
- * Override the {@link #createTransport(org.jupnp.model.types.UnsignedIntegerFourBytes, org.jupnp.support.lastchange.LastChange)}
+ * Override the
+ * {@link #createTransport(org.jupnp.model.types.UnsignedIntegerFourBytes, org.jupnp.support.lastchange.LastChange)}
  * method to utilize a subclass of <code>AVTransport</code> as your internal state holder.
  * </p>
  *
@@ -90,29 +91,25 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
 
     @SuppressWarnings("unchecked")
     public AVTransportService(Class<? extends AVTransportStateMachine> stateMachineDefinition,
-                              Class<? extends AbstractState<?>> initialState) {
-        this(stateMachineDefinition, initialState, (Class<T>)AVTransport.class);
+            Class<? extends AbstractState<?>> initialState) {
+        this(stateMachineDefinition, initialState, (Class<T>) AVTransport.class);
     }
 
     public AVTransportService(Class<? extends AVTransportStateMachine> stateMachineDefinition,
-                              Class<? extends AbstractState<?>> initialState,
-                              Class<T> transportClass) {
+            Class<? extends AbstractState<?>> initialState, Class<T> transportClass) {
         this.stateMachineDefinition = stateMachineDefinition;
         this.initialState = initialState;
         this.transportClass = transportClass;
     }
 
-    public void setAVTransportURI(UnsignedIntegerFourBytes instanceId,
-                                  String currentURI,
-                                  String currentURIMetaData) throws AVTransportException {
+    public void setAVTransportURI(UnsignedIntegerFourBytes instanceId, String currentURI, String currentURIMetaData)
+            throws AVTransportException {
 
         URI uri;
         try {
             uri = new URI(currentURI);
         } catch (Exception ex) {
-            throw new AVTransportException(
-                    ErrorCode.INVALID_ARGS, "CurrentURI can not be null or malformed"
-            );
+            throw new AVTransportException(ErrorCode.INVALID_ARGS, "CurrentURI can not be null or malformed");
         }
 
         try {
@@ -123,17 +120,14 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         }
     }
 
-    public void setNextAVTransportURI(UnsignedIntegerFourBytes instanceId,
-                                      String nextURI,
-                                      String nextURIMetaData) throws AVTransportException {
+    public void setNextAVTransportURI(UnsignedIntegerFourBytes instanceId, String nextURI, String nextURIMetaData)
+            throws AVTransportException {
 
         URI uri;
         try {
             uri = new URI(nextURI);
         } catch (Exception ex) {
-            throw new AVTransportException(
-                    ErrorCode.INVALID_ARGS, "NextURI can not be null or malformed"
-            );
+            throw new AVTransportException(ErrorCode.INVALID_ARGS, "NextURI can not be null or malformed");
         }
 
         try {
@@ -147,32 +141,23 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void setPlayMode(UnsignedIntegerFourBytes instanceId, String newPlayMode) throws AVTransportException {
         AVTransport transport = findStateMachine(instanceId).getCurrentState().getTransport();
         try {
-            transport.setTransportSettings(
-                    new TransportSettings(
-                            PlayMode.valueOf(newPlayMode),
-                            transport.getTransportSettings().getRecQualityMode()
-                    )
-            );
+            transport.setTransportSettings(new TransportSettings(PlayMode.valueOf(newPlayMode),
+                    transport.getTransportSettings().getRecQualityMode()));
         } catch (IllegalArgumentException ex) {
-            throw new AVTransportException(
-                    AVTransportErrorCode.PLAYMODE_NOT_SUPPORTED, "Unsupported play mode: " + newPlayMode
-            );
+            throw new AVTransportException(AVTransportErrorCode.PLAYMODE_NOT_SUPPORTED,
+                    "Unsupported play mode: " + newPlayMode);
         }
     }
 
-    public void setRecordQualityMode(UnsignedIntegerFourBytes instanceId, String newRecordQualityMode) throws AVTransportException {
+    public void setRecordQualityMode(UnsignedIntegerFourBytes instanceId, String newRecordQualityMode)
+            throws AVTransportException {
         AVTransport transport = findStateMachine(instanceId).getCurrentState().getTransport();
         try {
-            transport.setTransportSettings(
-                    new TransportSettings(
-                            transport.getTransportSettings().getPlayMode(),
-                            RecordQualityMode.valueOrExceptionOf(newRecordQualityMode)
-                    )
-            );
+            transport.setTransportSettings(new TransportSettings(transport.getTransportSettings().getPlayMode(),
+                    RecordQualityMode.valueOrExceptionOf(newRecordQualityMode)));
         } catch (IllegalArgumentException ex) {
-            throw new AVTransportException(
-                    AVTransportErrorCode.RECORDQUALITYMODE_NOT_SUPPORTED, "Unsupported record quality mode: " + newRecordQualityMode
-            );
+            throw new AVTransportException(AVTransportErrorCode.RECORDQUALITYMODE_NOT_SUPPORTED,
+                    "Unsupported record quality mode: " + newRecordQualityMode);
         }
     }
 
@@ -231,11 +216,10 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void seek(UnsignedIntegerFourBytes instanceId, String unit, String target) throws AVTransportException {
         SeekMode seekMode;
         try {
-             seekMode = SeekMode.valueOrExceptionOf(unit);
+            seekMode = SeekMode.valueOrExceptionOf(unit);
         } catch (IllegalArgumentException ex) {
-            throw new AVTransportException(
-                    AVTransportErrorCode.SEEKMODE_NOT_SUPPORTED, "Unsupported seek mode: " + unit
-            );
+            throw new AVTransportException(AVTransportErrorCode.SEEKMODE_NOT_SUPPORTED,
+                    "Unsupported seek mode: " + unit);
         }
 
         try {
@@ -284,11 +268,13 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         }
     }
 
-    protected AVTransportStateMachine findStateMachine(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    protected AVTransportStateMachine findStateMachine(UnsignedIntegerFourBytes instanceId)
+            throws AVTransportException {
         return findStateMachine(instanceId, true);
     }
 
-    protected AVTransportStateMachine findStateMachine(UnsignedIntegerFourBytes instanceId, boolean createDefaultTransport) throws AVTransportException {
+    protected AVTransportStateMachine findStateMachine(UnsignedIntegerFourBytes instanceId,
+            boolean createDefaultTransport) throws AVTransportException {
         synchronized (stateMachines) {
             long id = instanceId.getValue();
             AVTransportStateMachine stateMachine = stateMachines.get(id);
@@ -306,16 +292,11 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
 
     protected AVTransportStateMachine createStateMachine(UnsignedIntegerFourBytes instanceId) {
         // Create a proxy that delegates all calls to the right state implementation, working on the T state
-        return StateMachineBuilder.build(
-                stateMachineDefinition,
-                initialState,
-                new Class[]{transportClass},
-                new Object[]{createTransport(instanceId, getLastChange())}
-        );
+        return StateMachineBuilder.build(stateMachineDefinition, initialState, new Class[] { transportClass },
+                new Object[] { createTransport(instanceId, getLastChange()) });
     }
 
     protected AVTransport createTransport(UnsignedIntegerFourBytes instanceId, LastChange lastChange) {
         return new AVTransport(instanceId, lastChange, StorageMedium.NETWORK);
     }
-
 }

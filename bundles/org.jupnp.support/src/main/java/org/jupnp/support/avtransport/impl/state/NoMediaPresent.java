@@ -15,6 +15,8 @@
 
 package org.jupnp.support.avtransport.impl.state;
 
+import java.net.URI;
+
 import org.jupnp.support.avtransport.lastchange.AVTransportVariable;
 import org.jupnp.support.model.AVTransport;
 import org.jupnp.support.model.TransportAction;
@@ -22,8 +24,6 @@ import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URI;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -39,25 +39,17 @@ public abstract class NoMediaPresent<T extends AVTransport> extends AbstractStat
 
     public void onEntry() {
         logger.debug("Setting transport state to NO_MEDIA_PRESENT");
-        getTransport().setTransportInfo(
-                new TransportInfo(
-                        TransportState.NO_MEDIA_PRESENT,
-                        getTransport().getTransportInfo().getCurrentTransportStatus(),
-                        getTransport().getTransportInfo().getCurrentSpeed()
-                )
-        );
-        getTransport().getLastChange().setEventedValue(
-                getTransport().getInstanceId(),
+        getTransport().setTransportInfo(new TransportInfo(TransportState.NO_MEDIA_PRESENT,
+                getTransport().getTransportInfo().getCurrentTransportStatus(),
+                getTransport().getTransportInfo().getCurrentSpeed()));
+        getTransport().getLastChange().setEventedValue(getTransport().getInstanceId(),
                 new AVTransportVariable.TransportState(TransportState.NO_MEDIA_PRESENT),
-                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions())
-        );
+                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions()));
     }
 
     public abstract Class<? extends AbstractState<?>> setTransportURI(URI uri, String metaData);
 
     public TransportAction[] getCurrentTransportActions() {
-        return new TransportAction[] {
-                TransportAction.Stop
-        };
+        return new TransportAction[] { TransportAction.Stop };
     }
 }

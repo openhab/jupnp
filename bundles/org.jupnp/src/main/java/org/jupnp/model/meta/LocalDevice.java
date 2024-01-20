@@ -14,6 +14,12 @@
 
 package org.jupnp.model.meta;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.jupnp.model.Namespace;
 import org.jupnp.model.ValidationError;
 import org.jupnp.model.ValidationException;
@@ -30,12 +36,6 @@ import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDN;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * The metadata of a device created on this host, by application code.
  *
@@ -50,110 +50,112 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       LocalService service) throws ValidationException {
-        super(identity, type, details, null, new LocalService[]{service});
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, LocalService service)
+            throws ValidationException {
+        super(identity, type, details, null, new LocalService[] { service });
         this.deviceDetailsProvider = null;
     }
 
     public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetailsProvider deviceDetailsProvider,
-                       LocalService service) throws ValidationException {
-        super(identity, type, null, null, new LocalService[]{service});
+            LocalService service) throws ValidationException {
+        super(identity, type, null, null, new LocalService[] { service });
         this.deviceDetailsProvider = deviceDetailsProvider;
     }
 
     public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetailsProvider deviceDetailsProvider,
-                       LocalService service, LocalDevice embeddedDevice) throws ValidationException {
-        super(identity, type, null, null, new LocalService[]{service}, new LocalDevice[]{embeddedDevice});
+            LocalService service, LocalDevice embeddedDevice) throws ValidationException {
+        super(identity, type, null, null, new LocalService[] { service }, new LocalDevice[] { embeddedDevice });
         this.deviceDetailsProvider = deviceDetailsProvider;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       LocalService service, LocalDevice embeddedDevice) throws ValidationException {
-        super(identity, type, details, null, new LocalService[]{service}, new LocalDevice[]{embeddedDevice});
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, LocalService service,
+            LocalDevice embeddedDevice) throws ValidationException {
+        super(identity, type, details, null, new LocalService[] { service }, new LocalDevice[] { embeddedDevice });
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       LocalService[] services) throws ValidationException {
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, LocalService[] services)
+            throws ValidationException {
         super(identity, type, details, null, services);
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, LocalService[] services,
+            LocalDevice[] embeddedDevices) throws ValidationException {
         super(identity, type, details, null, services, embeddedDevices);
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon icon, LocalService service) throws ValidationException {
-        super(identity, type, details, new Icon[]{icon}, new LocalService[]{service});
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon icon, LocalService service)
+            throws ValidationException {
+        super(identity, type, details, new Icon[] { icon }, new LocalService[] { service });
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon icon, LocalService service, LocalDevice embeddedDevice) throws ValidationException {
-        super(identity, type, details, new Icon[]{icon}, new LocalService[]{service}, new LocalDevice[]{embeddedDevice});
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon icon, LocalService service,
+            LocalDevice embeddedDevice) throws ValidationException {
+        super(identity, type, details, new Icon[] { icon }, new LocalService[] { service },
+                new LocalDevice[] { embeddedDevice });
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon icon, LocalService[] services) throws ValidationException {
-        super(identity, type, details, new Icon[]{icon}, services);
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon icon,
+            LocalService[] services) throws ValidationException {
+        super(identity, type, details, new Icon[] { icon }, services);
+        this.deviceDetailsProvider = null;
+    }
+
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetailsProvider deviceDetailsProvider, Icon icon,
+            LocalService[] services) throws ValidationException {
+        super(identity, type, null, new Icon[] { icon }, services);
+        this.deviceDetailsProvider = deviceDetailsProvider;
+    }
+
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon icon,
+            LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
+        super(identity, type, details, new Icon[] { icon }, services, embeddedDevices);
+        this.deviceDetailsProvider = null;
+    }
+
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon[] icons,
+            LocalService service) throws ValidationException {
+        super(identity, type, details, icons, new LocalService[] { service });
+        this.deviceDetailsProvider = null;
+    }
+
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon[] icons,
+            LocalService service, LocalDevice embeddedDevice) throws ValidationException {
+        super(identity, type, details, icons, new LocalService[] { service }, new LocalDevice[] { embeddedDevice });
         this.deviceDetailsProvider = null;
     }
 
     public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetailsProvider deviceDetailsProvider,
-                       Icon icon, LocalService[] services) throws ValidationException {
-        super(identity, type, null, new Icon[]{icon}, services);
+            Icon[] icons, LocalService service, LocalDevice embeddedDevice) throws ValidationException {
+        super(identity, type, null, icons, new LocalService[] { service }, new LocalDevice[] { embeddedDevice });
         this.deviceDetailsProvider = deviceDetailsProvider;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon icon, LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
-        super(identity, type, details, new Icon[]{icon}, services, embeddedDevices);
-        this.deviceDetailsProvider = null;
-    }
-
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon[] icons, LocalService service) throws ValidationException {
-        super(identity, type, details, icons, new LocalService[]{service});
-        this.deviceDetailsProvider = null;
-    }
-
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon[] icons, LocalService service, LocalDevice embeddedDevice) throws ValidationException {
-        super(identity, type, details, icons, new LocalService[]{service}, new LocalDevice[]{embeddedDevice});
-        this.deviceDetailsProvider = null;
-    }
-
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetailsProvider deviceDetailsProvider,
-                       Icon[] icons, LocalService service, LocalDevice embeddedDevice) throws ValidationException {
-        super(identity, type, null, icons, new LocalService[]{service}, new LocalDevice[]{embeddedDevice});
-        this.deviceDetailsProvider = deviceDetailsProvider;
-    }
-
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon[] icons, LocalService[] services) throws ValidationException {
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon[] icons,
+            LocalService[] services) throws ValidationException {
         super(identity, type, details, icons, services);
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details,
-                       Icon[] icons, LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
+    public LocalDevice(DeviceIdentity identity, DeviceType type, DeviceDetails details, Icon[] icons,
+            LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
         super(identity, type, details, icons, services, embeddedDevices);
         this.deviceDetailsProvider = null;
     }
 
     public LocalDevice(DeviceIdentity identity, UDAVersion version, DeviceType type, DeviceDetails details,
-                       Icon[] icons, LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
+            Icon[] icons, LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
         super(identity, version, type, details, icons, services, embeddedDevices);
         this.deviceDetailsProvider = null;
     }
 
-    public LocalDevice(DeviceIdentity identity, UDAVersion version, DeviceType type, DeviceDetailsProvider deviceDetailsProvider,
-                       Icon[] icons, LocalService[] services, LocalDevice[] embeddedDevices) throws ValidationException {
+    public LocalDevice(DeviceIdentity identity, UDAVersion version, DeviceType type,
+            DeviceDetailsProvider deviceDetailsProvider, Icon[] icons, LocalService[] services,
+            LocalDevice[] embeddedDevices) throws ValidationException {
         super(identity, version, type, null, icons, services, embeddedDevices);
         this.deviceDetailsProvider = deviceDetailsProvider;
     }
@@ -181,25 +183,18 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
     }
 
     @Override
-    public LocalDevice newInstance(UDN udn, UDAVersion version, DeviceType type, DeviceDetails details,
-                                   Icon[] icons, LocalService[] services, List<LocalDevice> embeddedDevices)
-            throws ValidationException {
-        return new LocalDevice(
-                new DeviceIdentity(udn, getIdentity().getMaxAgeSeconds()),
-                version, type, details, icons,
+    public LocalDevice newInstance(UDN udn, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons,
+            LocalService[] services, List<LocalDevice> embeddedDevices) throws ValidationException {
+        return new LocalDevice(new DeviceIdentity(udn, getIdentity().getMaxAgeSeconds()), version, type, details, icons,
                 services,
-                embeddedDevices.size() > 0 ? embeddedDevices.toArray(new LocalDevice[embeddedDevices.size()]) : null
-        );
+                embeddedDevices.size() > 0 ? embeddedDevices.toArray(new LocalDevice[embeddedDevices.size()]) : null);
     }
 
     @Override
-    public LocalService newInstance(ServiceType serviceType, ServiceId serviceId,
-                                    URI descriptorURI, URI controlURI, URI eventSubscriptionURI,
-                                    Action<LocalService>[] actions, StateVariable<LocalService>[] stateVariables) throws ValidationException {
-        return new LocalService(
-                serviceType, serviceId,
-                actions, stateVariables
-        );
+    public LocalService newInstance(ServiceType serviceType, ServiceId serviceId, URI descriptorURI, URI controlURI,
+            URI eventSubscriptionURI, Action<LocalService>[] actions, StateVariable<LocalService>[] stateVariables)
+            throws ValidationException {
+        return new LocalService(serviceType, serviceId, actions, stateVariables);
     }
 
     @Override
@@ -227,25 +222,16 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
         if (hasIcons()) {
             for (Icon icon : getIcons()) {
                 if (icon.getUri().isAbsolute()) {
-                    errors.add(new ValidationError(
-                            getClass(),
-                            "icons",
-                            "Local icon URI can not be absolute: " + icon.getUri()
-                    ));
+                    errors.add(new ValidationError(getClass(), "icons",
+                            "Local icon URI can not be absolute: " + icon.getUri()));
                 }
                 if (icon.getUri().toString().contains("../")) {
-                    errors.add(new ValidationError(
-                            getClass(),
-                            "icons",
-                            "Local icon URI must not contain '../': " + icon.getUri()
-                    ));
+                    errors.add(new ValidationError(getClass(), "icons",
+                            "Local icon URI must not contain '../': " + icon.getUri()));
                 }
                 if (icon.getUri().toString().startsWith("/")) {
-                    errors.add(new ValidationError(
-                            getClass(),
-                            "icons",
-                            "Local icon URI must not start with '/': " + icon.getUri()
-                    ));
+                    errors.add(new ValidationError(getClass(), "icons",
+                            "Local icon URI must not start with '/': " + icon.getUri()));
                 }
             }
         }
@@ -267,19 +253,13 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
         // Services
         for (LocalService service : getServices()) {
 
-            discovered.add(
-                    new ServiceDescriptorResource(namespace.getDescriptorPath(service), service)
-            );
+            discovered.add(new ServiceDescriptorResource(namespace.getDescriptorPath(service), service));
 
             // Control
-            discovered.add(
-                    new ServiceControlResource(namespace.getControlPath(service), service)
-            );
+            discovered.add(new ServiceControlResource(namespace.getControlPath(service), service));
 
             // Event subscription
-            discovered.add(
-                    new ServiceEventSubscriptionResource(namespace.getEventSubscriptionPath(service), service)
-            );
+            discovered.add(new ServiceEventSubscriptionResource(namespace.getEventSubscriptionPath(service), service));
 
         }
 
@@ -300,7 +280,8 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
 
     @Override
     public LocalDevice getRoot() {
-        if (isRoot()) return this;
+        if (isRoot())
+            return this;
         LocalDevice current = this;
         while (current.getParentDevice() != null) {
             current = current.getParentDevice();
@@ -312,5 +293,4 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
     public LocalDevice findDevice(UDN udn) {
         return find(udn, this);
     }
-
 }

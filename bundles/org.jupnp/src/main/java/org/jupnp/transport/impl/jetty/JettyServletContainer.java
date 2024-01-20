@@ -14,20 +14,18 @@
 
 package org.jupnp.transport.impl.jetty;
 
-import javax.servlet.Servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
-import org.eclipse.jetty.server.Connector;
+import javax.servlet.Servlet;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-
+import org.jupnp.transport.spi.ServletContainerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.jupnp.transport.spi.ServletContainerAdapter;
 
 /**
  * A singleton wrapper of a <code>org.eclipse.jetty.server.Server</code>.
@@ -74,12 +72,11 @@ public class JettyServletContainer implements ServletContainerAdapter {
     @Override
     public synchronized void registerServlet(String contextPath, Servlet servlet) {
         if (server.getHandler() != null) {
-            log.trace("Server handler is already set: {}", server.getHandler() );
+            log.trace("Server handler is already set: {}", server.getHandler());
             return;
         }
         log.info("Registering UPnP servlet under context path: {}", contextPath);
-        ServletContextHandler servletHandler =
-            new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        ServletContextHandler servletHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         if (contextPath != null && contextPath.length() > 0) {
             servletHandler.setContextPath(contextPath);
         }
@@ -119,5 +116,4 @@ public class JettyServletContainer implements ServletContainerAdapter {
     protected void resetServer() {
         server = new Server(); // Has its own QueuedThreadPool
     }
-
 }

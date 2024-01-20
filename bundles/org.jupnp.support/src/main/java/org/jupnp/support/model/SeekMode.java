@@ -16,12 +16,12 @@
 package org.jupnp.support.model;
 
 /**
- *    ui4 (ABS_COUNT, REL_COUNT, TRACK_NR, TAPE-INDEX, FRAME)
- *    time (ABS_TIME, REL_TIME)
- *    float (CHANNEL_FREQ, in Hz)
- *   
- *   @author Christian Bauer - Initial Contribution
- *   @author Amit Kumar Mondal - Code Refactoring
+ * ui4 (ABS_COUNT, REL_COUNT, TRACK_NR, TAPE-INDEX, FRAME)
+ * time (ABS_TIME, REL_TIME)
+ * float (CHANNEL_FREQ, in Hz)
+ * 
+ * @author Christian Bauer - Initial Contribution
+ * @author Amit Kumar Mondal - Code Refactoring
  */
 public enum SeekMode {
 

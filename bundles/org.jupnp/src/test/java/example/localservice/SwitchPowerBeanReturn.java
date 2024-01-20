@@ -32,10 +32,7 @@ import org.jupnp.binding.annotations.*;
  * on the returned JavaBean.
  * </p>
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerBeanReturn {
 
     @UpnpStateVariable(defaultValue = "0", sendEvents = false)
@@ -45,8 +42,7 @@ public class SwitchPowerBeanReturn {
     private boolean status = false;
 
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
         target = newTargetValue;
         status = newTargetValue;
         System.out.println("Switch is: " + status);
@@ -57,13 +53,8 @@ public class SwitchPowerBeanReturn {
         return target;
     }
 
-    @UpnpAction(                                    // DOC:INC1
-            name = "GetStatus",
-            out = @UpnpOutputArgument(
-                    name = "ResultStatus",
-                    getterName = "getWrapped"
-            )
-    )
+    @UpnpAction( // DOC:INC1
+            name = "GetStatus", out = @UpnpOutputArgument(name = "ResultStatus", getterName = "getWrapped"))
     public StatusHolder getStatus() {
         return new StatusHolder(status);
     }
@@ -78,6 +69,5 @@ public class SwitchPowerBeanReturn {
         public boolean getWrapped() {
             return wrapped;
         }
-    }                                               // DOC:INC1
-
+    } // DOC:INC1
 }

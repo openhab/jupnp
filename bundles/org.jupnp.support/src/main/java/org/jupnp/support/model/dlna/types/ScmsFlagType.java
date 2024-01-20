@@ -22,7 +22,7 @@ public class ScmsFlagType {
 
     private boolean copyright;
     private boolean original;
-    
+
     public ScmsFlagType() {
         this.copyright = true;
         this.original = true;
@@ -32,7 +32,7 @@ public class ScmsFlagType {
         this.copyright = copyright;
         this.original = original;
     }
-    
+
     /**
      * @return the copyright
      */

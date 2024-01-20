@@ -49,11 +49,8 @@ public class DataAdapter implements UPnPEventListener {
     public DataAdapter(LocalService<LocalDevice> service) {
         propertyChangeSupport = new PropertyChangeSupport(this);
         LocalDevice device = service.getDevice();
-        String string = String.format(
-                "(&(%s=%s)(%s=%s))",
-                UPnPDevice.UDN, device.getIdentity().getUdn().getIdentifierString(),
-                UPnPService.ID, service.getServiceId()
-        );
+        String string = String.format("(&(%s=%s)(%s=%s))", UPnPDevice.UDN,
+                device.getIdentity().getUdn().getIdentifierString(), UPnPService.ID, service.getServiceId());
         log.trace("filter: {}", string);
 
         try {
@@ -71,8 +68,7 @@ public class DataAdapter implements UPnPEventListener {
 
     @Override
     public void notifyUPnPEvent(String deviceId, String serviceId, Dictionary events) {
-		log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "notifyUPnPEvent", deviceId, serviceId,
-				events);
+        log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "notifyUPnPEvent", deviceId, serviceId, events);
 
         for (String key : (List<String>) Collections.list(events.keys())) {
             Object value = events.get(key);

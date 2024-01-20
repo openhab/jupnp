@@ -15,13 +15,13 @@
 
 package org.jupnp.support.model;
 
-import org.w3c.dom.Element;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import org.w3c.dom.Element;
 
 /**
  * @author Christian Bauer
@@ -51,16 +51,16 @@ public abstract class DIDLObject {
             this.value = value;
             // TODO Not sure this is a good fix for https://github.com/4thline/cling/issues/62
             this.descriptorName = descriptorName == null
-                ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
-                : descriptorName;
+                    ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
+                    : descriptorName;
         }
 
         protected Property(V value, String descriptorName, List<Property<DIDLAttribute>> attributes) {
             this.value = value;
             // TODO Not sure this is a good fix for https://github.com/4thline/cling/issues/62
             this.descriptorName = descriptorName == null
-                ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
-                : descriptorName;
+                    ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
+                    : descriptorName;
             this.attributes.addAll(attributes);
         }
 
@@ -79,10 +79,8 @@ public abstract class DIDLObject {
         public void setOnElement(Element element) {
             element.setTextContent(toString());
             for (Property<DIDLAttribute> attr : attributes) {
-                element.setAttributeNS(
-                        attr.getValue().getNamespaceURI(),
-                        attr.getValue().getPrefix() + ':' + attr.getDescriptorName(),
-                        attr.getValue().getValue());
+                element.setAttributeNS(attr.getValue().getNamespaceURI(),
+                        attr.getValue().getPrefix() + ':' + attr.getDescriptorName(), attr.getValue().getValue());
             }
         }
 
@@ -206,18 +204,18 @@ public abstract class DIDLObject {
                 }
             }
         }
-        
+
         public static abstract class SEC {
 
             public interface NAMESPACE extends Property.NAMESPACE {
                 public static final String URI = "http://www.sec.co.kr/";
             }
-            
+
             public static class CAPTIONINFOEX extends Property<URI> implements NAMESPACE {
                 public CAPTIONINFOEX() {
                     this(null);
                 }
-                
+
                 public CAPTIONINFOEX(URI value) {
                     super(value, "CaptionInfoEx");
                 }
@@ -226,12 +224,12 @@ public abstract class DIDLObject {
                     super(value, "CaptionInfoEx", attributes);
                 }
             }
-            
+
             public static class CAPTIONINFO extends Property<URI> implements NAMESPACE {
                 public CAPTIONINFO() {
                     this(null);
                 }
-                
+
                 public CAPTIONINFO(URI value) {
                     super(value, "CaptionInfo");
                 }
@@ -240,7 +238,7 @@ public abstract class DIDLObject {
                     super(value, "CaptionInfo", attributes);
                 }
             }
-            
+
             public static class TYPE extends Property<DIDLAttribute> implements NAMESPACE {
                 public TYPE() {
                     this(null);
@@ -250,8 +248,6 @@ public abstract class DIDLObject {
                     super(value, "type");
                 }
             }
-            
-            
         }
 
         public static abstract class UPNP {
@@ -553,7 +549,6 @@ public abstract class DIDLObject {
                 }
             }
 
-
             public static class USER_ANNOTATION extends Property<String> implements NAMESPACE {
                 public USER_ANNOTATION() {
                     this(null);
@@ -633,7 +628,6 @@ public abstract class DIDLObject {
 
         public boolean equals(DIDLObject instance) {
             return getValue().equals(instance.getClazz().getValue());
-
         }
     }
 
@@ -656,20 +650,14 @@ public abstract class DIDLObject {
     }
 
     protected DIDLObject(DIDLObject other) {
-        this(other.getId(),
-             other.getParentID(),
-             other.getTitle(),
-             other.getCreator(),
-             other.isRestricted(),
-             other.getWriteStatus(),
-             other.getClazz(),
-             other.getResources(),
-             other.getProperties(),
-             other.getDescMetadata()
-        );
+        this(other.getId(), other.getParentID(), other.getTitle(), other.getCreator(), other.isRestricted(),
+                other.getWriteStatus(), other.getClazz(), other.getResources(), other.getProperties(),
+                other.getDescMetadata());
     }
 
-    protected DIDLObject(String id, String parentID, String title, String creator, boolean restricted, WriteStatus writeStatus, Class clazz, List<Res> resources, List<Property<?>> properties, List<DescMeta<?>> descMetadata) {
+    protected DIDLObject(String id, String parentID, String title, String creator, boolean restricted,
+            WriteStatus writeStatus, Class clazz, List<Res> resources, List<Property<?>> properties,
+            List<DescMeta<?>> descMetadata) {
         this.id = id;
         this.parentID = parentID;
         this.title = title;
@@ -773,13 +761,15 @@ public abstract class DIDLObject {
     }
 
     public DIDLObject addProperty(Property property) {
-        if (property == null) return this;
+        if (property == null)
+            return this;
         getProperties().add(property);
         return this;
     }
 
     public DIDLObject replaceFirstProperty(Property<?> property) {
-        if (property == null) return this;
+        if (property == null)
+            return this;
         Iterator<Property<?>> it = getProperties().iterator();
         while (it.hasNext()) {
             Property<?> p = it.next();
@@ -790,14 +780,17 @@ public abstract class DIDLObject {
         return this;
     }
 
-    public DIDLObject replaceProperties(java.lang.Class<? extends Property<?>> propertyClass, Property<?>[] properties) {
-        if (properties.length == 0) return this;
+    public DIDLObject replaceProperties(java.lang.Class<? extends Property<?>> propertyClass,
+            Property<?>[] properties) {
+        if (properties.length == 0)
+            return this;
         removeProperties(propertyClass);
         return addProperties(properties);
     }
 
     public DIDLObject addProperties(Property<?>[] properties) {
-        if (properties == null) return this;
+        if (properties == null)
+            return this;
         for (Property<?> property : properties) {
             addProperty(property);
         }
@@ -816,14 +809,16 @@ public abstract class DIDLObject {
 
     public boolean hasProperty(java.lang.Class<? extends Property<?>> propertyClass) {
         for (Property<?> property : getProperties()) {
-            if (propertyClass.isInstance(property)) return true;
+            if (propertyClass.isInstance(property))
+                return true;
         }
         return false;
     }
 
     public <V> Property<V> getFirstProperty(java.lang.Class<? extends Property<V>> propertyClass) {
         for (Property property : getProperties()) {
-            if (propertyClass.isInstance(property)) return property;
+            if (propertyClass.isInstance(property))
+                return property;
         }
         return null;
     }
@@ -831,7 +826,8 @@ public abstract class DIDLObject {
     public <V> Property<V> getLastProperty(java.lang.Class<? extends Property<V>> propertyClass) {
         Property found = null;
         for (Property property : getProperties()) {
-            if (propertyClass.isInstance(property)) found = property;
+            if (propertyClass.isInstance(property))
+                found = property;
         }
         return found;
     }
@@ -882,12 +878,15 @@ public abstract class DIDLObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DIDLObject that = (DIDLObject) o;
 
-        if (!id.equals(that.id)) return false;
+        if (!id.equals(that.id))
+            return false;
 
         return true;
     }

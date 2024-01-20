@@ -49,9 +49,7 @@ public class ValidationError {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName()
-                + " (Class: " + getClazz().getSimpleName()
-                + ", propertyName: " + getPropertyName() + "): "
-                + message;
+        return getClass().getSimpleName() + " (Class: " + getClazz().getSimpleName() + ", propertyName: "
+                + getPropertyName() + "): " + message;
     }
 }

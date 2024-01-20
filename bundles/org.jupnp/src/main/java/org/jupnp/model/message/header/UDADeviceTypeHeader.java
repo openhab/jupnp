@@ -14,10 +14,10 @@
 
 package org.jupnp.model.message.header;
 
+import java.net.URI;
+
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.UDADeviceType;
-
-import java.net.URI;
 
 /**
  * @author Christian Bauer
@@ -43,5 +43,4 @@ public class UDADeviceTypeHeader extends DeviceTypeHeader {
             throw new InvalidHeaderException("Invalid UDA device type header value, " + ex.getMessage(), ex);
         }
     }
-
 }

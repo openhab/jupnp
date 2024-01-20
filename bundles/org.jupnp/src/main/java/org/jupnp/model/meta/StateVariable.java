@@ -14,7 +14,6 @@
 
 package org.jupnp.model.meta;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,14 +74,9 @@ public class StateVariable<S extends Service> implements Validatable {
         List<ValidationError> errors = new ArrayList();
 
         if (getName() == null || getName().length() == 0) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "name",
-                    "StateVariable without name of: " + getService()
-            ));
+            errors.add(new ValidationError(getClass(), "name", "StateVariable without name of: " + getService()));
         } else if (!ModelUtil.isValidUDAName(getName())) {
-            SpecificationViolationReporter.report(getService().getDevice(),
-                    "Invalid state variable name: {}", this);
+            SpecificationViolationReporter.report(getService().getDevice(), "Invalid state variable name: {}", this);
         }
 
         errors.addAll(getTypeDetails().validate());
@@ -91,17 +85,12 @@ public class StateVariable<S extends Service> implements Validatable {
     }
 
     public boolean isModeratedNumericType() {
-        return Datatype.Builtin.isNumeric(
-                getTypeDetails().getDatatype().getBuiltin()
-        ) && getEventDetails().getEventMinimumDelta() > 0;
+        return Datatype.Builtin.isNumeric(getTypeDetails().getDatatype().getBuiltin())
+                && getEventDetails().getEventMinimumDelta() > 0;
     }
 
     public StateVariable<S> deepCopy() {
-        return new StateVariable(
-                getName(),
-                getTypeDetails(),
-                getEventDetails()
-        );
+        return new StateVariable(getName(), getTypeDetails(), getEventDetails());
     }
 
     @Override

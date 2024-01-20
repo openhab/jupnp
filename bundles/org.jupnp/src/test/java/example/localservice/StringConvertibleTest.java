@@ -14,10 +14,13 @@
 
 package example.localservice;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.DefaultServiceManager;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.ActionArgument;
@@ -27,9 +30,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
-import org.jupnp.data.SampleData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * String value converters
@@ -70,23 +70,17 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class StringConvertibleTest {
 
-        static LocalDevice createTestDevice(Class serviceClass) throws Exception {
+    static LocalDevice createTestDevice(Class serviceClass) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
 
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new DeviceType("mydomain", "CustomDevice", 1),
-                new DeviceDetails("A Custom Device"),
-                svc
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new DeviceType("mydomain", "CustomDevice", 1),
+                new DeviceDetails("A Custom Device"), svc);
     }
 
     static Object[][] getDevices() throws Exception {
-        return new LocalDevice[][]{
-                {createTestDevice(MyServiceWithStringConvertibles.class)},
-        };
+        return new LocalDevice[][] { { createTestDevice(MyServiceWithStringConvertibles.class) }, };
     }
 
     @ParameterizedTest

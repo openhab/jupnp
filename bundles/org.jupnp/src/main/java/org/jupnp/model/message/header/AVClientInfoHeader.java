@@ -21,20 +21,20 @@ package org.jupnp.model.message.header;
  */
 public class AVClientInfoHeader extends UpnpHeader<String> {
 
-	public AVClientInfoHeader() {
+    public AVClientInfoHeader() {
     }
 
-	public AVClientInfoHeader(String s) {
+    public AVClientInfoHeader(String s) {
         setValue(s);
     }
 
-	@Override
-	public void setString(String s) throws InvalidHeaderException {
-		setValue(s);
-	}
+    @Override
+    public void setString(String s) throws InvalidHeaderException {
+        setValue(s);
+    }
 
-	@Override
-	public String getString() {
-		return getValue();
-	}
+    @Override
+    public String getString() {
+        return getValue();
+    }
 }

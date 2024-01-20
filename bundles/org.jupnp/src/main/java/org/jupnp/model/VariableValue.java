@@ -45,13 +45,14 @@ public class VariableValue {
      * @param datatype The type of the variable.
      * @param value The value of the variable.
      * @throws InvalidValueException If the value is invalid for the given datatype, or if
-     *         its string representation is invalid in XML.
+     *             its string representation is invalid in XML.
      */
     public VariableValue(Datatype datatype, Object value) throws InvalidValueException {
         this.datatype = datatype;
         this.value = value instanceof String ? datatype.valueOf((String) value) : value;
 
-		if (ModelUtil.ANDROID_RUNTIME) return; // Skipping validation on Android
+        if (ModelUtil.ANDROID_RUNTIME)
+            return; // Skipping validation on Android
 
         // We can skip this validation because we can catch invalid values
         // of any remote service (action invocation, event value) before, they are
@@ -70,8 +71,8 @@ public class VariableValue {
         // created.
 
         if (!getDatatype().isValid(getValue()))
-            throw new InvalidValueException("Invalid value for " + getDatatype() +": " + getValue());
-        
+            throw new InvalidValueException("Invalid value for " + getDatatype() + ": " + getValue());
+
         logInvalidXML(toString());
     }
 
@@ -90,10 +91,8 @@ public class VariableValue {
         int i = 0;
         while (i < s.length()) {
             cp = s.codePointAt(i);
-            if (!(cp == 0x9 || cp == 0xA || cp == 0xD ||
-                    (cp >= 0x20 && cp <= 0xD7FF) ||
-                    (cp >= 0xE000 && cp <= 0xFFFD) ||
-                    (cp >= 0x10000 && cp <= 0x10FFFF))) {
+            if (!(cp == 0x9 || cp == 0xA || cp == 0xD || (cp >= 0x20 && cp <= 0xD7FF) || (cp >= 0xE000 && cp <= 0xFFFD)
+                    || (cp >= 0x10000 && cp <= 0x10FFFF))) {
                 SpecificationViolationReporter.report("Found invalid XML char code: {}", cp);
             }
             i += Character.charCount(cp);
@@ -104,5 +103,4 @@ public class VariableValue {
     public String toString() {
         return getDatatype().getString(getValue());
     }
-
 }

@@ -32,11 +32,12 @@ public class TimeSeekRangeHeader extends DLNAHeader<TimeSeekRangeType> {
     public TimeSeekRangeHeader(TimeSeekRangeType timeSeekRange) {
         setValue(timeSeekRange);
     }
+
     @Override
     public void setString(String s) {
         if (s.length() != 0) {
             String[] params = s.split(" ");
-            if (params.length>0) {
+            if (params.length > 0) {
                 try {
                     TimeSeekRangeType t = new TimeSeekRangeType(NormalPlayTimeRange.valueOf(params[0]));
                     if (params.length > 1) {
@@ -45,7 +46,8 @@ public class TimeSeekRangeHeader extends DLNAHeader<TimeSeekRangeType> {
                     setValue(t);
                     return;
                 } catch (InvalidValueException ex) {
-                    throw new InvalidHeaderException("Invalid TimeSeekRange header value: " + s + "; "+ex.getMessage(), ex);
+                    throw new InvalidHeaderException(
+                            "Invalid TimeSeekRange header value: " + s + "; " + ex.getMessage(), ex);
                 }
             }
         }
@@ -56,8 +58,8 @@ public class TimeSeekRangeHeader extends DLNAHeader<TimeSeekRangeType> {
     public String getString() {
         TimeSeekRangeType t = getValue();
         String s = t.getNormalPlayTimeRange().getString();
-        if (t.getBytesRange()!=null) s+= " "+t.getBytesRange().getString(true);
+        if (t.getBytesRange() != null)
+            s += " " + t.getBytesRange().getString(true);
         return s;
     }
-    
 }

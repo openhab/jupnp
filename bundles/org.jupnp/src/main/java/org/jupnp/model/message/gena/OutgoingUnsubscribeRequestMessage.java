@@ -26,18 +26,13 @@ import org.jupnp.model.message.header.UpnpHeader;
  */
 public class OutgoingUnsubscribeRequestMessage extends StreamRequestMessage {
 
-    public OutgoingUnsubscribeRequestMessage(RemoteGENASubscription subscription,
-                                             UpnpHeaders extraHeaders) {
+    public OutgoingUnsubscribeRequestMessage(RemoteGENASubscription subscription, UpnpHeaders extraHeaders) {
 
         super(UpnpRequest.Method.UNSUBSCRIBE, subscription.getEventSubscriptionURL());
 
-        getHeaders().add(
-                UpnpHeader.Type.SID,
-                new SubscriptionIdHeader(subscription.getSubscriptionId())
-        );
+        getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader(subscription.getSubscriptionId()));
 
         if (extraHeaders != null)
             getHeaders().putAll(extraHeaders);
-
     }
 }

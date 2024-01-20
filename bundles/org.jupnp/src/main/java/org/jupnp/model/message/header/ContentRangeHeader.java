@@ -25,7 +25,7 @@ import org.jupnp.model.types.InvalidValueException;
 public class ContentRangeHeader extends UpnpHeader<BytesRange> {
 
     public static final String PREFIX = "bytes ";
-    
+
     public ContentRangeHeader() {
     }
 
@@ -39,13 +39,13 @@ public class ContentRangeHeader extends UpnpHeader<BytesRange> {
 
     public void setString(String s) throws InvalidHeaderException {
         try {
-            setValue(BytesRange.valueOf(s,PREFIX));
+            setValue(BytesRange.valueOf(s, PREFIX));
         } catch (InvalidValueException ex) {
             throw new InvalidHeaderException("Invalid Range Header: " + ex.getMessage(), ex);
         }
     }
 
     public String getString() {
-        return getValue().getString(true,PREFIX);
+        return getValue().getString(true, PREFIX);
     }
 }

@@ -36,5 +36,4 @@ public abstract class AddMessage extends ActionCallback {
         getActionInvocation().setInput("MessageType", mimeType.toString());
         getActionInvocation().setInput("Message", message.toString());
     }
-
 }

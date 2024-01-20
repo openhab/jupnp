@@ -53,7 +53,7 @@ public interface RegistryListener {
      * </p>
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   A validated and hydrated device metadata graph, with anemic service metadata.
+     * @param device A validated and hydrated device metadata graph, with anemic service metadata.
      */
     public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
 
@@ -65,9 +65,9 @@ public interface RegistryListener {
      * </p>
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   A validated and hydrated device metadata graph, with anemic service metadata.
-     * @param ex       The reason why service metadata could not be initialized, or <code>null</code> if service
-     *                 descriptors couldn't be retrieved at all.
+     * @param device A validated and hydrated device metadata graph, with anemic service metadata.
+     * @param ex The reason why service metadata could not be initialized, or <code>null</code> if service
+     *            descriptors couldn't be retrieved at all.
      */
     public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
 
@@ -75,7 +75,7 @@ public interface RegistryListener {
      * Called when complete metadata of a newly discovered device is available.
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   A validated and hydrated device metadata graph, with complete service metadata.
+     * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
     public void remoteDeviceAdded(Registry registry, RemoteDevice device);
 
@@ -87,7 +87,7 @@ public interface RegistryListener {
      * </p>
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   A validated and hydrated device metadata graph, with complete service metadata.
+     * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
     public void remoteDeviceUpdated(Registry registry, RemoteDevice device);
 
@@ -100,7 +100,7 @@ public interface RegistryListener {
      * </p>
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   A validated and hydrated device metadata graph, with complete service metadata.
+     * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
     public void remoteDeviceRemoved(Registry registry, RemoteDevice device);
 
@@ -108,7 +108,7 @@ public interface RegistryListener {
      * Called after you add your own device to the {@link org.jupnp.registry.Registry}.
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   The local device added to the {@link org.jupnp.registry.Registry}.
+     * @param device The local device added to the {@link org.jupnp.registry.Registry}.
      */
     public void localDeviceAdded(Registry registry, LocalDevice device);
 
@@ -117,8 +117,9 @@ public interface RegistryListener {
      * <p>
      * This method will not be called when the UPnP stack is shutting down.
      * </p>
+     * 
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
-     * @param device   The local device removed from the {@link org.jupnp.registry.Registry}.
+     * @param device The local device removed from the {@link org.jupnp.registry.Registry}.
      */
     public void localDeviceRemoved(Registry registry, LocalDevice device);
 
@@ -127,6 +128,7 @@ public interface RegistryListener {
      * <p>
      * This method should typically not block, it executes in the thread that shuts down the UPnP stack.
      * </p>
+     * 
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      */
     public void beforeShutdown(Registry registry);
@@ -138,5 +140,4 @@ public interface RegistryListener {
      * </p>
      */
     public void afterShutdown();
-
 }

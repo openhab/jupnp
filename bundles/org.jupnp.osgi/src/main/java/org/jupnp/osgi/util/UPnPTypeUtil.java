@@ -27,51 +27,41 @@ import org.osgi.service.upnp.UPnPStateVariable;
 public class UPnPTypeUtil {
 
     private static final Object[][] records = {
-		// Integer              ui1, ui2, i1, i2, i4, int
-		{	UPnPStateVariable.TYPE_UI1,				Integer.class	},
-		{	UPnPStateVariable.TYPE_UI2,				Integer.class	},
-		{	UPnPStateVariable.TYPE_I1,				Integer.class	},
-		{	UPnPStateVariable.TYPE_I2,				Integer.class	},
-		{	UPnPStateVariable.TYPE_I4,				Integer.class	},
-		{	UPnPStateVariable.TYPE_INT,				Integer.class	},
-		// Long                 ui4, time, time.tz
-		{	UPnPStateVariable.TYPE_UI4,				Long.class		},
-		{	UPnPStateVariable.TYPE_TIME,			Long.class		},
-		{	UPnPStateVariable.TYPE_TIME_TZ,			Long.class		},
-		// Float                r4, float
-		{	UPnPStateVariable.TYPE_R4,				Float.class		},
-		{	UPnPStateVariable.TYPE_FLOAT,			Float.class		},
-		// Double               r8, number, fixed.14.4
-		{	UPnPStateVariable.TYPE_R8,				Double.class	},
-		{	UPnPStateVariable.TYPE_NUMBER,			Double.class	},
-		{	UPnPStateVariable.TYPE_FIXED_14_4,		Double.class	},
-		// Character            char
-		{ UPnPLocalStateVariable.TYPE_CHAR,			Character.class	},
-		// String               string, uri, uuid
-		{ UPnPLocalStateVariable.TYPE_STRING,		String.class	},
-		{ UPnPLocalStateVariable.TYPE_URI,			String.class	},
-		{ UPnPLocalStateVariable.TYPE_UUID,			String.class	},
-		// Date                 date, dateTime, dateTime.tz
-		{ UPnPLocalStateVariable.TYPE_DATE,			Date.class		},
-		{ UPnPLocalStateVariable.TYPE_DATETIME,		Date.class		},
-		{ UPnPLocalStateVariable.TYPE_DATETIME_TZ,	Date.class		},
-		// Boolean
-		{ UPnPLocalStateVariable.TYPE_BOOLEAN,		Boolean.class	},
-		// byte[]               bin.base64, bin.hex
-		{ UPnPLocalStateVariable.TYPE_BIN_BASE64,	byte[].class	},
-		{ UPnPLocalStateVariable.TYPE_BIN_HEX,		byte[].class	},
-	};
+            // Integer ui1, ui2, i1, i2, i4, int
+            { UPnPStateVariable.TYPE_UI1, Integer.class }, { UPnPStateVariable.TYPE_UI2, Integer.class },
+            { UPnPStateVariable.TYPE_I1, Integer.class }, { UPnPStateVariable.TYPE_I2, Integer.class },
+            { UPnPStateVariable.TYPE_I4, Integer.class }, { UPnPStateVariable.TYPE_INT, Integer.class },
+            // Long ui4, time, time.tz
+            { UPnPStateVariable.TYPE_UI4, Long.class }, { UPnPStateVariable.TYPE_TIME, Long.class },
+            { UPnPStateVariable.TYPE_TIME_TZ, Long.class },
+            // Float r4, float
+            { UPnPStateVariable.TYPE_R4, Float.class }, { UPnPStateVariable.TYPE_FLOAT, Float.class },
+            // Double r8, number, fixed.14.4
+            { UPnPStateVariable.TYPE_R8, Double.class }, { UPnPStateVariable.TYPE_NUMBER, Double.class },
+            { UPnPStateVariable.TYPE_FIXED_14_4, Double.class },
+            // Character char
+            { UPnPLocalStateVariable.TYPE_CHAR, Character.class },
+            // String string, uri, uuid
+            { UPnPLocalStateVariable.TYPE_STRING, String.class }, { UPnPLocalStateVariable.TYPE_URI, String.class },
+            { UPnPLocalStateVariable.TYPE_UUID, String.class },
+            // Date date, dateTime, dateTime.tz
+            { UPnPLocalStateVariable.TYPE_DATE, Date.class }, { UPnPLocalStateVariable.TYPE_DATETIME, Date.class },
+            { UPnPLocalStateVariable.TYPE_DATETIME_TZ, Date.class },
+            // Boolean
+            { UPnPLocalStateVariable.TYPE_BOOLEAN, Boolean.class },
+            // byte[] bin.base64, bin.hex
+            { UPnPLocalStateVariable.TYPE_BIN_BASE64, byte[].class },
+            { UPnPLocalStateVariable.TYPE_BIN_HEX, byte[].class }, };
 
-	private static final Map<String, Class<?>> classLookup = new Hashtable<String, Class<?>>();
+    private static final Map<String, Class<?>> classLookup = new Hashtable<String, Class<?>>();
 
-	static {
-		for (Object[] record : records) {
-			classLookup.put((String) record[0], (Class<?>) record[1]);
-		}
-	}
+    static {
+        for (Object[] record : records) {
+            classLookup.put((String) record[0], (Class<?>) record[1]);
+        }
+    }
 
-	public static Class<?> getUPnPClass(String type) {
-		return classLookup.get(type);
-	}
-
+    public static Class<?> getUPnPClass(String type) {
+        return classLookup.get(type);
+    }
 }

@@ -129,7 +129,8 @@ public class CacheControl {
     }
 
     public static CacheControl valueOf(String s) throws IllegalArgumentException {
-        if (s == null) return null;
+        if (s == null)
+            return null;
         CacheControl result = new CacheControl();
 
         String[] directives = s.split(",");
@@ -141,8 +142,10 @@ public class CacheControl {
             String value = null;
             if (nameValue.length > 1) {
                 value = nameValue[1].trim();
-                if (value.startsWith("\"")) value = value.substring(1);
-                if (value.endsWith("\"")) value = value.substring(0, value.length() - 1);
+                if (value.startsWith("\""))
+                    value = value.substring(1);
+                if (value.endsWith("\""))
+                    value = value.substring(0, value.length() - 1);
             }
 
             String lowercase = name.toLowerCase();
@@ -175,7 +178,8 @@ public class CacheControl {
             } else if ("public".equals(lowercase)) {
                 // ignore
             } else {
-                if (value == null) value = "";
+                if (value == null)
+                    value = "";
                 result.getCacheExtensions().put(name, value);
             }
         }
@@ -185,16 +189,24 @@ public class CacheControl {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (!isPrivateFlag()) sb.append("public");
-        if (isMustRevalidate()) append("must-revalidate", sb);
-        if (isNoTransform()) append("no-transform", sb);
-        if (isNoStore()) append("no-store", sb);
-        if (isProxyRevalidate()) append("proxy-revalidate", sb);
-        if (getSharedMaxAge() > -1) append("s-maxage", sb).append("=").append(getSharedMaxAge());
-        if (getMaxAge() > -1) append("max-age", sb).append("=").append(getMaxAge());
+        if (!isPrivateFlag())
+            sb.append("public");
+        if (isMustRevalidate())
+            append("must-revalidate", sb);
+        if (isNoTransform())
+            append("no-transform", sb);
+        if (isNoStore())
+            append("no-store", sb);
+        if (isProxyRevalidate())
+            append("proxy-revalidate", sb);
+        if (getSharedMaxAge() > -1)
+            append("s-maxage", sb).append("=").append(getSharedMaxAge());
+        if (getMaxAge() > -1)
+            append("max-age", sb).append("=").append(getMaxAge());
         if (isNoCache()) {
             List<String> fields = getNoCacheFields();
-            if (fields.size() < 1) append("no-cache", sb);
+            if (fields.size() < 1)
+                append("no-cache", sb);
             else {
                 for (String field : getNoCacheFields()) {
                     append("no-cache", sb).append("=\"").append(field).append("\"");
@@ -203,7 +215,8 @@ public class CacheControl {
         }
         if (isPrivateFlag()) {
             List<String> fields = getPrivateFields();
-            if (fields.size() < 1) append("private", sb);
+            if (fields.size() < 1)
+                append("private", sb);
             else {
                 for (String field : getPrivateFields()) {
                     append("private", sb).append("=\"").append(field).append("\"");
@@ -221,29 +234,43 @@ public class CacheControl {
     }
 
     private StringBuilder append(String s, StringBuilder sb) {
-        if (sb.length() > 0) sb.append(", ");
+        if (sb.length() > 0)
+            sb.append(", ");
         sb.append(s);
         return sb;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         CacheControl that = (CacheControl) o;
 
-        if (maxAge != that.maxAge) return false;
-        if (mustRevalidate != that.mustRevalidate) return false;
-        if (noCache != that.noCache) return false;
-        if (noStore != that.noStore) return false;
-        if (noTransform != that.noTransform) return false;
-        if (privateFlag != that.privateFlag) return false;
-        if (proxyRevalidate != that.proxyRevalidate) return false;
-        if (sharedMaxAge != that.sharedMaxAge) return false;
-        if (!cacheExtensions.equals(that.cacheExtensions)) return false;
-        if (!noCacheFields.equals(that.noCacheFields)) return false;
-        if (!privateFields.equals(that.privateFields)) return false;
+        if (maxAge != that.maxAge)
+            return false;
+        if (mustRevalidate != that.mustRevalidate)
+            return false;
+        if (noCache != that.noCache)
+            return false;
+        if (noStore != that.noStore)
+            return false;
+        if (noTransform != that.noTransform)
+            return false;
+        if (privateFlag != that.privateFlag)
+            return false;
+        if (proxyRevalidate != that.proxyRevalidate)
+            return false;
+        if (sharedMaxAge != that.sharedMaxAge)
+            return false;
+        if (!cacheExtensions.equals(that.cacheExtensions))
+            return false;
+        if (!noCacheFields.equals(that.noCacheFields))
+            return false;
+        if (!privateFields.equals(that.privateFields))
+            return false;
 
         return true;
     }
@@ -263,5 +290,4 @@ public class CacheControl {
         result = 31 * result + cacheExtensions.hashCode();
         return result;
     }
-
 }

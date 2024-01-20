@@ -56,8 +56,7 @@ public abstract class SendingAsync implements Runnable {
                 log.info("Interrupted protocol", ex);
             } else {
                 throw new RuntimeException(
-                    "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex
-                );
+                        "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex);
             }
         }
     }
@@ -68,5 +67,4 @@ public abstract class SendingAsync implements Runnable {
     public String toString() {
         return "(" + getClass().getSimpleName() + ")";
     }
-
 }

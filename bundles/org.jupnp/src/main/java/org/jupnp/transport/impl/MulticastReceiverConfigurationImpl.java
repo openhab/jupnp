@@ -14,10 +14,10 @@
 
 package org.jupnp.transport.impl;
 
-import org.jupnp.transport.spi.MulticastReceiverConfiguration;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import org.jupnp.transport.spi.MulticastReceiverConfiguration;
 
 /**
  * Settings for the default implementation.
@@ -43,7 +43,8 @@ public class MulticastReceiverConfigurationImpl implements MulticastReceiverConf
         this(group, port, 640);
     }
 
-    public MulticastReceiverConfigurationImpl(String group, int port, int maxDatagramBytes) throws UnknownHostException {
+    public MulticastReceiverConfigurationImpl(String group, int port, int maxDatagramBytes)
+            throws UnknownHostException {
         this(InetAddress.getByName(group), port, maxDatagramBytes);
     }
 
@@ -77,5 +78,4 @@ public class MulticastReceiverConfigurationImpl implements MulticastReceiverConf
     public void setMaxDatagramBytes(int maxDatagramBytes) {
         this.maxDatagramBytes = maxDatagramBytes;
     }
-
 }

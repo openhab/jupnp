@@ -15,13 +15,14 @@
 
 package org.jupnp.support.avtransport.lastchange;
 
-import org.jupnp.model.ModelUtil;
-import org.jupnp.support.lastchange.EventedValue;
-import org.jupnp.support.lastchange.LastChangeParser;
+import java.util.Set;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import java.util.Set;
+
+import org.jupnp.model.ModelUtil;
+import org.jupnp.support.lastchange.EventedValue;
+import org.jupnp.support.lastchange.LastChangeParser;
 
 /**
  * @author Christian Bauer
@@ -41,9 +42,8 @@ public class AVTransportLastChangeParser extends LastChangeParser {
         // TODO: Android 2.2 has a broken SchemaFactory, we can't validate
         // http://code.google.com/p/android/issues/detail?id=9491&q=schemafactory&colspec=ID%20Type%20Status%20Owner%20Summary%20Stars
         if (!ModelUtil.ANDROID_RUNTIME) {
-            return new Source[]{new StreamSource(
-                    Thread.currentThread().getContextClassLoader().getResourceAsStream(SCHEMA_RESOURCE)
-            )};
+            return new Source[] { new StreamSource(
+                    Thread.currentThread().getContextClassLoader().getResourceAsStream(SCHEMA_RESOURCE)) };
         }
         return null;
     }

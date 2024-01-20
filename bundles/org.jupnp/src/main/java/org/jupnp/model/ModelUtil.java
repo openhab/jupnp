@@ -18,8 +18,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Set;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Shared trivial procedures.
@@ -51,7 +51,7 @@ public class ModelUtil {
         boolean foundEmulator = false;
         try {
             Class androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
-            String product = (String)androidBuild.getField("PRODUCT").get(null);
+            String product = (String) androidBuild.getField("PRODUCT").get(null);
             if ("google_sdk".equals(product) || ("sdk".equals(product)))
                 foundEmulator = true;
         } catch (Exception ex) {
@@ -66,7 +66,8 @@ public class ModelUtil {
      * @return <code>true</code> if the given interface is an Enum, or if the collection contains a super-interface.
      */
     public static boolean isStringConvertibleType(Set<Class> stringConvertibleTypes, Class clazz) {
-        if (clazz.isEnum()) return true;
+        if (clazz.isEnum())
+            return true;
         for (Class toStringOutputType : stringConvertibleTypes) {
             if (toStringOutputType.isAssignableFrom(clazz)) {
                 return true;
@@ -84,7 +85,8 @@ public class ModelUtil {
         if (ANDROID_RUNTIME) {
             return name != null && name.length() != 0;
         }
-        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ENGLISH).startsWith("xml") && name.matches(Constants.REGEX_UDA_NAME);
+        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ENGLISH).startsWith("xml")
+                && name.matches(Constants.REGEX_UDA_NAME);
     }
 
     /**
@@ -130,7 +132,6 @@ public class ModelUtil {
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
-
     }
 
     /**
@@ -168,14 +169,10 @@ public class ModelUtil {
      * @return A string representing hours, minutes, seconds, e.g. <code>11:23:44</code>
      */
     public static String toTimeString(long seconds) {
-        long hours = seconds / 3600,
-                remainder = seconds % 3600,
-                minutes = remainder / 60,
-                secs = remainder % 60;
+        long hours = seconds / 3600, remainder = seconds % 3600, minutes = remainder / 60, secs = remainder % 60;
 
-        return ((hours < 10 ? "0" : "") + hours
-                + ":" + (minutes < 10 ? "0" : "") + minutes
-                + ":" + (secs < 10 ? "0" : "") + secs);
+        return ((hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":"
+                + (secs < 10 ? "0" : "") + secs);
     }
 
     /**
@@ -189,9 +186,7 @@ public class ModelUtil {
         String[] split = s.split(":");
         if (split.length != 3)
             throw new IllegalArgumentException("Can't parse time string: " + s);
-        return (Long.parseLong(split[0]) * 3600) +
-                (Long.parseLong(split[1]) * 60) +
-                (Long.parseLong(split[2]));
+        return (Long.parseLong(split[0]) * 3600) + (Long.parseLong(split[1]) * 60) + (Long.parseLong(split[2]));
     }
 
     /**
@@ -213,14 +208,14 @@ public class ModelUtil {
     /**
      * DNS reverse name lookup.
      *
-     * @param includeDomain <code>true</code> if the whole FQDN should be returned, instead of just the first (host) part.
+     * @param includeDomain <code>true</code> if the whole FQDN should be returned, instead of just the first (host)
+     *            part.
      * @return The resolved host (and domain-) name, or "UNKNOWN HOST" if resolution failed.
      */
     public static String getLocalHostName(boolean includeDomain) {
         try {
             String hostname = InetAddress.getLocalHost().getHostName();
-            return includeDomain
-                    ? hostname
+            return includeDomain ? hostname
                     : hostname.indexOf(".") != -1 ? hostname.substring(0, hostname.indexOf(".")) : hostname;
 
         } catch (Exception ex) {
@@ -245,5 +240,4 @@ public class ModelUtil {
         }
         throw new RuntimeException("Could not discover first network interface hardware address");
     }
-
 }

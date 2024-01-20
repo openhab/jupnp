@@ -32,5 +32,4 @@ public class OutgoingNotificationRequestDeviceType extends OutgoingNotificationR
         getHeaders().add(UpnpHeader.Type.NT, new DeviceTypeHeader(device.getType()));
         getHeaders().add(UpnpHeader.Type.USN, new DeviceUSNHeader(device.getIdentity().getUdn(), device.getType()));
     }
-
 }

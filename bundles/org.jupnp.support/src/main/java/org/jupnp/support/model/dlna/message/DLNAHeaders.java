@@ -15,14 +15,14 @@
 
 package org.jupnp.support.model.dlna.message;
 
-import org.jupnp.model.message.header.UpnpHeader;
-
 import java.io.ByteArrayInputStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.jupnp.model.message.UpnpHeaders;
+import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.support.model.dlna.message.header.DLNAHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,13 +50,13 @@ public class DLNAHeaders extends UpnpHeaders {
     public DLNAHeaders(ByteArrayInputStream inputStream) {
         super(inputStream);
     }
-    
+
     @Override
     protected void parseHeaders() {
-        if (parsedHeaders == null) { 
-            super.parseHeaders(); 
+        if (parsedHeaders == null) {
+            super.parseHeaders();
         }
-        
+
         // This runs as late as possible and only when necessary (getter called and map is dirty)
         parsedDLNAHeaders = new LinkedHashMap<>();
         logger.debug("Parsing all HTTP headers for known UPnP headers: {}", size());
@@ -74,7 +74,9 @@ public class DLNAHeaders extends UpnpHeaders {
             for (String value : entry.getValue()) {
                 UpnpHeader<?> upnpHeader = DLNAHeader.newInstance(type, value);
                 if (upnpHeader == null || upnpHeader.getValue() == null) {
-                    logger.debug("Ignoring known but non-parsable header (value violates the UDA specification?) '{}': {}", type.getHttpName(), value);
+                    logger.debug(
+                            "Ignoring known but non-parsable header (value violates the UDA specification?) '{}': {}",
+                            type.getHttpName(), value);
                 } else {
                     addParsedValue(type, upnpHeader);
                 }
@@ -117,12 +119,14 @@ public class DLNAHeaders extends UpnpHeaders {
     }
 
     public boolean containsKey(DLNAHeader.Type type) {
-        if (parsedDLNAHeaders == null) parseHeaders();
+        if (parsedDLNAHeaders == null)
+            parseHeaders();
         return parsedDLNAHeaders.containsKey(type);
     }
 
     public List<UpnpHeader<?>> get(DLNAHeader.Type type) {
-        if (parsedDLNAHeaders == null) parseHeaders();
+        if (parsedDLNAHeaders == null)
+            parseHeaders();
         return parsedDLNAHeaders.get(type);
     }
 
@@ -139,22 +143,22 @@ public class DLNAHeaders extends UpnpHeaders {
     }
 
     public UpnpHeader<?>[] getAsArray(DLNAHeader.Type type) {
-        if (parsedDLNAHeaders == null) parseHeaders();
+        if (parsedDLNAHeaders == null)
+            parseHeaders();
         return parsedDLNAHeaders.get(type) != null
                 ? parsedDLNAHeaders.get(type).toArray(new UpnpHeader[parsedDLNAHeaders.get(type).size()])
                 : new UpnpHeader[0];
     }
 
     public UpnpHeader<?> getFirstHeader(DLNAHeader.Type type) {
-        return getAsArray(type).length > 0
-                ? getAsArray(type)[0]
-                : null;
+        return getAsArray(type).length > 0 ? getAsArray(type)[0] : null;
     }
 
     @SuppressWarnings("unchecked")
     public <H extends UpnpHeader<?>> H getFirstHeader(DLNAHeader.Type type, Class<H> subtype) {
         UpnpHeader<?>[] headers = getAsArray(type);
-        if (headers.length == 0) return null;
+        if (headers.length == 0)
+            return null;
 
         for (UpnpHeader<?> header : headers) {
             if (subtype.isAssignableFrom(header.getClass())) {
@@ -180,5 +184,4 @@ public class DLNAHeaders extends UpnpHeaders {
             logger.trace("####################################################################");
         }
     }
-
 }

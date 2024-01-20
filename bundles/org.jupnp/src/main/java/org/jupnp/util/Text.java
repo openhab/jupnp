@@ -80,5 +80,4 @@ public class Text {
             throw new RuntimeException(ex);
         }
     }
-
 }

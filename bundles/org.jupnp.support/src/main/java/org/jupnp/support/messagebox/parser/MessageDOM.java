@@ -50,5 +50,4 @@ public class MessageDOM extends DOM {
         super.createRoot(element);
         return getRoot(xpath);
     }
-
 }

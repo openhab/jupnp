@@ -30,10 +30,13 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
     }
 
     public Boolean valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
-        if (s.equals("1") || s.toUpperCase(Locale.ENGLISH).equals("YES") || s.toUpperCase(Locale.ENGLISH).equals("TRUE")) {
+        if (s.isEmpty())
+            return null;
+        if (s.equals("1") || s.toUpperCase(Locale.ENGLISH).equals("YES")
+                || s.toUpperCase(Locale.ENGLISH).equals("TRUE")) {
             return true;
-        } else if (s.equals("0") || s.toUpperCase(Locale.ENGLISH).equals("NO") || s.toUpperCase(Locale.ENGLISH).equals("FALSE")) {
+        } else if (s.equals("0") || s.toUpperCase(Locale.ENGLISH).equals("NO")
+                || s.toUpperCase(Locale.ENGLISH).equals("FALSE")) {
             return false;
         } else {
             throw new InvalidValueException("Invalid boolean value string: " + s);
@@ -41,8 +44,8 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
     }
 
     public String getString(Boolean value) throws InvalidValueException {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         return value ? "1" : "0";
     }
-
 }

@@ -42,7 +42,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bauer
  */
-public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage> extends ReceivingAsync<IN> {
+public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage>
+        extends ReceivingAsync<IN> {
 
     final private Logger log = LoggerFactory.getLogger(UpnpService.class);
 
@@ -62,7 +63,8 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
         outputMessage = executeSync();
 
         if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {
-            log.trace("Setting extra headers on response message: {}", getRemoteClientInfo().getExtraResponseHeaders().size());
+            log.trace("Setting extra headers on response message: {}",
+                    getRemoteClientInfo().getExtraResponseHeaders().size());
             outputMessage.getHeaders().putAll(getRemoteClientInfo().getExtraResponseHeaders());
         }
     }
@@ -97,5 +99,4 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
     public String toString() {
         return "(" + getClass().getSimpleName() + ")";
     }
-
 }

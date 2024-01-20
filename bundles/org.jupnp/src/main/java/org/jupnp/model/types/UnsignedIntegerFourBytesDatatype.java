@@ -20,12 +20,12 @@ package org.jupnp.model.types;
 public class UnsignedIntegerFourBytesDatatype extends AbstractDatatype<UnsignedIntegerFourBytes> {
 
     public UnsignedIntegerFourBytes valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             return new UnsignedIntegerFourBytes(s);
         } catch (NumberFormatException ex) {
             throw new InvalidValueException("Can't convert string to number or not in range: " + s, ex);
         }
     }
-
 }

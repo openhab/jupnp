@@ -119,9 +119,8 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
 
             // Unfortunately, we always have to retrieve the descriptor because at this point we
             // have no idea if it's a root or embedded device
-            getUpnpService().getConfiguration().getAsyncProtocolExecutor().execute(
-                    new RetrieveRemoteDescriptors(getUpnpService(), rd)
-            );
+            getUpnpService().getConfiguration().getAsyncProtocolExecutor()
+                    .execute(new RetrieveRemoteDescriptors(getUpnpService(), rd));
 
         } else if (getInputMessage().isByeByeMessage()) {
 
@@ -134,8 +133,5 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
         } else {
             log.trace("Ignoring unknown notification message: {}", getInputMessage());
         }
-
     }
-
-
 }

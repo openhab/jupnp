@@ -14,18 +14,16 @@
 
 package org.jupnp.protocol;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.UpnpRequest;
-import org.jupnp.protocol.ProtocolCreationException;
-import org.jupnp.protocol.ReceivingSync;
 import org.jupnp.protocol.sync.ReceivingEvent;
-import org.junit.jupiter.api.Test;
-
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -37,13 +35,9 @@ class ProtocolFactoryTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        assertThrows(ProtocolCreationException.class, () -> upnpService.getProtocolFactory().createReceivingSync(
-            new StreamRequestMessage(
-                UpnpRequest.Method.NOTIFY,
-                URI.create("/dev/1234/upnp-org/SwitchPower/invalid"),
-                ""
-            )
-        ));
+        assertThrows(ProtocolCreationException.class,
+                () -> upnpService.getProtocolFactory().createReceivingSync(new StreamRequestMessage(
+                        UpnpRequest.Method.NOTIFY, URI.create("/dev/1234/upnp-org/SwitchPower/invalid"), "")));
     }
 
     @Test
@@ -51,21 +45,16 @@ class ProtocolFactoryTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        StreamRequestMessage message = new StreamRequestMessage(
-            UpnpRequest.Method.NOTIFY,
-            URI.create("/dev/1234/upnp-org/SwitchPower" + Namespace.EVENTS + Namespace.CALLBACK_FILE),
-            ""
-        );
+        StreamRequestMessage message = new StreamRequestMessage(UpnpRequest.Method.NOTIFY,
+                URI.create("/dev/1234/upnp-org/SwitchPower" + Namespace.EVENTS + Namespace.CALLBACK_FILE), "");
         ReceivingSync protocol = upnpService.getProtocolFactory().createReceivingSync(message);
         assertInstanceOf(ReceivingEvent.class, protocol);
 
         // TODO: UPNP VIOLATION: Onkyo devices send event messages with trailing garbage characters
         // dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
-        message = new StreamRequestMessage(
-            UpnpRequest.Method.NOTIFY,
-            URI.create("/dev/1234/upnp-org/SwitchPower" + Namespace.EVENTS + Namespace.CALLBACK_FILE + "192%2e168%2e10%2e38"),
-            ""
-        );
+        message = new StreamRequestMessage(UpnpRequest.Method.NOTIFY, URI.create(
+                "/dev/1234/upnp-org/SwitchPower" + Namespace.EVENTS + Namespace.CALLBACK_FILE + "192%2e168%2e10%2e38"),
+                "");
         protocol = upnpService.getProtocolFactory().createReceivingSync(message);
         assertInstanceOf(ReceivingEvent.class, protocol);
     }

@@ -37,11 +37,13 @@ public interface Constants {
     public static final String IPV6_UPNP_GLOBAL_ADDRESS = "FF0E::C";
 
     public static final int MIN_ADVERTISEMENT_AGE_SECONDS = 1800;
-    
+
     // Parsing rules for: deviceType, serviceType, serviceId (UDA 1.0, section 2.5)
 
-    // TODO: UPNP VIOLATION: Microsoft Windows Media Player Sharing 4.0, X_MS_MediaReceiverRegistrar service has type with periods instead of hyphens in the namespace!
-    // UDA 1.0 spec: "Period characters in the vendor domain name MUST be replaced with hyphens in accordance with RFC 2141"
+    // TODO: UPNP VIOLATION: Microsoft Windows Media Player Sharing 4.0, X_MS_MediaReceiverRegistrar service has type
+    // with periods instead of hyphens in the namespace!
+    // UDA 1.0 spec: "Period characters in the vendor domain name MUST be replaced with hyphens in accordance with RFC
+    // 2141"
     // TODO: UPNP VIOLATION: Azureus/Vuze 4.2.0.2 sends a URN as a service identifier, so we need to match colons!
     // TODO: UPNP VIOLATION: Intel UPnP Tools send dots in the service identifier suffix, match that...
 
@@ -50,11 +52,11 @@ public interface Constants {
     public static final String REGEX_ID = "[a-zA-Z_0-9\\-:\\.]{1,64}";
 
     /*
-    Must not contain a hyphen character (-, 2D Hex in UTF- 8). First character must be a USASCII letter (A-Z, a-z),
-    USASCII digit (0-9), an underscore ("_"), or a non-experimental Unicode letter or digit greater than U+007F.
-    Succeeding characters must be a USASCII letter (A-Z, a-z), USASCII digit (0-9), an underscore ("_"), a
-    period ("."), a Unicode combiningchar, an extender, or a non-experimental Unicode letter or digit greater
-    than U+007F. The first three letters must not be "XML" in any combination of case. Case sensitive.
+     * Must not contain a hyphen character (-, 2D Hex in UTF- 8). First character must be a USASCII letter (A-Z, a-z),
+     * USASCII digit (0-9), an underscore ("_"), or a non-experimental Unicode letter or digit greater than U+007F.
+     * Succeeding characters must be a USASCII letter (A-Z, a-z), USASCII digit (0-9), an underscore ("_"), a
+     * period ("."), a Unicode combiningchar, an extender, or a non-experimental Unicode letter or digit greater
+     * than U+007F. The first three letters must not be "XML" in any combination of case. Case sensitive.
      */
     // TODO: I have no idea how to match or what even is a "unicode extender character", neither does the Unicode book
     public static final String REGEX_UDA_NAME = "[a-zA-Z0-9^-_\\p{L}\\p{N}]{1}[a-zA-Z0-9^-_\\.\\\\p{L}\\\\p{N}\\p{Mc}\\p{Sk}]*";
@@ -67,5 +69,4 @@ public interface Constants {
 
     // State variable prefixes
     public static final String ARG_TYPE_PREFIX = "A_ARG_TYPE_";
-
 }

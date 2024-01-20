@@ -14,10 +14,10 @@
 
 package org.jupnp.model.message.header;
 
-import org.jupnp.model.UserConstants;
-
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jupnp.model.UserConstants;
 
 /**
  * @author Christian Bauer
@@ -56,7 +56,6 @@ public class TimeoutHeader extends UpnpHeader<Integer> {
         } else {
             setValue(INFINITE_VALUE);
         }
-
     }
 
     public String getString() {

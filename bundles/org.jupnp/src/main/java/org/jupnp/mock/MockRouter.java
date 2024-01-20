@@ -56,8 +56,7 @@ public class MockRouter implements Router {
     protected UpnpServiceConfiguration configuration;
     protected ProtocolFactory protocolFactory;
 
-    public MockRouter(UpnpServiceConfiguration configuration,
-                      ProtocolFactory protocolFactory) {
+    public MockRouter(UpnpServiceConfiguration configuration, ProtocolFactory protocolFactory) {
         this.configuration = configuration;
         this.protocolFactory = protocolFactory;
     }
@@ -100,12 +99,8 @@ public class MockRouter implements Router {
         // Simulate an active stream server, otherwise the notification/search response
         // protocols won't even run
         try {
-            return Arrays.asList(
-                new NetworkAddress(
-                    InetAddress.getByName("127.0.0.1"),
-                    NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT
-                )
-            );
+            return Arrays.asList(new NetworkAddress(InetAddress.getByName("127.0.0.1"),
+                    NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT));
         } catch (UnknownHostException ex) {
             throw new RuntimeException(ex);
         }
@@ -126,9 +121,8 @@ public class MockRouter implements Router {
     public StreamResponseMessage send(StreamRequestMessage msg) throws RouterException {
         sentStreamRequestMessages.add(msg);
         counter++;
-        return getStreamResponseMessages() != null
-            ? getStreamResponseMessages()[counter]
-            : getStreamResponseMessage(msg);
+        return getStreamResponseMessages() != null ? getStreamResponseMessages()[counter]
+                : getStreamResponseMessage(msg);
     }
 
     public void broadcast(byte[] bytes) {
@@ -166,5 +160,4 @@ public class MockRouter implements Router {
     public StreamResponseMessage getStreamResponseMessage(StreamRequestMessage request) {
         return null;
     }
-
 }

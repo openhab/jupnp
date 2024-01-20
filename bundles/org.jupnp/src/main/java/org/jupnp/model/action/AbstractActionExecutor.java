@@ -38,8 +38,7 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
 
     private Logger log = LoggerFactory.getLogger(AbstractActionExecutor.class);
 
-    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors =
-        new HashMap<ActionArgument<LocalService>, StateVariableAccessor>();
+    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors = new HashMap<ActionArgument<LocalService>, StateVariableAccessor>();
 
     protected AbstractActionExecutor() {
     }
@@ -69,10 +68,7 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
 
             service.getManager().execute(new Command() {
                 public void execute(ServiceManager serviceManager) throws Exception {
-                    AbstractActionExecutor.this.execute(
-                            actionInvocation,
-                            serviceManager.getImplementation()
-                    );
+                    AbstractActionExecutor.this.execute(actionInvocation, serviceManager.getImplementation());
                 }
 
                 @Override
@@ -90,17 +86,13 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
         } catch (Exception ex) {
             Throwable rootCause = Exceptions.unwrap(ex);
             log.trace("Execution has thrown, wrapping root cause in ActionException and returning", ex);
-            actionInvocation.setFailure(
-                new ActionException(
-                    ErrorCode.ACTION_FAILED,
-                    (rootCause.getMessage() != null ? rootCause.getMessage() : rootCause.toString()),
-                    rootCause
-                )
-            );
+            actionInvocation.setFailure(new ActionException(ErrorCode.ACTION_FAILED,
+                    (rootCause.getMessage() != null ? rootCause.getMessage() : rootCause.toString()), rootCause));
         }
     }
 
-    protected abstract void execute(ActionInvocation<LocalService> actionInvocation, Object serviceImpl) throws Exception;
+    protected abstract void execute(ActionInvocation<LocalService> actionInvocation, Object serviceImpl)
+            throws Exception;
 
     /**
      * Reads the output arguments after an action execution using accessors.
@@ -135,34 +127,31 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
     }
 
     /**
-     * Sets the output argument value on the {@link org.jupnp.model.action.ActionInvocation}, considers string conversion.
+     * Sets the output argument value on the {@link org.jupnp.model.action.ActionInvocation}, considers string
+     * conversion.
      */
-    protected void setOutputArgumentValue(ActionInvocation<LocalService> actionInvocation, ActionArgument<LocalService> argument, Object result)
-            throws ActionException {
+    protected void setOutputArgumentValue(ActionInvocation<LocalService> actionInvocation,
+            ActionArgument<LocalService> argument, Object result) throws ActionException {
 
         LocalService service = actionInvocation.getAction().getService();
 
         if (result != null) {
             try {
                 if (service.isStringConvertibleType(result)) {
-                    log.trace("Result of invocation matches convertible type, setting toString() single output argument value");
+                    log.trace(
+                            "Result of invocation matches convertible type, setting toString() single output argument value");
                     actionInvocation.setOutput(new ActionArgumentValue(argument, result.toString()));
                 } else {
                     log.trace("Result of invocation is Object, setting single output argument value");
                     actionInvocation.setOutput(new ActionArgumentValue(argument, result));
                 }
             } catch (InvalidValueException ex) {
-                throw new ActionException(
-                        ErrorCode.ARGUMENT_VALUE_INVALID,
-                        "Wrong type or invalid value for '" + argument.getName() + "': " + ex.getMessage(),
-                        ex
-                );
+                throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
+                        "Wrong type or invalid value for '" + argument.getName() + "': " + ex.getMessage(), ex);
             }
         } else {
 
             log.trace("Result of invocation is null, not setting any output argument value(s)");
         }
-
     }
-
 }

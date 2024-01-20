@@ -66,9 +66,11 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
             requestMessage.setBody(UpnpMessage.BodyType.STRING, toString(d));
 
             if (log.isTraceEnabled()) {
-                log.trace("===================================== GENA BODY BEGIN ============================================");
+                log.trace(
+                        "===================================== GENA BODY BEGIN ============================================");
                 log.trace(requestMessage.getBody().toString());
-                log.trace("====================================== GENA BODY END =============================================");
+                log.trace(
+                        "====================================== GENA BODY END =============================================");
             }
 
         } catch (Exception ex) {
@@ -80,16 +82,16 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
         log.trace("Reading body of: {}", requestMessage);
         if (log.isTraceEnabled()) {
-            log.trace("===================================== GENA BODY BEGIN ============================================");
+            log.trace(
+                    "===================================== GENA BODY BEGIN ============================================");
             log.trace(requestMessage.getBody() != null ? requestMessage.getBody().toString() : "null");
-            log.trace("-===================================== GENA BODY END ============================================");
+            log.trace(
+                    "-===================================== GENA BODY END ============================================");
         }
 
         String body = getMessageBody(requestMessage);
         try {
-            Document d = readDocument(
-                new InputSource(new StringReader(body)), this
-            );
+            Document d = readDocument(new InputSource(new StringReader(body)), this);
 
             Element propertysetElement = readPropertysetElement(d);
 
@@ -123,12 +125,8 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
         for (StateVariableValue stateVariableValue : message.getStateVariableValues()) {
             Element propertyElement = d.createElementNS(Constants.NS_UPNP_EVENT_10, "e:property");
             propertysetElement.appendChild(propertyElement);
-            XMLUtil.appendNewElement(
-                    d,
-                    propertyElement,
-                    stateVariableValue.getStateVariable().getName(),
-                    stateVariableValue.toString()
-            );
+            XMLUtil.appendNewElement(d, propertyElement, stateVariableValue.getStateVariable().getName(),
+                    stateVariableValue.toString());
         }
     }
 
@@ -159,11 +157,10 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                             log.trace("Reading state variable value: {}", stateVariableName);
                             String value = XMLUtil.getTextContent(propertyChild);
                             try {
-                                message.getStateVariableValues().add(
-                                        new StateVariableValue(stateVariable, value)
-                                );
+                                message.getStateVariableValues().add(new StateVariableValue(stateVariable, value));
                             } catch (InvalidValueException ex) {
-                                log.debug("Value {} for the state variable {} ignored: {}", value, stateVariableName, ex.getMessage());
+                                log.debug("Value {} for the state variable {} ignored: {}", value, stateVariableName,
+                                        ex.getMessage());
                             }
                             break;
                         }
@@ -178,9 +175,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
     protected String getMessageBody(UpnpMessage message) throws UnsupportedDataException {
         if (!message.isBodyNonEmptyString())
-            throw new UnsupportedDataException(
-                "Can't transform null or non-string/zero-length body of: " + message
-            );
+            throw new UnsupportedDataException("Can't transform null or non-string/zero-length body of: " + message);
         return message.getBodyString().trim();
     }
 
@@ -195,8 +190,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
     }
 
     protected String getUnprefixedNodeName(Node node) {
-        return node.getPrefix() != null
-                ? node.getNodeName().substring(node.getPrefix().length() + 1)
+        return node.getPrefix() != null ? node.getNodeName().substring(node.getPrefix().length() + 1)
                 : node.getNodeName();
     }
 

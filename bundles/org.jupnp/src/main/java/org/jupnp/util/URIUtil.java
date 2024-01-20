@@ -29,7 +29,7 @@ public class URIUtil {
      * Guarantees that the returned URI is absolute, no matter what the argument is.
      *
      * @param base An absolute base URI, can be null!
-     * @param uri  A string that either represents a relative or an already absolute URI
+     * @param uri A string that either represents a relative or an already absolute URI
      * @return An absolute URI
      * @throws IllegalArgumentException If the base URI is null and the given URI string is not absolute
      */
@@ -77,9 +77,8 @@ public class URIUtil {
                 URI absoluteURI = createAbsoluteURI(baseURI, relativeOrNot);
                 return absoluteURI.toURL();
             } catch (Exception ex) {
-                throw new IllegalArgumentException(
-                    "Base URL is not an URI, or can't create absolute URI (null?), " +
-                        "or absolute URI can not be converted to URL", ex);
+                throw new IllegalArgumentException("Base URL is not an URI, or can't create absolute URI (null?), "
+                        + "or absolute URI can not be converted to URL", ex);
             }
         }
     }
@@ -92,12 +91,15 @@ public class URIUtil {
         }
     }
 
-    public static URL createAbsoluteURL(InetAddress address, int localStreamPort, URI relativeOrNot) throws IllegalArgumentException {
+    public static URL createAbsoluteURL(InetAddress address, int localStreamPort, URI relativeOrNot)
+            throws IllegalArgumentException {
         try {
             if (address instanceof Inet6Address) {
-                return createAbsoluteURL(new URL("http://[" + address.getHostAddress() + "]:" + localStreamPort), relativeOrNot);
+                return createAbsoluteURL(new URL("http://[" + address.getHostAddress() + "]:" + localStreamPort),
+                        relativeOrNot);
             } else if (address instanceof Inet4Address) {
-                return createAbsoluteURL(new URL("http://" + address.getHostAddress() + ":" + localStreamPort), relativeOrNot);
+                return createAbsoluteURL(new URL("http://" + address.getHostAddress() + ":" + localStreamPort),
+                        relativeOrNot);
             } else {
                 throw new IllegalArgumentException("InetAddress is neither IPv4 nor IPv6: " + address);
             }
@@ -165,7 +167,8 @@ public class URIUtil {
     }
 
     public static URL toURL(URI uri) {
-        if (uri == null) return null;
+        if (uri == null)
+            return null;
         try {
             return uri.toURL();
         } catch (MalformedURLException ex) {
@@ -174,7 +177,8 @@ public class URIUtil {
     }
 
     public static URI toURI(URL url) {
-        if (url == null) return null;
+        if (url == null)
+            return null;
         try {
             return url.toURI();
         } catch (URISyntaxException ex) {
@@ -195,66 +199,78 @@ public class URIUtil {
      * http://www.lunatech-research.com/archives/2009/02/03/what-every-web-developer-must-know-about-url-encoding
      */
 
-    public final static BitSet ALLOWED = new BitSet() {{
-        int i;
-        for (i = 'a'; i <= 'z'; i++) {
-            set(i);
+    public final static BitSet ALLOWED = new BitSet() {
+        {
+            int i;
+            for (i = 'a'; i <= 'z'; i++) {
+                set(i);
+            }
+            for (i = 'A'; i <= 'Z'; i++) {
+                set(i);
+            }
+            for (i = '0'; i <= '9'; i++) {
+                set(i);
+            }
+            set('!');
+            set('$');
+            set('&');
+            set('\'');
+            set('(');
+            set(')');
+            set('*');
+            set('+');
+            set(',');
+            set(';');
+            set('=');
+            set('-');
+            set('.');
+            set('_');
+            set('~');
+            set(':');
+            set('@');
         }
-        for (i = 'A'; i <= 'Z'; i++) {
-            set(i);
+    };
+
+    public final static BitSet PATH_SEGMENT = new BitSet() {
+        {
+            or(ALLOWED);
+            clear(';');
         }
-        for (i = '0'; i <= '9'; i++) {
-            set(i);
+    };
+
+    public final static BitSet PATH_PARAM_NAME = new BitSet() {
+        {
+            or(ALLOWED);
+            clear(';');
+            clear('=');
         }
-        set('!');
-        set('$');
-        set('&');
-        set('\'');
-        set('(');
-        set(')');
-        set('*');
-        set('+');
-        set(',');
-        set(';');
-        set('=');
-        set('-');
-        set('.');
-        set('_');
-        set('~');
-        set(':');
-        set('@');
-    }};
+    };
 
-    public final static BitSet PATH_SEGMENT = new BitSet() {{
-        or(ALLOWED);
-        clear(';');
-    }};
+    public final static BitSet PATH_PARAM_VALUE = new BitSet() {
+        {
+            or(ALLOWED);
+            clear(';');
+        }
+    };
 
-    public final static BitSet PATH_PARAM_NAME = new BitSet() {{
-        or(ALLOWED);
-        clear(';');
-        clear('=');
-    }};
+    public final static BitSet QUERY = new BitSet() {
+        {
+            or(ALLOWED);
+            set('/');
+            set('?');
+            clear('=');
+            clear('&');
+            clear('+');
+        }
+    };
 
-    public final static BitSet PATH_PARAM_VALUE = new BitSet() {{
-        or(ALLOWED);
-        clear(';');
-    }};
-
-    public final static BitSet QUERY = new BitSet() {{
-        or(ALLOWED);
-        set('/');
-        set('?');
-        clear('=');
-        clear('&');
-        clear('+');
-    }};
-
-    public final static BitSet FRAGMENT = new BitSet() {{
-        or(ALLOWED);
-        set('/');
-        set('?');
-    }};
+    public final static BitSet FRAGMENT = new BitSet() {
+        {
+            or(ALLOWED);
+            set('/');
+            set('?');
+        }
+    };
 
     public static String encodePathSegment(final String pathSegment) {
         return encode(PATH_SEGMENT, pathSegment, "UTF-8");
@@ -296,5 +312,4 @@ public class URIUtil {
         }
         return encoded.toString();
     }
-
 }

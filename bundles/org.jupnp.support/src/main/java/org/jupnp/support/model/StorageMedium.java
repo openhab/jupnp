@@ -15,10 +15,10 @@
 
 package org.jupnp.support.model;
 
-import org.jupnp.model.ModelUtil;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jupnp.model.ModelUtil;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -63,11 +63,12 @@ public enum StorageMedium {
     private static Map<String, StorageMedium> byProtocolString = new HashMap<String, StorageMedium>() {
         private static final long serialVersionUID = 1635734229355713298L;
 
-    {
-        for (StorageMedium e : StorageMedium.values()) {
-            put(e.protocolString, e);
+        {
+            for (StorageMedium e : StorageMedium.values()) {
+                put(e.protocolString, e);
+            }
         }
-    }};
+    };
 
     private String protocolString;
 
@@ -86,7 +87,8 @@ public enum StorageMedium {
 
     public static StorageMedium valueOrExceptionOf(String s) {
         StorageMedium sm = byProtocolString.get(s);
-        if (sm != null) return sm;
+        if (sm != null)
+            return sm;
         throw new IllegalArgumentException("Invalid storage medium string: " + s);
     }
 
@@ -97,12 +99,12 @@ public enum StorageMedium {
 
     public static StorageMedium[] valueOfCommaSeparatedList(String s) {
         String[] strings = ModelUtil.fromCommaSeparatedList(s);
-        if (strings == null) return new StorageMedium[0];
+        if (strings == null)
+            return new StorageMedium[0];
         StorageMedium[] result = new StorageMedium[strings.length];
         for (int i = 0; i < strings.length; i++) {
             result[i] = valueOrVendorSpecificOf(strings[i]);
         }
         return result;
     }
-
 }

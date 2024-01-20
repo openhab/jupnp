@@ -31,7 +31,8 @@ import org.jupnp.transport.RouterException;
  *
  * @author Christian Bauer
  */
-public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage> extends SendingAsync {
+public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage>
+        extends SendingAsync {
 
     final private IN inputMessage;
     protected OUT outputMessage;
@@ -59,5 +60,4 @@ public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends S
     public String toString() {
         return "(" + getClass().getSimpleName() + ")";
     }
-
 }

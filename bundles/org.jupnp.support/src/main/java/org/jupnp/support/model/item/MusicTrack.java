@@ -15,16 +15,16 @@
 
 package org.jupnp.support.model.item;
 
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import java.util.List;
+
 import org.jupnp.support.model.Person;
 import org.jupnp.support.model.PersonWithRole;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.container.Container;
-
-import java.util.List;
-
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -42,19 +42,23 @@ public class MusicTrack extends AudioItem {
         super(other);
     }
 
-    public MusicTrack(String id, Container parent, String title, String creator, String album, String artist, Res... resource) {
+    public MusicTrack(String id, Container parent, String title, String creator, String album, String artist,
+            Res... resource) {
         this(id, parent.getId(), title, creator, album, artist, resource);
     }
 
-    public MusicTrack(String id, Container parent, String title, String creator, String album, PersonWithRole artist, Res... resource) {
+    public MusicTrack(String id, Container parent, String title, String creator, String album, PersonWithRole artist,
+            Res... resource) {
         this(id, parent.getId(), title, creator, album, artist, resource);
     }
 
-    public MusicTrack(String id, String parentID, String title, String creator, String album, String artist, Res... resource) {
+    public MusicTrack(String id, String parentID, String title, String creator, String album, String artist,
+            Res... resource) {
         this(id, parentID, title, creator, album, artist == null ? null : new PersonWithRole(artist), resource);
     }
 
-    public MusicTrack(String id, String parentID, String title, String creator, String album, PersonWithRole artist, Res... resource) {
+    public MusicTrack(String id, String parentID, String title, String creator, String album, PersonWithRole artist,
+            Res... resource) {
         super(id, parentID, title, creator, resource);
         setClazz(CLASS);
         if (album != null)
@@ -149,5 +153,4 @@ public class MusicTrack extends AudioItem {
         replaceFirstProperty(new DC.DATE(date));
         return this;
     }
-
 }

@@ -35,11 +35,10 @@ public class IO {
                     p = base + path;
                 }
             } else {
-                p = path.endsWith("/")
-                    ? path.substring(0, path.length() - 1)
-                    : path;
+                p = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
             }
-            if (p.startsWith("/")) p = p.substring(1);
+            if (p.startsWith("/"))
+                p = p.substring(1);
         }
         return p;
     }
@@ -185,12 +184,11 @@ public class IO {
     }
 
     public static String readLines(InputStream is) throws IOException {
-        if (is == null) throw new IllegalArgumentException("Inputstream was null");
+        if (is == null)
+            throw new IllegalArgumentException("Inputstream was null");
 
         BufferedReader inputReader;
-        inputReader = new BufferedReader(
-            new InputStreamReader(is)
-        );
+        inputReader = new BufferedReader(new InputStreamReader(is));
 
         StringBuilder input = new StringBuilder();
         String inputLine;
@@ -218,15 +216,18 @@ public class IO {
         return readLines(file, trimLines, commentChar, false);
     }
 
-    public static String[] readLines(File file, boolean trimLines, Character commentChar, boolean skipEmptyLines) throws IOException {
+    public static String[] readLines(File file, boolean trimLines, Character commentChar, boolean skipEmptyLines)
+            throws IOException {
         List<String> contents = new ArrayList();
         BufferedReader input = new BufferedReader(new FileReader(file));
         try {
             String line;
             while ((line = input.readLine()) != null) {
-                if (commentChar != null && line.matches("^\\s*" + commentChar + ".*")) continue;
+                if (commentChar != null && line.matches("^\\s*" + commentChar + ".*"))
+                    continue;
                 String l = trimLines ? line.trim() : line;
-                if (skipEmptyLines && l.length() == 0) continue;
+                if (skipEmptyLines && l.length() == 0)
+                    continue;
                 contents.add(l);
             }
         } finally {
@@ -235,23 +236,22 @@ public class IO {
         return contents.toArray(new String[contents.size()]);
     }
 
-
     /*
-    * Licensed to the Apache Software Foundation (ASF) under one or more
-    * contributor license agreements.  See the NOTICE file distributed with
-    * this work for additional information regarding copyright ownership.
-    * The ASF licenses this file to You under the Apache License, Version 2.0
-    * (the "License"); you may not use this file except in compliance with
-    * the License.  You may obtain a copy of the License at
-    *
-    *      http://www.apache.org/licenses/LICENSE-2.0
-    *
-    * Unless required by applicable law or agreed to in writing, software
-    * distributed under the License is distributed on an "AS IS" BASIS,
-    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    * See the License for the specific language governing permissions and
-    * limitations under the License.
-    */
+     * Licensed to the Apache Software Foundation (ASF) under one or more
+     * contributor license agreements. See the NOTICE file distributed with
+     * this work for additional information regarding copyright ownership.
+     * The ASF licenses this file to You under the Apache License, Version 2.0
+     * (the "License"); you may not use this file except in compliance with
+     * the License. You may obtain a copy of the License at
+     *
+     * http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     */
 
     /**
      * General IO stream manipulation utilities.
@@ -309,7 +309,7 @@ public class IO {
      */
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Unconditionally close an <code>Reader</code>.
@@ -384,7 +384,7 @@ public class IO {
     }
 
     // read toByteArray
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
@@ -395,7 +395,7 @@ public class IO {
      * @param input the <code>InputStream</code> to read from
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
     public static byte[] toByteArray(InputStream input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -413,7 +413,7 @@ public class IO {
      * @param input the <code>Reader</code> to read from
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
     public static byte[] toByteArray(Reader input) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -431,15 +431,14 @@ public class IO {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
      *
-     * @param input    the <code>Reader</code> to read from
+     * @param input the <code>Reader</code> to read from
      * @param encoding the encoding to use, null means platform default
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static byte[] toByteArray(Reader input, String encoding)
-        throws IOException {
+    public static byte[] toByteArray(Reader input, String encoding) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         copy(input, output, encoding);
         return output.toByteArray();
@@ -454,7 +453,7 @@ public class IO {
      * @param input the <code>String</code> to convert
      * @return the requested byte array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs (never occurs)
+     * @throws java.io.IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#getBytes()}
      */
     public static byte[] toByteArray(String input) throws IOException {
@@ -462,7 +461,7 @@ public class IO {
     }
 
     // read char[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Get the contents of an <code>InputStream</code> as a character array
@@ -474,7 +473,7 @@ public class IO {
      * @param is the <code>InputStream</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static char[] toCharArray(InputStream is) throws IOException {
@@ -493,15 +492,14 @@ public class IO {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param is       the <code>InputStream</code> to read from
+     * @param is the <code>InputStream</code> to read from
      * @param encoding the encoding to use, null means platform default
      * @return the requested character array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static char[] toCharArray(InputStream is, String encoding)
-        throws IOException {
+    public static char[] toCharArray(InputStream is, String encoding) throws IOException {
         CharArrayWriter output = new CharArrayWriter();
         copy(is, output, encoding);
         return output.toCharArray();
@@ -516,7 +514,7 @@ public class IO {
      * @param input the <code>Reader</code> to read from
      * @return the requested character array
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static char[] toCharArray(Reader input) throws IOException {
@@ -526,7 +524,7 @@ public class IO {
     }
 
     // read toString
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Get the contents of an <code>InputStream</code> as a String
@@ -538,7 +536,7 @@ public class IO {
      * @param input the <code>InputStream</code> to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
     public static String toString(InputStream input) throws IOException {
         StringWriter sw = new StringWriter();
@@ -556,14 +554,13 @@ public class IO {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input    the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read from
      * @param encoding the encoding to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
-    public static String toString(InputStream input, String encoding)
-        throws IOException {
+    public static String toString(InputStream input, String encoding) throws IOException {
         StringWriter sw = new StringWriter();
         copy(input, sw, encoding);
         return sw.toString();
@@ -578,7 +575,7 @@ public class IO {
      * @param input the <code>Reader</code> to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
     public static String toString(Reader input) throws IOException {
         StringWriter sw = new StringWriter();
@@ -593,7 +590,7 @@ public class IO {
      * @param input the byte array to read from
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs (never occurs)
+     * @throws java.io.IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[])}
      */
     public static String toString(byte[] input) throws IOException {
@@ -607,15 +604,14 @@ public class IO {
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      *
-     * @param input    the byte array to read from
+     * @param input the byte array to read from
      * @param encoding the encoding to use, null means platform default
      * @return the requested String
      * @throws NullPointerException if the input is null
-     * @throws java.io.IOException          if an I/O error occurs (never occurs)
+     * @throws java.io.IOException if an I/O error occurs (never occurs)
      * @deprecated Use {@link String#String(byte[], String)}
      */
-    public static String toString(byte[] input, String encoding)
-        throws IOException {
+    public static String toString(byte[] input, String encoding) throws IOException {
         if (encoding == null) {
             return new String(input);
         } else {
@@ -624,9 +620,9 @@ public class IO {
     }
 
     // readLines
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Convert the specified string to an input stream, encoded as bytes
@@ -648,7 +644,7 @@ public class IO {
      * Character encoding names can be found at
      * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
      *
-     * @param input    the string to convert
+     * @param input the string to convert
      * @param encoding the encoding to use, null means platform default
      * @return an input stream
      * @throws java.io.IOException if the encoding is invalid
@@ -660,20 +656,19 @@ public class IO {
     }
 
     // write byte[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Writes bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
      *
-     * @param data   the byte array to write, do not modify during output,
-     *               null ignored
+     * @param data the byte array to write, do not modify during output,
+     *            null ignored
      * @param output the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(byte[] data, OutputStream output)
-        throws IOException {
+    public static void write(byte[] data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data);
         }
@@ -685,11 +680,11 @@ public class IO {
      * <p/>
      * This method uses {@link String#String(byte[])}.
      *
-     * @param data   the byte array to write, do not modify during output,
-     *               null ignored
+     * @param data the byte array to write, do not modify during output,
+     *            null ignored
      * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(byte[] data, Writer output) throws IOException {
@@ -707,16 +702,15 @@ public class IO {
      * <p/>
      * This method uses {@link String#String(byte[], String)}.
      *
-     * @param data     the byte array to write, do not modify during output,
-     *                 null ignored
-     * @param output   the <code>Writer</code> to write to
+     * @param data the byte array to write, do not modify during output,
+     *            null ignored
+     * @param output the <code>Writer</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(byte[] data, Writer output, String encoding)
-        throws IOException {
+    public static void write(byte[] data, Writer output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -727,17 +721,17 @@ public class IO {
     }
 
     // write char[]
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Writes chars from a <code>char[]</code> to a <code>Writer</code>
      * using the default character encoding of the platform.
      *
-     * @param data   the char array to write, do not modify during output,
-     *               null ignored
+     * @param data the char array to write, do not modify during output,
+     *            null ignored
      * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(char[] data, Writer output) throws IOException {
@@ -753,15 +747,14 @@ public class IO {
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes()}.
      *
-     * @param data   the char array to write, do not modify during output,
-     *               null ignored
+     * @param data the char array to write, do not modify during output,
+     *            null ignored
      * @param output the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(char[] data, OutputStream output)
-        throws IOException {
+    public static void write(char[] data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(new String(data).getBytes());
         }
@@ -777,16 +770,15 @@ public class IO {
      * This method uses {@link String#String(char[])} and
      * {@link String#getBytes(String)}.
      *
-     * @param data     the char array to write, do not modify during output,
-     *                 null ignored
-     * @param output   the <code>OutputStream</code> to write to
+     * @param data the char array to write, do not modify during output,
+     *            null ignored
+     * @param output the <code>OutputStream</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(char[] data, OutputStream output, String encoding)
-        throws IOException {
+    public static void write(char[] data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -797,15 +789,15 @@ public class IO {
     }
 
     // write String
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Writes chars from a <code>String</code> to a <code>Writer</code>.
      *
-     * @param data   the <code>String</code> to write, null ignored
+     * @param data the <code>String</code> to write, null ignored
      * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
     public static void write(String data, Writer output) throws IOException {
@@ -821,14 +813,13 @@ public class IO {
      * <p/>
      * This method uses {@link String#getBytes()}.
      *
-     * @param data   the <code>String</code> to write, null ignored
+     * @param data the <code>String</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(String data, OutputStream output)
-        throws IOException {
+    public static void write(String data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data.getBytes());
         }
@@ -843,15 +834,14 @@ public class IO {
      * <p/>
      * This method uses {@link String#getBytes(String)}.
      *
-     * @param data     the <code>String</code> to write, null ignored
-     * @param output   the <code>OutputStream</code> to write to
+     * @param data the <code>String</code> to write, null ignored
+     * @param output the <code>OutputStream</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(String data, OutputStream output, String encoding)
-        throws IOException {
+    public static void write(String data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -862,19 +852,18 @@ public class IO {
     }
 
     // write StringBuffer
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Writes chars from a <code>StringBuffer</code> to a <code>Writer</code>.
      *
-     * @param data   the <code>StringBuffer</code> to write, null ignored
+     * @param data the <code>StringBuffer</code> to write, null ignored
      * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(StringBuffer data, Writer output)
-        throws IOException {
+    public static void write(StringBuffer data, Writer output) throws IOException {
         if (data != null) {
             output.write(data.toString());
         }
@@ -887,14 +876,13 @@ public class IO {
      * <p/>
      * This method uses {@link String#getBytes()}.
      *
-     * @param data   the <code>StringBuffer</code> to write, null ignored
+     * @param data the <code>StringBuffer</code> to write, null ignored
      * @param output the <code>OutputStream</code> to write to
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(StringBuffer data, OutputStream output)
-        throws IOException {
+    public static void write(StringBuffer data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes());
         }
@@ -909,15 +897,14 @@ public class IO {
      * <p/>
      * This method uses {@link String#getBytes(String)}.
      *
-     * @param data     the <code>StringBuffer</code> to write, null ignored
-     * @param output   the <code>OutputStream</code> to write to
+     * @param data the <code>StringBuffer</code> to write, null ignored
+     * @param output the <code>OutputStream</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(StringBuffer data, OutputStream output,
-                             String encoding) throws IOException {
+    public static void write(StringBuffer data, OutputStream output, String encoding) throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -928,7 +915,7 @@ public class IO {
     }
 
     // copy from InputStream
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Copy bytes from an <code>InputStream</code> to an
@@ -942,12 +929,12 @@ public class IO {
      * number of bytes cannot be returned as an int. For large streams
      * use the <code>copyLarge(InputStream, OutputStream)</code> method.
      *
-     * @param input  the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
-     * @throws ArithmeticException  if the byte count is too large
+     * @throws java.io.IOException if an I/O error occurs
+     * @throws ArithmeticException if the byte count is too large
      * @since Commons IO 1.1
      */
     public static int copy(InputStream input, OutputStream output) throws IOException {
@@ -965,15 +952,14 @@ public class IO {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedInputStream</code>.
      *
-     * @param input  the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @return the number of bytes copied
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.3
      */
-    public static long copyLarge(InputStream input, OutputStream output)
-        throws IOException {
+    public static long copyLarge(InputStream input, OutputStream output) throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         long count = 0;
         int n = 0;
@@ -993,14 +979,13 @@ public class IO {
      * <p/>
      * This method uses {@link java.io.InputStreamReader}.
      *
-     * @param input  the <code>InputStream</code> to read from
+     * @param input the <code>InputStream</code> to read from
      * @param output the <code>Writer</code> to write to
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(InputStream input, Writer output)
-        throws IOException {
+    public static void copy(InputStream input, Writer output) throws IOException {
         InputStreamReader in = new InputStreamReader(input);
         copy(in, output);
     }
@@ -1017,15 +1002,14 @@ public class IO {
      * <p/>
      * This method uses {@link java.io.InputStreamReader}.
      *
-     * @param input    the <code>InputStream</code> to read from
-     * @param output   the <code>Writer</code> to write to
+     * @param input the <code>InputStream</code> to read from
+     * @param output the <code>Writer</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(InputStream input, Writer output, String encoding)
-        throws IOException {
+    public static void copy(InputStream input, Writer output, String encoding) throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1035,7 +1019,7 @@ public class IO {
     }
 
     // copy from Reader
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Copy chars from a <code>Reader</code> to a <code>Writer</code>.
@@ -1048,12 +1032,12 @@ public class IO {
      * number of chars cannot be returned as an int. For large streams
      * use the <code>copyLarge(Reader, Writer)</code> method.
      *
-     * @param input  the <code>Reader</code> to read from
+     * @param input the <code>Reader</code> to read from
      * @param output the <code>Writer</code> to write to
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
-     * @throws ArithmeticException  if the character count is too large
+     * @throws java.io.IOException if an I/O error occurs
+     * @throws ArithmeticException if the character count is too large
      * @since Commons IO 1.1
      */
     public static int copy(Reader input, Writer output) throws IOException {
@@ -1070,11 +1054,11 @@ public class IO {
      * This method buffers the input internally, so there is no need to use a
      * <code>BufferedReader</code>.
      *
-     * @param input  the <code>Reader</code> to read from
+     * @param input the <code>Reader</code> to read from
      * @param output the <code>Writer</code> to write to
      * @return the number of characters copied
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.3
      */
     public static long copyLarge(Reader input, Writer output) throws IOException {
@@ -1101,14 +1085,13 @@ public class IO {
      * <p/>
      * This method uses {@link java.io.OutputStreamWriter}.
      *
-     * @param input  the <code>Reader</code> to read from
+     * @param input the <code>Reader</code> to read from
      * @param output the <code>OutputStream</code> to write to
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(Reader input, OutputStream output)
-        throws IOException {
+    public static void copy(Reader input, OutputStream output) throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
@@ -1132,15 +1115,14 @@ public class IO {
      * <p/>
      * This method uses {@link java.io.OutputStreamWriter}.
      *
-     * @param input    the <code>Reader</code> to read from
-     * @param output   the <code>OutputStream</code> to write to
+     * @param input the <code>Reader</code> to read from
+     * @param output the <code>OutputStream</code> to write to
      * @param encoding the encoding to use, null means platform default
      * @throws NullPointerException if the input or output is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void copy(Reader input, OutputStream output, String encoding)
-        throws IOException {
+    public static void copy(Reader input, OutputStream output, String encoding) throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1153,7 +1135,7 @@ public class IO {
     }
 
     // content equals
-    //-----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
 
     /**
      * Compare the contents of two Streams to determine if they are equal or
@@ -1167,10 +1149,9 @@ public class IO {
      * @return true if the content of the streams are equal or they both don't
      *         exist, false otherwise
      * @throws NullPointerException if either input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      */
-    public static boolean contentEquals(InputStream input1, InputStream input2)
-        throws IOException {
+    public static boolean contentEquals(InputStream input1, InputStream input2) throws IOException {
         if (!(input1 instanceof BufferedInputStream)) {
             input1 = new BufferedInputStream(input1);
         }
@@ -1203,11 +1184,10 @@ public class IO {
      * @return true if the content of the readers are equal or they both don't
      *         exist, false otherwise
      * @throws NullPointerException if either input is null
-     * @throws java.io.IOException          if an I/O error occurs
+     * @throws java.io.IOException if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static boolean contentEquals(Reader input1, Reader input2)
-        throws IOException {
+    public static boolean contentEquals(Reader input1, Reader input2) throws IOException {
         if (!(input1 instanceof BufferedReader)) {
             input1 = new BufferedReader(input1);
         }
@@ -1227,5 +1207,4 @@ public class IO {
         int ch2 = input2.read();
         return (ch2 == -1);
     }
-
 }

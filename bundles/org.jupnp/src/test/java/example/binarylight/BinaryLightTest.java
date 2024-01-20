@@ -14,12 +14,12 @@
 
 package example.binarylight;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -47,5 +47,4 @@ class BinaryLightTest {
         Thread.sleep(100);
         assertTrue(service.getManager().getImplementation().getStatus());
     }
-
 }

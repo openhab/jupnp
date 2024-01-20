@@ -36,5 +36,4 @@ public class ActionArgumentValue<S extends Service> extends VariableValue {
     public ActionArgument<S> getArgument() {
         return argument;
     }
-
 }

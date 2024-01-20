@@ -31,13 +31,13 @@ import org.jupnp.util.SpecificationViolationReporter;
  * @author Jochen Hiller - use SpecificationViolationReporter
  */
 public class ServiceType {
-	
-    public static final Pattern PATTERN =
-        Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
+
+    public static final Pattern PATTERN = Pattern
+            .compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
     // Note: 'serviceId' vs. 'service'
-    public static final Pattern BROKEN_PATTERN =
-        Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
+    public static final Pattern BROKEN_PATTERN = Pattern
+            .compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
     private String namespace;
     private String type;
@@ -113,24 +113,24 @@ public class ServiceType {
             matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(.+?):([0-9]+).*").matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 3) {
                 String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-                SpecificationViolationReporter.report(
-                        "Replacing invalid service type token '{}' with: {}", matcher.group(2), cleanToken);
+                SpecificationViolationReporter.report("Replacing invalid service type token '{}' with: {}",
+                        matcher.group(2), cleanToken);
                 return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
             }
 
-            // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of 'service'
+            // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of
+            // 'service'
             // urn:schemas-opencable-com:serviceId:dri2:debug:1
             matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(.+?):([0-9]+).*").matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 3) {
                 String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-                SpecificationViolationReporter.report(
-                        "Replacing invalid service type token '{}' with: {}", matcher.group(2), cleanToken);
+                SpecificationViolationReporter.report("Replacing invalid service type token '{}' with: {}",
+                        matcher.group(2), cleanToken);
                 return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
             }
         } catch (RuntimeException e) {
-            throw new InvalidValueException(String.format(
-                "Can't parse service type string (namespace/type/version) '%s'", s
-            ), e);
+            throw new InvalidValueException(
+                    String.format("Can't parse service type string (namespace/type/version) '%s'", s), e);
         }
 
         throw new InvalidValueException("Can't parse service type string (namespace/type/version): " + s);
@@ -141,10 +141,14 @@ public class ServiceType {
      *         this type's version is equal or higher than the given types version.
      */
     public boolean implementsVersion(ServiceType that) {
-        if (that == null) return false;
-        if (!namespace.equals(that.namespace)) return false;
-        if (!type.equals(that.type)) return false;
-        if (version < that.version) return false;
+        if (that == null)
+            return false;
+        if (!namespace.equals(that.namespace))
+            return false;
+        if (!type.equals(that.type))
+            return false;
+        if (version < that.version)
+            return false;
         return true;
     }
 
@@ -159,14 +163,19 @@ public class ServiceType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof ServiceType)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof ServiceType))
+            return false;
 
         ServiceType that = (ServiceType) o;
 
-        if (version != that.version) return false;
-        if (!namespace.equals(that.namespace)) return false;
-        if (!type.equals(that.type)) return false;
+        if (version != that.version)
+            return false;
+        if (!namespace.equals(that.namespace))
+            return false;
+        if (!type.equals(that.type))
+            return false;
 
         return true;
     }

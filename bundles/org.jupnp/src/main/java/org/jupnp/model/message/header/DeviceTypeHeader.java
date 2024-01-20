@@ -14,9 +14,9 @@
 
 package org.jupnp.model.message.header;
 
-import org.jupnp.model.types.DeviceType;
-
 import java.net.URI;
+
+import org.jupnp.model.types.DeviceType;
 
 /**
  * @author Christian Bauer

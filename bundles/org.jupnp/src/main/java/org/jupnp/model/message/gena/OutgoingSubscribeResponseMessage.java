@@ -27,7 +27,6 @@ import org.jupnp.model.message.header.UpnpHeader;
  */
 public class OutgoingSubscribeResponseMessage extends StreamResponseMessage {
 
-
     public OutgoingSubscribeResponseMessage(UpnpResponse.Status status) {
         super(status);
     }
@@ -35,7 +34,7 @@ public class OutgoingSubscribeResponseMessage extends StreamResponseMessage {
     public OutgoingSubscribeResponseMessage(LocalGENASubscription subscription) {
         super(new UpnpResponse(UpnpResponse.Status.OK));
 
-        getHeaders().add(UpnpHeader.Type.SERVER,new ServerHeader());
+        getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
         getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader(subscription.getSubscriptionId()));
         getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(subscription.getActualDurationSeconds()));
     }

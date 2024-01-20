@@ -14,14 +14,14 @@
 
 package org.jupnp.model.profile;
 
+import java.net.InetAddress;
+
 import org.jupnp.http.RequestInfo;
 import org.jupnp.model.message.Connection;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.UpnpHeaders;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.message.header.UserAgentHeader;
-
-import java.net.InetAddress;
 
 /**
  * Encapsulates information about a remote control point, the client.
@@ -44,7 +44,7 @@ public class RemoteClientInfo extends ClientInfo {
 
     public RemoteClientInfo(StreamRequestMessage requestMessage) {
         this(requestMessage != null ? requestMessage.getConnection() : null,
-            requestMessage != null ? requestMessage.getHeaders() : new UpnpHeaders());
+                requestMessage != null ? requestMessage.getHeaders() : new UpnpHeaders());
     }
 
     public RemoteClientInfo(Connection connection, UpnpHeaders requestHeaders) {
@@ -67,6 +67,7 @@ public class RemoteClientInfo extends ClientInfo {
      * closed. Note that some HTTP clients can <em>NOT</em> handle such garbage data in HTTP
      * responses, hence calling this method might cause compatibility issues.
      * </p>
+     * 
      * @return <code>true</code> if the remote client's connection was closed.
      */
     public boolean isRequestCancelled() {
@@ -76,9 +77,9 @@ public class RemoteClientInfo extends ClientInfo {
     /**
      * @throws InterruptedException if {@link #isRequestCancelled()} returns <code>true</code>.
      */
-    public void throwIfRequestCancelled() throws InterruptedException{
-        if(isRequestCancelled())
-             throw new InterruptedException("Client's request cancelled");
+    public void throwIfRequestCancelled() throws InterruptedException {
+        if (isRequestCancelled())
+            throw new InterruptedException("Client's request cancelled");
     }
 
     public InetAddress getRemoteAddress() {
@@ -98,10 +99,7 @@ public class RemoteClientInfo extends ClientInfo {
     }
 
     public void setResponseUserAgent(UserAgentHeader userAgentHeader) {
-        getExtraResponseHeaders().add(
-            UpnpHeader.Type.USER_AGENT,
-            userAgentHeader
-        );
+        getExtraResponseHeaders().add(UpnpHeader.Type.USER_AGENT, userAgentHeader);
     }
 
     // TODO: Remove this once we know how ClientProfile will look like
@@ -110,17 +108,13 @@ public class RemoteClientInfo extends ClientInfo {
     }
 
     public boolean isXbox360Request() {
-        return RequestInfo.isXbox360Request(
-            getRequestUserAgent(),
-            getRequestHeaders().getFirstHeaderString(UpnpHeader.Type.SERVER)
-        );
+        return RequestInfo.isXbox360Request(getRequestUserAgent(),
+                getRequestHeaders().getFirstHeaderString(UpnpHeader.Type.SERVER));
     }
 
     public boolean isPS3Request() {
-    	return RequestInfo.isPS3Request(
-            getRequestUserAgent(),
-            getRequestHeaders().getFirstHeaderString(UpnpHeader.Type.EXT_AV_CLIENT_INFO)
-        );
+        return RequestInfo.isPS3Request(getRequestUserAgent(),
+                getRequestHeaders().getFirstHeaderString(UpnpHeader.Type.EXT_AV_CLIENT_INFO));
     }
 
     @Override

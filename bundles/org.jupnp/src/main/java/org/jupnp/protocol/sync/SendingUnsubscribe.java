@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Disconnecting a GENA event subscription with a remote host.
  * <p>
- * Calls the {@link org.jupnp.model.gena.RemoteGENASubscription#end(org.jupnp.model.gena.CancelReason, org.jupnp.model.message.UpnpResponse)}
+ * Calls the
+ * {@link org.jupnp.model.gena.RemoteGENASubscription#end(org.jupnp.model.gena.CancelReason, org.jupnp.model.message.UpnpResponse)}
  * method if the subscription request was responded to correctly. No {@link org.jupnp.model.gena.CancelReason}
  * will be provided if the unsubscribe procedure completed as expected, otherwise <code>UNSUBSCRIBE_FAILED</code>
  * is used. The response might be <code>null</code> if no response was received from the remote host.
@@ -42,13 +43,8 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
     final protected RemoteGENASubscription subscription;
 
     public SendingUnsubscribe(UpnpService upnpService, RemoteGENASubscription subscription) {
-        super(
-            upnpService,
-            new OutgoingUnsubscribeRequestMessage(
-                subscription,
-                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())
-            )
-        );
+        super(upnpService, new OutgoingUnsubscribeRequestMessage(subscription,
+                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())));
         this.subscription = subscription;
     }
 
@@ -69,21 +65,19 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
         // Always remove from the registry and end the subscription properly - even if it's failed
         getUpnpService().getRegistry().removeRemoteSubscription(subscription);
 
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-            new Runnable() {
-                public void run() {
-                    if (response == null) {
-                        log.trace("Unsubscribe failed, no response received");
-                        subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
-                    } else if (response.getOperation().isFailed()) {
-                        log.trace("Unsubscribe failed, response was: {}", response);
-                        subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
-                    } else {
-                        log.trace("Unsubscribe successful, response was: {}", response);
-                        subscription.end(null, response.getOperation());
-                    }
+        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+            public void run() {
+                if (response == null) {
+                    log.trace("Unsubscribe failed, no response received");
+                    subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
+                } else if (response.getOperation().isFailed()) {
+                    log.trace("Unsubscribe failed, response was: {}", response);
+                    subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
+                } else {
+                    log.trace("Unsubscribe successful, response was: {}", response);
+                    subscription.end(null, response.getOperation());
                 }
             }
-        );
+        });
     }
 }

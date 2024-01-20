@@ -15,12 +15,12 @@
 
 package org.jupnp.support.model;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URI;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Descriptor metadata about an item/resource.

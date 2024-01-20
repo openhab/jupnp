@@ -19,64 +19,63 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.jupnp.device.simple.variables.TestStateVariable;
 import org.osgi.service.upnp.UPnPAction;
 import org.osgi.service.upnp.UPnPStateVariable;
-import org.jupnp.device.simple.variables.TestStateVariable;
 
 public class GetAction implements UPnPAction {
-	private String name;
-	private String[] argumentNames;
-	private Map<String, UPnPStateVariable> variables = new HashMap<String, UPnPStateVariable>();
-	
-	public GetAction(String name, TestStateVariable[] variables) {
-		this.name = name;
-		
-		this.argumentNames = new String[variables.length];
-		for (int i = 0; i < variables.length; i++) {
-			this.argumentNames[i] = String.format("%s", variables[i].getName());
-			this.variables.put(argumentNames[i], variables[i]);
-		}
-	}
+    private String name;
+    private String[] argumentNames;
+    private Map<String, UPnPStateVariable> variables = new HashMap<String, UPnPStateVariable>();
 
-	public GetAction(TestStateVariable variable) {
-		this(String.format("Get%s", variable.getName()), new TestStateVariable[] { variable });
-	}
+    public GetAction(String name, TestStateVariable[] variables) {
+        this.name = name;
 
-	@Override
-	public String getName() {
-		return name;
-	}
+        this.argumentNames = new String[variables.length];
+        for (int i = 0; i < variables.length; i++) {
+            this.argumentNames[i] = String.format("%s", variables[i].getName());
+            this.variables.put(argumentNames[i], variables[i]);
+        }
+    }
 
-	@Override
-	public String getReturnArgumentName() {
-		return null;
-	}
+    public GetAction(TestStateVariable variable) {
+        this(String.format("Get%s", variable.getName()), new TestStateVariable[] { variable });
+    }
 
-	@Override
-	public String[] getInputArgumentNames() {
-		return null;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String[] getOutputArgumentNames() {
-		return argumentNames;
-	}
+    @Override
+    public String getReturnArgumentName() {
+        return null;
+    }
 
-	@Override
-	public UPnPStateVariable getStateVariable(String argumentName) {
-		return variables.get(argumentName);
-	}
+    @Override
+    public String[] getInputArgumentNames() {
+        return null;
+    }
 
-	@Override
-	public Dictionary invoke(Dictionary args) throws Exception {
-		args = new Hashtable();
-		for (String name : argumentNames) {
-			TestStateVariable variable = (TestStateVariable) variables.get(name);
-		
-			args.put(name, variable.getCurrentValue());
-		}
-		
-		return args;
-	}
+    @Override
+    public String[] getOutputArgumentNames() {
+        return argumentNames;
+    }
 
+    @Override
+    public UPnPStateVariable getStateVariable(String argumentName) {
+        return variables.get(argumentName);
+    }
+
+    @Override
+    public Dictionary invoke(Dictionary args) throws Exception {
+        args = new Hashtable();
+        for (String name : argumentNames) {
+            TestStateVariable variable = (TestStateVariable) variables.get(name);
+
+            args.put(name, variable.getCurrentValue());
+        }
+
+        return args;
+    }
 }

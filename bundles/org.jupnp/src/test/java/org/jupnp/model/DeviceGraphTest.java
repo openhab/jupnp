@@ -14,17 +14,17 @@
 
 package org.jupnp.model;
 
-import org.jupnp.model.meta.LocalDevice;
-import org.jupnp.model.meta.RemoteDevice;
-import org.jupnp.model.meta.Service;
-import org.jupnp.model.types.ServiceType;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.data.SampleData;
 import org.jupnp.data.SampleDeviceEmbeddedOne;
 import org.jupnp.data.SampleDeviceEmbeddedTwo;
 import org.jupnp.data.SampleDeviceRootLocal;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.jupnp.model.meta.LocalDevice;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.Service;
+import org.jupnp.model.types.ServiceType;
 
 /**
  * @author Christian Bauer
@@ -52,8 +52,10 @@ class DeviceGraphTest {
         boolean haveOne = false, haveTwo = false;
 
         for (LocalDevice em : embedded) {
-            if (em.getIdentity().getUdn().equals(ld.getEmbeddedDevices()[0].getIdentity().getUdn())) haveOne = true;
-            if (em.getIdentity().getUdn().equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getIdentity().getUdn()))
+            if (em.getIdentity().getUdn().equals(ld.getEmbeddedDevices()[0].getIdentity().getUdn()))
+                haveOne = true;
+            if (em.getIdentity().getUdn()
+                    .equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getIdentity().getUdn()))
                 haveTwo = true;
         }
 
@@ -129,9 +131,12 @@ class DeviceGraphTest {
 
         boolean haveOne = false, haveTwo = false, haveThree = false;
         for (Service service : services) {
-            if (service.getServiceId().equals(one.getServiceId())) haveOne = true;
-            if (service.getServiceId().equals(two.getServiceId())) haveTwo = true;
-            if (service.getServiceId().equals(three.getServiceId())) haveThree = true;
+            if (service.getServiceId().equals(one.getServiceId()))
+                haveOne = true;
+            if (service.getServiceId().equals(two.getServiceId()))
+                haveTwo = true;
+            if (service.getServiceId().equals(three.getServiceId()))
+                haveThree = true;
         }
         assertTrue(haveOne);
         assertTrue(haveTwo);
@@ -205,8 +210,10 @@ class DeviceGraphTest {
         boolean haveOne = false, haveTwo = false, haveThree = false;
 
         for (ServiceType svcType : svcTypes) {
-            if (svcType.equals(ld.getServices()[0].getServiceType())) haveOne = true;
-            if (svcType.equals(ld.getEmbeddedDevices()[0].getServices()[0].getServiceType())) haveTwo = true;
+            if (svcType.equals(ld.getServices()[0].getServiceType()))
+                haveOne = true;
+            if (svcType.equals(ld.getEmbeddedDevices()[0].getServices()[0].getServiceType()))
+                haveTwo = true;
             if (svcType.equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0].getServiceType()))
                 haveThree = true;
         }

@@ -15,15 +15,15 @@
 
 package org.jupnp.support.model.container;
 
-import org.jupnp.support.model.StorageMedium;
-
 import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import org.jupnp.support.model.StorageMedium;
 
 /**
  * @author Christian Bauer
  */
 public class StorageVolume extends Container {
-    
+
     public static final Class CLASS = new Class("object.container.storageVolume");
 
     public StorageVolume() {
@@ -35,16 +35,16 @@ public class StorageVolume extends Container {
     }
 
     public StorageVolume(String id, Container parent, String title, String creator, Integer childCount,
-                         Long storageTotal, Long storageUsed, Long storageFree, StorageMedium storageMedium) {
+            Long storageTotal, Long storageUsed, Long storageFree, StorageMedium storageMedium) {
         this(id, parent.getId(), title, creator, childCount, storageTotal, storageUsed, storageFree, storageMedium);
     }
 
     public StorageVolume(String id, String parentID, String title, String creator, Integer childCount,
-                         Long storageTotal, Long storageUsed, Long storageFree, StorageMedium storageMedium) {
+            Long storageTotal, Long storageUsed, Long storageFree, StorageMedium storageMedium) {
         super(id, parentID, title, creator, CLASS, childCount);
         if (storageTotal != null)
             setStorageTotal(storageTotal);
-        if (storageUsed!= null)
+        if (storageUsed != null)
             setStorageUsed(storageUsed);
         if (storageFree != null)
             setStorageFree(storageFree);
@@ -87,5 +87,4 @@ public class StorageVolume extends Container {
         replaceFirstProperty(new UPNP.STORAGE_MEDIUM(storageMedium));
         return this;
     }
-    
 }

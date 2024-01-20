@@ -89,6 +89,5 @@ public class BlockingServlet extends HttpServlet {
             log.warn("{}", String.format("BlockingServlet timed out: id: %3d, duration: %,4d, request: %s", counter,
                     duration, req));
         }
-
     }
 }

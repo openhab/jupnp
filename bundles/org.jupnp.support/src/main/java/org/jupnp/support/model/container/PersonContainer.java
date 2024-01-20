@@ -48,5 +48,4 @@ public class PersonContainer extends Container {
         replaceFirstProperty(new DC.LANGUAGE(language));
         return this;
     }
-
 }

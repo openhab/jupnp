@@ -32,11 +32,8 @@ public class OutgoingSearchRequest extends OutgoingDatagramMessage<UpnpRequest> 
     private UpnpHeader searchTarget;
 
     public OutgoingSearchRequest(UpnpHeader searchTarget, int mxSeconds) {
-        super(
-                new UpnpRequest(UpnpRequest.Method.MSEARCH),
-                ModelUtil.getInetAddressByName(Constants.IPV4_UPNP_MULTICAST_GROUP),
-                Constants.UPNP_MULTICAST_PORT
-        );
+        super(new UpnpRequest(UpnpRequest.Method.MSEARCH),
+                ModelUtil.getInetAddressByName(Constants.IPV4_UPNP_MULTICAST_GROUP), Constants.UPNP_MULTICAST_PORT);
 
         this.searchTarget = searchTarget;
 

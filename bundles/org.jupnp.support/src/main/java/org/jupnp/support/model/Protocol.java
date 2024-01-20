@@ -54,5 +54,4 @@ public enum Protocol {
         logger.info("Unsupported OTHER protocol string: {}", s);
         return OTHER;
     }
-
 }

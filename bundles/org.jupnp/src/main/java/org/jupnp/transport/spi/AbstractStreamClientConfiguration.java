@@ -14,10 +14,10 @@
 
 package org.jupnp.transport.spi;
 
-import org.jupnp.model.ServerClientTokens;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.jupnp.model.ServerClientTokens;
 
 /**
  * @author Christian Bauer
@@ -39,13 +39,15 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
         this.timeoutSeconds = timeoutSeconds;
     }
 
-    protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService, int timeoutSeconds, int logWarningSeconds) {
+    protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService, int timeoutSeconds,
+            int logWarningSeconds) {
         this.requestExecutorService = requestExecutorService;
         this.timeoutSeconds = timeoutSeconds;
         this.logWarningSeconds = logWarningSeconds;
     }
 
-    protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService, int timeoutSeconds, int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
+    protected AbstractStreamClientConfiguration(ExecutorService requestExecutorService, int timeoutSeconds,
+            int logWarningSeconds, int retryAfterSeconds, int retryIterations) {
         this.requestExecutorService = requestExecutorService;
         this.timeoutSeconds = timeoutSeconds;
         this.logWarningSeconds = logWarningSeconds;
@@ -68,7 +70,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
      * @return Configured value or default of 5 retries.
      */
     public int getRetryIterations() {
-	return retryIterations;
+        return retryIterations;
     }
 
     /**

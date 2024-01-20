@@ -30,15 +30,13 @@ import org.jupnp.support.model.ProtocolInfo;
  */
 public abstract class PrepareForConnection extends ActionCallback {
 
-    public PrepareForConnection(Service<?, ?> service,
-                                ProtocolInfo remoteProtocolInfo, ServiceReference peerConnectionManager,
-                                int peerConnectionID, ConnectionInfo.Direction direction) {
+    public PrepareForConnection(Service<?, ?> service, ProtocolInfo remoteProtocolInfo,
+            ServiceReference peerConnectionManager, int peerConnectionID, ConnectionInfo.Direction direction) {
         this(service, null, remoteProtocolInfo, peerConnectionManager, peerConnectionID, direction);
     }
 
-    public PrepareForConnection(Service<?, ?> service, ControlPoint controlPoint,
-                                ProtocolInfo remoteProtocolInfo, ServiceReference peerConnectionManager,
-                                int peerConnectionID, ConnectionInfo.Direction direction) {
+    public PrepareForConnection(Service<?, ?> service, ControlPoint controlPoint, ProtocolInfo remoteProtocolInfo,
+            ServiceReference peerConnectionManager, int peerConnectionID, ConnectionInfo.Direction direction) {
         super(new ActionInvocation<>(service.getAction("PrepareForConnection")), controlPoint);
 
         getActionInvocation().setInput("RemoteProtocolInfo", remoteProtocolInfo.toString());
@@ -49,14 +47,10 @@ public abstract class PrepareForConnection extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        received(
-                invocation,
-                (Integer)invocation.getOutput("ConnectionID").getValue(),
-                (Integer)invocation.getOutput("RcsID").getValue(),
-                (Integer)invocation.getOutput("AVTransportID").getValue()
-        );
+        received(invocation, (Integer) invocation.getOutput("ConnectionID").getValue(),
+                (Integer) invocation.getOutput("RcsID").getValue(),
+                (Integer) invocation.getOutput("AVTransportID").getValue());
     }
 
     public abstract void received(ActionInvocation<?> invocation, int connectionID, int rcsID, int avTransportID);
-
 }

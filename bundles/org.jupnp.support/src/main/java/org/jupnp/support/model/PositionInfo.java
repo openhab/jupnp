@@ -15,11 +15,11 @@
 
 package org.jupnp.support.model;
 
+import java.util.Map;
+
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.action.ActionArgumentValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.Map;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -40,16 +40,11 @@ public class PositionInfo {
     }
 
     public PositionInfo(Map<String, ActionArgumentValue<?>> args) {
-        this(
-                ((UnsignedIntegerFourBytes) args.get("Track").getValue()).getValue(),
-                (String) args.get("TrackDuration").getValue(),
-                (String) args.get("TrackMetaData").getValue(),
-                (String) args.get("TrackURI").getValue(),
-                (String) args.get("RelTime").getValue(),
-                (String) args.get("AbsTime").getValue(),
-                (Integer) args.get("RelCount").getValue(),
-                (Integer) args.get("AbsCount").getValue()
-        );
+        this(((UnsignedIntegerFourBytes) args.get("Track").getValue()).getValue(),
+                (String) args.get("TrackDuration").getValue(), (String) args.get("TrackMetaData").getValue(),
+                (String) args.get("TrackURI").getValue(), (String) args.get("RelTime").getValue(),
+                (String) args.get("AbsTime").getValue(), (Integer) args.get("RelCount").getValue(),
+                (Integer) args.get("AbsCount").getValue());
     }
 
     public PositionInfo(PositionInfo copy, String relTime, String absTime) {
@@ -74,8 +69,7 @@ public class PositionInfo {
         this.absCount = copy.absCount;
     }
 
-    public PositionInfo(long track, String trackDuration, String trackURI,
-                        String relTime, String absTime) {
+    public PositionInfo(long track, String trackDuration, String trackURI, String relTime, String absTime) {
         this.track = new UnsignedIntegerFourBytes(track);
         this.trackDuration = trackDuration;
         this.trackURI = trackURI;
@@ -83,9 +77,8 @@ public class PositionInfo {
         this.absTime = absTime;
     }
 
-    public PositionInfo(long track, String trackDuration,
-                        String trackMetaData, String trackURI,
-                        String relTime, String absTime, int relCount, int absCount) {
+    public PositionInfo(long track, String trackDuration, String trackMetaData, String trackURI, String relTime,
+            String absTime, int relCount, int absCount) {
         this.track = new UnsignedIntegerFourBytes(track);
         this.trackDuration = trackDuration;
         this.trackMetaData = trackMetaData;
@@ -133,21 +126,22 @@ public class PositionInfo {
     public int getAbsCount() {
         return absCount;
     }
-    
+
     public void setTrackDuration(String trackDuration) {
-       this.trackDuration = trackDuration;
+        this.trackDuration = trackDuration;
     }
 
     public void setRelTime(String relTime) {
-       this.relTime = relTime;
+        this.relTime = relTime;
     }
-       
+
     public long getTrackDurationSeconds() {
         return getTrackDuration() == null ? 0 : ModelUtil.fromTimeString(getTrackDuration());
     }
 
     public long getTrackElapsedSeconds() {
-        return getRelTime() == null || getRelTime().equals("NOT_IMPLEMENTED") ? 0 : ModelUtil.fromTimeString(getRelTime());
+        return getRelTime() == null || getRelTime().equals("NOT_IMPLEMENTED") ? 0
+                : ModelUtil.fromTimeString(getRelTime());
     }
 
     public long getTrackRemainingSeconds() {
@@ -157,13 +151,14 @@ public class PositionInfo {
     public int getElapsedPercent() {
         long elapsed = getTrackElapsedSeconds();
         long total = getTrackDurationSeconds();
-        if (elapsed == 0 || total == 0) return 0;
-        return new Double(elapsed/((double)total/100)).intValue();
+        if (elapsed == 0 || total == 0)
+            return 0;
+        return new Double(elapsed / ((double) total / 100)).intValue();
     }
-
 
     @Override
     public String toString() {
-        return "(PositionInfo) Track: " + getTrack() + " RelTime: " + getRelTime() + " Duration: " + getTrackDuration() + " Percent: " + getElapsedPercent();
+        return "(PositionInfo) Track: " + getTrack() + " RelTime: " + getRelTime() + " Duration: " + getTrackDuration()
+                + " Percent: " + getElapsedPercent();
     }
 }

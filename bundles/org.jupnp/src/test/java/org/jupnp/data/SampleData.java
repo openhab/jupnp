@@ -39,9 +39,6 @@ import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.transport.impl.NetworkAddressFactoryImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 public class SampleData {
 
@@ -99,10 +96,8 @@ public class SampleData {
 
     public static Constructor<LocalDevice> getLocalDeviceConstructor() {
         try {
-            return LocalDevice.class.getConstructor(
-                    DeviceIdentity.class, DeviceType.class, DeviceDetails.class,
-                    Icon[].class, LocalService.class, LocalDevice.class
-            );
+            return LocalDevice.class.getConstructor(DeviceIdentity.class, DeviceType.class, DeviceDetails.class,
+                    Icon[].class, LocalService.class, LocalDevice.class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -110,10 +105,8 @@ public class SampleData {
 
     public static Constructor<LocalDevice> getLocalDeviceWithProviderConstructor() {
         try {
-            return LocalDevice.class.getConstructor(
-                    DeviceIdentity.class, DeviceType.class, DeviceDetailsProvider.class,
-                    Icon[].class, LocalService.class, LocalDevice.class
-            );
+            return LocalDevice.class.getConstructor(DeviceIdentity.class, DeviceType.class, DeviceDetailsProvider.class,
+                    Icon[].class, LocalService.class, LocalDevice.class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -121,10 +114,8 @@ public class SampleData {
 
     public static Constructor<LocalService> getLocalServiceConstructor() {
         try {
-            return LocalService.class.getConstructor(
-                    ServiceType.class, ServiceId.class,
-                    Action[].class, StateVariable[].class
-            );
+            return LocalService.class.getConstructor(ServiceType.class, ServiceId.class, Action[].class,
+                    StateVariable[].class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -137,26 +128,21 @@ public class SampleData {
     public static LocalDevice createLocalDevice(DeviceIdentity identity, boolean useProvider) {
         try {
 
-            Constructor<LocalDevice> ctor =
-                    useProvider
-                            ? getLocalDeviceWithProviderConstructor()
-                            : getLocalDeviceConstructor();
+            Constructor<LocalDevice> ctor = useProvider ? getLocalDeviceWithProviderConstructor()
+                    : getLocalDeviceConstructor();
 
             Constructor<LocalService> serviceConstructor = getLocalServiceConstructor();
 
-            return new SampleDeviceRootLocal(
-                    identity,
-                    new SampleServiceOne().newInstanceLocal(serviceConstructor),
+            return new SampleDeviceRootLocal(identity, new SampleServiceOne().newInstanceLocal(serviceConstructor),
                     new SampleDeviceEmbeddedOne(
                             new DeviceIdentity(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), identity),
                             new SampleServiceTwo().newInstanceLocal(serviceConstructor),
                             new SampleDeviceEmbeddedTwo(
                                     new DeviceIdentity(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), identity),
-                                    new SampleServiceThree().newInstanceLocal(serviceConstructor),
-                                    null
-                            ).newInstance(ctor, useProvider)
-                    ).newInstance(ctor, useProvider)
-            ).newInstance(ctor, useProvider);
+                                    new SampleServiceThree().newInstanceLocal(serviceConstructor), null)
+                                    .newInstance(ctor, useProvider))
+                            .newInstance(ctor, useProvider))
+                    .newInstance(ctor, useProvider);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -174,23 +160,13 @@ public class SampleData {
     }
 
     public static RemoteDeviceIdentity createRemoteDeviceIdentity(int maxAgeSeconds) {
-        return new RemoteDeviceIdentity(
-                SampleDeviceRoot.getRootUDN(),
-                maxAgeSeconds,
-                SampleDeviceRoot.getDeviceDescriptorURL(),
-                null,
-                getLocalBaseAddress()
-        );
+        return new RemoteDeviceIdentity(SampleDeviceRoot.getRootUDN(), maxAgeSeconds,
+                SampleDeviceRoot.getDeviceDescriptorURL(), null, getLocalBaseAddress());
     }
 
     public static RemoteDeviceIdentity createSecondRemoteDeviceIdentity(int maxAgeSeconds) {
-        return new RemoteDeviceIdentity(
-                SampleDeviceRoot.getRootUDN(),
-                maxAgeSeconds,
-                SampleDeviceRoot.getSecondDeviceDescriptorURL(),
-                null,
-                getSecondLocalBaseAddress()
-        );
+        return new RemoteDeviceIdentity(SampleDeviceRoot.getRootUDN(), maxAgeSeconds,
+                SampleDeviceRoot.getSecondDeviceDescriptorURL(), null, getSecondLocalBaseAddress());
     }
 
     public static RemoteDevice createRemoteDevice() {
@@ -199,10 +175,8 @@ public class SampleData {
 
     public static Constructor<RemoteDevice> getRemoteDeviceConstructor() {
         try {
-            return RemoteDevice.class.getConstructor(
-                    RemoteDeviceIdentity.class, DeviceType.class, DeviceDetails.class,
-                    Icon[].class, RemoteService.class, RemoteDevice.class
-            );
+            return RemoteDevice.class.getConstructor(RemoteDeviceIdentity.class, DeviceType.class, DeviceDetails.class,
+                    Icon[].class, RemoteService.class, RemoteDevice.class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -210,11 +184,8 @@ public class SampleData {
 
     public static Constructor<RemoteService> getRemoteServiceConstructor() {
         try {
-            return RemoteService.class.getConstructor(
-                    ServiceType.class, ServiceId.class,
-                    URI.class, URI.class, URI.class,
-                    Action[].class, StateVariable[].class
-            );
+            return RemoteService.class.getConstructor(ServiceType.class, ServiceId.class, URI.class, URI.class,
+                    URI.class, Action[].class, StateVariable[].class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -226,19 +197,16 @@ public class SampleData {
             Constructor<RemoteDevice> ctor = getRemoteDeviceConstructor();
             Constructor<RemoteService> serviceConstructor = getRemoteServiceConstructor();
 
-            return new SampleDeviceRoot(
-                    identity,
-                    new SampleServiceOne().newInstanceRemote(serviceConstructor),
+            return new SampleDeviceRoot(identity, new SampleServiceOne().newInstanceRemote(serviceConstructor),
                     new SampleDeviceEmbeddedOne(
                             new RemoteDeviceIdentity(SampleDeviceEmbeddedOne.getEmbeddedOneUDN(), identity),
                             new SampleServiceTwo().newInstanceRemote(serviceConstructor),
                             new SampleDeviceEmbeddedTwo(
                                     new RemoteDeviceIdentity(SampleDeviceEmbeddedTwo.getEmbeddedTwoUDN(), identity),
-                                    new SampleServiceThree().newInstanceRemote(serviceConstructor),
-                                    null
-                            ).newInstance(ctor)
-                    ).newInstance(ctor)
-            ).newInstance(ctor);
+                                    new SampleServiceThree().newInstanceRemote(serviceConstructor), null)
+                                    .newInstance(ctor))
+                            .newInstance(ctor))
+                    .newInstance(ctor);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -250,13 +218,10 @@ public class SampleData {
     }
 
     public static RemoteService createUndescribedRemoteService() {
-        RemoteService service =
-                new SampleServiceOneUndescribed().newInstanceRemote(SampleData.getRemoteServiceConstructor());
-        new SampleDeviceRoot(
-                SampleData.createRemoteDeviceIdentity(),
-                service,
-                null
-        ).newInstance(SampleData.getRemoteDeviceConstructor());
+        RemoteService service = new SampleServiceOneUndescribed()
+                .newInstanceRemote(SampleData.getRemoteServiceConstructor());
+        new SampleDeviceRoot(SampleData.createRemoteDeviceIdentity(), service, null)
+                .newInstance(SampleData.getRemoteDeviceConstructor());
         return service;
     }
 
@@ -271,10 +236,7 @@ public class SampleData {
     }
 
     public static <T> LocalService<T> readService(LocalService<T> service, Class<T> clazz) {
-        service.setManager(
-                new DefaultServiceManager(service, clazz)
-        );
+        service.setManager(new DefaultServiceManager(service, clazz));
         return service;
     }
-
 }

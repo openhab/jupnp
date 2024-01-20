@@ -15,10 +15,10 @@
 
 package org.jupnp.support.model.item;
 
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.container.Container;
-
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 /**
  * @author Christian Bauer
@@ -54,6 +54,4 @@ public class Photo extends ImageItem {
         replaceFirstProperty(new UPNP.ALBUM(album));
         return this;
     }
-
-
 }

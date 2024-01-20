@@ -55,7 +55,6 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
         super(new UpnpRequest(method, url), BodyType.STRING, body);
     }
 
-
     public StreamRequestMessage(UpnpRequest operation, byte[] body) {
         super(operation, BodyType.BYTES, body);
     }
@@ -71,17 +70,16 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
     public URI getUri() {
         return getOperation().getURI();
     }
-    
+
     public void setUri(URI uri) {
         getOperation().setUri(uri);
     }
 
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-	
-	public Connection getConnection() {
-		return connection;
-	}
-    
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }

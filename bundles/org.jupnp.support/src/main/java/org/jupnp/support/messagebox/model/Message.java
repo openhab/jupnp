@@ -65,7 +65,8 @@ public abstract class Message implements ElementAppender {
     }
 
     public Message(int id, Category category, DisplayType displayType) {
-        if (id == 0) id = randomGenerator.nextInt(Integer.MAX_VALUE);
+        if (id == 0)
+            id = randomGenerator.nextInt(Integer.MAX_VALUE);
         this.id = id;
         this.category = category;
         this.displayType = displayType;
@@ -85,12 +86,15 @@ public abstract class Message implements ElementAppender {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Message message = (Message) o;
 
-        if (id != message.id) return false;
+        if (id != message.id)
+            return false;
 
         return true;
     }
@@ -115,10 +119,8 @@ public abstract class Message implements ElementAppender {
 
             // Cut the root element, what we send to the TV is not really XML, just
             // random element soup which I'm sure the Samsung guys think is XML...
-            return s.replaceAll("<Message xmlns=\"urn:samsung-com:messagebox-1-0\">", "")
-                    .replaceAll("</Message>", "");
+            return s.replaceAll("<Message xmlns=\"urn:samsung-com:messagebox-1-0\">", "").replaceAll("</Message>", "");
 
-            
         } catch (ParserException ex) {
             throw new RuntimeException(ex);
         }

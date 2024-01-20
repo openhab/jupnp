@@ -14,7 +14,6 @@
 
 package org.jupnp.model.message.control;
 
-
 /**
  * @author Christian Bauer
  */

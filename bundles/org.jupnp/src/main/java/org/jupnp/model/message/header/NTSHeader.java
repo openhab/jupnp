@@ -38,7 +38,6 @@ public class NTSHeader extends UpnpHeader<NotificationSubtype> {
         if (getValue() == null) {
             throw new InvalidHeaderException("Invalid NTS header value: " + s);
         }
-
     }
 
     public String getString() {

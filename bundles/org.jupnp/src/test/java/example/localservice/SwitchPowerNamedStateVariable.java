@@ -47,10 +47,7 @@ import org.jupnp.binding.annotations.*;
  * arguments. This is a good example why UPnP is such a horrid specification.)
  * </p>
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerNamedStateVariable {
 
     @UpnpStateVariable(defaultValue = "0", sendEvents = false)
@@ -60,8 +57,7 @@ public class SwitchPowerNamedStateVariable {
     private boolean status = false;
 
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
         target = newTargetValue;
         status = newTargetValue;
         System.out.println("Switch is: " + status);
@@ -72,15 +68,9 @@ public class SwitchPowerNamedStateVariable {
         return target;
     }
 
-    @UpnpAction(                                    // DOC:INC1
-            name = "GetStatus",
-            out = @UpnpOutputArgument(
-                    name = "ResultStatus",
-                    stateVariable = "Status"
-            )
-    )
+    @UpnpAction( // DOC:INC1
+            name = "GetStatus", out = @UpnpOutputArgument(name = "ResultStatus", stateVariable = "Status"))
     public boolean retrieveStatus() {
         return status;
-    }                                               // DOC:INC1
-
+    } // DOC:INC1
 }

@@ -56,5 +56,4 @@ public class RegistryMaintainer implements Runnable {
         }
         log.trace("Stopped status on thread received, ending maintenance loop");
     }
-
 }

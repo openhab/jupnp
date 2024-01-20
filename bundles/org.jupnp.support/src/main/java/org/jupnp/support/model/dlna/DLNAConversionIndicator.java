@@ -14,7 +14,9 @@
  */
 package org.jupnp.support.model.dlna;
 
-/** DLNA.ORG_CI: conversion indicator parameter (integer)
+/**
+ * DLNA.ORG_CI: conversion indicator parameter (integer)
+ * 
  * <pre>
  *     0 not transcoded
  *     1 transcoded

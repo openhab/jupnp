@@ -14,6 +14,14 @@
 
 package org.jupnp.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.model.types.Base64Datatype;
 import org.jupnp.model.types.DLNADoc;
 import org.jupnp.model.types.Datatype;
@@ -27,14 +35,6 @@ import org.jupnp.model.types.UnsignedIntegerOneByteDatatype;
 import org.jupnp.model.types.UnsignedIntegerTwoBytesDatatype;
 import org.jupnp.model.types.csv.CSVBoolean;
 import org.jupnp.model.types.csv.CSVString;
-import org.junit.jupiter.api.Test;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DatatypesTest {
 
@@ -131,17 +131,15 @@ class DatatypesTest {
 
     @Test
     void dateAndTimeWithZone() {
-        DateTimeDatatype type =
-                new DateTimeDatatype(
-                        new String[]{"yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZ"},
-                        "yyyy-MM-dd'T'HH:mm:ssZ"
-                ) {
-                    @Override
-                    protected TimeZone getTimeZone() {
-                        // Set the "local" timezone to CET for the test
-                        return TimeZone.getTimeZone("CET");
-                    }
-                };
+        DateTimeDatatype type = new DateTimeDatatype(
+                new String[] { "yyyy-MM-dd", "yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd'T'HH:mm:ssZ" },
+                "yyyy-MM-dd'T'HH:mm:ssZ") {
+            @Override
+            protected TimeZone getTimeZone() {
+                // Set the "local" timezone to CET for the test
+                return TimeZone.getTimeZone("CET");
+            }
+        };
 
         Calendar expected = Calendar.getInstance();
         expected.setTimeZone(TimeZone.getTimeZone("CET"));
@@ -191,7 +189,7 @@ class DatatypesTest {
 
     @Test
     void timeWithZone() {
-        DateTimeDatatype type = new DateTimeDatatype(new String[]{"HH:mm:ssZ", "HH:mm:ss"}, "HH:mm:ssZ") {
+        DateTimeDatatype type = new DateTimeDatatype(new String[] { "HH:mm:ssZ", "HH:mm:ss" }, "HH:mm:ssZ") {
             @Override
             protected TimeZone getTimeZone() {
                 // Set the "local" timezone to CET for the test
@@ -209,14 +207,13 @@ class DatatypesTest {
         assertEquals(expected.getTimeInMillis(), type.valueOf("08:09:10").getTimeInMillis());
         assertEquals(expected.getTimeInMillis(), type.valueOf("08:09:10+0100").getTimeInMillis());
         assertEquals("08:09:10+0100", type.getString(expected));
-
     }
 
     @Test
     void base64() {
         Base64Datatype type = (Base64Datatype) Datatype.Builtin.BIN_BASE64.getDatatype();
-        assertArrayEquals(new byte[]{107, 86, -10}, type.valueOf("a1b2"));
-        assertEquals("a1b2", type.getString(new byte[]{107, 86, -10}));
+        assertArrayEquals(new byte[] { 107, 86, -10 }, type.valueOf("a1b2"));
+        assertEquals("a1b2", type.getString(new byte[] { 107, 86, -10 }));
     }
 
     @Test
@@ -267,16 +264,15 @@ class DatatypesTest {
 
     @Test
     void valueOfDouble() {
-        DoubleDatatype dt = (DoubleDatatype)Datatype.Builtin.R8.getDatatype();
+        DoubleDatatype dt = (DoubleDatatype) Datatype.Builtin.R8.getDatatype();
         Double d = dt.valueOf("1.23");
         assertEquals(1.23d, d);
     }
 
     @Test
     void valueOfFloat() {
-        FloatDatatype dt = (FloatDatatype)Datatype.Builtin.R4.getDatatype();
+        FloatDatatype dt = (FloatDatatype) Datatype.Builtin.R4.getDatatype();
         Float f = dt.valueOf("1.23456");
         assertEquals(1.23456f, f);
     }
-
 }

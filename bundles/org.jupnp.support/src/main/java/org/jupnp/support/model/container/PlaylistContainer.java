@@ -15,14 +15,14 @@
 
 package org.jupnp.support.model.container;
 
-import org.jupnp.support.model.Person;
-import org.jupnp.support.model.PersonWithRole;
-import org.jupnp.support.model.StorageMedium;
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 import java.util.List;
 
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.Person;
+import org.jupnp.support.model.PersonWithRole;
+import org.jupnp.support.model.StorageMedium;
 
 /**
  * @author Christian Bauer
@@ -176,5 +176,4 @@ public class PlaylistContainer extends Container {
         replaceFirstProperty(new DC.LANGUAGE(language));
         return this;
     }
-
 }

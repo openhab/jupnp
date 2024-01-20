@@ -30,8 +30,7 @@ public class ContentDirectoryException extends ActionException {
         super(errorCode, message);
     }
 
-    public ContentDirectoryException(int errorCode, String message,
-                                     Throwable cause) {
+    public ContentDirectoryException(int errorCode, String message, Throwable cause) {
         super(errorCode, message, cause);
     }
 
@@ -50,5 +49,4 @@ public class ContentDirectoryException extends ActionException {
     public ContentDirectoryException(ContentDirectoryErrorCode errorCode) {
         super(errorCode.getCode(), errorCode.getDescription());
     }
-
 }

@@ -42,24 +42,18 @@ import org.jupnp.util.io.IO;
 class InvalidActionXMLProcessingTest {
 
     static String[][] getInvalidXMLFile() {
-        return new String[][]{
-            {"/invalidxml/control/request_missing_envelope.xml"},
-            {"/invalidxml/control/request_missing_action_namespace.xml"},
-            {"/invalidxml/control/request_invalid_action_namespace.xml"},
-        };
+        return new String[][] { { "/invalidxml/control/request_missing_envelope.xml" },
+                { "/invalidxml/control/request_missing_action_namespace.xml" },
+                { "/invalidxml/control/request_invalid_action_namespace.xml" }, };
     }
 
     static String[][] getInvalidRecoverableXMLFile() {
-        return new String[][]{
-            {"/invalidxml/control/request_no_entityencoding.xml"},
-            {"/invalidxml/control/request_wrong_termination.xml"},
-        };
+        return new String[][] { { "/invalidxml/control/request_no_entityencoding.xml" },
+                { "/invalidxml/control/request_wrong_termination.xml" }, };
     }
 
     static String[][] getInvalidUnrecoverableXMLFile() {
-        return new String[][]{
-            {"/invalidxml/control/unrecoverable/naim_unity.xml"},
-        };
+        return new String[][] { { "/invalidxml/control/unrecoverable/naim_unity.xml" }, };
     }
 
     /* ############################## TEST FAILURE ############################ */
@@ -67,15 +61,13 @@ class InvalidActionXMLProcessingTest {
     @ParameterizedTest
     @MethodSource("getInvalidXMLFile")
     void readRequestDefaultFailure(String invalidXMLFile) {
-        assertThrows(UnsupportedDataException.class, () ->
-            readRequest(invalidXMLFile, new MockUpnpService()));
+        assertThrows(UnsupportedDataException.class, () -> readRequest(invalidXMLFile, new MockUpnpService()));
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidRecoverableXMLFile")
     void readRequestRecoverableFailure(String invalidXMLFile) {
-        assertThrows(UnsupportedDataException.class, () ->
-            readRequest(invalidXMLFile, new MockUpnpService()));
+        assertThrows(UnsupportedDataException.class, () -> readRequest(invalidXMLFile, new MockUpnpService()));
     }
 
     protected void readRequest(String invalidXMLFile, UpnpService upnpService) throws Exception {
@@ -94,22 +86,12 @@ class InvalidActionXMLProcessingTest {
     }
 
     public StreamRequestMessage createRequestMessage(Action action, String xmlFile) throws Exception {
-        StreamRequestMessage message =
-            new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("http://some.uri"));
+        StreamRequestMessage message = new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("http://some.uri"));
 
-        message.getHeaders().add(
-            UpnpHeader.Type.CONTENT_TYPE,
-            new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
-        message.getHeaders().add(
-            UpnpHeader.Type.SOAPACTION,
-            new SoapActionHeader(
-                new SoapActionType(
-                    action.getService().getServiceType(),
-                    action.getName()
-                )
-            )
-        );
+        message.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
+        message.getHeaders().add(UpnpHeader.Type.SOAPACTION,
+                new SoapActionHeader(new SoapActionType(action.getService().getServiceType(), action.getName())));
         message.setBody(IO.readLines(getClass().getResourceAsStream(xmlFile)));
         return message;
     }

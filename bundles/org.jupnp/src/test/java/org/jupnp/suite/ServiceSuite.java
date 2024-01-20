@@ -23,4 +23,3 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @SelectPackages("org.jupnp.service")
 public class ServiceSuite {
 }
-

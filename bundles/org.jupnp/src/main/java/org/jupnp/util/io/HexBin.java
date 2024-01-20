@@ -26,7 +26,6 @@
 */
 package org.jupnp.util.io;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -184,5 +183,4 @@ public final class HexBin {
         byte[] encoded = encode(binaryData.getBytes(StandardCharsets.UTF_8));
         return encoded == null ? null : new String(encoded);
     }
-
 }

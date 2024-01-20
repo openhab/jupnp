@@ -85,14 +85,14 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         }
     }
 
-    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type,
-                             boolean supportsQueryStateVariables, Class[] stringConvertibleTypes) throws LocalServiceBindingException {
-        return read(clazz, id, type, supportsQueryStateVariables, new HashSet<Class>(Arrays.asList(stringConvertibleTypes)));
+    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
+            Class[] stringConvertibleTypes) throws LocalServiceBindingException {
+        return read(clazz, id, type, supportsQueryStateVariables,
+                new HashSet<Class>(Arrays.asList(stringConvertibleTypes)));
     }
 
-    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type,
-                                   boolean supportsQueryStateVariables, Set<Class> stringConvertibleTypes)
-            throws LocalServiceBindingException {
+    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
+            Set<Class> stringConvertibleTypes) throws LocalServiceBindingException {
 
         Map<StateVariable, StateVariableAccessor> stateVariables = readStateVariables(clazz, stringConvertibleTypes);
         Map<Action, ActionExecutor> actions = readActions(clazz, stateVariables, stringConvertibleTypes);
@@ -103,7 +103,8 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         }
 
         try {
-            return new LocalService(type, id, actions, stateVariables, stringConvertibleTypes, supportsQueryStateVariables);
+            return new LocalService(type, id, actions, stateVariables, stringConvertibleTypes,
+                    supportsQueryStateVariables);
 
         } catch (ValidationException ex) {
             log.error("Could not validate device model", ex);
@@ -119,15 +120,14 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         for (Class stringConvertibleType : declaredTypes) {
             if (!Modifier.isPublic(stringConvertibleType.getModifiers())) {
                 throw new LocalServiceBindingException(
-                        "Declared string-convertible type must be public: " + stringConvertibleType
-                );
+                        "Declared string-convertible type must be public: " + stringConvertibleType);
             }
             try {
                 stringConvertibleType.getConstructor(String.class);
             } catch (NoSuchMethodException ex) {
                 throw new LocalServiceBindingException(
-                        "Declared string-convertible type needs a public single-argument String constructor: " + stringConvertibleType
-                );
+                        "Declared string-convertible type needs a public single-argument String constructor: "
+                                + stringConvertibleType);
             }
         }
         Set<Class> stringConvertibleTypes = new HashSet(Arrays.asList(declaredTypes));
@@ -140,8 +140,8 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         return stringConvertibleTypes;
     }
 
-    protected Map<StateVariable, StateVariableAccessor> readStateVariables(Class<?> clazz, Set<Class> stringConvertibleTypes)
-            throws LocalServiceBindingException {
+    protected Map<StateVariable, StateVariableAccessor> readStateVariables(Class<?> clazz,
+            Set<Class> stringConvertibleTypes) throws LocalServiceBindingException {
 
         Map<StateVariable, StateVariableAccessor> map = new HashMap();
 
@@ -151,7 +151,8 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             for (UpnpStateVariable v : variables.value()) {
 
                 if (v.name().length() == 0)
-                    throw new LocalServiceBindingException("Class-level @UpnpStateVariable name attribute value required");
+                    throw new LocalServiceBindingException(
+                            "Class-level @UpnpStateVariable name attribute value required");
 
                 String javaPropertyName = toJavaStateVariableName(v.name());
 
@@ -160,8 +161,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
                 StateVariableAccessor accessor = null;
                 if (getter != null && field != null) {
-                    accessor = variables.preferFields() ?
-                            new FieldStateVariableAccessor(field)
+                    accessor = variables.preferFields() ? new FieldStateVariableAccessor(field)
                             : new GetterStateVariableAccessor(getter);
                 } else if (field != null) {
                     accessor = new FieldStateVariableAccessor(field);
@@ -171,9 +171,8 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
                     log.trace("No field or getter found for state variable, skipping accessor: {}", v.name());
                 }
 
-                StateVariable stateVar =
-                        new AnnotationStateVariableBinder(v, v.name(), accessor, stringConvertibleTypes)
-                                .createStateVariable();
+                StateVariable stateVar = new AnnotationStateVariableBinder(v, v.name(), accessor,
+                        stringConvertibleTypes).createStateVariable();
 
                 map.put(stateVar, accessor);
             }
@@ -186,14 +185,9 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
             StateVariableAccessor accessor = new FieldStateVariableAccessor(field);
 
-            StateVariable stateVar = new AnnotationStateVariableBinder(
-                    svAnnotation,
-                    svAnnotation.name().length() == 0
-                            ? toUpnpStateVariableName(field.getName())
-                            : svAnnotation.name(),
-                    accessor,
-                    stringConvertibleTypes
-            ).createStateVariable();
+            StateVariable stateVar = new AnnotationStateVariableBinder(svAnnotation,
+                    svAnnotation.name().length() == 0 ? toUpnpStateVariableName(field.getName()) : svAnnotation.name(),
+                    accessor, stringConvertibleTypes).createStateVariable();
 
             map.put(stateVar, accessor);
         }
@@ -203,29 +197,20 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
             String propertyName = Reflections.getMethodPropertyName(getter.getName());
             if (propertyName == null) {
-                throw new LocalServiceBindingException(
-                        "Annotated method is not a getter method (: " + getter
-                );
+                throw new LocalServiceBindingException("Annotated method is not a getter method (: " + getter);
             }
 
             if (getter.getParameterTypes().length > 0)
                 throw new LocalServiceBindingException(
-                        "Getter method defined as @UpnpStateVariable can not have parameters: " + getter
-                );
+                        "Getter method defined as @UpnpStateVariable can not have parameters: " + getter);
 
             UpnpStateVariable svAnnotation = getter.getAnnotation(UpnpStateVariable.class);
 
             StateVariableAccessor accessor = new GetterStateVariableAccessor(getter);
 
-            StateVariable stateVar = new AnnotationStateVariableBinder(
-                    svAnnotation,
-                    svAnnotation.name().length() == 0
-                            ?
-                            toUpnpStateVariableName(propertyName)
-                            : svAnnotation.name(),
-                    accessor,
-                    stringConvertibleTypes
-            ).createStateVariable();
+            StateVariable stateVar = new AnnotationStateVariableBinder(svAnnotation,
+                    svAnnotation.name().length() == 0 ? toUpnpStateVariableName(propertyName) : svAnnotation.name(),
+                    accessor, stringConvertibleTypes).createStateVariable();
 
             map.put(stateVar, accessor);
         }
@@ -234,18 +219,17 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
     }
 
     protected Map<Action, ActionExecutor> readActions(Class<?> clazz,
-                                                      Map<StateVariable, StateVariableAccessor> stateVariables,
-                                                      Set<Class> stringConvertibleTypes)
+            Map<StateVariable, StateVariableAccessor> stateVariables, Set<Class> stringConvertibleTypes)
             throws LocalServiceBindingException {
 
         Map<Action, ActionExecutor> map = new HashMap();
 
         for (Method method : Reflections.getMethods(clazz, UpnpAction.class)) {
-            AnnotationActionBinder actionBinder =
-                    new AnnotationActionBinder(method, stateVariables, stringConvertibleTypes);
+            AnnotationActionBinder actionBinder = new AnnotationActionBinder(method, stateVariables,
+                    stringConvertibleTypes);
             Action action = actionBinder.appendAction(map);
-            if(isActionExcluded(action)) {
-            	map.remove(action);
+            if (isActionExcluded(action)) {
+                map.remove(action);
             }
         }
 
@@ -255,10 +239,10 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
     /**
      * Override this method to exclude action/methods after they have been discovered.
      */
-    protected  boolean isActionExcluded(Action action) {
-    	return false;
+    protected boolean isActionExcluded(Action action) {
+        return false;
     }
-    
+
     // TODO: I don't like the exceptions much, user has no idea what to do
 
     static String toUpnpStateVariableName(String javaName) {
@@ -275,7 +259,6 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         return upnpName.substring(0, 1).toLowerCase(Locale.ENGLISH) + upnpName.substring(1);
     }
 
-
     static String toUpnpActionName(String javaName) {
         if (javaName.length() < 1) {
             throw new IllegalArgumentException("Action name must be at least 1 character long");
@@ -289,5 +272,4 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         }
         return upnpName.substring(0, 1).toLowerCase(Locale.ENGLISH) + upnpName.substring(1);
     }
-
 }

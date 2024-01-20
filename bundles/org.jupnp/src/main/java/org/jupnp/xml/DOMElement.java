@@ -14,18 +14,19 @@
 
 package org.jupnp.xml;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.xml.namespace.QName;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Wraps a W3C element.
@@ -115,8 +116,10 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
     }
 
     public CHILD findChildWithIdentifier(final String id) {
-        Collection<CHILD> list = getXPathChildElements(CHILD_BUILDER, "descendant::" + prefix("*") + "[@id=\"" + id + "\"]");
-        if (list.size() == 1) return list.iterator().next();
+        Collection<CHILD> list = getXPathChildElements(CHILD_BUILDER,
+                "descendant::" + prefix("*") + "[@id=\"" + id + "\"]");
+        if (list.size() == 1)
+            return list.iterator().next();
         return null;
     }
 
@@ -129,11 +132,8 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
     }
 
     public CHILD createChild(String name, String namespaceURI) {
-        CHILD child = CHILD_BUILDER.build(
-                namespaceURI == null
-                        ? getW3CElement().getOwnerDocument().createElement(name)
-                        : getW3CElement().getOwnerDocument().createElementNS(namespaceURI, name)
-        );
+        CHILD child = CHILD_BUILDER.build(namespaceURI == null ? getW3CElement().getOwnerDocument().createElement(name)
+                : getW3CElement().getOwnerDocument().createElementNS(namespaceURI, name));
         getW3CElement().appendChild(child.getW3CElement());
         return child;
     }
@@ -171,18 +171,13 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
     protected CHILD adoptOrImport(Document document, CHILD child, boolean copy) {
         if (document != null) {
             if (copy) {
-                child = CHILD_BUILDER.build(
-                        (Element) document.importNode(child.getW3CElement(), true)
-                );
+                child = CHILD_BUILDER.build((Element) document.importNode(child.getW3CElement(), true));
             } else {
-                child = CHILD_BUILDER.build(
-                        (Element) document.adoptNode(child.getW3CElement())
-                );
+                child = CHILD_BUILDER.build((Element) document.adoptNode(child.getW3CElement()));
             }
         }
         return child;
     }
-
 
     protected abstract Builder<PARENT> createParentBuilder(DOMElement el);
 
@@ -194,8 +189,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
         NamedNodeMap map = getW3CElement().getAttributes();
         for (int i = 0; i < map.getLength(); i++) {
             Node attr = map.item(i);
-            sb.append(" ").append(attr.getNodeName()).append("=\"")
-                    .append(attr.getTextContent()).append("\"");
+            sb.append(" ").append(attr.getNodeName()).append("=\"").append(attr.getTextContent()).append("\"");
         }
         if (getContent().length() > 0) {
             sb.append(">").append(getContent()).append("</").append(getElementName()).append(">");
@@ -207,8 +201,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
 
     @Override
     public String toString() {
-        return "(" + getClass().getSimpleName() + ") " +
-                (getW3CElement() == null ? "UNBOUND" : getElementName());
+        return "(" + getClass().getSimpleName() + ") " + (getW3CElement() == null ? "UNBOUND" : getElementName());
     }
 
     public XPath getXpath() {
@@ -257,7 +250,8 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
 
     public Object getXPathResult(Node context, String expr, QName result) {
         try {
-            //System.out.println("#### XPATH: " + expr + " CONTEXT: " + context.getAttributes().getNamedItem("id") + " EXPECTING: " + result);
+            // System.out.println("#### XPATH: " + expr + " CONTEXT: " + context.getAttributes().getNamedItem("id") + "
+            // EXPECTING: " + result);
             if (result == null) {
                 return xpath.evaluate(expr, context);
             }
@@ -266,7 +260,6 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
             throw new RuntimeException(ex);
         }
     }
-
 
     public abstract class Builder<T extends DOMElement> {
         public DOMElement element;
@@ -281,7 +274,6 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
             DOMElement el = element.getFirstChild(elementName);
             return el != null ? build(el.getW3CElement()) : null;
         }
-
     }
 
     public abstract class ArrayBuilder<T extends DOMElement> extends Builder<T> {
@@ -308,5 +300,4 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
             return children;
         }
     }
-
 }

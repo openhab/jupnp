@@ -16,6 +16,7 @@ package org.jupnp.support.model.dlna.types;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.support.model.dlna.types.CodedDataBuffer.TransferMechanism;
 
@@ -26,7 +27,9 @@ import org.jupnp.support.model.dlna.types.CodedDataBuffer.TransferMechanism;
  */
 public class BufferInfoType {
 
-    private static final Pattern pattern = Pattern.compile("^dejitter=(\\d{1,10})(;CDB=(\\d{1,10});BTM=(0|1|2))?(;TD=(\\d{1,10}))?(;BFR=(0|1))?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern pattern = Pattern.compile(
+            "^dejitter=(\\d{1,10})(;CDB=(\\d{1,10});BTM=(0|1|2))?(;TD=(\\d{1,10}))?(;BFR=(0|1))?$",
+            Pattern.CASE_INSENSITIVE);
     private Long dejitterSize;
     private CodedDataBuffer cdb;
     private Long targetDuration;
@@ -36,8 +39,7 @@ public class BufferInfoType {
         this.dejitterSize = dejitterSize;
     }
 
-    public BufferInfoType(Long dejitterSize, CodedDataBuffer cdb,
-            Long targetDuration, Boolean fullnessReports) {
+    public BufferInfoType(Long dejitterSize, CodedDataBuffer cdb, Long targetDuration, Boolean fullnessReports) {
         this.dejitterSize = dejitterSize;
         this.cdb = cdb;
         this.targetDuration = targetDuration;
@@ -65,7 +67,7 @@ public class BufferInfoType {
                 }
                 return new BufferInfoType(dejitterSize, cdb, targetDuration, fullnessReports);
             } catch (NumberFormatException ex1) {
-              //no need to take any precaution measure
+                // no need to take any precaution measure
             }
         }
         throw new InvalidValueException("Can't parse BufferInfoType: " + s);
@@ -80,7 +82,7 @@ public class BufferInfoType {
             s += ";TD=" + targetDuration;
         }
         if (fullnessReports != null) {
-            s += ";BFR=" + (fullnessReports?"1":"0");
+            s += ";BFR=" + (fullnessReports ? "1" : "0");
         }
         return s;
     }

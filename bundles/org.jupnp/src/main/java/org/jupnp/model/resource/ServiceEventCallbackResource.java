@@ -14,9 +14,9 @@
 
 package org.jupnp.model.resource;
 
-import org.jupnp.model.meta.RemoteService;
-
 import java.net.URI;
+
+import org.jupnp.model.meta.RemoteService;
 
 /**
  * @author Christian Bauer

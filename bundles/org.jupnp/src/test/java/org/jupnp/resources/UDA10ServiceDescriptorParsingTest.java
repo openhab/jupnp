@@ -14,15 +14,15 @@
 
 package org.jupnp.resources;
 
+import org.junit.jupiter.api.Test;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
 import org.jupnp.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.jupnp.binding.xml.UDA10ServiceDescriptorBinderSAXImpl;
-import org.jupnp.model.meta.RemoteDevice;
-import org.jupnp.model.meta.RemoteService;
 import org.jupnp.data.SampleData;
 import org.jupnp.data.SampleServiceOne;
+import org.jupnp.model.meta.RemoteDevice;
+import org.jupnp.model.meta.RemoteService;
 import org.jupnp.util.io.IO;
-import org.junit.jupiter.api.Test;
 
 class UDA10ServiceDescriptorParsingTest {
 
@@ -30,7 +30,8 @@ class UDA10ServiceDescriptorParsingTest {
     void readUDA10DescriptorDOM() throws Exception {
         ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderImpl();
         RemoteService service = SampleData.createUndescribedRemoteService();
-        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
+        service = binder.describe(service,
+                IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }
 
@@ -38,7 +39,8 @@ class UDA10ServiceDescriptorParsingTest {
     void readUDA10DescriptorSAX() throws Exception {
         ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderSAXImpl();
         RemoteService service = SampleData.createUndescribedRemoteService();
-        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
+        service = binder.describe(service,
+                IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }
 
@@ -52,5 +54,4 @@ class UDA10ServiceDescriptorParsingTest {
         service = binder.describe(service, descriptorXml);
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(rd));
     }
-
 }

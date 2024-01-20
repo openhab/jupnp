@@ -14,12 +14,12 @@
 
 package org.jupnp.model;
 
-import org.w3c.dom.*;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.w3c.dom.*;
 
 /**
  * XML handling and printing shortcuts.
@@ -42,11 +42,13 @@ public class XMLUtil {
 
     public static String documentToString(Document document, boolean standalone) throws Exception {
         String prol = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"" + (standalone ? "yes" : "no") + "\"?>";
-        return prol + nodeToString(document.getDocumentElement(), new HashSet(), document.getDocumentElement().getNamespaceURI());
+        return prol + nodeToString(document.getDocumentElement(), new HashSet(),
+                document.getDocumentElement().getNamespaceURI());
     }
 
     public static String documentToFragmentString(Document document) throws Exception {
-        return nodeToString(document.getDocumentElement(), new HashSet(), document.getDocumentElement().getNamespaceURI());
+        return nodeToString(document.getDocumentElement(), new HashSet(),
+                document.getDocumentElement().getNamespaceURI());
     }
 
     protected static String nodeToString(Node node, Set<String> parentPrefixes, String namespaceURI) throws Exception {
@@ -70,7 +72,8 @@ public class XMLUtil {
                 NamedNodeMap map = element.getAttributes();
                 for (int i = 0; i < map.getLength(); i++) {
                     Node attr = map.item(i);
-                    if (attr.getNodeName().startsWith("xmlns")) continue;
+                    if (attr.getNodeName().startsWith("xmlns"))
+                        continue;
                     if (attr.getPrefix() != null && !parentPrefixes.contains(attr.getPrefix())) {
                         thisLevelPrefixes.put(attr.getPrefix(), element.getNamespaceURI());
                     }
@@ -82,8 +85,8 @@ public class XMLUtil {
                 }
             }
 
-            if (namespaceURI != null && !thisLevelPrefixes.containsValue(namespaceURI) &&
-                    !namespaceURI.equals(element.getParentNode().getNamespaceURI())) {
+            if (namespaceURI != null && !thisLevelPrefixes.containsValue(namespaceURI)
+                    && !namespaceURI.equals(element.getParentNode().getNamespaceURI())) {
                 b.append(" xmlns=\"").append(namespaceURI).append("\"");
             }
 
@@ -132,9 +135,9 @@ public class XMLUtil {
         s = s.replaceAll("&", "&amp;");
         s = s.replaceAll("<", "&lt;");
         s = s.replaceAll(">", "&gt;");
-        if(encodeQuotes) {
-        	s = s.replaceAll("'", "&apos;");
-        	s = s.replaceAll("\"", "&quot;");
+        if (encodeQuotes) {
+            s = s.replaceAll("'", "&apos;");
+            s = s.replaceAll("\"", "&quot;");
         }
         return s;
     }
@@ -153,7 +156,8 @@ public class XMLUtil {
         return appendNewElementIfNotNull(document, parent, el, content, null);
     }
 
-    public static Element appendNewElementIfNotNull(Document document, Element parent, Enum el, Object content, String namespace) {
+    public static Element appendNewElementIfNotNull(Document document, Element parent, Enum el, Object content,
+            String namespace) {
         return appendNewElementIfNotNull(document, parent, el.toString(), content, namespace);
     }
 
@@ -161,8 +165,10 @@ public class XMLUtil {
         return appendNewElementIfNotNull(document, parent, element, content, null);
     }
 
-    public static Element appendNewElementIfNotNull(Document document, Element parent, String element, Object content, String namespace) {
-        if (content == null) return parent;
+    public static Element appendNewElementIfNotNull(Document document, Element parent, String element, Object content,
+            String namespace) {
+        if (content == null)
+            return parent;
         return appendNewElement(document, parent, element, content, namespace);
     }
 
@@ -170,7 +176,8 @@ public class XMLUtil {
         return appendNewElement(document, parent, element, content, null);
     }
 
-    public static Element appendNewElement(Document document, Element parent, String element, Object content, String namespace) {
+    public static Element appendNewElement(Document document, Element parent, String element, Object content,
+            String namespace) {
         Element childElement;
         if (namespace != null) {
             childElement = document.createElementNS(namespace, element);
@@ -201,5 +208,4 @@ public class XMLUtil {
         }
         return buffer.toString();
     }
-
 }

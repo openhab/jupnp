@@ -15,11 +15,11 @@
 
 package org.jupnp.support.model.container;
 
-import org.jupnp.support.model.item.Item;
-import org.jupnp.support.model.item.Photo;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jupnp.support.model.item.Item;
+import org.jupnp.support.model.item.Photo;
 
 /**
  * @author Christian Bauer
@@ -40,7 +40,8 @@ public class PhotoAlbum extends Album {
         this(id, parent.getId(), title, creator, childCount, new ArrayList<Photo>());
     }
 
-    public PhotoAlbum(String id, Container parent, String title, String creator, Integer childCount, List<Photo> photos) {
+    public PhotoAlbum(String id, Container parent, String title, String creator, Integer childCount,
+            List<Photo> photos) {
         this(id, parent.getId(), title, creator, childCount, photos);
     }
 
@@ -48,7 +49,8 @@ public class PhotoAlbum extends Album {
         this(id, parentID, title, creator, childCount, new ArrayList<Photo>());
     }
 
-    public PhotoAlbum(String id, String parentID, String title, String creator, Integer childCount, List<Photo> photos) {
+    public PhotoAlbum(String id, String parentID, String title, String creator, Integer childCount,
+            List<Photo> photos) {
         super(id, parentID, title, creator, childCount);
         setClazz(CLASS);
         addPhotos(photos);
@@ -57,7 +59,8 @@ public class PhotoAlbum extends Album {
     public Photo[] getPhotos() {
         List<Photo> list = new ArrayList<>();
         for (Item item : getItems()) {
-            if (item instanceof Photo) list.add((Photo)item);
+            if (item instanceof Photo)
+                list.add((Photo) item);
         }
         return list.toArray(new Photo[list.size()]);
     }
@@ -74,5 +77,4 @@ public class PhotoAlbum extends Album {
             }
         }
     }
-
 }

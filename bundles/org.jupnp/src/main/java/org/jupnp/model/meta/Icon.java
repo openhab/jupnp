@@ -14,7 +14,6 @@
 
 package org.jupnp.model.meta;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +60,8 @@ public class Icon implements Validatable {
      * Used internally by jUPnP when {@link RemoteDevice} is discovered, you shouldn't have to call this.
      */
     public Icon(String mimeType, int width, int height, int depth, URI uri) {
-        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, uri, null);
+        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, uri,
+                null);
     }
 
     /**
@@ -70,7 +70,7 @@ public class Icon implements Validatable {
      *
      * @param url A URL of the icon data that can be read with <code>new File(url.toURI())</code>.
      */
-    public Icon(String mimeType, int width, int height, int depth, URL url) throws IOException{
+    public Icon(String mimeType, int width, int height, int depth, URL url) throws IOException {
         this(mimeType, width, height, depth, new File(URIUtil.toURI(url)));
     }
 
@@ -87,7 +87,8 @@ public class Icon implements Validatable {
      *
      * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
      */
-    public Icon(String mimeType, int width, int height, int depth, String uniqueName, InputStream is) throws IOException {
+    public Icon(String mimeType, int width, int height, int depth, String uniqueName, InputStream is)
+            throws IOException {
         this(mimeType, width, height, depth, uniqueName, IO.readBytes(is));
     }
 
@@ -97,20 +98,19 @@ public class Icon implements Validatable {
      * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
      */
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, byte[] data) {
-        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, URI.create(uniqueName), data);
+        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth,
+                URI.create(uniqueName), data);
     }
 
     /**
      * Use this constructor if your local icon is binary data encoded with <em>BinHex</em>.
-
+     * 
      * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
      * @param binHexEncoded The icon bytes encoded as BinHex.
      */
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, String binHexEncoded) {
-        this(
-                mimeType, width, height, depth, uniqueName,
-                binHexEncoded != null && !binHexEncoded.isEmpty() ? new BinHexDatatype().valueOf(binHexEncoded) : null
-        );
+        this(mimeType, width, height, depth, uniqueName,
+                binHexEncoded != null && !binHexEncoded.isEmpty() ? new BinHexDatatype().valueOf(binHexEncoded) : null);
     }
 
     protected Icon(MimeType mimeType, int width, int height, int depth, URI uri, byte[] data) {
@@ -160,56 +160,37 @@ public class Icon implements Validatable {
         List<ValidationError> errors = new ArrayList();
 
         if (getMimeType() == null) {
-            SpecificationViolationReporter.report(getDevice(),
-                    "Invalid icon, missing mime type: {}", this);
+            SpecificationViolationReporter.report(getDevice(), "Invalid icon, missing mime type: {}", this);
         }
         if (getWidth() == 0) {
-            SpecificationViolationReporter.report(getDevice(),
-                    "Invalid icon, missing width: {}", this);
+            SpecificationViolationReporter.report(getDevice(), "Invalid icon, missing width: {}", this);
         }
         if (getHeight() == 0) {
-            SpecificationViolationReporter.report(getDevice(),
-                   "Invalid icon, missing height: {}", this);
+            SpecificationViolationReporter.report(getDevice(), "Invalid icon, missing height: {}", this);
         }
         if (getDepth() == 0) {
-            SpecificationViolationReporter.report(getDevice(),
-                   "Invalid icon, missing bitmap depth: {}", this);
+            SpecificationViolationReporter.report(getDevice(), "Invalid icon, missing bitmap depth: {}", this);
         }
 
         if (getUri() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "uri",
-                    "URL is required"
-            ));
+            errors.add(new ValidationError(getClass(), "uri", "URL is required"));
         } else {
-        	try {
-        		URL testURI = getUri().toURL();
-        		if (testURI == null)
-        			throw new MalformedURLException();
-        	} catch (MalformedURLException ex) {
-        		errors.add(new ValidationError(
-        				getClass(),
-        				"uri",
-        				"URL must be valid: " + ex.getMessage())
-        				);
-        	} catch (IllegalArgumentException ex) {
-        		// Relative URI is fine here!
-        	}
+            try {
+                URL testURI = getUri().toURL();
+                if (testURI == null)
+                    throw new MalformedURLException();
+            } catch (MalformedURLException ex) {
+                errors.add(new ValidationError(getClass(), "uri", "URL must be valid: " + ex.getMessage()));
+            } catch (IllegalArgumentException ex) {
+                // Relative URI is fine here!
+            }
         }
 
         return errors;
     }
 
     public Icon deepCopy() {
-        return new Icon(
-                getMimeType(),
-                getWidth(),
-                getHeight(),
-                getDepth(),
-                getUri(),
-                getData()
-        );
+        return new Icon(getMimeType(), getWidth(), getHeight(), getDepth(), getUri(), getData());
     }
 
     @Override

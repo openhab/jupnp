@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * By default, the namespace is organized as follows:
  * </p>
+ * 
  * <pre>{@code
  * http://host:port/dev/<udn>/desc.xml
  * http://host:port/dev/<udn>/svc/<svcIdNamespace>/<svcId>/desc.xml
@@ -153,7 +154,8 @@ public class Namespace {
     }
 
     public Resource[] getResources(Device device) throws ValidationException {
-        if (!device.isRoot()) return null;
+        if (!device.isRoot())
+            return null;
 
         Set<Resource> resources = new HashSet<Resource>();
         List<ValidationError> errors = new ArrayList<ValidationError>();
@@ -164,11 +166,8 @@ public class Namespace {
             log.trace("Discovered: {}", resource);
             if (!resources.add(resource)) {
                 log.trace("Local resource already exists, queueing validation error");
-                errors.add(new ValidationError(
-                    getClass(),
-                    "resources",
-                    "Local URI namespace conflict between resources of device: " + resource
-                ));
+                errors.add(new ValidationError(getClass(), "resources",
+                        "Local URI namespace conflict between resources of device: " + resource));
             }
         }
         if (errors.size() > 0) {
@@ -180,16 +179,8 @@ public class Namespace {
     protected URI appendPathToBaseURI(String path) {
         try {
             // not calling getBasePath() on purpose since we're not sure if all DalvikVMs will inline it correctly
-            return
-                new URI(
-                    basePath.getScheme(),
-                    null,
-                    basePath.getHost(),
-                    basePath.getPort(),
-                    decodedPath + path,
-                    null,
-                    null
-                );
+            return new URI(basePath.getScheme(), null, basePath.getHost(), basePath.getPort(), decodedPath + path, null,
+                    null);
         } catch (URISyntaxException e) {
             return URI.create(basePath + path);
         }

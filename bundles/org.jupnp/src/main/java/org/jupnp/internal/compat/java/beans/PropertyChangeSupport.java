@@ -32,45 +32,44 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PropertyChangeSupport {
 
-	/** Registered listeners for synchronized usage. */
-	private CopyOnWriteArrayList<PropertyChangeListener> listeners = new CopyOnWriteArrayList<PropertyChangeListener>();
+    /** Registered listeners for synchronized usage. */
+    private CopyOnWriteArrayList<PropertyChangeListener> listeners = new CopyOnWriteArrayList<PropertyChangeListener>();
 
-	/** The source object for property changes, */
-	private Object source;
+    /** The source object for property changes, */
+    private Object source;
 
-	public PropertyChangeSupport(Object source) {
-		this.source = source;
-	}
+    public PropertyChangeSupport(Object source) {
+        this.source = source;
+    }
 
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		this.listeners.add(listener);
-	}
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.listeners.add(listener);
+    }
 
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		this.listeners.remove(listener);
-	}
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.listeners.remove(listener);
+    }
 
-	/**
-	 * Fire an event for property changed. It will be fired when
-	 * <ul>
-	 * <li>oldValue == null</li>
-	 * <li>newValue == null</li>
-	 * <li>!oldValue.equals(newValue)</li>
-	 * </ul>
-	 * The property name will be put to event, but NOT used for filtering to
-	 * listeners. All listeners will be called synchronously. The order is not
-	 * guaranteed. As the event is immutable, the same event will be fired to
-	 * all listeners.
-	 */
-	public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-		if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
-			PropertyChangeEvent event = new PropertyChangeEvent(this.source, propertyName, oldValue, newValue);
-			for (Iterator<PropertyChangeListener> iter = listeners.iterator(); iter.hasNext();) {
-				PropertyChangeListener listener = iter.next();
-				listener.propertyChange(event);
-			}
+    /**
+     * Fire an event for property changed. It will be fired when
+     * <ul>
+     * <li>oldValue == null</li>
+     * <li>newValue == null</li>
+     * <li>!oldValue.equals(newValue)</li>
+     * </ul>
+     * The property name will be put to event, but NOT used for filtering to
+     * listeners. All listeners will be called synchronously. The order is not
+     * guaranteed. As the event is immutable, the same event will be fired to
+     * all listeners.
+     */
+    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
+            PropertyChangeEvent event = new PropertyChangeEvent(this.source, propertyName, oldValue, newValue);
+            for (Iterator<PropertyChangeListener> iter = listeners.iterator(); iter.hasNext();) {
+                PropertyChangeListener listener = iter.next();
+                listener.propertyChange(event);
+            }
 
-		}
-	}
-
+        }
+    }
 }

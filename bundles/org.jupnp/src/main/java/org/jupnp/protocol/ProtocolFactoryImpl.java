@@ -87,7 +87,8 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
 
             switch (incomingRequest.getOperation().getMethod()) {
                 case NOTIFY:
-                    return isByeBye(incomingRequest) || isSupportedServiceAdvertisement(incomingRequest) ? createReceivingNotification(incomingRequest)
+                    return isByeBye(incomingRequest) || isSupportedServiceAdvertisement(incomingRequest)
+                            ? createReceivingNotification(incomingRequest)
                             : null;
                 case MSEARCH:
                     return createReceivingSearch(incomingRequest);
@@ -184,8 +185,8 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             if (message.getUri().getPath().contains(Namespace.EVENTS + Namespace.CALLBACK_FILE)) {
                 log.warn("Fixing trailing garbage in event message path: {}", message.getUri().getPath());
                 String invalid = message.getUri().toString();
-                message.setUri(URI.create(invalid.substring(0, invalid.indexOf(Namespace.CALLBACK_FILE)
-                        + Namespace.CALLBACK_FILE.length())));
+                message.setUri(URI.create(invalid.substring(0,
+                        invalid.indexOf(Namespace.CALLBACK_FILE) + Namespace.CALLBACK_FILE.length())));
                 if (getUpnpService().getConfiguration().getNamespace().isEventCallbackPath(message.getUri())
                         && message.getOperation().getMethod().equals(UpnpRequest.Method.NOTIFY))
                     return createReceivingEvent(message);

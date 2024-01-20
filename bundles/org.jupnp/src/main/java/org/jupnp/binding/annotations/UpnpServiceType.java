@@ -14,18 +14,19 @@
 
 package org.jupnp.binding.annotations;
 
-import org.jupnp.model.types.UDAServiceType;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jupnp.model.types.UDAServiceType;
 
 @Target({})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpnpServiceType {
 
     String namespace() default UDAServiceType.DEFAULT_NAMESPACE;
+
     String value();
+
     int version() default 1;
 }

@@ -160,42 +160,44 @@ public class Headers implements Map<String, List<String>> {
     }
 
     private String normalize(String key) {
-        String result=key;
-        
+        String result = key;
+
         if (normalizeHeaders) {
-            if (key == null) return null;
-            if (key.length() == 0) return key;
+            if (key == null)
+                return null;
+            if (key.length() == 0)
+                return key;
             char[] b;
             b = key.toCharArray();
-            final int caseDiff = 'a' - 'A';//android optimization
-            
+            final int caseDiff = 'a' - 'A';// android optimization
+
             if (b[0] >= 'a' && b[0] <= 'z') {
                 b[0] = (char) (b[0] - caseDiff);
             }
-            int length = key.length();//android optimization
-            for (int i = 1; i < length;  i++) {
+            int length = key.length();// android optimization
+            for (int i = 1; i < length; i++) {
                 if (b[i] >= 'A' && b[i] <= 'Z') {
                     b[i] = (char) (b[i] + caseDiff);
                 }
             }
             result = new String(b);
-        } 
+        }
         return result;
     }
-    
+
     public static String readLine(ByteArrayInputStream is) {
         return readLine(new StringBuilder(256), is);
     }
 
     public static String readLine(StringBuilder sb, ByteArrayInputStream is) {
         int nextByte;
-        while((nextByte = is.read()) != -1) {
+        while ((nextByte = is.read()) != -1) {
             char nextChar = (char) nextByte;
             if (nextChar == CR) {
-                    nextByte = (char) is.read();
-                    if (nextByte == LF) {
-                        break;
-                    }
+                nextByte = (char) is.read();
+                if (nextByte == LF) {
+                    break;
+                }
             } else if (nextChar == LF) {
                 break;
             }
@@ -231,13 +233,10 @@ public class Headers implements Map<String, List<String>> {
         valueEnd = findEndOfString(sb);
 
         // This gets a bit messy because there are really HTTP headers without values (go figure...)
-        return new String[]
-                {
-                        sb.substring(nameStart, nameEnd),
-                        sb.length() >= valueStart && sb.length() >= valueEnd && valueStart < valueEnd
-                                ? sb.substring(valueStart, valueEnd)
-                                : null
-                };
+        return new String[] { sb.substring(nameStart, nameEnd),
+                sb.length() >= valueStart && sb.length() >= valueEnd && valueStart < valueEnd
+                        ? sb.substring(valueStart, valueEnd)
+                        : null };
     }
 
     protected int findNonWhitespace(String sb, int offset) {
@@ -270,10 +269,9 @@ public class Headers implements Map<String, List<String>> {
             for (String v : headerEntry.getValue()) {
                 headerString.append(v).append(",");
             }
-            headerString.delete(headerString.length()-1, headerString.length());
+            headerString.delete(headerString.length() - 1, headerString.length());
             headerString.append("\r\n");
         }
         return headerString.toString();
     }
-
 }

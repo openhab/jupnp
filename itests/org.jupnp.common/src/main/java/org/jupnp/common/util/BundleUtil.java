@@ -20,31 +20,27 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 
 public class BundleUtil {
-	static private final Object[][] states = {
-		{ Integer.valueOf(Bundle.UNINSTALLED),	"UNINSTALLED" },
-		{ Integer.valueOf(Bundle.INSTALLED),	"INSTALLED" },
-		{ Integer.valueOf(Bundle.RESOLVED),		"RESOLVED" },
-		{ Integer.valueOf(Bundle.STARTING),		"STARTING" },
-		{ Integer.valueOf(Bundle.STOPPING),		"STOPPING" },
-		{ Integer.valueOf(Bundle.ACTIVE),		"ACTIVE" }
-	};
-	
-	static private Map<Integer, String> stateLookup;
-	
-	static private Map<Integer, String> getStateLookup() {
-		if (stateLookup == null) {
-			stateLookup = new Hashtable<Integer, String>();
+    static private final Object[][] states = { { Integer.valueOf(Bundle.UNINSTALLED), "UNINSTALLED" },
+            { Integer.valueOf(Bundle.INSTALLED), "INSTALLED" }, { Integer.valueOf(Bundle.RESOLVED), "RESOLVED" },
+            { Integer.valueOf(Bundle.STARTING), "STARTING" }, { Integer.valueOf(Bundle.STOPPING), "STOPPING" },
+            { Integer.valueOf(Bundle.ACTIVE), "ACTIVE" } };
 
-			for (Object[] state : states) {
-				stateLookup.put((Integer) state[0], (String) state[1]);
-			}
-		}
-		
-		return stateLookup;
-	}
-	
-	static public String getBundleState(Bundle bundle) {
-		String state = getStateLookup().get(Integer.valueOf(bundle.getState()));
-		return state != null ? state : Integer.valueOf(bundle.getState()).toString();
-	}
+    static private Map<Integer, String> stateLookup;
+
+    static private Map<Integer, String> getStateLookup() {
+        if (stateLookup == null) {
+            stateLookup = new Hashtable<Integer, String>();
+
+            for (Object[] state : states) {
+                stateLookup.put((Integer) state[0], (String) state[1]);
+            }
+        }
+
+        return stateLookup;
+    }
+
+    static public String getBundleState(Bundle bundle) {
+        String state = getStateLookup().get(Integer.valueOf(bundle.getState()));
+        return state != null ? state : Integer.valueOf(bundle.getState()).toString();
+    }
 }

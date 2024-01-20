@@ -25,7 +25,7 @@ public class ExpirationDetails {
 
     private int maxAgeSeconds = UNLIMITED_AGE;
     private long lastRefreshTimestampSeconds = getCurrentTimestampSeconds();
-    
+
     private int renewAttempts;
 
     public ExpirationDetails() {
@@ -54,11 +54,11 @@ public class ExpirationDetails {
     public boolean hasExpired() {
         return hasExpired(false);
     }
-    
+
     public void renewAttempted() {
         renewAttempts++;
     }
-    
+
     public int getRenewAttempts() {
         return renewAttempts;
     }
@@ -69,24 +69,24 @@ public class ExpirationDetails {
      */
     public boolean hasExpired(boolean halfTime) {
         // Note: Uses direct field access for performance reasons on Android
-        return maxAgeSeconds != UNLIMITED_AGE &&
-                (lastRefreshTimestampSeconds + (maxAgeSeconds/(halfTime ? 2 : 1))) < getCurrentTimestampSeconds();
+        return maxAgeSeconds != UNLIMITED_AGE
+                && (lastRefreshTimestampSeconds + (maxAgeSeconds / (halfTime ? 2 : 1))) < getCurrentTimestampSeconds();
     }
 
     public long getSecondsUntilExpiration() {
         // Note: Uses direct field access for performance reasons on Android
-        return maxAgeSeconds == UNLIMITED_AGE
-                ? Integer.MAX_VALUE
+        return maxAgeSeconds == UNLIMITED_AGE ? Integer.MAX_VALUE
                 : (lastRefreshTimestampSeconds + maxAgeSeconds) - getCurrentTimestampSeconds();
     }
 
     protected long getCurrentTimestampSeconds() {
-        return new Date().getTime()/1000;
+        return new Date().getTime() / 1000;
     }
 
     // Performance optimization on Android
-    private static  String simpleName = ExpirationDetails.class.getSimpleName();
-	@Override
+    private static String simpleName = ExpirationDetails.class.getSimpleName();
+
+    @Override
     public String toString() {
         return "(" + simpleName + ")" + " MAX AGE: " + maxAgeSeconds;
     }

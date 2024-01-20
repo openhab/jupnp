@@ -14,11 +14,11 @@
 
 package org.jupnp.model.types;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.jupnp.model.Constants;
 import org.jupnp.model.ModelUtil;
-
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 /**
  * Header in SOAP action messages, naturally declaring the same thing as the body of the SOAP message.
@@ -30,11 +30,11 @@ public class SoapActionType {
     public static final String MAGIC_CONTROL_NS = "schemas-upnp-org";
     public static final String MAGIC_CONTROL_TYPE = "control-1-0";
 
-    public static final Pattern PATTERN_MAGIC_CONTROL =
-            Pattern.compile(Constants.NS_UPNP_CONTROL_10 +"#("+Constants.REGEX_UDA_NAME+")");
+    public static final Pattern PATTERN_MAGIC_CONTROL = Pattern
+            .compile(Constants.NS_UPNP_CONTROL_10 + "#(" + Constants.REGEX_UDA_NAME + ")");
 
-    public static final Pattern PATTERN =
-            Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_TYPE + "):([0-9]+)#("+Constants.REGEX_UDA_NAME+")");
+    public static final Pattern PATTERN = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:("
+            + Constants.REGEX_TYPE + "):([0-9]+)#(" + Constants.REGEX_UDA_NAME + ")");
 
     private String namespace;
     private String type;
@@ -74,26 +74,28 @@ public class SoapActionType {
 
     public static SoapActionType valueOf(String s) throws InvalidValueException {
         Matcher magicControlMatcher = SoapActionType.PATTERN_MAGIC_CONTROL.matcher(s);
-        
+
         try {
-        	if (magicControlMatcher.matches()) {
-        		return new SoapActionType(MAGIC_CONTROL_NS, MAGIC_CONTROL_TYPE, null, magicControlMatcher.group(1)); // throws IllegalArgumentException
-        	}
+            if (magicControlMatcher.matches()) {
+                return new SoapActionType(MAGIC_CONTROL_NS, MAGIC_CONTROL_TYPE, null, magicControlMatcher.group(1)); // throws
+                                                                                                                     // IllegalArgumentException
+            }
 
-        	Matcher matcher = SoapActionType.PATTERN.matcher(s);
-        	if (matcher.matches())
-        		return new SoapActionType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)), matcher.group(4));
+            Matcher matcher = SoapActionType.PATTERN.matcher(s);
+            if (matcher.matches())
+                return new SoapActionType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)),
+                        matcher.group(4));
 
-        } catch(RuntimeException e) {
-        	throw new InvalidValueException(String.format(
-                "Can't parse action type string (namespace/type/version#actionName) '%s'", s
-            ), e);
+        } catch (RuntimeException e) {
+            throw new InvalidValueException(
+                    String.format("Can't parse action type string (namespace/type/version#actionName) '%s'", s), e);
         }
         throw new InvalidValueException("Can't parse action type string (namespace/type/version#actionName): " + s);
     }
 
     public ServiceType getServiceType() {
-        if (version == null) return null;
+        if (version == null)
+            return null;
         return new ServiceType(namespace, type, version);
     }
 
@@ -112,15 +114,21 @@ public class SoapActionType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof SoapActionType)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof SoapActionType))
+            return false;
 
         SoapActionType that = (SoapActionType) o;
 
-        if (!actionName.equals(that.actionName)) return false;
-        if (!namespace.equals(that.namespace)) return false;
-        if (!type.equals(that.type)) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+        if (!actionName.equals(that.actionName))
+            return false;
+        if (!namespace.equals(that.namespace))
+            return false;
+        if (!type.equals(that.type))
+            return false;
+        if (version != null ? !version.equals(that.version) : that.version != null)
+            return false;
 
         return true;
     }
@@ -133,5 +141,4 @@ public class SoapActionType {
         result = 31 * result + (version != null ? version.hashCode() : 0);
         return result;
     }
-
 }

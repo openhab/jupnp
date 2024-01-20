@@ -39,8 +39,8 @@ public class PersonWithRole extends Person {
 
     public void setOnElement(Element element) {
         element.setTextContent(toString());
-        if(getRole() != null) {
-        	element.setAttribute("role", getRole());
+        if (getRole() != null) {
+            element.setAttribute("role", getRole());
         }
     }
 }

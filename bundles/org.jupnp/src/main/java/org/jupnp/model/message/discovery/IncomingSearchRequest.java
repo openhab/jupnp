@@ -50,5 +50,4 @@ public class IncomingSearchRequest extends IncomingDatagramMessage<UpnpRequest> 
         MANHeader header = getHeaders().getFirstHeader(UpnpHeader.Type.MAN, MANHeader.class);
         return header != null && header.getValue().equals(NotificationSubtype.DISCOVER.getHeaderString());
     }
-
 }

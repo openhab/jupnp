@@ -14,7 +14,6 @@
 
 package org.jupnp;
 
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -286,5 +285,4 @@ public class UpnpServiceImpl implements UpnpService {
             }
         }
     }
-
 }

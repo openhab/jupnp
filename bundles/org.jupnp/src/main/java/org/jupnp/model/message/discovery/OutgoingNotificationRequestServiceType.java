@@ -27,15 +27,12 @@ import org.jupnp.model.types.ServiceType;
  */
 public class OutgoingNotificationRequestServiceType extends OutgoingNotificationRequest {
 
-    public OutgoingNotificationRequestServiceType(Location location,
-                                                  LocalDevice device, NotificationSubtype type,
-                                                  ServiceType serviceType) {
+    public OutgoingNotificationRequestServiceType(Location location, LocalDevice device, NotificationSubtype type,
+            ServiceType serviceType) {
 
         super(location, device, type);
 
         getHeaders().add(UpnpHeader.Type.NT, new ServiceTypeHeader(serviceType));
         getHeaders().add(UpnpHeader.Type.USN, new ServiceUSNHeader(device.getIdentity().getUdn(), serviceType));
     }
-
-
 }

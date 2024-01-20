@@ -14,7 +14,6 @@
 
 package org.jupnp.http;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -31,8 +30,9 @@ import java.util.TreeMap;
 /**
  * Parses query strings into multi-valued hashmaps. This should be part of the JDK.
  * <p>
- *     TODO: Can't extend LinkedHashMap (or was it TreeMap?), broken in GWT RPC serialization!
+ * TODO: Can't extend LinkedHashMap (or was it TreeMap?), broken in GWT RPC serialization!
  * </p>
+ * 
  * @author Christian Bauer
  */
 public class Query {
@@ -50,8 +50,7 @@ public class Query {
 
     public Query(Map<String, String[]> parameters) {
         for (Map.Entry<String, String[]> entry : parameters.entrySet()) {
-            List<String> list =
-                Arrays.asList(entry.getValue() != null ? entry.getValue() : new String[0]);
+            List<String> list = Arrays.asList(entry.getValue() != null ? entry.getValue() : new String[0]);
             this.parameters.put(entry.getKey(), list);
         }
     }
@@ -61,7 +60,8 @@ public class Query {
     }
 
     public Query(String qs) {
-        if (qs == null) return;
+        if (qs == null)
+            return;
 
         // Parse query string
         String pairs[] = qs.split("&");
@@ -106,9 +106,7 @@ public class Query {
     }
 
     public List<String> getValuesAsList(String name) {
-        return parameters.containsKey(name)
-            ? Collections.unmodifiableList(parameters.get(name))
-            : null;
+        return parameters.containsKey(name) ? Collections.unmodifiableList(parameters.get(name)) : null;
     }
 
     public Enumeration<String> getNames() {
@@ -153,8 +151,10 @@ public class Query {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             for (String v : entry.getValue()) {
-                if (v == null || v.length() == 0) continue;
-                if (sb.length() > 0) sb.append("&");
+                if (v == null || v.length() == 0)
+                    continue;
+                if (sb.length() > 0)
+                    sb.append("&");
                 sb.append(entry.getKey());
                 sb.append("=");
                 sb.append(v);

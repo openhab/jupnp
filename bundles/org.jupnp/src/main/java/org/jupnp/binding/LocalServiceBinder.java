@@ -38,12 +38,12 @@ public interface LocalServiceBinder {
      * @param id The pre-defined identifier of the service.
      * @param type The pre-defined type of the service.
      * @param supportsQueryStateVariables <code>true</code> if the service should support the
-     *                                    deprecated "query any state variable value" action.
+     *            deprecated "query any state variable value" action.
      * @param stringConvertibleTypes A list of Java classes which map directly to string-typed
-     *                               UPnP state variables.
+     *            UPnP state variables.
      * @return The produced metadata.
      * @throws LocalServiceBindingException If binding failed.
      */
-    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type,
-                              boolean supportsQueryStateVariables, Class[] stringConvertibleTypes) throws LocalServiceBindingException;
+    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
+            Class[] stringConvertibleTypes) throws LocalServiceBindingException;
 }

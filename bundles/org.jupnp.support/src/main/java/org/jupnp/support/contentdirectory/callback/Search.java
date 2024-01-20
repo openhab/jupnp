@@ -67,8 +67,8 @@ public abstract class Search extends ActionCallback {
     /**
      * @param maxResults Can be <code>null</code>, then {@link #getDefaultMaxResults()} is used.
      */
-    public Search(Service<?, ?> service, String containerId, String searchCriteria, String filter,
-                  long firstResult, Long maxResults, SortCriterion... orderBy) {
+    public Search(Service<?, ?> service, String containerId, String searchCriteria, String filter, long firstResult,
+            Long maxResults, SortCriterion... orderBy) {
         super(new ActionInvocation<>(service.getAction("Search")));
 
         logger.debug("Creating browse action for container ID: {}", containerId);
@@ -77,10 +77,8 @@ public abstract class Search extends ActionCallback {
         getActionInvocation().setInput("SearchCriteria", searchCriteria);
         getActionInvocation().setInput("Filter", filter);
         getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(firstResult));
-        getActionInvocation().setInput(
-                "RequestedCount",
-                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
-        );
+        getActionInvocation().setInput("RequestedCount",
+                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults));
         getActionInvocation().setInput("SortCriteria", SortCriterion.toString(orderBy));
     }
 
@@ -94,8 +92,7 @@ public abstract class Search extends ActionCallback {
     public void success(ActionInvocation actionInvocation) {
         logger.debug("Successful search action, reading output argument values");
 
-        SearchResult result = new SearchResult(
-                actionInvocation.getOutput("Result").getValue().toString(),
+        SearchResult result = new SearchResult(actionInvocation.getOutput("Result").getValue().toString(),
                 (UnsignedIntegerFourBytes) actionInvocation.getOutput("NumberReturned").getValue(),
                 (UnsignedIntegerFourBytes) actionInvocation.getOutput("TotalMatches").getValue(),
                 (UnsignedIntegerFourBytes) actionInvocation.getOutput("UpdateID").getValue());
@@ -110,8 +107,7 @@ public abstract class Search extends ActionCallback {
                 updateStatus(Status.OK);
             } catch (Exception ex) {
                 actionInvocation.setFailure(
-                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex)
-                );
+                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex));
                 failure(actionInvocation, null);
             }
         } else {

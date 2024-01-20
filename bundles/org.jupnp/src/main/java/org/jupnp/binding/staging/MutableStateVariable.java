@@ -14,13 +14,13 @@
 
 package org.jupnp.binding.staging;
 
+import java.util.List;
+
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.meta.StateVariableAllowedValueRange;
 import org.jupnp.model.meta.StateVariableEventDetails;
 import org.jupnp.model.meta.StateVariableTypeDetails;
 import org.jupnp.model.types.Datatype;
-
-import java.util.List;
 
 /**
  * @author Christian Bauer
@@ -35,23 +35,13 @@ public class MutableStateVariable {
     public StateVariableEventDetails eventDetails;
 
     public StateVariable build() {
-        return new StateVariable(
-                name,
-                new StateVariableTypeDetails(
-                        dataType,
-                        defaultValue,
-                        allowedValues == null || allowedValues.size() == 0
-                                ? null
+        return new StateVariable(name,
+                new StateVariableTypeDetails(dataType, defaultValue,
+                        allowedValues == null || allowedValues.size() == 0 ? null
                                 : allowedValues.toArray(new String[allowedValues.size()]),
-                        allowedValueRange == null
-                                ? null :
-                                new StateVariableAllowedValueRange(
-                                        allowedValueRange.minimum,
-                                        allowedValueRange.maximum,
-                                        allowedValueRange.step
-                                )
-                ),
-                eventDetails
-        );
+                        allowedValueRange == null ? null
+                                : new StateVariableAllowedValueRange(allowedValueRange.minimum,
+                                        allowedValueRange.maximum, allowedValueRange.step)),
+                eventDetails);
     }
 }

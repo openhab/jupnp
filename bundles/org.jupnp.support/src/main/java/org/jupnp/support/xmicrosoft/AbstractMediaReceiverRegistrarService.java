@@ -32,33 +32,11 @@ import org.jupnp.model.types.UnsignedIntegerFourBytes;
  * @author Mario Franco
  * @author Amit Kumar Mondal - Code Refactoring
  */
-@UpnpService(
-        serviceId = @UpnpServiceId(
-                namespace = "microsoft.com",
-                value = "X_MS_MediaReceiverRegistrar"
-        ),
-        serviceType = @UpnpServiceType(
-                namespace = "microsoft.com",
-                value = "X_MS_MediaReceiverRegistrar",
-                version = 1
-        )
-)
-@UpnpStateVariables(
-        {
-                @UpnpStateVariable(name = "A_ARG_TYPE_DeviceID",
-                                   sendEvents = false,
-                                   datatype = "string"),
-                @UpnpStateVariable(name = "A_ARG_TYPE_Result",
-                                   sendEvents = false,
-                                   datatype = "int"),
-                @UpnpStateVariable(name = "A_ARG_TYPE_RegistrationReqMsg",
-                                   sendEvents = false,
-                                   datatype = "bin.base64"),
-                @UpnpStateVariable(name = "A_ARG_TYPE_RegistrationRespMsg",
-                                   sendEvents = false,
-                                   datatype = "bin.base64")
-        }
-)
+@UpnpService(serviceId = @UpnpServiceId(namespace = "microsoft.com", value = "X_MS_MediaReceiverRegistrar"), serviceType = @UpnpServiceType(namespace = "microsoft.com", value = "X_MS_MediaReceiverRegistrar", version = 1))
+@UpnpStateVariables({ @UpnpStateVariable(name = "A_ARG_TYPE_DeviceID", sendEvents = false, datatype = "string"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_Result", sendEvents = false, datatype = "int"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_RegistrationReqMsg", sendEvents = false, datatype = "bin.base64"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_RegistrationRespMsg", sendEvents = false, datatype = "bin.base64") })
 public abstract class AbstractMediaReceiverRegistrarService {
 
     protected final PropertyChangeSupport propertyChangeSupport;
@@ -80,13 +58,13 @@ public abstract class AbstractMediaReceiverRegistrarService {
     }
 
     protected AbstractMediaReceiverRegistrarService(PropertyChangeSupport propertyChangeSupport) {
-        this.propertyChangeSupport = propertyChangeSupport != null ? propertyChangeSupport : new PropertyChangeSupport(this);
+        this.propertyChangeSupport = propertyChangeSupport != null ? propertyChangeSupport
+                : new PropertyChangeSupport(this);
     }
 
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
-
 
     @UpnpAction(out = @UpnpOutputArgument(name = "AuthorizationGrantedUpdateID"))
     public UnsignedIntegerFourBytes getAuthorizationGrantedUpdateID() {
@@ -108,33 +86,22 @@ public abstract class AbstractMediaReceiverRegistrarService {
         return validationRevokedUpdateID;
     }
 
-    @UpnpAction(out = {
-            @UpnpOutputArgument(name = "Result",
-                                stateVariable = "A_ARG_TYPE_Result")
-    })
-    public int isAuthorized(@UpnpInputArgument(name = "DeviceID",
-                                                   stateVariable = "A_ARG_TYPE_DeviceID")
-                                String deviceID) {
+    @UpnpAction(out = { @UpnpOutputArgument(name = "Result", stateVariable = "A_ARG_TYPE_Result") })
+    public int isAuthorized(
+            @UpnpInputArgument(name = "DeviceID", stateVariable = "A_ARG_TYPE_DeviceID") String deviceID) {
+        return 1;
+    }
+
+    @UpnpAction(out = { @UpnpOutputArgument(name = "Result", stateVariable = "A_ARG_TYPE_Result") })
+    public int isValidated(
+            @UpnpInputArgument(name = "DeviceID", stateVariable = "A_ARG_TYPE_DeviceID") String deviceID) {
         return 1;
     }
 
     @UpnpAction(out = {
-            @UpnpOutputArgument(name = "Result",
-                                stateVariable = "A_ARG_TYPE_Result")
-    })
-    public int isValidated(@UpnpInputArgument(name = "DeviceID",
-                                                  stateVariable = "A_ARG_TYPE_DeviceID")
-                               String deviceID) {
-        return 1;
-    }
-
-    @UpnpAction(out = {
-            @UpnpOutputArgument(name = "RegistrationRespMsg",
-                                stateVariable = "A_ARG_TYPE_RegistrationRespMsg")
-    })
-    public byte[] registerDevice(@UpnpInputArgument(name = "RegistrationReqMsg",
-                                                    stateVariable = "A_ARG_TYPE_RegistrationReqMsg")
-                                 byte[] registrationReqMsg) {
-        return new byte[]{};
+            @UpnpOutputArgument(name = "RegistrationRespMsg", stateVariable = "A_ARG_TYPE_RegistrationRespMsg") })
+    public byte[] registerDevice(
+            @UpnpInputArgument(name = "RegistrationReqMsg", stateVariable = "A_ARG_TYPE_RegistrationReqMsg") byte[] registrationReqMsg) {
+        return new byte[] {};
     }
 }

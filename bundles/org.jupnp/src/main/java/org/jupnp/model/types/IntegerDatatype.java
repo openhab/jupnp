@@ -33,23 +33,23 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
     }
 
     public Integer valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             Integer value = Integer.parseInt(s.trim());
             if (!isValid(value)) {
-                throw new InvalidValueException("Not a " + getByteSize() + " byte(s) integer: " + s)
-                        ;
+                throw new InvalidValueException("Not a " + getByteSize() + " byte(s) integer: " + s);
             }
             return value;
         } catch (NumberFormatException ex) {
             // TODO: UPNP VIOLATION: Some renderers (like PacketVideo TMM Player) send
             // RelCount and AbsCount as "NOT_IMPLEMENTED" in GetPositionInfoResponse action.
             // The spec says: If not implemented the value shall be Max Integer value.
-        	if(s.equals("NOT_IMPLEMENTED")) {
-        		return getMaxValue();
-        	} else {
-            	throw new InvalidValueException("Can't convert string to number: " + s, ex);
-        	}
+            if (s.equals("NOT_IMPLEMENTED")) {
+                return getMaxValue();
+            } else {
+                throw new InvalidValueException("Can't convert string to number: " + s, ex);
+            }
         }
     }
 
@@ -58,7 +58,7 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
     }
 
     public int getMinValue() {
-        switch(getByteSize()) {
+        switch (getByteSize()) {
             case 1:
                 return Byte.MIN_VALUE;
             case 2:
@@ -70,7 +70,7 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
     }
 
     public int getMaxValue() {
-        switch(getByteSize()) {
+        switch (getByteSize()) {
             case 1:
                 return Byte.MAX_VALUE;
             case 2:
@@ -84,5 +84,4 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
     public int getByteSize() {
         return byteSize;
     }
-
 }

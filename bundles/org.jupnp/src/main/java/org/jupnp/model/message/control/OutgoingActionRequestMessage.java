@@ -46,11 +46,9 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
         if (actionInvocation instanceof RemoteActionInvocation) {
             RemoteActionInvocation remoteActionInvocation = (RemoteActionInvocation) actionInvocation;
             if (remoteActionInvocation.getRemoteClientInfo() != null
-                && remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent() != null) {
-                getHeaders().add(
-                    UpnpHeader.Type.USER_AGENT,
-                    new UserAgentHeader(remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent())
-                );
+                    && remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent() != null) {
+                getHeaders().add(UpnpHeader.Type.USER_AGENT,
+                        new UserAgentHeader(remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent()));
             }
         } else if (actionInvocation.getClientInfo() != null) {
             getHeaders().putAll(actionInvocation.getClientInfo().getRequestHeaders());
@@ -60,26 +58,17 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
     public OutgoingActionRequestMessage(Action action, UpnpRequest operation) {
         super(operation);
 
-        getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
+        getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
 
         SoapActionHeader soapActionHeader;
         if (action instanceof QueryStateVariableAction) {
             log.trace("Adding magic control SOAP action header for state variable query action");
-            soapActionHeader = new SoapActionHeader(
-                    new SoapActionType(
-                            SoapActionType.MAGIC_CONTROL_NS, SoapActionType.MAGIC_CONTROL_TYPE, null, action.getName()
-                    )
-            );
+            soapActionHeader = new SoapActionHeader(new SoapActionType(SoapActionType.MAGIC_CONTROL_NS,
+                    SoapActionType.MAGIC_CONTROL_TYPE, null, action.getName()));
         } else {
             soapActionHeader = new SoapActionHeader(
-                    new SoapActionType(
-                            action.getService().getServiceType(),
-                            action.getName()
-                    )
-            );
+                    new SoapActionType(action.getService().getServiceType(), action.getName()));
         }
 
         // We need to keep it for later, convenience for writing the SOAP body XML
@@ -96,5 +85,4 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
     public String getActionNamespace() {
         return actionNamespace;
     }
-
 }

@@ -23,10 +23,7 @@ import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
 
-@UpnpService(
-        serviceId = @UpnpServiceId("MyService"),
-        serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService")
-)
+@UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValueRangeProvider {
 
     // DOC:PROVIDER
@@ -49,9 +46,7 @@ public class MyServiceWithAllowedValueRangeProvider {
     // DOC:PROVIDER
 
     // DOC:VAR
-    @UpnpStateVariable(
-        allowedValueRangeProvider = MyAllowedValueProvider.class
-    )
+    @UpnpStateVariable(allowedValueRangeProvider = MyAllowedValueProvider.class)
     private int restricted;
     // DOC:VAR
 
@@ -65,4 +60,3 @@ public class MyServiceWithAllowedValueRangeProvider {
         this.restricted = restricted;
     }
 }
-

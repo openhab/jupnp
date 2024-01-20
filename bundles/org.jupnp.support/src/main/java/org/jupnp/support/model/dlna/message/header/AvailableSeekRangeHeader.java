@@ -43,7 +43,7 @@ public class AvailableSeekRangeHeader extends DLNAHeader<AvailableSeekRangeType>
                     NormalPlayTimeRange timeRange = null;
                     BytesRange byteRange = null;
 
-                    //Parse Mode
+                    // Parse Mode
                     try {
                         mode = AvailableSeekRangeType.Mode.valueOf("MODE_" + params[0]);
                     } catch (IllegalArgumentException e) {
@@ -51,9 +51,9 @@ public class AvailableSeekRangeHeader extends DLNAHeader<AvailableSeekRangeType>
                     }
 
                     boolean useTime = true;
-                    //Parse Second Token
+                    // Parse Second Token
                     try {
-                        timeRange = NormalPlayTimeRange.valueOf(params[1],true);
+                        timeRange = NormalPlayTimeRange.valueOf(params[1], true);
                     } catch (InvalidValueException timeInvalidValueException) {
                         try {
                             byteRange = BytesRange.valueOf(params[1]);
@@ -64,11 +64,10 @@ public class AvailableSeekRangeHeader extends DLNAHeader<AvailableSeekRangeType>
                     }
                     if (useTime) {
                         if (params.length > 2) {
-                            //Parse Third Token
+                            // Parse Third Token
                             byteRange = BytesRange.valueOf(params[2]);
                             setValue(new AvailableSeekRangeType(mode, timeRange, byteRange));
-                        }
-                        else {
+                        } else {
                             setValue(new AvailableSeekRangeType(mode, timeRange));
                         }
                     } else {
@@ -76,7 +75,8 @@ public class AvailableSeekRangeHeader extends DLNAHeader<AvailableSeekRangeType>
                     }
                     return;
                 } catch (InvalidValueException ex) {
-                    throw new InvalidHeaderException("Invalid AvailableSeekRange header value: " + s + "; " + ex.getMessage(), ex);
+                    throw new InvalidHeaderException(
+                            "Invalid AvailableSeekRange header value: " + s + "; " + ex.getMessage(), ex);
                 }
             }
         }

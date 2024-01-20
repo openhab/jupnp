@@ -14,24 +14,24 @@
 
 package org.jupnp.local;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpOutputArgument;
 import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
-import org.junit.jupiter.api.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -41,12 +41,8 @@ class LocalActionInvocationDatatypesTest {
     @Test
     void invokeActions() throws Exception {
 
-        LocalDevice device = new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("SomeDevice", 1),
-                new DeviceDetails("Some Device"),
-                SampleData.readService(LocalTestServiceOne.class)
-        );
+        LocalDevice device = new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("SomeDevice", 1),
+                new DeviceDetails("Some Device"), SampleData.readService(LocalTestServiceOne.class));
         LocalService svc = SampleData.getFirstService(device);
 
         ActionInvocation getDataInvocation = new ActionInvocation(svc.getAction("GetData"));
@@ -63,32 +59,31 @@ class LocalActionInvocationDatatypesTest {
         assertEquals("bar", invocation.getOutput("Two").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetThree"));
-        assertEquals(svc.getAction("GetThree").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "i2");
+        assertEquals(svc.getAction("GetThree").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(),
+                "i2");
         svc.getExecutor(invocation.getAction()).execute(invocation);
         assertNull(invocation.getFailure());
         assertEquals(1, invocation.getOutput().length);
         assertEquals("123", invocation.getOutput("three").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetFour"));
-        assertEquals(svc.getAction("GetFour").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "int");
+        assertEquals(svc.getAction("GetFour").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(),
+                "int");
         svc.getExecutor(invocation.getAction()).execute(invocation);
         assertNull(invocation.getFailure());
         assertEquals(1, invocation.getOutput().length);
         assertEquals("456", invocation.getOutput("four").toString());
 
         invocation = new ActionInvocation(svc.getAction("GetFive"));
-        assertEquals(svc.getAction("GetFive").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(), "int");
+        assertEquals(svc.getAction("GetFive").getOutputArguments()[0].getDatatype().getBuiltin().getDescriptorName(),
+                "int");
         svc.getExecutor(invocation.getAction()).execute(invocation);
         assertNull(invocation.getFailure());
         assertEquals(1, invocation.getOutput().length);
         assertEquals("456", invocation.getOutput("five").toString());
     }
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SomeService"),
-            serviceType = @UpnpServiceType(value = "SomeService", version = 1),
-            supportsQueryStateVariables = false
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SomeService"), serviceType = @UpnpServiceType(value = "SomeService", version = 1), supportsQueryStateVariables = false)
     public static class LocalTestServiceOne {
 
         @UpnpStateVariable(sendEvents = false)
@@ -133,10 +128,8 @@ class LocalActionInvocationDatatypesTest {
         }
 
         // We are testing _several_ output arguments returned in a bean, access through getters
-        @UpnpAction(out = {
-                @UpnpOutputArgument(name = "One", getterName = "getOne"),
-                @UpnpOutputArgument(name = "Two", getterName = "getTwo")
-        })
+        @UpnpAction(out = { @UpnpOutputArgument(name = "One", getterName = "getOne"),
+                @UpnpOutputArgument(name = "Two", getterName = "getTwo") })
         public StringsHolder getStrings() {
             return new StringsHolder();
         }

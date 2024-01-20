@@ -33,7 +33,6 @@ public interface NetworkAddressFactory {
     public static final String SYSTEM_PROPERTY_NET_IFACES = "org.jupnp.network.useInterfaces";
     public static final String SYSTEM_PROPERTY_NET_ADDRESSES = "org.jupnp.network.useAddresses";
 
-
     /**
      * @return The UDP multicast group to join.
      */
@@ -108,9 +107,8 @@ public interface NetworkAddressFactory {
      * @return A local address that is reachable from the given remote address.
      * @throws IllegalStateException If no local address reachable by the remote address has been found.
      */
-    public InetAddress getLocalAddress(NetworkInterface networkInterface,
-                                       boolean isIPv6,
-                                       InetAddress remoteAddress) throws IllegalStateException;
+    public InetAddress getLocalAddress(NetworkInterface networkInterface, boolean isIPv6, InetAddress remoteAddress)
+            throws IllegalStateException;
 
     /**
      * For debugging, logs all "usable" network interface(s) details with INFO level.

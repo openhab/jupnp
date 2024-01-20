@@ -22,19 +22,19 @@ import com.beust.jcommander.ParameterException;
  */
 public class MainCommandMutlicastResponsePortValidator implements IParameterValidator {
 
-	private final static String ERROR_MSG = "Parameter --multicastResponsePort ";
+    private final static String ERROR_MSG = "Parameter --multicastResponsePort ";
 
-	public void validate(String name, String value) throws ParameterException {
-		if (name.equals("--multicastResponsePort")) {
-			try {
-				Integer port = Integer.valueOf(value);
-				if ((port < 0) || (port > 65535)) {
-					throw new ParameterException(ERROR_MSG + "must be between 0..65535");
-				}
-			} catch (NumberFormatException ex) {
-				// must be valid port number
-				throw new ParameterException(ERROR_MSG + " is not a valid number)");
-			}
-		}
-	}
+    public void validate(String name, String value) throws ParameterException {
+        if (name.equals("--multicastResponsePort")) {
+            try {
+                Integer port = Integer.valueOf(value);
+                if ((port < 0) || (port > 65535)) {
+                    throw new ParameterException(ERROR_MSG + "must be between 0..65535");
+                }
+            } catch (NumberFormatException ex) {
+                // must be valid port number
+                throw new ParameterException(ERROR_MSG + " is not a valid number)");
+            }
+        }
+    }
 }

@@ -14,12 +14,12 @@
 
 package org.jupnp.controlpoint;
 
+import java.util.concurrent.Future;
+
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.registry.Registry;
-
-import java.util.concurrent.Future;
 
 /**
  * Unified API for the asynchronous execution of network searches, actions, event subscriptions.
@@ -29,14 +29,20 @@ import java.util.concurrent.Future;
 public interface ControlPoint {
 
     public UpnpServiceConfiguration getConfiguration();
+
     public ProtocolFactory getProtocolFactory();
+
     public Registry getRegistry();
 
     public void search();
-    public void search(UpnpHeader searchType);
-    public void search(int mxSeconds);
-    public void search(UpnpHeader searchType, int mxSeconds);
-    public Future execute(ActionCallback callback);
-    public void execute(SubscriptionCallback callback);
 
+    public void search(UpnpHeader searchType);
+
+    public void search(int mxSeconds);
+
+    public void search(UpnpHeader searchType, int mxSeconds);
+
+    public Future execute(ActionCallback callback);
+
+    public void execute(SubscriptionCallback callback);
 }

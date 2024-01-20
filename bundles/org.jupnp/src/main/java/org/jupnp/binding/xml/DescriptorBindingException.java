@@ -29,4 +29,3 @@ public class DescriptorBindingException extends Exception {
         super(s, throwable);
     }
 }
-

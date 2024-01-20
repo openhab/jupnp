@@ -26,29 +26,29 @@ import com.beust.jcommander.Parameters;
 @Parameters(separators = "=", commandDescription = "jupnptool")
 public class CommandLineArgs {
 
-	@Parameter(names = { "--help", "-h", "-?" }, description = "Help how to use this tool", help = true)
-	public Boolean doHelp = Boolean.FALSE;
+    @Parameter(names = { "--help", "-h", "-?" }, description = "Help how to use this tool", help = true)
+    public Boolean doHelp = Boolean.FALSE;
 
-	@Parameter(names = { "--loglevel",
-			"-l" }, description = "Set LogLevel to {OFF|ERROR|WARN|INFO|DEBUG|TRACE}", validateWith = MainCommandLogLevelValidator.class)
-	public String logLevel = "DISABLED";
+    @Parameter(names = { "--loglevel",
+            "-l" }, description = "Set LogLevel to {OFF|ERROR|WARN|INFO|DEBUG|TRACE}", validateWith = MainCommandLogLevelValidator.class)
+    public String logLevel = "DISABLED";
 
-	@Parameter(names = { "--multicastResponsePort",
-			"-m" }, description = "Specify Multicast Response Port", validateWith = MainCommandMutlicastResponsePortValidator.class)
-	public Integer multicastResponsePort = 0;
+    @Parameter(names = { "--multicastResponsePort",
+            "-m" }, description = "Specify Multicast Response Port", validateWith = MainCommandMutlicastResponsePortValidator.class)
+    public Integer multicastResponsePort = 0;
 
-	@Parameter(names = { "--pool",
-			"-p" }, description = "Configure thread pools and enable pool statistic (mainPoolSize,asyncPoolSize[,stats]) ", validateWith = MainCommandPoolConfigurationValidator.class)
-	public String poolConfig = CmdlineUPnPServiceConfiguration.MAIN_POOL_SIZE + "," + CmdlineUPnPServiceConfiguration.ASYNC_POOL_SIZE;
-	public static final String POOL_CONFIG_STATS_OPTION = "stats";
+    @Parameter(names = { "--pool",
+            "-p" }, description = "Configure thread pools and enable pool statistic (mainPoolSize,asyncPoolSize[,stats]) ", validateWith = MainCommandPoolConfigurationValidator.class)
+    public String poolConfig = CmdlineUPnPServiceConfiguration.MAIN_POOL_SIZE + ","
+            + CmdlineUPnPServiceConfiguration.ASYNC_POOL_SIZE;
+    public static final String POOL_CONFIG_STATS_OPTION = "stats";
 
-	@Parameter(names = { "--verbose", "-v" }, description = "Enable verbose messages")
-	public Boolean verbose = Boolean.FALSE;
+    @Parameter(names = { "--verbose", "-v" }, description = "Enable verbose messages")
+    public Boolean verbose = Boolean.FALSE;
 
-	public boolean isLoggingEnabled() {
-		return !logLevel.equals("DISABLED");
-	}
-
+    public boolean isLoggingEnabled() {
+        return !logLevel.equals("DISABLED");
+    }
 }
 
 /**
@@ -57,16 +57,16 @@ public class CommandLineArgs {
 @Parameters(separators = "=", commandDescription = "Search for UPnP devices")
 class SearchCommandArgs {
 
-	@Parameter(names = { "--timeout", "-t" }, description = "The timeout when search will be finished")
-	public Integer timeout = 10;
+    @Parameter(names = { "--timeout", "-t" }, description = "The timeout when search will be finished")
+    public Integer timeout = 10;
 
-	@Parameter(names = { "--sort",
-			"-s" }, description = "Sort using {none|ip|model|serialNumber|manufacturer|udn}", validateWith = SearchCommandSortByValidator.class)
-	public String sortBy = "none";
+    @Parameter(names = { "--sort",
+            "-s" }, description = "Sort using {none|ip|model|serialNumber|manufacturer|udn}", validateWith = SearchCommandSortByValidator.class)
+    public String sortBy = "none";
 
-	@Parameter(names = { "--filter",
-			"-f" }, description = "Filter for devices containing this text (in some description)")
-	public String filter = "*";
+    @Parameter(names = { "--filter",
+            "-f" }, description = "Filter for devices containing this text (in some description)")
+    public String filter = "*";
 }
 
 /**
@@ -75,9 +75,8 @@ class SearchCommandArgs {
 @Parameters(separators = "=", commandDescription = "Show UPnP device information")
 class InfoCommandArgs {
 
-	@Parameter(description = "IP address or UDN")
-	public List<String> ipAddressOrUdnList;
-
+    @Parameter(description = "IP address or UDN")
+    public List<String> ipAddressOrUdnList;
 }
 
 /**

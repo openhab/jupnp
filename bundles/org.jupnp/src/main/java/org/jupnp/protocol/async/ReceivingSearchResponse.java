@@ -109,5 +109,4 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
             }
         }
     }
-
 }

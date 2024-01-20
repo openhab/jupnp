@@ -15,6 +15,9 @@
 
 package org.jupnp.support.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.support.model.container.Album;
 import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.container.GenreContainer;
@@ -41,9 +44,6 @@ import org.jupnp.support.model.item.PlaylistItem;
 import org.jupnp.support.model.item.TextItem;
 import org.jupnp.support.model.item.VideoBroadcast;
 import org.jupnp.support.model.item.VideoItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -79,14 +79,14 @@ public class DIDLContent {
      * Adds {@link Item} or {@link Container} typed instances, ignores everything else.
      */
     public DIDLContent addObject(Object object) {
-        if(object instanceof Item) {
-        	addItem((Item)object);
-        } else if(object instanceof Container) {
-        	addContainer((Container)object);
+        if (object instanceof Item) {
+            addItem((Item) object);
+        } else if (object instanceof Container) {
+            addContainer((Container) object);
         }
         return this;
     }
-    
+
     public DIDLContent addItem(Item item) {
         getItems().add(item);
         return this;
@@ -215,7 +215,7 @@ public class DIDLContent {
 
         return specificContainers;
     }
-    
+
     public long getCount() {
         return items.size() + containers.size();
     }

@@ -15,6 +15,7 @@
 package org.jupnp.support.model.dlna.message.header;
 
 import java.util.regex.Pattern;
+
 import org.jupnp.model.message.header.InvalidHeaderException;
 import org.jupnp.support.model.dlna.types.ScmsFlagType;
 
@@ -25,15 +26,15 @@ import org.jupnp.support.model.dlna.types.ScmsFlagType;
 public class ScmsFlagHeader extends DLNAHeader<ScmsFlagType> {
 
     private static final Pattern pattern = Pattern.compile("^[01]{2}$", Pattern.CASE_INSENSITIVE);
-    
+
     public ScmsFlagHeader() {
     }
 
     @Override
     public void setString(String s) {
         if (pattern.matcher(s).matches()) {
-          setValue(new ScmsFlagType(s.charAt(0) == '0', s.charAt(1) == '0'));
-          return;
+            setValue(new ScmsFlagType(s.charAt(0) == '0', s.charAt(1) == '0'));
+            return;
         }
         throw new InvalidHeaderException("Invalid ScmsFlag header value: " + s);
     }
@@ -41,6 +42,6 @@ public class ScmsFlagHeader extends DLNAHeader<ScmsFlagType> {
     @Override
     public String getString() {
         ScmsFlagType v = getValue();
-        return (v.isCopyright()?"0":"1") + (v.isOriginal()?"0":"1");
+        return (v.isCopyright() ? "0" : "1") + (v.isOriginal() ? "0" : "1");
     }
 }

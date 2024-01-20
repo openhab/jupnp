@@ -46,14 +46,13 @@ public abstract class GetVolume extends ActionCallback {
             currentVolume = Integer.valueOf(invocation.getOutput("CurrentVolume").getValue().toString()); // UnsignedIntegerTwoBytes...
         } catch (Exception ex) {
             invocation.setFailure(
-                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ProtocolInfo response: " + ex, ex)
-            );
+                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ProtocolInfo response: " + ex, ex));
             failure(invocation, null);
             ok = false;
         }
-        if (ok) received(invocation, currentVolume);
+        if (ok)
+            received(invocation, currentVolume);
     }
 
     public abstract void received(ActionInvocation<?> actionInvocation, int currentVolume);
-
 }

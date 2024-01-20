@@ -15,11 +15,11 @@
 
 package org.jupnp.support.lastchange;
 
+import java.util.Map;
+
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.support.shared.AbstractMap;
-
-import java.util.Map;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -33,7 +33,7 @@ public abstract class EventedValue<V> {
         this.value = value;
     }
 
-    public EventedValue(Map.Entry<String,String>[] attributes) {
+    public EventedValue(Map.Entry<String, String>[] attributes) {
         try {
             this.value = valueOf(attributes);
         } catch (InvalidValueException ex) {
@@ -50,21 +50,20 @@ public abstract class EventedValue<V> {
     }
 
     public Map.Entry<String, String>[] getAttributes() {
-        return new Map.Entry[] {
-            new AbstractMap.SimpleEntry<>("val", toString())
-        };
+        return new Map.Entry[] { new AbstractMap.SimpleEntry<>("val", toString()) };
     }
 
-    protected V valueOf(Map.Entry<String,String>[] attributes) {
+    protected V valueOf(Map.Entry<String, String>[] attributes) {
         V v = null;
         for (Map.Entry<String, String> attribute : attributes) {
-            if (attribute.getKey().equals("val")) v = valueOf(attribute.getValue());
+            if (attribute.getKey().equals("val"))
+                v = valueOf(attribute.getValue());
         }
         return v;
     }
 
     protected V valueOf(String s) {
-        return (V)getDatatype().valueOf(s);
+        return (V) getDatatype().valueOf(s);
     }
 
     @Override

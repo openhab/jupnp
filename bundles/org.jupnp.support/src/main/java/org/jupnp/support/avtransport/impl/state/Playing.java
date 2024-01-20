@@ -15,6 +15,8 @@
 
 package org.jupnp.support.avtransport.impl.state;
 
+import java.net.URI;
+
 import org.jupnp.support.avtransport.lastchange.AVTransportVariable;
 import org.jupnp.support.model.AVTransport;
 import org.jupnp.support.model.SeekMode;
@@ -23,8 +25,6 @@ import org.jupnp.support.model.TransportInfo;
 import org.jupnp.support.model.TransportState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URI;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -41,35 +41,29 @@ public abstract class Playing<T extends AVTransport> extends AbstractState<T> {
     public void onEntry() {
         logger.debug("Setting transport state to PLAYING");
         getTransport().setTransportInfo(
-                new TransportInfo(
-                        TransportState.PLAYING,
-                        getTransport().getTransportInfo().getCurrentTransportStatus(),
-                        getTransport().getTransportInfo().getCurrentSpeed()
-                )
-        );
-        getTransport().getLastChange().setEventedValue(
-                getTransport().getInstanceId(),
+                new TransportInfo(TransportState.PLAYING, getTransport().getTransportInfo().getCurrentTransportStatus(),
+                        getTransport().getTransportInfo().getCurrentSpeed()));
+        getTransport().getLastChange().setEventedValue(getTransport().getInstanceId(),
                 new AVTransportVariable.TransportState(TransportState.PLAYING),
-                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions())
-        );
+                new AVTransportVariable.CurrentTransportActions(getCurrentTransportActions()));
     }
 
     public abstract Class<? extends AbstractState<?>> setTransportURI(URI uri, String metaData);
+
     public abstract Class<? extends AbstractState<?>> stop();
+
     public abstract Class<? extends AbstractState<?>> play(String speed);
+
     public abstract Class<? extends AbstractState<?>> pause();
+
     public abstract Class<? extends AbstractState<?>> next();
+
     public abstract Class<? extends AbstractState<?>> previous();
+
     public abstract Class<? extends AbstractState<?>> seek(SeekMode unit, String target);
 
     public TransportAction[] getCurrentTransportActions() {
-        return new TransportAction[] {
-                TransportAction.Stop,
-                TransportAction.Play,
-                TransportAction.Pause,
-                TransportAction.Next,
-                TransportAction.Previous,
-                TransportAction.Seek
-        };
+        return new TransportAction[] { TransportAction.Stop, TransportAction.Play, TransportAction.Pause,
+                TransportAction.Next, TransportAction.Previous, TransportAction.Seek };
     }
 }

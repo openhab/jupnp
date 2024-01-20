@@ -14,6 +14,11 @@
 
 package org.jupnp.registry;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.gena.GENASubscription;
@@ -22,11 +27,6 @@ import org.jupnp.model.resource.Resource;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDN;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Internal class, required by {@link RegistryImpl}.
@@ -53,10 +53,13 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
     }
 
     abstract void add(D device);
+
     abstract boolean remove(final D device);
+
     abstract void removeAll();
 
     abstract void maintain();
+
     abstract void shutdown();
 
     /**
@@ -74,8 +77,9 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
                 return device;
             }
             if (!rootOnly) {
-                D foundDevice = (D)item.getItem().findDevice(udn);
-                if (foundDevice != null) return foundDevice;
+                D foundDevice = (D) item.getItem().findDevice(udn);
+                if (foundDevice != null)
+                    return foundDevice;
             }
         }
         return null;
@@ -93,7 +97,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
     Collection<D> get(DeviceType deviceType) {
         Collection<D> devices = new HashSet();
         for (RegistryItem<UDN, D> item : deviceItems) {
-            D[] d = (D[])item.getItem().findDevices(deviceType);
+            D[] d = (D[]) item.getItem().findDevices(deviceType);
             if (d != null) {
                 devices.addAll(Arrays.asList(d));
             }
@@ -111,7 +115,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
         Collection<D> devices = new HashSet();
         for (RegistryItem<UDN, D> item : deviceItems) {
 
-            D[] d = (D[])item.getItem().findDevices(serviceType);
+            D[] d = (D[]) item.getItem().findDevices(serviceType);
             if (d != null) {
                 devices.addAll(Arrays.asList(d));
             }
@@ -137,12 +141,8 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
 
     void addSubscription(S subscription) {
 
-        RegistryItem<String, S> subscriptionItem =
-                new RegistryItem<String, S>(
-                        subscription.getSubscriptionId(),
-                        subscription,
-                        subscription.getActualDurationSeconds()
-                );
+        RegistryItem<String, S> subscriptionItem = new RegistryItem<String, S>(subscription.getSubscriptionId(),
+                subscription, subscription.getActualDurationSeconds());
 
         subscriptionItems.add(subscriptionItem);
     }
@@ -170,7 +170,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
 
     Resource[] getResources(Device device) throws RegistrationException {
         UpnpServiceConfiguration config = registry.getConfiguration();
-        if(config != null) {
+        if (config != null) {
             try {
                 return config.getNamespace().getResources(device);
             } catch (ValidationException ex) {

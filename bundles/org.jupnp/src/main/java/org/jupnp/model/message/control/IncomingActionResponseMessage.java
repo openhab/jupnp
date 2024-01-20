@@ -22,7 +22,6 @@ import org.jupnp.model.message.UpnpResponse;
  */
 public class IncomingActionResponseMessage extends StreamResponseMessage implements ActionResponseMessage {
 
-
     public IncomingActionResponseMessage(StreamResponseMessage source) {
         super(source);
     }
@@ -37,13 +36,11 @@ public class IncomingActionResponseMessage extends StreamResponseMessage impleme
 
     public boolean isFailedNonRecoverable() {
         int statusCode = getOperation().getStatusCode();
-        return getOperation().isFailed()
-                && !(statusCode == UpnpResponse.Status.METHOD_NOT_SUPPORTED.getStatusCode() ||
-                (statusCode == UpnpResponse.Status.INTERNAL_SERVER_ERROR.getStatusCode()) && hasBody());
+        return getOperation().isFailed() && !(statusCode == UpnpResponse.Status.METHOD_NOT_SUPPORTED.getStatusCode()
+                || (statusCode == UpnpResponse.Status.INTERNAL_SERVER_ERROR.getStatusCode()) && hasBody());
     }
 
     public boolean isFailedRecoverable() {
         return hasBody() && getOperation().getStatusCode() == UpnpResponse.Status.INTERNAL_SERVER_ERROR.getStatusCode();
     }
-
 }

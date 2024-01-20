@@ -35,6 +35,4 @@ public interface LastChangeDelegator {
     public void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception;
 
     public abstract UnsignedIntegerFourBytes[] getCurrentInstanceIds();
-
-
 }

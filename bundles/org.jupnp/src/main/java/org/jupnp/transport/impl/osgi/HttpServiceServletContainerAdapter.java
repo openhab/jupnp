@@ -38,45 +38,46 @@ import org.slf4j.LoggerFactory;
  * @author Ivan Iliev - No longer a singleton
  *
  */
-public class HttpServiceServletContainerAdapter implements
-		ServletContainerAdapter {
+public class HttpServiceServletContainerAdapter implements ServletContainerAdapter {
 
-	private final Logger logger = LoggerFactory.getLogger(HttpServiceServletContainerAdapter.class);
-	
-	private static HttpServiceServletContainerAdapter instance = null;
-	
-	protected HttpService httpService;
-	private BundleContext context;
-	private String contextPath;
-	
-	private HttpServiceServletContainerAdapter(HttpService httpService, BundleContext context) {
-		this.httpService = httpService;
-		this.context = context;
-	}
-	
-	public static synchronized HttpServiceServletContainerAdapter getInstance(HttpService httpService, BundleContext context) {
-	    if(instance == null) {
-	        instance = new HttpServiceServletContainerAdapter(httpService, context);
-	    }
-	    return instance;
-	}
-	
-	@Override
-	public void setExecutorService(ExecutorService executorService) {
-	}
+    private final Logger logger = LoggerFactory.getLogger(HttpServiceServletContainerAdapter.class);
 
-	@Override
-	public int addConnector(String host, int port) throws IOException {
-		if(port==-1) {
-			try {
-				port = Integer.parseInt(context.getProperty("org.osgi.service.http.port"));
-			} catch(NumberFormatException e) {}
-		}
-		return port;
-	}
+    private static HttpServiceServletContainerAdapter instance = null;
 
-	@Override
-	public void registerServlet(String contextPath, Servlet servlet) {
+    protected HttpService httpService;
+    private BundleContext context;
+    private String contextPath;
+
+    private HttpServiceServletContainerAdapter(HttpService httpService, BundleContext context) {
+        this.httpService = httpService;
+        this.context = context;
+    }
+
+    public static synchronized HttpServiceServletContainerAdapter getInstance(HttpService httpService,
+            BundleContext context) {
+        if (instance == null) {
+            instance = new HttpServiceServletContainerAdapter(httpService, context);
+        }
+        return instance;
+    }
+
+    @Override
+    public void setExecutorService(ExecutorService executorService) {
+    }
+
+    @Override
+    public int addConnector(String host, int port) throws IOException {
+        if (port == -1) {
+            try {
+                port = Integer.parseInt(context.getProperty("org.osgi.service.http.port"));
+            } catch (NumberFormatException e) {
+            }
+        }
+        return port;
+    }
+
+    @Override
+    public void registerServlet(String contextPath, Servlet servlet) {
         if (this.contextPath == null) {
             Dictionary<Object, Object> params = new Properties();
             try {
@@ -90,18 +91,17 @@ public class HttpServiceServletContainerAdapter implements
                 logger.error("Failed to register UPnP servlet!", e);
             }
         }
-	}
+    }
 
-	@Override
-	public void startIfNotRunning() {
-	}
+    @Override
+    public void startIfNotRunning() {
+    }
 
-	@Override
-	public void stopIfRunning() {
-		if(this.contextPath != null) {
-			httpService.unregister(this.contextPath);
-			this.contextPath = null;
-		}
-	}
-
+    @Override
+    public void stopIfRunning() {
+        if (this.contextPath != null) {
+            httpService.unregister(this.contextPath);
+            this.contextPath = null;
+        }
+    }
 }

@@ -41,8 +41,8 @@ public class AnnotationStateVariableBinder {
     protected StateVariableAccessor accessor;
     protected Set<Class> stringConvertibleTypes;
 
-    public AnnotationStateVariableBinder(UpnpStateVariable annotation, String name,
-                                         StateVariableAccessor accessor, Set<Class> stringConvertibleTypes) {
+    public AnnotationStateVariableBinder(UpnpStateVariable annotation, String name, StateVariableAccessor accessor,
+            Set<Class> stringConvertibleTypes) {
         this.annotation = annotation;
         this.name = name;
         this.accessor = accessor;
@@ -103,8 +103,7 @@ public class AnnotationStateVariableBinder {
                 }
                 if (!foundValue) {
                     throw new LocalServiceBindingException(
-                            "Default value '" + defaultValue + "' is not in allowed values of: " + getName()
-                    );
+                            "Default value '" + defaultValue + "' is not in allowed values of: " + getName());
                 }
             }
         }
@@ -116,11 +115,8 @@ public class AnnotationStateVariableBinder {
             if (getAnnotation().allowedValueRangeProvider() != void.class) {
                 allowedValueRange = getAllowedRangeFromProvider();
             } else if (getAnnotation().allowedValueMinimum() > 0 || getAnnotation().allowedValueMaximum() > 0) {
-                allowedValueRange = getAllowedValueRange(
-                    getAnnotation().allowedValueMinimum(),
-                    getAnnotation().allowedValueMaximum(),
-                    getAnnotation().allowedValueStep()
-                );
+                allowedValueRange = getAllowedValueRange(getAnnotation().allowedValueMinimum(),
+                        getAnnotation().allowedValueMaximum(), getAnnotation().allowedValueStep());
             } else {
                 log.trace("Not restricting allowed value range (of numeric typed state var): {}", getName());
             }
@@ -132,15 +128,13 @@ public class AnnotationStateVariableBinder {
                 try {
                     v = Long.valueOf(defaultValue);
                 } catch (Exception ex) {
-                    throw new LocalServiceBindingException(
-                        "Default value '" + defaultValue + "' is not numeric (for range checking) of: " + getName()
-                    );
+                    throw new LocalServiceBindingException("Default value '" + defaultValue
+                            + "' is not numeric (for range checking) of: " + getName());
                 }
 
                 if (!allowedValueRange.isInRange(v)) {
                     throw new LocalServiceBindingException(
-                        "Default value '" + defaultValue + "' is not in allowed range of: " + getName()
-                    );
+                            "Default value '" + defaultValue + "' is not in allowed range of: " + getName());
                 }
             }
         }
@@ -149,30 +143,31 @@ public class AnnotationStateVariableBinder {
         boolean sendEvents = getAnnotation().sendEvents();
         if (sendEvents && getAccessor() == null) {
             throw new LocalServiceBindingException(
-                    "State variable sends events but has no accessor for field or getter: " + getName()
-            );
+                    "State variable sends events but has no accessor for field or getter: " + getName());
         }
 
         int eventMaximumRateMillis = 0;
         int eventMinimumDelta = 0;
         if (sendEvents) {
             if (getAnnotation().eventMaximumRateMilliseconds() > 0) {
-                log.trace("Moderating state variable events using maximum rate (milliseconds): {}", getAnnotation().eventMaximumRateMilliseconds());
+                log.trace("Moderating state variable events using maximum rate (milliseconds): {}",
+                        getAnnotation().eventMaximumRateMilliseconds());
                 eventMaximumRateMillis = getAnnotation().eventMaximumRateMilliseconds();
             }
 
             if (getAnnotation().eventMinimumDelta() > 0 && Datatype.Builtin.isNumeric(datatype.getBuiltin())) {
                 // TODO: Doesn't consider floating point types!
-                log.trace("Moderating state variable events using minimum delta: {}", getAnnotation().eventMinimumDelta());
+                log.trace("Moderating state variable events using minimum delta: {}",
+                        getAnnotation().eventMinimumDelta());
                 eventMinimumDelta = getAnnotation().eventMinimumDelta();
             }
         }
 
-        StateVariableTypeDetails typeDetails =
-                new StateVariableTypeDetails(datatype, defaultValue, allowedValues, allowedValueRange);
+        StateVariableTypeDetails typeDetails = new StateVariableTypeDetails(datatype, defaultValue, allowedValues,
+                allowedValueRange);
 
-        StateVariableEventDetails eventDetails =
-                new StateVariableEventDetails(sendEvents, eventMaximumRateMillis, eventMinimumDelta);
+        StateVariableEventDetails eventDetails = new StateVariableEventDetails(sendEvents, eventMaximumRateMillis,
+                eventMinimumDelta);
 
         return new StateVariable(getName(), typeDetails, eventDetails);
     }
@@ -199,8 +194,8 @@ public class AnnotationStateVariableBinder {
         }
 
         // We can also guess that if the allowed values are set then it's a string
-        if ((declaredDatatype == null || declaredDatatype.length() == 0) &&
-                (getAnnotation().allowedValues().length > 0 || getAnnotation().allowedValuesEnum() != void.class)) {
+        if ((declaredDatatype == null || declaredDatatype.length() == 0)
+                && (getAnnotation().allowedValues().length > 0 || getAnnotation().allowedValuesEnum() != void.class)) {
             log.trace("State variable has restricted allowed values, hence using 'string' datatype");
             declaredDatatype = "string";
         }
@@ -219,7 +214,8 @@ public class AnnotationStateVariableBinder {
             return builtin.getDatatype();
         } else {
             // TODO
-            throw new LocalServiceBindingException("No built-in UPnP datatype found, using CustomDataType (TODO: NOT IMPLEMENTED)");
+            throw new LocalServiceBindingException(
+                    "No built-in UPnP datatype found, using CustomDataType (TODO: NOT IMPLEMENTED)");
         }
     }
 
@@ -233,9 +229,8 @@ public class AnnotationStateVariableBinder {
                 log.trace("Found state variable default value: {}", getAnnotation().defaultValue());
                 return getAnnotation().defaultValue();
             } catch (Exception ex) {
-                throw new LocalServiceBindingException(
-                        "Default value doesn't match datatype of state variable '" + getName() + "': " + ex.getMessage()
-                );
+                throw new LocalServiceBindingException("Default value doesn't match datatype of state variable '"
+                        + getName() + "': " + ex.getMessage());
             }
         }
 
@@ -254,8 +249,7 @@ public class AnnotationStateVariableBinder {
             Object o = enumType.getEnumConstants()[i];
             if (o.toString().length() > 32) {
                 throw new LocalServiceBindingException(
-                        "Allowed value string (that is, Enum constant name) is longer than 32 characters: " + o
-                );
+                        "Allowed value string (that is, Enum constant name) is longer than 32 characters: " + o);
             }
             log.trace("Adding allowed value (converted to string): {}", o);
             allowedValueStrings[i] = o.toString();
@@ -264,13 +258,10 @@ public class AnnotationStateVariableBinder {
         return allowedValueStrings;
     }
 
-    protected StateVariableAllowedValueRange getAllowedValueRange(long min,
-                                                                  long max,
-                                                                  long step) throws LocalServiceBindingException {
+    protected StateVariableAllowedValueRange getAllowedValueRange(long min, long max, long step)
+            throws LocalServiceBindingException {
         if (max < min) {
-            throw new LocalServiceBindingException(
-                    "Allowed value range maximum is smaller than minimum: " + getName()
-            );
+            throw new LocalServiceBindingException("Allowed value range maximum is smaller than minimum: " + getName());
         }
 
         return new StateVariableAllowedValueRange(min, max, step);
@@ -280,37 +271,27 @@ public class AnnotationStateVariableBinder {
         Class provider = getAnnotation().allowedValueProvider();
         if (!AllowedValueProvider.class.isAssignableFrom(provider))
             throw new LocalServiceBindingException(
-                "Allowed value provider is not of type " + AllowedValueProvider.class + ": " + getName()
-            );
+                    "Allowed value provider is not of type " + AllowedValueProvider.class + ": " + getName());
         try {
             return ((Class<? extends AllowedValueProvider>) provider).newInstance().getValues();
         } catch (Exception ex) {
-            throw new LocalServiceBindingException(
-                "Allowed value provider can't be instantiated: " + getName(), ex
-            );
+            throw new LocalServiceBindingException("Allowed value provider can't be instantiated: " + getName(), ex);
         }
     }
 
-    protected StateVariableAllowedValueRange getAllowedRangeFromProvider() throws  LocalServiceBindingException {
+    protected StateVariableAllowedValueRange getAllowedRangeFromProvider() throws LocalServiceBindingException {
         Class provider = getAnnotation().allowedValueRangeProvider();
         if (!AllowedValueRangeProvider.class.isAssignableFrom(provider))
-            throw new LocalServiceBindingException(
-                "Allowed value range provider is not of type " + AllowedValueRangeProvider.class + ": " + getName()
-            );
+            throw new LocalServiceBindingException("Allowed value range provider is not of type "
+                    + AllowedValueRangeProvider.class + ": " + getName());
         try {
-            AllowedValueRangeProvider providerInstance =
-                ((Class<? extends AllowedValueRangeProvider>) provider).newInstance();
-            return getAllowedValueRange(
-                providerInstance.getMinimum(),
-                providerInstance.getMaximum(),
-                providerInstance.getStep()
-            );
+            AllowedValueRangeProvider providerInstance = ((Class<? extends AllowedValueRangeProvider>) provider)
+                    .newInstance();
+            return getAllowedValueRange(providerInstance.getMinimum(), providerInstance.getMaximum(),
+                    providerInstance.getStep());
         } catch (Exception ex) {
-            throw new LocalServiceBindingException(
-                "Allowed value range provider can't be instantiated: " + getName(), ex
-            );
+            throw new LocalServiceBindingException("Allowed value range provider can't be instantiated: " + getName(),
+                    ex);
         }
     }
-
-
 }

@@ -14,6 +14,10 @@
 
 package org.jupnp.binding.staging;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.Device;
@@ -21,10 +25,6 @@ import org.jupnp.model.meta.Service;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Christian Bauer
@@ -41,12 +41,8 @@ public class MutableService {
     public List<MutableStateVariable> stateVariables = new ArrayList();
 
     public Service build(Device prototype) throws ValidationException {
-        return prototype.newInstance(
-                serviceType, serviceId,
-                descriptorURI, controlURI, eventSubscriptionURI,
-                createActions(),
-                createStateVariables()
-        );
+        return prototype.newInstance(serviceType, serviceId, descriptorURI, controlURI, eventSubscriptionURI,
+                createActions(), createStateVariables());
     }
 
     public Action[] createActions() {
@@ -66,5 +62,4 @@ public class MutableService {
         }
         return array;
     }
-
 }

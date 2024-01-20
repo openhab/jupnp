@@ -14,11 +14,11 @@
 
 package org.jupnp.model;
 
+import java.util.Collection;
+
 import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.state.StateVariableValue;
-
-import java.util.Collection;
 
 /**
  * Binds the metadata of a service to a service implementation, unified interface for accessing local services.
@@ -85,7 +85,7 @@ public interface ServiceManager<T> {
     /**
      * @return An instance with the interface expected by the
      *         bound {@link org.jupnp.model.action.ActionExecutor}s
-    *          and {@link org.jupnp.model.state.StateVariableAccessor}s.
+     *         and {@link org.jupnp.model.state.StateVariableAccessor}s.
      */
     public T getImplementation();
 
@@ -96,8 +96,10 @@ public interface ServiceManager<T> {
      * might decorate the execution, for example, by locking/unlocking access to a shared service
      * implementation before and after the execution.
      * </p>
+     * 
      * @param cmd The command to execute.
-     * @throws Exception Any exception, without wrapping, as thrown by {@link org.jupnp.model.Command#execute(ServiceManager)}
+     * @throws Exception Any exception, without wrapping, as thrown by
+     *             {@link org.jupnp.model.Command#execute(ServiceManager)}
      */
     public void execute(Command<T> cmd) throws Exception;
 
@@ -112,7 +114,7 @@ public interface ServiceManager<T> {
      * <li>The property name is the constant {@link #EVENTED_STATE_VARIABLES}.</li>
      * <li>The "old value" can be <code>null</code>, only the current state has to be included.</li>
      * <li>The "new value" is a <code>Collection</code> of {@link org.jupnp.model.state.StateVariableValue},
-     *     representing the current state of the service after the change.</li>
+     * representing the current state of the service after the change.</li>
      * </ul>
      * <p>
      * The collection has to include values for <em>all</em> state variables, no
@@ -132,5 +134,4 @@ public interface ServiceManager<T> {
      * @throws Exception Any error that occurred when the service's state was accessed.
      */
     public Collection<StateVariableValue> getCurrentState() throws Exception;
-
 }

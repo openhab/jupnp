@@ -27,14 +27,11 @@ import org.jupnp.model.types.ServiceType;
  */
 public class OutgoingSearchResponseServiceType extends OutgoingSearchResponse {
 
-    public OutgoingSearchResponseServiceType(IncomingDatagramMessage request,
-                                             Location location,
-                                             LocalDevice device,
-                                             ServiceType serviceType) {
+    public OutgoingSearchResponseServiceType(IncomingDatagramMessage request, Location location, LocalDevice device,
+            ServiceType serviceType) {
         super(request, location, device);
 
         getHeaders().add(UpnpHeader.Type.ST, new ServiceTypeHeader(serviceType));
         getHeaders().add(UpnpHeader.Type.USN, new ServiceUSNHeader(device.getIdentity().getUdn(), serviceType));
     }
-
 }

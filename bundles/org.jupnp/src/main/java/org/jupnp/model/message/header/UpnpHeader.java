@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,21 +37,9 @@ public abstract class UpnpHeader<T> {
      */
     public static enum Type {
 
-        USN("USN",
-                USNRootDeviceHeader.class,
-                DeviceUSNHeader.class,
-                ServiceUSNHeader.class,
-                UDNHeader.class
-        ),
-        NT("NT",
-                RootDeviceHeader.class,
-                UDADeviceTypeHeader.class,
-                UDAServiceTypeHeader.class,
-                DeviceTypeHeader.class,
-                ServiceTypeHeader.class,
-                UDNHeader.class,
-                NTEventHeader.class
-        ),
+        USN("USN", USNRootDeviceHeader.class, DeviceUSNHeader.class, ServiceUSNHeader.class, UDNHeader.class),
+        NT("NT", RootDeviceHeader.class, UDADeviceTypeHeader.class, UDAServiceTypeHeader.class, DeviceTypeHeader.class,
+                ServiceTypeHeader.class, UDNHeader.class, NTEventHeader.class),
         NTS("NTS", NTSHeader.class),
         HOST("HOST", HostHeader.class),
         SERVER("SERVER", ServerHeader.class),
@@ -62,15 +49,8 @@ public abstract class UpnpHeader<T> {
         CONTENT_TYPE("CONTENT-TYPE", ContentTypeHeader.class),
         MAN("MAN", MANHeader.class),
         MX("MX", MXHeader.class),
-        ST("ST",
-                STAllHeader.class,
-                RootDeviceHeader.class,
-                UDADeviceTypeHeader.class,
-                UDAServiceTypeHeader.class,
-                DeviceTypeHeader.class,
-                ServiceTypeHeader.class,
-                UDNHeader.class
-        ),
+        ST("ST", STAllHeader.class, RootDeviceHeader.class, UDADeviceTypeHeader.class, UDAServiceTypeHeader.class,
+                DeviceTypeHeader.class, ServiceTypeHeader.class, UDNHeader.class),
         EXT("EXT", EXTHeader.class),
         SOAPACTION("SOAPACTION", SoapActionHeader.class),
         TIMEOUT("TIMEOUT", TimeoutHeader.class),
@@ -80,15 +60,17 @@ public abstract class UpnpHeader<T> {
         RANGE("RANGE", RangeHeader.class),
         CONTENT_RANGE("CONTENT-RANGE", ContentRangeHeader.class),
         PRAGMA("PRAGMA", PragmaHeader.class),
-        
+
         EXT_IFACE_MAC("X-CLING-IFACE-MAC", InterfaceMacHeader.class),
         EXT_AV_CLIENT_INFO("X-AV-CLIENT-INFO", AVClientInfoHeader.class);
 
-        private static Map<String, Type> byName = new HashMap<String, Type>() {{
-            for (Type t : Type.values()) {
-                put(t.getHttpName(), t);
+        private static Map<String, Type> byName = new HashMap<String, Type>() {
+            {
+                for (Type t : Type.values()) {
+                    put(t.getHttpName(), t);
+                }
             }
-        }};
+        };
 
         private String httpName;
         private Class<? extends UpnpHeader>[] headerTypes;
@@ -119,8 +101,9 @@ public abstract class UpnpHeader<T> {
          * @param httpName A case-insensitive HTTP header name.
          */
         public static Type getByHttpName(String httpName) {
-            if (httpName == null) return null;
-        	return byName.get(httpName.toUpperCase(Locale.ENGLISH));
+            if (httpName == null)
+                return null;
+            return byName.get(httpName.toUpperCase(Locale.ENGLISH));
         }
     }
 
@@ -172,7 +155,8 @@ public abstract class UpnpHeader<T> {
                     upnpHeader.setString(headerValue);
                 }
             } catch (InvalidHeaderException ex) {
-                log.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(), ex.getMessage());
+                log.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(),
+                        ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
                 log.error("Error instantiating header of type '{}' with value: {}", type, headerValue, ex);

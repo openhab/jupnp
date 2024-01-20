@@ -1,5 +1,7 @@
 package org.jupnp.support.igd.callback;
 
+import java.util.Map;
+
 import org.jupnp.controlpoint.ActionCallback;
 import org.jupnp.controlpoint.ControlPoint;
 import org.jupnp.model.action.ActionArgumentValue;
@@ -7,8 +9,6 @@ import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerTwoBytes;
 import org.jupnp.support.model.PortMapping;
-
-import java.util.Map;
 
 /**
  * @author Christian Bauer

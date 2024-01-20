@@ -14,26 +14,26 @@
 
 package org.jupnp.resources;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleServiceOne;
 import org.jupnp.mock.MockUpnpService;
-import org.jupnp.model.meta.LocalDevice;
-import org.jupnp.model.meta.LocalService;
-import org.jupnp.model.meta.RemoteService;
-import org.jupnp.model.meta.Service;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
 import org.jupnp.model.message.UpnpRequest;
 import org.jupnp.model.message.header.ContentTypeHeader;
 import org.jupnp.model.message.header.HostHeader;
 import org.jupnp.model.message.header.UpnpHeader;
+import org.jupnp.model.meta.LocalDevice;
+import org.jupnp.model.meta.LocalService;
+import org.jupnp.model.meta.RemoteService;
+import org.jupnp.model.meta.Service;
 import org.jupnp.protocol.sync.ReceivingRetrieval;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleServiceOne;
-import org.junit.jupiter.api.Test;
-
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceDescriptorRetrievalTest {
 
@@ -56,10 +56,8 @@ class ServiceDescriptorRetrievalTest {
         StreamResponseMessage descriptorMessage = prot.getOutputMessage();
 
         // UDA 1.0 spec days this musst be 'text/xml'
-        assertEquals(
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE,
-                descriptorMessage.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE).getValue()
-        );
+        assertEquals(ContentTypeHeader.DEFAULT_CONTENT_TYPE,
+                descriptorMessage.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE).getValue());
 
         // Read the response and compare the returned device descriptor
         ServiceDescriptorBinder binder = upnpService.getConfiguration().getServiceDescriptorBinderUDA10();
@@ -80,8 +78,7 @@ class ServiceDescriptorRetrievalTest {
         Service service = SampleData.getFirstService(localDevice);
 
         URI descriptorURI = upnpService.getConfiguration().getNamespace().getDescriptorPath(service);
-        StreamRequestMessage descRetrievalMessage =
-                new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURI);
+        StreamRequestMessage descRetrievalMessage = new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURI);
         descRetrievalMessage.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader("localhost", 1234));
         ReceivingRetrieval prot = new ReceivingRetrieval(upnpService, descRetrievalMessage);
         prot.run();
@@ -90,5 +87,4 @@ class ServiceDescriptorRetrievalTest {
         // Should be null because it can't be found
         assertNull(descriptorMessage);
     }
-
 }

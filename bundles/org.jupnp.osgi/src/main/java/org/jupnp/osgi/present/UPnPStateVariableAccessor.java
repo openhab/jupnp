@@ -34,13 +34,13 @@ class UPnPStateVariableAccessor extends StateVariableAccessor {
 
     @Override
     public Class<?> getReturnType() {
-    	log.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType"); 
+        log.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType");
         return variable.getJavaDataType();
     }
 
     @Override
     public Object read(Object serviceImpl) throws Exception {
-		log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
+        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
         return null;
     }
 }

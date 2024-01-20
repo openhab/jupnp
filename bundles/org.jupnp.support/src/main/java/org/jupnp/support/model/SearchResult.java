@@ -30,9 +30,8 @@ public class SearchResult {
 
     protected UnsignedIntegerFourBytes containerUpdateID;
 
-    public SearchResult(String result, UnsignedIntegerFourBytes count,
-                        UnsignedIntegerFourBytes totalMatches,
-                        UnsignedIntegerFourBytes containerUpdateID) {
+    public SearchResult(String result, UnsignedIntegerFourBytes count, UnsignedIntegerFourBytes totalMatches,
+            UnsignedIntegerFourBytes containerUpdateID) {
         this.result = result;
         this.count = count;
         this.totalMatches = totalMatches;
@@ -44,12 +43,8 @@ public class SearchResult {
     }
 
     public SearchResult(String result, long count, long totalMatches, long updateID) {
-        this(
-                result,
-                new UnsignedIntegerFourBytes(count),
-                new UnsignedIntegerFourBytes(totalMatches),
-                new UnsignedIntegerFourBytes(updateID)
-        );
+        this(result, new UnsignedIntegerFourBytes(count), new UnsignedIntegerFourBytes(totalMatches),
+                new UnsignedIntegerFourBytes(updateID));
     }
 
     public String getResult() {

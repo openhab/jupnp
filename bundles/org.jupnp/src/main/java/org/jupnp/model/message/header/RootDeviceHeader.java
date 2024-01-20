@@ -34,5 +34,4 @@ public class RootDeviceHeader extends UpnpHeader<String> {
     public String getString() {
         return getValue();
     }
-
 }

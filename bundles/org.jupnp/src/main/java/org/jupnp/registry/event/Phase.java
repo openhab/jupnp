@@ -27,28 +27,27 @@ import java.lang.annotation.Target;
 
 public interface Phase {
 
-    @Target({FIELD, PARAMETER})
+    @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
     public @interface Alive {
 
     }
 
-    @Target({FIELD, PARAMETER})
+    @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
     public @interface Complete {
 
     }
 
-    @Target({FIELD, PARAMETER})
+    @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
     public @interface Byebye {
 
     }
 
-    @Target({FIELD, PARAMETER})
+    @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
     public @interface Updated {
 
     }
-
 }

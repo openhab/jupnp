@@ -53,8 +53,9 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
         try {
 
             int numberOfSpaces = 0;
-            for( int i = 0; i < s.length(); i++ ) {
-                if( s.charAt(i) == ' ' ) numberOfSpaces++;
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == ' ')
+                    numberOfSpaces++;
             }
 
             String[] osNameVersion;
@@ -62,7 +63,8 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
 
             if (s.contains(",")) {
 
-                // Some guys think that the tokens are separated with commas, not whitespace (read section 3.8 of the HTTP spec!)
+                // Some guys think that the tokens are separated with commas, not whitespace (read section 3.8 of the
+                // HTTP spec!)
                 String[] productTokens = s.split(",");
                 osNameVersion = productTokens[0].split("/");
                 productNameVersion = productTokens[2].split("/");
@@ -71,7 +73,7 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
 
                 // Some guys think that whitespace in token names is OK... it's not ... but let's try...
                 String beforeUpnpToken = s.substring(0, s.indexOf("UPnP/1.")).trim();
-                String afterUpnpToken = s.substring(s.indexOf("UPnP/1.")+8).trim(); // Assumes minor version is 0-9!
+                String afterUpnpToken = s.substring(s.indexOf("UPnP/1.") + 8).trim(); // Assumes minor version is 0-9!
                 osNameVersion = beforeUpnpToken.split("/");
                 productNameVersion = afterUpnpToken.split("/");
 
@@ -82,7 +84,6 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
                 osNameVersion = productTokens[0].split("/");
                 productNameVersion = productTokens[2].split("/");
             }
-
 
             serverClientTokens.setOsName(osNameVersion[0].trim());
             if (osNameVersion.length > 1) {
@@ -100,7 +101,6 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
             serverClientTokens.setOsVersion(ServerClientTokens.UNKNOWN_PLACEHOLDER);
             serverClientTokens.setProductName(ServerClientTokens.UNKNOWN_PLACEHOLDER);
             serverClientTokens.setProductVersion(ServerClientTokens.UNKNOWN_PLACEHOLDER);
-
 
             /* These are the rules:
              *

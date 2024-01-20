@@ -14,19 +14,19 @@
 
 package example.localservice;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.DefaultServiceManager;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
-import org.jupnp.data.SampleData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Restricting numeric value ranges
@@ -40,12 +40,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * your service is being bound, you can implement a class with the
  * <code>org.jupnp.binding.AllowedValueRangeProvider</code> interface:
  * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include: PROVIDER"/>
+ * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include:
+ * PROVIDER"/>
  * <p>
  * Then, instead of specifying a static list of string values in your state variable declaration,
  * name the provider class:
  * </p>
- * <a class="citation" id="MyServiceWithAllowedValueRangeProvider-VAR" href="javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include: VAR"/>
+ * <a class="citation" id="MyServiceWithAllowedValueRangeProvider-VAR" href=
+ * "javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include: VAR"/>
  * <p>
  * Note that this provider will only be queried when your annotations are being processed,
  * once when your service is bound in jUPnP.
@@ -58,20 +60,14 @@ class AllowedValueRangeTest {
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
 
-        return new LocalDevice(
-            SampleData.createLocalDeviceIdentity(),
-            new DeviceType("mydomain", "CustomDevice", 1),
-            new DeviceDetails("A Custom Device"),
-            svc
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new DeviceType("mydomain", "CustomDevice", 1),
+                new DeviceDetails("A Custom Device"), svc);
     }
 
     static Object[][] getDevices() {
         try {
-            return new LocalDevice[][]{
-                {createTestDevice(MyServiceWithAllowedValueRange.class)},
-                {createTestDevice(MyServiceWithAllowedValueRangeProvider.class)},
-            };
+            return new LocalDevice[][] { { createTestDevice(MyServiceWithAllowedValueRange.class) },
+                    { createTestDevice(MyServiceWithAllowedValueRangeProvider.class) }, };
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             // Damn testng swallows exceptions in provider/factory methods
@@ -89,5 +85,4 @@ class AllowedValueRangeTest {
         assertEquals(100, svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getMaximum());
         assertEquals(5, svc.getStateVariables()[0].getTypeDetails().getAllowedValueRange().getStep());
     }
-
 }

@@ -20,15 +20,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface UpnpService {
 
     UpnpServiceId serviceId();
+
     UpnpServiceType serviceType();
 
     boolean supportsQueryStateVariables() default true;
+
     Class[] stringConvertibleTypes() default {};
 }

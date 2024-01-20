@@ -21,25 +21,24 @@ import org.slf4j.LoggerFactory;
 
 public class TestVariable extends Observable {
     private static Logger log = LoggerFactory.getLogger(TestVariable.class);
-	private Object value;
+    private Object value;
 
-	public TestVariable(Object value) {
-		setValue(value);
-	}
-	
-	public void setValue(Object value) {
-		log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "setValue", value);
-		if (this.value == null || !this.value.equals(value)) {
-			log.trace("old: {} new: {}", this.value, value);
-			
-			this.value = value;
-			setChanged();
-			notifyObservers(this);
-		}
-	}
+    public TestVariable(Object value) {
+        setValue(value);
+    }
 
-	public Object getValue() {
-		return value;
-	}
-	
+    public void setValue(Object value) {
+        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "setValue", value);
+        if (this.value == null || !this.value.equals(value)) {
+            log.trace("old: {} new: {}", this.value, value);
+
+            this.value = value;
+            setChanged();
+            notifyObservers(this);
+        }
+    }
+
+    public Object getValue() {
+        return value;
+    }
 }

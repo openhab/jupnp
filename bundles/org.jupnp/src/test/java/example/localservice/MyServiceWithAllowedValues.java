@@ -22,16 +22,11 @@ import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
 
-@UpnpService(
-        serviceId = @UpnpServiceId("MyService"),
-        serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService")
-)
+@UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValues {
 
     // DOC:VAR
-    @UpnpStateVariable(
-        allowedValues = {"Foo", "Bar", "Baz"}
-    )
+    @UpnpStateVariable(allowedValues = { "Foo", "Bar", "Baz" })
     private String restricted;
     // DOC:VAR
 

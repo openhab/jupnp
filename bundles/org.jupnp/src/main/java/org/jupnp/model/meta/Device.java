@@ -61,18 +61,18 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         this(identity, null, null, null, null, null);
     }
 
-    public Device(DI identity, DeviceType type, DeviceDetails details,
-                  Icon[] icons, S[] services) throws ValidationException {
+    public Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services)
+            throws ValidationException {
         this(identity, null, type, details, icons, services, null);
     }
 
-    public Device(DI identity, DeviceType type, DeviceDetails details,
-                  Icon[] icons, S[] services, D[] embeddedDevices) throws ValidationException {
+    public Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services, D[] embeddedDevices)
+            throws ValidationException {
         this(identity, null, type, details, icons, services, embeddedDevices);
     }
 
-    public Device(DI identity, UDAVersion version, DeviceType type, DeviceDetails details,
-                  Icon[] icons, S[] services, D[] embeddedDevices) throws ValidationException {
+    public Device(DI identity, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons, S[] services,
+            D[] embeddedDevices) throws ValidationException {
 
         this.identity = identity;
         this.version = version == null ? new UDAVersion() : version;
@@ -88,11 +88,10 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
                 if (icon != null) {
                     icon.setDevice(this); // Set before validate()!
                     List<ValidationError> iconErrors = icon.validate();
-                    if(iconErrors.isEmpty()) {
+                    if (iconErrors.isEmpty()) {
                         validIcons.add(icon);
                     } else {
-                        SpecificationViolationReporter
-                                .report("Discarding invalid '" + icon + "': " + iconErrors, null);
+                        SpecificationViolationReporter.report("Discarding invalid '" + icon + "': " + iconErrors, null);
                     }
                 }
             }
@@ -119,7 +118,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
                 }
             }
         }
-        this.embeddedDevices = embeddedDevices == null || allNullEmbedded  ? null : embeddedDevices;
+        this.embeddedDevices = embeddedDevices == null || allNullEmbedded ? null : embeddedDevices;
 
         List<ValidationError> errors = validate();
         if (errors.size() > 0) {
@@ -163,7 +162,6 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     public boolean hasServices() {
         return getServices() != null && getServices().length > 0;
     }
-
 
     public boolean hasEmbeddedDevices() {
         return getEmbeddedDevices() != null && getEmbeddedDevices().length > 0;
@@ -226,11 +224,13 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     protected D find(UDN udn, D current) {
-        if (current.getIdentity().getUdn().equals(udn)) return current;
+        if (current.getIdentity().getUdn().equals(udn))
+            return current;
         if (current.hasEmbeddedDevices()) {
             for (D embeddedDevice : (D[]) current.getEmbeddedDevices()) {
                 D match;
-                if ((match = find(udn, embeddedDevice)) != null) return match;
+                if ((match = find(udn, embeddedDevice)) != null)
+                    return match;
             }
         }
         return null;
@@ -322,7 +322,8 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     public boolean isFullyHydrated() {
         S[] services = findServices();
         for (S service : services) {
-            if (service.hasStateVariables()) return true;
+            if (service.hasStateVariables())
+                return true;
         }
         return false;
     }
@@ -339,16 +340,18 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             // Some vendors end the model name with the model number, let's remove that
             ModelDetails modelDetails = getDetails().getModelDetails();
             if (modelDetails.getModelName() != null) {
-                cleanModelName = modelDetails.getModelNumber() != null && modelDetails.getModelName().endsWith(modelDetails.getModelNumber())
-                        ? modelDetails.getModelName().substring(0, modelDetails.getModelName().length() - modelDetails.getModelNumber().length())
-                        : modelDetails.getModelName();
+                cleanModelName = modelDetails.getModelNumber() != null
+                        && modelDetails.getModelName().endsWith(modelDetails.getModelNumber())
+                                ? modelDetails.getModelName().substring(0,
+                                        modelDetails.getModelName().length() - modelDetails.getModelNumber().length())
+                                : modelDetails.getModelName();
             }
 
             // Some vendors repeat the model name as the model number, no good
             if (cleanModelName != null) {
-                cleanModelNumber = modelDetails.getModelNumber() != null && !cleanModelName.startsWith(modelDetails.getModelNumber())
-                        ? modelDetails.getModelNumber()
-                        : "";
+                cleanModelNumber = modelDetails.getModelNumber() != null
+                        && !cleanModelName.startsWith(modelDetails.getModelNumber()) ? modelDetails.getModelNumber()
+                                : "";
             } else {
                 cleanModelNumber = modelDetails.getModelNumber();
             }
@@ -361,7 +364,8 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             // Some vendors repeat the manufacturer in model name, let's remove that too
             if (cleanModelName != null && getDetails().getManufacturerDetails().getManufacturer() != null) {
                 cleanModelName = cleanModelName.startsWith(getDetails().getManufacturerDetails().getManufacturer())
-                        ? cleanModelName.substring(getDetails().getManufacturerDetails().getManufacturer().length()).trim()
+                        ? cleanModelName.substring(getDetails().getManufacturerDetails().getManufacturer().length())
+                                .trim()
                         : cleanModelName.trim();
             }
 
@@ -386,9 +390,9 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             // type. Now that is a risky assumption...
 
             errors.addAll(getVersion().validate());
-            
-            if(getIdentity() != null) {
-            	errors.addAll(getIdentity().validate());
+
+            if (getIdentity() != null) {
+                errors.addAll(getIdentity().validate());
             }
 
             if (getDetails() != null) {
@@ -415,12 +419,15 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Device device = (Device) o;
 
-        if (!identity.equals(device.identity)) return false;
+        if (!identity.equals(device.identity))
+            return false;
 
         return true;
     }
@@ -430,12 +437,12 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         return identity.hashCode();
     }
 
-    public abstract D newInstance(UDN udn, UDAVersion version, DeviceType type, DeviceDetails details,
-                                  Icon[] icons, S[] services, List<D> embeddedDevices) throws ValidationException;
+    public abstract D newInstance(UDN udn, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons,
+            S[] services, List<D> embeddedDevices) throws ValidationException;
 
-    public abstract S newInstance(ServiceType serviceType, ServiceId serviceId,
-                                  URI descriptorURI, URI controlURI, URI eventSubscriptionURI,
-                                  Action<S>[] actions, StateVariable<S>[] stateVariables) throws ValidationException;
+    public abstract S newInstance(ServiceType serviceType, ServiceId serviceId, URI descriptorURI, URI controlURI,
+            URI eventSubscriptionURI, Action<S>[] actions, StateVariable<S>[] stateVariables)
+            throws ValidationException;
 
     public abstract D[] toDeviceArray(Collection<D> col);
 

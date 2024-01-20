@@ -15,10 +15,10 @@
 
 package org.jupnp.support.lastchange;
 
+import java.util.Map;
+
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.UnsignedIntegerTwoBytes;
-
-import java.util.Map;
 
 /**
  * @author Christian Bauer - Initial Contribution

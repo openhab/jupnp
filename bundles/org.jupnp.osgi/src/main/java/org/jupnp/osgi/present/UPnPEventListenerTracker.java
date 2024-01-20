@@ -27,18 +27,18 @@ import org.slf4j.LoggerFactory;
  *
  * @author Bruce Green
  */
-class UPnPEventListenerTracker extends ServiceTracker  {
+class UPnPEventListenerTracker extends ServiceTracker {
 
     private final Logger log = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
-	
-	public UPnPEventListenerTracker(BundleContext context, Filter filter, ServiceTrackerCustomizer customizer) {
-		super(context, filter, null);
-	}
-	
-	@Override
-	public Object addingService(ServiceReference reference) {
-		log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
+
+    public UPnPEventListenerTracker(BundleContext context, Filter filter, ServiceTrackerCustomizer customizer) {
+        super(context, filter, null);
+    }
+
+    @Override
+    public Object addingService(ServiceReference reference) {
+        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
 
         return super.addingService(reference);
-	}
+    }
 }

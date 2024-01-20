@@ -14,16 +14,15 @@
 
 package org.jupnp.osgi.discover;
 
-import org.osgi.framework.BundleContext;
 import org.jupnp.UpnpService;
+import org.osgi.framework.BundleContext;
 
 /**
  * @author Bruce Green
  */
 public class UPnPDiscover {
 
-	public UPnPDiscover(BundleContext context, UpnpService upnpService) {
-		upnpService.getControlPoint().getRegistry().addListener(new JUPnPRegistryListener(context, upnpService));
-	}
-
+    public UPnPDiscover(BundleContext context, UpnpService upnpService) {
+        upnpService.getControlPoint().getRegistry().addListener(new JUPnPRegistryListener(context, upnpService));
+    }
 }

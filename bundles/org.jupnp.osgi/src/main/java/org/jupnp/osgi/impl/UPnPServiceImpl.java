@@ -14,16 +14,16 @@
 
 package org.jupnp.osgi.impl;
 
-import org.osgi.service.upnp.UPnPAction;
-import org.osgi.service.upnp.UPnPService;
-import org.osgi.service.upnp.UPnPStateVariable;
-import org.jupnp.model.meta.Action;
-import org.jupnp.model.meta.Service;
-import org.jupnp.model.meta.StateVariable;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+
+import org.jupnp.model.meta.Action;
+import org.jupnp.model.meta.Service;
+import org.jupnp.model.meta.StateVariable;
+import org.osgi.service.upnp.UPnPAction;
+import org.osgi.service.upnp.UPnPService;
+import org.osgi.service.upnp.UPnPStateVariable;
 
 /**
  * @author Bruce Green

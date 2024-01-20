@@ -20,8 +20,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.util.Locale;
 
-import com.sun.net.httpserver.HttpExchange;
-
 import org.jupnp.model.message.Connection;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
@@ -32,9 +30,10 @@ import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.transport.spi.UpnpStream;
 import org.jupnp.util.Exceptions;
 import org.jupnp.util.io.IO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sun.net.httpserver.HttpExchange;
 
 /**
  * Default implementation based on the JDK 6.0 built-in HTTP Server.
@@ -65,14 +64,13 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
     public void run() {
 
         try {
-            log.trace("Processing HTTP request: {} {}", getHttpExchange().getRequestMethod(), getHttpExchange().getRequestURI());
+            log.trace("Processing HTTP request: {} {}", getHttpExchange().getRequestMethod(),
+                    getHttpExchange().getRequestURI());
 
             // Status
-            StreamRequestMessage requestMessage =
-                    new StreamRequestMessage(
-                            UpnpRequest.Method.getByHttpName(getHttpExchange().getRequestMethod()),
-                            getHttpExchange().getRequestURI()
-                    );
+            StreamRequestMessage requestMessage = new StreamRequestMessage(
+                    UpnpRequest.Method.getByHttpName(getHttpExchange().getRequestMethod()),
+                    getHttpExchange().getRequestURI());
 
             if (requestMessage.getOperation().getMethod().equals(UpnpRequest.Method.UNKNOWN)) {
                 log.trace("Method not supported by UPnP stack: {}", getHttpExchange().getRequestMethod());
@@ -81,8 +79,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
             // Protocol
             requestMessage.getOperation().setHttpMinorVersion(
-                    getHttpExchange().getProtocol().toUpperCase(Locale.ROOT).equals("HTTP/1.1") ? 1 : 0
-            );
+                    getHttpExchange().getProtocol().toUpperCase(Locale.ROOT).equals("HTTP/1.1") ? 1 : 0);
 
             log.trace("Created new request message: {}", requestMessage);
 
@@ -123,9 +120,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
                 log.trace("Preparing HTTP response message: {}", responseMessage);
 
                 // Headers
-                getHttpExchange().getResponseHeaders().putAll(
-                        responseMessage.getHeaders()
-                );
+                getHttpExchange().getResponseHeaders().putAll(responseMessage.getHeaders());
 
                 // Body
                 byte[] responseBodyBytes = responseMessage.hasBody() ? responseMessage.getBodyBytes() : null;
@@ -181,5 +176,4 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
     }
 
     abstract protected Connection createConnection();
-
 }

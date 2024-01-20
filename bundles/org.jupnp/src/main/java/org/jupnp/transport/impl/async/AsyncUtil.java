@@ -39,5 +39,4 @@ public class AsyncUtil {
      * otherwise false.
      */
     public static final boolean SERVLET3_SUPPORT;
-
 }

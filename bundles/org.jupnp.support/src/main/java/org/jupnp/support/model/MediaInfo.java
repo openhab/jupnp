@@ -15,10 +15,10 @@
 
 package org.jupnp.support.model;
 
-import org.jupnp.model.types.UnsignedIntegerFourBytes;
-import org.jupnp.model.action.ActionArgumentValue;
-
 import java.util.Map;
+
+import org.jupnp.model.action.ActionArgumentValue;
+import org.jupnp.model.types.UnsignedIntegerFourBytes;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -41,18 +41,14 @@ public class MediaInfo {
     }
 
     public MediaInfo(Map<String, ActionArgumentValue<?>> args) {
-        this(
-                (String) args.get("CurrentURI").getValue(),
-                (String) args.get("CurrentURIMetaData").getValue(),
-                (String) args.get("NextURI").getValue(),
-                (String) args.get("NextURIMetaData").getValue(),
+        this((String) args.get("CurrentURI").getValue(), (String) args.get("CurrentURIMetaData").getValue(),
+                (String) args.get("NextURI").getValue(), (String) args.get("NextURIMetaData").getValue(),
 
                 (UnsignedIntegerFourBytes) args.get("NrTracks").getValue(),
                 (String) args.get("MediaDuration").getValue(),
                 StorageMedium.valueOrVendorSpecificOf((String) args.get("PlayMedium").getValue()),
                 StorageMedium.valueOrVendorSpecificOf((String) args.get("RecordMedium").getValue()),
-                RecordMediumWriteStatus.valueOrUnknownOf((String) args.get("WriteStatus").getValue())
-        );
+                RecordMediumWriteStatus.valueOrUnknownOf((String) args.get("WriteStatus").getValue()));
     }
 
     public MediaInfo(String currentURI, String currentURIMetaData) {
@@ -60,9 +56,8 @@ public class MediaInfo {
         this.currentURIMetaData = currentURIMetaData;
     }
 
-    public MediaInfo(String currentURI, String currentURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
-                     StorageMedium playMedium) {
+    public MediaInfo(String currentURI, String currentURIMetaData, UnsignedIntegerFourBytes numberOfTracks,
+            String mediaDuration, StorageMedium playMedium) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
         this.numberOfTracks = numberOfTracks;
@@ -70,10 +65,9 @@ public class MediaInfo {
         this.playMedium = playMedium;
     }
 
-    public MediaInfo(String currentURI, String currentURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
-                     StorageMedium playMedium,
-                     StorageMedium recordMedium, RecordMediumWriteStatus writeStatus) {
+    public MediaInfo(String currentURI, String currentURIMetaData, UnsignedIntegerFourBytes numberOfTracks,
+            String mediaDuration, StorageMedium playMedium, StorageMedium recordMedium,
+            RecordMediumWriteStatus writeStatus) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
         this.numberOfTracks = numberOfTracks;
@@ -83,10 +77,8 @@ public class MediaInfo {
         this.writeStatus = writeStatus;
     }
 
-    public MediaInfo(String currentURI, String currentURIMetaData,
-                     String nextURI, String nextURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
-                     StorageMedium playMedium) {
+    public MediaInfo(String currentURI, String currentURIMetaData, String nextURI, String nextURIMetaData,
+            UnsignedIntegerFourBytes numberOfTracks, String mediaDuration, StorageMedium playMedium) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
         this.nextURI = nextURI;
@@ -96,11 +88,9 @@ public class MediaInfo {
         this.playMedium = playMedium;
     }
 
-    public MediaInfo(String currentURI, String currentURIMetaData,
-                     String nextURI, String nextURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
-                     StorageMedium playMedium,
-                     StorageMedium recordMedium, RecordMediumWriteStatus writeStatus) {
+    public MediaInfo(String currentURI, String currentURIMetaData, String nextURI, String nextURIMetaData,
+            UnsignedIntegerFourBytes numberOfTracks, String mediaDuration, StorageMedium playMedium,
+            StorageMedium recordMedium, RecordMediumWriteStatus writeStatus) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
         this.nextURI = nextURI;
@@ -147,5 +137,4 @@ public class MediaInfo {
     public RecordMediumWriteStatus getWriteStatus() {
         return writeStatus;
     }
-
 }

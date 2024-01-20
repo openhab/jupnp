@@ -14,7 +14,8 @@
  */
 package org.jupnp.support.model.dlna;
 
-/** DLNA.ORG_FLAGS, padded with 24 trailing 0s
+/**
+ * DLNA.ORG_FLAGS, padded with 24 trailing 0s
  *
  * <pre>
  *     80000000  31  senderPaced

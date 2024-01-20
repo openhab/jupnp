@@ -14,23 +14,22 @@
 
 package org.jupnp.transport.impl.jetty;
 
-import org.eclipse.jetty.http.HttpField;
-import org.eclipse.jetty.http.HttpFields;
-import org.eclipse.jetty.client.api.ContentProvider;
-import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.api.Response;
-import org.jupnp.http.Headers;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jetty.client.api.ContentProvider;
+import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.api.Response;
+import org.eclipse.jetty.http.HttpField;
+import org.eclipse.jetty.http.HttpFields;
+import org.jupnp.http.Headers;
 
 /**
  * Converts from/to jUPnP Headers to/from HTTP client (Jetty) header format.
@@ -114,11 +113,11 @@ public class HeaderUtil {
         final ContentProvider provider = request.getContent();
 
         final StringBuilder sb = new StringBuilder();
-        for(final ByteBuffer next : provider) {
+        for (final ByteBuffer next : provider) {
             final byte[] bytes = new byte[next.capacity()];
-            next.get( bytes );
+            next.get(bytes);
             // Should by "payload"
-            final String content = new String( bytes, StandardCharsets.UTF_8);
+            final String content = new String(bytes, StandardCharsets.UTF_8);
             sb.append(content);
         }
 
@@ -135,9 +134,9 @@ public class HeaderUtil {
         final ContentProvider provider = request.getContent();
 
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        for(final ByteBuffer next : provider) {
+        for (final ByteBuffer next : provider) {
             final byte[] bytes = new byte[next.capacity()];
-            next.get( bytes );
+            next.get(bytes);
 
             // Should by "payload"
             bos.write(bytes, 0, bytes.length);
@@ -158,11 +157,10 @@ public class HeaderUtil {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         final byte[] bytes = new byte[1024];
         int len;
-        while(0<(len = is.read(bytes))) {
+        while (0 < (len = is.read(bytes))) {
             bos.write(bytes, 0, len);
         }
 
         return bos.toByteArray();
     }
-
 }

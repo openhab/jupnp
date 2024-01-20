@@ -60,5 +60,4 @@ public class MessageElement extends DOMElement<MessageElement, MessageElement> {
             }
         };
     }
-
 }

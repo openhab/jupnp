@@ -73,33 +73,29 @@ public class InitialIntegrationTest extends BaseIntegration {
         AtomicBoolean successful = new AtomicBoolean(false);
 
         ActionInvocation setTargetInvocation = new GetTargetActionInvocation(service, name);
-        getUpnpService().getControlPoint().execute(
-                new ActionCallback(setTargetInvocation) {
+        getUpnpService().getControlPoint().execute(new ActionCallback(setTargetInvocation) {
 
-                    @Override
-                    public void success(ActionInvocation invocation) {
-                        log.info("Successfully called action '{}'", name);
-                        ActionArgumentValue[] outputs = invocation.getOutput();
-                        for (ActionArgumentValue output : outputs) {
-                            ActionArgument argument = output.getArgument();
-                            String name =  argument.getName();
-                            String type = (String) name;
-                            Object value = output.getValue();
-                            Object desired = data.getOSGiUPnPValue(name, type);
+            @Override
+            public void success(ActionInvocation invocation) {
+                log.info("Successfully called action '{}'", name);
+                ActionArgumentValue[] outputs = invocation.getOutput();
+                for (ActionArgumentValue output : outputs) {
+                    ActionArgument argument = output.getArgument();
+                    String name = argument.getName();
+                    String type = (String) name;
+                    Object value = output.getValue();
+                    Object desired = data.getOSGiUPnPValue(name, type);
 
-                            assertTrue(validate(name, type, value, desired));
-                        }
-                        successful.set(true);
-                    }
-
-                    @Override
-                    public void failure(ActionInvocation invocation,
-                                        UpnpResponse operation,
-                                        String defaultMsg) {
-                        fail(String.format("Failed calling action '%s': %s" , name, defaultMsg));
-                    }
+                    assertTrue(validate(name, type, value, desired));
                 }
-        );
+                successful.set(true);
+            }
+
+            @Override
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
+                fail(String.format("Failed calling action '%s': %s", name, defaultMsg));
+            }
+        });
 
         waitForAssert(() -> assertTrue(successful.get()));
     }
@@ -122,13 +118,14 @@ public class InitialIntegrationTest extends BaseIntegration {
                     argumentObject = data.getOSGiUPnPValue(argument.getName(), argumentType);
                     log.debug("@@@ object: {}", argumentObject);
                     argumentObject = data.getjUPnPUPnPValue(argumentType, argumentObject);
-                    log.debug("@@@ type: {}  value: {} ({})", argumentType, argumentObject, argumentObject.getClass().getName());
+                    log.debug("@@@ type: {}  value: {} ({})", argumentType, argumentObject,
+                            argumentObject.getClass().getName());
                     setInput(argument.getName(), argumentObject);
                 }
             } catch (InvalidValueException e) {
                 InvalidValueException exception = log.isDebugEnabled() ? e : null;
-                log.warn("Invalid value while setting '{}' argument '{}' of type '{}' to: {}",
-                        name, lastArgument, argumentType, argumentObject, exception);
+                log.warn("Invalid value while setting '{}' argument '{}' of type '{}' to: {}", name, lastArgument,
+                        argumentType, argumentObject, exception);
             }
         }
     }
@@ -152,23 +149,19 @@ public class InitialIntegrationTest extends BaseIntegration {
         AtomicBoolean successful = new AtomicBoolean(false);
 
         ActionInvocation setTargetInvocation = new SetTargetActionInvocation(service, name, data);
-        getUpnpService().getControlPoint().execute(
-                new ActionCallback(setTargetInvocation) {
+        getUpnpService().getControlPoint().execute(new ActionCallback(setTargetInvocation) {
 
-                    @Override
-                    public void success(ActionInvocation invocation) {
-                        log.info("Successfully called action '{}'", name);
-                        successful.set(true);
-                    }
+            @Override
+            public void success(ActionInvocation invocation) {
+                log.info("Successfully called action '{}'", name);
+                successful.set(true);
+            }
 
-                    @Override
-                    public void failure(ActionInvocation invocation,
-                                        UpnpResponse operation,
-                                        String defaultMsg) {
-                        fail(String.format("Failed calling action '%s': %s" , name, defaultMsg));
-                    }
-                }
-        );
+            @Override
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
+                fail(String.format("Failed calling action '%s': %s", name, defaultMsg));
+            }
+        });
 
         waitForAssert(() -> assertTrue(successful.get()));
     }

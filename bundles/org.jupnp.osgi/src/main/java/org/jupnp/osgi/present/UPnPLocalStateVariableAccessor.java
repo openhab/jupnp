@@ -30,33 +30,33 @@ class UPnPLocalStateVariableAccessor extends StateVariableAccessor {
     private static final SimpleDateFormat dateTimeTZFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
     private static final SimpleDateFormat timeTZFormat = new SimpleDateFormat("HH:mm:ssZ");
-	private UPnPLocalStateVariable variable;
-	
-	public UPnPLocalStateVariableAccessor(UPnPLocalStateVariable variable) {
-		this.variable = variable;
-	}
-	
-	@Override
-	public Class<?> getReturnType() {
-		logger.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType");
-		return variable.getJavaDataType();
-	}
+    private UPnPLocalStateVariable variable;
 
-	@Override
-	public Object read(Object serviceImpl) throws Exception {
-		logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
+    public UPnPLocalStateVariableAccessor(UPnPLocalStateVariable variable) {
+        this.variable = variable;
+    }
 
-		Object value = variable.getCurrentValue();
-		if (value != null) {
-			value = OSGiDataConverter.tojUPnPValue(variable.getUPnPDataType(), value);
-			
-			try {
-			} catch (InvalidValueException e) {
-				logger.error("Error accessing variable {}.", variable.getName());
-				logger.error(e.getMessage());
-			}
-		}
-		
-		return value;
-	}
+    @Override
+    public Class<?> getReturnType() {
+        logger.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType");
+        return variable.getJavaDataType();
+    }
+
+    @Override
+    public Object read(Object serviceImpl) throws Exception {
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
+
+        Object value = variable.getCurrentValue();
+        if (value != null) {
+            value = OSGiDataConverter.tojUPnPValue(variable.getUPnPDataType(), value);
+
+            try {
+            } catch (InvalidValueException e) {
+                logger.error("Error accessing variable {}.", variable.getName());
+                logger.error(e.getMessage());
+            }
+        }
+
+        return value;
+    }
 }

@@ -26,8 +26,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.StreamResponseMessage;
-import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.util.Exceptions;
+import org.jupnp.util.SpecificationViolationReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +55,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             SpecificationViolationReporter.report("HTTPS invalid.  Ignoring call " + requestMessage.getUri());
             return null;
         }
-	
+
         // We want to track how long it takes
         long start = System.nanoTime();
 
@@ -65,21 +65,17 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         final Long numberOfTries = failedTries.get(requestMessage.getUri());
 
         if (getConfiguration().getRetryAfterSeconds() > 0 && previeousFailureTime != null) {
-            if (start - previeousFailureTime < TimeUnit.SECONDS
-                    .toNanos(getConfiguration().getRetryAfterSeconds()) && 
-                    numberOfTries >= getConfiguration().getRetryIterations()) {
-                        log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
-                                        numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
+            if (start - previeousFailureTime < TimeUnit.SECONDS.toNanos(getConfiguration().getRetryAfterSeconds())
+                    && numberOfTries >= getConfiguration().getRetryIterations()) {
+                log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
+                        numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
                 return null;
-             } else if (start - previeousFailureTime < TimeUnit.SECONDS
-                    .toNanos(getConfiguration().getRetryAfterSeconds()) &&
-                    numberOfTries > 0 ) {
-                        log.debug("Previous attempt failed {} times.  Will retry {}",
-                                        numberOfTries, requestMessage);
+            } else if (start - previeousFailureTime < TimeUnit.SECONDS
+                    .toNanos(getConfiguration().getRetryAfterSeconds()) && numberOfTries > 0) {
+                log.debug("Previous attempt failed {} times.  Will retry {}", numberOfTries, requestMessage);
             } else {
-                log.debug("Clearing failed attempt after {} tries",
-                                numberOfTries);
-      	        failedRequests.remove(requestMessage.getUri());
+                log.debug("Clearing failed attempt after {} tries", numberOfTries);
+                failedRequests.remove(requestMessage.getUri());
                 failedTries.put(requestMessage.getUri(), (long) 0);
             }
         }
@@ -96,7 +92,8 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         // Wait on the current thread for completion
         try {
-            log.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(), requestMessage);
+            log.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(),
+                    requestMessage);
             StreamResponseMessage response = future.get(getConfiguration().getTimeoutSeconds(), TimeUnit.SECONDS);
 
             // Log a warning if it took too long
@@ -212,7 +209,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         }
     }
 
-    // Wrap the Callables to track if execution started or if it timed out while waiting in the executor queue 
+    // Wrap the Callables to track if execution started or if it timed out while waiting in the executor queue
     private static class RequestWrapper implements Callable<StreamResponseMessage> {
 
         Callable<StreamResponseMessage> task;
@@ -227,7 +224,5 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
             startTime = System.nanoTime();
             return task.call();
         }
-
     }
-
 }

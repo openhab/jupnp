@@ -47,7 +47,7 @@ public class MockUpnpService implements UpnpService {
     protected MockRouter router;
 
     protected NetworkAddressFactory networkAddressFactory;
-	private boolean sendsAlive;
+    private boolean sendsAlive;
 
     /**
      * Single-thread of execution for the whole UPnP stack, no ALIVE messages or registry maintenance.
@@ -77,8 +77,7 @@ public class MockUpnpService implements UpnpService {
     public MockUpnpService(final boolean sendsAlive, final MockUpnpServiceConfiguration configuration) {
 
         this.sendsAlive = sendsAlive;
-		this.configuration = configuration;
-
+        this.configuration = configuration;
     }
 
     protected ProtocolFactory createProtocolFactory(UpnpService service, boolean sendsAlive) {
@@ -114,7 +113,8 @@ public class MockUpnpService implements UpnpService {
             return new SendingNotificationAlive(getUpnpService(), localDevice) {
                 @Override
                 protected void execute() throws RouterException {
-                    if (sendsAlive) super.execute();
+                    if (sendsAlive)
+                        super.execute();
                 }
             };
         }
@@ -155,14 +155,16 @@ public class MockUpnpService implements UpnpService {
         getConfiguration().shutdown();
     }
 
-	@Override
-	public void startup() {
+    @Override
+    public void startup() {
         this.protocolFactory = createProtocolFactory(this, sendsAlive);
 
         this.registry = new RegistryImpl(this) {
             @Override
             protected RegistryMaintainer createRegistryMaintainer() {
-                return ((MockUpnpServiceConfiguration) configuration).isMaintainsRegistry() ? super.createRegistryMaintainer() : null;
+                return ((MockUpnpServiceConfiguration) configuration).isMaintainsRegistry()
+                        ? super.createRegistryMaintainer()
+                        : null;
             }
         };
 
@@ -171,5 +173,5 @@ public class MockUpnpService implements UpnpService {
         this.router = createRouter();
 
         this.controlPoint = new ControlPointImpl(configuration, protocolFactory, registry);
-	}
+    }
 }

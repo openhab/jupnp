@@ -32,7 +32,6 @@ public abstract class ConnectionComplete extends ActionCallback {
 
     protected ConnectionComplete(Service<?, ?> service, ControlPoint controlPoint, int connectionID) {
         super(new ActionInvocation<>(service.getAction("ConnectionComplete")), controlPoint);
-		getActionInvocation().setInput("ConnectionID", connectionID);
-	}
-
+        getActionInvocation().setInput("ConnectionID", connectionID);
+    }
 }

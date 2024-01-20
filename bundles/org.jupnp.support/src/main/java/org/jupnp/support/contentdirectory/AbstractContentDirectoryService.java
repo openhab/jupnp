@@ -47,54 +47,18 @@ import org.jupnp.support.model.SortCriterion;
  * @author Amit Kumar Mondal - Code Refactoring
  */
 
-@UpnpService(
-        serviceId = @UpnpServiceId("ContentDirectory"),
-        serviceType = @UpnpServiceType(value = "ContentDirectory", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("ContentDirectory"), serviceType = @UpnpServiceType(value = "ContentDirectory", version = 1))
 
-@UpnpStateVariables({
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_ObjectID",
-                                    sendEvents = false,
-                                    datatype = "string"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_Result",
-                                    sendEvents = false,
-                                    datatype = "string"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_BrowseFlag",
-                                    sendEvents = false,
-                                    datatype = "string",
-                                    allowedValuesEnum = BrowseFlag.class),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_Filter",
-                                    sendEvents = false,
-                                    datatype = "string"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_SortCriteria",
-                                    sendEvents = false,
-                                    datatype = "string"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_Index",
-                                    sendEvents = false,
-                                    datatype = "ui4"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_Count",
-                                    sendEvents = false,
-                                    datatype = "ui4"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_UpdateID",
-                                    sendEvents = false,
-                                    datatype = "ui4"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_URI",
-                                    sendEvents = false,
-                                    datatype = "uri"),
-                            @UpnpStateVariable(
-                                    name = "A_ARG_TYPE_SearchCriteria",
-                                    sendEvents = false,
-                                    datatype = "string")
-                    })
+@UpnpStateVariables({ @UpnpStateVariable(name = "A_ARG_TYPE_ObjectID", sendEvents = false, datatype = "string"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_Result", sendEvents = false, datatype = "string"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_BrowseFlag", sendEvents = false, datatype = "string", allowedValuesEnum = BrowseFlag.class),
+        @UpnpStateVariable(name = "A_ARG_TYPE_Filter", sendEvents = false, datatype = "string"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_SortCriteria", sendEvents = false, datatype = "string"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_Index", sendEvents = false, datatype = "ui4"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_Count", sendEvents = false, datatype = "ui4"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_UpdateID", sendEvents = false, datatype = "ui4"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_URI", sendEvents = false, datatype = "uri"),
+        @UpnpStateVariable(name = "A_ARG_TYPE_SearchCriteria", sendEvents = false, datatype = "string") })
 public abstract class AbstractContentDirectoryService {
 
     public static final String CAPS_WILDCARD = "*";
@@ -105,11 +69,7 @@ public abstract class AbstractContentDirectoryService {
     @UpnpStateVariable(sendEvents = false)
     private final CSV<String> sortCapabilities;
 
-    @UpnpStateVariable(
-            sendEvents = true,
-            defaultValue = "0",
-            eventMaximumRateMilliseconds = 200
-    )
+    @UpnpStateVariable(sendEvents = true, defaultValue = "0", eventMaximumRateMilliseconds = 200)
     private UnsignedIntegerFourBytes systemUpdateID = new UnsignedIntegerFourBytes(0);
 
     protected final PropertyChangeSupport propertyChangeSupport;
@@ -123,8 +83,9 @@ public abstract class AbstractContentDirectoryService {
     }
 
     protected AbstractContentDirectoryService(List<String> searchCapabilities, List<String> sortCapabilities,
-                                              PropertyChangeSupport propertyChangeSupport) {
-        this.propertyChangeSupport = propertyChangeSupport != null ? propertyChangeSupport : new PropertyChangeSupport(this);
+            PropertyChangeSupport propertyChangeSupport) {
+        this.propertyChangeSupport = propertyChangeSupport != null ? propertyChangeSupport
+                : new PropertyChangeSupport(this);
         this.searchCapabilities = new CSVString();
         this.searchCapabilities.addAll(searchCapabilities);
         this.sortCapabilities = new CSVString();
@@ -160,35 +121,20 @@ public abstract class AbstractContentDirectoryService {
     protected synchronized void changeSystemUpdateID() {
         Long oldUpdateID = getSystemUpdateID().getValue();
         systemUpdateID.increment(true);
-        getPropertyChangeSupport().firePropertyChange(
-                "SystemUpdateID",
-                oldUpdateID,
-                getSystemUpdateID().getValue()
-        );
+        getPropertyChangeSupport().firePropertyChange("SystemUpdateID", oldUpdateID, getSystemUpdateID().getValue());
     }
 
     @UpnpAction(out = {
-            @UpnpOutputArgument(name = "Result",
-                                stateVariable = "A_ARG_TYPE_Result",
-                                getterName = "getResult"),
-            @UpnpOutputArgument(name = "NumberReturned",
-                                stateVariable = "A_ARG_TYPE_Count",
-                                getterName = "getCount"),
-            @UpnpOutputArgument(name = "TotalMatches",
-                                stateVariable = "A_ARG_TYPE_Count",
-                                getterName = "getTotalMatches"),
-            @UpnpOutputArgument(name = "UpdateID",
-                                stateVariable = "A_ARG_TYPE_UpdateID",
-                                getterName = "getContainerUpdateID")
-    })
-    public BrowseResult browse(
-            @UpnpInputArgument(name = "ObjectID", aliases = "ContainerID") String objectId,
+            @UpnpOutputArgument(name = "Result", stateVariable = "A_ARG_TYPE_Result", getterName = "getResult"),
+            @UpnpOutputArgument(name = "NumberReturned", stateVariable = "A_ARG_TYPE_Count", getterName = "getCount"),
+            @UpnpOutputArgument(name = "TotalMatches", stateVariable = "A_ARG_TYPE_Count", getterName = "getTotalMatches"),
+            @UpnpOutputArgument(name = "UpdateID", stateVariable = "A_ARG_TYPE_UpdateID", getterName = "getContainerUpdateID") })
+    public BrowseResult browse(@UpnpInputArgument(name = "ObjectID", aliases = "ContainerID") String objectId,
             @UpnpInputArgument(name = "BrowseFlag") String browseFlag,
             @UpnpInputArgument(name = "Filter") String filter,
             @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerFourBytes firstResult,
             @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerFourBytes maxResults,
-            @UpnpInputArgument(name = "SortCriteria") String orderBy)
-            throws ContentDirectoryException {
+            @UpnpInputArgument(name = "SortCriteria") String orderBy) throws ContentDirectoryException {
 
         SortCriterion[] orderByCriteria;
         try {
@@ -198,13 +144,8 @@ public abstract class AbstractContentDirectoryService {
         }
 
         try {
-            return browse(
-                    objectId,
-                    BrowseFlag.valueOrNullOf(browseFlag),
-                    filter,
-                    firstResult.getValue(), maxResults.getValue(),
-                    orderByCriteria
-            );
+            return browse(objectId, BrowseFlag.valueOrNullOf(browseFlag), filter, firstResult.getValue(),
+                    maxResults.getValue(), orderByCriteria);
         } catch (ContentDirectoryException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -222,34 +163,21 @@ public abstract class AbstractContentDirectoryService {
      * error message can be returned to control points.
      * </p>
      */
-    public abstract BrowseResult browse(String objectID, BrowseFlag browseFlag,
-                                        String filter,
-                                        long firstResult, long maxResults,
-                                        SortCriterion[] orderby) throws ContentDirectoryException;
-
+    public abstract BrowseResult browse(String objectID, BrowseFlag browseFlag, String filter, long firstResult,
+            long maxResults, SortCriterion[] orderby) throws ContentDirectoryException;
 
     @UpnpAction(out = {
-            @UpnpOutputArgument(name = "Result",
-                                stateVariable = "A_ARG_TYPE_Result",
-                                getterName = "getResult"),
-            @UpnpOutputArgument(name = "NumberReturned",
-                                stateVariable = "A_ARG_TYPE_Count",
-                                getterName = "getCount"),
-            @UpnpOutputArgument(name = "TotalMatches",
-                                stateVariable = "A_ARG_TYPE_Count",
-                                getterName = "getTotalMatches"),
-            @UpnpOutputArgument(name = "UpdateID",
-                                stateVariable = "A_ARG_TYPE_UpdateID",
-                                getterName = "getContainerUpdateID")
-    })
+            @UpnpOutputArgument(name = "Result", stateVariable = "A_ARG_TYPE_Result", getterName = "getResult"),
+            @UpnpOutputArgument(name = "NumberReturned", stateVariable = "A_ARG_TYPE_Count", getterName = "getCount"),
+            @UpnpOutputArgument(name = "TotalMatches", stateVariable = "A_ARG_TYPE_Count", getterName = "getTotalMatches"),
+            @UpnpOutputArgument(name = "UpdateID", stateVariable = "A_ARG_TYPE_UpdateID", getterName = "getContainerUpdateID") })
     public BrowseResult search(
             @UpnpInputArgument(name = "ContainerID", stateVariable = "A_ARG_TYPE_ObjectID") String containerId,
             @UpnpInputArgument(name = "SearchCriteria") String searchCriteria,
             @UpnpInputArgument(name = "Filter") String filter,
             @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerFourBytes firstResult,
             @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerFourBytes maxResults,
-            @UpnpInputArgument(name = "SortCriteria") String orderBy)
-            throws ContentDirectoryException {
+            @UpnpInputArgument(name = "SortCriteria") String orderBy) throws ContentDirectoryException {
 
         SortCriterion[] orderByCriteria;
         try {
@@ -259,13 +187,8 @@ public abstract class AbstractContentDirectoryService {
         }
 
         try {
-            return search(
-                    containerId,
-                    searchCriteria,
-                    filter,
-                    firstResult.getValue(), maxResults.getValue(),
-                    orderByCriteria
-            );
+            return search(containerId, searchCriteria, filter, firstResult.getValue(), maxResults.getValue(),
+                    orderByCriteria);
         } catch (ContentDirectoryException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -279,8 +202,8 @@ public abstract class AbstractContentDirectoryService {
      * The default implementation returns an empty result.
      * </p>
      */
-    public BrowseResult search(String containerId, String searchCriteria, String filter,
-                               long firstResult, long maxResults, SortCriterion[] orderBy) throws ContentDirectoryException {
+    public BrowseResult search(String containerId, String searchCriteria, String filter, long firstResult,
+            long maxResults, SortCriterion[] orderBy) throws ContentDirectoryException {
 
         try {
             return new BrowseResult(new DIDLParser().generate(new DIDLContent()), 0, 0);

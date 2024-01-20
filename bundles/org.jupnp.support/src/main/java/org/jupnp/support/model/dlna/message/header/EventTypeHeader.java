@@ -15,6 +15,7 @@
 package org.jupnp.support.model.dlna.message.header;
 
 import java.util.regex.Pattern;
+
 import org.jupnp.model.message.header.InvalidHeaderException;
 
 /**
@@ -22,7 +23,7 @@ import org.jupnp.model.message.header.InvalidHeaderException;
  * @author Amit Kumar Mondal - Code Refactoring
  */
 public class EventTypeHeader extends DLNAHeader<String> {
-    
+
     private static final Pattern pattern = Pattern.compile("^[0-9]{4}$", Pattern.CASE_INSENSITIVE);
 
     public EventTypeHeader() {

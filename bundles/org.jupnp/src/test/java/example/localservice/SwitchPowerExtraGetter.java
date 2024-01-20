@@ -30,10 +30,7 @@ import org.jupnp.binding.annotations.*;
  * are several output arguments you can map each to a different getter method.
  * </p>
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerExtraGetter {
 
     @UpnpStateVariable(defaultValue = "0", sendEvents = false)
@@ -43,8 +40,7 @@ public class SwitchPowerExtraGetter {
     private boolean status = false;
 
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
         target = newTargetValue;
         status = newTargetValue;
         System.out.println("Switch is: " + status);
@@ -55,19 +51,12 @@ public class SwitchPowerExtraGetter {
         return target;
     }
 
-    public boolean getStatus() {                    // DOC:INC1
+    public boolean getStatus() { // DOC:INC1
         return status;
     }
 
-    @UpnpAction(
-            name = "GetStatus",
-            out = @UpnpOutputArgument(
-                    name = "ResultStatus",
-                    getterName = "getStatus"
-            )
-    )
+    @UpnpAction(name = "GetStatus", out = @UpnpOutputArgument(name = "ResultStatus", getterName = "getStatus"))
     public void retrieveStatus() {
         // NOOP in this example
-    }                                               // DOC:INC1
-
+    } // DOC:INC1
 }

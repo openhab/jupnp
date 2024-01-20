@@ -43,5 +43,4 @@ public class SendingNotificationAlive extends SendingNotification {
     protected NotificationSubtype getNotificationSubtype() {
         return NotificationSubtype.ALIVE;
     }
-
 }

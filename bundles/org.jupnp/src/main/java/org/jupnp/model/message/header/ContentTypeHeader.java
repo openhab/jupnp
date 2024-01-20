@@ -32,7 +32,7 @@ public class ContentTypeHeader extends UpnpHeader<MimeType> {
         setValue(contentType);
     }
 
-    public ContentTypeHeader(String s) throws InvalidHeaderException{
+    public ContentTypeHeader(String s) throws InvalidHeaderException {
         setString(s);
     }
 

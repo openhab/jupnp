@@ -20,49 +20,49 @@ import java.io.InputStream;
 import org.osgi.service.upnp.UPnPIcon;
 
 public class SimpleTestDeviceIcon implements UPnPIcon {
-	private String mimeType;
-	private int width;
-	private int height;
-	private int size;
-	private int depth;
-	private String location;
-	
-	public SimpleTestDeviceIcon(String mimeType, int width, int height, int depth, int size, String location) {
-		this.mimeType = mimeType;
-		this.width = width;
-		this.height = height;
-		this.size = size;
-		this.depth = depth;
-		this.location = location;
-	}
-	
-	@Override
-	public String getMimeType() {
-		return mimeType;
-	}
+    private String mimeType;
+    private int width;
+    private int height;
+    private int size;
+    private int depth;
+    private String location;
 
-	@Override
-	public int getWidth() {
-		return width;
-	}
+    public SimpleTestDeviceIcon(String mimeType, int width, int height, int depth, int size, String location) {
+        this.mimeType = mimeType;
+        this.width = width;
+        this.height = height;
+        this.size = size;
+        this.depth = depth;
+        this.location = location;
+    }
 
-	@Override
-	public int getHeight() {
-		return height;
-	}
+    @Override
+    public String getMimeType() {
+        return mimeType;
+    }
 
-	@Override
-	public int getSize() {
-		return size;
-	}
+    @Override
+    public int getWidth() {
+        return width;
+    }
 
-	@Override
-	public int getDepth() {
-		return depth;
-	}
+    @Override
+    public int getHeight() {
+        return height;
+    }
 
-	@Override
-	public InputStream getInputStream() throws IOException {
-		return SimpleTestDeviceIcon.class.getResourceAsStream(location);
-	}
+    @Override
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public int getDepth() {
+        return depth;
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return SimpleTestDeviceIcon.class.getResourceAsStream(location);
+    }
 }

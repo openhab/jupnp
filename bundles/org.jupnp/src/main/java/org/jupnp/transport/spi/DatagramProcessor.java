@@ -14,13 +14,12 @@
 
 package org.jupnp.transport.spi;
 
+import java.net.DatagramPacket;
+import java.net.InetAddress;
 
 import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.message.IncomingDatagramMessage;
 import org.jupnp.model.message.OutgoingDatagramMessage;
-
-import java.net.DatagramPacket;
-import java.net.InetAddress;
 
 /**
  * Reads and creates UDP datagrams from and into UPnP messages.
@@ -42,9 +41,11 @@ public interface DatagramProcessor {
      * @param receivedOnAddress The address of the socket on which this datagram was received.
      * @param datagram The received UDP datagram.
      * @return The populated instance.
-     * @throws org.jupnp.model.UnsupportedDataException If the datagram could not be read, or didn't contain required data.
+     * @throws org.jupnp.model.UnsupportedDataException If the datagram could not be read, or didn't contain required
+     *             data.
      */
-    public IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram) throws UnsupportedDataException;
+    public IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram)
+            throws UnsupportedDataException;
 
     /**
      * Creates a UDP datagram with the content of a message.
@@ -58,7 +59,4 @@ public interface DatagramProcessor {
      * @throws UnsupportedDataException If the datagram could not be created.
      */
     public DatagramPacket write(OutgoingDatagramMessage message) throws UnsupportedDataException;
-
 }
-
-

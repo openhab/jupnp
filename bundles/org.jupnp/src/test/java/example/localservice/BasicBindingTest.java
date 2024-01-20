@@ -14,10 +14,13 @@
 
 package example.localservice;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.DefaultServiceManager;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.ActionArgument;
@@ -28,9 +31,6 @@ import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
-import org.jupnp.data.SampleData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Annotating a service implementation
@@ -59,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * </div>
  * <p>
  * For the next example, let's assume you have a class that was already written, not
- * necessarily  as a service backend for UPnP but for some other purpose. You can't
+ * necessarily as a service backend for UPnP but for some other purpose. You can't
  * redesign and rewrite your class without interrupting all existing code. jUPnP offers
  * some flexibility in the mapping of action methods, especially how the output of
  * an action call is obtained.
@@ -83,22 +83,16 @@ class BasicBindingTest {
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
 
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("BinaryLight", 1),
-                new DeviceDetails("Example Binary Light"),
-                svc
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("BinaryLight", 1),
+                new DeviceDetails("Example Binary Light"), svc);
     }
 
     static Object[][] getDevices() {
         try {
-            return new LocalDevice[][]{
-                    {createTestDevice(SwitchPowerNamedStateVariable.class)},
-                    {createTestDevice(SwitchPowerAnnotatedClass.class)},
-                    {createTestDevice(SwitchPowerExtraGetter.class)},
-                    {createTestDevice(SwitchPowerBeanReturn.class)},
-            };
+            return new LocalDevice[][] { { createTestDevice(SwitchPowerNamedStateVariable.class) },
+                    { createTestDevice(SwitchPowerAnnotatedClass.class) },
+                    { createTestDevice(SwitchPowerExtraGetter.class) },
+                    { createTestDevice(SwitchPowerBeanReturn.class) }, };
         } catch (Exception ex) {
             ex.printStackTrace(System.err);
             // Damn testng swallows exceptions in provider/factory methods
@@ -112,14 +106,17 @@ class BasicBindingTest {
         LocalService svc = device.getServices()[0];
 
         assertEquals("urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:SwitchPower", svc.getServiceId().toString());
-        assertEquals("urn:" + UDAServiceType.DEFAULT_NAMESPACE + ":service:SwitchPower:1", svc.getServiceType().toString());
+        assertEquals("urn:" + UDAServiceType.DEFAULT_NAMESPACE + ":service:SwitchPower:1",
+                svc.getServiceType().toString());
 
         assertEquals(2, svc.getStateVariables().length);
-        assertEquals(Datatype.Builtin.BOOLEAN, svc.getStateVariable("Target").getTypeDetails().getDatatype().getBuiltin());
+        assertEquals(Datatype.Builtin.BOOLEAN,
+                svc.getStateVariable("Target").getTypeDetails().getDatatype().getBuiltin());
         assertEquals("0", svc.getStateVariable("Target").getTypeDetails().getDefaultValue());
         assertFalse(svc.getStateVariable("Target").getEventDetails().isSendEvents());
 
-        assertEquals(Datatype.Builtin.BOOLEAN, svc.getStateVariable("Status").getTypeDetails().getDatatype().getBuiltin());
+        assertEquals(Datatype.Builtin.BOOLEAN,
+                svc.getStateVariable("Status").getTypeDetails().getDatatype().getBuiltin());
         assertEquals("0", svc.getStateVariable("Status").getTypeDetails().getDefaultValue());
         assertTrue(svc.getStateVariable("Status").getEventDetails().isSendEvents());
 
@@ -177,5 +174,4 @@ class BasicBindingTest {
         assertEquals(1, queryStateVariableInvocation.getOutput().length);
         assertEquals("0", queryStateVariableInvocation.getOutput()[0].toString());
     }
-
 }

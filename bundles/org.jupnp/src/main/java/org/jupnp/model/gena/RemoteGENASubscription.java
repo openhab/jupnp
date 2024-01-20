@@ -14,6 +14,11 @@
 
 package org.jupnp.model.gena;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 import org.jupnp.model.Location;
 import org.jupnp.model.Namespace;
@@ -23,11 +28,6 @@ import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * An outgoing subscription to a remote service.
@@ -43,32 +43,27 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
 
     protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    protected RemoteGENASubscription(RemoteService service,
-                                     int requestedDurationSeconds) {
+    protected RemoteGENASubscription(RemoteService service, int requestedDurationSeconds) {
         super(service, requestedDurationSeconds);
     }
 
     public URL getEventSubscriptionURL() {
-        return getService().getDevice().normalizeURI(
-                getService().getEventSubscriptionURI()
-        );
+        return getService().getDevice().normalizeURI(getService().getEventSubscriptionURI());
     }
 
     public List<URL> getEventCallbackURLs(List<NetworkAddress> activeStreamServers, Namespace namespace) {
         List<URL> callbackURLs = new ArrayList();
         for (NetworkAddress activeStreamServer : activeStreamServers) {
-            callbackURLs.add(
-                    new Location(
-                            activeStreamServer,
-                            namespace.getEventCallbackPathString(getService())
-                    ).getURL());
+            callbackURLs
+                    .add(new Location(activeStreamServer, namespace.getEventCallbackPathString(getService())).getURL());
         }
         return callbackURLs;
     }
 
-    /* The following four methods should always be called in an independent thread, not within the
-       message receiving thread. Otherwise the user who implements the abstract delegate methods can
-       block the network communication.
+    /*
+     * The following four methods should always be called in an independent thread, not within the
+     * message receiving thread. Otherwise the user who implements the abstract delegate methods can
+     * block the network communication.
      */
 
     synchronized public void establish() {
@@ -88,7 +83,8 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
         if (this.currentSequence != null) {
 
             // TODO: Handle rollover to 1!
-            if (this.currentSequence.getValue().equals(this.currentSequence.getBits().getMaxValue()) && sequence.getValue() == 1) {
+            if (this.currentSequence.getValue().equals(this.currentSequence.getBits().getMaxValue())
+                    && sequence.getValue() == 1) {
                 System.err.println("TODO: HANDLE ROLLOVER");
                 return;
             }
@@ -113,7 +109,7 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
 
         eventReceived();
     }
-    
+
     public abstract void invalidMessage(UnsupportedDataException ex);
 
     public abstract void failed(UpnpResponse responseStatus);

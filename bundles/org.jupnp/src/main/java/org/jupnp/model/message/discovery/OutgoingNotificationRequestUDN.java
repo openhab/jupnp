@@ -31,5 +31,4 @@ public class OutgoingNotificationRequestUDN extends OutgoingNotificationRequest 
         getHeaders().add(UpnpHeader.Type.NT, new UDNHeader(device.getIdentity().getUdn()));
         getHeaders().add(UpnpHeader.Type.USN, new UDNHeader(device.getIdentity().getUdn()));
     }
-
 }

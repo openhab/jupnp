@@ -42,5 +42,4 @@ public abstract class GetDeviceCapabilities extends ActionCallback {
     }
 
     public abstract void received(ActionInvocation<?> actionInvocation, DeviceCapabilities caps);
-
 }

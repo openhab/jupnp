@@ -34,18 +34,16 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Crypt {
 
     // Character set allowed for the salt string
-    static private final String SALTCHARS
-            = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    static private final String SALTCHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
     // Character set of the encrypted password: A-Za-z0-9./
-    static private final String itoa64
-            = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static private final String itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     /**
      * Function to return a string from the set: A-Za-z0-9./
      *
      * @param size Length of the string
-     * @param v    value to be converted
+     * @param v value to be converted
      * @return A string of size (size) from the set A-Za-z0-9./
      */
     static private final String to64(long v, int size) {
@@ -96,7 +94,7 @@ public class MD5Crypt {
     /**
      * LINUX/BSD MD5Crypt function
      *
-     * @param salt     Random string used to initialize the MD5 engine
+     * @param salt Random string used to initialize the MD5 engine
      * @param password Password to be encrypted
      * @return The encrypted password as an MD5 hash
      */
@@ -107,8 +105,8 @@ public class MD5Crypt {
     /**
      * Linux/BSD MD5Crypt function
      *
-     * @param magic    $1$ for Linux/BSB, $apr1$ for Apache crypt
-     * @param salt     8 byte permutation string
+     * @param magic $1$ for Linux/BSB, $apr1$ for Apache crypt
+     * @param salt 8 byte permutation string
      * @param password user password
      * @return The encrypted password as an MD5 hash
      * @throws java.lang.Exception
@@ -126,8 +124,7 @@ public class MD5Crypt {
         try {
             ctx = MessageDigest.getInstance("md5");
             ctx1 = MessageDigest.getInstance("md5");
-        }
-        catch (NoSuchAlgorithmException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             System.err.println(ex);
             return null;
         }
@@ -170,9 +167,11 @@ public class MD5Crypt {
             ctx.update(finalState, 0, pl > 16 ? 16 : pl);
         }
 
-        /** the original code claimed that finalState was being cleared
-         to keep dangerous bits out of memory,
-         but doing this is also required in order to get the right output. */
+        /**
+         * the original code claimed that finalState was being cleared
+         * to keep dangerous bits out of memory,
+         * but doing this is also required in order to get the right output.
+         */
 
         clearbits(finalState);
 
@@ -188,7 +187,8 @@ public class MD5Crypt {
 
         finalState = ctx.digest();
 
-        /** and now, just to make sure things don't run too fast
+        /**
+         * and now, just to make sure things don't run too fast
          * On a 60 Mhz Pentium this takes 34 msec, so you would
          * need 30 seconds to build a 1000 entry dictionary...
          * (The above timings from the C version)
@@ -197,8 +197,7 @@ public class MD5Crypt {
         for (int i = 0; i < 1000; i++) {
             try {
                 ctx1 = MessageDigest.getInstance("md5");
-            }
-            catch (NoSuchAlgorithmException e0) {
+            } catch (NoSuchAlgorithmException e0) {
                 return null;
             }
 
@@ -236,24 +235,19 @@ public class MD5Crypt {
         /**
          * Build a 22 byte output string from the set: A-Za-z0-9./
          */
-        l = (bytes2u(finalState[0]) << 16)
-                | (bytes2u(finalState[6]) << 8) | bytes2u(finalState[12]);
+        l = (bytes2u(finalState[0]) << 16) | (bytes2u(finalState[6]) << 8) | bytes2u(finalState[12]);
         result.append(to64(l, 4));
 
-        l = (bytes2u(finalState[1]) << 16)
-                | (bytes2u(finalState[7]) << 8) | bytes2u(finalState[13]);
+        l = (bytes2u(finalState[1]) << 16) | (bytes2u(finalState[7]) << 8) | bytes2u(finalState[13]);
         result.append(to64(l, 4));
 
-        l = (bytes2u(finalState[2]) << 16)
-                | (bytes2u(finalState[8]) << 8) | bytes2u(finalState[14]);
+        l = (bytes2u(finalState[2]) << 16) | (bytes2u(finalState[8]) << 8) | bytes2u(finalState[14]);
         result.append(to64(l, 4));
 
-        l = (bytes2u(finalState[3]) << 16)
-                | (bytes2u(finalState[9]) << 8) | bytes2u(finalState[15]);
+        l = (bytes2u(finalState[3]) << 16) | (bytes2u(finalState[9]) << 8) | bytes2u(finalState[15]);
         result.append(to64(l, 4));
 
-        l = (bytes2u(finalState[4]) << 16)
-                | (bytes2u(finalState[10]) << 8) | bytes2u(finalState[5]);
+        l = (bytes2u(finalState[4]) << 16) | (bytes2u(finalState[10]) << 8) | bytes2u(finalState[5]);
         result.append(to64(l, 4));
 
         l = bytes2u(finalState[11]);

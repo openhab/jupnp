@@ -30,13 +30,13 @@ public class MessageScheduleReminder extends Message {
     private final String location;
     private final String body;
 
-    public MessageScheduleReminder(DateTime startTime, NumberName owner, String subject,
-                                   DateTime endTime, String location, String body) {
+    public MessageScheduleReminder(DateTime startTime, NumberName owner, String subject, DateTime endTime,
+            String location, String body) {
         this(DisplayType.MAXIMUM, startTime, owner, subject, endTime, location, body);
     }
 
     public MessageScheduleReminder(DisplayType displayType, DateTime startTime, NumberName owner, String subject,
-                                   DateTime endTime, String location, String body) {
+            DateTime endTime, String location, String body) {
         super(Category.SCHEDULE_REMINDER, displayType);
         this.startTime = startTime;
         this.owner = owner;
@@ -78,5 +78,4 @@ public class MessageScheduleReminder extends Message {
         parent.createChild("Location").setContent(getLocation());
         parent.createChild("Body").setContent(getBody());
     }
-
 }

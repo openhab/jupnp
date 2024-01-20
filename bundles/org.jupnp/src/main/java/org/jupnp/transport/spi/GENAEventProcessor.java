@@ -40,5 +40,4 @@ public interface GENAEventProcessor {
      * @throws UnsupportedDataException
      */
     public void readBody(IncomingEventRequestMessage requestMessage) throws UnsupportedDataException;
-
 }

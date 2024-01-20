@@ -14,6 +14,8 @@
 
 package org.jupnp.local;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
@@ -25,33 +27,25 @@ import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LocalActionInvocationEnumTest {
 
     static LocalDevice createTestDevice(LocalService service) throws Exception {
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("BinaryLight", 1),
-                new DeviceDetails("Example Binary Light"),
-                service
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("BinaryLight", 1),
+                new DeviceDetails("Example Binary Light"), service);
     }
 
     static Object[][] getDevices() throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
-        return new LocalDevice[][]{
-                {createTestDevice(SampleData.readService(binder, TestServiceOne.class))},
-                {createTestDevice(SampleData.readService(binder,TestServiceTwo.class))},
-                {createTestDevice(SampleData.readService(binder, TestServiceThree.class))},
-        };
+        return new LocalDevice[][] { { createTestDevice(SampleData.readService(binder, TestServiceOne.class)) },
+                { createTestDevice(SampleData.readService(binder, TestServiceTwo.class)) },
+                { createTestDevice(SampleData.readService(binder, TestServiceThree.class)) }, };
     }
 
     @ParameterizedTest
@@ -87,10 +81,7 @@ class LocalActionInvocationEnumTest {
 
     /* ####################################################################################################### */
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class TestServiceOne {
 
         public enum Target {
@@ -123,13 +114,9 @@ class LocalActionInvocationEnumTest {
         }
     }
 
-
     /* ####################################################################################################### */
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class TestServiceTwo {
 
         public enum Target {
@@ -167,10 +154,7 @@ class LocalActionInvocationEnumTest {
 
     /* ####################################################################################################### */
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class TestServiceThree {
 
         public enum Target {
@@ -217,10 +201,7 @@ class LocalActionInvocationEnumTest {
 
     /* ####################################################################################################### */
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class TestServiceFour {
 
         public enum Target {
@@ -264,5 +245,4 @@ class LocalActionInvocationEnumTest {
             return status;
         }
     }
-
 }

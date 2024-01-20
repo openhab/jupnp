@@ -28,12 +28,12 @@ public class DoubleDatatype extends AbstractDatatype<Double> {
     }
 
     public Double valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             return Double.parseDouble(s);
         } catch (NumberFormatException ex) {
             throw new InvalidValueException("Can't convert string to number: " + s, ex);
         }
     }
-
 }

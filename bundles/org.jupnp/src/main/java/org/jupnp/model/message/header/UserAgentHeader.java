@@ -21,21 +21,21 @@ package org.jupnp.model.message.header;
  * @author Michael Pujos
  */
 public class UserAgentHeader extends UpnpHeader<String> {
-	
-	public UserAgentHeader() {
+
+    public UserAgentHeader() {
     }
-	
-	public UserAgentHeader(String s) {
+
+    public UserAgentHeader(String s) {
         setValue(s);
     }
 
-	@Override
-	public void setString(String s) throws InvalidHeaderException {
-		setValue(s);
-	}
+    @Override
+    public void setString(String s) throws InvalidHeaderException {
+        setValue(s);
+    }
 
-	@Override
-	public String getString() {
-		return getValue();
-	}
+    @Override
+    public String getString() {
+        return getValue();
+    }
 }

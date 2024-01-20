@@ -77,7 +77,6 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
             protected boolean isUsableAddress(NetworkInterface networkInterface, InetAddress address) {
                 return (address.isLoopbackAddress() && address instanceof Inet4Address);
             }
-
         };
     }
 
@@ -129,5 +128,4 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
             }
         };
     }
-
 }

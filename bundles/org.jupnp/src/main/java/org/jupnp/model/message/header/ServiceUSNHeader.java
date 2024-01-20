@@ -45,5 +45,4 @@ public class ServiceUSNHeader extends UpnpHeader<NamedServiceType> {
     public String getString() {
         return getValue().toString();
     }
-
 }

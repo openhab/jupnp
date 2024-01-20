@@ -32,8 +32,8 @@ public class AvailableRangeHeader extends DLNAHeader<NormalPlayTimeRange> {
             try {
                 setValue(NormalPlayTimeRange.valueOf(s, true));
                 return;
-            } catch (Exception ex) { 
-                //no need to take preventive measure
+            } catch (Exception ex) {
+                // no need to take preventive measure
             }
         }
         throw new InvalidHeaderException("Invalid AvailableRange header value: " + s);

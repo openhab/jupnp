@@ -22,40 +22,39 @@ import java.util.List;
 import org.osgi.service.upnp.UPnPDevice;
 
 public abstract class BaseUPnPDevice implements UPnPDevice {
-	private UPnPDevice parent;
-	private List<String> children = new ArrayList();
-	
-	private Dictionary<String, Object> descriptions = new Hashtable<String, Object>();
-	
-	protected void setParent(BaseUPnPDevice parent) {
-		this.parent = parent;
-		if (parent == null) {
-			getDescriptions(null).remove(UPnPDevice.PARENT_UDN);
-		}
-		else {
-			getDescriptions(null).put(UPnPDevice.PARENT_UDN, (String) parent.getDescriptions(null).get(UPnPDevice.UDN));
-		}
-	}
-	
-	public void addChild(BaseUPnPDevice device) {
-		device.setParent(this);
-		children.add((String) device.getDescriptions(null).get(UPnPDevice.UDN));
-		getDescriptions(null).put(UPnPDevice.CHILDREN_UDN, children.toArray(new String[children.size()]));
-	}
-	
-	public void removeChild(BaseUPnPDevice device) {
-		device.setParent(null);
-		children.remove((String) device.getDescriptions(null).get(UPnPDevice.UDN));
-		getDescriptions(null).put(UPnPDevice.CHILDREN_UDN, children.toArray(new String[children.size()]));
-	}
+    private UPnPDevice parent;
+    private List<String> children = new ArrayList();
 
-	public void setDescriptions(Dictionary<String, Object> descriptions) {
-		this.descriptions = descriptions;
-	}
+    private Dictionary<String, Object> descriptions = new Hashtable<String, Object>();
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Dictionary getDescriptions(String locale) {
-		return descriptions;
-	}
+    protected void setParent(BaseUPnPDevice parent) {
+        this.parent = parent;
+        if (parent == null) {
+            getDescriptions(null).remove(UPnPDevice.PARENT_UDN);
+        } else {
+            getDescriptions(null).put(UPnPDevice.PARENT_UDN, (String) parent.getDescriptions(null).get(UPnPDevice.UDN));
+        }
+    }
+
+    public void addChild(BaseUPnPDevice device) {
+        device.setParent(this);
+        children.add((String) device.getDescriptions(null).get(UPnPDevice.UDN));
+        getDescriptions(null).put(UPnPDevice.CHILDREN_UDN, children.toArray(new String[children.size()]));
+    }
+
+    public void removeChild(BaseUPnPDevice device) {
+        device.setParent(null);
+        children.remove((String) device.getDescriptions(null).get(UPnPDevice.UDN));
+        getDescriptions(null).put(UPnPDevice.CHILDREN_UDN, children.toArray(new String[children.size()]));
+    }
+
+    public void setDescriptions(Dictionary<String, Object> descriptions) {
+        this.descriptions = descriptions;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public Dictionary getDescriptions(String locale) {
+        return descriptions;
+    }
 }

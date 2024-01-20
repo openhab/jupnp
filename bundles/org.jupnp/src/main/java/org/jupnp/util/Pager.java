@@ -56,7 +56,8 @@ public class Pager implements Serializable {
     }
 
     public void setPage(Integer page) {
-        if (page != null) this.page = page;
+        if (page != null)
+            this.page = page;
     }
 
     public Long getPageSize() {
@@ -64,7 +65,8 @@ public class Pager implements Serializable {
     }
 
     public void setPageSize(Long pageSize) {
-        if (pageSize != null) this.pageSize = pageSize;
+        if (pageSize != null)
+            this.pageSize = pageSize;
     }
 
     public int getNextPage() {
@@ -93,7 +95,8 @@ public class Pager implements Serializable {
 
     public long getLastPage() {
         long lastPage = (numOfRecords / pageSize);
-        if (numOfRecords % pageSize == 0) lastPage--;
+        if (numOfRecords % pageSize == 0)
+            lastPage--;
         return lastPage + 1;
     }
 

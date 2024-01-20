@@ -14,11 +14,11 @@
 
 package org.jupnp.tool.cli;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Common functionality for test cases using JUPnPTool.
@@ -27,38 +27,37 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public abstract class AbstractTestCase {
 
-	protected JUPnPTool tool;
-	protected ByteArrayOutputStream out;
-	protected ByteArrayOutputStream err;
+    protected JUPnPTool tool;
+    protected ByteArrayOutputStream out;
+    protected ByteArrayOutputStream err;
 
-	public void createSilentTool() {
-		// will write output to buffers to check content later in tests
-		this.out = new ByteArrayOutputStream();
-		this.err = new ByteArrayOutputStream();
-		this.tool = new JUPnPToolWithRedirectionOfOutput(new PrintStream(out), new PrintStream(err));
-	}
+    public void createSilentTool() {
+        // will write output to buffers to check content later in tests
+        this.out = new ByteArrayOutputStream();
+        this.err = new ByteArrayOutputStream();
+        this.tool = new JUPnPToolWithRedirectionOfOutput(new PrintStream(out), new PrintStream(err));
+    }
 
-	public void releaseSilentTool() {
-		try {
-			this.err.close();
-			this.err = null;
-			this.out.close();
-			this.out = null;
-			this.tool = null;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public void releaseSilentTool() {
+        try {
+            this.err.close();
+            this.err = null;
+            this.out.close();
+            this.out = null;
+            this.tool = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public void checkCommandLine(final JUPnPTool tool, final int rcExpected, final String argsAsString) {
-		final String[] args = argsAsString.split(" ");
-		final int rc = tool.doMain(args);
-		assertEquals(rcExpected, rc);
-	}
+    public void checkCommandLine(final JUPnPTool tool, final int rcExpected, final String argsAsString) {
+        final String[] args = argsAsString.split(" ");
+        final int rc = tool.doMain(args);
+        assertEquals(rcExpected, rc);
+    }
 
-	public void resetStreams() {
-		this.out.reset();
-		this.err.reset();
-	}
-
+    public void resetStreams() {
+        this.out.reset();
+        this.err.reset();
+    }
 }

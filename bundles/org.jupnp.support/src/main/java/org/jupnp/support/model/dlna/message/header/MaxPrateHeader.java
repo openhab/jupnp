@@ -32,7 +32,7 @@ public class MaxPrateHeader extends DLNAHeader<Long> {
             setValue(Long.parseLong(s));
             return;
         } catch (NumberFormatException numberFormatException) {
-          //no need to take any precaution measure
+            // no need to take any precaution measure
         }
         throw new InvalidHeaderException("Invalid SCID header value: " + s);
     }

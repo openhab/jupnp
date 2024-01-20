@@ -47,9 +47,9 @@ public interface StreamClient<C extends StreamClientConfiguration> {
      * The rules for logging are:
      * </p>
      * <ul>
-     *     <li>If the caller interrupts the calling thread, log at <code>TRACE</code>.</li>
-     *     <li>If the request expires because the timeout has been reached, log at <code>INFO</code> level.</li>
-     *     <li>If another error occurs, log at <code>WARNING</code> level</li>
+     * <li>If the caller interrupts the calling thread, log at <code>TRACE</code>.</li>
+     * <li>If the request expires because the timeout has been reached, log at <code>INFO</code> level.</li>
+     * <li>If another error occurs, log at <code>WARNING</code> level</li>
      * </ul>
      * <p>
      * This method <strong>is required</strong> to add a <code>Host</code> HTTP header to the
@@ -77,5 +77,4 @@ public interface StreamClient<C extends StreamClientConfiguration> {
      * @return This service's configuration.
      */
     public C getConfiguration();
-
 }

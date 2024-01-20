@@ -57,12 +57,15 @@ public class DeviceIdentity implements Validatable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DeviceIdentity that = (DeviceIdentity) o;
 
-        if (!udn.equals(that.udn)) return false;
+        if (!udn.equals(that.udn))
+            return false;
 
         return true;
     }
@@ -79,16 +82,12 @@ public class DeviceIdentity implements Validatable {
 
     @Override
     public List<ValidationError> validate() {
-    	List<ValidationError> errors = new ArrayList<ValidationError>();
+        List<ValidationError> errors = new ArrayList<ValidationError>();
 
-    	if (getUdn() == null) {
-    		errors.add(new ValidationError(
-    				getClass(),
-    				"major",
-    				"Device has no UDN"
-    				));
-    	}
+        if (getUdn() == null) {
+            errors.add(new ValidationError(getClass(), "major", "Device has no UDN"));
+        }
 
-    	return errors;
+        return errors;
     }
 }

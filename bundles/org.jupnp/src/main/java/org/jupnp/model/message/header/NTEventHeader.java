@@ -34,5 +34,4 @@ public class NTEventHeader extends UpnpHeader<String> {
     public String getString() {
         return getValue();
     }
-
 }

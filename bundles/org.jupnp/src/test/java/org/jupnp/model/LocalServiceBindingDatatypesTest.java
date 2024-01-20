@@ -14,6 +14,10 @@
 
 package org.jupnp.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Random;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
@@ -24,17 +28,13 @@ import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.meta.ActionArgument;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
-
-import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -42,21 +42,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class LocalServiceBindingDatatypesTest {
 
     static LocalDevice createTestDevice(LocalService service) throws Exception {
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("TestDevice", 1),
-                new DeviceDetails("Test Device"),
-                service
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("TestDevice", 1),
+                new DeviceDetails("Test Device"), service);
     }
 
     static Object[][] getDevices() throws Exception {
         // This is what we are actually testing
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
 
-        return new LocalDevice[][]{
-                {createTestDevice(binder.read(TestServiceOne.class))},
-        };
+        return new LocalDevice[][] { { createTestDevice(binder.read(TestServiceOne.class)) }, };
     }
 
     @ParameterizedTest
@@ -65,7 +59,8 @@ class LocalServiceBindingDatatypesTest {
         LocalService svc = SampleData.getFirstService(device);
 
         assertEquals(1, svc.getStateVariables().length);
-        assertEquals(Datatype.Builtin.BIN_BASE64, svc.getStateVariable("Data").getTypeDetails().getDatatype().getBuiltin());
+        assertEquals(Datatype.Builtin.BIN_BASE64,
+                svc.getStateVariable("Data").getTypeDetails().getDatatype().getBuiltin());
         assertFalse(svc.getStateVariable("Data").getEventDetails().isSendEvents());
 
         assertEquals(1, svc.getActions().length);
@@ -80,11 +75,7 @@ class LocalServiceBindingDatatypesTest {
 
     /* ####################################################################################################### */
 
-    @UpnpService(
-            serviceId = @UpnpServiceId("SomeService"),
-            serviceType = @UpnpServiceType(value = "SomeService", version = 1),
-            supportsQueryStateVariables = false
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SomeService"), serviceType = @UpnpServiceType(value = "SomeService", version = 1), supportsQueryStateVariables = false)
     public static class TestServiceOne {
 
         public TestServiceOne() {
@@ -100,6 +91,4 @@ class LocalServiceBindingDatatypesTest {
             return data;
         }
     }
-
-
 }

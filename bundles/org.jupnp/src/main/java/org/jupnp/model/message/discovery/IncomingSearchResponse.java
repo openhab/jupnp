@@ -14,6 +14,8 @@
 
 package org.jupnp.model.message.discovery;
 
+import java.net.URL;
+
 import org.jupnp.model.message.IncomingDatagramMessage;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.message.header.DeviceUSNHeader;
@@ -27,8 +29,6 @@ import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.types.NamedDeviceType;
 import org.jupnp.model.types.NamedServiceType;
 import org.jupnp.model.types.UDN;
-
-import java.net.URL;
 
 /**
  * @author Christian Bauer
@@ -50,16 +50,22 @@ public class IncomingSearchResponse extends IncomingDatagramMessage<UpnpResponse
         // This processes the headers as specified in UDA 1.0, tables in section 1.1.12
 
         UpnpHeader<UDN> udnHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class);
-        if (udnHeader != null) return udnHeader.getValue();
+        if (udnHeader != null)
+            return udnHeader.getValue();
 
         udnHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, UDNHeader.class);
-        if (udnHeader != null) return udnHeader.getValue();
+        if (udnHeader != null)
+            return udnHeader.getValue();
 
-        UpnpHeader<NamedDeviceType> deviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, DeviceUSNHeader.class);
-        if (deviceTypeHeader != null) return deviceTypeHeader.getValue().getUdn();
+        UpnpHeader<NamedDeviceType> deviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN,
+                DeviceUSNHeader.class);
+        if (deviceTypeHeader != null)
+            return deviceTypeHeader.getValue().getUdn();
 
-        UpnpHeader<NamedServiceType> serviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, ServiceUSNHeader.class);
-        if (serviceTypeHeader != null) return serviceTypeHeader.getValue().getUdn();
+        UpnpHeader<NamedServiceType> serviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN,
+                ServiceUSNHeader.class);
+        if (serviceTypeHeader != null)
+            return serviceTypeHeader.getValue().getUdn();
 
         return null;
     }
@@ -81,11 +87,11 @@ public class IncomingSearchResponse extends IncomingDatagramMessage<UpnpResponse
     }
 
     public byte[] getInterfaceMacHeader() {
-        InterfaceMacHeader header = getHeaders().getFirstHeader(UpnpHeader.Type.EXT_IFACE_MAC, InterfaceMacHeader.class);
+        InterfaceMacHeader header = getHeaders().getFirstHeader(UpnpHeader.Type.EXT_IFACE_MAC,
+                InterfaceMacHeader.class);
         if (header != null) {
             return header.getValue();
         }
         return null;
     }
-
 }

@@ -31,5 +31,4 @@ public abstract class AbstractState<T extends AVTransport> {
     }
 
     public abstract TransportAction[] getCurrentTransportActions();
-
 }

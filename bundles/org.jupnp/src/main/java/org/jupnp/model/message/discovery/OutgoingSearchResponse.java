@@ -32,9 +32,7 @@ import org.jupnp.model.meta.LocalDevice;
  */
 public class OutgoingSearchResponse extends OutgoingDatagramMessage<UpnpResponse> {
 
-    public OutgoingSearchResponse(IncomingDatagramMessage request,
-                                  Location location,
-                                  LocalDevice device) {
+    public OutgoingSearchResponse(IncomingDatagramMessage request, Location location, LocalDevice device) {
 
         super(new UpnpResponse(UpnpResponse.Status.OK), request.getSourceAddress(), request.getSourcePort());
 
@@ -44,12 +42,9 @@ public class OutgoingSearchResponse extends OutgoingDatagramMessage<UpnpResponse
         getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
 
         if ("true".equals(System.getProperty(Constants.SYSTEM_PROPERTY_ANNOUNCE_MAC_ADDRESS))
-            && location.getNetworkAddress().getHardwareAddress() != null) {
-            getHeaders().add(
-                UpnpHeader.Type.EXT_IFACE_MAC,
-                new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress())
-            );
+                && location.getNetworkAddress().getHardwareAddress() != null) {
+            getHeaders().add(UpnpHeader.Type.EXT_IFACE_MAC,
+                    new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress()));
         }
     }
-
 }

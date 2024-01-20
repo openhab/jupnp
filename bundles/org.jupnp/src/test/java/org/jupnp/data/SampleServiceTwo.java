@@ -14,6 +14,9 @@
 
 package org.jupnp.data;
 
+import java.net.URI;
+import java.net.URL;
+
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.ServiceId;
@@ -21,9 +24,6 @@ import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.util.URIUtil;
-
-import java.net.URI;
-import java.net.URL;
 
 /**
  * @author Christian Bauer
@@ -80,5 +80,4 @@ public class SampleServiceTwo extends SampleService {
     public StateVariable[] getStateVariables() {
         return new StateVariable[0];
     }
-
 }

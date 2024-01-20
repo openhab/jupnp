@@ -20,7 +20,6 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 
 @Suite
 @SuiteDisplayName("Model")
-@SelectPackages({"org.jupnp.model", "org.jupnp.model.profile"})
+@SelectPackages({ "org.jupnp.model", "org.jupnp.model.profile" })
 public class ModelSuite {
 }
-

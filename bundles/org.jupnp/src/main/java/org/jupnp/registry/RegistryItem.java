@@ -50,8 +50,10 @@ class RegistryItem<K, I> {
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         RegistryItem that = (RegistryItem) o;
 
@@ -64,6 +66,7 @@ class RegistryItem<K, I> {
 
     @Override
     public String toString() {
-        return "("+getClass().getSimpleName()+") " + getExpirationDetails() + " KEY: " + getKey() + " ITEM: " + getItem();
+        return "(" + getClass().getSimpleName() + ") " + getExpirationDetails() + " KEY: " + getKey() + " ITEM: "
+                + getItem();
     }
 }

@@ -22,62 +22,67 @@ import org.slf4j.LoggerFactory;
 
 public class UPnPStateVariableImpl implements UPnPStateVariable {
     private Logger logger = LoggerFactory.getLogger(UPnPStateVariableImpl.class);
-	
-	private StateVariable<?> variable;
-	
-	public UPnPStateVariableImpl(StateVariable<?> variable) {
-		this.variable = variable;
-	}
 
-	@Override
-	public String getName() {
-		return variable.getName();
-	}
+    private StateVariable<?> variable;
 
-	@Override
-	public Class getJavaDataType() {
-		String type = variable.getTypeDetails().getDatatype().getBuiltin().getDescriptorName();
-		Class<?> clazz = UPnPTypeUtil.getUPnPClass(type);
-		
-		if (clazz == null) {
-			logger.warn("Cannot covert UPnP type {} to UPnP Java type", type);
-		}
-		return clazz != null ? clazz : variable.getTypeDetails().getDatatype().getClass();
-	}
+    public UPnPStateVariableImpl(StateVariable<?> variable) {
+        this.variable = variable;
+    }
 
-	@Override
-	public String getUPnPDataType() {
-		return variable.getTypeDetails().getDatatype().getDisplayString();
-	}
+    @Override
+    public String getName() {
+        return variable.getName();
+    }
 
-	@Override
-	public Object getDefaultValue() {
-		return variable.getTypeDetails().getDefaultValue();
-	}
+    @Override
+    public Class getJavaDataType() {
+        String type = variable.getTypeDetails().getDatatype().getBuiltin().getDescriptorName();
+        Class<?> clazz = UPnPTypeUtil.getUPnPClass(type);
 
-	@Override
-	public String[] getAllowedValues() {
-		return variable.getTypeDetails().getAllowedValues();
-	}
+        if (clazz == null) {
+            logger.warn("Cannot covert UPnP type {} to UPnP Java type", type);
+        }
+        return clazz != null ? clazz : variable.getTypeDetails().getDatatype().getClass();
+    }
 
-	@Override
-	public Number getMinimum() {
-		return (variable.getTypeDetails().getAllowedValueRange() != null) ? variable.getTypeDetails().getAllowedValueRange().getMinimum() : null;
-	}
+    @Override
+    public String getUPnPDataType() {
+        return variable.getTypeDetails().getDatatype().getDisplayString();
+    }
 
-	@Override
-	public Number getMaximum() {
-		return (variable.getTypeDetails().getAllowedValueRange() != null) ?variable.getTypeDetails().getAllowedValueRange().getMaximum() : null;
-	}
+    @Override
+    public Object getDefaultValue() {
+        return variable.getTypeDetails().getDefaultValue();
+    }
 
-	@Override
-	public Number getStep() {
-		return (variable.getTypeDetails().getAllowedValueRange() != null) ? variable.getTypeDetails().getAllowedValueRange().getStep() : null;
-	}
+    @Override
+    public String[] getAllowedValues() {
+        return variable.getTypeDetails().getAllowedValues();
+    }
 
-	@Override
-	public boolean sendsEvents() {
-		return variable.getEventDetails().isSendEvents();
-	}
+    @Override
+    public Number getMinimum() {
+        return (variable.getTypeDetails().getAllowedValueRange() != null)
+                ? variable.getTypeDetails().getAllowedValueRange().getMinimum()
+                : null;
+    }
 
+    @Override
+    public Number getMaximum() {
+        return (variable.getTypeDetails().getAllowedValueRange() != null)
+                ? variable.getTypeDetails().getAllowedValueRange().getMaximum()
+                : null;
+    }
+
+    @Override
+    public Number getStep() {
+        return (variable.getTypeDetails().getAllowedValueRange() != null)
+                ? variable.getTypeDetails().getAllowedValueRange().getStep()
+                : null;
+    }
+
+    @Override
+    public boolean sendsEvents() {
+        return variable.getEventDetails().isSendEvents();
+    }
 }

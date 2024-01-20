@@ -14,9 +14,9 @@
 
 package org.jupnp.model.state;
 
-import org.jupnp.util.Reflections;
-
 import java.lang.reflect.Field;
+
+import org.jupnp.util.Reflections;
 
 /**
  * Reads the value of a state variable using reflection and a field.

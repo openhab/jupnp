@@ -30,33 +30,32 @@ package org.jupnp.internal.compat.java.beans;
  */
 public class PropertyChangeEvent {
 
-	// all event properties we need
-	private final Object source;
-	private final String propertyName;
-	private final Object oldValue;
-	private final Object newValue;
+    // all event properties we need
+    private final Object source;
+    private final String propertyName;
+    private final Object oldValue;
+    private final Object newValue;
 
-	public PropertyChangeEvent(Object source, String propName, Object oldValue, Object newValue) {
-		this.source = source;
-		this.propertyName = propName;
-		this.oldValue = oldValue;
-		this.newValue = newValue;
-	}
+    public PropertyChangeEvent(Object source, String propName, Object oldValue, Object newValue) {
+        this.source = source;
+        this.propertyName = propName;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
 
-	public Object getSource() {
-		return this.source;
-	}
+    public Object getSource() {
+        return this.source;
+    }
 
-	public String getPropertyName() {
-		return this.propertyName;
-	}
+    public String getPropertyName() {
+        return this.propertyName;
+    }
 
-	public Object getOldValue() {
-		return this.oldValue;
-	}
+    public Object getOldValue() {
+        return this.oldValue;
+    }
 
-	public Object getNewValue() {
-		return this.newValue;
-	}
-
+    public Object getNewValue() {
+        return this.newValue;
+    }
 }

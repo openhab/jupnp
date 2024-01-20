@@ -50,5 +50,4 @@ public class StateVariableEventDetails {
     public int getEventMinimumDelta() {
         return eventMinimumDelta;
     }
-
 }

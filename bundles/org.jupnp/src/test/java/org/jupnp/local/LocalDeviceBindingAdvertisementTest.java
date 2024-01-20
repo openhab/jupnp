@@ -14,6 +14,9 @@
 
 package org.jupnp.local;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
@@ -25,6 +28,7 @@ import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.ServiceDescriptorBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.DiscoveryOptions;
@@ -38,11 +42,7 @@ import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.NotificationSubtype;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
 import org.jupnp.util.URIUtil;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * TODO: These timing-sensitive tests fail sometimes... should use latches instead to coordinate threads
@@ -68,11 +68,8 @@ class LocalDeviceBindingAdvertisementTest {
         upnpService.shutdown();
 
         DeviceDescriptorBinder dvcBinder = upnpService.getConfiguration().getDeviceDescriptorBinderUDA10();
-        String descriptorXml = dvcBinder.generate(
-            binaryLight,
-            new RemoteClientInfo(),
-            upnpService.getConfiguration().getNamespace()
-        );
+        String descriptorXml = dvcBinder.generate(binaryLight, new RemoteClientInfo(),
+                upnpService.getConfiguration().getNamespace());
 
         RemoteDevice testDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
 
@@ -92,10 +89,7 @@ class LocalDeviceBindingAdvertisementTest {
         MockUpnpService upnpService = new MockUpnpService(true, true);
         upnpService.startup();
 
-        LocalDevice ld =
-            SampleData.createLocalDevice(
-                SampleData.createLocalDeviceIdentity(1)
-            );
+        LocalDevice ld = SampleData.createLocalDevice(SampleData.createLocalDeviceIdentity(1));
 
         upnpService.getRegistry().addDevice(ld);
         assertEquals(1, upnpService.getRegistry().getLocalDevices().size());
@@ -124,19 +118,16 @@ class LocalDeviceBindingAdvertisementTest {
 
     @Test
     void waitForAliveFlood() throws Exception {
-        MockUpnpService upnpService = new MockUpnpService(true,
-            new MockUpnpServiceConfiguration(true) {
-                @Override
-                public int getAliveIntervalMillis() {
-                    return 2000;
-                }
-            });
+        MockUpnpService upnpService = new MockUpnpService(true, new MockUpnpServiceConfiguration(true) {
+            @Override
+            public int getAliveIntervalMillis() {
+                return 2000;
+            }
+        });
         upnpService.startup();
 
-        LocalDevice ld =
-            SampleData.createLocalDevice(
-                SampleData.createLocalDeviceIdentity(1000) // Max age ignored
-            );
+        LocalDevice ld = SampleData.createLocalDevice(SampleData.createLocalDeviceIdentity(1000) // Max age ignored
+        );
 
         upnpService.getRegistry().addDevice(ld);
         assertEquals(1, upnpService.getRegistry().getLocalDevices().size());
@@ -161,10 +152,7 @@ class LocalDeviceBindingAdvertisementTest {
         MockUpnpService upnpService = new MockUpnpService(true, true);
         upnpService.startup();
 
-        LocalDevice ld =
-            SampleData.createLocalDevice(
-                SampleData.createLocalDeviceIdentity(60)
-            );
+        LocalDevice ld = SampleData.createLocalDevice(SampleData.createLocalDeviceIdentity(60));
 
         upnpService.getRegistry().addDevice(ld, new DiscoveryOptions(true, true));
 
@@ -205,9 +193,8 @@ class LocalDeviceBindingAdvertisementTest {
     protected void assertAliveMsgBasics(Namespace namespace, UpnpMessage msg, LocalDevice device, Integer maxAge) {
         assertEquals(NotificationSubtype.ALIVE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
         assertEquals(
-            URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(device)).toString(),
-            msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString()
-        );
+                URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(device)).toString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString());
         assertEquals(maxAge, msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getValue());
         assertEquals(new ServerClientTokens(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getValue());
     }
@@ -215,27 +202,19 @@ class LocalDeviceBindingAdvertisementTest {
     protected void assertByeByeMsgBasics(Namespace namespace, UpnpMessage msg, LocalDevice device, Integer maxAge) {
         assertEquals(NotificationSubtype.BYEBYE, msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue());
         assertEquals(
-            URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(device)).toString(),
-            msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString()
-        );
+                URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(device)).toString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getValue().toString());
         assertEquals(maxAge, msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAX_AGE).getValue());
         assertEquals(new ServerClientTokens(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getValue());
     }
 
-    @UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class DemoBinaryLight {
 
         private static LocalDevice createTestDevice() throws Exception {
             LocalServiceBinder binder = new AnnotationLocalServiceBinder();
-            return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("BinaryLight", 1),
-                new DeviceDetails("Example Binary Light"),
-                binder.read(DemoBinaryLight.class)
-            );
+            return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("BinaryLight", 1),
+                    new DeviceDetails("Example Binary Light"), binder.read(DemoBinaryLight.class));
         }
 
         @UpnpStateVariable(defaultValue = "0", sendEvents = false)
@@ -255,12 +234,9 @@ class LocalDeviceBindingAdvertisementTest {
             return target;
         }
 
-        @UpnpAction(out = {@UpnpOutputArgument(name = "ResultStatus")})
+        @UpnpAction(out = { @UpnpOutputArgument(name = "ResultStatus") })
         public boolean getStatus() {
             return status;
         }
-
     }
-
 }
-

@@ -24,13 +24,20 @@ import org.jupnp.util.statemachine.StateMachine;
 public interface AVTransportStateMachine extends StateMachine<AbstractState<?>> {
 
     public abstract void setTransportURI(URI uri, String uriMetaData);
-    public abstract void setNextTransportURI(URI uri, String uriMetaData);
-    public abstract void stop();
-    public abstract void play(String speed);
-    public abstract void pause();
-    public abstract void record();
-    public abstract void seek(SeekMode unit, String target);
-    public abstract void next();
-    public abstract void previous();
 
+    public abstract void setNextTransportURI(URI uri, String uriMetaData);
+
+    public abstract void stop();
+
+    public abstract void play(String speed);
+
+    public abstract void pause();
+
+    public abstract void record();
+
+    public abstract void seek(SeekMode unit, String target);
+
+    public abstract void next();
+
+    public abstract void previous();
 }

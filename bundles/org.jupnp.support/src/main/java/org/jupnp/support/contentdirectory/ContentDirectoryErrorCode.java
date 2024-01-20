@@ -19,33 +19,32 @@ package org.jupnp.support.contentdirectory;
  * @author Alessio Gaeta
  */
 public enum ContentDirectoryErrorCode {
-	
-	NO_SUCH_OBJECT(701, "The specified ObjectID is invalid"),
-	UNSUPPORTED_SORT_CRITERIA(709, "Unsupported or invalid sort criteria"),
+
+    NO_SUCH_OBJECT(701, "The specified ObjectID is invalid"),
+    UNSUPPORTED_SORT_CRITERIA(709, "Unsupported or invalid sort criteria"),
     CANNOT_PROCESS(720, "Cannot process the request");
 
-	private int code;
-	private String description;
-	
-	ContentDirectoryErrorCode(int code, String description) {
-		this.code = code;
-		this.description = description;
-	}
+    private int code;
+    private String description;
 
-	public int getCode() {
-		return code;
-	}
+    ContentDirectoryErrorCode(int code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
-	
-	public static ContentDirectoryErrorCode getByCode(int code) {
-		for (ContentDirectoryErrorCode errorCode : values()) {
-			if (errorCode.getCode() == code)
-				return errorCode;
-		}
-		return null;
-	}
+    public int getCode() {
+        return code;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public static ContentDirectoryErrorCode getByCode(int code) {
+        for (ContentDirectoryErrorCode errorCode : values()) {
+            if (errorCode.getCode() == code)
+                return errorCode;
+        }
+        return null;
+    }
 }

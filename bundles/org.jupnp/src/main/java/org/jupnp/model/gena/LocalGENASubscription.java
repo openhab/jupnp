@@ -33,7 +33,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,8 +67,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         this.callbackURLs = callbackURLs;
     }
 
-    public LocalGENASubscription(LocalService service,
-                                 Integer requestedDurationSeconds, List<URL> callbackURLs) throws Exception {
+    public LocalGENASubscription(LocalService service, Integer requestedDurationSeconds, List<URL> callbackURLs)
+            throws Exception {
         super(service);
 
         setSubscriptionDuration(requestedDurationSeconds);
@@ -131,7 +130,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * values, calls {@link #eventReceived()}.
      */
     synchronized public void propertyChange(PropertyChangeEvent e) {
-        if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES)) return;
+        if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES))
+            return;
 
         log.trace("Eventing triggered, getting state for subscription: {}", getSubscriptionId());
 
@@ -144,7 +144,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         for (StateVariableValue newValue : newValues) {
             String name = newValue.getStateVariable().getName();
             if (!excludedVariables.contains(name)) {
-                log.trace("Adding state variable value to current values of event: {} = {}", newValue.getStateVariable(), newValue);
+                log.trace("Adding state variable value to current values of event: {} = {}",
+                        newValue.getStateVariable(), newValue);
                 currentValues.put(newValue.getStateVariable().getName(), newValue);
 
                 // Preserve "last sent" state for future moderation
@@ -183,8 +184,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
             StateVariable stateVariable = stateVariableValue.getStateVariable();
             String stateVariableName = stateVariableValue.getStateVariable().getName();
 
-            if (stateVariable.getEventDetails().getEventMaximumRateMilliseconds() == 0 &&
-                    stateVariable.getEventDetails().getEventMinimumDelta() == 0) {
+            if (stateVariable.getEventDetails().getEventMaximumRateMilliseconds() == 0
+                    && stateVariable.getEventDetails().getEventMinimumDelta() == 0) {
                 log.trace("Variable is not moderated: {}", stateVariable);
                 continue;
             }
@@ -197,7 +198,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
 
             if (stateVariable.getEventDetails().getEventMaximumRateMilliseconds() > 0) {
                 long timestampLastSent = lastSentTimestamp.get(stateVariableName);
-                long timestampNextSend = timestampLastSent + (stateVariable.getEventDetails().getEventMaximumRateMilliseconds());
+                long timestampNextSend = timestampLastSent
+                        + (stateVariable.getEventDetails().getEventMaximumRateMilliseconds());
                 if (currentTime <= timestampNextSend) {
                     log.trace("Excluding state variable with maximum rate: {}", stateVariable);
                     excludedVariables.add(stateVariableName);
@@ -233,17 +235,15 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
 
     /**
      * @param requestedDurationSeconds If <code>null</code> defaults to
-     *                                 {@link org.jupnp.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}
+     *            {@link org.jupnp.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}
      */
     synchronized public void setSubscriptionDuration(Integer requestedDurationSeconds) {
-        this.requestedDurationSeconds =
-                requestedDurationSeconds == null
-                        ? UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS
-                        : requestedDurationSeconds;
+        this.requestedDurationSeconds = requestedDurationSeconds == null
+                ? UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS
+                : requestedDurationSeconds;
 
         setActualSubscriptionDurationSeconds(this.requestedDurationSeconds);
     }
 
     public abstract void ended(CancelReason reason);
-
 }

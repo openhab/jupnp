@@ -27,15 +27,15 @@ import org.jupnp.util.SpecificationViolationReporter;
  * @author Jochen Hiller - use SpecificationViolationReporter
  */
 public class ServiceId {
-	
+
     public static final String UNKNOWN = "UNKNOWN";
 
-    public static final Pattern PATTERN =
-        Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID + ")");
+    public static final Pattern PATTERN = Pattern
+            .compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID + ")");
 
     // Note: 'service' vs. 'serviceId'
-    public static final Pattern BROKEN_PATTERN =
-               Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_ID+ ")");
+    public static final Pattern BROKEN_PATTERN = Pattern
+            .compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_ID + ")");
 
     private String namespace;
     private String id;
@@ -109,13 +109,17 @@ public class ServiceId {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof ServiceId)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof ServiceId))
+            return false;
 
         ServiceId serviceId = (ServiceId) o;
 
-        if (!id.equals(serviceId.id)) return false;
-        if (!namespace.equals(serviceId.namespace)) return false;
+        if (!id.equals(serviceId.id))
+            return false;
+        if (!namespace.equals(serviceId.namespace))
+            return false;
 
         return true;
     }

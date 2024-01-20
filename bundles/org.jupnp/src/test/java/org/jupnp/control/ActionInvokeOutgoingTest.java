@@ -14,7 +14,14 @@
 
 package org.jupnp.control;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.controlpoint.ActionCallback;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleServiceOne;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.action.ActionInvocation;
@@ -44,14 +51,6 @@ import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.transport.RouterException;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleServiceOne;
-import org.junit.jupiter.api.Test;
-
-import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 
 class ActionInvokeOutgoingTest {
 
@@ -132,7 +131,6 @@ class ActionInvokeOutgoingTest {
             public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
                 assertions[0] = false;
             }
-
         };
 
         upnpService.getControlPoint().execute(callback);
@@ -191,10 +189,8 @@ class ActionInvokeOutgoingTest {
         assertTrue(assertions[0]);
 
         assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
-        assertEquals(
-            ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong.",
-            actionInvocation.getFailure().getMessage()
-        );
+        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong.",
+                actionInvocation.getFailure().getMessage());
     }
 
     @Test
@@ -211,9 +207,7 @@ class ActionInvokeOutgoingTest {
 
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(RESPONSE_SUCCESSFUL)
-                        };
+                        return new StreamResponseMessage[] { new StreamResponseMessage(RESPONSE_SUCCESSFUL) };
                     }
                 };
             }
@@ -231,11 +225,7 @@ class ActionInvokeOutgoingTest {
         extraHeaders.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "MyCustom/Agent");
         extraHeaders.add("X-Custom-Header", "foo");
 
-        ActionInvocation actionInvocation =
-            new ActionInvocation(
-                action,
-                new ClientInfo(extraHeaders)
-            );
+        ActionInvocation actionInvocation = new ActionInvocation(action, new ClientInfo(extraHeaders));
 
         final boolean[] assertions = new boolean[1];
         ActionCallback callback = new ActionCallback(actionInvocation) {
@@ -259,24 +249,14 @@ class ActionInvokeOutgoingTest {
         StreamRequestMessage request = upnpService.getRouter().getSentStreamRequestMessages().get(0);
 
         // Mandatory headers
-        assertEquals(
-            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.CONTENT_TYPE)
-        );
-        assertEquals(
-            "\"" + SampleServiceOne.getThisServiceType() + "#GetTarget\"",
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.SOAPACTION)
-        );
+        assertEquals(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                request.getHeaders().getFirstHeaderString(UpnpHeader.Type.CONTENT_TYPE));
+        assertEquals("\"" + SampleServiceOne.getThisServiceType() + "#GetTarget\"",
+                request.getHeaders().getFirstHeaderString(UpnpHeader.Type.SOAPACTION));
 
         // The extra headers
-        assertEquals(
-            "MyCustom/Agent",
-            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.USER_AGENT)
-        );
-        assertEquals(
-            "foo",
-            request.getHeaders().getFirstHeader("X-CUSTOM-HEADER")
-        );
+        assertEquals("MyCustom/Agent", request.getHeaders().getFirstHeaderString(UpnpHeader.Type.USER_AGENT));
+        assertEquals("foo", request.getHeaders().getFirstHeader("X-CUSTOM-HEADER"));
 
         assertEquals(1, actionInvocation.getOutput().length);
         assertEquals("0", actionInvocation.getOutput()[0].toString());
@@ -290,9 +270,8 @@ class ActionInvokeOutgoingTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR), RESPONSE_FAILURE)
-                        };
+                        return new StreamResponseMessage[] { new StreamResponseMessage(
+                                new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR), RESPONSE_FAILURE) };
                     }
                 };
             }
@@ -327,10 +306,7 @@ class ActionInvokeOutgoingTest {
         assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
         assertTrue(assertions[0]);
         assertEquals(ErrorCode.INVALID_CONTROL_URL.getCode(), actionInvocation.getFailure().getErrorCode());
-        assertEquals(
-            "A test string",
-            actionInvocation.getFailure().getMessage()
-        );
+        assertEquals("A test string", actionInvocation.getFailure().getMessage());
     }
 
     @Test
@@ -341,9 +317,8 @@ class ActionInvokeOutgoingTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.NOT_FOUND))
-                        };
+                        return new StreamResponseMessage[] {
+                                new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.NOT_FOUND)) };
                     }
                 };
             }
@@ -379,9 +354,8 @@ class ActionInvokeOutgoingTest {
         assertTrue(assertions[0]);
         assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         assertEquals(
-            ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found.",
-            actionInvocation.getFailure().getMessage()
-        );
+                ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found.",
+                actionInvocation.getFailure().getMessage());
     }
 
     @Test
@@ -417,10 +391,8 @@ class ActionInvokeOutgoingTest {
         assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
         assertTrue(assertions[0]);
         assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
-        assertEquals(
-            ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received.",
-            actionInvocation.getFailure().getMessage()
-        );
+        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received.",
+                actionInvocation.getFailure().getMessage());
     }
 
     @Test
@@ -431,9 +403,7 @@ class ActionInvokeOutgoingTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(RESPONSE_NEGATIVE_VALUE)
-                        };
+                        return new StreamResponseMessage[] { new StreamResponseMessage(RESPONSE_NEGATIVE_VALUE) };
                     }
                 };
             }
@@ -441,33 +411,16 @@ class ActionInvokeOutgoingTest {
         upnpService.startup();
 
         // Registry remote device and its service
-        RemoteDevice device = new RemoteDevice(
-            SampleData.createRemoteDeviceIdentity(),
-            new UDADeviceType("MyDevice"),
-            new DeviceDetails("JustATest"),
-            new RemoteService(
-                new UDAServiceType("MyService"),
-                new UDAServiceId("MyService"),
-                URI.create("/scpd.xml"),
-                URI.create("/control"),
-                URI.create("/events"),
-                new Action[]{
-                    new Action(
-                        "GetNegativeValue",
-                        new ActionArgument[]{
-                            new ActionArgument("Result", "NegativeValue", ActionArgument.Direction.OUT)
-                        }
-                    )
-                },
-                new StateVariable[]{
-                    new StateVariable(
-                        "NegativeValue",
-                        new StateVariableTypeDetails(Datatype.Builtin.UI4.getDatatype()),
-                        new StateVariableEventDetails(false)
-                    )
-                }
-            )
-        );
+        RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity(), new UDADeviceType("MyDevice"),
+                new DeviceDetails("JustATest"),
+                new RemoteService(new UDAServiceType("MyService"), new UDAServiceId("MyService"),
+                        URI.create("/scpd.xml"), URI.create("/control"), URI.create("/events"),
+                        new Action[] { new Action("GetNegativeValue",
+                                new ActionArgument[] { new ActionArgument("Result", "NegativeValue",
+                                        ActionArgument.Direction.OUT) }) },
+                        new StateVariable[] { new StateVariable("NegativeValue",
+                                new StateVariableTypeDetails(Datatype.Builtin.UI4.getDatatype()),
+                                new StateVariableEventDetails(false)) }));
 
         upnpService.getRegistry().addDevice(device);
 
@@ -502,9 +455,7 @@ class ActionInvokeOutgoingTest {
                 return new MockRouter(getConfiguration(), getProtocolFactory()) {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(RESPONSE_QUERY_VARIABLE)
-                        };
+                        return new StreamResponseMessage[] { new StreamResponseMessage(RESPONSE_QUERY_VARIABLE) };
                     }
                 };
             }
@@ -538,17 +489,14 @@ class ActionInvokeOutgoingTest {
         assertNull(actionInvocation.getFailure());
         assertEquals(1, upnpService.getRouter().getSentStreamRequestMessages().size());
         assertTrue(assertions[0]);
-        assertEquals(
-            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
-            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString()
-        );
-        assertEquals(
-                "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"",
-                upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString()
-        );
+        assertEquals(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString(),
+                upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders()
+                        .getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString());
+        assertEquals("\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\"",
+                upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders()
+                        .getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString());
         assertEquals(1, actionInvocation.getOutput().length);
         assertEquals("return", actionInvocation.getOutput()[0].getArgument().getName());
         assertEquals("0", actionInvocation.getOutput()[0].toString());
     }
-
 }

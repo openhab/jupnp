@@ -21,19 +21,15 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class MainCommandLogLevelValidator implements IParameterValidator {
-	public void validate(String name, String value) throws ParameterException {
-		if (name.equals("--loglevel")) {
-			if ((value.equalsIgnoreCase("TRACE"))
-					|| (value.equalsIgnoreCase("DEBUG"))
-					|| (value.equalsIgnoreCase("INFO"))
-					|| (value.equalsIgnoreCase("WARN"))
-					|| (value.equalsIgnoreCase("ERROR"))
-					|| (value.equalsIgnoreCase("OFF"))) {
-			} else {
-				throw new ParameterException("Parameter " + name
-						+ " must be {OFF|ERROR|WARN|INFO|DEBUG|TRACE} (found "
-						+ value + ")");
-			}
-		}
-	}
+    public void validate(String name, String value) throws ParameterException {
+        if (name.equals("--loglevel")) {
+            if ((value.equalsIgnoreCase("TRACE")) || (value.equalsIgnoreCase("DEBUG"))
+                    || (value.equalsIgnoreCase("INFO")) || (value.equalsIgnoreCase("WARN"))
+                    || (value.equalsIgnoreCase("ERROR")) || (value.equalsIgnoreCase("OFF"))) {
+            } else {
+                throw new ParameterException(
+                        "Parameter " + name + " must be {OFF|ERROR|WARN|INFO|DEBUG|TRACE} (found " + value + ")");
+            }
+        }
+    }
 }

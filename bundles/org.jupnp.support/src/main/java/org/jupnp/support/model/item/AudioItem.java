@@ -15,16 +15,16 @@
 
 package org.jupnp.support.model.item;
 
-import org.jupnp.support.model.Person;
-import org.jupnp.support.model.Res;
-import org.jupnp.support.model.container.Container;
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.Person;
+import org.jupnp.support.model.Res;
+import org.jupnp.support.model.container.Container;
 
 /**
  * @author Christian Bauer
@@ -147,4 +147,3 @@ public class AudioItem extends Item {
         return this;
     }
 }
-

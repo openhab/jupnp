@@ -38,5 +38,4 @@ public class MusicGenre extends GenreContainer {
         super(id, parentID, title, creator, childCount);
         setClazz(CLASS);
     }
-
 }

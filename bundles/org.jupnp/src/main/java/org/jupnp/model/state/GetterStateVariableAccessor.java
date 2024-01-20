@@ -14,9 +14,9 @@
 
 package org.jupnp.model.state;
 
-import org.jupnp.util.Reflections;
-
 import java.lang.reflect.Method;
+
+import org.jupnp.util.Reflections;
 
 /**
  * Reads the value of a state variable using reflection and a getter method.
@@ -49,5 +49,4 @@ public class GetterStateVariableAccessor extends StateVariableAccessor {
     public String toString() {
         return super.toString() + " Method: " + getGetter();
     }
-
 }

@@ -14,6 +14,11 @@
 
 package org.jupnp.data;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+import java.net.URL;
+
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.DeviceIdentity;
@@ -33,11 +38,6 @@ import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDN;
 import org.jupnp.util.URIUtil;
 
-import java.net.URI;
-import java.net.URL;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author Christian Bauer
  */
@@ -54,21 +54,11 @@ public class SampleDeviceRoot extends SampleDevice {
 
     @Override
     public DeviceDetails getDeviceDetails() {
-        return new DeviceDetails(
-                "My Testdevice",
-                new ManufacturerDetails("4th Line", "http://www.4thline.org/"),
-                new ModelDetails("MYMODEL", "TEST Device", "ONE", "http://www.4thline.org/foo"),
-                "000da201238c",
-                "100000000001",
-                "http://www.4thline.org/some_user_interface/",
-                new DLNADoc[]{
-                        new DLNADoc("DMS", DLNADoc.Version.V1_5),
-                        new DLNADoc("M-DMS", DLNADoc.Version.V1_5)
-                },
-                new DLNACaps(new String[] {
-                        "av-upload", "image-upload", "audio-upload"
-                })
-        );
+        return new DeviceDetails("My Testdevice", new ManufacturerDetails("4th Line", "http://www.4thline.org/"),
+                new ModelDetails("MYMODEL", "TEST Device", "ONE", "http://www.4thline.org/foo"), "000da201238c",
+                "100000000001", "http://www.4thline.org/some_user_interface/",
+                new DLNADoc[] { new DLNADoc("DMS", DLNADoc.Version.V1_5), new DLNADoc("M-DMS", DLNADoc.Version.V1_5) },
+                new DLNACaps(new String[] { "av-upload", "image-upload", "audio-upload" }));
     }
 
     public DeviceDetailsProvider getDeviceDetailsProvider() {
@@ -77,10 +67,8 @@ public class SampleDeviceRoot extends SampleDevice {
 
     @Override
     public Icon[] getIcons() {
-        return new Icon[]{
-                new Icon("image/png", 32, 32, 8, URI.create("icon.png")),
-                new Icon("image/png", 32, 32, 8, URI.create("icon2.png"))
-        };
+        return new Icon[] { new Icon("image/png", 32, 32, 8, URI.create("icon.png")),
+                new Icon("image/png", 32, 32, 8, URI.create("icon2.png")) };
     }
 
     public static UDN getRootUDN() {
@@ -102,26 +90,23 @@ public class SampleDeviceRoot extends SampleDevice {
     public static void assertMatch(Device a, Device b) {
         assertMatch(a, b, true);
     }
-    
+
     public static void assertMatch(Device a, Device b, boolean checkType) {
         assertTrue(a.isRoot());
         assertDeviceMatch(a, b, checkType);
     }
 
-    public static void assertLocalResourcesMatch(Resource[] resources){
-        assertEquals(
-                ServiceEventCallbackResource.class,
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")).getClass()
-        );
+    public static void assertLocalResourcesMatch(Resource[] resources) {
+        assertEquals(ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb"))
+                        .getClass());
 
-        assertEquals(
-                ServiceEventCallbackResource.class,
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb")).getClass()
-        );
-        assertEquals(
-                ServiceEventCallbackResource.class,
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb")).getClass()
-        );
+        assertEquals(ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb"))
+                        .getClass());
+        assertEquals(ServiceEventCallbackResource.class,
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb"))
+                        .getClass());
     }
 
     protected static Resource getLocalResource(Resource[] resources, URI localPathQuery) {
@@ -133,8 +118,9 @@ public class SampleDeviceRoot extends SampleDevice {
     }
 
     protected static void assertDeviceMatch(Device a, Device b) {
-        assertDeviceMatch(a,b,true);
+        assertDeviceMatch(a, b, true);
     }
+
     protected static void assertDeviceMatch(Device a, Device b, boolean checkType) {
         assertEquals(0, a.validate().size());
         assertEquals(0, b.validate().size());
@@ -146,11 +132,15 @@ public class SampleDeviceRoot extends SampleDevice {
         assertEquals(a.getVersion().getMinor(), b.getVersion().getMinor());
         assertEquals(a.getType(), b.getType());
         assertEquals(a.getDetails().getFriendlyName(), b.getDetails().getFriendlyName());
-        assertEquals(a.getDetails().getManufacturerDetails().getManufacturer(), b.getDetails().getManufacturerDetails().getManufacturer());
-        assertEquals(a.getDetails().getManufacturerDetails().getManufacturerURI(), b.getDetails().getManufacturerDetails().getManufacturerURI());
-        assertEquals(a.getDetails().getModelDetails().getModelDescription(), b.getDetails().getModelDetails().getModelDescription());
+        assertEquals(a.getDetails().getManufacturerDetails().getManufacturer(),
+                b.getDetails().getManufacturerDetails().getManufacturer());
+        assertEquals(a.getDetails().getManufacturerDetails().getManufacturerURI(),
+                b.getDetails().getManufacturerDetails().getManufacturerURI());
+        assertEquals(a.getDetails().getModelDetails().getModelDescription(),
+                b.getDetails().getModelDetails().getModelDescription());
         assertEquals(a.getDetails().getModelDetails().getModelName(), b.getDetails().getModelDetails().getModelName());
-        assertEquals(a.getDetails().getModelDetails().getModelNumber(), b.getDetails().getModelDetails().getModelNumber());
+        assertEquals(a.getDetails().getModelDetails().getModelNumber(),
+                b.getDetails().getModelDetails().getModelNumber());
         assertEquals(a.getDetails().getModelDetails().getModelURI(), b.getDetails().getModelDetails().getModelURI());
         assertEquals(a.getDetails().getSerialNumber(), b.getDetails().getSerialNumber());
         assertEquals(a.getDetails().getUpc(), b.getDetails().getUpc());
@@ -189,18 +179,9 @@ public class SampleDeviceRoot extends SampleDevice {
                     RemoteService remoteServiceA = (RemoteService) service;
                     RemoteService remoteServiceB = (RemoteService) b.getServices()[i];
 
-                    assertEquals(
-                            remoteServiceA.getEventSubscriptionURI(),
-                            remoteServiceB.getEventSubscriptionURI()
-                    );
-                    assertEquals(
-                            remoteServiceA.getControlURI(),
-                            remoteServiceB.getControlURI()
-                    );
-                    assertEquals(
-                            remoteServiceA.getDescriptorURI(),
-                            remoteServiceB.getDescriptorURI()
-                    );
+                    assertEquals(remoteServiceA.getEventSubscriptionURI(), remoteServiceB.getEventSubscriptionURI());
+                    assertEquals(remoteServiceA.getControlURI(), remoteServiceB.getControlURI());
+                    assertEquals(remoteServiceA.getDescriptorURI(), remoteServiceB.getDescriptorURI());
                 }
             }
         }
@@ -210,10 +191,8 @@ public class SampleDeviceRoot extends SampleDevice {
             assertEquals(a.getEmbeddedDevices().length, b.getEmbeddedDevices().length);
             for (int i = 0; i < a.getEmbeddedDevices().length; i++) {
                 Device aEmbedded = a.getEmbeddedDevices()[i];
-                assertDeviceMatch(aEmbedded, b.getEmbeddedDevices()[i],checkType);
+                assertDeviceMatch(aEmbedded, b.getEmbeddedDevices()[i], checkType);
             }
         }
-
     }
-
 }

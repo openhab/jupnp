@@ -15,12 +15,12 @@
 
 package org.jupnp.support.model;
 
+import java.util.Map;
+
 import org.jupnp.model.action.ActionArgumentValue;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.model.types.UnsignedIntegerTwoBytes;
-
-import java.util.Map;
 
 /**
  * @author Christian Bauer - Initial Contribution
@@ -45,61 +45,33 @@ public class PortMapping {
     public PortMapping() {
     }
 
-
     public PortMapping(Map<String, ActionArgumentValue<Service<?, ?>>> map) {
-        this(
-                (Boolean) map.get("NewEnabled").getValue(),
+        this((Boolean) map.get("NewEnabled").getValue(),
                 (UnsignedIntegerFourBytes) map.get("NewLeaseDuration").getValue(),
                 (String) map.get("NewRemoteHost").getValue(),
                 (UnsignedIntegerTwoBytes) map.get("NewExternalPort").getValue(),
                 (UnsignedIntegerTwoBytes) map.get("NewInternalPort").getValue(),
-                (String) map.get("NewInternalClient").getValue(),
-                Protocol.valueOf(map.get("NewProtocol").toString()),
-                (String) map.get("NewPortMappingDescription").getValue()
-        );
+                (String) map.get("NewInternalClient").getValue(), Protocol.valueOf(map.get("NewProtocol").toString()),
+                (String) map.get("NewPortMappingDescription").getValue());
     }
 
     public PortMapping(int port, String internalClient, Protocol protocol) {
-        this(
-                true,
-                new UnsignedIntegerFourBytes(0),
-                null,
-                new UnsignedIntegerTwoBytes(port),
-                new UnsignedIntegerTwoBytes(port),
-                internalClient,
-                protocol,
-                null
-        );
+        this(true, new UnsignedIntegerFourBytes(0), null, new UnsignedIntegerTwoBytes(port),
+                new UnsignedIntegerTwoBytes(port), internalClient, protocol, null);
     }
 
     public PortMapping(int port, String internalClient, Protocol protocol, String description) {
-        this(
-                true,
-                new UnsignedIntegerFourBytes(0),
-                null,
-                new UnsignedIntegerTwoBytes(port),
-                new UnsignedIntegerTwoBytes(port),
-                internalClient,
-                protocol,
-                description
-        );
+        this(true, new UnsignedIntegerFourBytes(0), null, new UnsignedIntegerTwoBytes(port),
+                new UnsignedIntegerTwoBytes(port), internalClient, protocol, description);
     }
 
     public PortMapping(String remoteHost, UnsignedIntegerTwoBytes externalPort, Protocol protocol) {
-        this(
-                true,
-                new UnsignedIntegerFourBytes(0),
-                remoteHost,
-                externalPort,
-                null,
-                null,
-                protocol,
-                null
-        );
+        this(true, new UnsignedIntegerFourBytes(0), remoteHost, externalPort, null, null, protocol, null);
     }
 
-    public PortMapping(boolean enabled, UnsignedIntegerFourBytes leaseDurationSeconds, String remoteHost, UnsignedIntegerTwoBytes externalPort,
-                       UnsignedIntegerTwoBytes internalPort, String internalClient, Protocol protocol, String description) {
+    public PortMapping(boolean enabled, UnsignedIntegerFourBytes leaseDurationSeconds, String remoteHost,
+            UnsignedIntegerTwoBytes externalPort, UnsignedIntegerTwoBytes internalPort, String internalClient,
+            Protocol protocol, String description) {
         this.enabled = enabled;
         this.leaseDurationSeconds = leaseDurationSeconds;
         this.remoteHost = remoteHost;
@@ -179,11 +151,13 @@ public class PortMapping {
     }
 
     public void setDescription(String description) {
-        this.description = description == null || description.equals("-") || description.length() == 0 ? null : description;
+        this.description = description == null || description.equals("-") || description.length() == 0 ? null
+                : description;
     }
 
     @Override
     public String toString() {
-        return "(" + getClass().getSimpleName() + ") Protocol: " + getProtocol() + ", " + getExternalPort() + " => " + getInternalClient();
+        return "(" + getClass().getSimpleName() + ") Protocol: " + getProtocol() + ", " + getExternalPort() + " => "
+                + getInternalClient();
     }
 }

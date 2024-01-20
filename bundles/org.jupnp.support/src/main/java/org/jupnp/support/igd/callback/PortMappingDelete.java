@@ -42,7 +42,5 @@ public abstract class PortMappingDelete extends ActionCallback {
         getActionInvocation().setInput("NewProtocol", portMapping.getProtocol());
         if (portMapping.hasRemoteHost())
             getActionInvocation().setInput("NewRemoteHost", portMapping.getRemoteHost());
-
     }
-
 }

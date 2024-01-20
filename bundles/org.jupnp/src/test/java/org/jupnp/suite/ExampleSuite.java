@@ -20,7 +20,6 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 
 @Suite
 @SuiteDisplayName("Example")
-@SelectPackages({"example.binarylight", "example.controlpoint", "example.localservice", "example.registry"})
+@SelectPackages({ "example.binarylight", "example.controlpoint", "example.localservice", "example.registry" })
 public class ExampleSuite {
 }
-

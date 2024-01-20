@@ -32,7 +32,7 @@ public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
 
         // Cut off leading zeros
         if (!"0".equals(s)) {
-            while(s.startsWith("0")) {
+            while (s.startsWith("0")) {
                 s = s.substring(1);
             }
         }
@@ -42,7 +42,6 @@ public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
         } catch (NumberFormatException ex) {
             throw new InvalidHeaderException("Invalid event sequence, " + ex.getMessage(), ex);
         }
-
     }
 
     public String getString() {

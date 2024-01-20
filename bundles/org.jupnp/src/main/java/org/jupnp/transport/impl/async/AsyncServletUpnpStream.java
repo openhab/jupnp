@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.transport.impl.ServletUpnpStream;
-import org.jupnp.transport.spi.UpnpStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +44,8 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
     final protected AsyncContext asyncContext;
     final protected HttpServletRequest request;
 
-    public AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext, HttpServletRequest request) {
+    public AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext,
+            HttpServletRequest request) {
         super(protocolFactory);
         this.asyncContext = asyncContext;
         this.request = request;
@@ -105,5 +105,4 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
     public String toString() {
         return "" + hashCode();
     }
-
 }

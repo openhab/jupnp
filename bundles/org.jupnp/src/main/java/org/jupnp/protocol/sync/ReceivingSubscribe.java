@@ -31,7 +31,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.resource.ServiceEventSubscriptionResource;
 import org.jupnp.protocol.ReceivingSync;
 import org.jupnp.transport.RouterException;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +66,8 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     protected OutgoingSubscribeResponseMessage executeSync() throws RouterException {
 
-        ServiceEventSubscriptionResource resource =
-                getUpnpService().getRegistry().getResource(
-                        ServiceEventSubscriptionResource.class,
-                        getInputMessage().getUri()
-        );
+        ServiceEventSubscriptionResource resource = getUpnpService().getRegistry()
+                .getResource(ServiceEventSubscriptionResource.class, getInputMessage().getUri());
 
         if (resource == null) {
             log.trace("No local resource found: {}", getInputMessage());
@@ -80,19 +76,17 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
         log.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
 
-        IncomingSubscribeRequestMessage requestMessage =
-                new IncomingSubscribeRequestMessage(getInputMessage(), resource.getModel());
+        IncomingSubscribeRequestMessage requestMessage = new IncomingSubscribeRequestMessage(getInputMessage(),
+                resource.getModel());
 
         /// UDA 2.0, section 4.1.1: ensure callback url is in private network range
         if (requestMessage.getCallbackURLs() != null) {
             for (URL callbackUrl : requestMessage.getCallbackURLs()) {
                 try {
                     InetAddress callbackAddress = InetAddress.getByName(callbackUrl.getHost());
-                    if (!(callbackAddress.isLoopbackAddress() ||
-                            callbackAddress.isLinkLocalAddress() ||
-                            callbackAddress.isSiteLocalAddress())) {
-                        log.trace(
-                                "Callback URL not on accepted address range: {}", getInputMessage());
+                    if (!(callbackAddress.isLoopbackAddress() || callbackAddress.isLinkLocalAddress()
+                            || callbackAddress.isSiteLocalAddress())) {
+                        log.trace("Callback URL not on accepted address range: {}", getInputMessage());
                         return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
                     }
                 } catch (UnknownHostException e) {
@@ -103,25 +97,24 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         }
 
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
-        if (requestMessage.getSubscriptionId() != null &&
-                (requestMessage.hasNotificationHeader() || requestMessage.getCallbackURLs() != null)) {
+        if (requestMessage.getSubscriptionId() != null
+                && (requestMessage.hasNotificationHeader() || requestMessage.getCallbackURLs() != null)) {
             log.trace("Subscription ID and NT or Callback in subscribe request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.BAD_REQUEST);
         }
 
         if (requestMessage.getSubscriptionId() != null) {
             return processRenewal(resource.getModel(), requestMessage);
-        } else if (requestMessage.hasNotificationHeader() && requestMessage.getCallbackURLs() != null){
+        } else if (requestMessage.hasNotificationHeader() && requestMessage.getCallbackURLs() != null) {
             return processNewSubscription(resource.getModel(), requestMessage);
         } else {
             log.trace("No subscription ID, no NT or Callback, neither subscription or renewal: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
-
     }
 
     protected OutgoingSubscribeResponseMessage processRenewal(LocalService service,
-                                                              IncomingSubscribeRequestMessage requestMessage) {
+            IncomingSubscribeRequestMessage requestMessage) {
 
         subscription = getUpnpService().getRegistry().getLocalSubscription(requestMessage.getSubscriptionId());
 
@@ -142,7 +135,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
     }
 
     protected OutgoingSubscribeResponseMessage processNewSubscription(LocalService service,
-                                                                      IncomingSubscribeRequestMessage requestMessage) {
+            IncomingSubscribeRequestMessage requestMessage) {
         List<URL> callbackURLs = requestMessage.getCallbackURLs();
 
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
@@ -156,13 +149,13 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
-        Integer timeoutSeconds; 
-        if(getUpnpService().getConfiguration().isReceivedSubscriptionTimeoutIgnored()) {
-        	timeoutSeconds = null; // Use default value
+        Integer timeoutSeconds;
+        if (getUpnpService().getConfiguration().isReceivedSubscriptionTimeoutIgnored()) {
+            timeoutSeconds = null; // Use default value
         } else {
-        	timeoutSeconds = requestMessage.getRequestedTimeoutSeconds();
+            timeoutSeconds = requestMessage.getRequestedTimeoutSeconds();
         }
-        
+
         try {
             subscription = new LocalGENASubscription(service, timeoutSeconds, callbackURLs) {
                 public void established() {
@@ -173,9 +166,8 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
                 public void eventReceived() {
                     // The only thing we are interested in, sending an event when the state changes
-                    getUpnpService().getConfiguration().getSyncProtocolExecutorService().execute(
-                            getUpnpService().getProtocolFactory().createSendingEvent(this)
-                    );
+                    getUpnpService().getConfiguration().getSyncProtocolExecutorService()
+                            .execute(getUpnpService().getProtocolFactory().createSendingEvent(this));
                 }
             };
         } catch (Exception ex) {
@@ -192,9 +184,9 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     @Override
     public void responseSent(StreamResponseMessage responseMessage) {
-        if (subscription == null) return; // Preconditions failed very early on
-        if (responseMessage != null
-                && !responseMessage.getOperation().isFailed()
+        if (subscription == null)
+            return; // Preconditions failed very early on
+        if (responseMessage != null && !responseMessage.getOperation().isFailed()
                 && subscription.getCurrentSequence().getValue() == 0) { // Note that renewals should not have 0
 
             // This is a minor concurrency issue: If we now register on the service and henceforth send a new
@@ -207,9 +199,8 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
             subscription.establish();
 
             log.trace("Response to subscription sent successfully, now sending initial event asynchronously");
-            getUpnpService().getConfiguration().getAsyncProtocolExecutor().execute(
-                    getUpnpService().getProtocolFactory().createSendingEvent(subscription)
-            );
+            getUpnpService().getConfiguration().getAsyncProtocolExecutor()
+                    .execute(getUpnpService().getProtocolFactory().createSendingEvent(subscription));
 
         } else if (subscription.getCurrentSequence().getValue() == 0) {
             log.trace("Subscription request's response aborted, not sending initial event");
@@ -225,7 +216,8 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     @Override
     public void responseException(Throwable t) {
-        if (subscription == null) return; // Nothing to do, we didn't get that far
+        if (subscription == null)
+            return; // Nothing to do, we didn't get that far
         log.trace("Response could not be send to subscriber, removing local GENA subscription: {}", subscription);
         getUpnpService().getRegistry().removeLocalSubscription(subscription);
     }

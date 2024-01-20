@@ -23,7 +23,7 @@ import org.jupnp.model.types.InvalidValueException;
 public class NormalPlayTimeRange {
 
     public static final String PREFIX = "npt=";
-    
+
     private NormalPlayTime timeStart;
     private NormalPlayTime timeEnd;
     private NormalPlayTime timeDuration;
@@ -67,7 +67,7 @@ public class NormalPlayTimeRange {
 
     /**
      * 
-     * @return String format of Normal Play Time Range for response message header 
+     * @return String format of Normal Play Time Range for response message header
      */
     public String getString() {
         return getString(true);
@@ -75,7 +75,7 @@ public class NormalPlayTimeRange {
 
     /**
      * 
-     * @return String format of Normal Play Time Range for response message header 
+     * @return String format of Normal Play Time Range for response message header
      */
     public String getString(boolean includeDuration) {
         String s = PREFIX;
@@ -94,7 +94,7 @@ public class NormalPlayTimeRange {
     public static NormalPlayTimeRange valueOf(String s) {
         return valueOf(s, false);
     }
-    
+
     public static NormalPlayTimeRange valueOf(String s, boolean mandatoryTimeEnd) {
         if (s.startsWith(PREFIX)) {
             NormalPlayTime timeStart, timeEnd = null, timeDuration = null;
@@ -109,7 +109,7 @@ public class NormalPlayTimeRange {
                         timeEnd = NormalPlayTime.valueOf(params[1]);
                     }
                 case 1:
-                    if (params[0].length() != 0 && (!mandatoryTimeEnd || ( mandatoryTimeEnd && params.length>1))) {
+                    if (params[0].length() != 0 && (!mandatoryTimeEnd || (mandatoryTimeEnd && params.length > 1))) {
                         timeStart = NormalPlayTime.valueOf(params[0]);
                         return new NormalPlayTimeRange(timeStart, timeEnd, timeDuration);
                     }

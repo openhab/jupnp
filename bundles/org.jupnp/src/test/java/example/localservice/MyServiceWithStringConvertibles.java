@@ -14,18 +14,15 @@
 
 package example.localservice;
 
-import org.jupnp.binding.annotations.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
-import org.jupnp.model.types.csv.CSV;        // DOC:INC1
+
+import org.jupnp.binding.annotations.*;
+import org.jupnp.model.types.csv.CSV;
 import org.jupnp.model.types.csv.CSVInteger;
 
-@UpnpService(
-        serviceId = @UpnpServiceId("MyService"),
-        serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"),
-        stringConvertibleTypes = MyStringConvertible.class
-)
+@UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"), stringConvertibleTypes = MyStringConvertible.class)
 public class MyServiceWithStringConvertibles {
 
     @UpnpStateVariable
@@ -69,10 +66,7 @@ public class MyServiceWithStringConvertibles {
     }
 
     @UpnpAction
-    public void setMyNumbers(
-            @UpnpInputArgument(name = "In")
-            CSVInteger myNumbers
-    ) {
+    public void setMyNumbers(@UpnpInputArgument(name = "In") CSVInteger myNumbers) {
         this.myNumbers = myNumbers;
     }
 
@@ -82,10 +76,7 @@ public class MyServiceWithStringConvertibles {
     }
 
     @UpnpAction
-    public void setMyStringConvertible(
-            @UpnpInputArgument(name = "In")
-            MyStringConvertible myStringConvertible
-    ) {
+    public void setMyStringConvertible(@UpnpInputArgument(name = "In") MyStringConvertible myStringConvertible) {
         this.myStringConvertible = myStringConvertible;
     }
 } // DOC:INC1

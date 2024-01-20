@@ -113,16 +113,12 @@ public class UPnPActionImpl implements UPnPAction {
                 ActionArgument<?> argument = action.getInputArgument(key);
 
                 Object value = args.get(key);
-                //System.out.printf("key: %s value: %s\n", key, value);
+                // System.out.printf("key: %s value: %s\n", key, value);
 
-                if (!value.getClass().equals(
-                        argument.getDatatype().getBuiltin().getDeclaringClass())
-                        ) {
-                    value = OSGiDataConverter.tojUPnPValue(
-                            argument.getDatatype().getBuiltin().getDescriptorName(),
-                            value
-                    );
-                    //System.out.printf("key: %s value: %s\n", key, value);
+                if (!value.getClass().equals(argument.getDatatype().getBuiltin().getDeclaringClass())) {
+                    value = OSGiDataConverter.tojUPnPValue(argument.getDatatype().getBuiltin().getDescriptorName(),
+                            value);
+                    // System.out.printf("key: %s value: %s\n", key, value);
                 }
 
                 input.add(new ActionArgumentValue(argument, value));
@@ -130,8 +126,8 @@ public class UPnPActionImpl implements UPnPAction {
         }
 
         ControlPoint controlPoint = OSGiContext.getUpnpService().getControlPoint();
-        ActionInvocation<?> actionInvocation =
-                new ActionInvocation(action, input.toArray(new ActionArgumentValue<?>[input.size()]));
+        ActionInvocation<?> actionInvocation = new ActionInvocation(action,
+                input.toArray(new ActionArgumentValue<?>[input.size()]));
 
         new ActionCallback.Default(actionInvocation, controlPoint).run();
 
@@ -144,17 +140,17 @@ public class UPnPActionImpl implements UPnPAction {
                     Object value = argument.getValue();
 
                     if (value == null) {
-						log.error("Received null value for variable {} to OSGi type {}.", name,
-								argument.getDatatype().getDisplayString());
+                        log.error("Received null value for variable {} to OSGi type {}.", name,
+                                argument.getDatatype().getDisplayString());
                         // throw an exception
                     } else {
-                        //System.out.printf("name: %s  value: %s (%s)\n", name, value, value.getClass().getName());
+                        // System.out.printf("name: %s value: %s (%s)\n", name, value, value.getClass().getName());
 
                         value = OSGiDataConverter.toOSGiValue(argument.getDatatype(), value);
 
                         if (value == null) {
-							log.error("Cannot convert variable {} to OSGi type {}.", name,
-									argument.getDatatype().getDisplayString());
+                            log.error("Cannot convert variable {} to OSGi type {}.", name,
+                                    argument.getDatatype().getDisplayString());
                             // throw an exception
                         }
                         output.put(name, value);

@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
  * method will be called. The <code>RENEWAL_FAILED</code> reason will be used, however,
  * the response might be <code>null</code> if no response was received from the remote host.
  * </p>
+ * 
  * @author Christian Bauer
  */
 public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, IncomingSubscribeResponseMessage> {
@@ -44,13 +45,8 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
     final protected RemoteGENASubscription subscription;
 
     public SendingRenewal(UpnpService upnpService, RemoteGENASubscription subscription) {
-        super(
-            upnpService,
-            new OutgoingRenewalRequestMessage(
-                subscription,
-                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())
-            )
-        );
+        super(upnpService, new OutgoingRenewalRequestMessage(subscription,
+                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())));
         this.subscription = subscription;
     }
 
@@ -75,22 +71,18 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
         if (response.getOperation().isFailed()) {
             log.trace("Subscription renewal failed, response was: {}", response);
             getUpnpService().getRegistry().removeRemoteSubscription(subscription);
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            subscription.end(CancelReason.RENEWAL_FAILED,responseMessage.getOperation());
-                        }
-                    }
-            );
+            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+                public void run() {
+                    subscription.end(CancelReason.RENEWAL_FAILED, responseMessage.getOperation());
+                }
+            });
         } else if (!responseMessage.isValidHeaders()) {
             log.error("Subscription renewal failed, invalid or missing (SID, Timeout) response headers");
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            subscription.end(CancelReason.RENEWAL_FAILED, responseMessage.getOperation());
-                        }
-                    }
-            );
+            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+                public void run() {
+                    subscription.end(CancelReason.RENEWAL_FAILED, responseMessage.getOperation());
+                }
+            });
         } else {
             log.trace("Subscription renewed, updating in registry, response was: {}", response);
             subscription.setActualSubscriptionDurationSeconds(responseMessage.getSubscriptionDurationSeconds());
@@ -103,12 +95,10 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
     protected void onRenewalFailure() {
         log.trace("Subscription renewal failed, removing subscription from registry");
         getUpnpService().getRegistry().removeRemoteSubscription(subscription);
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                new Runnable() {
-                    public void run() {
-                        subscription.end(CancelReason.RENEWAL_FAILED, null);
-                    }
-                }
-        );
+        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+            public void run() {
+                subscription.end(CancelReason.RENEWAL_FAILED, null);
+            }
+        });
     }
 }

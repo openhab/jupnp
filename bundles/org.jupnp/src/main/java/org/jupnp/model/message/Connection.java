@@ -28,5 +28,4 @@ public interface Connection {
     InetAddress getRemoteAddress();
 
     InetAddress getLocalAddress();
-
 }

@@ -14,9 +14,9 @@
 
 package org.jupnp.binding.staging;
 
-import org.jupnp.model.meta.Icon;
-
 import java.net.URI;
+
+import org.jupnp.model.meta.Icon;
 
 /**
  * @author Christian Bauer

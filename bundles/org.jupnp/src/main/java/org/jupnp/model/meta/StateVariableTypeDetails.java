@@ -14,8 +14,6 @@
 
 package org.jupnp.model.meta;
 
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +44,8 @@ public class StateVariableTypeDetails implements Validatable {
         this(datatype, defaultValue, null, null);
     }
 
-    public StateVariableTypeDetails(Datatype datatype, String defaultValue, String[] allowedValues, StateVariableAllowedValueRange allowedValueRange) {
+    public StateVariableTypeDetails(Datatype datatype, String defaultValue, String[] allowedValues,
+            StateVariableAllowedValueRange allowedValueRange) {
         this.datatype = datatype;
         this.defaultValue = defaultValue;
         this.allowedValues = allowedValues;
@@ -76,9 +75,11 @@ public class StateVariableTypeDetails implements Validatable {
     }
 
     protected boolean foundDefaultInAllowedValues(String defaultValue, String[] allowedValues) {
-        if (defaultValue == null || allowedValues == null) return true;
+        if (defaultValue == null || allowedValues == null)
+            return true;
         for (String s : allowedValues) {
-            if (s.equals(defaultValue)) return true;
+            if (s.equals(defaultValue))
+                return true;
         }
         return false;
     }
@@ -87,41 +88,31 @@ public class StateVariableTypeDetails implements Validatable {
         List<ValidationError> errors = new ArrayList();
 
         if (getDatatype() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "datatype",
-                    "Service state variable has no datatype"
-            ));
+            errors.add(new ValidationError(getClass(), "datatype", "Service state variable has no datatype"));
         }
 
         if (getAllowedValues() != null) {
 
             if (getAllowedValueRange() != null) {
-                errors.add(new ValidationError(
-                        getClass(),
-                        "allowedValues",
-                        "Allowed value list of state variable can not also be restricted with allowed value range"
-                ));
+                errors.add(new ValidationError(getClass(), "allowedValues",
+                        "Allowed value list of state variable can not also be restricted with allowed value range"));
             }
 
             if (!Datatype.Builtin.STRING.equals(getDatatype().getBuiltin())) {
-                errors.add(new ValidationError(
-                        getClass(),
-                        "allowedValues",
-                        "Allowed value list of state variable only available for string datatype, not: " + getDatatype()
-                ));
+                errors.add(new ValidationError(getClass(), "allowedValues",
+                        "Allowed value list of state variable only available for string datatype, not: "
+                                + getDatatype()));
             }
 
             for (String s : getAllowedValues()) {
                 if (s.length() > 31) {
-                    SpecificationViolationReporter
-                            .report("Allowed value string must be less than 32 chars: {}", s);
+                    SpecificationViolationReporter.report("Allowed value string must be less than 32 chars: {}", s);
                 }
             }
 
-            if(!foundDefaultInAllowedValues(defaultValue, allowedValues)) {
-                SpecificationViolationReporter.report(
-                        "Allowed string values don't contain default value: {}", defaultValue);
+            if (!foundDefaultInAllowedValues(defaultValue, allowedValues)) {
+                SpecificationViolationReporter.report("Allowed string values don't contain default value: {}",
+                        defaultValue);
             }
         }
 

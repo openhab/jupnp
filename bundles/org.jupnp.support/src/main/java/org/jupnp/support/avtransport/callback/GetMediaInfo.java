@@ -42,5 +42,4 @@ public abstract class GetMediaInfo extends ActionCallback {
     }
 
     public abstract void received(ActionInvocation<?> invocation, MediaInfo mediaInfo);
-
 }

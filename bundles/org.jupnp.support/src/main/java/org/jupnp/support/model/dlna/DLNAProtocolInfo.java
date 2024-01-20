@@ -54,24 +54,21 @@ public class DLNAProtocolInfo extends ProtocolInfo {
         this.attributes.put(DLNAAttribute.Type.DLNA_ORG_PN, new DLNAProfileAttribute(profile));
         this.additionalInfo = this.getAttributesString();
     }
-    
+
     public DLNAProtocolInfo(Protocol protocol, String network, String contentFormat, String additionalInfo) {
         super(protocol, network, contentFormat, additionalInfo);
         parseAdditionalInfo();
     }
 
-    public DLNAProtocolInfo(Protocol protocol, String network, String contentFormat, Map<DLNAAttribute.Type, DLNAAttribute<?>> attributes) {
+    public DLNAProtocolInfo(Protocol protocol, String network, String contentFormat,
+            Map<DLNAAttribute.Type, DLNAAttribute<?>> attributes) {
         super(protocol, network, contentFormat, "");
         this.attributes.putAll(attributes);
         this.additionalInfo = this.getAttributesString();
     }
 
     public DLNAProtocolInfo(ProtocolInfo template) {
-        this(template.getProtocol(),
-             template.getNetwork(),
-             template.getContentFormat(),
-             template.getAdditionalInfo()
-        );
+        this(template.getProtocol(), template.getNetwork(), template.getContentFormat(), template.getAdditionalInfo());
     }
 
     public boolean contains(DLNAAttribute.Type type) {
@@ -88,7 +85,7 @@ public class DLNAProtocolInfo extends ProtocolInfo {
 
     protected String getAttributesString() {
         StringBuilder sb = new StringBuilder();
-        for (DLNAAttribute.Type type : DLNAAttribute.Type.values() ) {
+        for (DLNAAttribute.Type type : DLNAAttribute.Type.values()) {
             String value = attributes.containsKey(type) ? attributes.get(type).getString() : null;
             if (value != null && !value.isEmpty()) {
                 sb.append(sb.length() == 0 ? "" : ";");
@@ -106,16 +103,14 @@ public class DLNAProtocolInfo extends ProtocolInfo {
             for (String att : atts) {
                 String[] attNameValue = att.split("=");
                 if (attNameValue.length == 2) {
-                    DLNAAttribute.Type type =
-                            DLNAAttribute.Type.valueOfAttributeName(attNameValue[0]);
+                    DLNAAttribute.Type type = DLNAAttribute.Type.valueOfAttributeName(attNameValue[0]);
                     if (type != null) {
-                        DLNAAttribute<?> dlnaAttrinute =
-                                DLNAAttribute.newInstance(type, attNameValue[1], this.getContentFormat());
+                        DLNAAttribute<?> dlnaAttrinute = DLNAAttribute.newInstance(type, attNameValue[1],
+                                this.getContentFormat());
                         attributes.put(type, dlnaAttrinute);
                     }
                 }
             }
         }
     }
-
 }

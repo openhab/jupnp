@@ -14,11 +14,10 @@
 
 package org.jupnp.model.meta;
 
-import org.jupnp.model.ValidationError;
-
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
+import org.jupnp.model.ValidationError;
 
 /**
  * Describes a single action, the deprecated "query any state variable" action.
@@ -41,12 +40,9 @@ public class QueryStateVariableAction<S extends Service> extends Action<S> {
     }
 
     public QueryStateVariableAction(S service) {
-        super(ACTION_NAME,
-                new ActionArgument[]{
-                        new ActionArgument(INPUT_ARG_VAR_NAME, VIRTUAL_STATEVARIABLE_INPUT, ActionArgument.Direction.IN),
-                        new ActionArgument(OUTPUT_ARG_RETURN, VIRTUAL_STATEVARIABLE_OUTPUT, ActionArgument.Direction.OUT),
-                }
-        );
+        super(ACTION_NAME, new ActionArgument[] {
+                new ActionArgument(INPUT_ARG_VAR_NAME, VIRTUAL_STATEVARIABLE_INPUT, ActionArgument.Direction.IN),
+                new ActionArgument(OUTPUT_ARG_RETURN, VIRTUAL_STATEVARIABLE_OUTPUT, ActionArgument.Direction.OUT), });
         setService(service);
     }
 

@@ -25,36 +25,31 @@ import org.junit.jupiter.api.Test;
  */
 class InfoCommandTest extends AbstractTestCase {
 
-	@BeforeEach
-	void setUp() {
-		// use standard tool to see output in console
-		this.tool = new JUPnPTool();
-	}
+    @BeforeEach
+    void setUp() {
+        // use standard tool to see output in console
+        this.tool = new JUPnPTool();
+    }
 
-	@AfterEach
-	void tearDown() {
-		this.tool = null;
-	}
+    @AfterEach
+    void tearDown() {
+        this.tool = null;
+    }
 
-	@Test
-	void testInfoArgsMissing() {
-		checkCommandLine(tool, JUPnPTool.RC_MISSING_ARGUMENTS, "info");
-	}
+    @Test
+    void testInfoArgsMissing() {
+        checkCommandLine(tool, JUPnPTool.RC_MISSING_ARGUMENTS, "info");
+    }
 
-	@Test
-	void testInfoIpAddress() {
-		checkCommandLine(tool, JUPnPTool.RC_OK,
-				"--loglevel=INFO --verbose info 192.168.3.106 192.168.3.1");
-		checkCommandLine(tool, JUPnPTool.RC_OK,
-				"info 192.168.3.106 192.168.3.107");
-	}
+    @Test
+    void testInfoIpAddress() {
+        checkCommandLine(tool, JUPnPTool.RC_OK, "--loglevel=INFO --verbose info 192.168.3.106 192.168.3.1");
+        checkCommandLine(tool, JUPnPTool.RC_OK, "info 192.168.3.106 192.168.3.107");
+    }
 
-	@Test
-	void testInfoUDN() {
-		checkCommandLine(tool, JUPnPTool.RC_OK,
-				"--verbose info DCS-2332L-123456789012");
-		checkCommandLine(tool, JUPnPTool.RC_OK,
-				"info DCS-2332L-123456789012 12345678-1234-1234-1234-123456789012");
-	}
-
+    @Test
+    void testInfoUDN() {
+        checkCommandLine(tool, JUPnPTool.RC_OK, "--verbose info DCS-2332L-123456789012");
+        checkCommandLine(tool, JUPnPTool.RC_OK, "info DCS-2332L-123456789012 12345678-1234-1234-1234-123456789012");
+    }
 }

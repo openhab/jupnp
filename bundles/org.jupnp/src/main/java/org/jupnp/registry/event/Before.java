@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 /**
  * @author Christian Bauer
  */
-@Target({FIELD, PARAMETER})
+@Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 public @interface Before {
 }

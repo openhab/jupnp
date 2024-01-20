@@ -14,9 +14,9 @@
 
 package org.jupnp.model.types.csv;
 
-import org.jupnp.model.types.InvalidValueException;
-
 import java.net.URI;
+
+import org.jupnp.model.types.InvalidValueException;
 
 /**
  * @author Christian Bauer

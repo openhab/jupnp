@@ -14,6 +14,8 @@
 
 package org.jupnp.protocol;
 
+import java.net.URL;
+
 import org.jupnp.UpnpService;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.gena.LocalGENASubscription;
@@ -30,8 +32,6 @@ import org.jupnp.protocol.sync.SendingEvent;
 import org.jupnp.protocol.sync.SendingRenewal;
 import org.jupnp.protocol.sync.SendingSubscribe;
 import org.jupnp.protocol.sync.SendingUnsubscribe;
-
-import java.net.URL;
 
 /**
  * Factory for UPnP protocols, the core implementation of the UPnP specification.
@@ -56,8 +56,8 @@ public interface ProtocolFactory {
      * or {@link org.jupnp.protocol.async.ReceivingSearchResponse} protocol.
      *
      * @param message The incoming message, either {@link org.jupnp.model.message.UpnpRequest} or
-     *                {@link org.jupnp.model.message.UpnpResponse}.
-     * @return        The appropriate protocol that handles the messages or <code>null</code> if the message should be dropped.
+     *            {@link org.jupnp.model.message.UpnpResponse}.
+     * @return The appropriate protocol that handles the messages or <code>null</code> if the message should be dropped.
      * @throws ProtocolCreationException If no protocol could be found for the message.
      */
     public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message) throws ProtocolCreationException;
@@ -70,8 +70,8 @@ public interface ProtocolFactory {
      * {@link org.jupnp.protocol.sync.ReceivingEvent} protocol.
      *
      * @param requestMessage The incoming message, examime {@link org.jupnp.model.message.UpnpRequest.Method}
-     *                       to determine the protocol.
-     * @return        The appropriate protocol that handles the messages.
+     *            to determine the protocol.
+     * @return The appropriate protocol that handles the messages.
      * @throws ProtocolCreationException If no protocol could be found for the message.
      */
     public ReceivingSync createReceivingSync(StreamRequestMessage requestMessage) throws ProtocolCreationException;
@@ -99,7 +99,8 @@ public interface ProtocolFactory {
     /**
      * Called by the {@link org.jupnp.controlpoint.ControlPoint}, creates a protocol for GENA subscription.
      */
-    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription) throws ProtocolCreationException;
+    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription)
+            throws ProtocolCreationException;
 
     /**
      * Called by the {@link org.jupnp.controlpoint.ControlPoint}, creates a protocol for GENA renewal.

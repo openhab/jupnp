@@ -39,16 +39,14 @@ public class Reflections {
     public static Object invoke(Method method, Object target, Object... args) throws Exception {
         try {
             return method.invoke(target, args);
-        }
-        catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             String message = "Could not invoke method by reflection: " + toString(method);
             if (args != null && args.length > 0) {
                 message += " with parameters: (" + toClassNameString(", ", args) + ')';
             }
             message += " on: " + target.getClass().getName();
             throw new IllegalArgumentException(message, iae);
-        }
-        catch (InvocationTargetException ite) {
+        } catch (InvocationTargetException ite) {
             if (ite.getCause() instanceof Exception) {
                 throw (Exception) ite.getCause();
             } else {
@@ -64,13 +62,11 @@ public class Reflections {
         try {
             field.setAccessible(true);
             return field.get(target);
-        }
-        catch (IllegalArgumentException iae) {
-            String message = "Could not get field value by reflection: " + toString(field) +
-                    " on: " + target.getClass().getName();
+        } catch (IllegalArgumentException iae) {
+            String message = "Could not get field value by reflection: " + toString(field) + " on: "
+                    + target.getClass().getName();
             throw new IllegalArgumentException(message, iae);
-        }
-        finally {
+        } finally {
             field.setAccessible(accessible);
         }
     }
@@ -78,11 +74,11 @@ public class Reflections {
     // ####################
 
     public static Method getMethod(Class clazz, String name) {
-        for (Class superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class superClass = clazz; superClass != null
+                && superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredMethod(name);
-            }
-            catch (NoSuchMethodException nsme) {
+            } catch (NoSuchMethodException nsme) {
             }
         }
         throw new IllegalArgumentException("No such method: " + clazz.getName() + '.' + name);
@@ -95,11 +91,10 @@ public class Reflections {
         try {
             field.setAccessible(true);
             field.set(target, value);
-        }
-        catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             // target may be null if field is static so use field.getDeclaringClass() instead
-            String message = "Could not set field value by reflection: " + toString(field) +
-                    " on: " + field.getDeclaringClass().getName();
+            String message = "Could not set field value by reflection: " + toString(field) + " on: "
+                    + field.getDeclaringClass().getName();
             if (value == null) {
                 message += " with null value";
             } else {
@@ -128,10 +123,12 @@ public class Reflections {
     // ####################
 
     public static Method getGetterMethod(Class clazz, String name) {
-        for (Class superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class superClass = clazz; superClass != null
+                && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Method method : superClass.getDeclaredMethods()) {
                 String methodName = method.getName();
-                if (method.getParameterTypes().length != 0) continue;
+                if (method.getParameterTypes().length != 0)
+                    continue;
 
                 if (methodName.startsWith("get")) {
                     if (decapitalize(methodName.substring(3)).equals(name))
@@ -149,7 +146,8 @@ public class Reflections {
 
     public static List<Method> getMethods(Class clazz, Class annotation) {
         List<Method> methods = new ArrayList();
-        for (Class superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class superClass = clazz; superClass != null
+                && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Method method : superClass.getDeclaredMethods()) {
                 if (method.isAnnotationPresent(annotation)) {
                     methods.add(method);
@@ -162,11 +160,11 @@ public class Reflections {
     // ####################
 
     public static Field getField(Class clazz, String name) {
-        for (Class superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class superClass = clazz; superClass != null
+                && superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredField(name);
-            }
-            catch (NoSuchFieldException nsfe) {
+            } catch (NoSuchFieldException nsfe) {
             }
         }
         return null;
@@ -176,7 +174,8 @@ public class Reflections {
 
     public static List<Field> getFields(Class clazz, Class annotation) {
         List<Field> fields = new ArrayList();
-        for (Class superClass = clazz; superClass != null && superClass != Object.class; superClass = superClass.getSuperclass()) {
+        for (Class superClass = clazz; superClass != null
+                && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field field : superClass.getDeclaredFields()) {
                 if (field.isAnnotationPresent(annotation)) {
                     fields.add(field);
@@ -191,12 +190,11 @@ public class Reflections {
     /**
      * Get the actual type arguments a child class has used to extend a generic base class.
      *
-     * @param baseClass  the base class
+     * @param baseClass the base class
      * @param childClass the child class
      * @return a list of the raw classes for the actual type arguments.
      */
-    public static <T> List<Class<?>> getTypeArguments(
-            Class<T> baseClass, Class<? extends T> childClass) {
+    public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
         Map<Type, Type> resolvedTypes = new HashMap<Type, Type>();
         Type type = childClass;
         // start walking up the inheritance hierarchy until we hit baseClass
@@ -268,15 +266,13 @@ public class Reflections {
         try {
             field.setAccessible(true);
             return get(field, target);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             } else {
                 throw new IllegalArgumentException("exception setting: " + field.getName(), e);
             }
-        }
-        finally {
+        } finally {
             field.setAccessible(accessible);
         }
     }
@@ -286,15 +282,13 @@ public class Reflections {
         try {
             field.setAccessible(true);
             set(field, target, value);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             } else {
                 throw new IllegalArgumentException("exception setting: " + field.getName(), e);
             }
-        }
-        finally {
+        } finally {
             field.setAccessible(accessible);
         }
     }
@@ -302,8 +296,7 @@ public class Reflections {
     public static Object invokeAndWrap(Method method, Object target, Object... args) {
         try {
             return invoke(method, target, args);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
             } else {
@@ -313,16 +306,13 @@ public class Reflections {
     }
 
     public static String toString(Member member) {
-        return unqualify(member.getDeclaringClass().getName()) +
-                '.' +
-                member.getName();
+        return unqualify(member.getDeclaringClass().getName()) + '.' + member.getName();
     }
 
     public static Class classForName(String name) throws ClassNotFoundException {
         try {
             return Thread.currentThread().getContextClassLoader().loadClass(name);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return Class.forName(name);
         }
     }
@@ -330,8 +320,7 @@ public class Reflections {
     public static boolean isClassAvailable(String name) {
         try {
             classForName(name);
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             return false;
         }
         return true;
@@ -345,7 +334,7 @@ public class Reflections {
         if (typeArguments.length == 0) {
             throw new IllegalArgumentException("no type arguments for collection type");
         }
-        Type typeArgument = typeArguments.length == 1 ? typeArguments[0] : typeArguments[1]; //handle Maps
+        Type typeArgument = typeArguments.length == 1 ? typeArguments[0] : typeArguments[1]; // handle Maps
         if (typeArgument instanceof ParameterizedType) {
             typeArgument = ((ParameterizedType) typeArgument).getRawType();
         }
@@ -383,12 +372,10 @@ public class Reflections {
         throw new IllegalArgumentException("no such setter method: " + clazz.getName() + '.' + name);
     }
 
-
     public static Method getMethod(Annotation annotation, String name) {
         try {
             return annotation.annotationType().getMethod(name);
-        }
-        catch (NoSuchMethodException nsme) {
+        } catch (NoSuchMethodException nsme) {
             return null;
         }
     }
@@ -416,11 +403,11 @@ public class Reflections {
             }
             return found;
         }
-
     }
 
     public static String toClassNameString(String sep, Object... objects) {
-        if (objects.length == 0) return "";
+        if (objects.length == 0)
+            return "";
         StringBuilder builder = new StringBuilder();
         for (Object object : objects) {
             builder.append(sep);
@@ -451,5 +438,4 @@ public class Reflections {
         chars[0] = Character.toLowerCase(chars[0]);
         return new String(chars);
     }
-
 }

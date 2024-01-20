@@ -22,7 +22,7 @@ package org.jupnp.transport;
  * </p>
  * <p>
  * This exception is also thrown when you interrupt the thread calling the
- * router.  In such a case, the cause of this is an <code>InterruptedException</code>.
+ * router. In such a case, the cause of this is an <code>InterruptedException</code>.
  * </p>
  *
  * @author Christian Bauer

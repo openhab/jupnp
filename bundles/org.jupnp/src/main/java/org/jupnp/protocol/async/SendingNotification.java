@@ -59,8 +59,7 @@ public abstract class SendingNotification extends SendingAsync {
 
     protected void execute() throws RouterException {
 
-        List<NetworkAddress> activeStreamServers =
-            getUpnpService().getRouter().getActiveStreamServers(null);
+        List<NetworkAddress> activeStreamServers = getUpnpService().getRouter().getActiveStreamServers(null);
         if (activeStreamServers.size() == 0) {
             log.trace("Aborting notifications, no active stream servers found (network disabled?)");
             return;
@@ -69,12 +68,8 @@ public abstract class SendingNotification extends SendingAsync {
         // Prepare it once, it's the same for each repetition
         List<Location> descriptorLocations = new ArrayList();
         for (NetworkAddress activeStreamServer : activeStreamServers) {
-            descriptorLocations.add(
-                    new Location(
-                            activeStreamServer,
-                            getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(getDevice())
-                    )
-            );
+            descriptorLocations.add(new Location(activeStreamServer,
+                    getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(getDevice())));
         }
 
         for (int i = 0; i < getBulkRepeat(); i++) {
@@ -104,8 +99,7 @@ public abstract class SendingNotification extends SendingAsync {
 
     public void sendMessages(Location descriptorLocation) throws RouterException {
         log.trace("Sending root device messages: {}", getDevice());
-        List<OutgoingNotificationRequest> rootDeviceMsgs =
-                createDeviceMessages(getDevice(), descriptorLocation);
+        List<OutgoingNotificationRequest> rootDeviceMsgs = createDeviceMessages(getDevice(), descriptorLocation);
         for (OutgoingNotificationRequest upnpMessage : rootDeviceMsgs) {
             getUpnpService().getRouter().send(upnpMessage);
         }
@@ -113,16 +107,15 @@ public abstract class SendingNotification extends SendingAsync {
         if (getDevice().hasEmbeddedDevices()) {
             for (LocalDevice embeddedDevice : getDevice().findEmbeddedDevices()) {
                 log.trace("Sending embedded device messages: {}", embeddedDevice);
-                List<OutgoingNotificationRequest> embeddedDeviceMsgs =
-                        createDeviceMessages(embeddedDevice, descriptorLocation);
+                List<OutgoingNotificationRequest> embeddedDeviceMsgs = createDeviceMessages(embeddedDevice,
+                        descriptorLocation);
                 for (OutgoingNotificationRequest upnpMessage : embeddedDeviceMsgs) {
                     getUpnpService().getRouter().send(upnpMessage);
                 }
             }
         }
 
-        List<OutgoingNotificationRequest> serviceTypeMsgs =
-                createServiceTypeMessages(getDevice(), descriptorLocation);
+        List<OutgoingNotificationRequest> serviceTypeMsgs = createServiceTypeMessages(getDevice(), descriptorLocation);
         if (serviceTypeMsgs.size() > 0) {
             log.trace("Sending service type messages");
             for (OutgoingNotificationRequest upnpMessage : serviceTypeMsgs) {
@@ -131,52 +124,32 @@ public abstract class SendingNotification extends SendingAsync {
         }
     }
 
-    protected List<OutgoingNotificationRequest> createDeviceMessages(LocalDevice device,
-                                                                     Location descriptorLocation) {
+    protected List<OutgoingNotificationRequest> createDeviceMessages(LocalDevice device, Location descriptorLocation) {
         List<OutgoingNotificationRequest> msgs = new ArrayList();
 
         // See the tables in UDA 1.0 section 1.1.2
 
         if (device.isRoot()) {
-            msgs.add(
-                    new OutgoingNotificationRequestRootDevice(
-                            descriptorLocation,
-                            device,
-                            getNotificationSubtype()
-                    )
-            );
+            msgs.add(new OutgoingNotificationRequestRootDevice(descriptorLocation, device, getNotificationSubtype()));
         }
 
-        msgs.add(
-                new OutgoingNotificationRequestUDN(
-                        descriptorLocation, device, getNotificationSubtype()
-                )
-        );
-        msgs.add(
-                new OutgoingNotificationRequestDeviceType(
-                        descriptorLocation, device, getNotificationSubtype()
-                )
-        );
+        msgs.add(new OutgoingNotificationRequestUDN(descriptorLocation, device, getNotificationSubtype()));
+        msgs.add(new OutgoingNotificationRequestDeviceType(descriptorLocation, device, getNotificationSubtype()));
 
         return msgs;
     }
 
     protected List<OutgoingNotificationRequest> createServiceTypeMessages(LocalDevice device,
-                                                                          Location descriptorLocation) {
+            Location descriptorLocation) {
         List<OutgoingNotificationRequest> msgs = new ArrayList();
 
         for (ServiceType serviceType : device.findServiceTypes()) {
-            msgs.add(
-                    new OutgoingNotificationRequestServiceType(
-                            descriptorLocation, device,
-                            getNotificationSubtype(), serviceType
-                    )
-            );
+            msgs.add(new OutgoingNotificationRequestServiceType(descriptorLocation, device, getNotificationSubtype(),
+                    serviceType));
         }
 
         return msgs;
     }
 
     protected abstract NotificationSubtype getNotificationSubtype();
-
 }

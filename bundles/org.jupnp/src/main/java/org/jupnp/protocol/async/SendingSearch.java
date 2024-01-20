@@ -62,8 +62,7 @@ public class SendingSearch extends SendingAsync {
 
         if (!UpnpHeader.Type.ST.isValidHeaderType(searchTarget.getClass())) {
             throw new IllegalArgumentException(
-                    "Given search target instance is not a valid header class for type ST: " + searchTarget.getClass()
-            );
+                    "Given search target instance is not a valid header class for type ST: " + searchTarget.getClass());
         }
         this.searchTarget = searchTarget;
         this.mxSeconds = mxSeconds;
@@ -113,5 +112,4 @@ public class SendingSearch extends SendingAsync {
      */
     protected void prepareOutgoingSearchRequest(OutgoingSearchRequest message) {
     }
-
 }

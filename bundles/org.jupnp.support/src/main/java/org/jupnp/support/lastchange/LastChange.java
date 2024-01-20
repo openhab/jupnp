@@ -15,11 +15,11 @@
 
 package org.jupnp.support.lastchange;
 
-import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
+import org.jupnp.model.types.UnsignedIntegerFourBytes;
 
 /**
  * Collects all state changes per logical instance.
@@ -118,7 +118,8 @@ public class LastChange {
 
     @Override
     public synchronized String toString() {
-        if (!event.hasChanges()) return "";
+        if (!event.hasChanges())
+            return "";
         try {
             return parser.generate(event);
         } catch (Exception ex) {

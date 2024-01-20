@@ -49,4 +49,3 @@ public class ConnectionManagerException extends ActionException {
         super(errorCode.getCode(), errorCode.getDescription());
     }
 }
-

@@ -14,6 +14,8 @@
 
 package org.jupnp.control;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
 import org.jupnp.binding.annotations.UpnpAction;
 import org.jupnp.binding.annotations.UpnpInputArgument;
@@ -21,14 +23,12 @@ import org.jupnp.binding.annotations.UpnpOutputArgument;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -40,27 +40,15 @@ public class ActionSampleData {
     }
 
     public static LocalDevice createTestDevice(Class<?> clazz) throws Exception {
-        return createTestDevice(
-                SampleData.readService(
-                        new AnnotationLocalServiceBinder(),
-                        clazz
-                )
-        );
+        return createTestDevice(SampleData.readService(new AnnotationLocalServiceBinder(), clazz));
     }
 
     public static LocalDevice createTestDevice(LocalService service) throws Exception {
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("BinaryLight", 1),
-                new DeviceDetails("Example Binary Light"),
-                service
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("BinaryLight", 1),
+                new DeviceDetails("Example Binary Light"), service);
     }
 
-    @org.jupnp.binding.annotations.UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+    @org.jupnp.binding.annotations.UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class LocalTestService {
 
         @UpnpStateVariable(sendEvents = false)
@@ -102,7 +90,8 @@ public class ActionSampleData {
         public boolean getTarget() {
             try {
                 Thread.sleep(50); // A small delay so they are really concurrent
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+            }
             return super.getTarget();
         }
     }
@@ -113,7 +102,7 @@ public class ActionSampleData {
         String someValue;
 
         @UpnpAction
-        public void setSomeValue(@UpnpInputArgument(name = "SomeValue", aliases ={"SomeValue1"}) String someValue) {
+        public void setSomeValue(@UpnpInputArgument(name = "SomeValue", aliases = { "SomeValue1" }) String someValue) {
             this.someValue = someValue;
         }
 
@@ -121,13 +110,9 @@ public class ActionSampleData {
         public String getSomeValue() {
             return someValue;
         }
-
     }
-    
-    @org.jupnp.binding.annotations.UpnpService(
-            serviceId = @UpnpServiceId("SwitchPower"),
-            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-    )
+
+    @org.jupnp.binding.annotations.UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
     public static class LocalTestServiceWithClientInfo {
 
         @UpnpStateVariable(sendEvents = false)
@@ -160,7 +145,5 @@ public class ActionSampleData {
         public boolean getStatus() {
             return status;
         }
-
     }
-
 }

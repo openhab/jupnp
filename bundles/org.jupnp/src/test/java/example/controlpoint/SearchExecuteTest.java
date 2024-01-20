@@ -14,6 +14,11 @@
 
 package example.controlpoint;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.message.UpnpMessage;
 import org.jupnp.model.message.header.DeviceTypeHeader;
@@ -34,11 +39,6 @@ import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.model.types.UDN;
 import org.jupnp.protocol.async.SendingSearch;
-import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Searching the network
@@ -78,9 +78,8 @@ class SearchExecuteTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        upnpService.getControlPoint().search(       // DOC: SEARCH
-                new STAllHeader()
-        );                                          // DOC: SEARCH
+        upnpService.getControlPoint().search( // DOC: SEARCH
+                new STAllHeader()); // DOC: SEARCH
 
         assertMessages(upnpService, new STAllHeader());
     }
@@ -104,9 +103,8 @@ class SearchExecuteTest {
         upnpService.startup();
 
         UDN udn = new UDN(UUID.randomUUID());
-        upnpService.getControlPoint().search(       // DOC: SEARCH
-                new UDNHeader(udn)
-        );                                          // DOC: SEARCH
+        upnpService.getControlPoint().search( // DOC: SEARCH
+                new UDNHeader(udn)); // DOC: SEARCH
 
         assertMessages(upnpService, new UDNHeader(udn));
     }
@@ -127,19 +125,15 @@ class SearchExecuteTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        UDADeviceType udaType = new UDADeviceType("BinaryLight");       // DOC: SEARCH_UDA
-        upnpService.getControlPoint().search(
-                new UDADeviceTypeHeader(udaType)
-        );                                                              // DOC: SEARCH_UDA
+        UDADeviceType udaType = new UDADeviceType("BinaryLight"); // DOC: SEARCH_UDA
+        upnpService.getControlPoint().search(new UDADeviceTypeHeader(udaType)); // DOC: SEARCH_UDA
 
         assertMessages(upnpService, new UDADeviceTypeHeader(udaType));
 
         upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
-        DeviceType type = new DeviceType("org-mydomain", "MyDeviceType", 1);    // DOC: SEARCH_CUSTOM
-        upnpService.getControlPoint().search(
-                new DeviceTypeHeader(type)
-        );                                                                      // DOC: SEARCH_CUSTOM
+        DeviceType type = new DeviceType("org-mydomain", "MyDeviceType", 1); // DOC: SEARCH_CUSTOM
+        upnpService.getControlPoint().search(new DeviceTypeHeader(type)); // DOC: SEARCH_CUSTOM
 
         assertMessages(upnpService, new DeviceTypeHeader(type));
     }
@@ -156,23 +150,18 @@ class SearchExecuteTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        UDAServiceType udaType = new UDAServiceType("SwitchPower");      // DOC: SEARCH_UDA
-        upnpService.getControlPoint().search(
-                new UDAServiceTypeHeader(udaType)
-        );                                                               // DOC: SEARCH_UDA
+        UDAServiceType udaType = new UDAServiceType("SwitchPower"); // DOC: SEARCH_UDA
+        upnpService.getControlPoint().search(new UDAServiceTypeHeader(udaType)); // DOC: SEARCH_UDA
 
         assertMessages(upnpService, new UDAServiceTypeHeader(udaType));
 
         upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
-        ServiceType type = new ServiceType("org-mydomain", "MyServiceType", 1);    // DOC: SEARCH_CUSTOM
-        upnpService.getControlPoint().search(
-                new ServiceTypeHeader(type)
-        );                                                                        // DOC: SEARCH_CUSTOM
+        ServiceType type = new ServiceType("org-mydomain", "MyServiceType", 1); // DOC: SEARCH_CUSTOM
+        upnpService.getControlPoint().search(new ServiceTypeHeader(type)); // DOC: SEARCH_CUSTOM
 
         assertMessages(upnpService, new ServiceTypeHeader(type));
     }
-
 
     @Test
     void searchRoot() {
@@ -182,7 +171,6 @@ class SearchExecuteTest {
         assertMessages(upnpService, new RootDeviceHeader());
     }
 
-
     @Test
     void searchDefaults() {
         SendingSearch search = new SendingSearch(new MockUpnpService());
@@ -191,8 +179,7 @@ class SearchExecuteTest {
 
     @Test
     void searchInvalidST() {
-        assertThrows(IllegalArgumentException.class, () ->
-            new SendingSearch(new MockUpnpService(), new MXHeader()));
+        assertThrows(IllegalArgumentException.class, () -> new SendingSearch(new MockUpnpService(), new MXHeader()));
     }
 
     protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) {
@@ -203,7 +190,8 @@ class SearchExecuteTest {
     }
 
     protected void assertSearchMessage(UpnpMessage msg, UpnpHeader searchTarget) {
-        assertEquals(new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString());
+        assertEquals(new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString(),
+                msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString());
         assertEquals(new MXHeader().getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.MX).getString());
         assertEquals(searchTarget.getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString());
         assertEquals(new HostHeader().getString(), msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString());

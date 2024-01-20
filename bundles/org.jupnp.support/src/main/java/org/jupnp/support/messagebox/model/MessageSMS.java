@@ -38,7 +38,8 @@ public class MessageSMS extends Message {
         this(Message.DisplayType.MAXIMUM, receiveTime, receiver, sender, body);
     }
 
-    public MessageSMS(DisplayType displayType, DateTime receiveTime, NumberName receiver, NumberName sender, String body) {
+    public MessageSMS(DisplayType displayType, DateTime receiveTime, NumberName receiver, NumberName sender,
+            String body) {
         super(Message.Category.SMS, displayType);
         this.receiveTime = receiveTime;
         this.receiver = receiver;
@@ -68,5 +69,4 @@ public class MessageSMS extends Message {
         getSender().appendMessageElements(parent.createChild("Sender"));
         parent.createChild("Body").setContent(getBody());
     }
-    
 }

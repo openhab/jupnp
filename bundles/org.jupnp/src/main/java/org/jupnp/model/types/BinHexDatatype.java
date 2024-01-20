@@ -29,7 +29,8 @@ public class BinHexDatatype extends AbstractDatatype<byte[]> {
     }
 
     public byte[] valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             return HexBin.stringToBytes(s);
         } catch (Exception ex) {
@@ -39,12 +40,12 @@ public class BinHexDatatype extends AbstractDatatype<byte[]> {
 
     @Override
     public String getString(byte[] value) throws InvalidValueException {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         try {
             return HexBin.bytesToString(value);
         } catch (Exception ex) {
             throw new InvalidValueException(ex.getMessage(), ex);
         }
     }
-
 }

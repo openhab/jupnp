@@ -68,8 +68,8 @@ public abstract class Browse extends ActionCallback {
     /**
      * @param maxResults Can be <code>null</code>, then {@link #getDefaultMaxResults()} is used.
      */
-    public Browse(Service<?, ?> service, String objectID, BrowseFlag flag,
-                                String filter, long firstResult, Long maxResults, SortCriterion... orderBy) {
+    public Browse(Service<?, ?> service, String objectID, BrowseFlag flag, String filter, long firstResult,
+            Long maxResults, SortCriterion... orderBy) {
 
         super(new ActionInvocation<>(service.getAction("Browse")));
 
@@ -80,8 +80,7 @@ public abstract class Browse extends ActionCallback {
         getActionInvocation().setInput("Filter", filter);
         getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(firstResult));
         getActionInvocation().setInput("RequestedCount",
-                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
-        );
+                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults));
         getActionInvocation().setInput("SortCriteria", SortCriterion.toString(orderBy));
     }
 
@@ -94,12 +93,10 @@ public abstract class Browse extends ActionCallback {
     public void success(ActionInvocation invocation) {
         logger.debug("Successful browse action, reading output argument values");
 
-        BrowseResult result = new BrowseResult(
-                invocation.getOutput("Result").getValue().toString(),
+        BrowseResult result = new BrowseResult(invocation.getOutput("Result").getValue().toString(),
                 (UnsignedIntegerFourBytes) invocation.getOutput("NumberReturned").getValue(),
                 (UnsignedIntegerFourBytes) invocation.getOutput("TotalMatches").getValue(),
-                (UnsignedIntegerFourBytes) invocation.getOutput("UpdateID").getValue()
-        );
+                (UnsignedIntegerFourBytes) invocation.getOutput("UpdateID").getValue());
 
         boolean proceed = receivedRaw(invocation, result);
 
@@ -114,8 +111,7 @@ public abstract class Browse extends ActionCallback {
 
             } catch (Exception ex) {
                 invocation.setFailure(
-                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex)
-                );
+                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex));
                 failure(invocation, null);
             }
 
@@ -139,6 +135,6 @@ public abstract class Browse extends ActionCallback {
     }
 
     public abstract void received(ActionInvocation<?> actionInvocation, DIDLContent didl);
-    public abstract void updateStatus(Status status);
 
+    public abstract void updateStatus(Status status);
 }

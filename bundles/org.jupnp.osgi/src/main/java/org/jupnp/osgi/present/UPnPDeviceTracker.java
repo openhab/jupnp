@@ -77,7 +77,7 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     public UPnPDeviceTracker(BundleContext context, UpnpService upnpService, Filter filter) {
         super(context, filter, null);
-		log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "<init>", context, upnpService, filter);
+        log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "<init>", context, upnpService, filter);
         this.upnpService = upnpService;
     }
 
@@ -103,13 +103,8 @@ class UPnPDeviceTracker extends ServiceTracker {
                 if (names != null) {
                     for (String name : names) {
                         UPnPStateVariable variable = action.getStateVariable(name);
-                        ActionArgument<LocalService<DataAdapter>> argument =
-                                new ActionArgument<>(
-                                        name,
-                                        variable.getName(),
-                                        ActionArgument.Direction.IN,
-                                        false
-                                );
+                        ActionArgument<LocalService<DataAdapter>> argument = new ActionArgument<>(name,
+                                variable.getName(), ActionArgument.Direction.IN, false);
                         list.add(argument);
                     }
                 }
@@ -118,21 +113,14 @@ class UPnPDeviceTracker extends ServiceTracker {
                 if (names != null) {
                     for (String name : names) {
                         UPnPStateVariable variable = action.getStateVariable(name);
-                        ActionArgument<LocalService<DataAdapter>> argument =
-                                new ActionArgument<>(
-                                        name,
-                                        variable.getName(),
-                                        ActionArgument.Direction.OUT,
-                                        false
-                                );
+                        ActionArgument<LocalService<DataAdapter>> argument = new ActionArgument<>(name,
+                                variable.getName(), ActionArgument.Direction.OUT, false);
                         list.add(argument);
                     }
                 }
 
-                Action<LocalService<DataAdapter>> local = new Action<>(
-                        action.getName(),
-                        list.toArray(new ActionArgument[list.size()])
-                );
+                Action<LocalService<DataAdapter>> local = new Action<>(action.getName(),
+                        list.toArray(new ActionArgument[list.size()]));
 
                 executors.put(local, new UPnPActionExecutor(action));
             }
@@ -141,18 +129,16 @@ class UPnPDeviceTracker extends ServiceTracker {
         return executors;
     }
 
-    private Map<StateVariable<LocalService<DataAdapter>>, StateVariableAccessor> createStateVariableAccessors(UPnPStateVariable[] variables) {
+    private Map<StateVariable<LocalService<DataAdapter>>, StateVariableAccessor> createStateVariableAccessors(
+            UPnPStateVariable[] variables) {
         Map<StateVariable<LocalService<DataAdapter>>, StateVariableAccessor> map = new HashMap<>();
 
         if (variables != null) {
             for (UPnPStateVariable variable : variables) {
 
                 Datatype<?> dataType = Datatype.Builtin.getByDescriptorName(variable.getUPnPDataType()).getDatatype();
-                StateVariable<LocalService<DataAdapter>> local = new StateVariable<>(
-                        variable.getName(),
-                        new StateVariableTypeDetails(dataType),
-                        new StateVariableEventDetails(variable.sendsEvents())
-                );
+                StateVariable<LocalService<DataAdapter>> local = new StateVariable<>(variable.getName(),
+                        new StateVariableTypeDetails(dataType), new StateVariableEventDetails(variable.sendsEvents()));
                 if (variable instanceof UPnPLocalStateVariable) {
                     map.put(local, new UPnPLocalStateVariableAccessor((UPnPLocalStateVariable) variable));
                 } else {
@@ -162,7 +148,6 @@ class UPnPDeviceTracker extends ServiceTracker {
         }
 
         return map;
-
     }
 
     private Set<Class<?>> createStringConvertibleTypes() {
@@ -181,23 +166,20 @@ class UPnPDeviceTracker extends ServiceTracker {
         return set;
     }
 
-    private LocalService<DataAdapter>[] createServices(UPnPService[] services) throws InvalidValueException, ValidationException {
+    private LocalService<DataAdapter>[] createServices(UPnPService[] services)
+            throws InvalidValueException, ValidationException {
         List<LocalService<DataAdapter>> list = null;
 
         if (services != null) {
             list = new ArrayList<>();
             for (UPnPService service : services) {
-                UPnPLocalServiceImpl<DataAdapter> local =
-                        new UPnPLocalServiceImpl<DataAdapter>(
-                                ServiceType.valueOf(service.getType()),
-                                ServiceId.valueOf(service.getId()),
-                                (Map) createActionExecutors(service.getActions()),
-                                (Map) createStateVariableAccessors(service.getStateVariables()),
-                                (Set) createStringConvertibleTypes(),
-                                false
-                        );
+                UPnPLocalServiceImpl<DataAdapter> local = new UPnPLocalServiceImpl<DataAdapter>(
+                        ServiceType.valueOf(service.getType()), ServiceId.valueOf(service.getId()),
+                        (Map) createActionExecutors(service.getActions()),
+                        (Map) createStateVariableAccessors(service.getStateVariables()),
+                        (Set) createStringConvertibleTypes(), false);
 
-                //local.setManager(new UPnPServiceManager<>(local));
+                // local.setManager(new UPnPServiceManager<>(local));
                 local.setManager(new DefaultServiceManager<>(local, DataAdapter.class));
 
                 list.add(local);
@@ -215,14 +197,8 @@ class UPnPDeviceTracker extends ServiceTracker {
             for (UPnPIcon icon : icons) {
                 InputStream in = icon.getInputStream();
                 if (in != null) {
-                    Icon local =
-                            new Icon(icon.getMimeType(),
-                                     icon.getWidth(),
-                                     icon.getHeight(),
-                                     icon.getDepth(),
-                                     UUID.randomUUID().toString(),
-                                     in
-                            );
+                    Icon local = new Icon(icon.getMimeType(), icon.getWidth(), icon.getHeight(), icon.getDepth(),
+                            UUID.randomUUID().toString(), in);
                     list.add(local);
                 }
             }
@@ -230,7 +206,6 @@ class UPnPDeviceTracker extends ServiceTracker {
 
         return (list != null) ? list.toArray(new Icon[list.size()]) : null;
     }
-
 
     private String getSafeString(Object object) {
         return (object != null) ? object.toString() : null;
@@ -242,31 +217,20 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     private LocalDevice createDevice(UPnPDevice in) throws ValidationException, IOException, URISyntaxException {
         Dictionary<?, ?> descriptions = in.getDescriptions(null);
-        DeviceIdentity identity =
-                new DeviceIdentity(
-                        new UDN(getSafeString(descriptions.get(UPnPDevice.UDN)))
-                );
+        DeviceIdentity identity = new DeviceIdentity(new UDN(getSafeString(descriptions.get(UPnPDevice.UDN))));
 
-        DeviceType type =
-                DeviceType.valueOf(getSafeString(descriptions.get(UPnPDevice.TYPE)));
+        DeviceType type = DeviceType.valueOf(getSafeString(descriptions.get(UPnPDevice.TYPE)));
 
-        DeviceDetails details =
-                new DeviceDetails(
-                        getSafeString(descriptions.get(UPnPDevice.FRIENDLY_NAME)),
-                        new ManufacturerDetails(
-                                getSafeString(descriptions.get(UPnPDevice.MANUFACTURER)),
-                                getSafeURI(descriptions.get(UPnPDevice.MANUFACTURER_URL))
-                        ),
-                        new ModelDetails(
-                                getSafeString(descriptions.get(UPnPDevice.MODEL_NAME)),
-                                getSafeString(descriptions.get(UPnPDevice.MODEL_DESCRIPTION)),
-                                getSafeString(descriptions.get(UPnPDevice.MODEL_NUMBER)),
-                                getSafeURI(descriptions.get(UPnPDevice.MODEL_URL))
-                        ),
-                        getSafeString(descriptions.get(UPnPDevice.SERIAL_NUMBER)),
-                        getSafeString(descriptions.get(UPnPDevice.UPC)),
-                        getSafeURI(descriptions.get(UPnPDevice.PRESENTATION_URL))
-                );
+        DeviceDetails details = new DeviceDetails(getSafeString(descriptions.get(UPnPDevice.FRIENDLY_NAME)),
+                new ManufacturerDetails(getSafeString(descriptions.get(UPnPDevice.MANUFACTURER)),
+                        getSafeURI(descriptions.get(UPnPDevice.MANUFACTURER_URL))),
+                new ModelDetails(getSafeString(descriptions.get(UPnPDevice.MODEL_NAME)),
+                        getSafeString(descriptions.get(UPnPDevice.MODEL_DESCRIPTION)),
+                        getSafeString(descriptions.get(UPnPDevice.MODEL_NUMBER)),
+                        getSafeURI(descriptions.get(UPnPDevice.MODEL_URL))),
+                getSafeString(descriptions.get(UPnPDevice.SERIAL_NUMBER)),
+                getSafeString(descriptions.get(UPnPDevice.UPC)),
+                getSafeURI(descriptions.get(UPnPDevice.PRESENTATION_URL)));
 
         Icon[] icons = createIcons(in.getIcons(null));
 
@@ -277,7 +241,7 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     @Override
     public Object addingService(ServiceReference reference) {
-		log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
+        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
         UPnPDevice device = (UPnPDevice) super.addingService(reference);
         log.trace(device.toString());
 
@@ -301,7 +265,7 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     @Override
     public void removedService(ServiceReference reference, Object device) {
-		log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, device);
+        log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, device);
 
         LocalDevice local = registrations.get(device);
         if (local != null) {
@@ -309,6 +273,4 @@ class UPnPDeviceTracker extends ServiceTracker {
             registrations.remove(device);
         }
     }
-
 }
-

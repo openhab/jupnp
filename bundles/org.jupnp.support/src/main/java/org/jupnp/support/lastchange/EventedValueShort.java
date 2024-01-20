@@ -15,9 +15,9 @@
 
 package org.jupnp.support.lastchange;
 
-import org.jupnp.model.types.Datatype;
-
 import java.util.Map;
+
+import org.jupnp.model.types.Datatype;
 
 /**
  * @author Christian Bauer - Initial Contribution

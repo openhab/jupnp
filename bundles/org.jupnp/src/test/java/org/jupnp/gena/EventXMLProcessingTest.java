@@ -25,6 +25,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.junit.jupiter.api.Test;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.gena.CancelReason;
@@ -37,10 +39,8 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
-import org.jupnp.data.SampleData;
 import org.jupnp.transport.impl.GENAEventProcessorImpl;
 import org.jupnp.transport.spi.GENAEventProcessor;
-import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -77,15 +77,12 @@ class EventXMLProcessingTest {
             }
 
             public void ended(CancelReason reason) {
-
             }
 
             public void established() {
-
             }
 
             public void eventReceived() {
-
             }
         };
 
@@ -158,12 +155,12 @@ class EventXMLProcessingTest {
 
         document1.removeChild(document1.getChildNodes().item(0));
         document2.removeChild(document2.getChildNodes().item(0));
-        
+
         return document1.isEqualNode(document2);
     }
 
     private boolean nodeListsEqual(NodeList childNodes1, NodeList childNodes2) {
-        
+
         // compare the two node sets
         for (int i = 0; i < childNodes1.getLength(); i++) {
             Node item1 = childNodes1.item(i);
@@ -184,5 +181,4 @@ class EventXMLProcessingTest {
 
         return true;
     }
-
 }

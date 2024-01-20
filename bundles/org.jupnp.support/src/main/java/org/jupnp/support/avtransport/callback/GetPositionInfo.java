@@ -42,5 +42,4 @@ public abstract class GetPositionInfo extends ActionCallback {
     }
 
     public abstract void received(ActionInvocation<?> invocation, PositionInfo positionInfo);
-
 }

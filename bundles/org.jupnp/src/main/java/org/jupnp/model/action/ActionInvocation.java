@@ -14,15 +14,15 @@
 
 package org.jupnp.model.action;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.ActionArgument;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.profile.ClientInfo;
 import org.jupnp.model.types.InvalidValueException;
-
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * The input, output, and failure values of an action invocation.
@@ -45,32 +45,24 @@ public class ActionInvocation<S extends Service> {
         this(action, null, null, null);
     }
 
-    public ActionInvocation(Action<S> action,
-                            ClientInfo clientInfo) {
+    public ActionInvocation(Action<S> action, ClientInfo clientInfo) {
         this(action, null, null, clientInfo);
     }
 
-    public ActionInvocation(Action<S> action,
-                            ActionArgumentValue<S>[] input) {
+    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input) {
         this(action, input, null, null);
     }
 
-    public ActionInvocation(Action<S> action,
-                            ActionArgumentValue<S>[] input,
-                            ClientInfo clientInfo) {
+    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input, ClientInfo clientInfo) {
         this(action, input, null, clientInfo);
     }
 
-    public ActionInvocation(Action<S> action,
-                            ActionArgumentValue<S>[] input,
-                            ActionArgumentValue<S>[] output) {
+    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input, ActionArgumentValue<S>[] output) {
         this(action, input, output, null);
     }
 
-    public ActionInvocation(Action<S> action,
-                            ActionArgumentValue<S>[] input,
-                            ActionArgumentValue<S>[] output,
-                            ClientInfo clientInfo) {
+    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input, ActionArgumentValue<S>[] output,
+            ClientInfo clientInfo) {
         if (action == null) {
             throw new IllegalArgumentException("Action can not be null");
         }
@@ -135,7 +127,8 @@ public class ActionInvocation<S extends Service> {
     }
 
     public void setInput(ActionArgumentValue<S>[] input) {
-        if (input == null) return;
+        if (input == null)
+            return;
         for (ActionArgumentValue<S> argumentValue : input) {
             this.input.put(argumentValue.getArgument().getName(), argumentValue);
         }
@@ -145,12 +138,13 @@ public class ActionInvocation<S extends Service> {
         setOutput(new ActionArgumentValue(getOutputArgument(argumentName), value));
     }
 
-    public void setOutput(ActionArgumentValue<S> value){
+    public void setOutput(ActionArgumentValue<S> value) {
         output.put(value.getArgument().getName(), value);
     }
 
     public void setOutput(ActionArgumentValue<S>[] output) {
-        if (output == null) return;
+        if (output == null)
+            return;
         for (ActionArgumentValue<S> argumentValue : output) {
             this.output.put(argumentValue.getArgument().getName(), argumentValue);
         }
@@ -158,13 +152,15 @@ public class ActionInvocation<S extends Service> {
 
     protected ActionArgument<S> getInputArgument(String name) {
         ActionArgument<S> argument = getAction().getInputArgument(name);
-        if (argument == null) throw new IllegalArgumentException("Argument not found: " + name);
+        if (argument == null)
+            throw new IllegalArgumentException("Argument not found: " + name);
         return argument;
     }
 
     protected ActionArgument<S> getOutputArgument(String name) {
         ActionArgument<S> argument = getAction().getOutputArgument(name);
-        if (argument == null) throw new IllegalArgumentException("Argument not found: " + name);
+        if (argument == null)
+            throw new IllegalArgumentException("Argument not found: " + name);
         return argument;
     }
 

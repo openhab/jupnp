@@ -14,6 +14,14 @@
 
 package org.jupnp.binding.xml;
 
+import static org.jupnp.binding.xml.Descriptor.Service.ATTRIBUTE;
+import static org.jupnp.binding.xml.Descriptor.Service.ELEMENT;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import org.jupnp.binding.staging.MutableAction;
 import org.jupnp.binding.staging.MutableActionArgument;
 import org.jupnp.binding.staging.MutableAllowedValueRange;
@@ -27,19 +35,11 @@ import org.jupnp.model.types.CustomDatatype;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.xml.SAXParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static org.jupnp.binding.xml.Descriptor.Service.ATTRIBUTE;
-import static org.jupnp.binding.xml.Descriptor.Service.ELEMENT;
 
 /**
  * Implementation based on JAXP SAX.
@@ -52,7 +52,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
     private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
     @Override
-    public <S extends Service> S describe(S undescribedService, String descriptorXml) throws DescriptorBindingException, ValidationException {
+    public <S extends Service> S describe(S undescribedService, String descriptorXml)
+            throws DescriptorBindingException, ValidationException {
 
         if (descriptorXml == null || descriptorXml.length() == 0) {
             throw new DescriptorBindingException("Null or empty descriptor");
@@ -69,15 +70,13 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
 
             new RootHandler(descriptor, parser);
 
-            parser.parse(
-                    new InputSource(
-                            // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML element, need to trim()
-                            new StringReader(descriptorXml.trim())
-                    )
-            );
+            parser.parse(new InputSource(
+                    // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML
+                    // element, need to trim()
+                    new StringReader(descriptorXml.trim())));
 
             // Build the immutable descriptor graph
-            return (S)descriptor.build(undescribedService.getDevice());
+            return (S) descriptor.build(undescribedService.getDevice());
 
         } catch (ValidationException ex) {
             throw ex;
@@ -203,11 +202,12 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 case direction:
                     String directionString = getCharacters();
                     try {
-                        getInstance().direction = ActionArgument.Direction.valueOf(directionString.toUpperCase(Locale.ENGLISH));
+                        getInstance().direction = ActionArgument.Direction
+                                .valueOf(directionString.toUpperCase(Locale.ENGLISH));
                     } catch (IllegalArgumentException ex) {
                         // TODO: UPNP VIOLATION: Pelco SpectraIV-IP uses illegal value INOUT
-                        SpecificationViolationReporter.report(
-                                "Invalid action argument direction, assuming 'IN': {}", directionString);
+                        SpecificationViolationReporter.report("Invalid action argument direction, assuming 'IN': {}",
+                                directionString);
                         getInstance().direction = ActionArgument.Direction.IN;
                     }
                     break;
@@ -240,9 +240,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 MutableStateVariable stateVariable = new MutableStateVariable();
 
                 String sendEventsAttributeValue = attributes.getValue(ATTRIBUTE.sendEvents.toString());
-                stateVariable.eventDetails = new StateVariableEventDetails(
-                        sendEventsAttributeValue != null && sendEventsAttributeValue.toUpperCase(Locale.ENGLISH).equals("YES")
-                );
+                stateVariable.eventDetails = new StateVariableEventDetails(sendEventsAttributeValue != null
+                        && sendEventsAttributeValue.toUpperCase(Locale.ENGLISH).equals("YES"));
 
                 getInstance().add(stateVariable);
                 new StateVariableHandler(stateVariable, this);
@@ -376,10 +375,12 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         }
 
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public void startElement(String uri, String localName, String qName, Attributes attributes)
+                throws SAXException {
             super.startElement(uri, localName, qName, attributes);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null) return;
+            if (el == null)
+                return;
             startElement(el, attributes);
         }
 
@@ -387,7 +388,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         public void endElement(String uri, String localName, String qName) throws SAXException {
             super.endElement(uri, localName, qName);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null) return;
+            if (el == null)
+                return;
             endElement(el);
         }
 
@@ -398,16 +400,13 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         }
 
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
-
         }
 
         public void endElement(ELEMENT element) throws SAXException {
-
         }
 
         public boolean isLastElement(ELEMENT element) {
             return false;
         }
     }
-
 }

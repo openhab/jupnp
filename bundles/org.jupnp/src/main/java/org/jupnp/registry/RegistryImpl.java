@@ -93,10 +93,7 @@ public class RegistryImpl implements Registry {
     }
 
     protected RegistryMaintainer createRegistryMaintainer() {
-        return new RegistryMaintainer(
-                this,
-                getConfiguration().getRegistryMaintenanceIntervalMillis()
-        );
+        return new RegistryMaintainer(this, getConfiguration().getRegistryMaintenanceIntervalMillis());
     }
 
     // #################################################################################################
@@ -134,13 +131,11 @@ public class RegistryImpl implements Registry {
         }
 
         for (final RegistryListener listener : getListeners()) {
-            getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            listener.remoteDeviceDiscoveryStarted(RegistryImpl.this, device);
-                        }
-                    }
-            );
+            getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+                public void run() {
+                    listener.remoteDeviceDiscoveryStarted(RegistryImpl.this, device);
+                }
+            });
         }
 
         return true;
@@ -148,13 +143,11 @@ public class RegistryImpl implements Registry {
 
     public void notifyDiscoveryFailure(final RemoteDevice device, final Exception ex) {
         for (final RegistryListener listener : getListeners()) {
-            getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            listener.remoteDeviceDiscoveryFailed(RegistryImpl.this, device, ex);
-                        }
-                    }
-            );
+            getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
+                public void run() {
+                    listener.remoteDeviceDiscoveryFailed(RegistryImpl.this, device, ex);
+                }
+            });
         }
     }
 
@@ -164,7 +157,7 @@ public class RegistryImpl implements Registry {
         remoteItemsLock.readLock().lock();
         try {
             localItemsLock.writeLock().lock();
-            try{
+            try {
                 localItems.add(localDevice);
             } finally {
                 localItemsLock.writeLock().unlock();
@@ -282,8 +275,10 @@ public class RegistryImpl implements Registry {
     public Device getDevice(UDN udn, boolean rootOnly) {
         Device device;
 
-        if ((device = getLocalDevice(udn, rootOnly)) != null) return device;
-        if ((device = getRemoteDevice(udn, rootOnly)) != null) return device;
+        if ((device = getLocalDevice(udn, rootOnly)) != null)
+            return device;
+        if ((device = getRemoteDevice(udn, rootOnly)) != null)
+            return device;
 
         return null;
     }
@@ -401,21 +396,23 @@ public class RegistryImpl implements Registry {
 
         // Note: Uses field access on resourceItems for performance reasons
 
-		for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-        	Resource resource = resourceItem.getItem();
-        	if (resource.matches(pathQuery)) {
+        for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+            Resource resource = resourceItem.getItem();
+            if (resource.matches(pathQuery)) {
                 return resource;
             }
         }
 
-        // TODO: UPNP VIOLATION: Fuppes on my ReadyNAS thinks it's a cool idea to add a slash at the end of the callback URI...
+        // TODO: UPNP VIOLATION: Fuppes on my ReadyNAS thinks it's a cool idea to add a slash at the end of the callback
+        // URI...
         // It also cuts off any query parameters in the callback URL - nice!
         if (pathQuery.getPath().endsWith("/")) {
-            URI pathQueryWithoutSlash = URI.create(pathQuery.toString().substring(0, pathQuery.toString().length() - 1));
+            URI pathQueryWithoutSlash = URI
+                    .create(pathQuery.toString().substring(0, pathQuery.toString().length() - 1));
 
- 			for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-            	Resource resource = resourceItem.getItem();
-            	if (resource.matches(pathQueryWithoutSlash)) {
+            for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
+                Resource resource = resourceItem.getItem();
+                if (resource.matches(pathQueryWithoutSlash)) {
                     return resource;
                 }
             }
@@ -556,14 +553,14 @@ public class RegistryImpl implements Registry {
     public void shutdown() {
         log.trace("Shutting down registry...");
 
-        synchronized(lock) {
+        synchronized (lock) {
             if (registryMaintainer != null)
                 registryMaintainer.stop();
         }
 
         // Final cleanup run to flush out pending executions which might
         // not have been caught by the maintainer before it stopped
-        synchronized(pendingExecutions) {
+        synchronized (pendingExecutions) {
             log.trace("Executing final pending operations on shutdown: {}", pendingExecutions.size());
             runPendingExecutions(false);
         }
@@ -596,7 +593,7 @@ public class RegistryImpl implements Registry {
     }
 
     public void pause() {
-        synchronized(lock) {
+        synchronized (lock) {
             if (registryMaintainer != null) {
                 log.trace("Pausing registry maintenance");
                 runPendingExecutions(true);
@@ -607,7 +604,7 @@ public class RegistryImpl implements Registry {
     }
 
     public void resume() {
-        synchronized(lock) {
+        synchronized (lock) {
             if (registryMaintainer == null) {
                 log.trace("Resuming registry maintenance");
                 remoteItemsLock.writeLock().lock();
@@ -631,7 +628,7 @@ public class RegistryImpl implements Registry {
     }
 
     public boolean isPaused() {
-        synchronized(lock) {
+        synchronized (lock) {
             return registryMaintainer == null;
         }
     }
@@ -651,14 +648,11 @@ public class RegistryImpl implements Registry {
                 it.remove();
             }
         }
-        
+
         // Let each resource do its own maintenance
-        synchronized(pendingExecutions) {
+        synchronized (pendingExecutions) {
             for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-                resourceItem.getItem().maintain(
-                        pendingExecutions,
-                        resourceItem.getExpirationDetails()
-                );
+                resourceItem.getItem().maintain(pendingExecutions, resourceItem.getExpirationDetails());
             }
         }
 
@@ -706,7 +700,8 @@ public class RegistryImpl implements Registry {
 
     public void printDebugLog() {
         if (log.isTraceEnabled()) {
-            log.trace("====================================    REMOTE   ================================================");
+            log.trace(
+                    "====================================    REMOTE   ================================================");
 
             remoteItemsLock.readLock().lock();
             try {
@@ -717,7 +712,8 @@ public class RegistryImpl implements Registry {
                 remoteItemsLock.readLock().unlock();
             }
 
-            log.trace("====================================    LOCAL    ================================================");
+            log.trace(
+                    "====================================    LOCAL    ================================================");
 
             localItemsLock.readLock().lock();
             try {
@@ -728,33 +724,34 @@ public class RegistryImpl implements Registry {
                 localItemsLock.readLock().unlock();
             }
 
-            log.trace("====================================  RESOURCES  ================================================");
+            log.trace(
+                    "====================================  RESOURCES  ================================================");
 
             for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
                 log.trace(resourceItem.toString());
             }
 
-            log.trace("=================================================================================================");
+            log.trace(
+                    "=================================================================================================");
 
         }
-
     }
-    
- 	@Override
-	public void registerPendingRemoteSubscription(RemoteGENASubscription subscription) {
-		synchronized (pendingSubscriptionsLock) {
+
+    @Override
+    public void registerPendingRemoteSubscription(RemoteGENASubscription subscription) {
+        synchronized (pendingSubscriptionsLock) {
             pendingSubscriptionsLock.add(subscription);
         }
-	}
-	
-	@Override
-	public void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription) {
+    }
+
+    @Override
+    public void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription) {
         synchronized (pendingSubscriptionsLock) {
-            if(pendingSubscriptionsLock.remove(subscription)) {
+            if (pendingSubscriptionsLock.remove(subscription)) {
                 pendingSubscriptionsLock.notifyAll();
             }
         }
-	}
+    }
 
     @Override
     public RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId) {
@@ -766,7 +763,7 @@ public class RegistryImpl implements Registry {
                 }
                 if (!pendingSubscriptionsLock.isEmpty()) {
                     try {
-                        log.trace("Subscription not found, waiting for pending subscription procedure to terminate." );
+                        log.trace("Subscription not found, waiting for pending subscription procedure to terminate.");
                         pendingSubscriptionsLock.wait();
                     } catch (InterruptedException e) {
                     }
@@ -775,5 +772,4 @@ public class RegistryImpl implements Registry {
         }
         return null;
     }
-
 }

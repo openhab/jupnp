@@ -14,7 +14,6 @@
 
 package org.jupnp.model;
 
-
 import java.util.List;
 
 /**

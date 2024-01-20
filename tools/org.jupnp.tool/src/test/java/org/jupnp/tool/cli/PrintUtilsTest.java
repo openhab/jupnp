@@ -14,10 +14,11 @@
 
 package org.jupnp.tool.cli;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -27,30 +28,29 @@ import org.junit.jupiter.api.Test;
  */
 class PrintUtilsTest {
 
-	@Test
-	void testPrintTable() {
-		List<String[]> table = new ArrayList<>();
-		table.add(new String[] { "IP", "Model", "SerialNumber" });
-		table.add(new String[] { "==", "=====", "============" });
-		table.add(new String[] { "192.168.2.1", "QIVICON", "1234567890" });
-		table.add(new String[] { "192.168.2.2", "FRITZ!Box 7490", "-" });
-		table.add(new String[] { "192.168.2.3", "DCS-932L", "-" });
-		table.add(new String[] { "192.168.2.4", "Philips hue bridge 2012",
-				"123456789012" });
-		table.add(new String[] { "192.168.2.5", "Sonos PLAY:3", "-" });
-		String s = PrintUtils.printTable(table, 4);
-		// System.out.println(s);
-		
-		c(s, "IP             Model                      SerialNumber    ");
-		c(s, "==             =====                      ============    ");
-		c(s, "192.168.2.1    QIVICON                    1234567890      ");
-		c(s, "192.168.2.2    FRITZ!Box 7490             -               ");
-		c(s, "192.168.2.3    DCS-932L                   -               ");
-		c(s, "192.168.2.4    Philips hue bridge 2012    123456789012    ");
-		c(s, "192.168.2.5    Sonos PLAY:3               -               ");
-	}
+    @Test
+    void testPrintTable() {
+        List<String[]> table = new ArrayList<>();
+        table.add(new String[] { "IP", "Model", "SerialNumber" });
+        table.add(new String[] { "==", "=====", "============" });
+        table.add(new String[] { "192.168.2.1", "QIVICON", "1234567890" });
+        table.add(new String[] { "192.168.2.2", "FRITZ!Box 7490", "-" });
+        table.add(new String[] { "192.168.2.3", "DCS-932L", "-" });
+        table.add(new String[] { "192.168.2.4", "Philips hue bridge 2012", "123456789012" });
+        table.add(new String[] { "192.168.2.5", "Sonos PLAY:3", "-" });
+        String s = PrintUtils.printTable(table, 4);
+        // System.out.println(s);
 
-	private void c(String s, String mustContain) {
-		assertTrue(s.contains(mustContain));
-	}
+        c(s, "IP             Model                      SerialNumber    ");
+        c(s, "==             =====                      ============    ");
+        c(s, "192.168.2.1    QIVICON                    1234567890      ");
+        c(s, "192.168.2.2    FRITZ!Box 7490             -               ");
+        c(s, "192.168.2.3    DCS-932L                   -               ");
+        c(s, "192.168.2.4    Philips hue bridge 2012    123456789012    ");
+        c(s, "192.168.2.5    Sonos PLAY:3               -               ");
+    }
+
+    private void c(String s, String mustContain) {
+        assertTrue(s.contains(mustContain));
+    }
 }

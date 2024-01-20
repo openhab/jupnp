@@ -14,15 +14,15 @@
 
 package org.jupnp.model.resource;
 
-import org.jupnp.model.meta.Icon;
-
 import java.net.URI;
+
+import org.jupnp.model.meta.Icon;
 
 /**
  * @author Christian Bauer
  */
 public class IconResource extends Resource<Icon> {
-    
+
     public IconResource(URI localURI, Icon model) {
         super(localURI, model);
     }

@@ -101,7 +101,7 @@ public class Iterators {
                 throw new IllegalStateException("Call next() first");
             if (removedCurrent)
                 throw new IllegalStateException("Already removed current, call next()");
-            synchronizedRemove(nextIndex-1);
+            synchronizedRemove(nextIndex - 1);
             removedCurrent = true;
         }
 
@@ -111,5 +111,4 @@ public class Iterators {
          */
         abstract protected void synchronizedRemove(int index);
     }
-
 }

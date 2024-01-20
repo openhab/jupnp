@@ -73,8 +73,7 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
                     log.info("Interrupted protocol '{}'", getClass().getSimpleName(), ex);
                 } else {
                     throw new RuntimeException(
-                        "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex
-                    );
+                            "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex);
                 }
             }
         }
@@ -102,5 +101,4 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
     public String toString() {
         return "(" + getClass().getSimpleName() + ")";
     }
-
 }

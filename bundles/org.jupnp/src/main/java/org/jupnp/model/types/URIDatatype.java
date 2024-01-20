@@ -26,12 +26,12 @@ public class URIDatatype extends AbstractDatatype<URI> {
     }
 
     public URI valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             return new URI(s);
         } catch (URISyntaxException ex) {
             throw new InvalidValueException(ex.getMessage(), ex);
         }
     }
-
 }

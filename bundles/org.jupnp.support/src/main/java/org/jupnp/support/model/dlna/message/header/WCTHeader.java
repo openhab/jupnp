@@ -15,6 +15,7 @@
 package org.jupnp.support.model.dlna.message.header;
 
 import java.util.regex.Pattern;
+
 import org.jupnp.model.message.header.InvalidHeaderException;
 
 /**
@@ -24,7 +25,7 @@ import org.jupnp.model.message.header.InvalidHeaderException;
 public class WCTHeader extends DLNAHeader<Boolean> {
 
     private static final Pattern pattern = Pattern.compile("^[01]{1}$", Pattern.CASE_INSENSITIVE);
-    
+
     public WCTHeader() {
         setValue(false);
     }
@@ -32,7 +33,7 @@ public class WCTHeader extends DLNAHeader<Boolean> {
     @Override
     public void setString(String s) {
         if (pattern.matcher(s).matches()) {
-            setValue( s.equals("1"));
+            setValue(s.equals("1"));
             return;
         }
         throw new InvalidHeaderException("Invalid SCID header value: " + s);
@@ -40,6 +41,6 @@ public class WCTHeader extends DLNAHeader<Boolean> {
 
     @Override
     public String getString() {
-        return getValue() ? "1":"0";
+        return getValue() ? "1" : "0";
     }
 }

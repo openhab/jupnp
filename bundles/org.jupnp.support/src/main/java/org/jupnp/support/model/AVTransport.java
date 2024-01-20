@@ -35,7 +35,7 @@ public class AVTransport {
     protected TransportSettings transportSettings;
 
     public AVTransport(UnsignedIntegerFourBytes instanceID, LastChange lastChange, StorageMedium possiblePlayMedium) {
-        this(instanceID, lastChange, new StorageMedium[]{possiblePlayMedium});
+        this(instanceID, lastChange, new StorageMedium[] { possiblePlayMedium });
     }
 
     public AVTransport(UnsignedIntegerFourBytes instanceID, LastChange lastChange, StorageMedium[] possiblePlayMedia) {
@@ -95,5 +95,4 @@ public class AVTransport {
     public void setTransportSettings(TransportSettings transportSettings) {
         this.transportSettings = transportSettings;
     }
-
 }

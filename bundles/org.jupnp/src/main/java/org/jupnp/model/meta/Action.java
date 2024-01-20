@@ -42,7 +42,7 @@ public class Action<S extends Service> implements Validatable {
         this.name = name;
         if (arguments != null) {
 
-            List<ActionArgument> inputList= new ArrayList();
+            List<ActionArgument> inputList = new ArrayList();
             List<ActionArgument> outputList = new ArrayList();
 
             for (ActionArgument argument : arguments) {
@@ -86,12 +86,14 @@ public class Action<S extends Service> implements Validatable {
     }
 
     public ActionArgument<S> getFirstInputArgument() {
-        if (!hasInputArguments()) throw new IllegalStateException("No input arguments: " + this);
+        if (!hasInputArguments())
+            throw new IllegalStateException("No input arguments: " + this);
         return getInputArguments()[0];
     }
 
     public ActionArgument<S> getFirstOutputArgument() {
-        if (!hasOutputArguments()) throw new IllegalStateException("No output arguments: " + this);
+        if (!hasOutputArguments())
+            throw new IllegalStateException("No output arguments: " + this);
         return getOutputArguments()[0];
     }
 
@@ -101,7 +103,8 @@ public class Action<S extends Service> implements Validatable {
 
     public ActionArgument<S> getInputArgument(String name) {
         for (ActionArgument<S> arg : getInputArguments()) {
-            if (arg.isNameOrAlias(name)) return arg;
+            if (arg.isNameOrAlias(name))
+                return arg;
         }
         return null;
     }
@@ -112,7 +115,8 @@ public class Action<S extends Service> implements Validatable {
 
     public ActionArgument<S> getOutputArgument(String name) {
         for (ActionArgument<S> arg : getOutputArguments()) {
-            if (arg.getName().equals(name)) return arg;
+            if (arg.getName().equals(name))
+                return arg;
         }
         return null;
     }
@@ -125,37 +129,28 @@ public class Action<S extends Service> implements Validatable {
         return getOutputArguments() != null && getOutputArguments().length > 0;
     }
 
-
     @Override
     public String toString() {
-        return "(" + getClass().getSimpleName() +
-                ", Arguments: " + (getArguments() != null ? getArguments().length : "NO ARGS") +
-                ") " + getName();
+        return "(" + getClass().getSimpleName() + ", Arguments: "
+                + (getArguments() != null ? getArguments().length : "NO ARGS") + ") " + getName();
     }
 
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList();
 
         if (getName() == null || getName().length() == 0) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "name",
-                    "Action without name of: " + getService()
-            ));
+            errors.add(new ValidationError(getClass(), "name", "Action without name of: " + getService()));
         } else if (!ModelUtil.isValidUDAName(getName())) {
-            SpecificationViolationReporter.report(getService().getDevice(),
-                    "Invalid action name: {}", this);
+            SpecificationViolationReporter.report(getService().getDevice(), "Invalid action name: {}", this);
         }
 
         for (ActionArgument actionArgument : getArguments()) {
             // Check argument relatedStateVariable in service state table
 
             if (getService().getStateVariable(actionArgument.getRelatedStateVariableName()) == null) {
-                errors.add(new ValidationError(
-                        getClass(),
-                        "arguments",
-                        "Action argument references an unknown state variable: " + actionArgument.getRelatedStateVariableName()
-                ));
+                errors.add(new ValidationError(getClass(), "arguments",
+                        "Action argument references an unknown state variable: "
+                                + actionArgument.getRelatedStateVariableName()));
             }
         }
 
@@ -166,12 +161,12 @@ public class Action<S extends Service> implements Validatable {
             // Check retval
             if (actionArgument.isReturnValue()) {
                 if (actionArgument.getDirection() == ActionArgument.Direction.IN) {
-					SpecificationViolationReporter.report(getService().getDevice(),
-							"Input argument can not have <retval/>");
+                    SpecificationViolationReporter.report(getService().getDevice(),
+                            "Input argument can not have <retval/>");
                 } else {
                     if (retValueArgument != null) {
-						SpecificationViolationReporter.report(getService().getDevice(),
-								"Only one argument of action '{}' can be <retval/>", getName());
+                        SpecificationViolationReporter.report(getService().getDevice(),
+                                "Only one argument of action '{}' can be <retval/>", getName());
                     }
                     retValueArgument = actionArgument;
                     retValueArgumentIndex = i;
@@ -183,9 +178,9 @@ public class Action<S extends Service> implements Validatable {
             for (int j = 0; j < retValueArgumentIndex; j++) {
                 ActionArgument a = getArguments()[j];
                 if (a.getDirection() == ActionArgument.Direction.OUT) {
-					SpecificationViolationReporter.report(getService().getDevice(),
-							"Argument '{}' of action '{}' is <retval/> but not the first OUT argument",
-							retValueArgument.getName(), getName());
+                    SpecificationViolationReporter.report(getService().getDevice(),
+                            "Argument '{}' of action '{}' is <retval/> but not the first OUT argument",
+                            retValueArgument.getName(), getName());
                 }
             }
         }
@@ -204,10 +199,6 @@ public class Action<S extends Service> implements Validatable {
             actionArgumentsDupe[i] = arg.deepCopy();
         }
 
-        return new Action<S>(
-                getName(),
-                actionArgumentsDupe
-        );
+        return new Action<S>(getName(), actionArgumentsDupe);
     }
-
 }

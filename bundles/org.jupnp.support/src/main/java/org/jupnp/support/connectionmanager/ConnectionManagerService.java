@@ -45,13 +45,9 @@ import org.slf4j.LoggerFactory;
  * @author Alessio Gaeta
  * @author Amit Kumar Mondal - Code Refactoring
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("ConnectionManager"),
-        serviceType = @UpnpServiceType(value = "ConnectionManager", version = 1),
-        stringConvertibleTypes = {ProtocolInfo.class, ProtocolInfos.class, ServiceReference.class}
-)
-@UpnpStateVariables({
-        @UpnpStateVariable(name = "SourceProtocolInfo", datatype = "string"),
+@UpnpService(serviceId = @UpnpServiceId("ConnectionManager"), serviceType = @UpnpServiceType(value = "ConnectionManager", version = 1), stringConvertibleTypes = {
+        ProtocolInfo.class, ProtocolInfos.class, ServiceReference.class })
+@UpnpStateVariables({ @UpnpStateVariable(name = "SourceProtocolInfo", datatype = "string"),
         @UpnpStateVariable(name = "SinkProtocolInfo", datatype = "string"),
         @UpnpStateVariable(name = "CurrentConnectionIDs", datatype = "string"),
         @UpnpStateVariable(name = "A_ARG_TYPE_ConnectionStatus", allowedValuesEnum = ConnectionInfo.Status.class, sendEvents = false),
@@ -60,8 +56,7 @@ import org.slf4j.LoggerFactory;
         @UpnpStateVariable(name = "A_ARG_TYPE_ProtocolInfo", datatype = "string", sendEvents = false),
         @UpnpStateVariable(name = "A_ARG_TYPE_ConnectionID", datatype = "i4", sendEvents = false),
         @UpnpStateVariable(name = "A_ARG_TYPE_AVTransportID", datatype = "i4", sendEvents = false),
-        @UpnpStateVariable(name = "A_ARG_TYPE_RcsID", datatype = "i4", sendEvents = false)
-})
+        @UpnpStateVariable(name = "A_ARG_TYPE_RcsID", datatype = "i4", sendEvents = false) })
 public class ConnectionManagerService {
 
     private final Logger logger = LoggerFactory.getLogger(ConnectionManagerService.class.getName());
@@ -89,16 +84,15 @@ public class ConnectionManagerService {
         this(null, new ProtocolInfos(), new ProtocolInfos(), activeConnections);
     }
 
-    public ConnectionManagerService(ProtocolInfos sourceProtocolInfo, ProtocolInfos sinkProtocolInfo, ConnectionInfo... activeConnections) {
+    public ConnectionManagerService(ProtocolInfos sourceProtocolInfo, ProtocolInfos sinkProtocolInfo,
+            ConnectionInfo... activeConnections) {
         this(null, sourceProtocolInfo, sinkProtocolInfo, activeConnections);
     }
 
-    public ConnectionManagerService(PropertyChangeSupport propertyChangeSupport,
-                                            ProtocolInfos sourceProtocolInfo, ProtocolInfos sinkProtocolInfo,
-                                            ConnectionInfo... activeConnections) {
-        this.propertyChangeSupport =
-                propertyChangeSupport == null
-                        ? new PropertyChangeSupport(this) : propertyChangeSupport;
+    public ConnectionManagerService(PropertyChangeSupport propertyChangeSupport, ProtocolInfos sourceProtocolInfo,
+            ProtocolInfos sinkProtocolInfo, ConnectionInfo... activeConnections) {
+        this.propertyChangeSupport = propertyChangeSupport == null ? new PropertyChangeSupport(this)
+                : propertyChangeSupport;
 
         this.sourceProtocolInfo = sourceProtocolInfo;
         this.sinkProtocolInfo = sinkProtocolInfo;
@@ -112,31 +106,25 @@ public class ConnectionManagerService {
         return propertyChangeSupport;
     }
 
-    @UpnpAction(out = {
-            @UpnpOutputArgument(name = "RcsID", getterName = "getRcsID"),
+    @UpnpAction(out = { @UpnpOutputArgument(name = "RcsID", getterName = "getRcsID"),
             @UpnpOutputArgument(name = "AVTransportID", getterName = "getAvTransportID"),
             @UpnpOutputArgument(name = "ProtocolInfo", getterName = "getProtocolInfo"),
             @UpnpOutputArgument(name = "PeerConnectionManager", stateVariable = "A_ARG_TYPE_ConnectionManager", getterName = "getPeerConnectionManager"),
             @UpnpOutputArgument(name = "PeerConnectionID", stateVariable = "A_ARG_TYPE_ConnectionID", getterName = "getPeerConnectionID"),
             @UpnpOutputArgument(name = "Direction", getterName = "getDirection"),
-            @UpnpOutputArgument(name = "Status", stateVariable = "A_ARG_TYPE_ConnectionStatus", getterName = "getConnectionStatus")
-    })
-    public synchronized ConnectionInfo getCurrentConnectionInfo(@UpnpInputArgument(name = "ConnectionID") int connectionId)
-            throws ActionException {
+            @UpnpOutputArgument(name = "Status", stateVariable = "A_ARG_TYPE_ConnectionStatus", getterName = "getConnectionStatus") })
+    public synchronized ConnectionInfo getCurrentConnectionInfo(
+            @UpnpInputArgument(name = "ConnectionID") int connectionId) throws ActionException {
         logger.debug("Getting connection information of connection ID: {}", connectionId);
         ConnectionInfo info;
         if ((info = activeConnections.get(connectionId)) == null) {
-            throw new ConnectionManagerException(
-                    ConnectionManagerErrorCode.INVALID_CONNECTION_REFERENCE,
-                    "Non-active connection ID: " + connectionId
-            );
+            throw new ConnectionManagerException(ConnectionManagerErrorCode.INVALID_CONNECTION_REFERENCE,
+                    "Non-active connection ID: " + connectionId);
         }
         return info;
     }
 
-    @UpnpAction(out = {
-            @UpnpOutputArgument(name = "ConnectionIDs")
-    })
+    @UpnpAction(out = { @UpnpOutputArgument(name = "ConnectionIDs") })
     public synchronized CSV<UnsignedIntegerFourBytes> getCurrentConnectionIDs() {
         CSV<UnsignedIntegerFourBytes> csv = new CSVUnsignedIntegerFourBytes();
         for (Integer connectionID : activeConnections.keySet()) {
@@ -148,8 +136,7 @@ public class ConnectionManagerService {
 
     @UpnpAction(out = {
             @UpnpOutputArgument(name = "Source", stateVariable = "SourceProtocolInfo", getterName = "getSourceProtocolInfo"),
-            @UpnpOutputArgument(name = "Sink", stateVariable = "SinkProtocolInfo", getterName = "getSinkProtocolInfo")
-    })
+            @UpnpOutputArgument(name = "Sink", stateVariable = "SinkProtocolInfo", getterName = "getSinkProtocolInfo") })
     public synchronized void getProtocolInfo() throws ActionException {
         // NOOP
     }

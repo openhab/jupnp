@@ -26,7 +26,7 @@ import org.jupnp.util.SpecificationViolationReporter;
 /**
  * Describes a single action argument, either input or output.
  * <p>
- * No, I haven't  figured out so far what the "return value" thingy is good for.
+ * No, I haven't figured out so far what the "return value" thingy is good for.
  * </p>
  *
  * @author Christian Bauer
@@ -35,14 +35,15 @@ import org.jupnp.util.SpecificationViolationReporter;
 public class ActionArgument<S extends Service> implements Validatable {
 
     public enum Direction {
-        IN, OUT
+        IN,
+        OUT
     }
 
     final private String name;
     final private String[] aliases;
     final private String relatedStateVariableName;
     final private Direction direction;
-    final private boolean returnValue;     // TODO: What is this stuff good for anyway?
+    final private boolean returnValue; // TODO: What is this stuff good for anyway?
 
     // Package mutable state
     private Action<S> action;
@@ -54,12 +55,13 @@ public class ActionArgument<S extends Service> implements Validatable {
     public ActionArgument(String name, String[] aliases, String relatedStateVariableName, Direction direction) {
         this(name, aliases, relatedStateVariableName, direction, false);
     }
-    
+
     public ActionArgument(String name, String relatedStateVariableName, Direction direction, boolean returnValue) {
         this(name, new String[0], relatedStateVariableName, direction, returnValue);
     }
 
-    public ActionArgument(String name, String[] aliases, String relatedStateVariableName, Direction direction, boolean returnValue) {
+    public ActionArgument(String name, String[] aliases, String relatedStateVariableName, Direction direction,
+            boolean returnValue) {
         this.name = name;
         this.aliases = aliases;
         this.relatedStateVariableName = relatedStateVariableName;
@@ -76,9 +78,11 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public boolean isNameOrAlias(String name) {
-        if (getName().equalsIgnoreCase(name)) return true;
+        if (getName().equalsIgnoreCase(name))
+            return true;
         for (String alias : aliases) {
-            if (alias.equalsIgnoreCase(name)) return true;
+            if (alias.equalsIgnoreCase(name))
+                return true;
         }
         return false;
     }
@@ -113,46 +117,31 @@ public class ActionArgument<S extends Service> implements Validatable {
         List<ValidationError> errors = new ArrayList();
 
         if (getName() == null || getName().length() == 0) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "name",
-                    "Argument without name of: " + getAction()
-            ));
+            errors.add(new ValidationError(getClass(), "name", "Argument without name of: " + getAction()));
         } else if (!ModelUtil.isValidUDAName(getName())) {
-            SpecificationViolationReporter.report(getAction().getService().getDevice(),
-                    "Invalid argument name: {}", this);
+            SpecificationViolationReporter.report(getAction().getService().getDevice(), "Invalid argument name: {}",
+                    this);
         } else if (getName().length() > 32) {
             SpecificationViolationReporter.report(getAction().getService().getDevice(),
                     "Argument name should be less than 32 characters: {}", this);
         }
 
         if (getDirection() == null) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "direction",
-                    "Argument '"+getName()+"' requires a direction, either IN or OUT"
-            ));
+            errors.add(new ValidationError(getClass(), "direction",
+                    "Argument '" + getName() + "' requires a direction, either IN or OUT"));
         }
 
         if (isReturnValue() && getDirection() != ActionArgument.Direction.OUT) {
-            errors.add(new ValidationError(
-                    getClass(),
-                    "direction",
-                    "Return value argument '" + getName() + "' must be direction OUT"
-            ));
+            errors.add(new ValidationError(getClass(), "direction",
+                    "Return value argument '" + getName() + "' must be direction OUT"));
         }
 
         return errors;
     }
 
     public ActionArgument<S> deepCopy() {
-        return new ActionArgument<S>(
-                getName(),
-                getAliases(),
-                getRelatedStateVariableName(),
-                getDirection(),
-                isReturnValue()
-        );
+        return new ActionArgument<S>(getName(), getAliases(), getRelatedStateVariableName(), getDirection(),
+                isReturnValue());
     }
 
     @Override

@@ -60,5 +60,4 @@ public interface StreamClientConfiguration {
      * @return The HTTP user agent value.
      */
     public String getUserAgentValue(int majorVersion, int minorVersion);
-
 }

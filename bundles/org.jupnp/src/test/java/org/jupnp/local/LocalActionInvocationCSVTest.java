@@ -14,6 +14,10 @@
 
 package org.jupnp.local;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
@@ -24,6 +28,7 @@ import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.meta.DeviceDetails;
 import org.jupnp.model.meta.LocalDevice;
@@ -35,31 +40,17 @@ import org.jupnp.model.types.csv.CSVBoolean;
 import org.jupnp.model.types.csv.CSVInteger;
 import org.jupnp.model.types.csv.CSVString;
 import org.jupnp.model.types.csv.CSVUnsignedIntegerFourBytes;
-import org.jupnp.data.SampleData;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LocalActionInvocationCSVTest {
 
     static LocalDevice createTestDevice(LocalService service) throws Exception {
-        return new LocalDevice(
-                SampleData.createLocalDeviceIdentity(),
-                new UDADeviceType("TestDevice", 1),
-                new DeviceDetails("Test Device"),
-                service
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("TestDevice", 1),
+                new DeviceDetails("Test Device"), service);
     }
 
     static Object[][] getDevices() throws Exception {
-        return new LocalDevice[][]{
-                {createTestDevice(
-                        SampleData.readService(
-                                new AnnotationLocalServiceBinder(), TestServiceOne.class
-                        )
-                )},
-        };
+        return new LocalDevice[][] { {
+                createTestDevice(SampleData.readService(new AnnotationLocalServiceBinder(), TestServiceOne.class)) }, };
     }
 
     @ParameterizedTest
@@ -126,14 +117,9 @@ class LocalActionInvocationCSVTest {
         return getActionInvocation.getOutput(svc.getAction(getAction).getFirstOutputArgument()).toString();
     }
 
-
     /* ####################################################################################################### */
 
-
-    @UpnpService(
-            serviceId = @UpnpServiceId("TestService"),
-            serviceType = @UpnpServiceType(value = "TestService", version = 1)
-    )
+    @UpnpService(serviceId = @UpnpServiceId("TestService"), serviceType = @UpnpServiceType(value = "TestService", version = 1))
     public static class TestServiceOne {
 
         @UpnpStateVariable(sendEvents = false)
@@ -204,5 +190,4 @@ class LocalActionInvocationCSVTest {
             return uifourVar;
         }
     }
-
 }

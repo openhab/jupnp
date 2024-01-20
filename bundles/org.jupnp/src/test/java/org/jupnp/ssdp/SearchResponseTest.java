@@ -14,7 +14,15 @@
 
 package org.jupnp.ssdp;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleDeviceRoot;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.Constants;
 import org.jupnp.model.message.IncomingDatagramMessage;
@@ -30,14 +38,6 @@ import org.jupnp.model.message.header.USNRootDeviceHeader;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.RemoteDevice;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleDeviceRoot;
-import org.junit.jupiter.api.Test;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
@@ -140,19 +140,13 @@ class SearchResponseTest {
     }
 
     protected IncomingSearchResponse createResponseMessage(UpnpHeader stHeader) throws UnknownHostException {
-        IncomingSearchResponse msg = new IncomingSearchResponse(
-                new IncomingDatagramMessage<>(
-                        new UpnpResponse(UpnpResponse.Status.OK),
-                        InetAddress.getByName("127.0.0.1"),
-                        Constants.UPNP_MULTICAST_PORT,
-                        InetAddress.getByName("127.0.0.1")
-                )
-        );
+        IncomingSearchResponse msg = new IncomingSearchResponse(new IncomingDatagramMessage<>(
+                new UpnpResponse(UpnpResponse.Status.OK), InetAddress.getByName("127.0.0.1"),
+                Constants.UPNP_MULTICAST_PORT, InetAddress.getByName("127.0.0.1")));
 
         msg.getHeaders().add(UpnpHeader.Type.ST, stHeader);
         msg.getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
         msg.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader());
         return msg;
     }
-    
 }

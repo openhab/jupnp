@@ -14,10 +14,16 @@
 
 package example.localservice;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.model.DefaultServiceManager;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.action.RemoteActionInvocation;
@@ -30,12 +36,6 @@ import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.UDADeviceType;
-import org.jupnp.data.SampleData;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Accessing remote client information
@@ -74,18 +74,12 @@ class RemoteClientInfoTest {
         LocalService svc = binder.read(serviceClass);
         svc.setManager(new DefaultServiceManager(svc, serviceClass));
 
-        return new LocalDevice(
-            SampleData.createLocalDeviceIdentity(),
-            new UDADeviceType("BinaryLight", 1),
-            new DeviceDetails("Example Binary Light"),
-            svc
-        );
+        return new LocalDevice(SampleData.createLocalDeviceIdentity(), new UDADeviceType("BinaryLight", 1),
+                new DeviceDetails("Example Binary Light"), svc);
     }
 
     static Object[][] getDevices() throws Exception {
-        return new LocalDevice[][]{
-            {createTestDevice(SwitchPowerWithClientInfo.class)}
-        };
+        return new LocalDevice[][] { { createTestDevice(SwitchPowerWithClientInfo.class) } };
     }
 
     @ParameterizedTest
@@ -97,37 +91,32 @@ class RemoteClientInfoTest {
         requestHeaders.add(UpnpHeader.Type.USER_AGENT, new UserAgentHeader("foo/bar"));
         requestHeaders.add("X-MY-HEADER", "foo");
 
-        RemoteClientInfo clientInfo = new RemoteClientInfo(
-            new Connection() {
-                @Override
-                public boolean isOpen() {
-                    return true;
-                }
+        RemoteClientInfo clientInfo = new RemoteClientInfo(new Connection() {
+            @Override
+            public boolean isOpen() {
+                return true;
+            }
 
-                @Override
-                public InetAddress getRemoteAddress() {
-                    try {
-                        return InetAddress.getByName("10.0.0.1");
-                    } catch (UnknownHostException ex) {
-                        throw new RuntimeException(ex);
-                    }
+            @Override
+            public InetAddress getRemoteAddress() {
+                try {
+                    return InetAddress.getByName("10.0.0.1");
+                } catch (UnknownHostException ex) {
+                    throw new RuntimeException(ex);
                 }
+            }
 
-                @Override
-                public InetAddress getLocalAddress() {
-                    try {
-                        return InetAddress.getByName("10.0.0.2");
-                    } catch (UnknownHostException ex) {
-                        throw new RuntimeException(ex);
-                    }
+            @Override
+            public InetAddress getLocalAddress() {
+                try {
+                    return InetAddress.getByName("10.0.0.2");
+                } catch (UnknownHostException ex) {
+                    throw new RuntimeException(ex);
                 }
-            },
-            requestHeaders
-        );
+            }
+        }, requestHeaders);
 
-        ActionInvocation setTargetInvocation = new RemoteActionInvocation(
-            svc.getAction("SetTarget"), clientInfo
-        );
+        ActionInvocation setTargetInvocation = new RemoteActionInvocation(svc.getAction("SetTarget"), clientInfo);
 
         setTargetInvocation.setInput("NewTargetValue", true);
         svc.getExecutor(setTargetInvocation.getAction()).execute(setTargetInvocation);
@@ -136,5 +125,4 @@ class RemoteClientInfoTest {
 
         assertEquals("foobar", clientInfo.getExtraResponseHeaders().getFirstHeader("X-MY-HEADER"));
     }
-
 }

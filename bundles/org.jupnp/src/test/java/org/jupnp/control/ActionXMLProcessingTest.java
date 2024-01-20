@@ -20,6 +20,7 @@ import java.net.URI;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.action.ActionException;
@@ -43,36 +44,25 @@ import org.jupnp.model.types.ErrorCode;
 import org.jupnp.model.types.SoapActionType;
 import org.jupnp.transport.impl.SOAPActionProcessorImpl;
 import org.jupnp.transport.spi.SOAPActionProcessor;
-import org.jupnp.data.SampleData;
 
 class ActionXMLProcessingTest {
 
-    public static final String ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:SetSomeValue xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n" +
-            "       <SomeValue>This is encoded: &lt;</SomeValue>\n" +
-            "     </u:SetSomeValue>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+    public static final String ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" + " <s:Envelope\n"
+            + "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
+            + "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" + "   <s:Body>\n"
+            + "     <u:SetSomeValue xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n"
+            + "       <SomeValue>This is encoded: &lt;</SomeValue>\n" + "     </u:SetSomeValue>\n" + "   </s:Body>\n"
+            + " </s:Envelope>";
 
-    public static final String ALIAS_ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:SetSomeValue xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n" +
-            "       <SomeValue1>This is encoded: &lt;</SomeValue1>\n" +
-            "     </u:SetSomeValue>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+    public static final String ALIAS_ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" + " <s:Envelope\n"
+            + "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
+            + "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" + "   <s:Body>\n"
+            + "     <u:SetSomeValue xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n"
+            + "       <SomeValue1>This is encoded: &lt;</SomeValue1>\n" + "     </u:SetSomeValue>\n" + "   </s:Body>\n"
+            + " </s:Envelope>";
 
     static SOAPActionProcessor[][] getProcessors() {
-        return new SOAPActionProcessor[][] {
-            {new SOAPActionProcessorImpl()}
-        };
+        return new SOAPActionProcessor[][] { { new SOAPActionProcessorImpl() } };
     }
 
     @ParameterizedTest
@@ -87,7 +77,8 @@ class ActionXMLProcessingTest {
         actionInvocation.setInput("NewTargetValue", true);
 
         // The control URL doesn't matter
-        OutgoingActionRequestMessage outgoingCall = new OutgoingActionRequestMessage(actionInvocation, SampleData.getLocalBaseURL());
+        OutgoingActionRequestMessage outgoingCall = new OutgoingActionRequestMessage(actionInvocation,
+                SampleData.getLocalBaseURL());
 
         MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration() {
             @Override
@@ -150,7 +141,8 @@ class ActionXMLProcessingTest {
         ActionInvocation actionInvocation = new ActionInvocation(action);
         actionInvocation.setFailure(new ActionException(ErrorCode.ACTION_FAILED, "A test string"));
 
-        OutgoingActionResponseMessage outgoingCall = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
+        OutgoingActionResponseMessage outgoingCall = new OutgoingActionResponseMessage(
+                UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
         MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration() {
             @Override
@@ -169,7 +161,8 @@ class ActionXMLProcessingTest {
 
         assertEquals(ErrorCode.ACTION_FAILED.getCode(), actionInvocation.getFailure().getErrorCode());
         // Note the period at the end of the test string!
-        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". A test string.", actionInvocation.getFailure().getMessage());
+        assertEquals(ErrorCode.ACTION_FAILED.getDescription() + ". A test string.",
+                actionInvocation.getFailure().getMessage());
     }
 
     @ParameterizedTest
@@ -188,20 +181,12 @@ class ActionXMLProcessingTest {
             }
         });
 
-        StreamRequestMessage streamRequest = new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("http://some.uri"));
-        streamRequest.getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
-        streamRequest.getHeaders().add(
-                UpnpHeader.Type.SOAPACTION,
-                new SoapActionHeader(
-                        new SoapActionType(
-                                action.getService().getServiceType(),
-                                action.getName()
-                        )
-                )
-        );
+        StreamRequestMessage streamRequest = new StreamRequestMessage(UpnpRequest.Method.POST,
+                URI.create("http://some.uri"));
+        streamRequest.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
+        streamRequest.getHeaders().add(UpnpHeader.Type.SOAPACTION,
+                new SoapActionHeader(new SoapActionType(action.getService().getServiceType(), action.getName())));
         streamRequest.setBody(UpnpMessage.BodyType.STRING, ENCODED_REQUEST);
 
         IncomingActionRequestMessage request = new IncomingActionRequestMessage(streamRequest, svc);
@@ -227,20 +212,12 @@ class ActionXMLProcessingTest {
             }
         });
 
-        StreamRequestMessage streamRequest = new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("http://some.uri"));
-        streamRequest.getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
-        streamRequest.getHeaders().add(
-                UpnpHeader.Type.SOAPACTION,
-                new SoapActionHeader(
-                        new SoapActionType(
-                                action.getService().getServiceType(),
-                                action.getName()
-                        )
-                )
-        );
+        StreamRequestMessage streamRequest = new StreamRequestMessage(UpnpRequest.Method.POST,
+                URI.create("http://some.uri"));
+        streamRequest.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
+        streamRequest.getHeaders().add(UpnpHeader.Type.SOAPACTION,
+                new SoapActionHeader(new SoapActionType(action.getService().getServiceType(), action.getName())));
         streamRequest.setBody(UpnpMessage.BodyType.STRING, ALIAS_ENCODED_REQUEST);
 
         IncomingActionRequestMessage request = new IncomingActionRequestMessage(streamRequest, svc);

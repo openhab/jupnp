@@ -22,18 +22,11 @@ import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
 
-@UpnpService(
-        serviceId = @UpnpServiceId("MyService"),
-        serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService")
-)
+@UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValueRange {
 
     // DOC:VAR
-    @UpnpStateVariable(
-        allowedValueMinimum = 10,
-        allowedValueMaximum = 100,
-        allowedValueStep = 5
-    )
+    @UpnpStateVariable(allowedValueMinimum = 10, allowedValueMaximum = 100, allowedValueStep = 5)
     private int restricted;
     // DOC:VAR
 

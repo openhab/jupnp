@@ -25,5 +25,4 @@ public class SwitchPowerModerated extends SwitchPower {
 
     @UpnpStateVariable(eventMinimumDelta = 3)
     public Integer moderatedMinDeltaVar = 1;
-
 }

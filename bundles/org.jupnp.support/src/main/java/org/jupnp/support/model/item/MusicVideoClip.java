@@ -15,16 +15,16 @@
 
 package org.jupnp.support.model.item;
 
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import java.util.List;
+
 import org.jupnp.support.model.Person;
 import org.jupnp.support.model.PersonWithRole;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.container.Container;
-
-import java.util.List;
-
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 /**
  * @author Christian Bauer
@@ -144,6 +144,4 @@ public class MusicVideoClip extends VideoItem {
         replaceFirstProperty(new DC.DATE(date));
         return this;
     }
-
-
 }

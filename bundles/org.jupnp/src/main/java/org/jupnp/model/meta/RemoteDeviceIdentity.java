@@ -14,13 +14,13 @@
 
 package org.jupnp.model.meta;
 
+import java.net.InetAddress;
+import java.net.URL;
+
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.message.discovery.IncomingNotificationRequest;
 import org.jupnp.model.message.discovery.IncomingSearchResponse;
 import org.jupnp.model.types.UDN;
-
-import java.net.InetAddress;
-import java.net.URL;
 
 /**
  * Additional identifying information only relevant for discovered remote devices.
@@ -46,10 +46,12 @@ public class RemoteDeviceIdentity extends DeviceIdentity {
     final private InetAddress discoveredOnLocalAddress;
 
     public RemoteDeviceIdentity(UDN udn, RemoteDeviceIdentity template) {
-        this(udn, template.getMaxAgeSeconds(), template.getDescriptorURL(), template.getInterfaceMacAddress(), template.getDiscoveredOnLocalAddress());
+        this(udn, template.getMaxAgeSeconds(), template.getDescriptorURL(), template.getInterfaceMacAddress(),
+                template.getDiscoveredOnLocalAddress());
     }
 
-    public RemoteDeviceIdentity(UDN udn, Integer maxAgeSeconds, URL descriptorURL, byte[] interfaceMacAddress, InetAddress discoveredOnLocalAddress) {
+    public RemoteDeviceIdentity(UDN udn, Integer maxAgeSeconds, URL descriptorURL, byte[] interfaceMacAddress,
+            InetAddress discoveredOnLocalAddress) {
         super(udn, maxAgeSeconds);
         this.descriptorURL = descriptorURL;
         this.interfaceMacAddress = interfaceMacAddress;
@@ -57,21 +59,13 @@ public class RemoteDeviceIdentity extends DeviceIdentity {
     }
 
     public RemoteDeviceIdentity(IncomingNotificationRequest notificationRequest) {
-        this(notificationRequest.getUDN(),
-             notificationRequest.getMaxAge(),
-             notificationRequest.getLocationURL(),
-             notificationRequest.getInterfaceMacHeader(),
-             notificationRequest.getLocalAddress()
-        );
+        this(notificationRequest.getUDN(), notificationRequest.getMaxAge(), notificationRequest.getLocationURL(),
+                notificationRequest.getInterfaceMacHeader(), notificationRequest.getLocalAddress());
     }
 
     public RemoteDeviceIdentity(IncomingSearchResponse searchResponse) {
-        this(searchResponse.getRootDeviceUDN(),
-             searchResponse.getMaxAge(),
-             searchResponse.getLocationURL(),
-             searchResponse.getInterfaceMacHeader(),
-             searchResponse.getLocalAddress()
-        );
+        this(searchResponse.getRootDeviceUDN(), searchResponse.getMaxAge(), searchResponse.getLocationURL(),
+                searchResponse.getInterfaceMacHeader(), searchResponse.getLocalAddress());
     }
 
     public URL getDescriptorURL() {
@@ -87,7 +81,8 @@ public class RemoteDeviceIdentity extends DeviceIdentity {
     }
 
     public byte[] getWakeOnLANBytes() {
-        if (getInterfaceMacAddress() == null) return null;
+        if (getInterfaceMacAddress() == null)
+            return null;
         byte[] bytes = new byte[6 + 16 * getInterfaceMacAddress().length];
         for (int i = 0; i < 6; i++) {
             bytes[i] = (byte) 0xff;
@@ -101,7 +96,7 @@ public class RemoteDeviceIdentity extends DeviceIdentity {
     @Override
     public String toString() {
         // Performance optimization, so we don't have to wrap all log("foo " + device) calls with isLoggable
-		if(ModelUtil.ANDROID_RUNTIME) {
+        if (ModelUtil.ANDROID_RUNTIME) {
             return "(RemoteDeviceIdentity) UDN: " + getUdn() + ", Descriptor: " + getDescriptorURL();
         }
         return "(" + getClass().getSimpleName() + ") UDN: " + getUdn() + ", Descriptor: " + getDescriptorURL();

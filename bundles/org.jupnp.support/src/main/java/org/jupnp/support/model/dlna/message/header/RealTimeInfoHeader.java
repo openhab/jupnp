@@ -24,19 +24,19 @@ import org.jupnp.support.model.dlna.types.NormalPlayTime;
 public class RealTimeInfoHeader extends DLNAHeader<NormalPlayTime> {
 
     public static final String PREFIX = "DLNA.ORG_TLAG=";
-    
+
     public RealTimeInfoHeader() {
     }
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0 && s.startsWith(PREFIX) ) {
+        if (s.length() != 0 && s.startsWith(PREFIX)) {
             try {
                 s = s.substring(PREFIX.length());
-                setValue(s.equals("*") ? null : NormalPlayTime.valueOf(s) );
+                setValue(s.equals("*") ? null : NormalPlayTime.valueOf(s));
                 return;
             } catch (Exception ex) {
-              //no need to take any precaution measure
+                // no need to take any precaution measure
             }
         }
         throw new InvalidHeaderException("Invalid RealTimeInfo header value: " + s);
@@ -46,7 +46,7 @@ public class RealTimeInfoHeader extends DLNAHeader<NormalPlayTime> {
     public String getString() {
         NormalPlayTime v = getValue();
         if (v == null)
-            return PREFIX+"*";
-        return PREFIX+v.getString();
+            return PREFIX + "*";
+        return PREFIX + v.getString();
     }
 }

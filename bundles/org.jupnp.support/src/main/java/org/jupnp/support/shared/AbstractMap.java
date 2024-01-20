@@ -21,10 +21,12 @@ import java.util.*;
 /**
  * A base class for {@code Map} implementations.
  *
- * <p>Subclasses that permit new mappings to be added must override {@link
+ * <p>
+ * Subclasses that permit new mappings to be added must override {@link
  * #put}.
  *
- * <p>The default implementations of many methods are inefficient for large
+ * <p>
+ * The default implementations of many methods are inefficient for large
  * maps. For example in the default implementation, each call to {@link #get}
  * performs a linear iteration of the entry set. Subclasses should override such
  * methods to improve their performance.
@@ -44,8 +46,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      *
      * @since 1.6
      */
-    public static class SimpleImmutableEntry<K, V>
-            implements Map.Entry<K, V>, Serializable {
+    public static class SimpleImmutableEntry<K, V> implements Map.Entry<K, V>, Serializable {
         private static final long serialVersionUID = 7138329143949025153L;
 
         private final K key;
@@ -80,26 +81,26 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
             throw new UnsupportedOperationException();
         }
 
-        @Override public boolean equals(Object object) {
+        @Override
+        public boolean equals(Object object) {
             if (this == object) {
                 return true;
             }
             if (object instanceof Map.Entry) {
                 Map.Entry<?, ?> entry = (Map.Entry<?, ?>) object;
-                return (key == null ? entry.getKey() == null : key.equals(entry
-                        .getKey()))
-                        && (value == null ? entry.getValue() == null : value
-                                .equals(entry.getValue()));
+                return (key == null ? entry.getKey() == null : key.equals(entry.getKey()))
+                        && (value == null ? entry.getValue() == null : value.equals(entry.getValue()));
             }
             return false;
         }
 
-        @Override public int hashCode() {
-            return (key == null ? 0 : key.hashCode())
-                    ^ (value == null ? 0 : value.hashCode());
+        @Override
+        public int hashCode() {
+            return (key == null ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return key + "=" + value;
         }
     }
@@ -109,8 +110,7 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
      *
      * @since 1.6
      */
-    public static class SimpleEntry<K, V>
-            implements Map.Entry<K, V>, Serializable {
+    public static class SimpleEntry<K, V> implements Map.Entry<K, V>, Serializable {
         private static final long serialVersionUID = -8499721149061103585L;
 
         private final K key;
@@ -143,26 +143,26 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
             return result;
         }
 
-        @Override public boolean equals(Object object) {
+        @Override
+        public boolean equals(Object object) {
             if (this == object) {
                 return true;
             }
             if (object instanceof Map.Entry) {
                 Map.Entry<?, ?> entry = (Map.Entry<?, ?>) object;
-                return (key == null ? entry.getKey() == null : key.equals(entry
-                        .getKey()))
-                        && (value == null ? entry.getValue() == null : value
-                                .equals(entry.getValue()));
+                return (key == null ? entry.getKey() == null : key.equals(entry.getKey()))
+                        && (value == null ? entry.getValue() == null : value.equals(entry.getValue()));
             }
             return false;
         }
 
-        @Override public int hashCode() {
-            return (key == null ? 0 : key.hashCode())
-                    ^ (value == null ? 0 : value.hashCode());
+        @Override
+        public int hashCode() {
+            return (key == null ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return key + "=" + value;
         }
     }
@@ -174,7 +174,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation calls {@code entrySet().clear()}.
+     * <p>
+     * This implementation calls {@code entrySet().clear()}.
      */
     public void clear() {
         entrySet().clear();
@@ -183,7 +184,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates its key set, looking for a key that
+     * <p>
+     * This implementation iterates its key set, looking for a key that
      * {@code key} equals.
      */
     public boolean containsKey(Object key) {
@@ -207,7 +209,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates its entry set, looking for an entry with
+     * <p>
+     * This implementation iterates its entry set, looking for an entry with
      * a value that {@code value} equals.
      */
     public boolean containsValue(Object value) {
@@ -233,13 +236,15 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation first checks the structure of {@code object}. If
+     * <p>
+     * This implementation first checks the structure of {@code object}. If
      * it is not a map or of a different size, this returns false. Otherwise it
      * iterates its own entry set, looking up each entry's key in {@code
      * object}. If any value does not equal the other map's value for the same
      * key, this returns false. Otherwise it returns true.
      */
-    @Override public boolean equals(Object object) {
+    @Override
+    public boolean equals(Object object) {
         if (this == object) {
             return true;
         }
@@ -275,7 +280,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates its entry set, looking for an entry with
+     * <p>
+     * This implementation iterates its entry set, looking for an entry with
      * a key that {@code key} equals.
      */
     public V get(Object key) {
@@ -301,10 +307,12 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates its entry set, summing the hashcodes of
+     * <p>
+     * This implementation iterates its entry set, summing the hashcodes of
      * its entries.
      */
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
         int result = 0;
         Iterator<Map.Entry<K, V>> it = entrySet().iterator();
         while (it.hasNext()) {
@@ -316,7 +324,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation compares {@code size()} to 0.
+     * <p>
+     * This implementation compares {@code size()} to 0.
      */
     public boolean isEmpty() {
         return size() == 0;
@@ -325,21 +334,25 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation returns a view that calls through this to map. Its
+     * <p>
+     * This implementation returns a view that calls through this to map. Its
      * iterator transforms this map's entry set iterator to return keys.
      */
     public Set<K> keySet() {
         if (keySet == null) {
             keySet = new AbstractSet<K>() {
-                @Override public boolean contains(Object object) {
+                @Override
+                public boolean contains(Object object) {
                     return containsKey(object);
                 }
 
-                @Override public int size() {
+                @Override
+                public int size() {
                     return AbstractMap.this.size();
                 }
 
-                @Override public Iterator<K> iterator() {
+                @Override
+                public Iterator<K> iterator() {
                     return new Iterator<K>() {
                         Iterator<Map.Entry<K, V>> setIterator = entrySet().iterator();
 
@@ -364,7 +377,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This base implementation throws {@code UnsupportedOperationException}.
+     * <p>
+     * This base implementation throws {@code UnsupportedOperationException}.
      */
     public V put(K key, V value) {
         throw new UnsupportedOperationException();
@@ -373,7 +387,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates through {@code map}'s entry set, calling
+     * <p>
+     * This implementation iterates through {@code map}'s entry set, calling
      * {@code put()} for each.
      */
     public void putAll(Map<? extends K, ? extends V> map) {
@@ -385,7 +400,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation iterates its entry set, removing the entry with
+     * <p>
+     * This implementation iterates its entry set, removing the entry with
      * a key that {@code key} equals.
      */
     public V remove(Object key) {
@@ -413,7 +429,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation returns its entry set's size.
+     * <p>
+     * This implementation returns its entry set's size.
      */
     public int size() {
         return entrySet().size();
@@ -422,11 +439,13 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation composes a string by iterating its entry set. If
+     * <p>
+     * This implementation composes a string by iterating its entry set. If
      * this map contains itself as a key or a value, the string "(this Map)"
      * will appear in its place.
      */
-    @Override public String toString() {
+    @Override
+    public String toString() {
         if (isEmpty()) {
             return "{}";
         }
@@ -460,21 +479,25 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation returns a view that calls through this to map. Its
+     * <p>
+     * This implementation returns a view that calls through this to map. Its
      * iterator transforms this map's entry set iterator to return values.
      */
     public Collection<V> values() {
         if (valuesCollection == null) {
             valuesCollection = new AbstractCollection<V>() {
-                @Override public int size() {
+                @Override
+                public int size() {
                     return AbstractMap.this.size();
                 }
 
-                @Override public boolean contains(Object object) {
+                @Override
+                public boolean contains(Object object) {
                     return containsValue(object);
                 }
 
-                @Override public Iterator<V> iterator() {
+                @Override
+                public Iterator<V> iterator() {
                     return new Iterator<V>() {
                         Iterator<Map.Entry<K, V>> setIterator = entrySet().iterator();
 
@@ -497,7 +520,8 @@ public abstract class AbstractMap<K, V> implements Map<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    @Override protected Object clone() throws CloneNotSupportedException {
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
         AbstractMap<K, V> result = (AbstractMap<K, V>) super.clone();
         result.keySet = null;
         result.valuesCollection = null;

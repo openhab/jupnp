@@ -14,9 +14,9 @@
 
 package org.jupnp.model.message.header;
 
-import org.jupnp.model.types.SoapActionType;
-
 import java.net.URI;
+
+import org.jupnp.model.types.SoapActionType;
 
 /**
  * @author Christian Bauer
@@ -44,7 +44,7 @@ public class SoapActionHeader extends UpnpHeader<SoapActionType> {
                 throw new InvalidHeaderException("Invalid SOAP action header, must be enclosed in doublequotes:" + s);
             }
 
-            SoapActionType t = SoapActionType.valueOf(s.substring(1, s.length()-1));
+            SoapActionType t = SoapActionType.valueOf(s.substring(1, s.length() - 1));
             setValue(t);
         } catch (RuntimeException ex) {
             throw new InvalidHeaderException("Invalid SOAP action header value, " + ex.getMessage(), ex);

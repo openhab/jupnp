@@ -14,6 +14,9 @@
 
 package org.jupnp.registry;
 
+import java.net.URI;
+import java.util.Collection;
+
 import org.jupnp.UpnpService;
 import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.model.DiscoveryOptions;
@@ -30,9 +33,6 @@ import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDN;
 import org.jupnp.protocol.ProtocolFactory;
-
-import java.net.URI;
-import java.util.Collection;
 
 /**
  * The core of the UPnP stack, keeping track of known devices and resources.
@@ -60,7 +60,9 @@ import java.util.Collection;
 public interface Registry {
 
     public UpnpService getUpnpService();
+
     public UpnpServiceConfiguration getConfiguration();
+
     public ProtocolFactory getProtocolFactory();
 
     // #################################################################################################
@@ -337,7 +339,7 @@ public interface Registry {
 
     /**
      * @param pathQuery The path and optional query string of the resource's
-     *                  registration URI (e.g. <code>/dev/somefile.xml?param=value</code>)
+     *            registration URI (e.g. <code>/dev/somefile.xml?param=value</code>)
      * @return Any registered resource that matches the given URI path.
      * @throws IllegalArgumentException If the given URI was absolute, only path and query are allowed.
      */
@@ -346,7 +348,7 @@ public interface Registry {
     /**
      * @param <T> The required subtype of the {@link org.jupnp.model.resource.Resource}.
      * @param pathQuery The path and optional query string of the resource's
-     *                  registration URI (e.g. <code>/dev/somefile.xml?param=value</code>)
+     *            registration URI (e.g. <code>/dev/somefile.xml?param=value</code>)
      * @param resourceType The required subtype of the {@link org.jupnp.model.resource.Resource}.
      * @return Any registered resource that matches the given URI path and subtype.
      * @throws IllegalArgumentException If the given URI was absolute, only path and query are allowed.
@@ -446,5 +448,4 @@ public interface Registry {
      * </p>
      */
     public void advertiseLocalDevices();
-
 }

@@ -14,6 +14,11 @@
 
 package org.jupnp.model.meta;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.jupnp.model.ModelUtil;
 import org.jupnp.model.ServiceManager;
 import org.jupnp.model.ValidationException;
@@ -21,11 +26,6 @@ import org.jupnp.model.action.ActionExecutor;
 import org.jupnp.model.state.StateVariableAccessor;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * The metadata of a service created on this host, by application code.
@@ -45,8 +45,8 @@ public class LocalService<T> extends Service<LocalDevice, LocalService> {
 
     protected ServiceManager manager;
 
-    public LocalService(ServiceType serviceType, ServiceId serviceId,
-                        Action[] actions, StateVariable[] stateVariables) throws ValidationException {
+    public LocalService(ServiceType serviceType, ServiceId serviceId, Action[] actions, StateVariable[] stateVariables)
+            throws ValidationException {
         super(serviceType, serviceId, actions, stateVariables);
         this.manager = null;
         this.actionExecutors = new HashMap();
@@ -55,16 +55,12 @@ public class LocalService<T> extends Service<LocalDevice, LocalService> {
         this.supportsQueryStateVariables = true;
     }
 
-    public LocalService(ServiceType serviceType, ServiceId serviceId,
-                        Map<Action, ActionExecutor> actionExecutors,
-                        Map<StateVariable, StateVariableAccessor> stateVariableAccessors,
-                        Set<Class> stringConvertibleTypes,
-                        boolean supportsQueryStateVariables) throws ValidationException {
+    public LocalService(ServiceType serviceType, ServiceId serviceId, Map<Action, ActionExecutor> actionExecutors,
+            Map<StateVariable, StateVariableAccessor> stateVariableAccessors, Set<Class> stringConvertibleTypes,
+            boolean supportsQueryStateVariables) throws ValidationException {
 
-        super(serviceType, serviceId,
-                actionExecutors.keySet().toArray(new Action[actionExecutors.size()]),
-                stateVariableAccessors.keySet().toArray(new StateVariable[stateVariableAccessors.size()])
-        );
+        super(serviceType, serviceId, actionExecutors.keySet().toArray(new Action[actionExecutors.size()]),
+                stateVariableAccessors.keySet().toArray(new StateVariable[stateVariableAccessors.size()]));
 
         this.supportsQueryStateVariables = supportsQueryStateVariables;
         this.stringConvertibleTypes = stringConvertibleTypes;
@@ -127,6 +123,6 @@ public class LocalService<T> extends Service<LocalDevice, LocalService> {
 
     @Override
     public String toString() {
-        return super.toString()  + ", Manager: " + manager;
+        return super.toString() + ", Manager: " + manager;
     }
 }

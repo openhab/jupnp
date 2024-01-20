@@ -35,7 +35,6 @@ import org.jupnp.model.resource.Resource;
 import org.jupnp.model.resource.ServiceDescriptorResource;
 import org.jupnp.protocol.ReceivingSync;
 import org.jupnp.transport.RouterException;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,30 +92,22 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
                 log.trace("Found local device matching relative request URI: {}", requestedURI);
                 LocalDevice device = (LocalDevice) resource.getModel();
 
-                DeviceDescriptorBinder deviceDescriptorBinder =
-                        getUpnpService().getConfiguration().getDeviceDescriptorBinderUDA10();
-                String deviceDescriptor = deviceDescriptorBinder.generate(
-                        device,
-                        getRemoteClientInfo(),
-                        getUpnpService().getConfiguration().getNamespace()
-                );
-                response = new StreamResponseMessage(
-                        deviceDescriptor,
-                        new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE)
-                );
+                DeviceDescriptorBinder deviceDescriptorBinder = getUpnpService().getConfiguration()
+                        .getDeviceDescriptorBinderUDA10();
+                String deviceDescriptor = deviceDescriptorBinder.generate(device, getRemoteClientInfo(),
+                        getUpnpService().getConfiguration().getNamespace());
+                response = new StreamResponseMessage(deviceDescriptor,
+                        new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE));
             } else if (ServiceDescriptorResource.class.isAssignableFrom(resource.getClass())) {
-
 
                 log.trace("Found local service matching relative request URI: {}", requestedURI);
                 LocalService service = (LocalService) resource.getModel();
 
-                ServiceDescriptorBinder serviceDescriptorBinder =
-                        getUpnpService().getConfiguration().getServiceDescriptorBinderUDA10();
+                ServiceDescriptorBinder serviceDescriptorBinder = getUpnpService().getConfiguration()
+                        .getServiceDescriptorBinderUDA10();
                 String serviceDescriptor = serviceDescriptorBinder.generate(service);
-                response = new StreamResponseMessage(
-                        serviceDescriptor,
-                        new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE)
-                );
+                response = new StreamResponseMessage(serviceDescriptor,
+                        new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE));
 
             } else if (IconResource.class.isAssignableFrom(resource.getClass())) {
 
@@ -134,7 +125,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
             log.warn("Error generating requested device/service descriptor", ex);
             response = new StreamResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
-        
+
         response.getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
 
         return response;

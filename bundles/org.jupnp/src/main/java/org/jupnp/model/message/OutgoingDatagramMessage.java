@@ -34,7 +34,8 @@ public abstract class OutgoingDatagramMessage<O extends UpnpOperation> extends U
         this.destinationPort = destinationPort;
     }
 
-    protected OutgoingDatagramMessage(O operation, BodyType bodyType, Object body, InetAddress destinationAddress, int destinationPort) {
+    protected OutgoingDatagramMessage(O operation, BodyType bodyType, Object body, InetAddress destinationAddress,
+            int destinationPort) {
         super(operation, bodyType, body);
         this.destinationAddress = destinationAddress;
         this.destinationPort = destinationPort;
@@ -47,7 +48,7 @@ public abstract class OutgoingDatagramMessage<O extends UpnpOperation> extends U
     public int getDestinationPort() {
         return destinationPort;
     }
-    
+
     @Override
     public UpnpHeaders getHeaders() {
         return this.headers;

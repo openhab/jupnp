@@ -75,8 +75,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     private Logger log = LoggerFactory.getLogger(DOMParser.class);
 
-    public static final URL XML_SCHEMA_RESOURCE =
-            Thread.currentThread().getContextClassLoader().getResource("org.jupnp/schemas/xml.xsd");
+    public static final URL XML_SCHEMA_RESOURCE = Thread.currentThread().getContextClassLoader()
+            .getResource("org.jupnp/schemas/xml.xsd");
 
     protected Source[] schemaSources;
     protected Schema schema;
@@ -93,15 +93,16 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
         if (schema == null) {
             // Lazy initialization
-            // TODO: http://stackoverflow.com/questions/3129934/schemafactory-doesnt-support-w3c-xml-schema-in-platform-level-8
+            // TODO:
+            // http://stackoverflow.com/questions/3129934/schemafactory-doesnt-support-w3c-xml-schema-in-platform-level-8
             try {
                 SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-                schemaFactory.setResourceResolver(new CatalogResourceResolver(
-                        new HashMap<URI, URL>() {{
-                            put(DOM.XML_SCHEMA_NAMESPACE, XML_SCHEMA_RESOURCE);
-                        }}
-                ));
+                schemaFactory.setResourceResolver(new CatalogResourceResolver(new HashMap<URI, URL>() {
+                    {
+                        put(DOM.XML_SCHEMA_NAMESPACE, XML_SCHEMA_RESOURCE);
+                    }
+                }));
 
                 if (schemaSources != null) {
                     schema = schemaFactory.newSchema(schemaSources);
@@ -223,7 +224,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public D parse(URL url, boolean validate) throws ParserException {
-        if (url == null) throw new IllegalArgumentException("Can't parse null URL");
+        if (url == null)
+            throw new IllegalArgumentException("Can't parse null URL");
         try {
             return parse(url.openStream(), validate);
         } catch (Exception ex) {
@@ -232,12 +234,14 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public D parse(String string, boolean validate) throws ParserException {
-        if (string == null) throw new IllegalArgumentException("Can't parse null string");
+        if (string == null)
+            throw new IllegalArgumentException("Can't parse null string");
         return parse(new InputSource(new StringReader(string)), validate);
     }
 
     public D parse(File file, boolean validate) throws ParserException {
-        if (file == null) throw new IllegalArgumentException("Can't parse null file");
+        if (file == null)
+            throw new IllegalArgumentException("Can't parse null file");
         try {
             return parse(file.toURI().toURL(), validate);
         } catch (Exception ex) {
@@ -272,13 +276,15 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     // =================================================================================================
 
     public void validate(URL url) throws ParserException {
-        if (url == null) throw new IllegalArgumentException("Can't validate null URL");
+        if (url == null)
+            throw new IllegalArgumentException("Can't validate null URL");
         log.trace("Validating XML of URL: {}", url);
         validate(new StreamSource(url.toString()));
     }
 
     public void validate(String string) throws ParserException {
-        if (string == null) throw new IllegalArgumentException("Can't validate null string");
+        if (string == null)
+            throw new IllegalArgumentException("Can't validate null string");
         log.trace("Validating XML string characters: {}", string.length());
         validate(new SAXSource(new InputSource(new StringReader(string))));
     }
@@ -419,7 +425,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
             String meta = "\\s*<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
             output = output.replaceFirst(meta, "");
 
-            // Rip out the even dumber xmlns attribute that magically got added (seems to be a difference between JDK 1.4 and 5)
+            // Rip out the even dumber xmlns attribute that magically got added (seems to be a difference between JDK
+            // 1.4 and 5)
             String xmlns = "<html xmlns=\"http://www.w3.org/1999/xhtml\">";
             output = output.replaceFirst(xmlns, "<html>");
 
@@ -446,8 +453,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     public boolean isIgnorableWSNode(Node node) {
         // TODO: What about XML space="preserve"?
-        return node.getNodeType() == Node.TEXT_NODE &&
-                node.getTextContent().matches("[\\t\\n\\x0B\\f\\r\\s]+");
+        return node.getNodeType() == Node.TEXT_NODE && node.getTextContent().matches("[\\t\\n\\x0B\\f\\r\\s]+");
     }
 
     // =================================================================================================
@@ -467,7 +473,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     protected ParserException unwrapException(Exception ex) {
         // Another historic moment in Java XML API design!
         if (ex.getCause() != null && ex.getCause() instanceof ParserException) {
-            return (ParserException)ex.getCause();
+            return (ParserException) ex.getCause();
         }
         return new ParserException(ex);
     }
@@ -486,7 +492,6 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         is.setPublicId(publicId);
         is.setSystemId(systemId);
         return is;
-
     }
 
     // ======================================= Utility Methods =============================================
@@ -496,7 +501,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public static String escape(String string, boolean convertNewlines, boolean convertSpaces) {
-        if (string == null) return null;
+        if (string == null)
+            return null;
         StringBuilder sb = new StringBuilder();
         String entity;
         char c;
@@ -546,20 +552,24 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public static String stripElements(String xml) {
-        if (xml == null) return null;
+        if (xml == null)
+            return null;
         return xml.replaceAll("<([a-zA-Z]|/).*?>", "");
     }
 
     public static void accept(Node node, NodeVisitor visitor) {
-        if (node == null) return;
-        if (visitor.isHalted()) return;
+        if (node == null)
+            return;
+        if (visitor.isHalted())
+            return;
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
             boolean cont = true;
             if (child.getNodeType() == visitor.nodeType) {
                 visitor.visit(child);
-                if (visitor.isHalted()) break;
+                if (visitor.isHalted())
+                    break;
             }
             accept(child, visitor);
         }
@@ -595,5 +605,4 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         wrapper.append("</").append(wrapperName).append(">");
         return wrapper.toString();
     }
-
 }

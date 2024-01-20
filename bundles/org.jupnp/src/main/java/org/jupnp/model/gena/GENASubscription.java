@@ -44,7 +44,7 @@ public abstract class GENASubscription<S extends Service> {
     /**
      * Defaults to {@link org.jupnp.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.
      */
-    protected GENASubscription(S  service) {
+    protected GENASubscription(S service) {
         this.service = service;
     }
 
@@ -86,6 +86,7 @@ public abstract class GENASubscription<S extends Service> {
     }
 
     public abstract void established();
+
     public abstract void eventReceived();
 
     @Override

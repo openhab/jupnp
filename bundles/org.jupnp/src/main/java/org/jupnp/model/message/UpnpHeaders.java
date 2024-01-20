@@ -58,7 +58,8 @@ public class UpnpHeaders extends Headers {
         log.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
-            if (entry.getKey() == null) continue; // Oh yes, the JDK has 'null' HTTP headers
+            if (entry.getKey() == null)
+                continue; // Oh yes, the JDK has 'null' HTTP headers
 
             UpnpHeader.Type type = UpnpHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
@@ -69,8 +70,7 @@ public class UpnpHeaders extends Headers {
             for (String value : entry.getValue()) {
                 UpnpHeader upnpHeader = UpnpHeader.newInstance(type, value);
                 if (upnpHeader == null || upnpHeader.getValue() == null) {
-                    log.trace(
-                        "Ignoring known but irrelevant header (value violates the UDA specification?) '{}': {}", 
+                    log.trace("Ignoring known but irrelevant header (value violates the UDA specification?) '{}': {}",
                             type.getHttpName(), value);
                 } else {
                     addParsedValue(type, upnpHeader);
@@ -114,12 +114,14 @@ public class UpnpHeaders extends Headers {
     }
 
     public boolean containsKey(UpnpHeader.Type type) {
-        if (parsedHeaders == null) parseHeaders();
+        if (parsedHeaders == null)
+            parseHeaders();
         return parsedHeaders.containsKey(type);
     }
 
     public List<UpnpHeader> get(UpnpHeader.Type type) {
-        if (parsedHeaders == null) parseHeaders();
+        if (parsedHeaders == null)
+            parseHeaders();
         return parsedHeaders.get(type);
     }
 
@@ -136,21 +138,21 @@ public class UpnpHeaders extends Headers {
     }
 
     public UpnpHeader[] getAsArray(UpnpHeader.Type type) {
-        if (parsedHeaders == null) parseHeaders();
+        if (parsedHeaders == null)
+            parseHeaders();
         return parsedHeaders.get(type) != null
                 ? parsedHeaders.get(type).toArray(new UpnpHeader[parsedHeaders.get(type).size()])
                 : new UpnpHeader[0];
     }
 
     public UpnpHeader getFirstHeader(UpnpHeader.Type type) {
-        return getAsArray(type).length > 0
-                ? getAsArray(type)[0]
-                : null;
+        return getAsArray(type).length > 0 ? getAsArray(type)[0] : null;
     }
 
     public <H extends UpnpHeader> H getFirstHeader(UpnpHeader.Type type, Class<H> subtype) {
         UpnpHeader[] headers = getAsArray(type);
-        if (headers.length == 0) return null;
+        if (headers.length == 0)
+            return null;
 
         for (UpnpHeader header : headers) {
             if (subtype.isAssignableFrom(header.getClass())) {
@@ -186,5 +188,4 @@ public class UpnpHeaders extends Headers {
             log.trace("####################################################################");
         }
     }
-
 }

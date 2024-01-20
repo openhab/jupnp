@@ -37,7 +37,7 @@ public class ServerClientTokens {
     // and this class is used more often. Identified with Java FlightRecorder
     private static String DEFAULT_OS_NAME = System.getProperty("os.name").replaceAll("[^a-zA-Z0-9\\.\\-_]", "");
     private static String DEFAULT_OS_VERSION = System.getProperty("os.version").replaceAll("[^a-zA-Z0-9\\.\\-_]", "");
-    
+
     private String osName = DEFAULT_OS_NAME;
     private String osVersion = DEFAULT_OS_VERSION;
     private String productName = UserConstants.PRODUCT_TOKEN_NAME;
@@ -56,7 +56,8 @@ public class ServerClientTokens {
         this.productVersion = productVersion;
     }
 
-    public ServerClientTokens(int majorVersion, int minorVersion, String osName, String osVersion, String productName, String productVersion) {
+    public ServerClientTokens(int majorVersion, int minorVersion, String osName, String osVersion, String productName,
+            String productVersion) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
         this.osName = osName;
@@ -115,8 +116,7 @@ public class ServerClientTokens {
 
     @Override
     public String toString() {
-        return getOsName()+"/"+getOsVersion() 
-                + " UPnP/" + getMajorVersion() + "." + getMinorVersion() + " "
+        return getOsName() + "/" + getOsVersion() + " UPnP/" + getMajorVersion() + "." + getMinorVersion() + " "
                 + getProductName() + "/" + getProductVersion();
     }
 
@@ -138,7 +138,7 @@ public class ServerClientTokens {
     }
 
     public String getOsToken() {
-        return getOsName().replaceAll(" ", "_")+"/"+getOsVersion().replaceAll(" ", "_");
+        return getOsName().replaceAll(" ", "_") + "/" + getOsVersion().replaceAll(" ", "_");
     }
 
     public String getProductToken() {
@@ -147,17 +147,25 @@ public class ServerClientTokens {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         ServerClientTokens that = (ServerClientTokens) o;
 
-        if (majorVersion != that.majorVersion) return false;
-        if (minorVersion != that.minorVersion) return false;
-        if (!osName.equals(that.osName)) return false;
-        if (!osVersion.equals(that.osVersion)) return false;
-        if (!productName.equals(that.productName)) return false;
-        if (!productVersion.equals(that.productVersion)) return false;
+        if (majorVersion != that.majorVersion)
+            return false;
+        if (minorVersion != that.minorVersion)
+            return false;
+        if (!osName.equals(that.osName))
+            return false;
+        if (!osVersion.equals(that.osVersion))
+            return false;
+        if (!productName.equals(that.productName))
+            return false;
+        if (!productVersion.equals(that.productVersion))
+            return false;
 
         return true;
     }

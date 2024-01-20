@@ -31,31 +31,35 @@ public class HttpFetch {
         return fetchBinary(url, 500, 500);
     }
 
-    public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
+    public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis)
+            throws IOException {
         return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<byte[]>() {
             @Override
-            public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
+            public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is)
+                    throws IOException {
                 return new Representation<byte[]>(urlConnection, IO.readBytes(is));
             }
         });
     }
 
-    public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
+    public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis)
+            throws IOException {
         return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<String>() {
             @Override
-            public Representation<String> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
+            public Representation<String> createRepresentation(URLConnection urlConnection, InputStream is)
+                    throws IOException {
                 return new Representation<String>(urlConnection, IO.readLines(is));
             }
         });
     }
 
-    public static <E> Representation<E> fetch(URL url, int connectTimeoutMillis, int readTimeoutMillis, RepresentationFactory<E> factory)
-            throws IOException {
+    public static <E> Representation<E> fetch(URL url, int connectTimeoutMillis, int readTimeoutMillis,
+            RepresentationFactory<E> factory) throws IOException {
         return fetch(url, "GET", connectTimeoutMillis, readTimeoutMillis, factory);
     }
 
-    public static <E> Representation<E> fetch(URL url, String method, int connectTimeoutMillis, int readTimeoutMillis, RepresentationFactory<E> factory)
-            throws IOException {
+    public static <E> Representation<E> fetch(URL url, String method, int connectTimeoutMillis, int readTimeoutMillis,
+            RepresentationFactory<E> factory) throws IOException {
 
         HttpURLConnection urlConnection = null;
         InputStream is = null;
@@ -82,7 +86,7 @@ public class HttpFetch {
                     errorStream.close();
                 }
                 throw new IOException("Fetching resource failed, returned status code: " + responseCode);
-                //String responseBody = IO.readString(urlConnection.getErrorStream());
+                // String responseBody = IO.readString(urlConnection.getErrorStream());
             }
             throw ex;
         } finally {

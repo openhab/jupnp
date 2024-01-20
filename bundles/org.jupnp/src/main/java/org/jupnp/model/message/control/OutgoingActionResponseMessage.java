@@ -54,23 +54,13 @@ public class OutgoingActionResponseMessage extends StreamResponseMessage impleme
     }
 
     protected void addHeaders() {
-        getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
-        getHeaders().add(
-                UpnpHeader.Type.SERVER,
-                new ServerHeader()
-        );
-        getHeaders().add(
-                UpnpHeader.Type.EXT,
-                new EXTHeader()
-        );
+        getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
+        getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
+        getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
     }
 
     public String getActionNamespace() {
         return actionNamespace;
     }
-
-
 }

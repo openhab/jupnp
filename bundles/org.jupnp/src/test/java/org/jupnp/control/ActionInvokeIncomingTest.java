@@ -14,6 +14,13 @@
 
 package org.jupnp.control;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.action.ActionException;
@@ -40,49 +47,31 @@ import org.jupnp.model.types.ErrorCode;
 import org.jupnp.model.types.SoapActionType;
 import org.jupnp.protocol.sync.ReceivingAction;
 import org.jupnp.util.MimeType;
-import org.junit.jupiter.api.Test;
-
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.UnknownHostException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Christian Bauer
  */
 class ActionInvokeIncomingTest {
 
-    public static final String SET_REQUEST = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:SetTarget xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n" +
-            "       <NewTargetValue>1</NewTargetValue>\n" +
-            "     </u:SetTarget>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+    public static final String SET_REQUEST = "<?xml version=\"1.0\"?>\n" + " <s:Envelope\n"
+            + "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
+            + "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" + "   <s:Body>\n"
+            + "     <u:SetTarget xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n"
+            + "       <NewTargetValue>1</NewTargetValue>\n" + "     </u:SetTarget>\n" + "   </s:Body>\n"
+            + " </s:Envelope>";
 
-    public static final String GET_REQUEST = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:GetTarget xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\"/>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+    public static final String GET_REQUEST = "<?xml version=\"1.0\"?>\n" + " <s:Envelope\n"
+            + "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
+            + "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" + "   <s:Body>\n"
+            + "     <u:GetTarget xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\"/>\n" + "   </s:Body>\n"
+            + " </s:Envelope>";
 
-    public static final String QUERY_STATE_VARIABLE_REQUEST = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:QueryStateVariable xmlns:u=\"urn:schemas-upnp-org:control-1-0\">\n" +
-            "       <varName>Status</varName>\n" +
-            "     </u:QueryStateVariable>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+    public static final String QUERY_STATE_VARIABLE_REQUEST = "<?xml version=\"1.0\"?>\n" + " <s:Envelope\n"
+            + "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
+            + "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" + "   <s:Body>\n"
+            + "     <u:QueryStateVariable xmlns:u=\"urn:schemas-upnp-org:control-1-0\">\n"
+            + "       <varName>Status</varName>\n" + "     </u:QueryStateVariable>\n" + "   </s:Body>\n"
+            + " </s:Envelope>";
 
     @Test
     void incomingRemoteCallGet() throws Exception {
@@ -91,8 +80,8 @@ class ActionInvokeIncomingTest {
 
     @Test
     void incomingRemoteCallClientInfo() throws Exception {
-        UpnpMessage response =
-                incomingRemoteCallGet(ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceWithClientInfo.class));
+        UpnpMessage response = incomingRemoteCallGet(
+                ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceWithClientInfo.class));
 
         assertEquals(4, response.getHeaders().size());
         assertEquals("foobar", response.getHeaders().getFirstHeader("X-MY-HEADER"));
@@ -144,12 +133,11 @@ class ActionInvokeIncomingTest {
 
         assertNotNull(response);
         assertFalse(response.getOperation().isFailed());
-        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                .isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-        assertEquals(
-            new ServerHeader().getValue(),
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-        );
+        assertEquals(new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -194,10 +182,8 @@ class ActionInvokeIncomingTest {
 
             URI controlURI = upnpService.getConfiguration().getNamespace().getControlPath(service);
             StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST, controlURI);
-            request.getHeaders().add(
-                    UpnpHeader.Type.CONTENT_TYPE,
-                    new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-            );
+            request.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                    new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
 
             SoapActionType actionType = new SoapActionType(service.getServiceType(), action.getName());
             request.getHeaders().add(UpnpHeader.Type.SOAPACTION, new SoapActionHeader(actionType));
@@ -211,12 +197,11 @@ class ActionInvokeIncomingTest {
 
             assertNotNull(response);
             assertFalse(response.getOperation().isFailed());
-            assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+            assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                    .isUDACompliantXML());
             assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-            assertEquals(
-                new ServerHeader().getValue(),
-                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-            );
+            assertEquals(new ServerHeader().getValue(),
+                    response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
             IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
             ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -225,7 +210,6 @@ class ActionInvokeIncomingTest {
             assertNotNull(responseInvocation.getOutput("RetTargetValue"));
         }
     }
-
 
     @Test
     void incomingRemoteCallSet() throws Exception {
@@ -251,12 +235,11 @@ class ActionInvokeIncomingTest {
 
         assertNotNull(response);
         assertFalse(response.getOperation().isFailed());
-        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                .isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-        assertEquals(
-            new ServerHeader().getValue(),
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-        );
+        assertEquals(new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -276,7 +259,8 @@ class ActionInvokeIncomingTest {
 
         Action action = service.getAction("SetTarget");
 
-        StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("/some/random/123/uri"));
+        StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST,
+                URI.create("/some/random/123/uri"));
         addMandatoryRequestHeaders(service, action, request);
         request.setBody(UpnpMessage.BodyType.STRING, SET_REQUEST);
 
@@ -315,12 +299,11 @@ class ActionInvokeIncomingTest {
 
         assertNotNull(response);
         assertTrue(response.getOperation().isFailed());
-        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                .isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-        assertEquals(
-            new ServerHeader().getValue(),
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-        );
+        assertEquals(new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -359,12 +342,11 @@ class ActionInvokeIncomingTest {
 
         assertNotNull(response);
         assertFalse(response.getOperation().isFailed());
-        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                .isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-        assertEquals(
-            new ServerHeader().getValue(),
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-        );
+        assertEquals(new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -378,11 +360,10 @@ class ActionInvokeIncomingTest {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST, URI.create("/some/random/123/uri"));
-        request.getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(MimeType.valueOf("some/randomtype"))
-        );
+        StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST,
+                URI.create("/some/random/123/uri"));
+        request.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(MimeType.valueOf("some/randomtype")));
         request.setBody(UpnpMessage.BodyType.STRING, SET_REQUEST);
 
         ReceivingAction prot = new ReceivingAction(upnpService, request);
@@ -392,7 +373,8 @@ class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
-        assertEquals(UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode(), response.getOperation().getStatusCode());
+        assertEquals(UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode(),
+                response.getOperation().getStatusCode());
     }
 
     @Test
@@ -408,17 +390,11 @@ class ActionInvokeIncomingTest {
 
         URI controlURI = upnpService.getConfiguration().getNamespace().getControlPath(service);
         StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST, controlURI);
-        request.getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
-        request.getHeaders().add(
-                UpnpHeader.Type.SOAPACTION,
-                new SoapActionHeader(
-                        new SoapActionType(
-                                SoapActionType.MAGIC_CONTROL_NS, SoapActionType.MAGIC_CONTROL_TYPE, null, action.getName()
-                        )
-                )
+        request.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
+        request.getHeaders().add(UpnpHeader.Type.SOAPACTION,
+                new SoapActionHeader(new SoapActionType(SoapActionType.MAGIC_CONTROL_NS,
+                        SoapActionType.MAGIC_CONTROL_TYPE, null, action.getName()))
 
         );
         request.setBody(UpnpMessage.BodyType.STRING, QUERY_STATE_VARIABLE_REQUEST);
@@ -431,12 +407,11 @@ class ActionInvokeIncomingTest {
 
         assertNotNull(response);
         assertFalse(response.getOperation().isFailed());
-        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class)
+                .isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
-        assertEquals(
-            new ServerHeader().getValue(),
-            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue()
-        );
+        assertEquals(new ServerHeader().getValue(),
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue());
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -447,15 +422,12 @@ class ActionInvokeIncomingTest {
     }
 
     protected void addMandatoryRequestHeaders(Service service, Action action, StreamRequestMessage request) {
-        request.getHeaders().add(
-                UpnpHeader.Type.CONTENT_TYPE,
-                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-        );
+        request.getHeaders().add(UpnpHeader.Type.CONTENT_TYPE,
+                new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8));
 
         SoapActionType actionType = new SoapActionType(service.getServiceType(), action.getName());
         request.getHeaders().add(UpnpHeader.Type.SOAPACTION, new SoapActionHeader(actionType));
         // Not mandatory but only for the tests
         request.getHeaders().add(UpnpHeader.Type.USER_AGENT, new UserAgentHeader("foo/bar"));
     }
-
 }

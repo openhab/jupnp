@@ -16,9 +16,9 @@ package org.jupnp;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ExecutorService;
 
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
 import org.jupnp.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
@@ -212,11 +212,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings("rawtypes")
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), createStreamClientConfiguration());
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(),
+                createStreamClientConfiguration());
     }
 
     private StreamClientConfiguration createStreamClientConfiguration() {
-        return new StreamClientConfigurationImpl(asyncExecutorService, timeoutSeconds, 5, retryAfterSeconds, retryIterations);
+        return new StreamClientConfigurationImpl(asyncExecutorService, timeoutSeconds, 5, retryAfterSeconds,
+                retryIterations);
     }
 
     @Override
@@ -328,10 +330,10 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Override
     public ExecutorService getAsyncProtocolExecutor() {
-        if ( asyncThreadPool == true ) {
+        if (asyncThreadPool == true) {
             return asyncExecutorService;
         } else {
-               return Executors.newCachedThreadPool();
+            return Executors.newCachedThreadPool();
         }
     }
 
@@ -415,42 +417,42 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected ExecutorService getRemoteExecutorService() {
-       if ( remoteThreadPool == true ) {
-           return remoteExecutorService;
-       } else {
-           return Executors.newCachedThreadPool();
-       }
+        if (remoteThreadPool == true) {
+            return remoteExecutorService;
+        } else {
+            return Executors.newCachedThreadPool();
+        }
     }
 
     protected ExecutorService getMainExecutorService() {
-       if ( mainThreadPool == true ) {
-           return mainExecutorService;
-       } else {
-           return Executors.newCachedThreadPool();
-       }
+        if (mainThreadPool == true) {
+            return mainExecutorService;
+        } else {
+            return Executors.newCachedThreadPool();
+        }
     }
 
     private void createExecutorServices() {
-        if ( mainThreadPool == true ) {
+        if (mainThreadPool == true) {
             log.debug("Creating mainThreadPool");
             mainExecutorService = createMainExecutorService();
         } else {
             log.debug("Skipping mainThreadPool creation.");
         }
-    
-        if ( asyncThreadPool == true ) {
+
+        if (asyncThreadPool == true) {
             log.debug("Creating asyncThreadPool");
-                asyncExecutorService = createAsyncProtocolExecutorService();
+            asyncExecutorService = createAsyncProtocolExecutorService();
         } else {
             log.debug("Skipping asyncThreadPool creation.");
         }
-    
-        if ( remoteThreadPool == true ) {
+
+        if (remoteThreadPool == true) {
             log.debug("Creating remoteThreadPool");
             remoteExecutorService = createRemoteProtocolExecutorService();
         } else {
             log.debug("Skipping remoteThreadPool creation.");
-        }    
+        }
     }
 
     protected ExecutorService createMainExecutorService() {
@@ -483,7 +485,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                 log.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
             }
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration threadPoolSize = {} {}", threadPoolSize, mainThreadPool);
+        log.info("OSGiUpnpServiceConfiguration createConfiguration threadPoolSize = {} {}", threadPoolSize,
+                mainThreadPool);
 
         prop = properties.get("asyncThreadPoolSize");
         if (prop instanceof String) {
@@ -499,7 +502,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                         asyncThreadPoolSize);
             }
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize, asyncThreadPool);
+        log.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize,
+                asyncThreadPool);
 
         prop = properties.get("multicastResponsePort");
         if (prop instanceof String) {
@@ -587,7 +591,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         log.info("OSGiUpnpServiceConfiguration timeoutSeconds = {}", timeoutSeconds);
 
         // let's automatically determine the size for the remoteThreadPool
-        if ( ( mainThreadPool == false ) || ( asyncThreadPool == false ) ) {
+        if ((mainThreadPool == false) || (asyncThreadPool == false)) {
             remoteThreadPool = false;
             remoteThreadPoolSize = -1;
         } else {

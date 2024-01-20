@@ -14,11 +14,11 @@
 
 package org.jupnp.model.resource;
 
-import org.jupnp.model.ExpirationDetails;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
+import org.jupnp.model.ExpirationDetails;
 
 /**
  * An addressable object, stored, managed, and accessible through the {@link org.jupnp.registry.Registry}.
@@ -56,7 +56,6 @@ public class Resource<M> {
         return model;
     }
 
-
     /**
      * @param pathQuery A relative URI.
      * @return <code>true</code> if the given URI path and query matches the resource's path and query.
@@ -71,11 +70,11 @@ public class Resource<M> {
      * NOOP by default.
      * </p>
      *
-     * @param pendingExecutions Add <code>Runnable</code>'s to this collection if maintenance code has to run in the background.
+     * @param pendingExecutions Add <code>Runnable</code>'s to this collection if maintenance code has to run in the
+     *            background.
      * @param expirationDetails The details of this resource's expiration, e.g. when it will expire.
      */
-    public void maintain(List<Runnable> pendingExecutions,
-                         ExpirationDetails expirationDetails) {
+    public void maintain(List<Runnable> pendingExecutions, ExpirationDetails expirationDetails) {
         // Do nothing
     }
 
@@ -91,12 +90,15 @@ public class Resource<M> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Resource resource = (Resource) o;
 
-        if (!getPathQuery().equals(resource.getPathQuery())) return false;
+        if (!getPathQuery().equals(resource.getPathQuery()))
+            return false;
 
         return true;
     }
@@ -110,5 +112,4 @@ public class Resource<M> {
     public String toString() {
         return "(" + getClass().getSimpleName() + ") URI: " + getPathQuery();
     }
-
 }

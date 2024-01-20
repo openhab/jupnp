@@ -14,13 +14,10 @@
 
 package org.jupnp.model;
 
-import org.junit.jupiter.api.Disabled;
-import org.jupnp.model.ModelUtil;
-import org.jupnp.model.XMLUtil;
-import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,11 +27,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 class UtilTest {
 
@@ -66,25 +63,25 @@ class UtilTest {
 
     @Test
     void csvToString() {
-        Object[] plainStrings = new Object[]{"foo", "bar", "baz"};
+        Object[] plainStrings = new Object[] { "foo", "bar", "baz" };
         assertEquals("foo,bar,baz", ModelUtil.toCommaSeparatedList(plainStrings));
 
-        Object[] commaStrings = new Object[]{"foo,", "bar", "b,az"};
+        Object[] commaStrings = new Object[] { "foo,", "bar", "b,az" };
         assertEquals("foo\\,,bar,b\\,az", ModelUtil.toCommaSeparatedList(commaStrings));
 
-        Object[] backslashStrings = new Object[]{"f\\oo", "b,ar", "b\\az"};
+        Object[] backslashStrings = new Object[] { "f\\oo", "b,ar", "b\\az" };
         assertEquals("f\\\\oo,b\\,ar,b\\\\az", ModelUtil.toCommaSeparatedList(backslashStrings));
     }
 
     @Test
     void stringToCsv() {
-        String[] plainStrings = new String[]{"foo", "bar", "baz"};
+        String[] plainStrings = new String[] { "foo", "bar", "baz" };
         assertArrayEquals(ModelUtil.fromCommaSeparatedList("foo,bar,baz"), plainStrings);
 
-        String[] commaStrings = new String[]{"foo,", "bar", "b,az"};
+        String[] commaStrings = new String[] { "foo,", "bar", "b,az" };
         assertArrayEquals(ModelUtil.fromCommaSeparatedList("foo\\,,bar,b\\,az"), commaStrings);
 
-        String[] backslashStrings = new String[]{"f\\oo", "b,ar", "b\\az"};
+        String[] backslashStrings = new String[] { "f\\oo", "b,ar", "b\\az" };
         assertArrayEquals(ModelUtil.fromCommaSeparatedList("f\\\\oo,b\\,ar,b\\\\az"), backslashStrings);
     }
 
@@ -273,8 +270,6 @@ class UtilTest {
 
     @Test
     void parseInvalidTimeString() {
-        assertThrows(IllegalArgumentException.class, () ->
-            ModelUtil.fromTimeString("00-00:11.123"));
+        assertThrows(IllegalArgumentException.class, () -> ModelUtil.fromTimeString("00-00:11.123"));
     }
-
 }

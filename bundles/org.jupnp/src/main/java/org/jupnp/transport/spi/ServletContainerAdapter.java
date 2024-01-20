@@ -14,9 +14,10 @@
 
 package org.jupnp.transport.spi;
 
-import javax.servlet.Servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+
+import javax.servlet.Servlet;
 
 /**
  * Implement this to provide your own servlet container (instance),
@@ -77,5 +78,4 @@ public interface ServletContainerAdapter {
      * Stop your servlet container if it's still running, might be called multiple times.
      */
     void stopIfRunning();
-
 }

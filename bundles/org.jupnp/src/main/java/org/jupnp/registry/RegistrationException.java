@@ -14,9 +14,9 @@
 
 package org.jupnp.registry;
 
-import org.jupnp.model.ValidationError;
-
 import java.util.List;
+
+import org.jupnp.model.ValidationError;
 
 /**
  * A recoverable error, thrown if device metadata could not be registered.

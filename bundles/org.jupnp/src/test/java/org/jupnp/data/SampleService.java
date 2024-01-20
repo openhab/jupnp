@@ -14,14 +14,14 @@
 
 package org.jupnp.data;
 
+import java.lang.reflect.Constructor;
+import java.net.URI;
+
 import org.jupnp.model.meta.Action;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
-
-import java.lang.reflect.Constructor;
-import java.net.URI;
 
 /**
  * @author Christian Bauer
@@ -29,19 +29,22 @@ import java.net.URI;
 public abstract class SampleService {
 
     public abstract ServiceType getServiceType();
+
     public abstract ServiceId getServiceId();
+
     public abstract URI getDescriptorURI();
+
     public abstract URI getControlURI();
+
     public abstract URI getEventSubscriptionURI();
+
     public abstract Action[] getActions();
+
     public abstract StateVariable[] getStateVariables();
 
     public <S extends Service> S newInstanceLocal(Constructor<S> ctor) {
         try {
-            return ctor.newInstance(
-                    getServiceType(), getServiceId(),
-                    getActions(), getStateVariables()
-            );
+            return ctor.newInstance(getServiceType(), getServiceId(), getActions(), getStateVariables());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -49,14 +52,10 @@ public abstract class SampleService {
 
     public <S extends Service> S newInstanceRemote(Constructor<S> ctor) {
         try {
-            return ctor.newInstance(
-                    getServiceType(), getServiceId(),
-                    getDescriptorURI(), getControlURI(), getEventSubscriptionURI(),
-                    getActions(), getStateVariables()
-            );
+            return ctor.newInstance(getServiceType(), getServiceId(), getDescriptorURI(), getControlURI(),
+                    getEventSubscriptionURI(), getActions(), getStateVariables());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
-
 }

@@ -33,14 +33,14 @@ public class StorageFolder extends Container {
     }
 
     public StorageFolder(String id, Container parent, String title, String creator, Integer childCount,
-                         Long storageUsed) {
+            Long storageUsed) {
         this(id, parent.getId(), title, creator, childCount, storageUsed);
     }
 
     public StorageFolder(String id, String parentID, String title, String creator, Integer childCount,
-                         Long storageUsed) {
+            Long storageUsed) {
         super(id, parentID, title, creator, CLASS, childCount);
-        if (storageUsed!= null)
+        if (storageUsed != null)
             setStorageUsed(storageUsed);
     }
 
@@ -52,6 +52,4 @@ public class StorageFolder extends Container {
         replaceFirstProperty(new UPNP.STORAGE_USED(l));
         return this;
     }
-
-
 }

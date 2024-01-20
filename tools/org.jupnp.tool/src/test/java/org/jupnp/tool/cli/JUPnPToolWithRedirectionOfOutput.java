@@ -36,77 +36,75 @@ import ch.qos.logback.core.util.StatusPrinter;
  */
 public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
 
-	public JUPnPToolWithRedirectionOfOutput(PrintStream out, PrintStream err) {
-		super(out, err);
-	}
+    public JUPnPToolWithRedirectionOfOutput(PrintStream out, PrintStream err) {
+        super(out, err);
+    }
 
-	/**
-	 * Add an appender to Root-Logger with redirection to stdout.
-	 */
-	protected void setLogging(String resourceName, String rootAppenderLogLevel) {
-		super.setLogging(resourceName, rootAppenderLogLevel);
+    /**
+     * Add an appender to Root-Logger with redirection to stdout.
+     */
+    protected void setLogging(String resourceName, String rootAppenderLogLevel) {
+        super.setLogging(resourceName, rootAppenderLogLevel);
 
-		LoggerContext context = (LoggerContext) LoggerFactory
-				.getILoggerFactory();
-		// try to redirect logback output to given outputStream
-		// add appender to output stream for ROOT logger
-		PatternLayoutEncoder ple = new PatternLayoutEncoder();
-		ple.setPattern("%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
-		ple.setContext(context);
-		ple.start();
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        // try to redirect logback output to given outputStream
+        // add appender to output stream for ROOT logger
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+        ple.setPattern("%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n");
+        ple.setContext(context);
+        ple.start();
 
-		ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
-				.getLogger(Logger.ROOT_LOGGER_NAME);
-		OutputStreamAppender<ILoggingEvent> appender = new OutputStreamAppender<>();
-		// first set encoder, then output stream
-		appender.setEncoder(ple);
-		OutputStream os = new RedirectToOutputStream(this.outputStream);
-		appender.setOutputStream(os);
-		appender.setName("RedirectToOutputStream");
-		appender.setContext(context);
-		appender.start();
+        ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger) LoggerFactory
+                .getLogger(Logger.ROOT_LOGGER_NAME);
+        OutputStreamAppender<ILoggingEvent> appender = new OutputStreamAppender<>();
+        // first set encoder, then output stream
+        appender.setEncoder(ple);
+        OutputStream os = new RedirectToOutputStream(this.outputStream);
+        appender.setOutputStream(os);
+        appender.setName("RedirectToOutputStream");
+        appender.setContext(context);
+        appender.start();
 
-		rootLogger.addAppender(appender);
-		Level level = Level.valueOf(rootAppenderLogLevel);
-		rootLogger.setLevel(level);
-		// see https://issues.apache.org/jira/browse/SLING-3045
-		// there can be sync issues when reconfiguring logback
-		long now = new Date().getTime();
-		StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
-	}
+        rootLogger.addAppender(appender);
+        Level level = Level.valueOf(rootAppenderLogLevel);
+        rootLogger.setLevel(level);
+        // see https://issues.apache.org/jira/browse/SLING-3045
+        // there can be sync issues when reconfiguring logback
+        long now = new Date().getTime();
+        StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
+    }
 
-	private static class RedirectToOutputStream extends OutputStream {
+    private static class RedirectToOutputStream extends OutputStream {
 
-		private final OutputStream outputStream;
+        private final OutputStream outputStream;
 
-		public RedirectToOutputStream(OutputStream os) {
-			this.outputStream = os;
-		}
+        public RedirectToOutputStream(OutputStream os) {
+            this.outputStream = os;
+        }
 
-		@Override
-		public void write(int b) throws IOException {
-			outputStream.write(b);
-		}
+        @Override
+        public void write(int b) throws IOException {
+            outputStream.write(b);
+        }
 
-		@Override
-		public void write(byte[] b) throws IOException {
-			outputStream.write(b);
-		}
+        @Override
+        public void write(byte[] b) throws IOException {
+            outputStream.write(b);
+        }
 
-		@Override
-		public void write(byte[] b, int off, int len) throws IOException {
-			outputStream.write(b, off, len);
-		}
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            outputStream.write(b, off, len);
+        }
 
-		@Override
-		public void flush() throws IOException {
-			outputStream.flush();
-		}
+        @Override
+        public void flush() throws IOException {
+            outputStream.flush();
+        }
 
-		@Override
-		public void close() {
-			// do NOT close the output stream
-		}
-
-	}
+        @Override
+        public void close() {
+            // do NOT close the output stream
+        }
+    }
 }

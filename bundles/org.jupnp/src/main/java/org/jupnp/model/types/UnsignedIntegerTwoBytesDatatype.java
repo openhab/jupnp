@@ -20,12 +20,12 @@ package org.jupnp.model.types;
 public class UnsignedIntegerTwoBytesDatatype extends AbstractDatatype<UnsignedIntegerTwoBytes> {
 
     public UnsignedIntegerTwoBytes valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             return new UnsignedIntegerTwoBytes(s);
         } catch (NumberFormatException ex) {
             throw new InvalidValueException("Can't convert string to number or not in range: " + s, ex);
         }
     }
-
 }

@@ -15,15 +15,15 @@
 
 package org.jupnp.support.model.item;
 
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
+import java.util.List;
+
 import org.jupnp.support.model.Person;
 import org.jupnp.support.model.Res;
 import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.container.Container;
-
-import java.util.List;
-
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 /**
  * @author Christian Bauer
@@ -44,11 +44,13 @@ public class AudioBook extends AudioItem {
         this(id, parent.getId(), title, creator, null, null, null, resource);
     }
 
-    public AudioBook(String id, Container parent, String title, String creator, String producer, String contributor, String date, Res... resource) {
+    public AudioBook(String id, Container parent, String title, String creator, String producer, String contributor,
+            String date, Res... resource) {
         this(id, parent.getId(), title, creator, new Person(producer), new Person(contributor), date, resource);
     }
 
-    public AudioBook(String id, String parentID, String title, String creator, Person producer, Person contributor, String date, Res... resource) {
+    public AudioBook(String id, String parentID, String title, String creator, Person producer, Person contributor,
+            String date, Res... resource) {
         super(id, parentID, title, creator, resource);
         setClazz(CLASS);
         if (producer != null)
@@ -58,7 +60,7 @@ public class AudioBook extends AudioItem {
         if (date != null)
             setDate(date);
     }
-    
+
     public StorageMedium getStorageMedium() {
         return getFirstPropertyValue(UPNP.STORAGE_MEDIUM.class);
     }
@@ -110,5 +112,4 @@ public class AudioBook extends AudioItem {
         replaceFirstProperty(new DC.DATE(date));
         return this;
     }
-
 }

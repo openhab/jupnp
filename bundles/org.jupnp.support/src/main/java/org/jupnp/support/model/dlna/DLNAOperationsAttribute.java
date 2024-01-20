@@ -50,7 +50,7 @@ public class DLNAOperationsAttribute extends DLNAAttribute<EnumSet<DLNAOperation
                 }
             }
         } catch (NumberFormatException numberFormatException) {
-            //no need to take any measure
+            // no need to take any measure
         }
 
         if (value.isEmpty())

@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.jupnp.model.types.InvalidValueException;
 
 /**
@@ -30,7 +31,9 @@ public class NormalPlayTime {
         SECONDS,
         TIME
     }
-    private static final Pattern pattern = Pattern.compile("^(\\d+):(\\d{1,2}):(\\d{1,2})(\\.(\\d{1,3}))?|(\\d+)(\\.(\\d{1,3}))?$", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern pattern = Pattern
+            .compile("^(\\d+):(\\d{1,2}):(\\d{1,2})(\\.(\\d{1,3}))?|(\\d+)(\\.(\\d{1,3}))?$", Pattern.CASE_INSENSITIVE);
     private long milliseconds;
 
     public NormalPlayTime(long milliseconds) {
@@ -83,17 +86,20 @@ public class NormalPlayTime {
     }
 
     /**
-     * We don't ignore the right zeros in milliseconds, a small compromise 
+     * We don't ignore the right zeros in milliseconds, a small compromise
+     * 
      * @param format
      */
-    public String getString(Format format) {        
+    public String getString(Format format) {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds);
         long ms = milliseconds % 1000;
         switch (format) {
             case TIME:
-                seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
+                seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+                        - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
                 long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
-                long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds));
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
+                        - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds));
                 return String.format(Locale.ROOT, "%d:%02d:%02d.%03d", hours, minutes, seconds, ms);
             default:
                 return String.format(Locale.ROOT, "%d.%03d", seconds, ms);
@@ -107,18 +113,15 @@ public class NormalPlayTime {
             try {
                 if (matcher.group(1) != null) {
                     msMultiplier = (int) Math.pow(10, 3 - matcher.group(5).length());
-                    return new NormalPlayTime(
-                            Long.parseLong(matcher.group(1)),
-                            Long.parseLong(matcher.group(2)),
-                            Long.parseLong(matcher.group(3)),
-                            Long.parseLong(matcher.group(5))*msMultiplier);
+                    return new NormalPlayTime(Long.parseLong(matcher.group(1)), Long.parseLong(matcher.group(2)),
+                            Long.parseLong(matcher.group(3)), Long.parseLong(matcher.group(5)) * msMultiplier);
                 } else {
                     msMultiplier = (int) Math.pow(10, 3 - matcher.group(8).length());
                     return new NormalPlayTime(
-                            Long.parseLong(matcher.group(6)) * 1000 + Long.parseLong(matcher.group(8))*msMultiplier);
+                            Long.parseLong(matcher.group(6)) * 1000 + Long.parseLong(matcher.group(8)) * msMultiplier);
                 }
             } catch (NumberFormatException ex1) {
-              //no need to take any precaution measure
+                // no need to take any precaution measure
             }
         }
         throw new InvalidValueException("Can't parse NormalPlayTime: " + s);

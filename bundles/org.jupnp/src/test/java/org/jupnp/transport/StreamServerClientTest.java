@@ -21,12 +21,12 @@ import java.io.UncheckedIOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.jupnp.UpnpServiceConfiguration;
@@ -44,7 +44,6 @@ import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.transport.spi.UpnpStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.junit.jupiter.api.Test;
 
 public abstract class StreamServerClientTest {
 
@@ -101,7 +100,7 @@ public abstract class StreamServerClientTest {
     public static TestProtocol lastExecutedServerProtocol;
 
     static void start(Function<Integer, StreamServer> createServer,
-                      Function<UpnpServiceConfiguration, StreamClient> createClient) throws Exception {
+            Function<UpnpServiceConfiguration, StreamClient> createClient) throws Exception {
         server = createServer.apply(TEST_PORT);
         server.init(InetAddress.getByName(TEST_HOST), router);
         configuration.getStreamServerExecutorService().execute(server);
@@ -235,16 +234,14 @@ public abstract class StreamServerClientTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "http:///", "http:///descriptor.xml", "http://:8081/descriptor.xml"})
+    @ValueSource(strings = { "", "http:///", "http:///descriptor.xml", "http://:8081/descriptor.xml" })
     void returnNullForInvalidURI(String uri) throws Exception {
         assertNull(client.sendRequest(createRequestMessage(new URI(uri))));
     }
 
     protected StreamRequestMessage createRequestMessage(String path) {
-        return new StreamRequestMessage(
-            UpnpRequest.Method.GET,
-            URI.create("http://" + TEST_HOST + ":" + TEST_PORT + path)
-        );
+        return new StreamRequestMessage(UpnpRequest.Method.GET,
+                URI.create("http://" + TEST_HOST + ":" + TEST_PORT + path));
     }
 
     protected StreamRequestMessage createRequestMessage(URI uri) {
@@ -274,7 +271,7 @@ public abstract class StreamServerClientTest {
         }
     }
 
-    public static class OKBodyResponse extends TestProtocol{
+    public static class OKBodyResponse extends TestProtocol {
 
         public static final String PATH = "/okbody";
 
@@ -408,5 +405,4 @@ public abstract class StreamServerClientTest {
             return new StreamResponseMessage(UpnpResponse.Status.OK);
         }
     }
-
 }

@@ -51,7 +51,8 @@ public class AnnotationActionBinder {
     protected Map<StateVariable, StateVariableAccessor> stateVariables;
     protected Set<Class> stringConvertibleTypes;
 
-    public AnnotationActionBinder(Method method, Map<StateVariable, StateVariableAccessor> stateVariables, Set<Class> stringConvertibleTypes) {
+    public AnnotationActionBinder(Method method, Map<StateVariable, StateVariableAccessor> stateVariables,
+            Set<Class> stringConvertibleTypes) {
         this.annotation = method.getAnnotation(UpnpAction.class);
         this.stateVariables = stateVariables;
         this.method = method;
@@ -89,8 +90,8 @@ public class AnnotationActionBinder {
         Map<ActionArgument<LocalService>, StateVariableAccessor> outputArguments = createOutputArguments();
 
         inputArguments.addAll(outputArguments.keySet());
-        ActionArgument<LocalService>[] actionArguments =
-                inputArguments.toArray(new ActionArgument[inputArguments.size()]);
+        ActionArgument<LocalService>[] actionArguments = inputArguments
+                .toArray(new ActionArgument[inputArguments.size()]);
 
         Action action = new Action(name, actionArguments);
         ActionExecutor executor = createExecutor(outputArguments);
@@ -118,30 +119,20 @@ public class AnnotationActionBinder {
                     UpnpInputArgument inputArgumentAnnotation = (UpnpInputArgument) paramAnnotation;
                     annotatedParams++;
 
-                    String argumentName =
-                            inputArgumentAnnotation.name();
+                    String argumentName = inputArgumentAnnotation.name();
 
-                    StateVariable stateVariable =
-                            findRelatedStateVariable(
-                                    inputArgumentAnnotation.stateVariable(),
-                                    argumentName,
-                                    getMethod().getName()
-                            );
+                    StateVariable stateVariable = findRelatedStateVariable(inputArgumentAnnotation.stateVariable(),
+                            argumentName, getMethod().getName());
 
                     if (stateVariable == null) {
                         throw new LocalServiceBindingException(
-                                "Could not detected related state variable of argument: " + argumentName
-                        );
+                                "Could not detected related state variable of argument: " + argumentName);
                     }
 
                     validateType(stateVariable, getMethod().getParameterTypes()[i]);
 
-                    ActionArgument inputArgument = new ActionArgument(
-                            argumentName,
-                            inputArgumentAnnotation.aliases(),
-                            stateVariable.getName(),
-                            ActionArgument.Direction.IN
-                    );
+                    ActionArgument inputArgument = new ActionArgument(argumentName, inputArgumentAnnotation.aliases(),
+                            stateVariable.getName(), ActionArgument.Direction.IN);
 
                     list.add(inputArgument);
                 }
@@ -149,20 +140,23 @@ public class AnnotationActionBinder {
         }
         // A method can't have any parameters that are not annotated with @UpnpInputArgument - we wouldn't know what
         // value to pass when we invoke it later on... unless the last parameter is of type RemoteClientInfo
-        if (annotatedParams < getMethod().getParameterTypes().length
-            && !RemoteClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
-            throw new LocalServiceBindingException("Method has parameters that are not input arguments: " + getMethod().getName());
+        if (annotatedParams < getMethod().getParameterTypes().length && !RemoteClientInfo.class
+                .isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length - 1])) {
+            throw new LocalServiceBindingException(
+                    "Method has parameters that are not input arguments: " + getMethod().getName());
         }
 
         return list;
     }
 
-    protected Map<ActionArgument<LocalService>, StateVariableAccessor> createOutputArguments() throws LocalServiceBindingException {
+    protected Map<ActionArgument<LocalService>, StateVariableAccessor> createOutputArguments()
+            throws LocalServiceBindingException {
 
         Map<ActionArgument<LocalService>, StateVariableAccessor> map = new LinkedHashMap(); // !!! Insertion order!
 
         UpnpAction actionAnnotation = getMethod().getAnnotation(UpnpAction.class);
-        if (actionAnnotation.out().length == 0) return map;
+        if (actionAnnotation.out().length == 0)
+            return map;
 
         boolean hasMultipleOutputArguments = actionAnnotation.out().length > 1;
 
@@ -170,11 +164,8 @@ public class AnnotationActionBinder {
 
             String argumentName = outputArgumentAnnotation.name();
 
-            StateVariable stateVariable = findRelatedStateVariable(
-                    outputArgumentAnnotation.stateVariable(),
-                    argumentName,
-                    getMethod().getName()
-            );
+            StateVariable stateVariable = findRelatedStateVariable(outputArgumentAnnotation.stateVariable(),
+                    argumentName, getMethod().getName());
 
             // Might-just-work attempt, try the name of the getter
             if (stateVariable == null && outputArgumentAnnotation.getterName().length() > 0) {
@@ -183,24 +174,16 @@ public class AnnotationActionBinder {
 
             if (stateVariable == null) {
                 throw new LocalServiceBindingException(
-                        "Related state variable not found for output argument: " + argumentName
-                );
+                        "Related state variable not found for output argument: " + argumentName);
             }
 
-            StateVariableAccessor accessor = findOutputArgumentAccessor(
-                    stateVariable,
-                    outputArgumentAnnotation.getterName(),
-                    hasMultipleOutputArguments
-            );
+            StateVariableAccessor accessor = findOutputArgumentAccessor(stateVariable,
+                    outputArgumentAnnotation.getterName(), hasMultipleOutputArguments);
 
             log.trace("Found related state variable for output argument '{}': {}", argumentName, stateVariable);
 
-            ActionArgument outputArgument = new ActionArgument(
-                    argumentName,
-                    stateVariable.getName(),
-                    ActionArgument.Direction.OUT,
-                    !hasMultipleOutputArguments
-            );
+            ActionArgument outputArgument = new ActionArgument(argumentName, stateVariable.getName(),
+                    ActionArgument.Direction.OUT, !hasMultipleOutputArguments);
 
             map.put(outputArgument, accessor);
         }
@@ -208,8 +191,8 @@ public class AnnotationActionBinder {
         return map;
     }
 
-    protected StateVariableAccessor findOutputArgumentAccessor(StateVariable stateVariable, String getterName, boolean multipleArguments)
-            throws LocalServiceBindingException {
+    protected StateVariableAccessor findOutputArgumentAccessor(StateVariable stateVariable, String getterName,
+            boolean multipleArguments) throws LocalServiceBindingException {
 
         boolean isVoid = getMethod().getReturnType().equals(Void.TYPE);
 
@@ -221,9 +204,8 @@ public class AnnotationActionBinder {
                 // Use the same class as the action method
                 Method getter = Reflections.getMethod(getMethod().getDeclaringClass(), getterName);
                 if (getter == null)
-                    throw new LocalServiceBindingException(
-                            "Declared getter method '" + getterName + "' not found on: " + getMethod().getDeclaringClass()
-                    );
+                    throw new LocalServiceBindingException("Declared getter method '" + getterName + "' not found on: "
+                            + getMethod().getDeclaringClass());
 
                 validateType(stateVariable, getter.getReturnType());
 
@@ -234,16 +216,14 @@ public class AnnotationActionBinder {
                 return getStateVariables().get(stateVariable);
             }
 
-
         } else if (getterName != null && getterName.length() > 0) {
             log.trace("Action method is not void, will use getter method on returned instance: {}", getterName);
 
             // Use the returned class
             Method getter = Reflections.getMethod(getMethod().getReturnType(), getterName);
             if (getter == null)
-                throw new LocalServiceBindingException(
-                        "Declared getter method '" + getterName + "' not found on return type: " + getMethod().getReturnType()
-                );
+                throw new LocalServiceBindingException("Declared getter method '" + getterName
+                        + "' not found on return type: " + getMethod().getReturnType());
 
             validateType(stateVariable, getter.getReturnType());
 
@@ -276,7 +256,8 @@ public class AnnotationActionBinder {
             // Try with A_ARG_TYPE prefix
             String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(argumentName);
             actualName = Constants.ARG_TYPE_PREFIX + actualName;
-            log.trace("Finding related state variable with prefixed argument name (converted to UPnP name): {}", actualName);
+            log.trace("Finding related state variable with prefixed argument name (converted to UPnP name): {}",
+                    actualName);
             relatedStateVariable = getStateVariable(actualName);
         }
 
@@ -285,10 +266,8 @@ public class AnnotationActionBinder {
             String methodPropertyName = Reflections.getMethodPropertyName(methodName);
             if (methodPropertyName != null) {
                 log.trace("Finding related state variable with method property name: {}", methodPropertyName);
-                relatedStateVariable =
-                        getStateVariable(
-                                AnnotationLocalServiceBinder.toUpnpStateVariableName(methodPropertyName)
-                        );
+                relatedStateVariable = getStateVariable(
+                        AnnotationLocalServiceBinder.toUpnpStateVariableName(methodPropertyName));
             }
         }
 
@@ -300,27 +279,24 @@ public class AnnotationActionBinder {
         // Validate datatype as good as we can
         // (for enums and other convertible types, the state variable type should be STRING)
 
-        Datatype.Default expectedDefaultMapping =
-                ModelUtil.isStringConvertibleType(getStringConvertibleTypes(), type)
-                        ? Datatype.Default.STRING
-                        : Datatype.Default.getByJavaType(type);
+        Datatype.Default expectedDefaultMapping = ModelUtil.isStringConvertibleType(getStringConvertibleTypes(), type)
+                ? Datatype.Default.STRING
+                : Datatype.Default.getByJavaType(type);
 
         log.trace("Expecting '{}' to match default mapping: {}", stateVariable, expectedDefaultMapping);
 
-        if (expectedDefaultMapping != null &&
-                !stateVariable.getTypeDetails().getDatatype().isHandlingJavaType(expectedDefaultMapping.getJavaType())) {
+        if (expectedDefaultMapping != null && !stateVariable.getTypeDetails().getDatatype()
+                .isHandlingJavaType(expectedDefaultMapping.getJavaType())) {
 
             // TODO: Consider custom types?!
             throw new LocalServiceBindingException(
-                    "State variable '" + stateVariable + "' datatype can't handle action " +
-                            "argument's Java type (change one): " + expectedDefaultMapping.getJavaType()
-            );
+                    "State variable '" + stateVariable + "' datatype can't handle action "
+                            + "argument's Java type (change one): " + expectedDefaultMapping.getJavaType());
 
-        } else if (expectedDefaultMapping == null && stateVariable.getTypeDetails().getDatatype().getBuiltin() != null) {
-            throw new LocalServiceBindingException(
-                    "State variable '" + stateVariable  + "' should be custom datatype " +
-                            "(action argument type is unknown Java type): " + type.getSimpleName()
-            );
+        } else if (expectedDefaultMapping == null
+                && stateVariable.getTypeDetails().getDatatype().getBuiltin() != null) {
+            throw new LocalServiceBindingException("State variable '" + stateVariable + "' should be custom datatype "
+                    + "(action argument type is unknown Java type): " + type.getSimpleName());
         }
 
         log.trace("State variable matches required argument datatype (or can't be validated because it is custom)");
@@ -334,5 +310,4 @@ public class AnnotationActionBinder {
         }
         return null;
     }
-
 }

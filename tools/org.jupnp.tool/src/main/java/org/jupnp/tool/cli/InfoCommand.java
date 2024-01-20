@@ -31,135 +31,134 @@ import org.slf4j.LoggerFactory;
  */
 public class InfoCommand {
 
-	private static Logger logger = LoggerFactory.getLogger(InfoCommand.class);
-	private JUPnPTool tool;
-	private StringBuilder sb;
+    private static Logger logger = LoggerFactory.getLogger(InfoCommand.class);
+    private JUPnPTool tool;
+    private StringBuilder sb;
 
-	public InfoCommand(JUPnPTool tool) {
-		this.tool = tool;
-	}
+    public InfoCommand(JUPnPTool tool) {
+        this.tool = tool;
+    }
 
-	public int run(List<String> ipAddressOrUdns, boolean verbose) {
-		logger.info("Show information for devices {}", flatList(ipAddressOrUdns));
-		if (verbose) {
-			SpecificationViolationReporter.enableReporting();
-		} else {
-			logger.debug("Disable UPnP specification violation reportings");
-			SpecificationViolationReporter.disableReporting();
-		}
+    public int run(List<String> ipAddressOrUdns, boolean verbose) {
+        logger.info("Show information for devices {}", flatList(ipAddressOrUdns));
+        if (verbose) {
+            SpecificationViolationReporter.enableReporting();
+        } else {
+            logger.debug("Disable UPnP specification violation reportings");
+            SpecificationViolationReporter.disableReporting();
+        }
 
-		UpnpService upnpService = tool.createUpnpService();
-		upnpService.startup();
-		upnpService.getControlPoint().search(new STAllHeader());
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// ignore
-		}
+        UpnpService upnpService = tool.createUpnpService();
+        upnpService.startup();
+        upnpService.getControlPoint().search(new STAllHeader());
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // ignore
+        }
 
-		Registry registry = upnpService.getRegistry();
-		for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
-			RemoteDevice device = iter.next();
+        Registry registry = upnpService.getRegistry();
+        for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
+            RemoteDevice device = iter.next();
 
-			String ipAddress = device.getIdentity().getDescriptorURL().getHost();
-			String udn = device.getIdentity().getUdn().getIdentifierString();
-			logger.info("ip: {}, udn={}", ipAddress, udn);
+            String ipAddress = device.getIdentity().getDescriptorURL().getHost();
+            String udn = device.getIdentity().getUdn().getIdentifierString();
+            logger.info("ip: {}, udn={}", ipAddress, udn);
 
-			for (Iterator<String> searchIiter = ipAddressOrUdns.iterator(); searchIiter.hasNext();) {
-				String ipAddressOrUdn = searchIiter.next();
-				boolean match = false;
-				if (isSameUdn(udn, ipAddressOrUdn)) {
-					match = true;
-				} else {
-					try {
-						if (isSameIpAddress(ipAddress, ipAddressOrUdn)) {
-							match = true;
-						}
-					} catch (IllegalArgumentException ex) {
-						// ignore errors
-					}
-				}
-				if (match) {
-					showDeviceInfo(device, ipAddressOrUdn, verbose);
-				}
-			}
-		}
-		upnpService.shutdown();
+            for (Iterator<String> searchIiter = ipAddressOrUdns.iterator(); searchIiter.hasNext();) {
+                String ipAddressOrUdn = searchIiter.next();
+                boolean match = false;
+                if (isSameUdn(udn, ipAddressOrUdn)) {
+                    match = true;
+                } else {
+                    try {
+                        if (isSameIpAddress(ipAddress, ipAddressOrUdn)) {
+                            match = true;
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        // ignore errors
+                    }
+                }
+                if (match) {
+                    showDeviceInfo(device, ipAddressOrUdn, verbose);
+                }
+            }
+        }
+        upnpService.shutdown();
 
-		return JUPnPTool.RC_OK;
-	}
+        return JUPnPTool.RC_OK;
+    }
 
-	private void showDeviceInfo(RemoteDevice device, String searchCriteria, boolean verbose) {
-		logger.info(device.toString());
-		sb = new StringBuilder();
-		sb.append("Device info for ");
-		sb.append(searchCriteria);
-		print("UDN", device.getIdentity().getUdn().getIdentifierString());
-		print("Display", device.getDisplayString());
-		print("Model.Name", device.getDetails().getModelDetails().getModelName());
-		print("Model.Description", device.getDetails().getModelDetails().getModelDescription());
-		print("Model.Number", device.getDetails().getModelDetails().getModelNumber());
-		print("Model.URI", device.getDetails().getModelDetails().getModelURI());
-		print("DescriptorURL", device.getIdentity().getDescriptorURL());
-		print("SerialNumber", device.getDetails().getSerialNumber());
-		print("FriendlyName", device.getDetails().getFriendlyName());
-		print("UPC", device.getDetails().getUpc());
-		print("Manufacturer", device.getDetails().getManufacturerDetails().getManufacturer());
-		print("ManufacturerURI", device.getDetails().getManufacturerDetails().getManufacturerURI());
-		print("PresentationURI", device.getDetails().getPresentationURI());
-		if (verbose) {
-			print("Type", device.getType().getType());
-			print("Type.Display", device.getType().getDisplayString());
-			print("Type.Version", String.valueOf(device.getType().getVersion()));
-			print("UDA.Version", device.getVersion().getMajor() + "."
-					+ device.getVersion().getMinor());
-			print("isRootDevice", String.valueOf(device.isRoot()));
-			print("isFullyHydrated", String.valueOf(device.isFullyHydrated()));
-		}
+    private void showDeviceInfo(RemoteDevice device, String searchCriteria, boolean verbose) {
+        logger.info(device.toString());
+        sb = new StringBuilder();
+        sb.append("Device info for ");
+        sb.append(searchCriteria);
+        print("UDN", device.getIdentity().getUdn().getIdentifierString());
+        print("Display", device.getDisplayString());
+        print("Model.Name", device.getDetails().getModelDetails().getModelName());
+        print("Model.Description", device.getDetails().getModelDetails().getModelDescription());
+        print("Model.Number", device.getDetails().getModelDetails().getModelNumber());
+        print("Model.URI", device.getDetails().getModelDetails().getModelURI());
+        print("DescriptorURL", device.getIdentity().getDescriptorURL());
+        print("SerialNumber", device.getDetails().getSerialNumber());
+        print("FriendlyName", device.getDetails().getFriendlyName());
+        print("UPC", device.getDetails().getUpc());
+        print("Manufacturer", device.getDetails().getManufacturerDetails().getManufacturer());
+        print("ManufacturerURI", device.getDetails().getManufacturerDetails().getManufacturerURI());
+        print("PresentationURI", device.getDetails().getPresentationURI());
+        if (verbose) {
+            print("Type", device.getType().getType());
+            print("Type.Display", device.getType().getDisplayString());
+            print("Type.Version", String.valueOf(device.getType().getVersion()));
+            print("UDA.Version", device.getVersion().getMajor() + "." + device.getVersion().getMinor());
+            print("isRootDevice", String.valueOf(device.isRoot()));
+            print("isFullyHydrated", String.valueOf(device.isFullyHydrated()));
+        }
 
-		sb.append("\n");
-		tool.printStdout(sb.toString());
-	}
+        sb.append("\n");
+        tool.printStdout(sb.toString());
+    }
 
-	private void print(final String desc, final Object o) {
-		if (o == null) {
-			// do skip this property, as null makes no sense
-			return;
-		} else {
-			String s;
-			if (o instanceof String) {
-				if (((String) o).length() == 0) {
-					s = "\"\"";
-				} else {
-					s = (String) o;
-				}
-			} else {
-				s = String.valueOf(o);
-			}
-			sb.append("\n");
-			sb.append(desc);
-			sb.append("\t\t\t\t", 0, 3 - (desc.length() / 8));
-			sb.append(s);
-		}
-	}
+    private void print(final String desc, final Object o) {
+        if (o == null) {
+            // do skip this property, as null makes no sense
+            return;
+        } else {
+            String s;
+            if (o instanceof String) {
+                if (((String) o).length() == 0) {
+                    s = "\"\"";
+                } else {
+                    s = (String) o;
+                }
+            } else {
+                s = String.valueOf(o);
+            }
+            sb.append("\n");
+            sb.append(desc);
+            sb.append("\t\t\t\t", 0, 3 - (desc.length() / 8));
+            sb.append(s);
+        }
+    }
 
-	private String flatList(List<String> l) {
-		StringBuilder sb = new StringBuilder();
-		for (Iterator<String> iter = l.iterator(); iter.hasNext();) {
-			sb.append(iter.next());
-			sb.append(" ");
-		}
-		return sb.toString();
-	}
+    private String flatList(List<String> l) {
+        StringBuilder sb = new StringBuilder();
+        for (Iterator<String> iter = l.iterator(); iter.hasNext();) {
+            sb.append(iter.next());
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
 
-	private boolean isSameIpAddress(String ip1, String ip2) {
-		return IpAddressUtils.isSameIpAddress(ip1, ip2);
-	}
+    private boolean isSameIpAddress(String ip1, String ip2) {
+        return IpAddressUtils.isSameIpAddress(ip1, ip2);
+    }
 
-	private boolean isSameUdn(String udn1, String udn2) {
-		if ((udn1 == null) || (udn2 == null)) {
-			return false;
-		}
-		return udn1.equals(udn2);
-	}
+    private boolean isSameUdn(String udn1, String udn2) {
+        if ((udn1 == null) || (udn2 == null)) {
+            return false;
+        }
+        return udn1.equals(udn2);
+    }
 }

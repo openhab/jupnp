@@ -41,7 +41,6 @@ public class ConnectionInfo {
         public Direction getOpposite() {
             return this.equals(Output) ? Input : Output;
         }
-
     }
 
     protected final int connectionID;
@@ -71,7 +70,7 @@ public class ConnectionInfo {
      * <li>RcsID should be 0 or -1</li>
      * <li>AVTransportID should be 0 or -1</li>
      * <li>ProtocolInfo should contain accurate information if it is known, otherwhise
-     *     it should be NULL (empty string)</li>
+     * it should be NULL (empty string)</li>
      * <li>PeerConnectionManager should be NULL (empty string)</li>
      * <li>PeerConnectionID should be -1</li>
      * <li>Direction should be Input or Output</li>
@@ -82,12 +81,9 @@ public class ConnectionInfo {
         this(0, 0, 0, null, null, -1, Direction.Input, Status.Unknown);
     }
 
-
-    public ConnectionInfo(int connectionID,
-                          int rcsID, int avTransportID,
-                          ProtocolInfo protocolInfo,
-                          ServiceReference peerConnectionManager, int peerConnectionID,
-                          Direction direction, Status connectionStatus) {
+    public ConnectionInfo(int connectionID, int rcsID, int avTransportID, ProtocolInfo protocolInfo,
+            ServiceReference peerConnectionManager, int peerConnectionID, Direction direction,
+            Status connectionStatus) {
         this.connectionID = connectionID;
         this.rcsID = rcsID;
         this.avTransportID = avTransportID;
@@ -136,20 +132,30 @@ public class ConnectionInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         ConnectionInfo that = (ConnectionInfo) o;
 
-        if (avTransportID != that.avTransportID) return false;
-        if (connectionID != that.connectionID) return false;
-        if (peerConnectionID != that.peerConnectionID) return false;
-        if (rcsID != that.rcsID) return false;
-        if (connectionStatus != that.connectionStatus) return false;
-        if (direction != that.direction) return false;
-        if (peerConnectionManager != null ? !peerConnectionManager.equals(that.peerConnectionManager) : that.peerConnectionManager != null)
+        if (avTransportID != that.avTransportID)
             return false;
-        if (protocolInfo != null ? !protocolInfo.equals(that.protocolInfo) : that.protocolInfo != null) return false;
+        if (connectionID != that.connectionID)
+            return false;
+        if (peerConnectionID != that.peerConnectionID)
+            return false;
+        if (rcsID != that.rcsID)
+            return false;
+        if (connectionStatus != that.connectionStatus)
+            return false;
+        if (direction != that.direction)
+            return false;
+        if (peerConnectionManager != null ? !peerConnectionManager.equals(that.peerConnectionManager)
+                : that.peerConnectionManager != null)
+            return false;
+        if (protocolInfo != null ? !protocolInfo.equals(that.protocolInfo) : that.protocolInfo != null)
+            return false;
 
         return true;
     }

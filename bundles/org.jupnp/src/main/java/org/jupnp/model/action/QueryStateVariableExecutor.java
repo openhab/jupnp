@@ -26,27 +26,26 @@ import org.jupnp.model.types.ErrorCode;
  * @author Christian Bauer
  */
 public class QueryStateVariableExecutor extends AbstractActionExecutor {
-    
+
     @Override
     protected void execute(ActionInvocation<LocalService> actionInvocation, Object serviceImpl) throws Exception {
 
         // Querying a state variable doesn't mean an actual "action" method on this instance gets invoked
         if (actionInvocation.getAction() instanceof QueryStateVariableAction) {
             if (!actionInvocation.getAction().getService().isSupportsQueryStateVariables()) {
-                actionInvocation.setFailure(
-                        new ActionException(ErrorCode.INVALID_ACTION, "This service does not support querying state variables")
-                );
+                actionInvocation.setFailure(new ActionException(ErrorCode.INVALID_ACTION,
+                        "This service does not support querying state variables"));
             } else {
                 executeQueryStateVariable(actionInvocation, serviceImpl);
             }
         } else {
             throw new IllegalStateException(
-                    "This class can only execute QueryStateVariableAction's, not: " + actionInvocation.getAction()
-            );
+                    "This class can only execute QueryStateVariableAction's, not: " + actionInvocation.getAction());
         }
     }
 
-    protected void executeQueryStateVariable(ActionInvocation<LocalService> actionInvocation, Object serviceImpl) throws Exception {
+    protected void executeQueryStateVariable(ActionInvocation<LocalService> actionInvocation, Object serviceImpl)
+            throws Exception {
 
         LocalService service = actionInvocation.getAction().getService();
 
@@ -54,27 +53,21 @@ public class QueryStateVariableExecutor extends AbstractActionExecutor {
         StateVariable stateVariable = service.getStateVariable(stateVariableName);
 
         if (stateVariable == null) {
-            throw new ActionException(
-                    ErrorCode.ARGUMENT_VALUE_INVALID, "No state variable found: " + stateVariableName
-            );
+            throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
+                    "No state variable found: " + stateVariableName);
         }
 
         StateVariableAccessor accessor;
         if ((accessor = service.getAccessor(stateVariable.getName())) == null) {
-            throw new ActionException(
-                    ErrorCode.ARGUMENT_VALUE_INVALID, "No accessor for state variable, can't read state: " + stateVariableName
-            );
+            throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
+                    "No accessor for state variable, can't read state: " + stateVariableName);
         }
 
         try {
-            setOutputArgumentValue(
-                    actionInvocation,
-                    actionInvocation.getAction().getOutputArgument("return"),
-                    accessor.read(stateVariable, serviceImpl).toString()
-            );
+            setOutputArgumentValue(actionInvocation, actionInvocation.getAction().getOutputArgument("return"),
+                    accessor.read(stateVariable, serviceImpl).toString());
         } catch (Exception ex) {
             throw new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage());
         }
     }
-
 }

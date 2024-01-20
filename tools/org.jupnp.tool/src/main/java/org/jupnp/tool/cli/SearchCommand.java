@@ -37,305 +37,302 @@ import org.slf4j.LoggerFactory;
  */
 public class SearchCommand {
 
-	private static Logger logger = LoggerFactory.getLogger(SearchCommand.class);
-	private JUPnPTool tool;
+    private static Logger logger = LoggerFactory.getLogger(SearchCommand.class);
+    private JUPnPTool tool;
 
-	public SearchCommand(JUPnPTool tool) {
-		this.tool = tool;
-	}
+    public SearchCommand(JUPnPTool tool) {
+        this.tool = tool;
+    }
 
-	public int run(int timeout, String sortBy, String filter, boolean verbose) {
-		// This will create necessary network resources for UPnP right away
-		logger.debug("Starting jUPnP search...");
-		if (verbose) {
-			SpecificationViolationReporter.enableReporting();
-		} else {
-			logger.debug("Disable UPnP specification violation reportings");
-			SpecificationViolationReporter.disableReporting();
-		}
-		UpnpService upnpService = tool.createUpnpService();
-		upnpService.startup();
+    public int run(int timeout, String sortBy, String filter, boolean verbose) {
+        // This will create necessary network resources for UPnP right away
+        logger.debug("Starting jUPnP search...");
+        if (verbose) {
+            SpecificationViolationReporter.enableReporting();
+        } else {
+            logger.debug("Disable UPnP specification violation reportings");
+            SpecificationViolationReporter.disableReporting();
+        }
+        UpnpService upnpService = tool.createUpnpService();
+        upnpService.startup();
 
-		SearchResultPrinter printer = new SearchResultPrinter(sortBy, verbose);
-		if (!hasToSort(sortBy)) {
-			upnpService.getRegistry().addListener(new SearchRegistryListener(printer, sortBy, filter, verbose));
-		}
-		printer.printHeader();
+        SearchResultPrinter printer = new SearchResultPrinter(sortBy, verbose);
+        if (!hasToSort(sortBy)) {
+            upnpService.getRegistry().addListener(new SearchRegistryListener(printer, sortBy, filter, verbose));
+        }
+        printer.printHeader();
 
-		// Send a search message to all devices and services, they should
-		// respond soon
-		logger.debug("Sending SEARCH message to all devices...");
-		upnpService.getControlPoint().search(new STAllHeader());
+        // Send a search message to all devices and services, they should
+        // respond soon
+        logger.debug("Sending SEARCH message to all devices...");
+        upnpService.getControlPoint().search(new STAllHeader());
 
-		// Let's wait "timeout" for them to respond
-		logger.debug("Waiting {} seconds before shutting down...", timeout);
-		try {
-			Thread.sleep(timeout * 1000);
-		} catch (InterruptedException e) {
-			logger.error("{}", e);
-		}
+        // Let's wait "timeout" for them to respond
+        logger.debug("Waiting {} seconds before shutting down...", timeout);
+        try {
+            Thread.sleep(timeout * 1000);
+        } catch (InterruptedException e) {
+            logger.error("{}", e);
+        }
 
-		logger.debug("Processing results...");
-		Registry registry = upnpService.getRegistry();
+        logger.debug("Processing results...");
+        Registry registry = upnpService.getRegistry();
 
-		for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
-			RemoteDevice device = iter.next();
-			handleRemoteDevice(device, printer, sortBy, filter, verbose);
-		}
+        for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
+            RemoteDevice device = iter.next();
+            handleRemoteDevice(device, printer, sortBy, filter, verbose);
+        }
 
-		printer.printBody();
+        printer.printBody();
 
-		// Release all resources and advertise BYEBYE to other UPnP devices
-		logger.debug("Stopping jUPnP...");
-		try {
-			upnpService.shutdown();
-		} catch (Exception ex) {
-			logger.error("Error during shutdown", ex);
-		}
-		logger.debug("Stopped jUPnP...");
+        // Release all resources and advertise BYEBYE to other UPnP devices
+        logger.debug("Stopping jUPnP...");
+        try {
+            upnpService.shutdown();
+        } catch (Exception ex) {
+            logger.error("Error during shutdown", ex);
+        }
+        logger.debug("Stopped jUPnP...");
 
-		return JUPnPTool.RC_OK;
-	}
+        return JUPnPTool.RC_OK;
+    }
 
-	private void handleRemoteDevice(RemoteDevice device, SearchResultPrinter searchResult, String sortBy, String filter,
-			boolean verbose) {
-		if (device.isRoot()) {
-			// logStdout(device.toString());
-			String ipAddress = device.getIdentity().getDescriptorURL().getHost();
-			String model = device.getDetails().getModelDetails().getModelName();
-			String manu = device.getDetails().getManufacturerDetails().getManufacturer();
-			String udn = device.getIdentity().getUdn().getIdentifierString();
-			String name = device.getDisplayString();
-			String serialNumber = device.getDetails().getSerialNumber();
-			// some devices will return "null" as serialNumber
-			// TODO needs check where this happens in JUPnP
-			if ((serialNumber == null) || ("null".equals(serialNumber))) {
-				serialNumber = "-";
-			}
+    private void handleRemoteDevice(RemoteDevice device, SearchResultPrinter searchResult, String sortBy, String filter,
+            boolean verbose) {
+        if (device.isRoot()) {
+            // logStdout(device.toString());
+            String ipAddress = device.getIdentity().getDescriptorURL().getHost();
+            String model = device.getDetails().getModelDetails().getModelName();
+            String manu = device.getDetails().getManufacturerDetails().getManufacturer();
+            String udn = device.getIdentity().getUdn().getIdentifierString();
+            String name = device.getDisplayString();
+            String serialNumber = device.getDetails().getSerialNumber();
+            // some devices will return "null" as serialNumber
+            // TODO needs check where this happens in JUPnP
+            if ((serialNumber == null) || ("null".equals(serialNumber))) {
+                serialNumber = "-";
+            }
 
-			String fullDeviceInformationString = ipAddress + "\n" + model + "\n" + manu + "\n" + udn + "\n"
-					+ serialNumber + "\n" + name;
-			boolean filterOK = false;
-			if ("*".equals(filter)) {
-				filterOK = true;
-			} else if (fullDeviceInformationString.contains(filter)) {
-				logger.debug("Filter check: filter '{}' matched '{}'", filter, fullDeviceInformationString);
-				filterOK = true;
-			} else {
-				logger.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
-			}
+            String fullDeviceInformationString = ipAddress + "\n" + model + "\n" + manu + "\n" + udn + "\n"
+                    + serialNumber + "\n" + name;
+            boolean filterOK = false;
+            if ("*".equals(filter)) {
+                filterOK = true;
+            } else if (fullDeviceInformationString.contains(filter)) {
+                logger.debug("Filter check: filter '{}' matched '{}'", filter, fullDeviceInformationString);
+                filterOK = true;
+            } else {
+                logger.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
+            }
 
-			// filter out: very simple: details from above should include
-			// this text
-			if (filterOK) {
-				searchResult.add(ipAddress, model, serialNumber, manu, udn);
-			}
-		}
-	}
+            // filter out: very simple: details from above should include
+            // this text
+            if (filterOK) {
+                searchResult.add(ipAddress, model, serialNumber, manu, udn);
+            }
+        }
+    }
 
-	class SearchRegistryListener implements RegistryListener {
+    class SearchRegistryListener implements RegistryListener {
 
-		private final SearchResultPrinter printer;
-		private final String sortBy;
-		private final String filter;
-		private final boolean verbose;
+        private final SearchResultPrinter printer;
+        private final String sortBy;
+        private final String filter;
+        private final boolean verbose;
 
-		public SearchRegistryListener(SearchResultPrinter printer, String sortBy, String filter, boolean verbose) {
-			this.printer = printer;
-			this.sortBy = sortBy;
-			this.filter = filter;
-			this.verbose = verbose;
-		}
+        public SearchRegistryListener(SearchResultPrinter printer, String sortBy, String filter, boolean verbose) {
+            this.printer = printer;
+            this.sortBy = sortBy;
+            this.filter = filter;
+            this.verbose = verbose;
+        }
 
-		@Override
-		public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
-			// ignore
-		}
+        @Override
+        public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
+            // ignore
+        }
 
-		@Override
-		public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
-			// ignore
-		}
+        @Override
+        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+            // ignore
+        }
 
-		@Override
-		public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-			handleRemoteDevice(device, printer, sortBy, filter, verbose);
-		}
+        @Override
+        public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+            handleRemoteDevice(device, printer, sortBy, filter, verbose);
+        }
 
-		@Override
-		public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
-			// ignore
-		}
+        @Override
+        public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
+            // ignore
+        }
 
-		@Override
-		public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
-			// ignore
-		}
+        @Override
+        public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
+            // ignore
+        }
 
-		@Override
-		public void localDeviceAdded(Registry registry, LocalDevice device) {
-			// ignore
-		}
+        @Override
+        public void localDeviceAdded(Registry registry, LocalDevice device) {
+            // ignore
+        }
 
-		@Override
-		public void localDeviceRemoved(Registry registry, LocalDevice device) {
-			// ignore
-		}
+        @Override
+        public void localDeviceRemoved(Registry registry, LocalDevice device) {
+            // ignore
+        }
 
-		@Override
-		public void beforeShutdown(Registry registry) {
-			// ignore
-		}
+        @Override
+        public void beforeShutdown(Registry registry) {
+            // ignore
+        }
 
-		@Override
-		public void afterShutdown() {
-			// ignore
-		}
+        @Override
+        public void afterShutdown() {
+            // ignore
+        }
+    }
 
-	}
+    /**
+     * Will contain search results, will filter out duplicate ip addresses.
+     */
+    public class SearchResultPrinter {
 
-	/**
-	 * Will contain search results, will filter out duplicate ip addresses.
-	 */
-	public class SearchResultPrinter {
+        private class Result {
+            private String ipAddress;
+            private String model;
+            private String serialNumber;
+            private String manufacturer;
+            private String udn;
 
-		private class Result {
-			private String ipAddress;
-			private String model;
-			private String serialNumber;
-			private String manufacturer;
-			private String udn;
+            public Result(String i, String m, String s, String manu, String udn) {
+                this.ipAddress = i;
+                this.model = m;
+                this.serialNumber = s;
+                this.manufacturer = manu;
+                this.udn = udn;
+            }
+        }
 
-			public Result(String i, String m, String s, String manu, String udn) {
-				this.ipAddress = i;
-				this.model = m;
-				this.serialNumber = s;
-				this.manufacturer = manu;
-				this.udn = udn;
-			}
-		}
+        private final int[] COLUMN_WIDTH = new int[] { 17, 25, 25, 25, 25 };
+        private final List<Result> results = new ArrayList<Result>();
+        private final List<String> udns = new ArrayList<String>();
+        private final String sortBy;
+        private final boolean verbose;
 
-		private final int[] COLUMN_WIDTH = new int[] { 17, 25, 25, 25, 25 };
-		private final List<Result> results = new ArrayList<Result>();
-		private final List<String> udns = new ArrayList<String>();
-		private final String sortBy;
-		private final boolean verbose;
+        public SearchResultPrinter(String sortBy, boolean verbose) {
+            this.sortBy = sortBy;
+            this.verbose = verbose;
+        }
 
-		public SearchResultPrinter(String sortBy, boolean verbose) {
-			this.sortBy = sortBy;
-			this.verbose = verbose;
-		}
+        public void printHeader() {
+            if (hasToSort(sortBy)) {
+                // nothing to do, header will be printed later
+                return;
+            }
+            String msg;
+            if (verbose) {
+                msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
+                        + fixedWidth("Manufacturer", COLUMN_WIDTH[2]) + fixedWidth("SerialNumber", COLUMN_WIDTH[3])
+                        + fixedWidth("UDN", COLUMN_WIDTH[4]);
+            } else {
+                msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
+                        + fixedWidth("SerialNumber", COLUMN_WIDTH[3]);
+            }
+            tool.printStdout(msg);
+        }
 
-		public void printHeader() {
-			if (hasToSort(sortBy)) {
-				// nothing to do, header will be printed later
-				return;
-			}
-			String msg;
-			if (verbose) {
-				msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
-						+ fixedWidth("Manufacturer", COLUMN_WIDTH[2]) + fixedWidth("SerialNumber", COLUMN_WIDTH[3])
-						+ fixedWidth("UDN", COLUMN_WIDTH[4]);
-			} else {
-				msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
-						+ fixedWidth("SerialNumber", COLUMN_WIDTH[3]);
-			}
-			tool.printStdout(msg);
-		}
+        public void add(String ip, String model, String serialNumber, String manu, String udn) {
+            if (!udns.contains(udn)) {
+                results.add(new Result(ip, model, serialNumber, manu, udn));
+                if (!hasToSort(sortBy)) {
+                    String msg;
+                    if (verbose) {
+                        msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
+                                + fixedWidth(manu, COLUMN_WIDTH[2]) + fixedWidth(serialNumber, COLUMN_WIDTH[3])
+                                + fixedWidth(udn, COLUMN_WIDTH[4]);
+                    } else {
+                        msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
+                                + fixedWidth(serialNumber, COLUMN_WIDTH[3]);
+                    }
+                    tool.printStdout(msg);
+                }
+                udns.add(udn);
+            }
+        }
 
-		public void add(String ip, String model, String serialNumber, String manu, String udn) {
-			if (!udns.contains(udn)) {
-				results.add(new Result(ip, model, serialNumber, manu, udn));
-				if (!hasToSort(sortBy)) {
-					String msg;
-					if (verbose) {
-						msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
-								+ fixedWidth(manu, COLUMN_WIDTH[2]) + fixedWidth(serialNumber, COLUMN_WIDTH[3])
-								+ fixedWidth(udn, COLUMN_WIDTH[4]);
-					} else {
-						msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
-								+ fixedWidth(serialNumber, COLUMN_WIDTH[3]);
-					}
-					tool.printStdout(msg);
-				}
-				udns.add(udn);
-			}
-		}
+        public void printBody() {
+            if (!hasToSort(sortBy)) {
+                // nothing to do, results have been printed during add()
+                return;
+            }
+            String msg = asBody();
+            tool.printStdout(msg);
+        }
 
-		public void printBody() {
-			if (!hasToSort(sortBy)) {
-				// nothing to do, results have been printed during add()
-				return;
-			}
-			String msg = asBody();
-			tool.printStdout(msg);
+        public String asBody() {
+            // sort now
+            sortResults(sortBy);
+            // convert map to table
+            List<String[]> table = new ArrayList<String[]>();
+            if (verbose) {
+                table.add(new String[] { "IP address", "Model", "Manufacturer", "SerialNumber", "UDN" });
+            } else {
+                table.add(new String[] { "IP address", "Model", "SerialNumber" });
+            }
+            for (Iterator<Result> iter = results.iterator(); iter.hasNext();) {
+                Result result = iter.next();
+                if (verbose) {
+                    table.add(new String[] { result.ipAddress, result.model, result.manufacturer, result.serialNumber,
+                            result.udn });
+                } else {
+                    table.add(new String[] { result.ipAddress, result.model, result.serialNumber });
+                }
+            }
+            String msg = PrintUtils.printTable(table, 4);
+            // if only one line: no device found
+            if (results.isEmpty()) {
+                msg = msg + "<no device found>";
+            }
+            return msg;
+        }
 
-		}
+        private void sortResults(final String columnName) {
+            Comparator<Result> comparator = new Comparator<Result>() {
+                @Override
+                public int compare(Result o1, Result o2) {
+                    if ("ip".equals(columnName)) {
+                        return IpAddressUtils.compareIpAddress(o1.ipAddress, o2.ipAddress);
+                    } else if ("model".equals(columnName)) {
+                        return o1.model.compareTo(o2.model);
+                    } else if ("serialNumber".equals(columnName)) {
+                        return o1.serialNumber.compareTo(o2.serialNumber);
+                    } else if ("manufacturer".equals(columnName)) {
+                        return o1.manufacturer.compareTo(o2.manufacturer);
+                    } else if ("udn".equals(columnName)) {
+                        return o1.udn.compareTo(o2.udn);
+                    } else {
+                        return 0;
+                    }
+                }
+            };
+            Collections.sort(results, comparator);
+        }
 
-		public String asBody() {
-			// sort now
-			sortResults(sortBy);
-			// convert map to table
-			List<String[]> table = new ArrayList<String[]>();
-			if (verbose) {
-				table.add(new String[] { "IP address", "Model", "Manufacturer", "SerialNumber", "UDN" });
-			} else {
-				table.add(new String[] { "IP address", "Model", "SerialNumber" });
-			}
-			for (Iterator<Result> iter = results.iterator(); iter.hasNext();) {
-				Result result = iter.next();
-				if (verbose) {
-					table.add(new String[] { result.ipAddress, result.model, result.manufacturer, result.serialNumber,
-							result.udn });
-				} else {
-					table.add(new String[] { result.ipAddress, result.model, result.serialNumber });
-				}
-			}
-			String msg = PrintUtils.printTable(table, 4);
-			// if only one line: no device found
-			if (results.isEmpty()) {
-				msg = msg + "<no device found>";
-			}
-			return msg;
-		}
+        private final static String STRING_WITH_SPACES = "                           ";
 
-		private void sortResults(final String columnName) {
-			Comparator<Result> comparator = new Comparator<Result>() {
-				@Override
-				public int compare(Result o1, Result o2) {
-					if ("ip".equals(columnName)) {
-						return IpAddressUtils.compareIpAddress(o1.ipAddress, o2.ipAddress);
-					} else if ("model".equals(columnName)) {
-						return o1.model.compareTo(o2.model);
-					} else if ("serialNumber".equals(columnName)) {
-						return o1.serialNumber.compareTo(o2.serialNumber);
-					} else if ("manufacturer".equals(columnName)) {
-						return o1.manufacturer.compareTo(o2.manufacturer);
-					} else if ("udn".equals(columnName)) {
-						return o1.udn.compareTo(o2.udn);
-					} else {
-						return 0;
-					}
-				}
-			};
-			Collections.sort(results, comparator);
-		}
+        private String fixedWidth(String s, int width) {
+            if (s == null) {
+                return STRING_WITH_SPACES.substring(0, width);
+            } else if (s.length() >= width) {
+                return s;
+            } else {
+                return s + STRING_WITH_SPACES.substring(0, width - s.length());
+            }
+        }
+    }
 
-		private final static String STRING_WITH_SPACES = "                           ";
-
-		private String fixedWidth(String s, int width) {
-			if (s == null) {
-				return STRING_WITH_SPACES.substring(0, width);
-			} else if (s.length() >= width) {
-				return s;
-			} else {
-				return s + STRING_WITH_SPACES.substring(0, width - s.length());
-			}
-		}
-	}
-
-	private boolean hasToSort(String sortBy) {
-		return !"none".equals(sortBy);
-	}
-
+    private boolean hasToSort(String sortBy) {
+        return !"none".equals(sortBy);
+    }
 }

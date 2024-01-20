@@ -44,117 +44,115 @@ import org.slf4j.LoggerFactory;
  */
 public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-	static final transient Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
+    static final transient Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
-	static int MAIN_POOL_SIZE = 20;
-	static int ASYNC_POOL_SIZE = 20;
+    static int MAIN_POOL_SIZE = 20;
+    static int ASYNC_POOL_SIZE = 20;
 
-	static int MULTICAST_RESPONSE_LISTEN_PORT = NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT;
+    static int MULTICAST_RESPONSE_LISTEN_PORT = NetworkAddressFactoryImpl.DEFAULT_MULTICAST_RESPONSE_LISTEN_PORT;
 
-	// class methods to configure behavior
+    // class methods to configure behavior
 
-	public static void setDebugStatistics(boolean onOrOff) {
-		MonitoredQueueingThreadPoolExecutor.DEBUG_STATISTICS = onOrOff;
-	}
+    public static void setDebugStatistics(boolean onOrOff) {
+        MonitoredQueueingThreadPoolExecutor.DEBUG_STATISTICS = onOrOff;
+    }
 
-	public static void setPoolConfiguration(int mainPoolSize, int asyncPoolSize) {
-		MAIN_POOL_SIZE = mainPoolSize;
-		ASYNC_POOL_SIZE = asyncPoolSize;
-	}
+    public static void setPoolConfiguration(int mainPoolSize, int asyncPoolSize) {
+        MAIN_POOL_SIZE = mainPoolSize;
+        ASYNC_POOL_SIZE = asyncPoolSize;
+    }
 
-	public static void setMulticastResponsePort(Integer port) {
-		MULTICAST_RESPONSE_LISTEN_PORT = port.intValue();
-	}
+    public static void setMulticastResponsePort(Integer port) {
+        MULTICAST_RESPONSE_LISTEN_PORT = port.intValue();
+    }
 
-	private ExecutorService mainExecutorService;
+    private ExecutorService mainExecutorService;
 
-	private ExecutorService asyncExecutorService;
+    private ExecutorService asyncExecutorService;
 
-	private final StreamClientConfiguration configuration;
-	private final TransportConfiguration transportConfiguration;
+    private final StreamClientConfiguration configuration;
+    private final TransportConfiguration transportConfiguration;
 
-	// instance methods
+    // instance methods
 
-	public CmdlineUPnPServiceConfiguration() {
-		super();
-		createExecutorServices();
+    public CmdlineUPnPServiceConfiguration() {
+        super();
+        createExecutorServices();
 
-		configuration = new StreamClientConfigurationImpl(mainExecutorService);
-		transportConfiguration = new JettyTransportConfiguration();
-	}
+        configuration = new StreamClientConfigurationImpl(mainExecutorService);
+        transportConfiguration = new JettyTransportConfiguration();
+    }
 
-	/**
-	 * We create a network address factory based on configured multicast port.
-	 */
-	@Override
-	public NetworkAddressFactory createNetworkAddressFactory() {
-		return super.createNetworkAddressFactory(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
-				MULTICAST_RESPONSE_LISTEN_PORT);
-	}
+    /**
+     * We create a network address factory based on configured multicast port.
+     */
+    @Override
+    public NetworkAddressFactory createNetworkAddressFactory() {
+        return super.createNetworkAddressFactory(NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
+                MULTICAST_RESPONSE_LISTEN_PORT);
+    }
 
-	private void createExecutorServices() {
-		mainExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-main", MAIN_POOL_SIZE);
-		asyncExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-async", ASYNC_POOL_SIZE);
-	}
+    private void createExecutorServices() {
+        mainExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-main", MAIN_POOL_SIZE);
+        asyncExecutorService = new MonitoredQueueingThreadPoolExecutor("jupnptool-async", ASYNC_POOL_SIZE);
+    }
 
-	protected ExecutorService getMainExecutorService() {
-		return mainExecutorService;
-	}
+    protected ExecutorService getMainExecutorService() {
+        return mainExecutorService;
+    }
 
-	@Override
-	public Executor getRegistryMaintainerExecutor() {
-		return getMainExecutorService();
-	}
+    @Override
+    public Executor getRegistryMaintainerExecutor() {
+        return getMainExecutorService();
+    }
 
-	@Override
-	public Executor getRegistryListenerExecutor() {
-		return getMainExecutorService();
-	}
+    @Override
+    public Executor getRegistryListenerExecutor() {
+        return getMainExecutorService();
+    }
 
-	@Override
-	public ExecutorService getMulticastReceiverExecutor() {
-		return getMainExecutorService();
-	}
+    @Override
+    public ExecutorService getMulticastReceiverExecutor() {
+        return getMainExecutorService();
+    }
 
-	@Override
-	public ExecutorService getDatagramIOExecutor() {
-		return getMainExecutorService();
-	}
+    @Override
+    public ExecutorService getDatagramIOExecutor() {
+        return getMainExecutorService();
+    }
 
-	@Override
-	public ExecutorService getStreamServerExecutorService() {
-		return getMainExecutorService();
-	}
+    @Override
+    public ExecutorService getStreamServerExecutorService() {
+        return getMainExecutorService();
+    }
 
-	@Override
-	public ExecutorService getAsyncProtocolExecutor() {
-		return asyncExecutorService;
-	}
+    @Override
+    public ExecutorService getAsyncProtocolExecutor() {
+        return asyncExecutorService;
+    }
 
-	@Override
-	public void shutdown() {
-		logger.debug("Shutting down executor services");
-		shutdownExecutorServices();
+    @Override
+    public void shutdown() {
+        logger.debug("Shutting down executor services");
+        shutdownExecutorServices();
 
-		// create the executor again ready for reuse in case the runtime is
-		// started up again.
-		createExecutorServices();
-	}
+        // create the executor again ready for reuse in case the runtime is
+        // started up again.
+        createExecutorServices();
+    }
 
-	protected void shutdownExecutorServices() {
-		if (mainExecutorService != null) {
-			mainExecutorService.shutdownNow();
-		}
-		if (asyncExecutorService != null) {
-			asyncExecutorService.shutdownNow();
-		}
-	}
+    protected void shutdownExecutorServices() {
+        if (mainExecutorService != null) {
+            mainExecutorService.shutdownNow();
+        }
+        if (asyncExecutorService != null) {
+            asyncExecutorService.shutdownNow();
+        }
+    }
 
     @Override
     public StreamClient createStreamClient() {
-        return transportConfiguration.createStreamClient(
-                getSyncProtocolExecutorService(), configuration
-        );
+        return transportConfiguration.createStreamClient(getSyncProtocolExecutorService(), configuration);
     }
 
     @Override
@@ -162,58 +160,57 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
         return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
-	// inner classes
+    // inner classes
 
-	/**
-	 * This class implements a rejection handler which logs rejects smart. Logs
-	 * once happens one error message, and further messages report only number
-	 * of rejections.
-	 *
-	 * This class locks against multiple usage to have clea log messages. This
-	 * may have influence during runtime, as logging will be done during holder
-	 * a lock.
-	 */
-	public static class SmartLoggingDiscardPolicy extends ThreadPoolExecutor.DiscardPolicy {
+    /**
+     * This class implements a rejection handler which logs rejects smart. Logs
+     * once happens one error message, and further messages report only number
+     * of rejections.
+     *
+     * This class locks against multiple usage to have clea log messages. This
+     * may have influence during runtime, as logging will be done during holder
+     * a lock.
+     */
+    public static class SmartLoggingDiscardPolicy extends ThreadPoolExecutor.DiscardPolicy {
 
-		private static Lock rejectLock = new ReentrantLock();
+        private static Lock rejectLock = new ReentrantLock();
 
-		private static boolean displayedErrorOnce = false;
-		private static String lastRejectedClass = null;
-		private static final int MAX_NO_OF_REJECTS_TO_LOG = 20;
-		private static int noOfRejects = 0;
+        private static boolean displayedErrorOnce = false;
+        private static String lastRejectedClass = null;
+        private static final int MAX_NO_OF_REJECTS_TO_LOG = 20;
+        private static int noOfRejects = 0;
 
-		// The pool is bounded and rejections will happen during shutdown
-		@Override
-		public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-			if (threadPoolExecutor.isTerminating()) {
-				// do log rejects during shutdown in debug level only
-				logger.debug("Thread pool rejected during termination execution of {}", runnable.toString());
-			} else {
-				try {
-					rejectLock.lock();
-					if (displayedErrorOnce == false) {
-						logger.error("Thread pool rejected executions, consider to resize pool sizing");
-						displayedErrorOnce = true;
-					}
-					// check for changed runnable class names
-					if ((lastRejectedClass == null) || (!lastRejectedClass.equals(runnable.getClass().getName()))) {
-						logger.warn("Thread pool rejected execution of {}", runnable);
-						noOfRejects = 0;
-						lastRejectedClass = runnable.getClass().getName();
-					} else {
-						// same runnable class name, increment number of calls
-						noOfRejects = noOfRejects + 1;
-						if (noOfRejects >= MAX_NO_OF_REJECTS_TO_LOG) {
-							logger.warn("Thread pool rejected execution of ({} times) {}", noOfRejects, runnable);
-							noOfRejects = 0;
-						}
-					}
-				} finally {
-					rejectLock.unlock();
-				}
-			}
-			super.rejectedExecution(runnable, threadPoolExecutor);
-		}
-	}
-
+        // The pool is bounded and rejections will happen during shutdown
+        @Override
+        public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
+            if (threadPoolExecutor.isTerminating()) {
+                // do log rejects during shutdown in debug level only
+                logger.debug("Thread pool rejected during termination execution of {}", runnable.toString());
+            } else {
+                try {
+                    rejectLock.lock();
+                    if (displayedErrorOnce == false) {
+                        logger.error("Thread pool rejected executions, consider to resize pool sizing");
+                        displayedErrorOnce = true;
+                    }
+                    // check for changed runnable class names
+                    if ((lastRejectedClass == null) || (!lastRejectedClass.equals(runnable.getClass().getName()))) {
+                        logger.warn("Thread pool rejected execution of {}", runnable);
+                        noOfRejects = 0;
+                        lastRejectedClass = runnable.getClass().getName();
+                    } else {
+                        // same runnable class name, increment number of calls
+                        noOfRejects = noOfRejects + 1;
+                        if (noOfRejects >= MAX_NO_OF_REJECTS_TO_LOG) {
+                            logger.warn("Thread pool rejected execution of ({} times) {}", noOfRejects, runnable);
+                            noOfRejects = 0;
+                        }
+                    }
+                } finally {
+                    rejectLock.unlock();
+                }
+            }
+            super.rejectedExecution(runnable, threadPoolExecutor);
+        }
+    }
 }

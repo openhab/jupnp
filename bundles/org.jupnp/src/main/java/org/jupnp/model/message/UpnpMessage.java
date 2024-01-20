@@ -14,11 +14,11 @@
 
 package org.jupnp.model.message;
 
-import org.jupnp.model.message.header.ContentTypeHeader;
-import org.jupnp.model.message.header.UpnpHeader;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+
+import org.jupnp.model.message.header.ContentTypeHeader;
+import org.jupnp.model.message.header.UpnpHeader;
 
 /**
  * A non-streaming message, the interface between the transport layer and the protocols.
@@ -39,7 +39,8 @@ import java.nio.charset.StandardCharsets;
 public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public static enum BodyType {
-        STRING, BYTES
+        STRING,
+        BYTES
     }
 
     private int udaMajorVersion = 1;
@@ -108,15 +109,8 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
     }
 
     public void setBodyCharacters(byte[] characterData) throws UnsupportedEncodingException {
-        setBody(
-                UpnpMessage.BodyType.STRING,
-                new String(
-                        characterData,
-                        getContentTypeCharset() != null
-                                ? getContentTypeCharset()
-                                : "UTF-8"
-                )
-        );
+        setBody(UpnpMessage.BodyType.STRING,
+                new String(characterData, getContentTypeCharset() != null ? getContentTypeCharset() : "UTF-8"));
     }
 
     public boolean hasBody() {
@@ -133,18 +127,18 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public String getBodyString() {
         try {
-                if(!hasBody()) {
-                    return null;
+            if (!hasBody()) {
+                return null;
+            }
+            if (getBodyType().equals(BodyType.STRING)) {
+                String body = ((String) getBody());
+                if (body.charAt(0) == '\ufeff') { /* utf8 BOM */
+                    body = body.substring(1);
                 }
-                if(getBodyType().equals(BodyType.STRING)) {
-                    String body = ((String) getBody());
-                    if(body.charAt(0) == '\ufeff') { /* utf8 BOM */
-                        body = body.substring(1);
-                    }
-                    return body;
-                } else {
-                    return new String((byte[]) getBody(), StandardCharsets.UTF_8);
-                }
+                return body;
+            } else {
+                return new String((byte[]) getBody(), StandardCharsets.UTF_8);
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -152,10 +146,10 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public byte[] getBodyBytes() {
         try {
-            if(!hasBody()) {
+            if (!hasBody()) {
                 return null;
             }
-            if(getBodyType().equals(BodyType.STRING)) {
+            if (getBodyType().equals(BodyType.STRING)) {
                 return getBodyString().getBytes();
             } else {
                 return (byte[]) getBody();
@@ -175,8 +169,10 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         // the entity body is bytes. However, to support broken UPnP devices which also violate the
         // UPnP spec and do not send any content type at all, we need to assume no content type
         // means a textual entity body is available.
-        if (contentTypeHeader == null) return true;
-        if (contentTypeHeader.isText()) return true;
+        if (contentTypeHeader == null)
+            return true;
+        if (contentTypeHeader.isText())
+            return true;
         // Only if there was any content-type header and none was text
         return false;
     }
@@ -205,9 +201,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
     }
 
     public boolean isBodyNonEmptyString() {
-        return hasBody()
-            && getBodyType().equals(UpnpMessage.BodyType.STRING)
-            && getBodyString().length() > 0;
+        return hasBody() && getBodyType().equals(UpnpMessage.BodyType.STRING) && getBodyString().length() > 0;
     }
 
     @Override

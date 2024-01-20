@@ -44,13 +44,13 @@ public abstract class DLNAAttribute<T> {
 
         /**
          * Order is important for DLNAProtocolInfo
-         */ 
+         */
         DLNA_ORG_PN("DLNA.ORG_PN", DLNAProfileAttribute.class),
         DLNA_ORG_OP("DLNA.ORG_OP", DLNAOperationsAttribute.class),
         DLNA_ORG_PS("DLNA.ORG_PS", DLNAPlaySpeedAttribute.class),
         DLNA_ORG_CI("DLNA.ORG_CI", DLNAConversionIndicatorAttribute.class),
         DLNA_ORG_FLAGS("DLNA.ORG_FLAGS", DLNAFlagsAttribute.class);
-    
+
         private static Map<String, Type> byName = new HashMap<String, Type>() {
             private static final long serialVersionUID = -4611773458029624524L;
 
@@ -97,10 +97,10 @@ public abstract class DLNAAttribute<T> {
     }
 
     /**
-     * @param s  This attribute's value as a string representation.
+     * @param s This attribute's value as a string representation.
      * @param cf This attribute's mime type as a string representation, optional.
      * @throws InvalidDLNAProtocolAttributeException
-     *          If the value is invalid for this DLNA attribute.
+     *             If the value is invalid for this DLNA attribute.
      */
     public abstract void setString(String s, String cf);
 
@@ -118,9 +118,9 @@ public abstract class DLNAAttribute<T> {
      * the subtype instance is returned.
      * </p>
      *
-     * @param type           The type of the attribute.
+     * @param type The type of the attribute.
      * @param attributeValue The value of the attribute.
-     * @param contentFormat  The DLNA mime type of the attribute, optional.
+     * @param contentFormat The DLNA mime type of the attribute, optional.
      * @return The best matching attribute subtype instance, or <code>null</code> if no subtype can be found.
      */
     public static DLNAAttribute<?> newInstance(DLNAAttribute.Type type, String attributeValue, String contentFormat) {
@@ -135,10 +135,12 @@ public abstract class DLNAAttribute<T> {
                     attr.setString(attributeValue, contentFormat);
                 }
             } catch (InvalidDLNAProtocolAttributeException ex) {
-                logger.trace("Invalid DLNA attribute value for tested type: {} - {}", attributeClass.getSimpleName(), ex.getMessage());
+                logger.trace("Invalid DLNA attribute value for tested type: {} - {}", attributeClass.getSimpleName(),
+                        ex.getMessage());
                 attr = null;
             } catch (Exception ex) {
-                logger.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue, Exceptions.unwrap(ex));
+                logger.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue,
+                        Exceptions.unwrap(ex));
             }
         }
         return attr;

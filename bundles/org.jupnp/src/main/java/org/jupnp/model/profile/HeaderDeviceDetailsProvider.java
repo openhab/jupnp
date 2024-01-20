@@ -14,12 +14,12 @@
 
 package org.jupnp.model.profile;
 
-import org.jupnp.model.meta.DeviceDetails;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.jupnp.model.meta.DeviceDetails;
 
 /**
  * Selects device details based on a regex and the client's HTTP headers.
@@ -61,7 +61,6 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
         }
     }
 
-
     final private DeviceDetails defaultDeviceDetails;
     final private Map<Key, DeviceDetails> headerDetails;
 
@@ -69,8 +68,7 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
         this(defaultDeviceDetails, null);
     }
 
-    public HeaderDeviceDetailsProvider(DeviceDetails defaultDeviceDetails,
-                                       Map<Key, DeviceDetails> headerDetails) {
+    public HeaderDeviceDetailsProvider(DeviceDetails defaultDeviceDetails, Map<Key, DeviceDetails> headerDetails) {
         this.defaultDeviceDetails = defaultDeviceDetails;
         this.headerDetails = headerDetails != null ? headerDetails : new HashMap();
     }
@@ -84,11 +82,13 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
     }
 
     public DeviceDetails provide(RemoteClientInfo info) {
-        if (info == null || info.getRequestHeaders().isEmpty()) return getDefaultDeviceDetails();
+        if (info == null || info.getRequestHeaders().isEmpty())
+            return getDefaultDeviceDetails();
 
         for (Key key : getHeaderDetails().keySet()) {
             List<String> headerValues;
-            if ((headerValues = info.getRequestHeaders().get(key.getHeaderName())) == null) continue;
+            if ((headerValues = info.getRequestHeaders().get(key.getHeaderName())) == null)
+                continue;
             for (String headerValue : headerValues) {
                 if (key.isValuePatternMatch(headerValue))
                     return getHeaderDetails().get(key);
@@ -96,5 +96,4 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
         }
         return getDefaultDeviceDetails();
     }
-
 }

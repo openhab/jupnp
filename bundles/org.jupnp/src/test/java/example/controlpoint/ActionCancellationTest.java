@@ -14,6 +14,10 @@
 
 package example.controlpoint;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.concurrent.Future;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
@@ -30,10 +34,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.UDAServiceId;
 
 import example.binarylight.BinaryLightSampleData;
-
-import java.util.concurrent.Future;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Cancelling an action invocation
@@ -59,8 +59,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * </p>
  * <p/>
  * <a class="citation" href="javacode://this#invokeActions(LocalDevice)"
- *    id="ActionCancellationTest_invokeActions2"
- *    style="include: CALLBACK; exclude: TEST;"/>
+ * id="ActionCancellationTest_invokeActions2"
+ * style="include: CALLBACK; exclude: TEST;"/>
  * <p>
  * A special exception type is provided if the action call was indeed cancelled.
  * </p>
@@ -115,16 +115,13 @@ class ActionCancellationTest {
     static LocalService bindService(Class<?> clazz) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         LocalService svc = binder.read(clazz);
-        svc.setManager(
-            new DefaultServiceManager(svc, clazz)
-        );
+        svc.setManager(new DefaultServiceManager(svc, clazz));
         return svc;
     }
 
     static Object[][] getDevices() throws Exception {
-        return new LocalDevice[][]{
-            {BinaryLightSampleData.createDevice(bindService(SwitchPowerWithInterruption.class))},
-        };
+        return new LocalDevice[][] {
+                { BinaryLightSampleData.createDevice(bindService(SwitchPowerWithInterruption.class)) }, };
     }
 
     @ParameterizedTest
@@ -149,9 +146,7 @@ class ActionCancellationTest {
             }
 
             @Override
-            public void failure(ActionInvocation invocation,
-                                UpnpResponse operation,
-                                String defaultMsg) {
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
                 if (invocation.getFailure() instanceof ActionCancelledException) {
                     // Handle the cancellation here...
                     tests[0] = true; // DOC:TEST

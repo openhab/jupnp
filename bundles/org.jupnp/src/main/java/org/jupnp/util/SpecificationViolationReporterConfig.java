@@ -22,12 +22,12 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** 
- * Implements a managed service to enable or disable the {@link SpecificationViolationReporter}. 
+/**
+ * Implements a managed service to enable or disable the {@link SpecificationViolationReporter}.
  * 
- * @author Andre Fuechsel 
+ * @author Andre Fuechsel
  */
-@Component(configurationPid = "org.jupnp.util", property = "specificationViolationReporterEnabled:Boolean=true" )
+@Component(configurationPid = "org.jupnp.util", property = "specificationViolationReporterEnabled:Boolean=true")
 @Designate(ocd = SpecificationViolationReporterConfig.Config.class)
 public class SpecificationViolationReporterConfig {
 

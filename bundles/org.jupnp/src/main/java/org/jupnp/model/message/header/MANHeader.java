@@ -14,8 +14,8 @@
 
 package org.jupnp.model.message.header;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Christian Bauer
@@ -60,10 +60,12 @@ public class MANHeader extends UpnpHeader<String> {
     }
 
     public String getString() {
-        if (getValue() == null) return null;
+        if (getValue() == null)
+            return null;
         StringBuilder s = new StringBuilder();
         s.append("\"").append(getValue()).append("\"");
-        if (getNamespace() != null) s.append("; ns=").append(getNamespace());
+        if (getNamespace() != null)
+            s.append("; ns=").append(getNamespace());
         return s.toString();
     }
 

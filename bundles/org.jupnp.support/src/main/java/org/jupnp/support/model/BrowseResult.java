@@ -28,9 +28,8 @@ public class BrowseResult {
     protected UnsignedIntegerFourBytes totalMatches;
     protected UnsignedIntegerFourBytes containerUpdateID;
 
-    public BrowseResult(String result, UnsignedIntegerFourBytes count,
-                        UnsignedIntegerFourBytes totalMatches,
-                        UnsignedIntegerFourBytes containerUpdateID) {
+    public BrowseResult(String result, UnsignedIntegerFourBytes count, UnsignedIntegerFourBytes totalMatches,
+            UnsignedIntegerFourBytes containerUpdateID) {
         this.result = result;
         this.count = count;
         this.totalMatches = totalMatches;
@@ -42,12 +41,8 @@ public class BrowseResult {
     }
 
     public BrowseResult(String result, long count, long totalMatches, long updatedId) {
-        this(
-                result,
-                new UnsignedIntegerFourBytes(count),
-                new UnsignedIntegerFourBytes(totalMatches),
-                new UnsignedIntegerFourBytes(updatedId)
-        );
+        this(result, new UnsignedIntegerFourBytes(count), new UnsignedIntegerFourBytes(totalMatches),
+                new UnsignedIntegerFourBytes(updatedId));
     }
 
     public String getResult() {
@@ -77,6 +72,4 @@ public class BrowseResult {
     public long getContainerUpdateIDLong() {
         return containerUpdateID.getValue();
     }
-
-
 }

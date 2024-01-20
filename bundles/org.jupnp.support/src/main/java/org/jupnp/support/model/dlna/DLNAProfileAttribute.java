@@ -19,15 +19,15 @@ package org.jupnp.support.model.dlna;
  * @author Amit Kumar Mondal - Code Refactoring
  */
 public class DLNAProfileAttribute extends DLNAAttribute<DLNAProfiles> {
-    
+
     public DLNAProfileAttribute() {
         setValue(DLNAProfiles.NONE);
     }
-    
+
     public DLNAProfileAttribute(DLNAProfiles profile) {
         setValue(profile);
     }
-    
+
     public void setString(String s, String cf) {
         DLNAProfiles value = DLNAProfiles.valueOf(s, cf);
         if (value == null) {
@@ -35,7 +35,7 @@ public class DLNAProfileAttribute extends DLNAAttribute<DLNAProfiles> {
         }
         setValue(value);
     }
-    
+
     public String getString() {
         return getValue().getCode();
     }

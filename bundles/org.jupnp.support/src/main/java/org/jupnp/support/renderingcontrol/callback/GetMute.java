@@ -30,6 +30,7 @@ public abstract class GetMute extends ActionCallback {
     public GetMute(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
+
     public GetMute(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetMute")));
         getActionInvocation().setInput("InstanceID", instanceId);

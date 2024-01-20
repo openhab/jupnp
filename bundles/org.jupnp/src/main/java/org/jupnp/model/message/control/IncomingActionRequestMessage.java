@@ -32,11 +32,11 @@ public class IncomingActionRequestMessage extends StreamRequestMessage implement
     final private Action action;
     final private String actionNamespace;
 
-    public IncomingActionRequestMessage(StreamRequestMessage source,
-                                        LocalService service) throws ActionException {
+    public IncomingActionRequestMessage(StreamRequestMessage source, LocalService service) throws ActionException {
         super(source);
 
-        SoapActionHeader soapActionHeader = getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class);
+        SoapActionHeader soapActionHeader = getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION,
+                SoapActionHeader.class);
         if (soapActionHeader == null) {
             throw new ActionException(ErrorCode.INVALID_ACTION, "Missing SOAP action header");
         }
@@ -45,12 +45,14 @@ public class IncomingActionRequestMessage extends StreamRequestMessage implement
 
         this.action = service.getAction(actionType.getActionName());
         if (this.action == null) {
-            throw new ActionException(ErrorCode.INVALID_ACTION, "Service doesn't implement action: " + actionType.getActionName());
+            throw new ActionException(ErrorCode.INVALID_ACTION,
+                    "Service doesn't implement action: " + actionType.getActionName());
         }
 
         if (!QueryStateVariableAction.ACTION_NAME.equals(actionType.getActionName())) {
             if (!service.getServiceType().implementsVersion(actionType.getServiceType())) {
-                throw new ActionException(ErrorCode.INVALID_ACTION, "Service doesn't support the requested service version");
+                throw new ActionException(ErrorCode.INVALID_ACTION,
+                        "Service doesn't support the requested service version");
             }
         }
 
@@ -64,5 +66,4 @@ public class IncomingActionRequestMessage extends StreamRequestMessage implement
     public String getActionNamespace() {
         return actionNamespace;
     }
-
 }

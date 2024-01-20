@@ -26,7 +26,8 @@ public class ShortDatatype extends AbstractDatatype<Short> {
     }
 
     public Short valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
         try {
             Short value = Short.parseShort(s.trim());
             if (!isValid(value)) {
@@ -37,5 +38,4 @@ public class ShortDatatype extends AbstractDatatype<Short> {
             throw new InvalidValueException("Can't convert string to number: " + s, ex);
         }
     }
-
 }

@@ -24,7 +24,8 @@ public interface ActionMessage {
     public String getActionNamespace();
 
     public boolean isBodyNonEmptyString();
+
     public String getBodyString();
+
     public void setBody(String string);
-    
 }

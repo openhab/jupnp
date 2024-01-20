@@ -53,16 +53,9 @@ public class EventedValueChannelMute extends EventedValue<ChannelMute> {
     @SuppressWarnings("unchecked")
     @Override
     public Map.Entry<String, String>[] getAttributes() {
-        return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<>(
-                        "val",
-                        new BooleanDatatype().getString(getValue().getMute())
-                ),
-                new AbstractMap.SimpleEntry<>(
-                        "channel",
-                        getValue().getChannel().name()
-                )
-        };
+        return new Map.Entry[] {
+                new AbstractMap.SimpleEntry<>("val", new BooleanDatatype().getString(getValue().getMute())),
+                new AbstractMap.SimpleEntry<>("channel", getValue().getChannel().name()) };
     }
 
     @Override

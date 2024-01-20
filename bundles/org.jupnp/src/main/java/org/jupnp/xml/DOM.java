@@ -14,11 +14,12 @@
 
 package org.jupnp.xml;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.net.URI;
 
 import javax.xml.xpath.XPath;
-import java.net.URI;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Wraps a W3C document and provides an entry point for browsing the DOM (in subclasses).
@@ -27,8 +28,7 @@ import java.net.URI;
  */
 public abstract class DOM {
 
-    public static final URI XML_SCHEMA_NAMESPACE =
-            URI.create("http://www.w3.org/2001/xml.xsd");
+    public static final URI XML_SCHEMA_NAMESPACE = URI.create("http://www.w3.org/2001/xml.xsd");
 
     public static final String CDATA_BEGIN = "<![CDATA[";
     public static final String CDATA_END = "]]>";
@@ -50,7 +50,8 @@ public abstract class DOM {
     }
 
     public abstract String getRootElementNamespace();
-    public abstract DOMElement getRoot(XPath xpath);
-    public abstract DOM copy();
 
+    public abstract DOMElement getRoot(XPath xpath);
+
+    public abstract DOM copy();
 }

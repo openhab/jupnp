@@ -46,9 +46,9 @@ public class EventedValueChannelVolumeDB extends EventedValue<ChannelVolumeDB> {
             if (attribute.getKey().equals("channel"))
                 channel = Channel.valueOf(attribute.getValue());
             if (attribute.getKey().equals("val"))
-                volumeDB = (new UnsignedIntegerTwoBytesDatatype()
-                        .valueOf(attribute.getValue()))
-                        .getValue().intValue(); // Java is fun!
+                volumeDB = (new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue())).getValue().intValue(); // Java
+                                                                                                                        // is
+                                                                                                                        // fun!
         }
         return channel != null && volumeDB != null ? new ChannelVolumeDB(channel, volumeDB) : null;
     }
@@ -56,18 +56,11 @@ public class EventedValueChannelVolumeDB extends EventedValue<ChannelVolumeDB> {
     @SuppressWarnings("unchecked")
     @Override
     public Map.Entry<String, String>[] getAttributes() {
-        return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<>(
-                        "val",
-                        new UnsignedIntegerTwoBytesDatatype().getString(
-                                new UnsignedIntegerTwoBytes(getValue().getVolumeDB())
-                        )
-                ),
-                new AbstractMap.SimpleEntry<>(
-                        "channel",
-                        getValue().getChannel().name()
-                )
-        };
+        return new Map.Entry[] {
+                new AbstractMap.SimpleEntry<>("val",
+                        new UnsignedIntegerTwoBytesDatatype()
+                                .getString(new UnsignedIntegerTwoBytes(getValue().getVolumeDB()))),
+                new AbstractMap.SimpleEntry<>("channel", getValue().getChannel().name()) };
     }
 
     @Override

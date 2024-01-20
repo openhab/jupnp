@@ -73,8 +73,8 @@ public class AsyncServlet extends HttpServlet {
             @Override
             public void onTimeout(AsyncEvent arg0) throws IOException {
                 long duration = System.currentTimeMillis() - startTime;
-                log.debug("{}", String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s", counter,
-                        duration, arg0.getSuppliedRequest()));
+                log.debug("{}", String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s",
+                        counter, duration, arg0.getSuppliedRequest()));
             }
 
             @Override
@@ -94,10 +94,9 @@ public class AsyncServlet extends HttpServlet {
             @Override
             public void onComplete(AsyncEvent arg0) throws IOException {
                 long duration = System.currentTimeMillis() - startTime;
-                log.debug("{}", String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s", counter,
-                        duration, arg0.getSuppliedResponse()));
+                log.debug("{}", String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s",
+                        counter, duration, arg0.getSuppliedResponse()));
             }
-
         });
 
         AsyncServletUpnpStream stream = new AsyncServletUpnpStream(router.getProtocolFactory(), async, req) {

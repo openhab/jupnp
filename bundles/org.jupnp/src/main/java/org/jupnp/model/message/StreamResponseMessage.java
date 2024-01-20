@@ -37,24 +37,21 @@ public class StreamResponseMessage extends UpnpMessage<UpnpResponse> {
         super(operation);
     }
 
-
     public StreamResponseMessage(UpnpResponse operation, String body) {
         super(operation, BodyType.STRING, body);
     }
 
     public StreamResponseMessage(String body) {
-        super(new UpnpResponse(UpnpResponse.Status.OK),BodyType.STRING, body);
+        super(new UpnpResponse(UpnpResponse.Status.OK), BodyType.STRING, body);
     }
-
 
     public StreamResponseMessage(UpnpResponse operation, byte[] body) {
         super(operation, BodyType.BYTES, body);
     }
 
     public StreamResponseMessage(byte[] body) {
-        super(new UpnpResponse(UpnpResponse.Status.OK),BodyType.BYTES, body);
+        super(new UpnpResponse(UpnpResponse.Status.OK), BodyType.BYTES, body);
     }
-
 
     public StreamResponseMessage(String body, ContentTypeHeader contentType) {
         this(body);
@@ -73,5 +70,4 @@ public class StreamResponseMessage extends UpnpMessage<UpnpResponse> {
     public StreamResponseMessage(byte[] body, MimeType mimeType) {
         this(body, new ContentTypeHeader(mimeType));
     }
-
 }

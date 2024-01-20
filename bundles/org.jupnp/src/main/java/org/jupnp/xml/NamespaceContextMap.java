@@ -14,10 +14,11 @@
 
 package org.jupnp.xml;
 
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 
 /**
  * This should have been part of the JDK.

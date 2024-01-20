@@ -42,7 +42,7 @@ public class ServiceReference {
     public ServiceReference(String s) {
         String[] split = s.split("/");
         if (split.length == 2) {
-            this.udn =  UDN.valueOf(split[0]);
+            this.udn = UDN.valueOf(split[0]);
             this.serviceId = ServiceId.valueOf(split[1]);
         } else {
             this.udn = null;
@@ -65,13 +65,17 @@ public class ServiceReference {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         ServiceReference that = (ServiceReference) o;
 
-        if (!serviceId.equals(that.serviceId)) return false;
-        if (!udn.equals(that.udn)) return false;
+        if (!serviceId.equals(that.serviceId))
+            return false;
+        if (!udn.equals(that.udn))
+            return false;
 
         return true;
     }
@@ -87,5 +91,4 @@ public class ServiceReference {
     public String toString() {
         return udn == null || serviceId == null ? "" : udn + DELIMITER + serviceId;
     }
-
 }

@@ -20,10 +20,7 @@ import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 /**
  * @author Jochen Hiller - Changed to use Compact2 compliant Java Beans
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerWithPropertyChangeSupport {
 
     private final PropertyChangeSupport propertyChangeSupport;
@@ -67,5 +64,4 @@ public class SwitchPowerWithPropertyChangeSupport {
     public boolean getStatus() {
         return status;
     }
-
 }

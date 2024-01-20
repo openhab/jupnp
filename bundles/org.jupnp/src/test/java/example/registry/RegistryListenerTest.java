@@ -14,7 +14,11 @@
 
 package example.registry;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.binding.xml.DeviceDescriptorBinder;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockRouter;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.message.StreamResponseMessage;
@@ -26,10 +30,6 @@ import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.protocol.RetrieveRemoteDescriptors;
 import org.jupnp.registry.DefaultRegistryListener;
 import org.jupnp.registry.Registry;
-import org.jupnp.data.SampleData;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Listening to registry changes
@@ -70,7 +70,6 @@ class RegistryListenerTest {
         void localDeviceAdded(Registry registry, LocalDevice device);
 
         void localDeviceRemoved(Registry registry, LocalDevice device);
-
     }
 
     /**
@@ -84,7 +83,8 @@ class RegistryListenerTest {
      * as soon as possible, after the first descriptor has been retrieved and parsed. At this time
      * the services metadata is however not available:
      * </p>
-     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.QuickstartRegistryListener" style="exclude: EXC1, EXC2;"/>
+     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.QuickstartRegistryListener" style=
+     * "exclude: EXC1, EXC2;"/>
      * <p>
      * This is how you register and activate a listener:
      * </p>
@@ -103,24 +103,23 @@ class RegistryListenerTest {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
                         try {
-                            String deviceDescriptorXML =
-                                getConfiguration().getDeviceDescriptorBinderUDA10().generate(
-                                    hydratedDevice,
-                                    new RemoteClientInfo(),
-                                    getConfiguration().getNamespace()
-                                );
-                            String serviceOneXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
-                            String serviceTwoXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
-                            String serviceThreeXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
-                            return new StreamResponseMessage[]{
-                                new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-                            };
+                            String deviceDescriptorXML = getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+                                    hydratedDevice, new RemoteClientInfo(), getConfiguration().getNamespace());
+                            String serviceOneXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[0]);
+                            String serviceTwoXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[1]);
+                            String serviceThreeXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[2]);
+                            return new StreamResponseMessage[] {
+                                    new StreamResponseMessage(deviceDescriptorXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceOneXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceTwoXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceThreeXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -131,7 +130,7 @@ class RegistryListenerTest {
         upnpService.startup();
 
         QuickstartRegistryListener listener = new QuickstartRegistryListener(); // DOC: INC1
-        upnpService.getRegistry().addListener(listener);                        // DOC: INC1
+        upnpService.getRegistry().addListener(listener); // DOC: INC1
 
         RetrieveRemoteDescriptors retrieveDescriptors = new RetrieveRemoteDescriptors(upnpService, discoveredDevice);
         retrieveDescriptors.run();
@@ -153,20 +152,15 @@ class RegistryListenerTest {
                         String deviceDescriptorXML;
                         DeviceDescriptorBinder binder = getConfiguration().getDeviceDescriptorBinderUDA10();
                         try {
-                            deviceDescriptorXML =
-                                binder.generate(
-                                    hydratedDevice,
-                                    new RemoteClientInfo(),
-                                    getConfiguration().getNamespace()
-                                );
+                            deviceDescriptorXML = binder.generate(hydratedDevice, new RemoteClientInfo(),
+                                    getConfiguration().getNamespace());
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
-                        return new StreamResponseMessage[]{
-                            new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            null,
-                            null,
-                            null // Don't return any service descriptors, make it fail
+                        return new StreamResponseMessage[] { new StreamResponseMessage(deviceDescriptorXML,
+                                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8), null, null, null // Don't return any
+                                                                                               // service descriptors,
+                                                                                               // make it fail
                         };
                     }
                 };
@@ -220,7 +214,8 @@ class RegistryListenerTest {
      * Most of the time, on any device that is faster than a cellphone, your listeners will look
      * like this:
      * </p>
-     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.MyListener" style="exclude: EXC1, EXC2, EXC3;"/>
+     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.MyListener" style="exclude: EXC1,
+     * EXC2, EXC3;"/>
      * <p>
      * The device metadata of the parameter to <code>remoteDeviceAdded()</code> is fully hydrated, all
      * of its services, actions, and state variables are available. You can continue with this metadata,
@@ -241,24 +236,23 @@ class RegistryListenerTest {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
                         try {
-                            String deviceDescriptorXML =
-                                getConfiguration().getDeviceDescriptorBinderUDA10().generate(
-                                    hydratedDevice,
-                                    new RemoteClientInfo(),
-                                    getConfiguration().getNamespace()
-                                );
-                            String serviceOneXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
-                            String serviceTwoXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
-                            String serviceThreeXML =
-                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
-                            return new StreamResponseMessage[]{
-                                new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-                            };
+                            String deviceDescriptorXML = getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+                                    hydratedDevice, new RemoteClientInfo(), getConfiguration().getNamespace());
+                            String serviceOneXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[0]);
+                            String serviceTwoXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[1]);
+                            String serviceThreeXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[2]);
+                            return new StreamResponseMessage[] {
+                                    new StreamResponseMessage(deviceDescriptorXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceOneXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceTwoXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceThreeXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -292,24 +286,23 @@ class RegistryListenerTest {
                     @Override
                     public StreamResponseMessage[] getStreamResponseMessages() {
                         try {
-                            String deviceDescriptorXML =
-                                getConfiguration().getDeviceDescriptorBinderUDA10().generate(
-                                    hydratedDevice,
-                                    new RemoteClientInfo(),
-                                    getConfiguration().getNamespace()
-                                );
-                            String serviceOneXML =
-                                    getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
-                                String serviceTwoXML =
-                                    getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
-                                String serviceThreeXML =
-                                    getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
-                                return new StreamResponseMessage[]{
-                                    new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                    new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                    new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                                    new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-                                };
+                            String deviceDescriptorXML = getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+                                    hydratedDevice, new RemoteClientInfo(), getConfiguration().getNamespace());
+                            String serviceOneXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[0]);
+                            String serviceTwoXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[1]);
+                            String serviceThreeXML = getConfiguration().getServiceDescriptorBinderUDA10()
+                                    .generate(hydratedDevice.findServices()[2]);
+                            return new StreamResponseMessage[] {
+                                    new StreamResponseMessage(deviceDescriptorXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceOneXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceTwoXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                    new StreamResponseMessage(serviceThreeXML,
+                                            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -327,7 +320,7 @@ class RegistryListenerTest {
 
         assertTrue(listener.added);
         assertFalse(listener.removed);
-        
+
         listener.reset();
 
         upnpService.getRegistry().addDevice(new RemoteDevice(SampleData.createSecondRemoteDeviceIdentity(1800)));
@@ -336,39 +329,38 @@ class RegistryListenerTest {
         assertTrue(listener.removed);
         assertEquals("127.0.0.2", listener.deviceAdded.getIdentity().getDescriptorURL().getHost());
         assertEquals("127.0.0.1", listener.deviceRemoved.getIdentity().getDescriptorURL().getHost());
-        
+
         listener.reset();
-        
+
         upnpService.getRegistry().removeAllRemoteDevices();
         assertFalse(listener.added);
         assertTrue(listener.removed);
     }
-    
+
     public static class MyListener extends DefaultRegistryListener {
         public boolean added = false; // DOC: EXC1
         public boolean removed = false; // DOC: EXC1
-        public RemoteDevice deviceAdded = null; 
-        public RemoteDevice deviceRemoved = null; 
+        public RemoteDevice deviceAdded = null;
+        public RemoteDevice deviceRemoved = null;
 
         @Override
         public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
             added = true; // DOC: EXC2
-            deviceAdded = device; 
+            deviceAdded = device;
         }
 
         @Override
         public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
             // Stop using the service if this is the same device, it's gone now
             removed = true; // DOC: EXC3
-            deviceRemoved = device; 
+            deviceRemoved = device;
         }
-        
+
         void reset() {
-            added = false; 
-            removed = false; 
-            deviceAdded = null; 
-            deviceRemoved = null; 
+            added = false;
+            removed = false;
+            deviceAdded = null;
+            deviceRemoved = null;
         }
     }
-
 }

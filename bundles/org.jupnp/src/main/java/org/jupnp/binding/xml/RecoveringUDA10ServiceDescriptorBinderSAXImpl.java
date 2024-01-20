@@ -73,8 +73,7 @@ public class RecoveringUDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceD
     protected String fixRetval(String descriptorXml) {
         if (descriptorXml.contains("<scpd xmlns=\"urn:Belkin:service-1-0\">")) {
             if (descriptorXml.contains("<retval")) {
-                SpecificationViolationReporter
-                    .report("Detected invalid service value 'retval', replacing it", null);
+                SpecificationViolationReporter.report("Detected invalid service value 'retval', replacing it", null);
                 descriptorXml = descriptorXml.replaceAll("<retval/>", " ");
                 return descriptorXml.replaceAll("<retval />", " ");
             }
@@ -93,5 +92,4 @@ public class RecoveringUDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceD
         }
         return descriptorXml;
     }
-
 }

@@ -93,8 +93,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             return;
         }
 
-        List<NetworkAddress> activeStreamServers =
-            getUpnpService().getRouter().getActiveStreamServers(getInputMessage().getLocalAddress());
+        List<NetworkAddress> activeStreamServers = getUpnpService().getRouter()
+                .getActiveStreamServers(getInputMessage().getLocalAddress());
         if (activeStreamServers.size() == 0) {
             log.trace("Aborting search response, no active stream servers found (network disabled?)");
             return;
@@ -118,7 +118,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         // Spec says we should assume "less" if it's 120 or more
         // From the spec, MX should be "greater than or equal to 1"
         // Prevent negative MX to make nextInt() throw IllegalArgumentException below
-        if (mx > 120 || mx <= 0) mx = MXHeader.DEFAULT_VALUE;
+        if (mx > 120 || mx <= 0)
+            mx = MXHeader.DEFAULT_VALUE;
 
         // Only wait if there is something to wait for
         if (getUpnpService().getRegistry().getLocalDevices().size() > 0) {
@@ -129,7 +130,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
         return true;
     }
-    
+
     protected void sendResponses(UpnpHeader searchTarget, NetworkAddress activeStreamServer) throws RouterException {
         if (searchTarget instanceof STAllHeader) {
 
@@ -169,8 +170,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             if (LOG_ENABLED) {
                 log.trace("Sending root device messages: {}", localDevice);
             }
-            List<OutgoingSearchResponse> rootDeviceMsgs =
-                    createDeviceMessages(localDevice, activeStreamServer);
+            List<OutgoingSearchResponse> rootDeviceMsgs = createDeviceMessages(localDevice, activeStreamServer);
             for (OutgoingSearchResponse upnpMessage : rootDeviceMsgs) {
                 getUpnpService().getRouter().send(upnpMessage);
             }
@@ -180,16 +180,15 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                     if (LOG_ENABLED) {
                         log.trace("Sending embedded device messages: {}", embeddedDevice);
                     }
-                    List<OutgoingSearchResponse> embeddedDeviceMsgs =
-                            createDeviceMessages(embeddedDevice, activeStreamServer);
+                    List<OutgoingSearchResponse> embeddedDeviceMsgs = createDeviceMessages(embeddedDevice,
+                            activeStreamServer);
                     for (OutgoingSearchResponse upnpMessage : embeddedDeviceMsgs) {
                         getUpnpService().getRouter().send(upnpMessage);
                     }
                 }
             }
 
-            List<OutgoingSearchResponse> serviceTypeMsgs =
-                    createServiceTypeMessages(localDevice, activeStreamServer);
+            List<OutgoingSearchResponse> serviceTypeMsgs = createServiceTypeMessages(localDevice, activeStreamServer);
             if (serviceTypeMsgs.size() > 0) {
                 if (LOG_ENABLED) {
                     log.trace("Sending service type messages");
@@ -202,37 +201,21 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
     }
 
-    protected List<OutgoingSearchResponse> createDeviceMessages(LocalDevice device,
-                                                                NetworkAddress activeStreamServer) {
+    protected List<OutgoingSearchResponse> createDeviceMessages(LocalDevice device, NetworkAddress activeStreamServer) {
         List<OutgoingSearchResponse> msgs = new ArrayList<OutgoingSearchResponse>();
 
         // See the tables in UDA 1.0 section 1.1.2
 
         if (device.isRoot()) {
-            msgs.add(
-                    new OutgoingSearchResponseRootDevice(
-                            getInputMessage(),
-                            getDescriptorLocation(activeStreamServer, device),
-                            device
-                    )
-            );
+            msgs.add(new OutgoingSearchResponseRootDevice(getInputMessage(),
+                    getDescriptorLocation(activeStreamServer, device), device));
         }
 
-        msgs.add(
-                new OutgoingSearchResponseUDN(
-                        getInputMessage(),
-                        getDescriptorLocation(activeStreamServer, device),
-                        device
-                )
-        );
+        msgs.add(new OutgoingSearchResponseUDN(getInputMessage(), getDescriptorLocation(activeStreamServer, device),
+                device));
 
-        msgs.add(
-                new OutgoingSearchResponseDeviceType(
-                        getInputMessage(),
-                        getDescriptorLocation(activeStreamServer, device),
-                        device
-                )
-        );
+        msgs.add(new OutgoingSearchResponseDeviceType(getInputMessage(),
+                getDescriptorLocation(activeStreamServer, device), device));
 
         for (OutgoingSearchResponse msg : msgs) {
             prepareOutgoingSearchResponse(msg);
@@ -242,16 +225,11 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     }
 
     protected List<OutgoingSearchResponse> createServiceTypeMessages(LocalDevice device,
-                                                                     NetworkAddress activeStreamServer) {
+            NetworkAddress activeStreamServer) {
         List<OutgoingSearchResponse> msgs = new ArrayList<OutgoingSearchResponse>();
         for (ServiceType serviceType : device.findServiceTypes()) {
-            OutgoingSearchResponse message =
-                new OutgoingSearchResponseServiceType(
-                        getInputMessage(),
-                        getDescriptorLocation(activeStreamServer, device),
-                        device,
-                        serviceType
-                );
+            OutgoingSearchResponse message = new OutgoingSearchResponseServiceType(getInputMessage(),
+                    getDescriptorLocation(activeStreamServer, device), device, serviceType);
             prepareOutgoingSearchResponse(message);
             msgs.add(message);
         }
@@ -265,12 +243,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             if (isAdvertisementDisabled(device))
                 continue;
 
-            OutgoingSearchResponse message =
-                new OutgoingSearchResponseRootDevice(
-                        getInputMessage(),
-                        getDescriptorLocation(activeStreamServer, device),
-                        device
-                );
+            OutgoingSearchResponse message = new OutgoingSearchResponseRootDevice(getInputMessage(),
+                    getDescriptorLocation(activeStreamServer, device), device);
             prepareOutgoingSearchResponse(message);
             getUpnpService().getRouter().send(message);
         }
@@ -280,60 +254,50 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Device device = getUpnpService().getRegistry().getDevice(udn, false);
         if (device != null && device instanceof LocalDevice) {
 
-            if (isAdvertisementDisabled((LocalDevice)device))
+            if (isAdvertisementDisabled((LocalDevice) device))
                 return;
 
             log.trace("Responding to UDN device search: {}", udn);
-            OutgoingSearchResponse message =
-                new OutgoingSearchResponseUDN(
-                        getInputMessage(),
-                        getDescriptorLocation(activeStreamServer, (LocalDevice) device),
-                        (LocalDevice) device
-                );
+            OutgoingSearchResponse message = new OutgoingSearchResponseUDN(getInputMessage(),
+                    getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device);
             prepareOutgoingSearchResponse(message);
             getUpnpService().getRouter().send(message);
         }
     }
 
-    protected void sendSearchResponseDeviceType(DeviceType deviceType, NetworkAddress activeStreamServer) throws RouterException{
+    protected void sendSearchResponseDeviceType(DeviceType deviceType, NetworkAddress activeStreamServer)
+            throws RouterException {
         log.trace("Responding to device type search: {}", deviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(deviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if (isAdvertisementDisabled((LocalDevice)device))
+                if (isAdvertisementDisabled((LocalDevice) device))
                     continue;
 
                 log.trace("Sending matching device type search result for: {}", device);
-                OutgoingSearchResponse message =
-                    new OutgoingSearchResponseDeviceType(
-                            getInputMessage(),
-                            getDescriptorLocation(activeStreamServer, (LocalDevice) device),
-                            (LocalDevice) device
-                    );
+                OutgoingSearchResponse message = new OutgoingSearchResponseDeviceType(getInputMessage(),
+                        getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device);
                 prepareOutgoingSearchResponse(message);
                 getUpnpService().getRouter().send(message);
             }
         }
     }
 
-    protected void sendSearchResponseServiceType(ServiceType serviceType, NetworkAddress activeStreamServer) throws RouterException {
+    protected void sendSearchResponseServiceType(ServiceType serviceType, NetworkAddress activeStreamServer)
+            throws RouterException {
         log.trace("Responding to service type search: {}", serviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(serviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if (isAdvertisementDisabled((LocalDevice)device))
+                if (isAdvertisementDisabled((LocalDevice) device))
                     continue;
 
                 log.trace("Sending matching service type search result: {}", device);
-                OutgoingSearchResponse message =
-                    new OutgoingSearchResponseServiceType(
-                            getInputMessage(),
-                            getDescriptorLocation(activeStreamServer, (LocalDevice) device),
-                            (LocalDevice) device,
-                            serviceType
-                    );
+                OutgoingSearchResponse message = new OutgoingSearchResponseServiceType(getInputMessage(),
+                        getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device,
+                        serviceType);
                 prepareOutgoingSearchResponse(message);
                 getUpnpService().getRouter().send(message);
             }
@@ -341,15 +305,12 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     }
 
     protected Location getDescriptorLocation(NetworkAddress activeStreamServer, LocalDevice device) {
-        return new Location(
-                activeStreamServer,
-                getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(device)
-        );
+        return new Location(activeStreamServer,
+                getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(device));
     }
 
     protected boolean isAdvertisementDisabled(LocalDevice device) {
-        DiscoveryOptions options =
-            getUpnpService().getRegistry().getDiscoveryOptions(device.getIdentity().getUdn());
+        DiscoveryOptions options = getUpnpService().getRegistry().getDiscoveryOptions(device.getIdentity().getUdn());
         return options != null && !options.isAdvertised();
     }
 
@@ -358,5 +319,4 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
      */
     protected void prepareOutgoingSearchResponse(OutgoingSearchResponse message) {
     }
-
 }

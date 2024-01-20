@@ -36,5 +36,4 @@ public class StateVariableValue<S extends Service> extends VariableValue {
     public StateVariable<S> getStateVariable() {
         return stateVariable;
     }
-
 }

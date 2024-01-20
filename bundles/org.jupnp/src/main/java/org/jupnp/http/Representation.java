@@ -33,11 +33,13 @@ public class Representation<E> implements Serializable {
     private String entityTag;
     private E entity;
 
-    public Representation(CacheControl cacheControl, Integer contentLength, String contentType, Long lastModified, String entityTag, E entity) {
+    public Representation(CacheControl cacheControl, Integer contentLength, String contentType, Long lastModified,
+            String entityTag, E entity) {
         this(null, cacheControl, contentLength, contentType, lastModified, entityTag, entity);
     }
 
-    public Representation(URL url, CacheControl cacheControl, Integer contentLength, String contentType, Long lastModified, String entityTag, E entity) {
+    public Representation(URL url, CacheControl cacheControl, Integer contentLength, String contentType,
+            Long lastModified, String entityTag, E entity) {
         this.url = url;
         this.cacheControl = cacheControl;
         this.contentLength = contentLength;
@@ -48,15 +50,9 @@ public class Representation<E> implements Serializable {
     }
 
     public Representation(URLConnection urlConnection, E entity) {
-        this(
-                urlConnection.getURL(),
-                CacheControl.valueOf(urlConnection.getHeaderField("Cache-Control")),
-                urlConnection.getContentLength(),
-                urlConnection.getContentType(),
-                urlConnection.getLastModified(),
-                urlConnection.getHeaderField("Etag"),
-                entity
-        );
+        this(urlConnection.getURL(), CacheControl.valueOf(urlConnection.getHeaderField("Cache-Control")),
+                urlConnection.getContentLength(), urlConnection.getContentType(), urlConnection.getLastModified(),
+                urlConnection.getHeaderField("Etag"), entity);
     }
 
     public URL getUrl() {
@@ -88,11 +84,9 @@ public class Representation<E> implements Serializable {
     }
 
     public Long getMaxAgeOrNull() {
-        return (getCacheControl() == null ||
-                getCacheControl().getMaxAge() == -1 ||
-                getCacheControl().getMaxAge() == 0)
+        return (getCacheControl() == null || getCacheControl().getMaxAge() == -1 || getCacheControl().getMaxAge() == 0)
                 ? null
-                : (long)getCacheControl().getMaxAge();
+                : (long) getCacheControl().getMaxAge();
     }
 
     public boolean isExpired(long storedOn, long maxAge) {
@@ -104,23 +98,19 @@ public class Representation<E> implements Serializable {
     }
 
     public boolean isNoStore() {
-        return getCacheControl() != null &&
-                getCacheControl().isNoStore();
+        return getCacheControl() != null && getCacheControl().isNoStore();
     }
 
     public boolean isNoCache() {
-        return getCacheControl() != null &&
-                getCacheControl().isNoCache();
+        return getCacheControl() != null && getCacheControl().isNoCache();
     }
 
     public boolean mustRevalidate() {
-        return getCacheControl() != null &&
-                getCacheControl().isProxyRevalidate();
+        return getCacheControl() != null && getCacheControl().isProxyRevalidate();
     }
 
     public boolean hasEntityTagChanged(String currentEtag) {
-        return getEntityTag() != null
-                && !getEntityTag().equals(currentEtag);
+        return getEntityTag() != null && !getEntityTag().equals(currentEtag);
     }
 
     public boolean hasBeenModified(long currentModificationTime) {
@@ -131,5 +121,4 @@ public class Representation<E> implements Serializable {
     public String toString() {
         return "(" + getClass().getSimpleName() + ") CT: " + getContentType();
     }
-
 }

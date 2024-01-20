@@ -24,49 +24,26 @@ import org.jupnp.binding.annotations.UpnpStateVariable;
 import org.jupnp.binding.annotations.UpnpStateVariables;
 import org.jupnp.model.profile.RemoteClientInfo;
 
-@UpnpService(
-    serviceId = @UpnpServiceId("SwitchPower"),
-    serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
-@UpnpStateVariables(
-    {
-        @UpnpStateVariable(
-            name = "Target",
-            defaultValue = "0",
-            sendEvents = false
-        ),
-        @UpnpStateVariable(
-            name = "Status",
-            defaultValue = "0"
-        )
-    }
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
+@UpnpStateVariables({ @UpnpStateVariable(name = "Target", defaultValue = "0", sendEvents = false),
+        @UpnpStateVariable(name = "Status", defaultValue = "0") })
 public class SwitchPowerWithClientInfo {
 
     private boolean power;
 
     // DOC:CLIENT_INFO
     @UpnpAction
-    public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
-                          boolean newTargetValue,
-                          RemoteClientInfo clientInfo) {
+    public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue,
+            RemoteClientInfo clientInfo) {
         power = newTargetValue;
         System.out.println("Switch is: " + power);
 
         if (clientInfo != null) {
+            System.out.println("Client's address is: " + clientInfo.getRemoteAddress());
+            System.out.println("Received message on: " + clientInfo.getLocalAddress());
+            System.out.println("Client's user agent is: " + clientInfo.getRequestUserAgent());
             System.out.println(
-                "Client's address is: " + clientInfo.getRemoteAddress()
-            );
-            System.out.println(
-                "Received message on: " + clientInfo.getLocalAddress()
-            );
-            System.out.println(
-                "Client's user agent is: " + clientInfo.getRequestUserAgent()
-            );
-            System.out.println(
-                "Client's custom header is: " +
-                clientInfo.getRequestHeaders().getFirstHeader("X-MY-HEADER")
-            );
+                    "Client's custom header is: " + clientInfo.getRequestHeaders().getFirstHeader("X-MY-HEADER"));
 
             // Return some extra headers in the response
             clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
@@ -83,4 +60,4 @@ public class SwitchPowerWithClientInfo {
     public boolean getStatus() {
         return power;
     }
-}                                                                               // DOC:INC1
+} // DOC:INC1

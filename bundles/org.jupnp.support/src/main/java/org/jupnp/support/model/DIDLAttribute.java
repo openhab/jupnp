@@ -21,7 +21,7 @@ package org.jupnp.support.model;
  * @author Mario Franco
  */
 public class DIDLAttribute {
-    
+
     private String namespaceURI;
     private String prefix;
     private String value;
@@ -31,6 +31,7 @@ public class DIDLAttribute {
         this.prefix = prefix;
         this.value = value;
     }
+
     /**
      * @return the namespaceURI
      */
@@ -51,5 +52,4 @@ public class DIDLAttribute {
     public String getValue() {
         return value;
     }
-    
 }

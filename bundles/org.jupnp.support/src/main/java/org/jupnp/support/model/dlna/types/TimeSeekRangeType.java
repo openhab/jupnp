@@ -24,12 +24,11 @@ public class TimeSeekRangeType {
 
     private NormalPlayTimeRange normalPlayTimeRange;
     private BytesRange bytesRange;
-    
 
     public TimeSeekRangeType(NormalPlayTimeRange nptRange) {
         this.normalPlayTimeRange = nptRange;
     }
-    
+
     public TimeSeekRangeType(NormalPlayTimeRange nptRange, BytesRange byteRange) {
         this.normalPlayTimeRange = nptRange;
         this.bytesRange = byteRange;
@@ -55,6 +54,4 @@ public class TimeSeekRangeType {
     public void setBytesRange(BytesRange bytesRange) {
         this.bytesRange = bytesRange;
     }
-
-
 }

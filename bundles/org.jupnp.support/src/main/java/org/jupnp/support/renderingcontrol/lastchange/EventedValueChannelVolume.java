@@ -46,9 +46,9 @@ public class EventedValueChannelVolume extends EventedValue<ChannelVolume> {
             if (attribute.getKey().equals("channel"))
                 channel = Channel.valueOf(attribute.getValue());
             if (attribute.getKey().equals("val"))
-                volume = (new UnsignedIntegerTwoBytesDatatype()
-                        .valueOf(attribute.getValue()))
-                        .getValue().intValue(); // Java is fun!
+                volume = (new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue())).getValue().intValue(); // Java
+                                                                                                                      // is
+                                                                                                                      // fun!
         }
         return channel != null && volume != null ? new ChannelVolume(channel, volume) : null;
     }
@@ -56,18 +56,11 @@ public class EventedValueChannelVolume extends EventedValue<ChannelVolume> {
     @SuppressWarnings("unchecked")
     @Override
     public Map.Entry<String, String>[] getAttributes() {
-        return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<>(
-                        "val",
-                        new UnsignedIntegerTwoBytesDatatype().getString(
-                                new UnsignedIntegerTwoBytes(getValue().getVolume())
-                        )
-                ),
-                new AbstractMap.SimpleEntry<>(
-                        "channel",
-                        getValue().getChannel().name()
-                )
-        };
+        return new Map.Entry[] {
+                new AbstractMap.SimpleEntry<>("val",
+                        new UnsignedIntegerTwoBytesDatatype()
+                                .getString(new UnsignedIntegerTwoBytes(getValue().getVolume()))),
+                new AbstractMap.SimpleEntry<>("channel", getValue().getChannel().name()) };
     }
 
     @Override

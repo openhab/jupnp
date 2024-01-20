@@ -62,13 +62,17 @@ public class NamedDeviceType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof NamedDeviceType)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof NamedDeviceType))
+            return false;
 
         NamedDeviceType that = (NamedDeviceType) o;
 
-        if (!deviceType.equals(that.deviceType)) return false;
-        if (!udn.equals(that.udn)) return false;
+        if (!deviceType.equals(that.deviceType))
+            return false;
+        if (!udn.equals(that.udn))
+            return false;
 
         return true;
     }

@@ -70,15 +70,16 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
                 URL url = new URL(sp);
                 try {
                     /*
-                        On some platforms (Android...), a valid URL might not be a valid URI, so
-                        we need to test for this and skip any invalid URI, e.g.
-
-                        Java.net.URISyntaxException: Invalid % sequence: %wl in authority at index 32: http://[fe80::208:caff:fec4:824e%wlan0]:8485/eventSub
-    		                at libcore.net.UriCodec.validate(UriCodec.java:58)
-                            at java.net.URI.parseURI(URI.java:394)
-                            at java.net.URI.<init>(URI.java:204)
-                            at java.net.URL.toURI(URL.java:497)
-            	    */
+                     * On some platforms (Android...), a valid URL might not be a valid URI, so
+                     * we need to test for this and skip any invalid URI, e.g.
+                     * 
+                     * Java.net.URISyntaxException: Invalid % sequence: %wl in authority at index 32:
+                     * http://[fe80::208:caff:fec4:824e%wlan0]:8485/eventSub
+                     * at libcore.net.UriCodec.validate(UriCodec.java:58)
+                     * at java.net.URI.parseURI(URI.java:394)
+                     * at java.net.URI.<init>(URI.java:204)
+                     * at java.net.URL.toURI(URL.java:497)
+                     */
                     url.toURI();
                 } catch (URISyntaxException ex) {
                     log.warn("Discarding callback URL, not a valid URI on this platform: {}", url, ex);

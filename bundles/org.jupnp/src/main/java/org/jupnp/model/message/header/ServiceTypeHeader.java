@@ -14,9 +14,9 @@
 
 package org.jupnp.model.message.header;
 
-import org.jupnp.model.types.ServiceType;
-
 import java.net.URI;
+
+import org.jupnp.model.types.ServiceType;
 
 /**
  * @author Christian Bauer

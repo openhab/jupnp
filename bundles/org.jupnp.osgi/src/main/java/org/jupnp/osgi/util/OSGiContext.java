@@ -42,7 +42,6 @@ public class OSGiContext {
         OSGiContext.upnpService = null;
     }
 
-
     public static BundleContext getBundleContext() {
         return bundleContext;
     }
@@ -50,5 +49,4 @@ public class OSGiContext {
     public static UpnpService getUpnpService() {
         return upnpService;
     }
-
 }

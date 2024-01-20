@@ -30,5 +30,4 @@ final public class UnsignedIntegerFourBytes extends UnsignedVariableInteger {
     public Bits getBits() {
         return Bits.THIRTYTWO;
     }
-
 }

@@ -38,14 +38,10 @@ public class BinaryLightClient implements Runnable {
             UpnpService upnpService = new UpnpServiceImpl();
 
             // Add a listener for device registration events
-            upnpService.getRegistry().addListener(
-                    createRegistryListener(upnpService)
-            );
+            upnpService.getRegistry().addListener(createRegistryListener(upnpService));
 
             // Broadcast a search message for all devices
-            upnpService.getControlPoint().search(
-                    new STAllHeader()
-            );
+            upnpService.getControlPoint().search(new STAllHeader());
         } catch (Exception ex) {
             System.err.println("Exception occured: " + ex);
             System.exit(1);
@@ -76,30 +72,26 @@ public class BinaryLightClient implements Runnable {
             }
         };
     }
+
     // DOC: REGISTRYLISTENER
     // DOC: EXECUTEACTION
     void executeAction(UpnpService upnpService, Service switchPowerService) {
-            ActionInvocation setTargetInvocation =
-                    new SetTargetActionInvocation(switchPowerService);
+        ActionInvocation setTargetInvocation = new SetTargetActionInvocation(switchPowerService);
 
-            // Executes asynchronous in the background
-            upnpService.getControlPoint().execute(
-                    new ActionCallback(setTargetInvocation) {
+        // Executes asynchronous in the background
+        upnpService.getControlPoint().execute(new ActionCallback(setTargetInvocation) {
 
-                        @Override
-                        public void success(ActionInvocation invocation) {
-                            assert invocation.getOutput().length == 0;
-                            System.out.println("Successfully called action!");
-                        }
+            @Override
+            public void success(ActionInvocation invocation) {
+                assert invocation.getOutput().length == 0;
+                System.out.println("Successfully called action!");
+            }
 
-                        @Override
-                        public void failure(ActionInvocation invocation,
-                                            UpnpResponse operation,
-                                            String defaultMsg) {
-                            System.err.println(defaultMsg);
-                        }
-                    }
-            );
+            @Override
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
+                System.err.println(defaultMsg);
+            }
+        });
     }
 
     static class SetTargetActionInvocation extends ActionInvocation {

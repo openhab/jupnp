@@ -63,8 +63,7 @@ public class CatalogResourceResolver implements LSResourceResolver {
         }
         log.info(
                 "System identifier not found in catalog, continuing with default resolution (this most likely means remote HTTP request!): {}",
-                systemId
-        );
+                systemId);
         return null;
     }
 

@@ -14,9 +14,9 @@
 
 package org.jupnp.model.types;
 
-import org.jupnp.model.ModelUtil;
-
 import java.util.Arrays;
+
+import org.jupnp.model.ModelUtil;
 
 /**
  * An arbitrary list of comma-separated elements, representing DLNA capabilities (whatever that is).
@@ -36,7 +36,8 @@ public class DLNACaps {
     }
 
     static public DLNACaps valueOf(String s) throws InvalidValueException {
-        if (s == null || s.length() == 0) return new DLNACaps(new String[0]);
+        if (s == null || s.length() == 0)
+            return new DLNACaps(new String[0]);
         String[] caps = s.split(",");
         String[] trimmed = new String[caps.length];
         for (int i = 0; i < caps.length; i++) {
@@ -47,12 +48,15 @@ public class DLNACaps {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         DLNACaps dlnaCaps = (DLNACaps) o;
 
-        if (!Arrays.equals(caps, dlnaCaps.caps)) return false;
+        if (!Arrays.equals(caps, dlnaCaps.caps))
+            return false;
 
         return true;
     }

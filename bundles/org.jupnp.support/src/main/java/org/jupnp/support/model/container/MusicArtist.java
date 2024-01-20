@@ -15,10 +15,10 @@
 
 package org.jupnp.support.model.container;
 
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+
 import java.net.URI;
 import java.util.List;
-
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 /**
  * @author Christian Bauer
@@ -69,5 +69,4 @@ public class MusicArtist extends PersonContainer {
         replaceFirstProperty(new UPNP.ARTIST_DISCO_URI(uri));
         return this;
     }
-
 }

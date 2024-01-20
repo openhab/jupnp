@@ -14,18 +14,18 @@
 
 package org.jupnp.ssdp;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.URI;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.jupnp.data.SampleData;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.ExpirationDetails;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.resource.Resource;
-import org.jupnp.data.SampleData;
-import org.junit.jupiter.api.Test;
-
-import java.net.URI;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RegistryExpirationTest {
 
@@ -34,11 +34,9 @@ class RegistryExpirationTest {
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
-        RemoteDevice rd = SampleData.createRemoteDevice(
-                SampleData.createRemoteDeviceIdentity(1)
-        );
+        RemoteDevice rd = SampleData.createRemoteDevice(SampleData.createRemoteDeviceIdentity(1));
         upnpService.getRegistry().addDevice(rd);
-        
+
         assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
 
         Thread.sleep(3000);
@@ -50,20 +48,16 @@ class RegistryExpirationTest {
 
     @Test
     void overrideAgeThenAddAndExpire() throws Exception {
-        MockUpnpService upnpService = new MockUpnpService(
-            new MockUpnpServiceConfiguration(true) {
+        MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration(true) {
 
-                @Override
-                public Integer getRemoteDeviceMaxAgeSeconds() {
-                    return 0;
-                }
+            @Override
+            public Integer getRemoteDeviceMaxAgeSeconds() {
+                return 0;
             }
-        );
+        });
         upnpService.startup();
 
-        RemoteDevice rd = SampleData.createRemoteDevice(
-                SampleData.createRemoteDeviceIdentity(1)
-        );
+        RemoteDevice rd = SampleData.createRemoteDevice(SampleData.createRemoteDeviceIdentity(1));
         upnpService.getRegistry().addDevice(rd);
 
         assertEquals(1, upnpService.getRegistry().getRemoteDevices().size());
@@ -90,9 +84,7 @@ class RegistryExpirationTest {
         MockUpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
-        RemoteDevice rd = SampleData.createRemoteDevice(
-                SampleData.createRemoteDeviceIdentity(2)
-        );
+        RemoteDevice rd = SampleData.createRemoteDevice(SampleData.createRemoteDeviceIdentity(2));
 
         // Add it to registry
         upnpService.getRegistry().addDevice(rd);
@@ -166,5 +158,4 @@ class RegistryExpirationTest {
             wasExecuted = true;
         }
     }
-
 }

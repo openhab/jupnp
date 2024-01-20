@@ -63,7 +63,8 @@ public class RequestInfo {
 
     public static void reportParameters(StringBuilder builder, HttpServletRequest req) {
         Enumeration names = req.getParameterNames();
-        if (names == null) return;
+        if (names == null)
+            return;
 
         if (names.hasMoreElements()) {
             builder.append("Parameters:\n");
@@ -81,7 +82,8 @@ public class RequestInfo {
 
     public static void reportHeaders(StringBuilder builder, HttpServletRequest req) {
         Enumeration names = req.getHeaderNames();
-        if (names == null) return;
+        if (names == null)
+            return;
         if (names.hasMoreElements()) {
             builder.append("Headers:\n");
             while (names.hasMoreElements()) {
@@ -94,7 +96,8 @@ public class RequestInfo {
 
     public static void reportCookies(StringBuilder builder, HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
-        if (cookies == null) return;
+        if (cookies == null)
+            return;
         int l = cookies.length;
         if (l > 0) {
             builder.append("Cookies:\n");
@@ -115,8 +118,8 @@ public class RequestInfo {
     }
 
     public static boolean isPS3Request(String userAgent, String avClientInfo) {
-        return ((userAgent != null && userAgent.contains("PLAYSTATION 3")) ||
-            (avClientInfo != null && avClientInfo.contains("PLAYSTATION 3")));
+        return ((userAgent != null && userAgent.contains("PLAYSTATION 3"))
+                || (avClientInfo != null && avClientInfo.contains("PLAYSTATION 3")));
     }
 
     public static boolean isAndroidBubbleUPnPRequest(String userAgent) {
@@ -144,8 +147,8 @@ public class RequestInfo {
     }
 
     public static boolean isXbox360Request(String userAgent, String server) {
-        return (userAgent != null && (userAgent.contains("Xbox") || userAgent.contains("Xenon"))) ||
-            (server != null && server.contains("Xbox"));
+        return (userAgent != null && (userAgent.contains("Xbox") || userAgent.contains("Xenon")))
+                || (server != null && server.contains("Xbox"));
     }
 
     public static boolean isXbox360AlbumArtRequest(HttpServletRequest request) {
@@ -157,11 +160,11 @@ public class RequestInfo {
     }
 
     public static void dumpRequestString(long timestamp, HttpServletRequest request) {
-    	LoggerFactory.getLogger(RequestInfo.class).info(getRequestInfoString(timestamp, request));
+        LoggerFactory.getLogger(RequestInfo.class).info(getRequestInfoString(timestamp, request));
     }
 
     public static void dumpRequestHeaders(long timestamp, String text, HttpServletRequest request) {
-    	Logger log = LoggerFactory.getLogger(RequestInfo.class);
+        Logger log = LoggerFactory.getLogger(RequestInfo.class);
         log.info(text);
         dumpRequestString(timestamp, request);
         Enumeration headers = request.getHeaderNames();
@@ -175,24 +178,19 @@ public class RequestInfo {
     }
 
     public static String getRequestInfoString(long timestamp, HttpServletRequest request) {
-        return String.format("%s %s %s %s %s %d",
-            request.getMethod(),
-            request.getRequestURI(),
-            request.getProtocol(),
-            request.getParameterMap(),
-            request.getRemoteAddr(),
-            timestamp);
+        return String.format("%s %s %s %s %s %d", request.getMethod(), request.getRequestURI(), request.getProtocol(),
+                request.getParameterMap(), request.getRemoteAddr(), timestamp);
     }
 
     public static String getRequestFullURL(HttpServletRequest req) {
 
-        String scheme = req.getScheme();             // http
-        String serverName = req.getServerName();     // hostname.com
-        int serverPort = req.getServerPort();        // 80
-        String contextPath = req.getContextPath();   // /mywebapp
-        String servletPath = req.getServletPath();   // /servlet/MyServlet
-        String pathInfo = req.getPathInfo();         // /a/b;c=123
-        String queryString = req.getQueryString();   // d=789
+        String scheme = req.getScheme(); // http
+        String serverName = req.getServerName(); // hostname.com
+        int serverPort = req.getServerPort(); // 80
+        String contextPath = req.getContextPath(); // /mywebapp
+        String servletPath = req.getServletPath(); // /servlet/MyServlet
+        String pathInfo = req.getPathInfo(); // /a/b;c=123
+        String queryString = req.getQueryString(); // d=789
 
         // Reconstruct original requesting URL
         StringBuffer url = new StringBuffer();
@@ -212,5 +210,4 @@ public class RequestInfo {
         }
         return url.toString();
     }
-
 }

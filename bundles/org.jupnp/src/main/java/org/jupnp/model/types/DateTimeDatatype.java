@@ -34,7 +34,8 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
     }
 
     public Calendar valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty()) return null;
+        if (s.isEmpty())
+            return null;
 
         Date d = getDateValue(s, readFormats);
         if (d == null) {
@@ -49,7 +50,8 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
 
     @Override
     public String getString(Calendar value) throws InvalidValueException {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         SimpleDateFormat sdt = new SimpleDateFormat(writeFormat);
         sdt.setTimeZone(getTimeZone());
         return sdt.format(value.getTime());
@@ -58,8 +60,7 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
     protected String normalizeTimeZone(String value) {
         if (value.endsWith("Z")) {
             value = value.substring(0, value.length() - 1) + "+0000";
-        } else if ((value.length() > 7)
-                && (value.charAt(value.length() - 3) == ':')
+        } else if ((value.length() > 7) && (value.charAt(value.length() - 3) == ':')
                 && ((value.charAt(value.length() - 6) == '-') || (value.charAt(value.length() - 6) == '+'))) {
 
             value = value.substring(0, value.length() - 3) + value.substring(value.length() - 2);
@@ -88,5 +89,4 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
     protected TimeZone getTimeZone() {
         return TimeZone.getDefault();
     }
-
 }

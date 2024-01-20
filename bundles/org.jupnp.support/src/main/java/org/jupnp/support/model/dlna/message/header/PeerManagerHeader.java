@@ -31,12 +31,12 @@ public class PeerManagerHeader extends DLNAHeader<ServiceReference> {
         if (s.length() != 0) {
             try {
                 ServiceReference serviceReference = new ServiceReference(s);
-                if (serviceReference.getUdn()!=null && serviceReference.getServiceId()!=null) {
+                if (serviceReference.getUdn() != null && serviceReference.getServiceId() != null) {
                     setValue(serviceReference);
                     return;
                 }
             } catch (Exception ex) {
-              //no need to take any precaution measure
+                // no need to take any precaution measure
             }
         }
         throw new InvalidHeaderException("Invalid PeerManager header value: " + s);

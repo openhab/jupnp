@@ -21,18 +21,15 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class SearchCommandSortByValidator implements IParameterValidator {
-	public void validate(String name, String value) throws ParameterException {
-		if (name.equals("--sort")) {
-			if ((value.equalsIgnoreCase("ip"))
-					|| (value.equalsIgnoreCase("model"))
-					|| (value.equalsIgnoreCase("serialNumber"))
-					|| (value.equalsIgnoreCase("manufacturer"))
-					|| (value.equalsIgnoreCase("udn"))) {
-			} else {
-				throw new ParameterException("Parameter " + name
-						+ " must be {ip|model|serialNumber} (found " + value
-						+ ")");
-			}
-		}
-	}
+    public void validate(String name, String value) throws ParameterException {
+        if (name.equals("--sort")) {
+            if ((value.equalsIgnoreCase("ip")) || (value.equalsIgnoreCase("model"))
+                    || (value.equalsIgnoreCase("serialNumber")) || (value.equalsIgnoreCase("manufacturer"))
+                    || (value.equalsIgnoreCase("udn"))) {
+            } else {
+                throw new ParameterException(
+                        "Parameter " + name + " must be {ip|model|serialNumber} (found " + value + ")");
+            }
+        }
+    }
 }

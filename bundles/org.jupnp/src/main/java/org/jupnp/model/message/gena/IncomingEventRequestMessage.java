@@ -14,6 +14,9 @@
 
 package org.jupnp.model.message.gena;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.header.EventSequenceHeader;
 import org.jupnp.model.message.header.NTEventHeader;
@@ -24,9 +27,6 @@ import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.NotificationSubtype;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author Christian Bauer
@@ -50,8 +50,7 @@ public class IncomingEventRequestMessage extends StreamRequestMessage {
     }
 
     public String getSubscrptionId() {
-        SubscriptionIdHeader header =
-                getHeaders().getFirstHeader(UpnpHeader.Type.SID,SubscriptionIdHeader.class);
+        SubscriptionIdHeader header = getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class);
         return header != null ? header.getValue() : null;
     }
 
@@ -66,8 +65,7 @@ public class IncomingEventRequestMessage extends StreamRequestMessage {
     public boolean hasNotificationHeaders() {
         UpnpHeader ntHeader = getHeaders().getFirstHeader(UpnpHeader.Type.NT);
         UpnpHeader ntsHeader = getHeaders().getFirstHeader(UpnpHeader.Type.NTS);
-        return ntHeader != null && ntHeader.getValue() != null
-                && ntsHeader != null && ntsHeader.getValue() != null;
+        return ntHeader != null && ntHeader.getValue() != null && ntsHeader != null && ntsHeader.getValue() != null;
     }
 
     /**
@@ -77,9 +75,8 @@ public class IncomingEventRequestMessage extends StreamRequestMessage {
     public boolean hasValidNotificationHeaders() {
         NTEventHeader ntHeader = getHeaders().getFirstHeader(UpnpHeader.Type.NT, NTEventHeader.class);
         NTSHeader ntsHeader = getHeaders().getFirstHeader(UpnpHeader.Type.NTS, NTSHeader.class);
-        return ntHeader != null && ntHeader.getValue() != null
-                && ntsHeader != null && ntsHeader.getValue().equals(NotificationSubtype.PROPCHANGE);
-
+        return ntHeader != null && ntHeader.getValue() != null && ntsHeader != null
+                && ntsHeader.getValue().equals(NotificationSubtype.PROPCHANGE);
     }
 
     @Override

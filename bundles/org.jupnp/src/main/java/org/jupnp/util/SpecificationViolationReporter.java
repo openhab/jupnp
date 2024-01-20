@@ -34,7 +34,7 @@ public class SpecificationViolationReporter {
 
     private static final SpecificationViolationReporter INSTANCE = new SpecificationViolationReporter();
 
-	/**
+    /**
      * Defaults to enabled. Is volatile to reflect changes in arbitrary threads immediately.
      */
     private volatile boolean enabled = true;
@@ -83,5 +83,4 @@ public class SpecificationViolationReporter {
     public static void report(Device<DeviceIdentity, Device, Service> device, String format, Object... arguments) {
         INSTANCE._report(device, format, arguments);
     }
-
 }

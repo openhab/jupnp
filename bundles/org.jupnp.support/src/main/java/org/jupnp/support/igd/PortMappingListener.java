@@ -15,6 +15,12 @@
 
 package org.jupnp.support.igd;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.Device;
@@ -31,12 +37,6 @@ import org.jupnp.support.model.PortMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Maintains UPnP port mappings on an InternetGatewayDevice automatically.
  * <p>
@@ -49,13 +49,15 @@ import java.util.Map;
  * <p>
  * The following listener maps external WAN TCP port 8123 to internal host 10.0.0.2:
  * </p>
+ * 
  * <pre>{@code
- * upnpService.getRegistry().addListener(
- *newPortMappingListener(newPortMapping(8123, "10.0.0.2",PortMapping.Protocol.TCP))
- * );}</pre>
+ * upnpService.getRegistry()
+ *         .addListener(newPortMappingListener(newPortMapping(8123, "10.0.0.2", PortMapping.Protocol.TCP)));
+ * }</pre>
  * <p>
  * If all you need from the Cling UPnP stack is NAT port mapping, use the following idiom:
  * </p>
+ * 
  * <pre>{@code
  * UpnpService upnpService = new UpnpServiceImpl(
  *     new PortMappingListener(new PortMapping(8123, "10.0.0.2", PortMapping.Protocol.TCP))
@@ -85,7 +87,7 @@ public class PortMappingListener extends DefaultRegistryListener {
     protected Map<Service<?, ?>, List<PortMapping>> activePortMappings = new HashMap<>();
 
     public PortMappingListener(PortMapping portMapping) {
-        this(new PortMapping[]{portMapping});
+        this(new PortMapping[] { portMapping });
     }
 
     public PortMappingListener(PortMapping[] portMappings) {
@@ -96,7 +98,8 @@ public class PortMappingListener extends DefaultRegistryListener {
     public synchronized void deviceAdded(Registry registry, Device device) {
 
         Service<?, ?> connectionService;
-        if ((connectionService = discoverConnectionService(device)) == null) return;
+        if ((connectionService = discoverConnectionService(device)) == null)
+            return;
 
         logger.debug("Activating port mappings on: {}", connectionService);
 
@@ -127,10 +130,12 @@ public class PortMappingListener extends DefaultRegistryListener {
             Iterator<Map.Entry<Service<?, ?>, List<PortMapping>>> it = activePortMappings.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Service<?, ?>, List<PortMapping>> activeEntry = it.next();
-                if (!activeEntry.getKey().equals(service)) continue;
+                if (!activeEntry.getKey().equals(service))
+                    continue;
 
                 if (activeEntry.getValue().size() > 0)
-                    handleFailureMessage("Device disappeared, couldn't delete port mappings: " + activeEntry.getValue().size());
+                    handleFailureMessage(
+                            "Device disappeared, couldn't delete port mappings: " + activeEntry.getValue().size());
 
                 it.remove();
             }
@@ -158,7 +163,6 @@ public class PortMappingListener extends DefaultRegistryListener {
                         handleFailureMessage("Failed to delete port mapping: " + pm);
                         handleFailureMessage("Reason: " + defaultMsg);
                     }
-
                 }.run(); // Synchronous!
             }
         }
@@ -191,6 +195,4 @@ public class PortMappingListener extends DefaultRegistryListener {
     protected void handleFailureMessage(String s) {
         logger.warn(s);
     }
-
 }
-

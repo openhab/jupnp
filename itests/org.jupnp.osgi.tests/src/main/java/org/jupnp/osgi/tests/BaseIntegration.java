@@ -24,13 +24,8 @@ import java.util.Collections;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.jupnp.UpnpServiceConfiguration;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.upnp.UPnPDevice;
 import org.jupnp.UpnpService;
+import org.jupnp.UpnpServiceConfiguration;
 import org.jupnp.common.util.BundleUtil;
 import org.jupnp.common.util.DataUtil;
 import org.jupnp.model.meta.Action;
@@ -39,6 +34,11 @@ import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UnsignedVariableInteger;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.upnp.UPnPDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,8 +81,7 @@ public class BaseIntegration {
 
     protected <T> T getService(Class<T> clazz) {
         @SuppressWarnings("unchecked")
-        ServiceReference<T> serviceReference = (ServiceReference<T>) bundleContext
-                .getServiceReference(clazz.getName());
+        ServiceReference<T> serviceReference = (ServiceReference<T>) bundleContext.getServiceReference(clazz.getName());
 
         return serviceReference == null ? null : bundleContext.getService(serviceReference);
     }
@@ -102,7 +101,8 @@ public class BaseIntegration {
     public void dumpBundles(Bundle[] bundles) {
         log.info("This is running inside Equinox.");
         for (Bundle bundle : bundles) {
-            log.info(String.format("%2d|%-12s| %s", bundle.getBundleId(), BundleUtil.getBundleState(bundle), bundle.getSymbolicName()));
+            log.info(String.format("%2d|%-12s| %s", bundle.getBundleId(), BundleUtil.getBundleState(bundle),
+                    bundle.getSymbolicName()));
         }
     }
 
@@ -179,14 +179,11 @@ public class BaseIntegration {
 
         if (value == null) {
             string = "[null]";
-        }
-        else if (value instanceof byte[]) {
+        } else if (value instanceof byte[]) {
             string = bytesToString((byte[]) value);
-        }
-        else if (value instanceof Byte[]) {
+        } else if (value instanceof Byte[]) {
             string = bytesToString(toBytes((Byte[]) value));
-        }
-        else {
+        } else {
             string = value.toString();
         }
 
@@ -203,30 +200,25 @@ public class BaseIntegration {
 
         if (value instanceof UnsignedVariableInteger) {
             value = Integer.valueOf(((UnsignedVariableInteger) value).getValue().intValue());
-        }
-        else if (value instanceof Calendar) {
+        } else if (value instanceof Calendar) {
             if (type.equals("time") || type.equals("time.tz")) {
                 Calendar calendar = (Calendar) value;
                 Date date = calendar.getTime();
                 value = date.getTime() + calendar.getTimeZone().getOffset(date.getTime());
-            }
-            else {
+            } else {
                 value = ((Calendar) value).getTime();
             }
-        }
-        else if (value instanceof Byte[]) {
+        } else if (value instanceof Byte[]) {
             if (type.equals("bin.base64")) {
                 value = Base64.getDecoder().decode(toBytes((Byte[]) value));
-            }
-            else {
+            } else {
                 value = toBytes((Byte[]) value);
             }
         }
 
         if (value instanceof byte[]) {
             matches = DataUtil.compareBytes((byte[]) value, (byte[]) desired);
-        }
-        else {
+        } else {
             matches = value.equals(desired);
 
             if (!matches) {

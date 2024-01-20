@@ -21,16 +21,12 @@ import org.jupnp.binding.annotations.UpnpService;
 import org.jupnp.binding.annotations.UpnpServiceId;
 import org.jupnp.binding.annotations.UpnpServiceType;
 import org.jupnp.binding.annotations.UpnpStateVariable;
-
 import org.jupnp.internal.compat.java.beans.PropertyChangeSupport;
 
 /**
  * @author Jochen Hiller - Changed to use Compact2 compliant Java Beans
  */
-@UpnpService(
-        serviceId = @UpnpServiceId("SwitchPower"),
-        serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerWithBundledPropertyChange {
 
     private final PropertyChangeSupport propertyChangeSupport;
@@ -56,9 +52,7 @@ public class SwitchPowerWithBundledPropertyChange {
         status = newTargetValue;
 
         // If several evented variables changed, bundle them in one event separated with commas:
-        getPropertyChangeSupport().firePropertyChange(
-            "Target, Status", null, null
-        );
+        getPropertyChangeSupport().firePropertyChange("Target, Status", null, null);
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))
@@ -70,5 +64,4 @@ public class SwitchPowerWithBundledPropertyChange {
     public boolean getStatus() {
         return status;
     }
-
 }

@@ -33,7 +33,9 @@ public abstract class Descriptor {
 
         public enum ELEMENT {
             root,
-            specVersion, major, minor,
+            specVersion,
+            major,
+            minor,
             URLBase,
             device,
             UDN,
@@ -52,8 +54,20 @@ public abstract class Descriptor {
             presentationURL,
             UPC,
             serialNumber,
-            iconList, icon, width, height, depth, url, mimetype,
-            serviceList, service, serviceType, serviceId, SCPDURL, controlURL, eventSubURL,
+            iconList,
+            icon,
+            width,
+            height,
+            depth,
+            url,
+            mimetype,
+            serviceList,
+            service,
+            serviceType,
+            serviceId,
+            SCPDURL,
+            controlURL,
+            eventSubURL,
             deviceList;
 
             public static ELEMENT valueOrNullOf(String s) {
@@ -76,11 +90,27 @@ public abstract class Descriptor {
 
         public enum ELEMENT {
             scpd,
-            specVersion, major, minor,
-            actionList, action, name,
-            argumentList, argument, direction, relatedStateVariable, retval,
-            serviceStateTable, stateVariable, dataType, defaultValue,
-            allowedValueList, allowedValue, allowedValueRange, minimum, maximum, step;
+            specVersion,
+            major,
+            minor,
+            actionList,
+            action,
+            name,
+            argumentList,
+            argument,
+            direction,
+            relatedStateVariable,
+            retval,
+            serviceStateTable,
+            stateVariable,
+            dataType,
+            defaultValue,
+            allowedValueList,
+            allowedValue,
+            allowedValueRange,
+            minimum,
+            maximum,
+            step;
 
             public static ELEMENT valueOrNullOf(String s) {
                 try {
@@ -93,12 +123,10 @@ public abstract class Descriptor {
             public boolean equals(Node node) {
                 return toString().equals(node.getLocalName());
             }
-
         }
 
         public enum ATTRIBUTE {
             sendEvents
         }
     }
-
 }

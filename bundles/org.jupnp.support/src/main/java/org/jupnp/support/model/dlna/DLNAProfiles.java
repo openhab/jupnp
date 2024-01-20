@@ -22,11 +22,13 @@ package org.jupnp.support.model.dlna;
  */
 public enum DLNAProfiles {
 
-    NONE("",""),
+    NONE("", ""),
 
-    //Image
+    // Image
     JPEG_SM("JPEG_SM", DLNAMimeTypes.MIME_IMAGE_JPEG), /* Profile for image media class content of small resolution */
-    JPEG_MED("JPEG_MED", DLNAMimeTypes.MIME_IMAGE_JPEG), /* Profile for image media class content of medium resolution */
+    JPEG_MED("JPEG_MED", DLNAMimeTypes.MIME_IMAGE_JPEG), /*
+                                                          * Profile for image media class content of medium resolution
+                                                          */
     JPEG_LRG("JPEG_LRG", DLNAMimeTypes.MIME_IMAGE_JPEG), /* Profile for image media class content of high resolution */
     JPEG_TN("JPEG_TN", DLNAMimeTypes.MIME_IMAGE_JPEG), /* Profile for image thumbnails */
     JPEG_SM_ICO("JPEG_SM_ICO", DLNAMimeTypes.MIME_IMAGE_JPEG), /* Profile for small icons */
@@ -36,17 +38,17 @@ public enum DLNAProfiles {
     PNG_SM_ICO("PNG_SM_ICO", DLNAMimeTypes.MIME_IMAGE_PNG), /* Profile for small icons */
     PNG_LRG_ICO("PNG_LRG_ICO", DLNAMimeTypes.MIME_IMAGE_PNG), /* Profile for image class content of high resolution */
     PNG_LRG("PNG_LRG", DLNAMimeTypes.MIME_IMAGE_PNG),
-    
-    //Audio
-    LPCM("LPCM",DLNAMimeTypes.MIME_AUDIO_LPCM),
-    LPCM_LOW("LPCM_low",DLNAMimeTypes.MIME_AUDIO_LPCM),
 
-    MP3("MP3",DLNAMimeTypes.MIME_AUDIO_MPEG),
-    MP3X("MP3X",DLNAMimeTypes.MIME_AUDIO_MPEG),
+    // Audio
+    LPCM("LPCM", DLNAMimeTypes.MIME_AUDIO_LPCM),
+    LPCM_LOW("LPCM_low", DLNAMimeTypes.MIME_AUDIO_LPCM),
 
-    WMABASE("WMABASE",DLNAMimeTypes.MIME_AUDIO_WMA),
-    WMAFULL("WMAFULL",DLNAMimeTypes.MIME_AUDIO_WMA),
-    WMAPRO("WMAPRO",DLNAMimeTypes.MIME_AUDIO_WMA),
+    MP3("MP3", DLNAMimeTypes.MIME_AUDIO_MPEG),
+    MP3X("MP3X", DLNAMimeTypes.MIME_AUDIO_MPEG),
+
+    WMABASE("WMABASE", DLNAMimeTypes.MIME_AUDIO_WMA),
+    WMAFULL("WMAFULL", DLNAMimeTypes.MIME_AUDIO_WMA),
+    WMAPRO("WMAPRO", DLNAMimeTypes.MIME_AUDIO_WMA),
 
     AAC_ADTS("AAC_ADTS", DLNAMimeTypes.MIME_AUDIO_ADTS),
     AAC_ADTS_320("AAC_ADTS_320", DLNAMimeTypes.MIME_AUDIO_ADTS),
@@ -87,7 +89,7 @@ public enum DLNAProfiles {
     AMR_WBplus("AMR_WBplus", DLNAMimeTypes.MIME_AUDIO_3GP),
     ATRAC3("ATRAC3plus", DLNAMimeTypes.MIME_AUDIO_ATRAC),
 
-    //Video
+    // Video
     WMVMED_BASE("WMVMED_BASE", DLNAMimeTypes.MIME_VIDEO_WMV),
     WMVMED_FULL("WMVMED_FULL", DLNAMimeTypes.MIME_VIDEO_WMV),
     WMVMED_PRO("WMVMED_PRO", DLNAMimeTypes.MIME_VIDEO_WMV),
@@ -261,20 +263,20 @@ public enum DLNAProfiles {
     AVC_TS_MP_SD_AAC_LTP_MULT7_ISO("AVC_TS_MP_SD_AAC_LTP_MULT7_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
     AVC_TS_MP_SD_BSAC("AVC_TS_MP_SD_BSAC", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
     AVC_TS_MP_SD_BSAC_T("AVC_TS_MP_SD_BSAC_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_MP_SD_BSAC_ISO("AVC_TS_MP_SD_BSAC_ISO",DLNAMimeTypes.MIME_VIDEO_MPEG),
+    AVC_TS_MP_SD_BSAC_ISO("AVC_TS_MP_SD_BSAC_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
 
-    AVC_TS_HD_24_AC3("AVC_TS_HD_24_AC3",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_24_AC3_T("AVC_TS_HD_24_AC3_T",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_24_AC3_ISO("AVC_TS_HD_24_AC3_ISO",DLNAMimeTypes.MIME_VIDEO_MPEG),
+    AVC_TS_HD_24_AC3("AVC_TS_HD_24_AC3", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_24_AC3_T("AVC_TS_HD_24_AC3_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_24_AC3_ISO("AVC_TS_HD_24_AC3_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
 
-    AVC_TS_HD_50_LPCM_T("AVC_TS_HD_50_LPCM_T",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_50_AC3("AVC_TS_HD_50_AC3",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_50_AC3_T("AVC_TS_HD_50_AC3_T",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_50_AC3_ISO("AVC_TS_HD_50_AC3_ISO",DLNAMimeTypes.MIME_VIDEO_MPEG),
+    AVC_TS_HD_50_LPCM_T("AVC_TS_HD_50_LPCM_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_50_AC3("AVC_TS_HD_50_AC3", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_50_AC3_T("AVC_TS_HD_50_AC3_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_50_AC3_ISO("AVC_TS_HD_50_AC3_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
 
-    AVC_TS_HD_60_AC3("AVC_TS_HD_60_AC3",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_60_AC3_T("AVC_TS_HD_60_AC3_T",DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
-    AVC_TS_HD_60_AC3_ISO("AVC_TS_HD_60_AC3_ISO",DLNAMimeTypes.MIME_VIDEO_MPEG),
+    AVC_TS_HD_60_AC3("AVC_TS_HD_60_AC3", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_60_AC3_T("AVC_TS_HD_60_AC3_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
+    AVC_TS_HD_60_AC3_ISO("AVC_TS_HD_60_AC3_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
 
     AVC_TS_BL_CIF30_AAC_MULT5("AVC_TS_BL_CIF30_AAC_MULT5", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
     AVC_TS_BL_CIF30_AAC_MULT5_T("AVC_TS_BL_CIF30_AAC_MULT5_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
@@ -336,7 +338,6 @@ public enum DLNAProfiles {
     AVC_TS_BL_CIF15_BSAC_T("AVC_TS_BL_CIF15_BSAC_T", DLNAMimeTypes.MIME_VIDEO_MPEG_TS),
     AVC_TS_BL_CIF15_BSAC_ISO("AVC_TS_BL_CIF15_BSAC_ISO", DLNAMimeTypes.MIME_VIDEO_MPEG),
 
-
     AVC_3GPP_BL_CIF30_AMR_WBplus("AVC_3GPP_BL_CIF30_AMR_WBplus", DLNAMimeTypes.MIME_VIDEO_3GP),
     AVC_3GPP_BL_CIF15_AMR_WBplus("AVC_3GPP_BL_CIF15_AMR_WBplus", DLNAMimeTypes.MIME_VIDEO_3GP),
     AVC_3GPP_BL_QCIF15_AAC("AVC_3GPP_BL_QCIF15_AAC", DLNAMimeTypes.MIME_VIDEO_3GP),
@@ -380,8 +381,8 @@ public enum DLNAProfiles {
 
     public static DLNAProfiles valueOf(String code, String contentFormat) {
         for (DLNAProfiles errorCode : values()) {
-            if (errorCode.getCode().equals(code) && 
-                    (contentFormat.length() == 0 || errorCode.getContentFormat().equals(contentFormat))) {
+            if (errorCode.getCode().equals(code)
+                    && (contentFormat.length() == 0 || errorCode.getContentFormat().equals(contentFormat))) {
                 return errorCode;
             }
         }
@@ -389,35 +390,34 @@ public enum DLNAProfiles {
     }
 
     public static class DLNAMimeTypes {
-        
+
         /** Constructor */
         private DLNAMimeTypes() {
             throw new IllegalAccessError("Non-Instantiable");
         }
-        
-        public static final String MIME_IMAGE_JPEG              = "image/jpeg";
-        public static final String MIME_IMAGE_PNG               = "image/png";
 
-        public static final String MIME_AUDIO_3GP               = "audio/3gpp";
-        public static final String MIME_AUDIO_ADTS              = "audio/vnd.dlna.adts";
-        public static final String MIME_AUDIO_ATRAC             = "audio/x-sony-oma";
-        public static final String MIME_AUDIO_DOLBY_DIGITAL     = "audio/vnd.dolby.dd-raw";
-        public static final String MIME_AUDIO_LPCM              = "audio/L16";
-        public static final String MIME_AUDIO_MPEG              = "audio/mpeg";
-        public static final String MIME_AUDIO_MPEG_4            = "audio/mp4";
-        public static final String MIME_AUDIO_WMA               = "audio/x-ms-wma";
+        public static final String MIME_IMAGE_JPEG = "image/jpeg";
+        public static final String MIME_IMAGE_PNG = "image/png";
 
-        public static final String MIME_VIDEO_3GP               = "video/3gpp";
-        public static final String MIME_VIDEO_ASF               = "video/x-ms-asf";
-        public static final String MIME_VIDEO_MPEG              = "video/mpeg";
-        public static final String MIME_VIDEO_MPEG_4            = "video/mp4";
-        public static final String MIME_VIDEO_MPEG_TS           = "video/vnd.dlna.mpeg-tts";
-        public static final String MIME_VIDEO_WMV               = "video/x-ms-wmv";
-        public static final String MIME_VIDEO_DIVX              = "video/divx";
-        public static final String MIME_VIDEO_AVI               = "video/avi";
-        public static final String MIME_VIDEO_XMS_AVI           = "video/x-msvideo";
-        public static final String MIME_VIDEO_MATROSKA          = "video/x-matroska";
-        public static final String MIME_VIDEO_MKV               = "video/x-mkv";
+        public static final String MIME_AUDIO_3GP = "audio/3gpp";
+        public static final String MIME_AUDIO_ADTS = "audio/vnd.dlna.adts";
+        public static final String MIME_AUDIO_ATRAC = "audio/x-sony-oma";
+        public static final String MIME_AUDIO_DOLBY_DIGITAL = "audio/vnd.dolby.dd-raw";
+        public static final String MIME_AUDIO_LPCM = "audio/L16";
+        public static final String MIME_AUDIO_MPEG = "audio/mpeg";
+        public static final String MIME_AUDIO_MPEG_4 = "audio/mp4";
+        public static final String MIME_AUDIO_WMA = "audio/x-ms-wma";
+
+        public static final String MIME_VIDEO_3GP = "video/3gpp";
+        public static final String MIME_VIDEO_ASF = "video/x-ms-asf";
+        public static final String MIME_VIDEO_MPEG = "video/mpeg";
+        public static final String MIME_VIDEO_MPEG_4 = "video/mp4";
+        public static final String MIME_VIDEO_MPEG_TS = "video/vnd.dlna.mpeg-tts";
+        public static final String MIME_VIDEO_WMV = "video/x-ms-wmv";
+        public static final String MIME_VIDEO_DIVX = "video/divx";
+        public static final String MIME_VIDEO_AVI = "video/avi";
+        public static final String MIME_VIDEO_XMS_AVI = "video/x-msvideo";
+        public static final String MIME_VIDEO_MATROSKA = "video/x-matroska";
+        public static final String MIME_VIDEO_MKV = "video/x-mkv";
     }
 }
-

@@ -14,6 +14,8 @@
 
 package example.controlpoint;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.jupnp.binding.LocalServiceBinder;
@@ -38,7 +40,6 @@ import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
 
 import example.binarylight.BinaryLightSampleData;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Invoking an action
@@ -54,7 +55,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * <p>
  * Once you have the device, access the <code>Service</code> through the metadata model, for example:
  * </p>
- * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_findservice" style="include: FINDSERVICE"/>
+ * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_findservice" style="include:
+ * FINDSERVICE"/>
  * <p>
  * This method will search the device and all its embedded devices for a service with the given
  * identifier and returns either the found <code>Service</code> or <code>null</code>. The jUPnP
@@ -66,7 +68,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * instance is <em>NOT</em> thread-safe and each thread that wishes to execute an action has to
  * obtain its own invocation from the <code>Action</code> metamodel:
  * </p>
- * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_getstatus" style="include: GETSTATUS; exclude: EXC1"/>
+ * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_getstatus" style="include: GETSTATUS;
+ * exclude: EXC1"/>
  * <p>
  * Execution is asynchronous, your <code>ActionCallback</code> has two methods which will be called
  * by the UPnP stack when the execution completes. If the action is successful, you can obtain any
@@ -81,7 +84,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * you want to execute an <code>ActionInvocation</code> directly, within the current thread, use the empty
  * <code>ActionCallback.Default</code> implementation:
  * </p>
- * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_synchronous" style="include: SYNCHRONOUS"/>
+ * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_synchronous" style="include:
+ * SYNCHRONOUS"/>
  * <p>
  * When invocation fails you can access the failure details through
  * <code>invocation.getFailure()</code>, or use the shown convenience method to create a simple error
@@ -89,9 +93,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * </p>
  * <p>
  * When an action requires input argument values, you have to provide them. Like output arguments, any
- * input arguments of actions are also named, so you can set them by calling <code>setInput("MyArgumentName", value)</code>:
+ * input arguments of actions are also named, so you can set them by calling
+ * <code>setInput("MyArgumentName", value)</code>:
  * </p>
- * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_settarget" style="include: SETTARGET; exclude: EXC2"/>
+ * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_settarget" style="include: SETTARGET;
+ * exclude: EXC2"/>
  * <p>
  * This action has one input argument of UPnP type "boolean". You can set a Java <code>boolean</code>
  * primitive or <code>Boolean</code> instance and it will be automatically converted. If you set an
@@ -101,9 +107,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * <div class="note">
  * <div class="title">Empty values and null in jUPnP</div>
  * There is no difference between empty string <code>""</code> and <code>null</code> in jUPnP,
- * because the UPnP specification does not address this issue. The SOAP  message of an action call
+ * because the UPnP specification does not address this issue. The SOAP message of an action call
  * or an event message must contain an element {@code <SomeVar></SomeVar>} for all arguments, even if
- * it is an empty XML element. If you provide  an empty string or a null value when preparing a message,
+ * it is an empty XML element. If you provide an empty string or a null value when preparing a message,
  * it will always be a <code>null</code> on the receiving end because we can only transmit one
  * thing, an empty XML element. If you forget to set an input argument's value, it will be null/empty element.
  * </div>
@@ -113,25 +119,16 @@ class ActionInvocationTest {
     static LocalService bindService(Class<?> clazz) throws Exception {
         LocalServiceBinder binder = new AnnotationLocalServiceBinder();
         // Let's also test the overloaded reader
-        LocalService svc = binder.read(
-                clazz,
-                new UDAServiceId("SwitchPower"),
-                new UDAServiceType("SwitchPower", 1),
-                true,
-                new Class[]{MyString.class}
-        );
-        svc.setManager(
-                new DefaultServiceManager(svc, clazz)
-        );
+        LocalService svc = binder.read(clazz, new UDAServiceId("SwitchPower"), new UDAServiceType("SwitchPower", 1),
+                true, new Class[] { MyString.class });
+        svc.setManager(new DefaultServiceManager(svc, clazz));
         return svc;
     }
 
     static Object[][] getDevices() throws Exception {
-        return new LocalDevice[][]{
-                {BinaryLightSampleData.createDevice(bindService(TestServiceOne.class))},
-                {BinaryLightSampleData.createDevice(bindService(TestServiceTwo.class))},
-                {BinaryLightSampleData.createDevice(bindService(TestServiceThree.class))},
-        };
+        return new LocalDevice[][] { { BinaryLightSampleData.createDevice(bindService(TestServiceOne.class)) },
+                { BinaryLightSampleData.createDevice(bindService(TestServiceTwo.class)) },
+                { BinaryLightSampleData.createDevice(bindService(TestServiceThree.class)) }, };
     }
 
     @ParameterizedTest
@@ -141,17 +138,17 @@ class ActionInvocationTest {
         upnpService.startup();
 
         Service service = device.findService(new UDAServiceId("SwitchPower")); // DOC: FINDSERVICE
-        Action getStatusAction = service.getAction("GetStatus");               // DOC: FINDSERVICE
+        Action getStatusAction = service.getAction("GetStatus"); // DOC: FINDSERVICE
 
         final boolean[] tests = new boolean[3];
 
-        ActionInvocation getStatusInvocation = new ActionInvocation(getStatusAction);   // DOC: GETSTATUS
+        ActionInvocation getStatusInvocation = new ActionInvocation(getStatusAction); // DOC: GETSTATUS
 
         ActionCallback getStatusCallback = new ActionCallback(getStatusInvocation) {
 
             @Override
             public void success(ActionInvocation invocation) {
-                ActionArgumentValue status  = invocation.getOutput("ResultStatus");
+                ActionArgumentValue status = invocation.getOutput("ResultStatus");
 
                 assertNotNull(status);
 
@@ -166,17 +163,14 @@ class ActionInvocationTest {
             }
 
             @Override
-            public void failure(ActionInvocation invocation,
-                                UpnpResponse operation,
-                                String defaultMsg) {
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
                 System.err.println(defaultMsg);
             }
         };
 
-        upnpService.getControlPoint().execute(getStatusCallback);                       // DOC: GETSTATUS
+        upnpService.getControlPoint().execute(getStatusCallback); // DOC: GETSTATUS
 
-
-        Action action = service.getAction("SetTarget");                                 // DOC: SETTARGET
+        Action action = service.getAction("SetTarget"); // DOC: SETTARGET
 
         ActionInvocation setTargetInvocation = new ActionInvocation(action);
 
@@ -192,18 +186,16 @@ class ActionInvocationTest {
             }
 
             @Override
-            public void failure(ActionInvocation invocation,
-                                UpnpResponse operation,
-                                String defaultMsg) {
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
                 System.err.println(defaultMsg);
             }
         };
 
-        upnpService.getControlPoint().execute(setTargetCallback);                       // DOC: SETTARGET
+        upnpService.getControlPoint().execute(setTargetCallback); // DOC: SETTARGET
 
         getStatusInvocation = new ActionInvocation(getStatusAction);
         new ActionCallback.Default(getStatusInvocation, upnpService.getControlPoint()).run(); // DOC: SYNCHRONOUS
-        ActionArgumentValue status  = getStatusInvocation.getOutput("ResultStatus");
+        ActionArgumentValue status = getStatusInvocation.getOutput("ResultStatus");
         if (Boolean.valueOf(true).equals(status.getValue())) {
             tests[2] = true;
         }
@@ -211,7 +203,6 @@ class ActionInvocationTest {
         for (boolean test : tests) {
             assertTrue(test);
         }
-
 
         LocalService svc = (LocalService) service;
 
@@ -259,9 +250,7 @@ class ActionInvocationTest {
             }
 
             @Override
-            public void failure(ActionInvocation invocation,
-                                UpnpResponse operation,
-                                String defaultMsg) {
+            public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
                 System.err.println(defaultMsg);
             }
         };
@@ -306,7 +295,8 @@ class ActionInvocationTest {
         private MyString myString;
 
         @UpnpAction
-        public void setTarget(@UpnpInputArgument(name = "NewTargetValue", aliases ={"NewTargetValue1"}) boolean newTargetValue) {
+        public void setTarget(
+                @UpnpInputArgument(name = "NewTargetValue", aliases = { "NewTargetValue1" }) boolean newTargetValue) {
             target = newTargetValue;
             status = newTargetValue;
         }
@@ -326,7 +316,7 @@ class ActionInvocationTest {
         }
 
         @UpnpAction
-        public void setMyString(@UpnpInputArgument(name = "MyString", aliases ={"MyString1"}) MyString myString) {
+        public void setMyString(@UpnpInputArgument(name = "MyString", aliases = { "MyString1" }) MyString myString) {
             this.myString = myString;
         }
 
@@ -351,7 +341,8 @@ class ActionInvocationTest {
         private MyString myString;
 
         @UpnpAction
-        public void setTarget(@UpnpInputArgument(name = "NewTargetValue", aliases ={"NewTargetValue1"}) boolean newTargetValue) {
+        public void setTarget(
+                @UpnpInputArgument(name = "NewTargetValue", aliases = { "NewTargetValue1" }) boolean newTargetValue) {
             target = newTargetValue;
             status = newTargetValue;
         }
@@ -367,7 +358,7 @@ class ActionInvocationTest {
         }
 
         @UpnpAction
-        public void setMyString(@UpnpInputArgument(name = "MyString", aliases ={"MyString1"}) MyString myString) {
+        public void setMyString(@UpnpInputArgument(name = "MyString", aliases = { "MyString1" }) MyString myString) {
             this.myString = myString;
         }
 
@@ -399,7 +390,6 @@ class ActionInvocationTest {
                 return myString;
             }
         }
-
     }
 
     public static class TestServiceThree {
@@ -414,7 +404,8 @@ class ActionInvocationTest {
         private MyString myString;
 
         @UpnpAction
-        public void setTarget(@UpnpInputArgument(name = "NewTargetValue", aliases ={"NewTargetValue1"}) boolean newTargetValue) {
+        public void setTarget(
+                @UpnpInputArgument(name = "NewTargetValue", aliases = { "NewTargetValue1" }) boolean newTargetValue) {
             target = newTargetValue;
             status = newTargetValue;
         }
@@ -430,7 +421,7 @@ class ActionInvocationTest {
         }
 
         @UpnpAction
-        public void setMyString(@UpnpInputArgument(name = "MyString", aliases ={"MyString1"}) MyString myString) {
+        public void setMyString(@UpnpInputArgument(name = "MyString", aliases = { "MyString1" }) MyString myString) {
             this.myString = myString;
         }
 
@@ -456,5 +447,4 @@ class ActionInvocationTest {
             return s;
         }
     }
-
 }

@@ -20,7 +20,6 @@ import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.jupnp.transport.spi.StreamServerConfiguration;
 
-
 /**
  * Interface to abstract a transport implementation.
  *
@@ -37,7 +36,8 @@ public interface TransportConfiguration<SCC extends StreamClientConfiguration, S
      * @param executorService used to dispatch request/response processing.
      * @return created {@link StreamClient}
      */
-    StreamClient<SCC> createStreamClient(final ExecutorService executorService, final StreamClientConfiguration configuration);
+    StreamClient<SCC> createStreamClient(final ExecutorService executorService,
+            final StreamClientConfiguration configuration);
 
     /**
      * Creates a {@link StreamServer} using the given {@code listenerPort}.

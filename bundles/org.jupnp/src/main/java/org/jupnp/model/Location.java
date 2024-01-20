@@ -15,7 +15,6 @@
 package org.jupnp.model;
 
 import java.net.InetAddress;
-import java.net.URI;
 import java.net.URL;
 
 /**
@@ -52,13 +51,17 @@ public class Location {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         Location location = (Location) o;
 
-        if (!networkAddress.equals(location.networkAddress)) return false;
-        if (!path.equals(location.path)) return false;
+        if (!networkAddress.equals(location.networkAddress))
+            return false;
+        if (!path.equals(location.path))
+            return false;
 
         return true;
     }

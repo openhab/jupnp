@@ -68,7 +68,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 
         int cpus = Runtime.getRuntime().availableProcessors();
         int maxThreads = 5 * cpus;
-        
+
         final QueuedThreadPool queuedThreadPool = createThreadPool("jupnp-jetty-client", 5, maxThreads, 60000);
 
         httpClient.setExecutor(queuedThreadPool);
@@ -245,5 +245,4 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
         queuedThreadPool.setDaemon(true);
         return queuedThreadPool;
     }
-
 }

@@ -28,7 +28,6 @@ import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.meta.Service;
 import org.jupnp.protocol.ProtocolCreationException;
 import org.jupnp.protocol.sync.SendingSubscribe;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,33 +36,32 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Usage example, establishing a subscription with a {@link org.jupnp.model.meta.Service}:
  * </p>
+ * 
  * <pre>
  * SubscriptionCallback callback = new SubscriptionCallback(service, 600) { // Timeout in seconds
  *
- *      public void established(GENASubscription sub) {
- *          System.out.println("Established: " + sub.getSubscriptionId());
- *      }
+ *     public void established(GENASubscription sub) {
+ *         System.out.println("Established: " + sub.getSubscriptionId());
+ *     }
  *
- *      public void failed(GENASubscription sub, UpnpResponse response, Exception ex) {
- *          System.err.println(
- *              createDefaultFailureMessage(response, ex)
- *          );
- *      }
+ *     public void failed(GENASubscription sub, UpnpResponse response, Exception ex) {
+ *         System.err.println(createDefaultFailureMessage(response, ex));
+ *     }
  *
- *      public void ended(GENASubscription sub, CancelReason reason, UpnpResponse response) {
- *          // Reason should be null, or it didn't end regularly
- *      }
+ *     public void ended(GENASubscription sub, CancelReason reason, UpnpResponse response) {
+ *         // Reason should be null, or it didn't end regularly
+ *     }
  *
- *      public void eventReceived(GENASubscription sub) {
- *          System.out.println("Event: " + sub.getCurrentSequence().getValue());
- *          Map&lt;String, StateVariableValue> values = sub.getCurrentValues();
- *          StateVariableValue status = values.get("Status");
- *          System.out.println("Status is: " + status.toString());
- *      }
+ *     public void eventReceived(GENASubscription sub) {
+ *         System.out.println("Event: " + sub.getCurrentSequence().getValue());
+ *         Map&lt;String, StateVariableValue> values = sub.getCurrentValues();
+ *         StateVariableValue status = values.get("Status");
+ *         System.out.println("Status is: " + status.toString());
+ *     }
  *
- *      public void eventsMissed(GENASubscription sub, int numberOfMissedEvents) {
- *          System.out.println("Missed events: " + numberOfMissedEvents);
- *      }
+ *     public void eventsMissed(GENASubscription sub, int numberOfMissedEvents) {
+ *         System.out.println("Missed events: " + numberOfMissedEvents);
+ *     }
  * };
  *
  * upnpService.getControlPoint().execute(callback);
@@ -112,7 +110,7 @@ public abstract class SubscriptionCallback implements Runnable {
     }
 
     synchronized public void run() {
-        if (getControlPoint()  == null) {
+        if (getControlPoint() == null) {
             throw new IllegalStateException("Callback must be executed through ControlPoint");
         }
 
@@ -137,38 +135,38 @@ public abstract class SubscriptionCallback implements Runnable {
 
         LocalGENASubscription localSubscription = null;
         try {
-            localSubscription =
-                    new LocalGENASubscription(service, Integer.MAX_VALUE, Collections.EMPTY_LIST) {
+            localSubscription = new LocalGENASubscription(service, Integer.MAX_VALUE, Collections.EMPTY_LIST) {
 
-                        public void failed(Exception ex) {
-                            synchronized (SubscriptionCallback.this) {
-                                SubscriptionCallback.this.setSubscription(null);
-                                SubscriptionCallback.this.failed(null, null, ex);
-                            }
-                        }
+                public void failed(Exception ex) {
+                    synchronized (SubscriptionCallback.this) {
+                        SubscriptionCallback.this.setSubscription(null);
+                        SubscriptionCallback.this.failed(null, null, ex);
+                    }
+                }
 
-                        public void established() {
-                            synchronized (SubscriptionCallback.this) {
-                                SubscriptionCallback.this.setSubscription(this);
-                                SubscriptionCallback.this.established(this);
-                            }
-                        }
+                public void established() {
+                    synchronized (SubscriptionCallback.this) {
+                        SubscriptionCallback.this.setSubscription(this);
+                        SubscriptionCallback.this.established(this);
+                    }
+                }
 
-                        public void ended(CancelReason reason) {
-                            synchronized (SubscriptionCallback.this) {
-                                SubscriptionCallback.this.setSubscription(null);
-                                SubscriptionCallback.this.ended(this, reason, null);
-                            }
-                        }
+                public void ended(CancelReason reason) {
+                    synchronized (SubscriptionCallback.this) {
+                        SubscriptionCallback.this.setSubscription(null);
+                        SubscriptionCallback.this.ended(this, reason, null);
+                    }
+                }
 
-                        public void eventReceived() {
-                            synchronized (SubscriptionCallback.this) {
-                                log.trace("Local service state updated, notifying callback, sequence is: {}", getCurrentSequence());
-                                SubscriptionCallback.this.eventReceived(this);
-                                incrementSequence();
-                            }
-                        }
-                    };
+                public void eventReceived() {
+                    synchronized (SubscriptionCallback.this) {
+                        log.trace("Local service state updated, notifying callback, sequence is: {}",
+                                getCurrentSequence());
+                        SubscriptionCallback.this.eventReceived(this);
+                        incrementSequence();
+                    }
+                }
+            };
 
             log.trace("Local device service is currently registered, also registering subscription");
             getControlPoint().getRegistry().addLocalSubscription(localSubscription);
@@ -176,7 +174,8 @@ public abstract class SubscriptionCallback implements Runnable {
             log.trace("Notifying subscription callback of local subscription availability");
             localSubscription.establish();
 
-            log.trace("Simulating first initial event for local subscription callback, sequence: {}", localSubscription.getCurrentSequence());
+            log.trace("Simulating first initial event for local subscription callback, sequence: {}",
+                    localSubscription.getCurrentSequence());
             eventReceived(localSubscription);
             localSubscription.incrementSequence();
 
@@ -192,48 +191,47 @@ public abstract class SubscriptionCallback implements Runnable {
     }
 
     private void establishRemoteSubscription(RemoteService service) {
-        RemoteGENASubscription remoteSubscription =
-                new RemoteGENASubscription(service, requestedDurationSeconds) {
+        RemoteGENASubscription remoteSubscription = new RemoteGENASubscription(service, requestedDurationSeconds) {
 
-                    public void failed(UpnpResponse responseStatus) {
-                        synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.setSubscription(null);
-                            SubscriptionCallback.this.failed(this, responseStatus, null);
-                        }
-                    }
+            public void failed(UpnpResponse responseStatus) {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.setSubscription(null);
+                    SubscriptionCallback.this.failed(this, responseStatus, null);
+                }
+            }
 
-                    public void established() {
-                        synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.setSubscription(this);
-                            SubscriptionCallback.this.established(this);
-                        }
-                    }
+            public void established() {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.setSubscription(this);
+                    SubscriptionCallback.this.established(this);
+                }
+            }
 
-                    public void ended(CancelReason reason, UpnpResponse responseStatus) {
-                        synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.setSubscription(null);
-                            SubscriptionCallback.this.ended(this, reason, responseStatus);
-                        }
-                    }
+            public void ended(CancelReason reason, UpnpResponse responseStatus) {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.setSubscription(null);
+                    SubscriptionCallback.this.ended(this, reason, responseStatus);
+                }
+            }
 
-                    public void eventReceived() {
-                        synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.eventReceived(this);
-                        }
-                    }
+            public void eventReceived() {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.eventReceived(this);
+                }
+            }
 
-                    public void eventsMissed(int numberOfMissedEvents) {
-                        synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.eventsMissed(this, numberOfMissedEvents);
-                        }
-                    }
+            public void eventsMissed(int numberOfMissedEvents) {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.eventsMissed(this, numberOfMissedEvents);
+                }
+            }
 
-					public void invalidMessage(UnsupportedDataException ex) {
-						synchronized (SubscriptionCallback.this) {
-							SubscriptionCallback.this.invalidMessage(this, ex);
-						}
-					}
-                };
+            public void invalidMessage(UnsupportedDataException ex) {
+                synchronized (SubscriptionCallback.this) {
+                    SubscriptionCallback.this.invalidMessage(this, ex);
+                }
+            }
+        };
 
         SendingSubscribe protocol;
         try {
@@ -246,11 +244,12 @@ public abstract class SubscriptionCallback implements Runnable {
     }
 
     synchronized public void end() {
-        if (subscription == null) return;
+        if (subscription == null)
+            return;
         if (subscription instanceof LocalGENASubscription) {
-            endLocalSubscription((LocalGENASubscription)subscription);
+            endLocalSubscription((LocalGENASubscription) subscription);
         } else if (subscription instanceof RemoteGENASubscription) {
-            endRemoteSubscription((RemoteGENASubscription)subscription);
+            endRemoteSubscription((RemoteGENASubscription) subscription);
         }
     }
 
@@ -262,9 +261,8 @@ public abstract class SubscriptionCallback implements Runnable {
 
     private void endRemoteSubscription(RemoteGENASubscription subscription) {
         log.trace("Ending remote subscription: {}", subscription);
-        getControlPoint().getConfiguration().getSyncProtocolExecutorService().execute(
-                getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription)
-        );
+        getControlPoint().getConfiguration().getSyncProtocolExecutorService()
+                .execute(getControlPoint().getProtocolFactory().createSendingUnsubscribe(subscription));
     }
 
     protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception) {
@@ -275,14 +273,16 @@ public abstract class SubscriptionCallback implements Runnable {
      * Called when establishing a local or remote subscription failed. To get a nice error message that
      * transparently detects local or remote errors use <tt>createDefaultFailureMessage()</tt>.
      *
-     * @param subscription   The failed subscription object, not very useful at this point.
-     * @param responseStatus For a remote subscription, if a response was received at all, this is it, otherwise <tt>null</tt>.
-     * @param exception      For a local subscription and failed creation of a remote subscription protocol (before
-     *                       sending the subscribe request), any exception that caused the failure, otherwise <tt>null</tt>.
-     * @param defaultMsg     A user-friendly error message.
+     * @param subscription The failed subscription object, not very useful at this point.
+     * @param responseStatus For a remote subscription, if a response was received at all, this is it, otherwise
+     *            <tt>null</tt>.
+     * @param exception For a local subscription and failed creation of a remote subscription protocol (before
+     *            sending the subscribe request), any exception that caused the failure, otherwise <tt>null</tt>.
+     * @param defaultMsg A user-friendly error message.
      * @see #createDefaultFailureMessage
      */
-    protected abstract void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception, String defaultMsg);
+    protected abstract void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception,
+            String defaultMsg);
 
     /**
      * Called when a local or remote subscription was successfully established.
@@ -294,10 +294,10 @@ public abstract class SubscriptionCallback implements Runnable {
     /**
      * Called when a local or remote subscription ended, either on user request or because of a failure.
      *
-     * @param subscription   The ended subscription instance.
-     * @param reason         If the subscription ended regularly (through <tt>end()</tt>), this is <tt>null</tt>.
+     * @param subscription The ended subscription instance.
+     * @param reason If the subscription ended regularly (through <tt>end()</tt>), this is <tt>null</tt>.
      * @param responseStatus For a remote subscription, if the cause implies a remopte response and it was
-     *                       received, this is it (e.g. renewal failure response).
+     *            received, this is it (e.g. renewal failure response).
      */
     protected abstract void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus);
 
@@ -317,6 +317,7 @@ public abstract class SubscriptionCallback implements Runnable {
      * <p>
      * It's up to you if you want to react to missed events or if you (can) silently ignore them.
      * </p>
+     * 
      * @param subscription The established subscription.
      * @param numberOfMissedEvents The number of missed events.
      */
@@ -354,8 +355,7 @@ public abstract class SubscriptionCallback implements Runnable {
      * @param remoteGENASubscription The established subscription.
      * @param ex Call {@link org.jupnp.model.UnsupportedDataException#getData()} to access the invalid XML.
      */
-	protected void invalidMessage(RemoteGENASubscription remoteGENASubscription,
-                                  UnsupportedDataException ex) {
+    protected void invalidMessage(RemoteGENASubscription remoteGENASubscription, UnsupportedDataException ex) {
         log.info("Invalid event message received", ex);
         if (log.isTraceEnabled()) {
             log.trace("------------------------------------------------------------------------------");
@@ -368,5 +368,4 @@ public abstract class SubscriptionCallback implements Runnable {
     public String toString() {
         return "(SubscriptionCallback) " + getService();
     }
-
 }

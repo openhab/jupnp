@@ -14,11 +14,11 @@
 
 package org.jupnp.transport.spi;
 
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+
 import org.jupnp.model.message.OutgoingDatagramMessage;
 import org.jupnp.transport.Router;
-
-import java.net.InetAddress;
-import java.net.DatagramPacket;
 
 /**
  * Service for receiving (unicast only) and sending UDP datagrams, one per bound IP address.
@@ -59,7 +59,8 @@ public interface DatagramIO<C extends DatagramIOConfiguration> extends Runnable 
      * @param datagramProcessor Reads and writes datagrams.
      * @throws InitializationException If the service could not be initialized or started.
      */
-    public void init(InetAddress bindAddress, int bindPort, Router router, DatagramProcessor datagramProcessor) throws InitializationException;
+    public void init(InetAddress bindAddress, int bindPort, Router router, DatagramProcessor datagramProcessor)
+            throws InitializationException;
 
     /**
      * Stops the service, closes any listening sockets.
@@ -72,7 +73,8 @@ public interface DatagramIO<C extends DatagramIOConfiguration> extends Runnable 
     public C getConfiguration();
 
     /**
-     * Sends a datagram after conversion with {@link org.jupnp.transport.spi.DatagramProcessor#write(org.jupnp.model.message.OutgoingDatagramMessage)}.
+     * Sends a datagram after conversion with
+     * {@link org.jupnp.transport.spi.DatagramProcessor#write(org.jupnp.model.message.OutgoingDatagramMessage)}.
      *
      * @param message The message to send.
      */

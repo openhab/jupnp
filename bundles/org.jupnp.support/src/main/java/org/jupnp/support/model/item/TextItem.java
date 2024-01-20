@@ -15,18 +15,18 @@
 
 package org.jupnp.support.model.item;
 
-import org.jupnp.support.model.Person;
-import org.jupnp.support.model.PersonWithRole;
-import org.jupnp.support.model.Res;
-import org.jupnp.support.model.StorageMedium;
-import org.jupnp.support.model.container.Container;
+import static org.jupnp.support.model.DIDLObject.Property.DC;
+import static org.jupnp.support.model.DIDLObject.Property.UPNP;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jupnp.support.model.DIDLObject.Property.DC;
-import static org.jupnp.support.model.DIDLObject.Property.UPNP;
+import org.jupnp.support.model.Person;
+import org.jupnp.support.model.PersonWithRole;
+import org.jupnp.support.model.Res;
+import org.jupnp.support.model.StorageMedium;
+import org.jupnp.support.model.container.Container;
 
 /**
  * @author Christian Bauer
@@ -65,7 +65,7 @@ public class TextItem extends Item {
 
     public TextItem setAuthors(PersonWithRole[] persons) {
         removeProperties(UPNP.AUTHOR.class);
-        for (PersonWithRole p: persons) {
+        for (PersonWithRole p : persons) {
             addProperty(new UPNP.AUTHOR(p));
         }
         return this;
@@ -192,5 +192,4 @@ public class TextItem extends Item {
         }
         return this;
     }
-
 }

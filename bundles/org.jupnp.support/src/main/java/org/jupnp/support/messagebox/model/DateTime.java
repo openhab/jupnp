@@ -15,10 +15,10 @@
 
 package org.jupnp.support.messagebox.model;
 
-import org.jupnp.support.messagebox.parser.MessageElement;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.jupnp.support.messagebox.parser.MessageElement;
 
 /**
  * @author Christian Bauer
@@ -59,5 +59,4 @@ public class DateTime implements ElementAppender {
         SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
         return fmt.format(new Date());
     }
-
 }

@@ -37,5 +37,4 @@ public class GenreContainer extends Container {
     public GenreContainer(String id, String parentID, String title, String creator, Integer childCount) {
         super(id, parentID, title, creator, CLASS, childCount);
     }
-
 }

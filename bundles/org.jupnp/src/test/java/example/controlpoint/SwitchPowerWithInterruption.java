@@ -52,8 +52,8 @@ import org.jupnp.model.profile.RemoteClientInfo;
  * These checks look as follows in your service method:
  * </p>
  * <a class="citation"
- *    href="javacode://this"
- *    style="include: ACTION_METHOD; exclude: ACTUAL_WORK;"/>
+ * href="javacode://this"
+ * style="include: ACTION_METHOD; exclude: ACTUAL_WORK;"/>
  *
  * <p>
  * You abort processing by throwing an <code>InterruptedException</code>, jUPnP will do the rest. jUPnP will send
@@ -139,10 +139,7 @@ import org.jupnp.model.profile.RemoteClientInfo;
  * interoperability problems.
  * </p>
  */
-@UpnpService(
-    serviceId = @UpnpServiceId("SwitchPower"),
-    serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
-)
+@UpnpService(serviceId = @UpnpServiceId("SwitchPower"), serviceType = @UpnpServiceType(value = "SwitchPower", version = 1))
 public class SwitchPowerWithInterruption {
 
     @UpnpStateVariable(sendEvents = false)
@@ -154,7 +151,7 @@ public class SwitchPowerWithInterruption {
     // DOC:ACTION_METHOD
     @UpnpAction
     public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue,
-                          RemoteClientInfo remoteClientInfo) throws InterruptedException {
+            RemoteClientInfo remoteClientInfo) throws InterruptedException {
         // DOC:ACTUAL_WORK
         target = newTargetValue;
         status = newTargetValue;
@@ -185,5 +182,4 @@ public class SwitchPowerWithInterruption {
     public boolean getStatus() {
         return status;
     }
-
 }

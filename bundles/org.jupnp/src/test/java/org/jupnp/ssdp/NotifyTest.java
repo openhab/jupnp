@@ -14,7 +14,15 @@
 
 package org.jupnp.ssdp;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import org.junit.jupiter.api.Test;
 import org.jupnp.UpnpService;
+import org.jupnp.data.SampleData;
+import org.jupnp.data.SampleDeviceRoot;
 import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.Constants;
 import org.jupnp.model.message.IncomingDatagramMessage;
@@ -31,14 +39,6 @@ import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.meta.LocalDevice;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.types.NotificationSubtype;
-import org.jupnp.data.SampleData;
-import org.jupnp.data.SampleDeviceRoot;
-import org.junit.jupiter.api.Test;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class NotifyTest {
 
@@ -96,7 +96,8 @@ class NotifyTest {
         msg.getHeaders().add(UpnpHeader.Type.USN, new USNRootDeviceHeader(rd.getIdentity().getUdn()));
         msg.getHeaders().add(UpnpHeader.Type.MAX_AGE, new MaxAgeHeader(rd.getIdentity().getMaxAgeSeconds()));
         // We test the missing header
-        //msg.getHeaders().add(UpnpHeader.Type.LOCATION, new LocationHeader(SampleDeviceRoot.getDeviceDescriptorURL()));
+        // msg.getHeaders().add(UpnpHeader.Type.LOCATION, new
+        // LocationHeader(SampleDeviceRoot.getDeviceDescriptorURL()));
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
@@ -117,7 +118,7 @@ class NotifyTest {
         msg.getHeaders().add(UpnpHeader.Type.USN, new USNRootDeviceHeader(rd.getIdentity().getUdn()));
         msg.getHeaders().add(UpnpHeader.Type.LOCATION, new LocationHeader(SampleDeviceRoot.getDeviceDescriptorURL()));
         // We test the missing header
-        //msg.getHeaders().add(UpnpHeader.Type.MAX_AGE, new MaxAgeHeader(rd.getIdentity().getMaxAgeSeconds()));
+        // msg.getHeaders().add(UpnpHeader.Type.MAX_AGE, new MaxAgeHeader(rd.getIdentity().getMaxAgeSeconds()));
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
@@ -153,9 +154,7 @@ class NotifyTest {
         UpnpService upnpService = new MockUpnpService(false, true);
         upnpService.startup();
 
-        RemoteDevice rd = SampleData.createRemoteDevice(
-                SampleData.createRemoteDeviceIdentity(2)
-        );
+        RemoteDevice rd = SampleData.createRemoteDevice(SampleData.createRemoteDeviceIdentity(2));
         RemoteDevice embedded = rd.getEmbeddedDevices()[0];
 
         upnpService.getRegistry().addDevice(rd);
@@ -182,17 +181,11 @@ class NotifyTest {
     }
 
     protected IncomingNotificationRequest createRequestMessage() throws UnknownHostException {
-        IncomingNotificationRequest msg = new IncomingNotificationRequest(
-                new IncomingDatagramMessage<>(
-                        new UpnpRequest(UpnpRequest.Method.NOTIFY),
-                        InetAddress.getByName("127.0.0.1"),
-                        Constants.UPNP_MULTICAST_PORT,
-                        InetAddress.getByName("127.0.0.1")
-                )
-        );
+        IncomingNotificationRequest msg = new IncomingNotificationRequest(new IncomingDatagramMessage<>(
+                new UpnpRequest(UpnpRequest.Method.NOTIFY), InetAddress.getByName("127.0.0.1"),
+                Constants.UPNP_MULTICAST_PORT, InetAddress.getByName("127.0.0.1")));
 
         msg.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader());
         return msg;
     }
-
 }

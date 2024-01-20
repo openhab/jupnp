@@ -50,7 +50,7 @@ public class DLNAFlagsAttribute extends DLNAAttribute<EnumSet<DLNAFlags>> {
                 }
             }
         } catch (Exception e) {
-            //not required
+            // not required
         }
 
         if (value.isEmpty())

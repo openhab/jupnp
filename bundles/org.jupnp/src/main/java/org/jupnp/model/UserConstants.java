@@ -26,5 +26,4 @@ public class UserConstants {
     public static final String PRODUCT_TOKEN_VERSION = "2.0";
 
     public static final int DEFAULT_SUBSCRIPTION_DURATION_SECONDS = 1800;
-
 }

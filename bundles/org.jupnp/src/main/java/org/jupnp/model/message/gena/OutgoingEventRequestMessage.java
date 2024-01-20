@@ -14,6 +14,9 @@
 
 package org.jupnp.model.message.gena;
 
+import java.net.URL;
+import java.util.Collection;
+
 import org.jupnp.model.gena.GENASubscription;
 import org.jupnp.model.message.StreamRequestMessage;
 import org.jupnp.model.message.UpnpRequest;
@@ -27,9 +30,6 @@ import org.jupnp.model.state.StateVariableValue;
 import org.jupnp.model.types.NotificationSubtype;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 
-import java.net.URL;
-import java.util.Collection;
-
 /**
  * @author Christian Bauer
  */
@@ -37,10 +37,8 @@ public class OutgoingEventRequestMessage extends StreamRequestMessage {
 
     final private Collection<StateVariableValue> stateVariableValues;
 
-    public OutgoingEventRequestMessage(GENASubscription subscription,
-                                       URL callbackURL,
-                                       UnsignedIntegerFourBytes sequence,
-                                       Collection<StateVariableValue> values) {
+    public OutgoingEventRequestMessage(GENASubscription subscription, URL callbackURL,
+            UnsignedIntegerFourBytes sequence, Collection<StateVariableValue> values) {
 
         super(new UpnpRequest(UpnpRequest.Method.NOTIFY, callbackURL));
 

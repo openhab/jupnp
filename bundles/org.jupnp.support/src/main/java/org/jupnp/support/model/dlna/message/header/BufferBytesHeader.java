@@ -33,7 +33,7 @@ public class BufferBytesHeader extends DLNAHeader<UnsignedIntegerFourBytes> {
             setValue(new UnsignedIntegerFourBytes(s));
             return;
         } catch (NumberFormatException numberFormatException) {
-            //no need to take any precaution measure
+            // no need to take any precaution measure
         }
         throw new InvalidHeaderException("Invalid header value: " + s);
     }

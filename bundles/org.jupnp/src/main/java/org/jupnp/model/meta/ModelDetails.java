@@ -53,7 +53,8 @@ public class ModelDetails {
         this.modelURI = modelURI;
     }
 
-    public ModelDetails(String modelName, String modelDescription, String modelNumber, String modelURI) throws IllegalArgumentException {
+    public ModelDetails(String modelName, String modelDescription, String modelNumber, String modelURI)
+            throws IllegalArgumentException {
         this.modelName = modelName;
         this.modelDescription = modelDescription;
         this.modelNumber = modelNumber;

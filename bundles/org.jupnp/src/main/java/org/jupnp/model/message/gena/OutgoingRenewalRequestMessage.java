@@ -27,23 +27,15 @@ import org.jupnp.model.message.header.UpnpHeader;
  */
 public class OutgoingRenewalRequestMessage extends StreamRequestMessage {
 
-    public OutgoingRenewalRequestMessage(RemoteGENASubscription subscription,
-                                         UpnpHeaders extraHeaders) {
+    public OutgoingRenewalRequestMessage(RemoteGENASubscription subscription, UpnpHeaders extraHeaders) {
 
         super(UpnpRequest.Method.SUBSCRIBE, subscription.getEventSubscriptionURL());
 
-        getHeaders().add(
-                UpnpHeader.Type.SID,
-                new SubscriptionIdHeader(subscription.getSubscriptionId())
-        );
+        getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader(subscription.getSubscriptionId()));
 
-        getHeaders().add(
-                UpnpHeader.Type.TIMEOUT,
-                new TimeoutHeader(subscription.getRequestedDurationSeconds())
-        );
+        getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(subscription.getRequestedDurationSeconds()));
 
         if (extraHeaders != null)
             getHeaders().putAll(extraHeaders);
     }
-
 }

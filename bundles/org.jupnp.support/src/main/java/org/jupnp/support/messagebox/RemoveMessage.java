@@ -36,5 +36,4 @@ public abstract class RemoveMessage extends ActionCallback {
         super(new ActionInvocation<>(service.getAction("RemoveMessage")));
         getActionInvocation().setInput("MessageID", id);
     }
-
 }

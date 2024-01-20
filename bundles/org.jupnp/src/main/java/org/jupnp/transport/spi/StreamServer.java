@@ -14,9 +14,9 @@
 
 package org.jupnp.transport.spi;
 
-import org.jupnp.transport.Router;
-
 import java.net.InetAddress;
+
+import org.jupnp.transport.Router;
 
 /**
  * Service for receiving TCP (HTTP) streams, one per bound IP address.
@@ -37,6 +37,7 @@ import java.net.InetAddress;
  * <p>
  * In pseudo-code:
  * </p>
+ * 
  * <pre>
  * MyStreamServer implements StreamServer {
  *      run() {
@@ -97,5 +98,4 @@ public interface StreamServer<C extends StreamServerConfiguration> extends Runna
      * @return This service's configuration.
      */
     public C getConfiguration();
-
 }

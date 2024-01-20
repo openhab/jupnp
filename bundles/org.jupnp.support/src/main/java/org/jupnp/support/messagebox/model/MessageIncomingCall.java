@@ -59,5 +59,4 @@ public class MessageIncomingCall extends Message {
         getCallee().appendMessageElements(parent.createChild("Callee"));
         getCaller().appendMessageElements(parent.createChild("Caller"));
     }
-
 }

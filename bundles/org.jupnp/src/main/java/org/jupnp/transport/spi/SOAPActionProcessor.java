@@ -39,7 +39,8 @@ public interface SOAPActionProcessor {
      * @param actionInvocation The action invocation from which input argument values are read.
      * @throws org.jupnp.model.UnsupportedDataException
      */
-    public void writeBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation) throws UnsupportedDataException;
+    public void writeBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
+            throws UnsupportedDataException;
 
     /**
      * Converts the given invocation output into SOAP XML content, setting on the given response message.
@@ -48,7 +49,8 @@ public interface SOAPActionProcessor {
      * @param actionInvocation The action invocation from which output argument values are read.
      * @throws UnsupportedDataException
      */
-    public void writeBody(ActionResponseMessage responseMessage, ActionInvocation actionInvocation) throws UnsupportedDataException;
+    public void writeBody(ActionResponseMessage responseMessage, ActionInvocation actionInvocation)
+            throws UnsupportedDataException;
 
     /**
      * Converts SOAP XML content of the request message and sets input argument values on the given invocation.
@@ -57,7 +59,8 @@ public interface SOAPActionProcessor {
      * @param actionInvocation The action invocation on which input argument values are set.
      * @throws UnsupportedDataException
      */
-    public void readBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation) throws UnsupportedDataException;
+    public void readBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
+            throws UnsupportedDataException;
 
     /**
      * Converts SOAP XML content of the response message and sets output argument values on the given invocation.
@@ -66,6 +69,6 @@ public interface SOAPActionProcessor {
      * @param actionInvocation The action invocation on which output argument values are set.
      * @throws UnsupportedDataException
      */
-    public void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation) throws UnsupportedDataException;
-
+    public void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation)
+            throws UnsupportedDataException;
 }

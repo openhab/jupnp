@@ -14,13 +14,12 @@
 
 package org.jupnp.model.types;
 
-import org.jupnp.model.ModelUtil;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-import java.security.MessageDigest;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.UUID;
+
+import org.jupnp.model.ModelUtil;
 
 /**
  * A unique device name.
@@ -100,19 +99,14 @@ public class UDN {
             systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress(), StandardCharsets.UTF_8));
         } else {
             throw new RuntimeException(
-                "This method does not create a unique identifier on Android, see the Javadoc and " +
-                    "use new UDN(UUID) instead!"
-            );
+                    "This method does not create a unique identifier on Android, see the Javadoc and "
+                            + "use new UDN(UUID) instead!");
         }
 
         try {
-            byte[] hash = MessageDigest.getInstance("MD5").digest(systemSalt.toString().getBytes(StandardCharsets.UTF_8));
-            return new UDN(
-                    new UUID(
-                            new BigInteger(-1, hash).longValue(),
-                            salt.hashCode()
-                    )
-            );
+            byte[] hash = MessageDigest.getInstance("MD5")
+                    .digest(systemSalt.toString().getBytes(StandardCharsets.UTF_8));
+            return new UDN(new UUID(new BigInteger(-1, hash).longValue(), salt.hashCode()));
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -125,8 +119,10 @@ public class UDN {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof UDN)) return false;
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof UDN))
+            return false;
         UDN udn = (UDN) o;
         return identifierString.equals(udn.identifierString);
     }
@@ -135,5 +131,4 @@ public class UDN {
     public int hashCode() {
         return identifierString.hashCode();
     }
-
 }

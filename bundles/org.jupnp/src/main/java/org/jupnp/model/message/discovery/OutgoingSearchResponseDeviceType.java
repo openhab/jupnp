@@ -26,13 +26,10 @@ import org.jupnp.model.meta.LocalDevice;
  */
 public class OutgoingSearchResponseDeviceType extends OutgoingSearchResponse {
 
-    public OutgoingSearchResponseDeviceType(IncomingDatagramMessage request,
-                                            Location location,
-                                            LocalDevice device) {
+    public OutgoingSearchResponseDeviceType(IncomingDatagramMessage request, Location location, LocalDevice device) {
         super(request, location, device);
 
         getHeaders().add(UpnpHeader.Type.ST, new DeviceTypeHeader(device.getType()));
         getHeaders().add(UpnpHeader.Type.USN, new DeviceUSNHeader(device.getIdentity().getUdn(), device.getType()));
     }
-
 }

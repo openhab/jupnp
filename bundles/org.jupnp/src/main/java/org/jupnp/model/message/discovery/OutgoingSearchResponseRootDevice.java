@@ -26,9 +26,7 @@ import org.jupnp.model.meta.LocalDevice;
  */
 public class OutgoingSearchResponseRootDevice extends OutgoingSearchResponse {
 
-    public OutgoingSearchResponseRootDevice(IncomingDatagramMessage request,
-                                            Location location,
-                                            LocalDevice device) {
+    public OutgoingSearchResponseRootDevice(IncomingDatagramMessage request, Location location, LocalDevice device) {
         super(request, location, device);
 
         getHeaders().add(UpnpHeader.Type.ST, new RootDeviceHeader());

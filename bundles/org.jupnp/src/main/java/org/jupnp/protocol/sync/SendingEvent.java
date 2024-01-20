@@ -49,7 +49,8 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
     public SendingEvent(UpnpService upnpService, LocalGENASubscription subscription) {
         super(upnpService, null); // Special case, we actually need to send several messages to each callback URL
 
-        // TODO: Ugly design! It is critical (concurrency) that we prepare the event messages here, in the constructor thread!
+        // TODO: Ugly design! It is critical (concurrency) that we prepare the event messages here, in the constructor
+        // thread!
 
         subscriptionId = subscription.getSubscriptionId();
 
@@ -82,7 +83,6 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
                 log.trace("Sending event message '{}' to callback URL: {}", currentSequence, requestMessage.getUri());
             }
 
-
             // Send request
             lastResponse = getUpnpService().getRouter().send(requestMessage);
             log.trace("Received event callback response: {}", lastResponse);
@@ -92,6 +92,5 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
         // It's not really used, so just return the last one - we have only one callback URL most of the
         // time anyway
         return lastResponse;
-
     }
 }
