@@ -209,7 +209,7 @@ public class RouterImpl implements Router {
         lock(readLock);
         try {
             if (enabled && streamServers.size() > 0) {
-                List<NetworkAddress> streamServerAddresses = new ArrayList<NetworkAddress>();
+                List<NetworkAddress> streamServerAddresses = new ArrayList<>();
 
                 StreamServer preferredServer;
                 if (preferredAddress != null && (preferredServer = streamServers.get(preferredAddress)) != null) {

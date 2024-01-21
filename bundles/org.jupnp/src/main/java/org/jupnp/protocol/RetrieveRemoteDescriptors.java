@@ -69,7 +69,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     private RemoteDevice rd;
 
     private static final ConcurrentHashMap<URL, Boolean> activeRetrievals = new ConcurrentHashMap();
-    protected List<UDN> errorsAlreadyLogged = new ArrayList<UDN>();
+    protected List<UDN> errorsAlreadyLogged = new ArrayList<>();
 
     public RetrieveRemoteDescriptors(UpnpService upnpService, RemoteDevice rd) {
         this.upnpService = upnpService;

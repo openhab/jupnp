@@ -42,7 +42,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     private Logger log = LoggerFactory.getLogger(Registry.class);
 
-    protected Map<UDN, DiscoveryOptions> discoveryOptions = new HashMap<UDN, DiscoveryOptions>();
+    protected Map<UDN, DiscoveryOptions> discoveryOptions = new HashMap<>();
     protected long lastAliveIntervalTimestamp = 0;
 
     LocalItems(RegistryImpl registry) {
@@ -101,8 +101,8 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         log.trace("Adding item to registry with expiration in seconds: {}",
                 localDevice.getIdentity().getMaxAgeSeconds());
 
-        RegistryItem<UDN, LocalDevice> localItem = new RegistryItem<UDN, LocalDevice>(
-                localDevice.getIdentity().getUdn(), localDevice, localDevice.getIdentity().getMaxAgeSeconds());
+        RegistryItem<UDN, LocalDevice> localItem = new RegistryItem<>(localDevice.getIdentity().getUdn(), localDevice,
+                localDevice.getIdentity().getMaxAgeSeconds());
 
         getDeviceItems().add(localItem);
         log.trace("Registered local device: {}", localItem);

@@ -53,7 +53,7 @@ public class UPnPTypeUtil {
             { UPnPLocalStateVariable.TYPE_BIN_BASE64, byte[].class },
             { UPnPLocalStateVariable.TYPE_BIN_HEX, byte[].class }, };
 
-    private static final Map<String, Class<?>> classLookup = new Hashtable<String, Class<?>>();
+    private static final Map<String, Class<?>> classLookup = new Hashtable<>();
 
     static {
         for (Object[] record : records) {

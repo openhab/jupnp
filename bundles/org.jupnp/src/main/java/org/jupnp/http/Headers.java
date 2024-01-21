@@ -39,7 +39,7 @@ public class Headers implements Map<String, List<String>> {
     static final byte CR = 13;
     static final byte LF = 10;
 
-    final Map<String, List<String>> map = new HashMap<String, List<String>>(32);
+    final Map<String, List<String>> map = new HashMap<>(32);
     private boolean normalizeHeaders = true;
 
     public Headers() {
@@ -147,14 +147,14 @@ public class Headers implements Map<String, List<String>> {
         String k = normalize(key);
         List<String> l = map.get(k);
         if (l == null) {
-            l = new LinkedList<String>();
+            l = new LinkedList<>();
             map.put(k, l);
         }
         l.add(value);
     }
 
     public void set(String key, String value) {
-        LinkedList<String> l = new LinkedList<String>();
+        LinkedList<String> l = new LinkedList<>();
         l.add(value);
         put(key, l);
     }

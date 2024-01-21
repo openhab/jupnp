@@ -141,8 +141,8 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
 
     void addSubscription(S subscription) {
 
-        RegistryItem<String, S> subscriptionItem = new RegistryItem<String, S>(subscription.getSubscriptionId(),
-                subscription, subscription.getActualDurationSeconds());
+        RegistryItem<String, S> subscriptionItem = new RegistryItem<>(subscription.getSubscriptionId(), subscription,
+                subscription.getActualDurationSeconds());
 
         subscriptionItems.add(subscriptionItem);
     }

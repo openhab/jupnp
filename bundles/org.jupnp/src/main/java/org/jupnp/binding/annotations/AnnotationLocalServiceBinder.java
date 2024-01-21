@@ -87,8 +87,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
     public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
             Class[] stringConvertibleTypes) throws LocalServiceBindingException {
-        return read(clazz, id, type, supportsQueryStateVariables,
-                new HashSet<Class>(Arrays.asList(stringConvertibleTypes)));
+        return read(clazz, id, type, supportsQueryStateVariables, new HashSet<>(Arrays.asList(stringConvertibleTypes)));
     }
 
     public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,

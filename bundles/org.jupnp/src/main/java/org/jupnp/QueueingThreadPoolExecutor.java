@@ -86,8 +86,8 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
 
     private QueueingThreadPoolExecutor(String threadPoolName, ThreadFactory threadFactory, int threadPoolSize,
             RejectedExecutionHandler rejectionHandler) {
-        super(CORE_THREAD_POOL_SIZE, threadPoolSize, 10L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-                threadFactory, rejectionHandler);
+        super(CORE_THREAD_POOL_SIZE, threadPoolSize, 10L, TimeUnit.SECONDS, new SynchronousQueue<>(), threadFactory,
+                rejectionHandler);
         this.threadPoolName = threadPoolName;
         allowCoreThreadTimeOut(true);
     }

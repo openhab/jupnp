@@ -82,7 +82,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         // We don't fail device validation if icons were invalid, only log a warning. To
         // comply with mutability rules (can't set icons field in validate() method), we
         // validate the icons here before we set the field value
-        List<Icon> validIcons = new ArrayList<Icon>();
+        List<Icon> validIcons = new ArrayList<>();
         if (icons != null) {
             for (Icon icon : icons) {
                 if (icon != null) {
@@ -380,7 +380,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList<ValidationError>();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getType() != null) {
 

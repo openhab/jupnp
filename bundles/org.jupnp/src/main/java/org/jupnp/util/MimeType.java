@@ -41,7 +41,7 @@ public class MimeType {
         if (parameters == null) {
             this.parameters = Collections.EMPTY_MAP;
         } else {
-            Map<String, String> map = new TreeMap<String, String>(new Comparator<String>() {
+            Map<String, String> map = new TreeMap<>(new Comparator<>() {
                 public int compare(String o1, String o2) {
                     return o1.compareToIgnoreCase(o2);
                 }

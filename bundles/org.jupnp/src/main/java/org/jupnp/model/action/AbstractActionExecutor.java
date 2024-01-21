@@ -38,7 +38,7 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
 
     private Logger log = LoggerFactory.getLogger(AbstractActionExecutor.class);
 
-    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors = new HashMap<ActionArgument<LocalService>, StateVariableAccessor>();
+    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors = new HashMap<>();
 
     protected AbstractActionExecutor() {
     }

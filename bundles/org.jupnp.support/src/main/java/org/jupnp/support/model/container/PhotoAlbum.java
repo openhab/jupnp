@@ -37,7 +37,7 @@ public class PhotoAlbum extends Album {
     }
 
     public PhotoAlbum(String id, Container parent, String title, String creator, Integer childCount) {
-        this(id, parent.getId(), title, creator, childCount, new ArrayList<Photo>());
+        this(id, parent.getId(), title, creator, childCount, new ArrayList<>());
     }
 
     public PhotoAlbum(String id, Container parent, String title, String creator, Integer childCount,
@@ -46,7 +46,7 @@ public class PhotoAlbum extends Album {
     }
 
     public PhotoAlbum(String id, String parentID, String title, String creator, Integer childCount) {
-        this(id, parentID, title, creator, childCount, new ArrayList<Photo>());
+        this(id, parentID, title, creator, childCount, new ArrayList<>());
     }
 
     public PhotoAlbum(String id, String parentID, String title, String creator, Integer childCount,

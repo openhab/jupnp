@@ -26,7 +26,7 @@ import org.osgi.service.upnp.UPnPStateVariable;
 public class GetAction implements UPnPAction {
     private String name;
     private String[] argumentNames;
-    private Map<String, UPnPStateVariable> variables = new HashMap<String, UPnPStateVariable>();
+    private Map<String, UPnPStateVariable> variables = new HashMap<>();
 
     public GetAction(String name, TestStateVariable[] variables) {
         this.name = name;

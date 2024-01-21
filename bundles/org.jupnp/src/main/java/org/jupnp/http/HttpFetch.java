@@ -33,22 +33,22 @@ public class HttpFetch {
 
     public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis)
             throws IOException {
-        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<byte[]>() {
+        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<>() {
             @Override
             public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is)
                     throws IOException {
-                return new Representation<byte[]>(urlConnection, IO.readBytes(is));
+                return new Representation<>(urlConnection, IO.readBytes(is));
             }
         });
     }
 
     public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis)
             throws IOException {
-        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<String>() {
+        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<>() {
             @Override
             public Representation<String> createRepresentation(URLConnection urlConnection, InputStream is)
                     throws IOException {
-                return new Representation<String>(urlConnection, IO.readLines(is));
+                return new Representation<>(urlConnection, IO.readLines(is));
             }
         });
     }

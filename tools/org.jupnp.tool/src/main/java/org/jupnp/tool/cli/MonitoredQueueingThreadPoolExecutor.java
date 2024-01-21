@@ -103,10 +103,10 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
         }
 
         /** Thread safe collection for points. */
-        private List<Statistics.PoolStatPoint> points = new CopyOnWriteArrayList<Statistics.PoolStatPoint>();
+        private List<Statistics.PoolStatPoint> points = new CopyOnWriteArrayList<>();
 
         /** Thread safe collection for executors. */
-        private ConcurrentHashMap<String, AtomicInteger> executors = new ConcurrentHashMap<String, AtomicInteger>();
+        private ConcurrentHashMap<String, AtomicInteger> executors = new ConcurrentHashMap<>();
 
         private final String poolName;
 
@@ -156,10 +156,9 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
         public void dumpExecutorsStats() {
             statsLogger.info("Dump Pool Executors for poolName: {}", poolName);
 
-            List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<ConcurrentHashMap.Entry<String, AtomicInteger>>(
-                    executors.entrySet());
+            List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<>(executors.entrySet());
             // sort the entries by number of calls
-            Collections.sort(entries, new Comparator<ConcurrentHashMap.Entry<String, AtomicInteger>>() {
+            Collections.sort(entries, new Comparator<>() {
                 public int compare(ConcurrentHashMap.Entry<String, AtomicInteger> a,
                         ConcurrentHashMap.Entry<String, AtomicInteger> b) {
                     return Integer.compare(b.getValue().get(), a.getValue().get());

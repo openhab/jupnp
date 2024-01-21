@@ -37,7 +37,7 @@ public class Activator implements BundleActivator {
     private static Activator plugin;
     private static BundleContext context;
     private ServiceTracker tracker;
-    private List<ServiceReference> references = new ArrayList<ServiceReference>();
+    private List<ServiceReference> references = new ArrayList<>();
 
     public static Activator getPlugin() {
         return plugin;

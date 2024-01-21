@@ -84,7 +84,7 @@ public class SAXParser {
     protected Schema createSchema(Source[] schemaSources) {
         try {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            schemaFactory.setResourceResolver(new CatalogResourceResolver(new HashMap<URI, URL>() {
+            schemaFactory.setResourceResolver(new CatalogResourceResolver(new HashMap<>() {
                 {
                     put(XML_SCHEMA_NAMESPACE, XML_SCHEMA_RESOURCE);
                 }

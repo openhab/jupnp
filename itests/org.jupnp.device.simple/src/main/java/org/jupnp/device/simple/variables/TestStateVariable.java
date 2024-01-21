@@ -113,10 +113,10 @@ public class TestStateVariable implements Observer, UPnPLocalStateVariable {
     public void update(Observable o, Object arg) {
         EventAdmin eventAdmin = Activator.getPlugin().getEventAdmin();
         if (eventAdmin != null) {
-            Dictionary<String, Object> values = new Hashtable<String, Object>();
+            Dictionary<String, Object> values = new Hashtable<>();
             values.put(getName(), getCurrentValue());
 
-            Map<String, Object> properties = new HashMap<String, Object>();
+            Map<String, Object> properties = new HashMap<>();
             properties.put(UPnPDevice.UDN, device.getDescriptions(null).get(UPnPDevice.UDN));
             properties.put(UPnPService.ID, service.getId());
             properties.put("upnp.events", values);

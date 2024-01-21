@@ -41,8 +41,8 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
     private final Logger log = LoggerFactory.getLogger(StreamClient.class);
 
     private static final int FAILED_REQUESTS_MAX_SIZE = 100;
-    private Map<URI, Long> failedRequests = new ConcurrentHashMap<URI, Long>();
-    private Map<URI, Long> failedTries = new ConcurrentHashMap<URI, Long>();
+    private Map<URI, Long> failedRequests = new ConcurrentHashMap<>();
+    private Map<URI, Long> failedTries = new ConcurrentHashMap<>();
 
     @Override
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {

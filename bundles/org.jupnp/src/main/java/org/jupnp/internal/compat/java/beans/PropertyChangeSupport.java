@@ -33,7 +33,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class PropertyChangeSupport {
 
     /** Registered listeners for synchronized usage. */
-    private CopyOnWriteArrayList<PropertyChangeListener> listeners = new CopyOnWriteArrayList<PropertyChangeListener>();
+    private CopyOnWriteArrayList<PropertyChangeListener> listeners = new CopyOnWriteArrayList<>();
 
     /** The source object for property changes, */
     private Object source;

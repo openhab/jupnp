@@ -50,7 +50,7 @@ class UPnPActionExecutor implements ActionExecutor {
 
         ActionArgumentValue<LocalService>[] inputs = actionInvocation.getInput();
 
-        Dictionary<String, Object> args = new Hashtable<String, Object>();
+        Dictionary<String, Object> args = new Hashtable<>();
         for (ActionArgumentValue<LocalService> input : inputs) {
             ActionArgument<?> argument = input.getArgument();
 

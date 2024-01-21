@@ -40,7 +40,7 @@ public abstract class PooledXmlProcessor {
     public PooledXmlProcessor(int basePoolSize) {
         documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
-        builderPool = new ConcurrentLinkedQueue<DocumentBuilder>();
+        builderPool = new ConcurrentLinkedQueue<>();
 
         for (int i = 0; i < basePoolSize; i++) {
             try {

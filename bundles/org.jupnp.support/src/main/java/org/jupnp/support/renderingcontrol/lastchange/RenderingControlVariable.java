@@ -31,7 +31,7 @@ import org.jupnp.support.lastchange.EventedValueUnsignedIntegerTwoBytes;
  */
 public class RenderingControlVariable {
 
-    public static final Set<Class<? extends EventedValue<?>>> ALL = new HashSet<Class<? extends EventedValue<?>>>() {
+    public static final Set<Class<? extends EventedValue<?>>> ALL = new HashSet<>() {
         private static final long serialVersionUID = 2062504242615209977L;
 
         {

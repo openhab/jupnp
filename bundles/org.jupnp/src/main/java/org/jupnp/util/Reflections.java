@@ -195,7 +195,7 @@ public class Reflections {
      * @return a list of the raw classes for the actual type arguments.
      */
     public static <T> List<Class<?>> getTypeArguments(Class<T> baseClass, Class<? extends T> childClass) {
-        Map<Type, Type> resolvedTypes = new HashMap<Type, Type>();
+        Map<Type, Type> resolvedTypes = new HashMap<>();
         Type type = childClass;
         // start walking up the inheritance hierarchy until we hit baseClass
         while (!getClass(type).equals(baseClass)) {
@@ -226,7 +226,7 @@ public class Reflections {
         } else {
             actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
         }
-        List<Class<?>> typeArgumentsAsClasses = new ArrayList<Class<?>>();
+        List<Class<?>> typeArgumentsAsClasses = new ArrayList<>();
         // resolve types by chasing down type variables.
         for (Type baseType : actualTypeArguments) {
             while (resolvedTypes.containsKey(baseType)) {

@@ -361,7 +361,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         public JUPnPExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
             // This is the same as Executors.newCachedThreadPool
             super(CORE_THREAD_POOL_SIZE, THREAD_POOL_SIZE, 10L, TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<Runnable>(THREAD_QUEUE_SIZE), threadFactory, rejectedHandler);
+                    new ArrayBlockingQueue<>(THREAD_QUEUE_SIZE), threadFactory, rejectedHandler);
             allowCoreThreadTimeOut(THREAD_POOL_CORE_TIMEOUT);
         }
 

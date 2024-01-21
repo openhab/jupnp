@@ -75,7 +75,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
 
         Filter filter = (Filter) reference.getProperty(UPnPEventListener.UPNP_FILTER);
         if (filter != null) {
-            List<SubscriptionCallback> callbacks = new ArrayList<SubscriptionCallback>();
+            List<SubscriptionCallback> callbacks = new ArrayList<>();
             UPnPServiceImpl[] services = (UPnPServiceImpl[]) device.getServices();
             if (services != null) {
                 Dictionary descriptions = device.getDescriptions(null);

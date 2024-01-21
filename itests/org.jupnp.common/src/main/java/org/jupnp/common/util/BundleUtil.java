@@ -29,7 +29,7 @@ public class BundleUtil {
 
     private static Map<Integer, String> getStateLookup() {
         if (stateLookup == null) {
-            stateLookup = new Hashtable<Integer, String>();
+            stateLookup = new Hashtable<>();
 
             for (Object[] state : states) {
                 stateLookup.put((Integer) state[0], (String) state[1]);

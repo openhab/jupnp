@@ -75,7 +75,7 @@ public abstract class AbstractContentDirectoryService {
     protected final PropertyChangeSupport propertyChangeSupport;
 
     protected AbstractContentDirectoryService() {
-        this(new ArrayList<String>(), new ArrayList<String>(), null);
+        this(new ArrayList<>(), new ArrayList<>(), null);
     }
 
     protected AbstractContentDirectoryService(List<String> searchCapabilities, List<String> sortCapabilities) {

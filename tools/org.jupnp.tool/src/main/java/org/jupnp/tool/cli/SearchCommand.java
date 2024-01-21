@@ -215,8 +215,8 @@ public class SearchCommand {
         }
 
         private final int[] COLUMN_WIDTH = new int[] { 17, 25, 25, 25, 25 };
-        private final List<Result> results = new ArrayList<Result>();
-        private final List<String> udns = new ArrayList<String>();
+        private final List<Result> results = new ArrayList<>();
+        private final List<String> udns = new ArrayList<>();
         private final String sortBy;
         private final boolean verbose;
 
@@ -274,7 +274,7 @@ public class SearchCommand {
             // sort now
             sortResults(sortBy);
             // convert map to table
-            List<String[]> table = new ArrayList<String[]>();
+            List<String[]> table = new ArrayList<>();
             if (verbose) {
                 table.add(new String[] { "IP address", "Model", "Manufacturer", "SerialNumber", "UDN" });
             } else {
@@ -298,7 +298,7 @@ public class SearchCommand {
         }
 
         private void sortResults(final String columnName) {
-            Comparator<Result> comparator = new Comparator<Result>() {
+            Comparator<Result> comparator = new Comparator<>() {
                 @Override
                 public int compare(Result o1, Result o2) {
                     if ("ip".equals(columnName)) {

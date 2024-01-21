@@ -40,8 +40,8 @@ public class UPnPServiceImpl implements UPnPService {
         this.service = service;
 
         if (service.getActions() != null) {
-            List<UPnPAction> list = new ArrayList<UPnPAction>();
-            actionsIndex = new Hashtable<String, UPnPAction>();
+            List<UPnPAction> list = new ArrayList<>();
+            actionsIndex = new Hashtable<>();
 
             for (Action<?> action : service.getActions()) {
                 UPnPAction item = new UPnPActionImpl(action);
@@ -53,8 +53,8 @@ public class UPnPServiceImpl implements UPnPService {
         }
 
         if (service.getStateVariables() != null) {
-            List<UPnPStateVariable> list = new ArrayList<UPnPStateVariable>();
-            variablesIndex = new Hashtable<String, UPnPStateVariable>();
+            List<UPnPStateVariable> list = new ArrayList<>();
+            variablesIndex = new Hashtable<>();
 
             for (StateVariable<?> variable : service.getStateVariables()) {
                 UPnPStateVariable item = new UPnPStateVariableImpl(variable);

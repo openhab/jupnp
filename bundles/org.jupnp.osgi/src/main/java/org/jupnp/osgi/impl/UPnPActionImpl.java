@@ -68,7 +68,7 @@ public class UPnPActionImpl implements UPnPAction {
 
     @Override
     public String[] getInputArgumentNames() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ActionArgument<?> argument : action.getInputArguments()) {
             list.add(argument.getName());
         }
@@ -78,7 +78,7 @@ public class UPnPActionImpl implements UPnPAction {
 
     @Override
     public String[] getOutputArgumentNames() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (ActionArgument<?> argument : action.getOutputArguments()) {
             list.add(argument.getName());
         }
@@ -106,7 +106,7 @@ public class UPnPActionImpl implements UPnPAction {
     public Dictionary invoke(Dictionary args) throws Exception {
         Dictionary<Object, Object> output = null;
 
-        List<ActionArgumentValue<?>> input = new ArrayList<ActionArgumentValue<?>>();
+        List<ActionArgumentValue<?>> input = new ArrayList<>();
 
         if (args != null) {
             for (String key : (ArrayList<String>) Collections.list(args.keys())) {
@@ -134,7 +134,7 @@ public class UPnPActionImpl implements UPnPAction {
         if (actionInvocation.getFailure() == null) {
             ActionArgumentValue<?>[] arguments = actionInvocation.getOutput();
             if (arguments != null && arguments.length != 0) {
-                output = new Hashtable<Object, Object>();
+                output = new Hashtable<>();
                 for (ActionArgumentValue<?> argument : arguments) {
                     String name = argument.getArgument().getName();
                     Object value = argument.getValue();

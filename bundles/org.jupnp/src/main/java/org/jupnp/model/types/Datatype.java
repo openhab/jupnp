@@ -125,7 +125,7 @@ public interface Datatype<V> {
         URI("uri", new URIDatatype()),
         UUID("uuid", new StringDatatype());
 
-        private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {
+        private static Map<String, Builtin> byName = new HashMap<>() {
             {
                 for (Builtin b : Builtin.values()) {
                     // Lowercase descriptor name!

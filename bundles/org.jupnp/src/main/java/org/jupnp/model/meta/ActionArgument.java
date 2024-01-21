@@ -140,7 +140,7 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public ActionArgument<S> deepCopy() {
-        return new ActionArgument<S>(getName(), getAliases(), getRelatedStateVariableName(), getDirection(),
+        return new ActionArgument<>(getName(), getAliases(), getRelatedStateVariableName(), getDirection(),
                 isReturnValue());
     }
 

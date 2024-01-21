@@ -83,7 +83,7 @@ public class Iterators {
         boolean removedCurrent = false;
 
         public Synchronized(Collection<E> collection) {
-            this.wrapped = new CopyOnWriteArrayList<E>(collection).iterator();
+            this.wrapped = new CopyOnWriteArrayList<>(collection).iterator();
         }
 
         public boolean hasNext() {

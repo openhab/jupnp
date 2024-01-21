@@ -30,7 +30,7 @@ public class InstanceID {
     protected List<EventedValue<?>> values = new ArrayList<>();
 
     public InstanceID(UnsignedIntegerFourBytes id) {
-        this(id, new ArrayList<EventedValue<?>>());
+        this(id, new ArrayList<>());
     }
 
     public InstanceID(UnsignedIntegerFourBytes id, List<EventedValue<?>> values) {

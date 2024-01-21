@@ -156,7 +156,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
     protected Collection<StateVariableValue> getCurrentState(String[] variableNames) throws Exception {
         lock();
         try {
-            Collection<StateVariableValue> values = new ArrayList<StateVariableValue>();
+            Collection<StateVariableValue> values = new ArrayList<>();
             for (String variableName : variableNames) {
                 variableName = variableName.trim();
 

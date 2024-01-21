@@ -199,6 +199,6 @@ public class Action<S extends Service> implements Validatable {
             actionArgumentsDupe[i] = arg.deepCopy();
         }
 
-        return new Action<S>(getName(), actionArgumentsDupe);
+        return new Action<>(getName(), actionArgumentsDupe);
     }
 }

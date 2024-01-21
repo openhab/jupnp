@@ -31,7 +31,7 @@ import org.jupnp.model.types.PragmaType;
 public class PragmaHeader extends DLNAHeader<List<PragmaType>> {
 
     public PragmaHeader() {
-        setValue(new ArrayList<PragmaType>());
+        setValue(new ArrayList<>());
     }
 
     @Override

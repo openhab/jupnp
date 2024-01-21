@@ -100,7 +100,7 @@ public class RegistryImpl implements Registry {
 
     protected final Set<RegistryListener> registryListeners = new CopyOnWriteArraySet();
     protected final Set<RegistryItem<URI, Resource>> resourceItems = Collections
-            .newSetFromMap(new ConcurrentHashMap<RegistryItem<URI, Resource>, Boolean>());
+            .newSetFromMap(new ConcurrentHashMap<>());
     protected final List<Runnable> pendingExecutions = new LinkedList();
 
     // in the methods that acquire both locks at the same time always acquire remoteItemsLock first

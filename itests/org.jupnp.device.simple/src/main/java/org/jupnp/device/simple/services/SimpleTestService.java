@@ -89,12 +89,12 @@ public class SimpleTestService implements UPnPService {
     private static TestData data = TestDataFactory.getInstance().getTestData(TEST_DATA_ID);
 
     private TestStateVariable[] variables;
-    private Map<String, UPnPStateVariable> variablesIndex = new HashMap<String, UPnPStateVariable>();
+    private Map<String, UPnPStateVariable> variablesIndex = new HashMap<>();
     private UPnPAction[] actions;
-    private Map<String, UPnPAction> actionsIndex = new HashMap<String, UPnPAction>();
+    private Map<String, UPnPAction> actionsIndex = new HashMap<>();
 
     public SimpleTestService(UPnPDevice device, Simple simple) {
-        List<UPnPStateVariable> variableList = new ArrayList<UPnPStateVariable>();
+        List<UPnPStateVariable> variableList = new ArrayList<>();
 
         for (Object[] record : records) {
             Object value;
@@ -112,7 +112,7 @@ public class SimpleTestService implements UPnPService {
             variableList.add(variable);
         }
 
-        List<UPnPAction> actionList = new ArrayList<UPnPAction>();
+        List<UPnPAction> actionList = new ArrayList<>();
         variables = variableList.toArray(new TestStateVariable[variableList.size()]);
         for (TestStateVariable variable : variables) {
             variablesIndex.put(variable.getName(), variable);

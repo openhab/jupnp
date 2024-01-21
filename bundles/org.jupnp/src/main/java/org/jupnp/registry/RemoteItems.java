@@ -149,7 +149,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
 
             // Override the device's maximum age if configured (systems without multicast support)
-            final RegistryItem<UDN, RemoteDevice> item = new RegistryItem<UDN, RemoteDevice>(
+            final RegistryItem<UDN, RemoteDevice> item = new RegistryItem<>(
                     registeredRemoteDevice.getIdentity().getUdn(), registeredRemoteDevice,
                     registry.getConfiguration().getRemoteDeviceMaxAgeSeconds() != null
                             ? registry.getConfiguration().getRemoteDeviceMaxAgeSeconds()
@@ -290,7 +290,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     public void resume() {
         log.trace("Updating remote device expiration timestamps on resume");
-        List<RemoteDeviceIdentity> toUpdate = new ArrayList<RemoteDeviceIdentity>();
+        List<RemoteDeviceIdentity> toUpdate = new ArrayList<>();
         for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             toUpdate.add(remoteItem.getItem().getIdentity());
         }

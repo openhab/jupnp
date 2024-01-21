@@ -37,7 +37,7 @@ import java.util.TreeMap;
  */
 public class Query {
 
-    protected final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
+    protected final Map<String, List<String>> parameters = new LinkedHashMap<>();
 
     public static Query newInstance(Map<String, List<String>> parameters) {
         Query query = new Query();
@@ -79,7 +79,7 @@ public class Query {
             }
             List<String> list = parameters.get(name);
             if (list == null) {
-                list = new ArrayList<String>();
+                list = new ArrayList<>();
                 parameters.put(name, list);
             }
             list.add(value);
@@ -114,7 +114,7 @@ public class Query {
     }
 
     public Map<String, String[]> getMap() {
-        Map<String, String[]> map = new TreeMap<String, String[]>();
+        Map<String, String[]> map = new TreeMap<>();
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             List<String> list = entry.getValue();
             String[] values;
@@ -139,7 +139,7 @@ public class Query {
         Map<String, List<String>> params = new HashMap(getMapWithLists());
         List<String> existingValues = params.get(name);
         if (existingValues == null) {
-            existingValues = new ArrayList<String>();
+            existingValues = new ArrayList<>();
             params.put(name, existingValues);
         }
         existingValues.addAll(Arrays.asList(values));

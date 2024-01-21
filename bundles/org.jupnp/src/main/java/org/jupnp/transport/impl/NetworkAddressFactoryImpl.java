@@ -59,11 +59,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     private final Logger log = LoggerFactory.getLogger(NetworkAddressFactoryImpl.class);
 
-    protected final Set<String> useInterfaces = new HashSet<String>();
-    protected final Set<String> useAddresses = new HashSet<String>();
+    protected final Set<String> useInterfaces = new HashSet<>();
+    protected final Set<String> useAddresses = new HashSet<>();
 
-    protected final List<NetworkInterface> networkInterfaces = new ArrayList<NetworkInterface>();
-    protected final List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
+    protected final List<NetworkInterface> networkInterfaces = new ArrayList<>();
+    protected final List<InetAddress> bindAddresses = new ArrayList<>();
 
     protected int streamListenPort;
     protected int multicastResponsePort;
@@ -152,7 +152,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     @Override
     public Iterator<NetworkInterface> getNetworkInterfaces() {
-        return new Iterators.Synchronized<NetworkInterface>(networkInterfaces) {
+        return new Iterators.Synchronized<>(networkInterfaces) {
             @Override
             protected void synchronizedRemove(int index) {
                 synchronized (networkInterfaces) {
@@ -164,7 +164,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     @Override
     public Iterator<InetAddress> getBindAddresses() {
-        return new Iterators.Synchronized<InetAddress>(bindAddresses) {
+        return new Iterators.Synchronized<>(bindAddresses) {
             @Override
             protected void synchronizedRemove(int index) {
                 synchronized (bindAddresses) {

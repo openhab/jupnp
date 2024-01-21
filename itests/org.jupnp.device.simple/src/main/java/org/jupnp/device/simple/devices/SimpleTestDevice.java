@@ -33,7 +33,7 @@ public class SimpleTestDevice extends BaseUPnPDevice {
     private static final String SIMPLE_TEST_DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
 
     private UPnPService[] services;
-    private Map<String, UPnPService> index = new HashMap<String, UPnPService>();
+    private Map<String, UPnPService> index = new HashMap<>();
     private UPnPIcon[] icons = { new SimpleTestDeviceIcon("image/png", 50, 50, 32, 6243, "images/upnp-icon-small.png"),
             new SimpleTestDeviceIcon("image/png", 100, 100, 32, 14812, "images/upnp-icon-large.png"), };
 
@@ -56,7 +56,7 @@ public class SimpleTestDevice extends BaseUPnPDevice {
 
         UPnPService service;
 
-        List<UPnPService> list = new ArrayList<UPnPService>();
+        List<UPnPService> list = new ArrayList<>();
 
         service = new SimpleTestService(this, simple);
         list.add(service);

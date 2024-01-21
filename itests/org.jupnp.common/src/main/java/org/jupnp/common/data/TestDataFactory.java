@@ -68,7 +68,7 @@ public class TestDataFactory {
     public TestData getTestData(String id) {
 
         if (data == null) {
-            data = new Hashtable<String, TestData>();
+            data = new Hashtable<>();
             Properties properties = getProperties();
 
             for (Object key : properties.keySet()) {

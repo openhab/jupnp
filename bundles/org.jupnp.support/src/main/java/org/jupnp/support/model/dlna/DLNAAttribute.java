@@ -51,7 +51,7 @@ public abstract class DLNAAttribute<T> {
         DLNA_ORG_CI("DLNA.ORG_CI", DLNAConversionIndicatorAttribute.class),
         DLNA_ORG_FLAGS("DLNA.ORG_FLAGS", DLNAFlagsAttribute.class);
 
-        private static Map<String, Type> byName = new HashMap<String, Type>() {
+        private static Map<String, Type> byName = new HashMap<>() {
             private static final long serialVersionUID = -4611773458029624524L;
 
             {

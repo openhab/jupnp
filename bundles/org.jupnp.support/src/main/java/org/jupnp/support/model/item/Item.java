@@ -53,23 +53,22 @@ public class Item extends DIDLObject {
     }
 
     public Item(String id, Container parent, String title, String creator, DIDLObject.Class clazz) {
-        this(id, parent.getId(), title, creator, false, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>());
+        this(id, parent.getId(), title, creator, false, null, clazz, new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>());
     }
 
     public Item(String id, Container parent, String title, String creator, DIDLObject.Class clazz, String refID) {
-        this(id, parent.getId(), title, creator, false, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), refID);
+        this(id, parent.getId(), title, creator, false, null, clazz, new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>(), refID);
     }
 
     public Item(String id, String parentID, String title, String creator, DIDLObject.Class clazz) {
-        this(id, parentID, title, creator, false, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>());
+        this(id, parentID, title, creator, false, null, clazz, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Item(String id, String parentID, String title, String creator, DIDLObject.Class clazz, String refID) {
-        this(id, parentID, title, creator, false, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), refID);
+        this(id, parentID, title, creator, false, null, clazz, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+                refID);
     }
 
     public String getRefID() {

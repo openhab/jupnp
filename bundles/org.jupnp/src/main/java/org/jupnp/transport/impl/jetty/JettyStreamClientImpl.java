@@ -152,7 +152,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     @Override
     protected Callable<StreamResponseMessage> createCallable(final StreamRequestMessage requestMessage,
             final Request request) {
-        return new Callable<StreamResponseMessage>() {
+        return new Callable<>() {
             @Override
             public StreamResponseMessage call() throws Exception {
                 log.trace("Sending HTTP request: {}", requestMessage);

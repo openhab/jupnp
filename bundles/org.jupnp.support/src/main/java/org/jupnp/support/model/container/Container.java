@@ -89,30 +89,28 @@ public class Container extends DIDLObject {
 
     public Container(String id, Container parent, String title, String creator, DIDLObject.Class clazz,
             Integer childCount) {
-        this(id, parent.getId(), title, creator, true, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), childCount, false, new ArrayList<Class>(), new ArrayList<Class>(),
-                new ArrayList<Item>());
+        this(id, parent.getId(), title, creator, true, null, clazz, new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>(), childCount, false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Container(String id, String parentID, String title, String creator, DIDLObject.Class clazz,
             Integer childCount) {
-        this(id, parentID, title, creator, true, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), childCount, false, new ArrayList<Class>(), new ArrayList<Class>(),
-                new ArrayList<Item>());
+        this(id, parentID, title, creator, true, null, clazz, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+                childCount, false, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
     }
 
     public Container(String id, Container parent, String title, String creator, DIDLObject.Class clazz,
             Integer childCount, boolean searchable, List<Class> createClasses, List<Class> searchClasses,
             List<Item> items) {
-        this(id, parent.getId(), title, creator, true, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), childCount, searchable, createClasses, searchClasses, items);
+        this(id, parent.getId(), title, creator, true, null, clazz, new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>(), childCount, searchable, createClasses, searchClasses, items);
     }
 
     public Container(String id, String parentID, String title, String creator, DIDLObject.Class clazz,
             Integer childCount, boolean searchable, List<Class> createClasses, List<Class> searchClasses,
             List<Item> items) {
-        this(id, parentID, title, creator, true, null, clazz, new ArrayList<Res>(), new ArrayList<Property<?>>(),
-                new ArrayList<DescMeta<?>>(), childCount, searchable, createClasses, searchClasses, items);
+        this(id, parentID, title, creator, true, null, clazz, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+                childCount, searchable, createClasses, searchClasses, items);
     }
 
     public Integer getChildCount() {

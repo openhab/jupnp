@@ -25,7 +25,7 @@ public abstract class BaseUPnPDevice implements UPnPDevice {
     private UPnPDevice parent;
     private List<String> children = new ArrayList();
 
-    private Dictionary<String, Object> descriptions = new Hashtable<String, Object>();
+    private Dictionary<String, Object> descriptions = new Hashtable<>();
 
     protected void setParent(BaseUPnPDevice parent) {
         this.parent = parent;
