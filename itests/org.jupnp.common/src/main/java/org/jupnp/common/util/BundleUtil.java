@@ -20,14 +20,14 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 
 public class BundleUtil {
-    static private final Object[][] states = { { Integer.valueOf(Bundle.UNINSTALLED), "UNINSTALLED" },
+    private static final Object[][] states = { { Integer.valueOf(Bundle.UNINSTALLED), "UNINSTALLED" },
             { Integer.valueOf(Bundle.INSTALLED), "INSTALLED" }, { Integer.valueOf(Bundle.RESOLVED), "RESOLVED" },
             { Integer.valueOf(Bundle.STARTING), "STARTING" }, { Integer.valueOf(Bundle.STOPPING), "STOPPING" },
             { Integer.valueOf(Bundle.ACTIVE), "ACTIVE" } };
 
-    static private Map<Integer, String> stateLookup;
+    private static Map<Integer, String> stateLookup;
 
-    static private Map<Integer, String> getStateLookup() {
+    private static Map<Integer, String> getStateLookup() {
         if (stateLookup == null) {
             stateLookup = new Hashtable<Integer, String>();
 
@@ -39,7 +39,7 @@ public class BundleUtil {
         return stateLookup;
     }
 
-    static public String getBundleState(Bundle bundle) {
+    public static String getBundleState(Bundle bundle) {
         String state = getStateLookup().get(Integer.valueOf(bundle.getState()));
         return state != null ? state : Integer.valueOf(bundle.getState()).toString();
     }

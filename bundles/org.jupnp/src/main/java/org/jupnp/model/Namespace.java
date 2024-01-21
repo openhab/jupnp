@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Namespace {
 
-    final private Logger log = LoggerFactory.getLogger(Namespace.class);
+    private final Logger log = LoggerFactory.getLogger(Namespace.class);
 
     public static final String DEVICE = "/dev";
     public static final String SERVICE = "/svc";
@@ -68,8 +68,8 @@ public class Namespace {
     public static final String DESCRIPTOR_FILE = "/desc";
     public static final String CALLBACK_FILE = "/cb";
 
-    final protected URI basePath;
-    final protected String decodedPath;
+    protected final URI basePath;
+    protected final String decodedPath;
 
     public Namespace() {
         this("");

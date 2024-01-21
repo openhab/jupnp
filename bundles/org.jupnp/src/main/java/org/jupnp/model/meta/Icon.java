@@ -46,12 +46,12 @@ import org.jupnp.util.io.IO;
  */
 public class Icon implements Validatable {
 
-    final private MimeType mimeType;
-    final private int width;
-    final private int height;
-    final private int depth;
-    final private URI uri;
-    final private byte[] data;
+    private final MimeType mimeType;
+    private final int width;
+    private final int height;
+    private final int depth;
+    private final URI uri;
+    private final byte[] data;
 
     // Package mutable state
     private Device device;

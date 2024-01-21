@@ -31,7 +31,7 @@ public class ModelUtil {
     /**
      * True if this class is executing on an Android runtime
      */
-    final public static boolean ANDROID_RUNTIME;
+    public static final boolean ANDROID_RUNTIME;
     static {
         boolean foundAndroid = false;
         try {
@@ -46,7 +46,7 @@ public class ModelUtil {
     /**
      * True if this class is executing on an Android emulator runtime.
      */
-    final public static boolean ANDROID_EMULATOR;
+    public static final boolean ANDROID_EMULATOR;
     static {
         boolean foundEmulator = false;
         try {

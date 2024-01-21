@@ -43,7 +43,7 @@ import org.jupnp.model.types.UDN;
  */
 public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalService> {
 
-    final private DeviceDetailsProvider deviceDetailsProvider;
+    private final DeviceDetailsProvider deviceDetailsProvider;
 
     public LocalDevice(DeviceIdentity identity) throws ValidationException {
         super(identity);

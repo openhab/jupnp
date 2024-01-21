@@ -15,7 +15,7 @@
 package org.jupnp.common.util;
 
 public class DataUtil {
-    static public boolean compareBytes(byte[] arg1, byte[] arg2) {
+    public static boolean compareBytes(byte[] arg1, byte[] arg2) {
         boolean result = true;
 
         if (arg1.length != arg2.length) {
@@ -31,7 +31,7 @@ public class DataUtil {
         return result;
     }
 
-    static public boolean compareBytes(Byte[] arg1, byte[] arg2) {
+    public static boolean compareBytes(Byte[] arg1, byte[] arg2) {
         byte[] bytes = new byte[arg1.length];
         for (int i = 0; i < arg1.length; i++) {
             bytes[i] = arg1[i].byteValue();

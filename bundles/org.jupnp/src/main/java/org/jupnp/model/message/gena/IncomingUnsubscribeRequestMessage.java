@@ -26,7 +26,7 @@ import org.jupnp.model.meta.LocalService;
  */
 public class IncomingUnsubscribeRequestMessage extends StreamRequestMessage {
 
-    final private LocalService service;
+    private final LocalService service;
 
     public IncomingUnsubscribeRequestMessage(StreamRequestMessage source, LocalService service) {
         super(source);

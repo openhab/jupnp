@@ -36,8 +36,8 @@ import java.util.Set;
  */
 public class Headers implements Map<String, List<String>> {
 
-    final static byte CR = 13;
-    final static byte LF = 10;
+    static final byte CR = 13;
+    static final byte LF = 10;
 
     final Map<String, List<String>> map = new HashMap<String, List<String>>(32);
     private boolean normalizeHeaders = true;

@@ -49,9 +49,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingAction extends SendingSync<OutgoingActionRequestMessage, IncomingActionResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(SendingAction.class);
+    private final Logger log = LoggerFactory.getLogger(SendingAction.class);
 
-    final protected ActionInvocation actionInvocation;
+    protected final ActionInvocation actionInvocation;
 
     public SendingAction(UpnpService upnpService, ActionInvocation actionInvocation, URL controlURL) {
         super(upnpService, new OutgoingActionRequestMessage(actionInvocation, controlURL));

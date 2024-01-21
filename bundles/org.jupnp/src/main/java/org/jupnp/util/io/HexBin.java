@@ -38,10 +38,10 @@ import java.nio.charset.StandardCharsets;
  */
 public final class HexBin {
 
-    static private final int BASELENGTH = 255;
-    static private final int LOOKUPLENGTH = 16;
-    static private byte[] hexNumberTable = new byte[BASELENGTH];
-    static private byte[] lookUpHexAlphabet = new byte[LOOKUPLENGTH];
+    private static final int BASELENGTH = 255;
+    private static final int LOOKUPLENGTH = 16;
+    private static byte[] hexNumberTable = new byte[BASELENGTH];
+    private static byte[] lookUpHexAlphabet = new byte[LOOKUPLENGTH];
 
     static {
         for (int i = 0; i < BASELENGTH; i++) {
@@ -76,7 +76,7 @@ public final class HexBin {
     /**
      * Converts bytes to a hex string
      */
-    static public String bytesToString(byte[] binaryData) {
+    public static String bytesToString(byte[] binaryData) {
         if (binaryData == null)
             return null;
         return new String(encode(binaryData));
@@ -85,7 +85,7 @@ public final class HexBin {
     /**
      * Converts bytes to a hex string with separator (e.g. colon)
      */
-    static public String bytesToString(byte[] binaryData, String separator) {
+    public static String bytesToString(byte[] binaryData, String separator) {
         if (binaryData == null)
             return null;
         String s = new String(encode(binaryData));
@@ -108,14 +108,14 @@ public final class HexBin {
     /**
      * Converts a hex string to a byte array.
      */
-    static public byte[] stringToBytes(String hexEncoded) {
+    public static byte[] stringToBytes(String hexEncoded) {
         return decode(hexEncoded.getBytes());
     }
 
     /**
      * Converts a hex string to a byte array.
      */
-    static public byte[] stringToBytes(String hexEncoded, String separator) {
+    public static byte[] stringToBytes(String hexEncoded, String separator) {
         return decode(hexEncoded.replaceAll(separator, "").getBytes());
     }
 
@@ -125,7 +125,7 @@ public final class HexBin {
      * @param binaryData
      * @return return encode binary array
      */
-    static public byte[] encode(byte[] binaryData) {
+    public static byte[] encode(byte[] binaryData) {
         if (binaryData == null)
             return null;
         int lengthData = binaryData.length;
@@ -138,7 +138,7 @@ public final class HexBin {
         return encodedData;
     }
 
-    static public byte[] decode(byte[] binaryData) {
+    public static byte[] decode(byte[] binaryData) {
         if (binaryData == null)
             return null;
         int lengthData = binaryData.length;

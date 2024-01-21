@@ -25,7 +25,7 @@ import org.jupnp.model.message.header.UserAgentHeader;
  */
 public class ClientInfo {
 
-    final protected UpnpHeaders requestHeaders;
+    protected final UpnpHeaders requestHeaders;
 
     public ClientInfo() {
         this(new UpnpHeaders());

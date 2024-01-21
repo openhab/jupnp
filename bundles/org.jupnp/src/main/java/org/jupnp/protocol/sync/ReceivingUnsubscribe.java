@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(ReceivingUnsubscribe.class);
+    private final Logger log = LoggerFactory.getLogger(ReceivingUnsubscribe.class);
 
     public ReceivingUnsubscribe(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);

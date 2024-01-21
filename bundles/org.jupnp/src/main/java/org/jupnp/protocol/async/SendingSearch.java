@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingSearch extends SendingAsync {
 
-    final private Logger log = LoggerFactory.getLogger(SendingSearch.class);
+    private final Logger log = LoggerFactory.getLogger(SendingSearch.class);
 
     private final UpnpHeader searchTarget;
     private final int mxSeconds;

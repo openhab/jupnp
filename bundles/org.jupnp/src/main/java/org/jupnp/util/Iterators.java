@@ -27,7 +27,7 @@ public class Iterators {
     /**
      * A default implementation with no elements.
      */
-    static public class Empty<E> implements Iterator<E> {
+    public static class Empty<E> implements Iterator<E> {
 
         public boolean hasNext() {
             return false;
@@ -45,9 +45,9 @@ public class Iterators {
     /**
      * A fixed single element.
      */
-    static public class Singular<E> implements Iterator<E> {
+    public static class Singular<E> implements Iterator<E> {
 
-        final protected E element;
+        protected final E element;
         protected int current;
 
         public Singular(E element) {
@@ -75,7 +75,7 @@ public class Iterators {
      * <code>remove()</code> is called, delegates to {@link #synchronizedRemove(int)}.
      * </p>
      */
-    static public abstract class Synchronized<E> implements Iterator<E> {
+    public abstract static class Synchronized<E> implements Iterator<E> {
 
         final Iterator<E> wrapped;
 
@@ -109,6 +109,6 @@ public class Iterators {
          * Must remove the element at the given index from the original collection in a
          * thread-safe fashion.
          */
-        abstract protected void synchronizedRemove(int index);
+        protected abstract void synchronizedRemove(int index);
     }
 }

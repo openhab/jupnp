@@ -39,10 +39,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AsyncServletUpnpStream extends ServletUpnpStream implements AsyncListener {
 
-    final private Logger log = LoggerFactory.getLogger(AsyncServletUpnpStream.class);
+    private final Logger log = LoggerFactory.getLogger(AsyncServletUpnpStream.class);
 
-    final protected AsyncContext asyncContext;
-    final protected HttpServletRequest request;
+    protected final AsyncContext asyncContext;
+    protected final HttpServletRequest request;
 
     public AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext,
             HttpServletRequest request) {

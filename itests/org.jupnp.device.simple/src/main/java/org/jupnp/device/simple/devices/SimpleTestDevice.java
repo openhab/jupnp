@@ -29,8 +29,8 @@ import org.osgi.service.upnp.UPnPIcon;
 import org.osgi.service.upnp.UPnPService;
 
 public class SimpleTestDevice extends BaseUPnPDevice {
-    static private final String SIMPLE_TEST_DEVICE_ID = String.format("SIMPLE-TEST-DEVICE-%s", UUID.randomUUID());
-    static private final String SIMPLE_TEST_DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
+    private static final String SIMPLE_TEST_DEVICE_ID = String.format("SIMPLE-TEST-DEVICE-%s", UUID.randomUUID());
+    private static final String SIMPLE_TEST_DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
 
     private UPnPService[] services;
     private Map<String, UPnPService> index = new HashMap<String, UPnPService>();

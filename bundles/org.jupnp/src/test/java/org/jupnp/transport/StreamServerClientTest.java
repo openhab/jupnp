@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class StreamServerClientTest {
 
-    final private static Logger log = LoggerFactory.getLogger(StreamServerClientTest.class);
+    private static final Logger log = LoggerFactory.getLogger(StreamServerClientTest.class);
 
     public static final String TEST_HOST = "localhost";
     public static final int TEST_PORT = getAvailablePort();
@@ -248,8 +248,8 @@ public abstract class StreamServerClientTest {
         return new StreamRequestMessage(UpnpRequest.Method.GET, uri);
     }
 
-    public static abstract class TestProtocol extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
-        volatile public boolean isComplete;
+    public abstract static class TestProtocol extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
+        public volatile boolean isComplete;
 
         public TestProtocol(StreamRequestMessage inputMessage) {
             super(null, inputMessage);

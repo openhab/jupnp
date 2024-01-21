@@ -37,7 +37,7 @@ import java.util.TreeMap;
  */
 public class Query {
 
-    final protected Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
+    protected final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
 
     public static Query newInstance(Map<String, List<String>> parameters) {
         Query query = new Query();

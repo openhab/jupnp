@@ -31,9 +31,9 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class StateVariableAllowedValueRange implements Validatable {
 
-    final private long minimum;
-    final private long maximum;
-    final private long step;
+    private final long minimum;
+    private final long maximum;
+    private final long step;
 
     public StateVariableAllowedValueRange(long minimum, long maximum) {
         this(minimum, maximum, 1);

@@ -103,11 +103,11 @@ public abstract class ActionCallback implements Runnable {
         return actionInvocation;
     }
 
-    synchronized public ControlPoint getControlPoint() {
+    public synchronized ControlPoint getControlPoint() {
         return controlPoint;
     }
 
-    synchronized public ActionCallback setControlPoint(ControlPoint controlPoint) {
+    public synchronized ActionCallback setControlPoint(ControlPoint controlPoint) {
         this.controlPoint = controlPoint;
         return this;
     }

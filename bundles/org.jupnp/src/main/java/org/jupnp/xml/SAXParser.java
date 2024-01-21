@@ -46,7 +46,7 @@ public class SAXParser {
     public static final URL XML_SCHEMA_RESOURCE = Thread.currentThread().getContextClassLoader()
             .getResource("org.jupnp/schemas/xml.xsd");
 
-    final private XMLReader xr;
+    private final XMLReader xr;
 
     public SAXParser() {
         this(null);

@@ -66,19 +66,19 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
      * block the network communication.
      */
 
-    synchronized public void establish() {
+    public synchronized void establish() {
         established();
     }
 
-    synchronized public void fail(UpnpResponse responseStatus) {
+    public synchronized void fail(UpnpResponse responseStatus) {
         failed(responseStatus);
     }
 
-    synchronized public void end(CancelReason reason, UpnpResponse response) {
+    public synchronized void end(CancelReason reason, UpnpResponse response) {
         ended(reason, response);
     }
 
-    synchronized public void receive(UnsignedIntegerFourBytes sequence, Collection<StateVariableValue> newValues) {
+    public synchronized void receive(UnsignedIntegerFourBytes sequence, Collection<StateVariableValue> newValues) {
 
         if (this.currentSequence != null) {
 

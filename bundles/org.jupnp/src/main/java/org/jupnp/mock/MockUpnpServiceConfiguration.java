@@ -33,8 +33,8 @@ import org.jupnp.transport.spi.NetworkAddressFactory;
  */
 public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-    final protected boolean maintainsRegistry;
-    final protected boolean multiThreaded;
+    protected final boolean maintainsRegistry;
+    protected final boolean multiThreaded;
 
     /**
      * Does not maintain registry, single threaded execution.

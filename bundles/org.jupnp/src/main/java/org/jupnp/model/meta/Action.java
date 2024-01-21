@@ -30,10 +30,10 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class Action<S extends Service> implements Validatable {
 
-    final private String name;
-    final private ActionArgument[] arguments;
-    final private ActionArgument[] inputArguments;
-    final private ActionArgument[] outputArguments;
+    private final String name;
+    private final ActionArgument[] arguments;
+    private final ActionArgument[] inputArguments;
+    private final ActionArgument[] outputArguments;
 
     // Package mutable state
     private S service;

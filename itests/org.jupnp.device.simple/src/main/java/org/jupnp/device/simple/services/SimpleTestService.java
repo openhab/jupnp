@@ -34,17 +34,17 @@ import org.osgi.service.upnp.UPnPService;
 import org.osgi.service.upnp.UPnPStateVariable;
 
 public class SimpleTestService implements UPnPService {
-    static private final String SERVICE_ID = "urn:4thline-com:serviceId:SimpleTest";
-    static private final String SERVICE_TYPE = "urn:schemas-4thline-com:service:SimpleTest:1";
-    static private final int FIELD_UPNP_TYPE = 0;
-    static private final int FIELD_JAVA_TYPE = 1;
-    static private final int FIELD_DEFAULT_VALUE = 2;
-    static private final int FIELD_VALUE = 3;
-    static private final String TEST_DATA_ID = "initial";
+    private static final String SERVICE_ID = "urn:4thline-com:serviceId:SimpleTest";
+    private static final String SERVICE_TYPE = "urn:schemas-4thline-com:service:SimpleTest:1";
+    private static final int FIELD_UPNP_TYPE = 0;
+    private static final int FIELD_JAVA_TYPE = 1;
+    private static final int FIELD_DEFAULT_VALUE = 2;
+    private static final int FIELD_VALUE = 3;
+    private static final String TEST_DATA_ID = "initial";
 
-    static private final long time = System.currentTimeMillis();
+    private static final long time = System.currentTimeMillis();
 
-    static private Object[][] records = {
+    private static Object[][] records = {
             // Integer ui1, ui2, i1, i2, i4, int
             { UPnPLocalStateVariable.TYPE_UI1, Integer.class, new Integer(0), new Integer(1) },
             { UPnPLocalStateVariable.TYPE_UI2, Integer.class, new Integer(0), new Integer(2) },
@@ -86,7 +86,7 @@ public class SimpleTestService implements UPnPService {
             { UPnPLocalStateVariable.TYPE_BIN_HEX, byte[].class, new byte[] {},
                     new byte[] { (byte) 0x10, (byte) 0x01, (byte) 0xF0, (byte) 0x0F } }, };
 
-    static private TestData data = TestDataFactory.getInstance().getTestData(TEST_DATA_ID);
+    private static TestData data = TestDataFactory.getInstance().getTestData(TEST_DATA_ID);
 
     private TestStateVariable[] variables;
     private Map<String, UPnPStateVariable> variablesIndex = new HashMap<String, UPnPStateVariable>();

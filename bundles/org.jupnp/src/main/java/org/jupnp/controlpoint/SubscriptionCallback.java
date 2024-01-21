@@ -93,23 +93,23 @@ public abstract class SubscriptionCallback implements Runnable {
         return service;
     }
 
-    synchronized public ControlPoint getControlPoint() {
+    public synchronized ControlPoint getControlPoint() {
         return controlPoint;
     }
 
-    synchronized public void setControlPoint(ControlPoint controlPoint) {
+    public synchronized void setControlPoint(ControlPoint controlPoint) {
         this.controlPoint = controlPoint;
     }
 
-    synchronized public GENASubscription getSubscription() {
+    public synchronized GENASubscription getSubscription() {
         return subscription;
     }
 
-    synchronized public void setSubscription(GENASubscription subscription) {
+    public synchronized void setSubscription(GENASubscription subscription) {
         this.subscription = subscription;
     }
 
-    synchronized public void run() {
+    public synchronized void run() {
         if (getControlPoint() == null) {
             throw new IllegalStateException("Callback must be executed through ControlPoint");
         }
@@ -243,7 +243,7 @@ public abstract class SubscriptionCallback implements Runnable {
         protocol.run();
     }
 
-    synchronized public void end() {
+    public synchronized void end() {
         if (subscription == null)
             return;
         if (subscription instanceof LocalGENASubscription) {

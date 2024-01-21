@@ -26,8 +26,8 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class VariableValue {
 
-    final private Datatype datatype;
-    final private Object value;
+    private final Datatype datatype;
+    private final Object value;
 
     /**
      * Creates and validates a variable value.

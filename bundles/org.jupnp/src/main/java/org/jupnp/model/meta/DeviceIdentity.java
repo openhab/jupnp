@@ -29,8 +29,8 @@ import org.jupnp.model.types.UDN;
  */
 public class DeviceIdentity implements Validatable {
 
-    final private UDN udn;
-    final private Integer maxAgeSeconds;
+    private final UDN udn;
+    private final Integer maxAgeSeconds;
 
     public DeviceIdentity(UDN udn, DeviceIdentity template) {
         this.udn = udn;

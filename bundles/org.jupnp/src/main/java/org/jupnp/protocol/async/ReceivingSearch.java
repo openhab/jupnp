@@ -68,7 +68,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     private final boolean LOG_ENABLED = log.isTraceEnabled();
 
-    final protected Random randomGenerator = new Random();
+    protected final Random randomGenerator = new Random();
 
     public ReceivingSearch(UpnpService upnpService, IncomingDatagramMessage<UpnpRequest> inputMessage) {
         super(upnpService, new IncomingSearchRequest(inputMessage));

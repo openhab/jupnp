@@ -567,7 +567,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         throw e;
     }
 
-    static protected URI parseURI(String uri) {
+    protected static URI parseURI(String uri) {
         // TODO: UPNP VIOLATION: Netgear DG834 uses a non-URI: 'www.netgear.com'
         if (uri.startsWith("www.")) {
             uri = "http://" + uri;

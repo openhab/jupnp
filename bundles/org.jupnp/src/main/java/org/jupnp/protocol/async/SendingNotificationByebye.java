@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingNotificationByebye extends SendingNotification {
 
-    final private Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
 
     public SendingNotificationByebye(UpnpService upnpService, LocalDevice device) {
         super(upnpService, device);

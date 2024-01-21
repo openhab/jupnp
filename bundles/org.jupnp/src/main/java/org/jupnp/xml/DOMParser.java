@@ -575,7 +575,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         }
     }
 
-    public static abstract class NodeVisitor {
+    public abstract static class NodeVisitor {
         private short nodeType;
 
         protected NodeVisitor(short nodeType) {

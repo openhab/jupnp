@@ -25,7 +25,7 @@ import com.beust.jcommander.ParameterException;
  */
 public class MainCommandPoolConfigurationValidator implements IParameterValidator {
 
-    private final static String ERROR_MSG = "Paramer --pool must be of format "
+    private static final String ERROR_MSG = "Paramer --pool must be of format "
             + "'<mainPoolSize>,<asyncPoolSize>[,stats]'";
 
     public void validate(String name, String value) throws ParameterException {

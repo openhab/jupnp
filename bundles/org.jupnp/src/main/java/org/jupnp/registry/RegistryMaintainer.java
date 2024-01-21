@@ -26,8 +26,8 @@ public class RegistryMaintainer implements Runnable {
 
     private Logger log = LoggerFactory.getLogger(RegistryMaintainer.class);
 
-    final private RegistryImpl registry;
-    final private int sleepIntervalMillis;
+    private final RegistryImpl registry;
+    private final int sleepIntervalMillis;
 
     private volatile boolean stopped = false;
 

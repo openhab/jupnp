@@ -31,8 +31,8 @@ import org.jupnp.model.types.InvalidValueException;
  */
 public class ActionInvocation<S extends Service> {
 
-    final protected Action<S> action;
-    final protected ClientInfo clientInfo;
+    protected final Action<S> action;
+    protected final ClientInfo clientInfo;
 
     // We don't necessarily have to preserve insertion order but it's nicer if the arrays returned
     // by the getters are reliable

@@ -35,7 +35,7 @@ import org.jupnp.model.types.UnsignedIntegerFourBytes;
  */
 public class OutgoingEventRequestMessage extends StreamRequestMessage {
 
-    final private Collection<StateVariableValue> stateVariableValues;
+    private final Collection<StateVariableValue> stateVariableValues;
 
     public OutgoingEventRequestMessage(GENASubscription subscription, URL callbackURL,
             UnsignedIntegerFourBytes sequence, Collection<StateVariableValue> values) {

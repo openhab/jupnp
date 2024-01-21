@@ -26,7 +26,7 @@ import org.jupnp.model.types.InvalidValueException;
  */
 public class ActionArgumentValue<S extends Service> extends VariableValue {
 
-    final private ActionArgument<S> argument;
+    private final ActionArgument<S> argument;
 
     public ActionArgumentValue(ActionArgument<S> argument, Object value) throws InvalidValueException {
         super(argument.getDatatype(), value != null && value.getClass().isEnum() ? value.toString() : value);

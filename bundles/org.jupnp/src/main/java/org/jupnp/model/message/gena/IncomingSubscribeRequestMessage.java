@@ -30,7 +30,7 @@ import org.jupnp.model.meta.LocalService;
  */
 public class IncomingSubscribeRequestMessage extends StreamRequestMessage {
 
-    final private LocalService service;
+    private final LocalService service;
 
     public IncomingSubscribeRequestMessage(StreamRequestMessage source, LocalService service) {
         super(source);

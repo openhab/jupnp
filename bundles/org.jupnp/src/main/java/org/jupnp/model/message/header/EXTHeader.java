@@ -20,7 +20,7 @@ package org.jupnp.model.message.header;
 public class EXTHeader extends UpnpHeader<String> {
 
     // That's just an empty header! Isn't that great...
-    public final static String DEFAULT_VALUE = "";
+    public static final String DEFAULT_VALUE = "";
 
     public EXTHeader() {
         setValue(DEFAULT_VALUE);

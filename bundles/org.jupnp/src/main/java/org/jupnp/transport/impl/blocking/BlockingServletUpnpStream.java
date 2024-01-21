@@ -32,7 +32,7 @@ import org.jupnp.transport.impl.ServletUpnpStream;
  */
 public abstract class BlockingServletUpnpStream extends ServletUpnpStream {
 
-    final protected FauxAsyncContext asyncContext;
+    protected final FauxAsyncContext asyncContext;
 
     protected StreamResponseMessage responseMessage;
 

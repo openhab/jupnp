@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
  */
 public abstract class DIDLObject {
 
-    public static abstract class Property<V> {
+    public abstract static class Property<V> {
 
         public interface NAMESPACE {
         }
@@ -205,7 +205,7 @@ public abstract class DIDLObject {
             }
         }
 
-        public static abstract class SEC {
+        public abstract static class SEC {
 
             public interface NAMESPACE extends Property.NAMESPACE {
                 String URI = "http://www.sec.co.kr/";
@@ -250,7 +250,7 @@ public abstract class DIDLObject {
             }
         }
 
-        public static abstract class UPNP {
+        public abstract static class UPNP {
 
             public interface NAMESPACE extends Property.NAMESPACE {
                 String URI = "urn:schemas-upnp-org:metadata-1-0/upnp/";
@@ -560,7 +560,7 @@ public abstract class DIDLObject {
             }
         }
 
-        public static abstract class DLNA {
+        public abstract static class DLNA {
 
             public interface NAMESPACE extends Property.NAMESPACE {
                 String URI = "urn:schemas-dlna-org:metadata-1-0/";

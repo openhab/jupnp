@@ -33,16 +33,16 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class DeviceDetails implements Validatable {
 
-    final private URL baseURL;
-    final private String friendlyName;
-    final private ManufacturerDetails manufacturerDetails;
-    final private ModelDetails modelDetails;
-    final private String serialNumber;
-    final private String upc;
-    final private URI presentationURI;
-    final private DLNADoc[] dlnaDocs;
-    final private DLNACaps dlnaCaps;
-    final private DLNACaps secProductCaps;
+    private final URL baseURL;
+    private final String friendlyName;
+    private final ManufacturerDetails manufacturerDetails;
+    private final ModelDetails modelDetails;
+    private final String serialNumber;
+    private final String upc;
+    private final URI presentationURI;
+    private final DLNADoc[] dlnaDocs;
+    private final DLNACaps dlnaCaps;
+    private final DLNACaps secProductCaps;
 
     public DeviceDetails(String friendlyName) {
         this(null, friendlyName, null, null, null, null, null);

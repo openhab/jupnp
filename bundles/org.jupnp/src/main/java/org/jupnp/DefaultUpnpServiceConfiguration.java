@@ -94,28 +94,28 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     // core size is a poor choice when there are lots of long-running + idle jobs.
     // a brief intro to the issue:
     // http://www.bigsoft.co.uk/blog/2009/11/27/rules-of-a-threadpoolexecutor-pool-size
-    final private static int CORE_THREAD_POOL_SIZE = 16;
-    final private static int THREAD_POOL_SIZE = 200;
-    final private static int THREAD_QUEUE_SIZE = 1000;
-    final private static boolean THREAD_POOL_CORE_TIMEOUT = true;
+    private static final int CORE_THREAD_POOL_SIZE = 16;
+    private static final int THREAD_POOL_SIZE = 200;
+    private static final int THREAD_QUEUE_SIZE = 1000;
+    private static final boolean THREAD_POOL_CORE_TIMEOUT = true;
 
-    final private int streamListenPort;
-    final private int multicastResponsePort;
+    private final int streamListenPort;
+    private final int multicastResponsePort;
 
-    final private ExecutorService defaultExecutorService;
+    private final ExecutorService defaultExecutorService;
 
-    final private DatagramProcessor datagramProcessor;
-    final private SOAPActionProcessor soapActionProcessor;
-    final private GENAEventProcessor genaEventProcessor;
+    private final DatagramProcessor datagramProcessor;
+    private final SOAPActionProcessor soapActionProcessor;
+    private final GENAEventProcessor genaEventProcessor;
 
-    final private DeviceDescriptorBinder deviceDescriptorBinderUDA10;
-    final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+    private final DeviceDescriptorBinder deviceDescriptorBinderUDA10;
+    private final ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
-    final private Namespace namespace;
+    private final Namespace namespace;
     private StreamClientConfiguration configuration;
 
     @SuppressWarnings("rawtypes")
-    final private TransportConfiguration transportConfiguration;
+    private final TransportConfiguration transportConfiguration;
 
     /**
      * Defaults to port '0', ephemeral.

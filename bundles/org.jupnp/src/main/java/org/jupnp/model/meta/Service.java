@@ -37,11 +37,11 @@ public abstract class Service<D extends Device, S extends Service> {
 
     private final Logger log = LoggerFactory.getLogger(Service.class);
 
-    final private ServiceType serviceType;
-    final private ServiceId serviceId;
+    private final ServiceType serviceType;
+    private final ServiceId serviceId;
 
-    final private Map<String, Action> actions = new HashMap();
-    final private Map<String, StateVariable> stateVariables = new HashMap();
+    private final Map<String, Action> actions = new HashMap();
+    private final Map<String, StateVariable> stateVariables = new HashMap();
 
     // Package mutable state
     private D device;

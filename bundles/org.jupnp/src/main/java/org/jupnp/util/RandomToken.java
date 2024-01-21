@@ -22,7 +22,7 @@ import java.util.Random;
  */
 public class RandomToken {
 
-    final protected Random random;
+    protected final Random random;
 
     public RandomToken() {
         try {

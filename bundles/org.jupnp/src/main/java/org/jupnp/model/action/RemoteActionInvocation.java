@@ -24,7 +24,7 @@ import org.jupnp.model.profile.RemoteClientInfo;
  */
 public class RemoteActionInvocation extends ActionInvocation {
 
-    final protected RemoteClientInfo remoteClientInfo;
+    protected final RemoteClientInfo remoteClientInfo;
 
     public RemoteActionInvocation(Action action, ActionArgumentValue[] input, ActionArgumentValue[] output,
             RemoteClientInfo remoteClientInfo) {

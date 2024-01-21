@@ -48,7 +48,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
 
     protected StreamResponseMessage responseMessage;
 
-    final protected Logger log = LoggerFactory.getLogger(ServletUpnpStream.class);
+    protected final Logger log = LoggerFactory.getLogger(ServletUpnpStream.class);
 
     public ServletUpnpStream(ProtocolFactory protocolFactory) {
         super(protocolFactory);
@@ -179,11 +179,11 @@ public abstract class ServletUpnpStream extends UpnpStream {
         }
     }
 
-    abstract protected Connection createConnection();
+    protected abstract Connection createConnection();
 
-    abstract protected HttpServletRequest getRequest();
+    protected abstract HttpServletRequest getRequest();
 
-    abstract protected HttpServletResponse getResponse();
+    protected abstract HttpServletResponse getResponse();
 
-    abstract protected void complete();
+    protected abstract void complete();
 }

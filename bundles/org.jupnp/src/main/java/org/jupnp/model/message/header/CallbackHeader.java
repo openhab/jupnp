@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CallbackHeader extends UpnpHeader<List<URL>> {
 
-    final private Logger log = LoggerFactory.getLogger(CallbackHeader.class);
+    private final Logger log = LoggerFactory.getLogger(CallbackHeader.class);
 
     public CallbackHeader() {
         setValue(new ArrayList());

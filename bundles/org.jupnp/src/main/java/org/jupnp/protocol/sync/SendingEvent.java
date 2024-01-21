@@ -40,11 +40,11 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, StreamResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(SendingEvent.class);
+    private final Logger log = LoggerFactory.getLogger(SendingEvent.class);
 
-    final protected String subscriptionId;
-    final protected OutgoingEventRequestMessage[] requestMessages;
-    final protected UnsignedIntegerFourBytes currentSequence;
+    protected final String subscriptionId;
+    protected final OutgoingEventRequestMessage[] requestMessages;
+    protected final UnsignedIntegerFourBytes currentSequence;
 
     public SendingEvent(UpnpService upnpService, LocalGENASubscription subscription) {
         super(upnpService, null); // Special case, we actually need to send several messages to each callback URL

@@ -34,7 +34,7 @@ import org.jupnp.transport.RouterException;
 public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage>
         extends SendingAsync {
 
-    final private IN inputMessage;
+    private final IN inputMessage;
     protected OUT outputMessage;
 
     protected SendingSync(UpnpService upnpService, IN inputMessage) {
@@ -50,7 +50,7 @@ public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends S
         return outputMessage;
     }
 
-    final protected void execute() throws RouterException {
+    protected final void execute() throws RouterException {
         outputMessage = executeSync();
     }
 

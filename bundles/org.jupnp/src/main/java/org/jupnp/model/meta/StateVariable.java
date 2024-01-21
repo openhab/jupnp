@@ -31,9 +31,9 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class StateVariable<S extends Service> implements Validatable {
 
-    final private String name;
-    final private StateVariableTypeDetails type;
-    final private StateVariableEventDetails eventDetails;
+    private final String name;
+    private final StateVariableTypeDetails type;
+    private final StateVariableEventDetails eventDetails;
 
     // Package mutable state
     private S service;

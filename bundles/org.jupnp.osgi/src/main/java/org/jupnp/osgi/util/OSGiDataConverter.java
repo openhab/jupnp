@@ -92,7 +92,7 @@ public class OSGiDataConverter {
         return (builtin.equals(Builtin.BIN_BASE64));
     }
 
-    static public Object toOSGiValue(Datatype type, Object input) {
+    public static Object toOSGiValue(Datatype type, Object input) {
         Object output = null;
 
         if (isInteger(type.getBuiltin())) {
@@ -283,7 +283,7 @@ public class OSGiDataConverter {
         return output;
     }
 
-    static public Object tojUPnPValue(String type, Object value) {
+    public static Object tojUPnPValue(String type, Object value) {
         if (value instanceof Date) {
             Date date = (Date) value;
 

@@ -175,5 +175,5 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
         }
     }
 
-    abstract protected Connection createConnection();
+    protected abstract Connection createConnection();
 }

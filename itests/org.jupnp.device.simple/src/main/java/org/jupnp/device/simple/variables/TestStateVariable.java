@@ -30,7 +30,7 @@ import org.osgi.service.upnp.UPnPLocalStateVariable;
 import org.osgi.service.upnp.UPnPService;
 
 public class TestStateVariable implements Observer, UPnPLocalStateVariable {
-    final static String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
+    static final String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
     private UPnPDevice device;
     private UPnPService service;
     private String name;

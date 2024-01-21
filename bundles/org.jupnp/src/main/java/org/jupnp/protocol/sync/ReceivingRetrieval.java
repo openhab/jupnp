@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(ReceivingRetrieval.class);
+    private final Logger log = LoggerFactory.getLogger(ReceivingRetrieval.class);
 
     public ReceivingRetrieval(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);

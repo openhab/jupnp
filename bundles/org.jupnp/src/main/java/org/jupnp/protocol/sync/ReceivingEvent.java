@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, OutgoingEventResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(ReceivingEvent.class);
+    private final Logger log = LoggerFactory.getLogger(ReceivingEvent.class);
 
     public ReceivingEvent(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);

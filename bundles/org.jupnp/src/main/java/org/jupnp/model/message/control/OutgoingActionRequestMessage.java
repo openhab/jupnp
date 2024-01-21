@@ -37,7 +37,7 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
 
     private Logger log = LoggerFactory.getLogger(OutgoingActionRequestMessage.class);
 
-    final private String actionNamespace;
+    private final String actionNamespace;
 
     public OutgoingActionRequestMessage(ActionInvocation actionInvocation, URL controlURL) {
         this(actionInvocation.getAction(), new UpnpRequest(UpnpRequest.Method.POST, controlURL));

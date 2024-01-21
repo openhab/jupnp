@@ -51,9 +51,9 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
 
     private Logger log = LoggerFactory.getLogger(DefaultServiceManager.class);
 
-    final protected LocalService<T> service;
-    final protected Class<T> serviceClass;
-    final protected ReentrantLock lock = new ReentrantLock(true);
+    protected final LocalService<T> service;
+    protected final Class<T> serviceClass;
+    protected final ReentrantLock lock = new ReentrantLock(true);
 
     // Locking!
     protected T serviceImpl;

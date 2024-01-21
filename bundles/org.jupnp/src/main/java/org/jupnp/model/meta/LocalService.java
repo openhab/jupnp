@@ -38,10 +38,10 @@ import org.jupnp.model.types.ServiceType;
  */
 public class LocalService<T> extends Service<LocalDevice, LocalService> {
 
-    final protected Map<Action, ActionExecutor> actionExecutors;
-    final protected Map<StateVariable, StateVariableAccessor> stateVariableAccessors;
-    final protected Set<Class> stringConvertibleTypes;
-    final protected boolean supportsQueryStateVariables;
+    protected final Map<Action, ActionExecutor> actionExecutors;
+    protected final Map<StateVariable, StateVariableAccessor> stateVariableAccessors;
+    protected final Set<Class> stringConvertibleTypes;
+    protected final boolean supportsQueryStateVariables;
 
     protected ServiceManager manager;
 
@@ -68,14 +68,14 @@ public class LocalService<T> extends Service<LocalDevice, LocalService> {
         this.actionExecutors = actionExecutors;
     }
 
-    synchronized public void setManager(ServiceManager<T> manager) {
+    public synchronized void setManager(ServiceManager<T> manager) {
         if (this.manager != null) {
             throw new IllegalStateException("Manager is final");
         }
         this.manager = manager;
     }
 
-    synchronized public ServiceManager<T> getManager() {
+    public synchronized ServiceManager<T> getManager() {
         if (manager == null) {
             throw new IllegalStateException("Unmanaged service, no implementation instance available");
         }

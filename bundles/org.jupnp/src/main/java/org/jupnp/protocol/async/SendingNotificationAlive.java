@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingNotificationAlive extends SendingNotification {
 
-    final private Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
 
     public SendingNotificationAlive(UpnpService upnpService, LocalDevice device) {
         super(upnpService, device);

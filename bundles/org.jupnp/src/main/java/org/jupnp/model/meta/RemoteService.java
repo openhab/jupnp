@@ -34,9 +34,9 @@ import org.jupnp.model.types.ServiceType;
  */
 public class RemoteService extends Service<RemoteDevice, RemoteService> {
 
-    final private URI descriptorURI;
-    final private URI controlURI;
-    final private URI eventSubscriptionURI;
+    private final URI descriptorURI;
+    private final URI controlURI;
+    private final URI eventSubscriptionURI;
 
     public RemoteService(ServiceType serviceType, ServiceId serviceId, URI descriptorURI, URI controlURI,
             URI eventSubscriptionURI) throws ValidationException {

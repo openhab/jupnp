@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class SendingNotification extends SendingAsync {
 
-    final private Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
 
     private LocalDevice device;
 

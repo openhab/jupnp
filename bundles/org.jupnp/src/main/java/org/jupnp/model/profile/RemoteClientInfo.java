@@ -35,8 +35,8 @@ import org.jupnp.model.message.header.UserAgentHeader;
  */
 public class RemoteClientInfo extends ClientInfo {
 
-    final protected Connection connection;
-    final protected UpnpHeaders extraResponseHeaders = new UpnpHeaders();
+    protected final Connection connection;
+    protected final UpnpHeaders extraResponseHeaders = new UpnpHeaders();
 
     public RemoteClientInfo() {
         this(null);

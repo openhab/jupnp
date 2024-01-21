@@ -36,8 +36,8 @@ public class ServiceReference {
 
     public static final String DELIMITER = "/";
 
-    final private UDN udn;
-    final private ServiceId serviceId;
+    private final UDN udn;
+    private final ServiceId serviceId;
 
     public ServiceReference(String s) {
         String[] split = s.split("/");

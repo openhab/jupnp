@@ -29,8 +29,8 @@ import org.jupnp.model.types.SoapActionType;
  */
 public class IncomingActionRequestMessage extends StreamRequestMessage implements ActionRequestMessage {
 
-    final private Action action;
-    final private String actionNamespace;
+    private final Action action;
+    private final String actionNamespace;
 
     public IncomingActionRequestMessage(StreamRequestMessage source, LocalService service) throws ActionException {
         super(source);

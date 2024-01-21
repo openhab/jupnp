@@ -45,14 +45,14 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     private final Logger log = LoggerFactory.getLogger(Device.class);
 
-    final private DI identity;
+    private final DI identity;
 
-    final private UDAVersion version;
-    final private DeviceType type;
-    final private DeviceDetails details;
-    final private Icon[] icons;
-    final protected S[] services;
-    final protected D[] embeddedDevices;
+    private final UDAVersion version;
+    private final DeviceType type;
+    private final DeviceDetails details;
+    private final Icon[] icons;
+    protected final S[] services;
+    protected final D[] embeddedDevices;
 
     // Package mutable state
     private D parentDevice;

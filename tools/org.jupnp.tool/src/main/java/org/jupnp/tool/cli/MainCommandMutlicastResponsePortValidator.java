@@ -22,7 +22,7 @@ import com.beust.jcommander.ParameterException;
  */
 public class MainCommandMutlicastResponsePortValidator implements IParameterValidator {
 
-    private final static String ERROR_MSG = "Parameter --multicastResponsePort ";
+    private static final String ERROR_MSG = "Parameter --multicastResponsePort ";
 
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--multicastResponsePort")) {

@@ -98,25 +98,25 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         this.callbackURLs = callbackURLs;
     }
 
-    synchronized public List<URL> getCallbackURLs() {
+    public synchronized List<URL> getCallbackURLs() {
         return callbackURLs;
     }
 
     /**
      * Adds a property change listener on the {@link org.jupnp.model.ServiceManager}.
      */
-    synchronized public void registerOnService() {
+    public synchronized void registerOnService() {
         getService().getManager().getPropertyChangeSupport().addPropertyChangeListener(this);
     }
 
-    synchronized public void establish() {
+    public synchronized void establish() {
         established();
     }
 
     /**
      * Removes a property change listener on the {@link org.jupnp.model.ServiceManager}.
      */
-    synchronized public void end(CancelReason reason) {
+    public synchronized void end(CancelReason reason) {
         try {
             getService().getManager().getPropertyChangeSupport().removePropertyChangeListener(this);
         } catch (Exception ex) {
@@ -129,7 +129,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * Moderates {@link org.jupnp.model.ServiceManager#EVENTED_STATE_VARIABLES} events and state variable
      * values, calls {@link #eventReceived()}.
      */
-    synchronized public void propertyChange(PropertyChangeEvent e) {
+    public synchronized void propertyChange(PropertyChangeEvent e) {
         if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES))
             return;
 
@@ -174,7 +174,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * @param values The state variable values to moderate.
      * @return A collection of state variable values that although they might have changed, are excluded from the event.
      */
-    synchronized protected Set<String> moderateStateVariables(long currentTime, Collection<StateVariableValue> values) {
+    protected synchronized Set<String> moderateStateVariables(long currentTime, Collection<StateVariableValue> values) {
 
         Set<String> excludedVariables = new HashSet();
 
@@ -229,7 +229,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         return excludedVariables;
     }
 
-    synchronized public void incrementSequence() {
+    public synchronized void incrementSequence() {
         this.currentSequence.increment(true);
     }
 
@@ -237,7 +237,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * @param requestedDurationSeconds If <code>null</code> defaults to
      *            {@link org.jupnp.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}
      */
-    synchronized public void setSubscriptionDuration(Integer requestedDurationSeconds) {
+    public synchronized void setSubscriptionDuration(Integer requestedDurationSeconds) {
         this.requestedDurationSeconds = requestedDurationSeconds == null
                 ? UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS
                 : requestedDurationSeconds;

@@ -39,11 +39,11 @@ public class ActionArgument<S extends Service> implements Validatable {
         OUT
     }
 
-    final private String name;
-    final private String[] aliases;
-    final private String relatedStateVariableName;
-    final private Direction direction;
-    final private boolean returnValue; // TODO: What is this stuff good for anyway?
+    private final String name;
+    private final String[] aliases;
+    private final String relatedStateVariableName;
+    private final Direction direction;
+    private final boolean returnValue; // TODO: What is this stuff good for anyway?
 
     // Package mutable state
     private Action<S> action;

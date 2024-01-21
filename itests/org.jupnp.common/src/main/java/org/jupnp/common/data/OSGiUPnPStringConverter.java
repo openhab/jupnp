@@ -290,7 +290,7 @@ public class OSGiUPnPStringConverter {
         return (type.equals(TYPE_BIN_BASE64) || type.equals(TYPE_BIN_HEX));
     }
 
-    static public Object toOSGiUPnPValue(String type, String string, Object value) {
+    public static Object toOSGiUPnPValue(String type, String string, Object value) {
         Object output = null;
 
         if (isInteger(type)) {
@@ -320,7 +320,7 @@ public class OSGiUPnPStringConverter {
         return output;
     }
 
-    static public Object toOSGiUPnPValue(String type, String string) {
+    public static Object toOSGiUPnPValue(String type, String string) {
         return toOSGiUPnPValue(type, string, null);
     }
 
@@ -442,7 +442,7 @@ public class OSGiUPnPStringConverter {
         return string != null ? string.getBytes() : value != null ? value : type.getBytes();
     }
 
-    static public Object tojUPnPUPnPValue(String type, Object value) {
+    public static Object tojUPnPUPnPValue(String type, Object value) {
         if (value instanceof Date) {
             Date date = (Date) value;
 

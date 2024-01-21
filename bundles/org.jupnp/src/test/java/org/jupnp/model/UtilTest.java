@@ -35,8 +35,8 @@ import org.xml.sax.InputSource;
 
 class UtilTest {
 
-    final protected DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-    final protected DocumentBuilder documentBuilder;
+    protected final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+    protected final DocumentBuilder documentBuilder;
 
     public UtilTest() {
         try {

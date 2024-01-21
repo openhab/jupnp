@@ -46,8 +46,8 @@ public class DLNADoc {
         }
     }
 
-    final private String devClass;
-    final private String version;
+    private final String devClass;
+    private final String version;
 
     public DLNADoc(String devClass, String version) {
         this.devClass = devClass;

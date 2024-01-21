@@ -41,7 +41,7 @@ public class BlockingServlet extends HttpServlet {
      */
     private static final long serialVersionUID = 3124088565842038644L;
 
-    final private Logger log = LoggerFactory.getLogger(BlockingServlet.class);
+    private final Logger log = LoggerFactory.getLogger(BlockingServlet.class);
 
     private final Router router;
 

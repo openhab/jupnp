@@ -25,16 +25,16 @@ import org.slf4j.LoggerFactory;
 
 public class TestDataFactory {
     private static final Logger log = LoggerFactory.getLogger(TestDataFactory.class);
-    static private String DEFAULT_FILE = "test-data-factory.properties";
-    static private String DEFAULT_KEY = "org.jupnp.osgi.test.data.factory.properties";
-    static public TestDataFactory instance;
+    private static String DEFAULT_FILE = "test-data-factory.properties";
+    private static String DEFAULT_KEY = "org.jupnp.osgi.test.data.factory.properties";
+    public static TestDataFactory instance;
 
     private String file = DEFAULT_FILE;
     private String key = DEFAULT_KEY;
     private Properties properties;
     private Map<String, TestData> data;
 
-    static public TestDataFactory getInstance() {
+    public static TestDataFactory getInstance() {
         if (instance == null) {
             instance = new TestDataFactory();
         }

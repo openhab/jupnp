@@ -199,7 +199,7 @@ public class URIUtil {
      * http://www.lunatech-research.com/archives/2009/02/03/what-every-web-developer-must-know-about-url-encoding
      */
 
-    public final static BitSet ALLOWED = new BitSet() {
+    public static final BitSet ALLOWED = new BitSet() {
         {
             int i;
             for (i = 'a'; i <= 'z'; i++) {
@@ -231,14 +231,14 @@ public class URIUtil {
         }
     };
 
-    public final static BitSet PATH_SEGMENT = new BitSet() {
+    public static final BitSet PATH_SEGMENT = new BitSet() {
         {
             or(ALLOWED);
             clear(';');
         }
     };
 
-    public final static BitSet PATH_PARAM_NAME = new BitSet() {
+    public static final BitSet PATH_PARAM_NAME = new BitSet() {
         {
             or(ALLOWED);
             clear(';');
@@ -246,14 +246,14 @@ public class URIUtil {
         }
     };
 
-    public final static BitSet PATH_PARAM_VALUE = new BitSet() {
+    public static final BitSet PATH_PARAM_VALUE = new BitSet() {
         {
             or(ALLOWED);
             clear(';');
         }
     };
 
-    public final static BitSet QUERY = new BitSet() {
+    public static final BitSet QUERY = new BitSet() {
         {
             or(ALLOWED);
             set('/');
@@ -264,7 +264,7 @@ public class URIUtil {
         }
     };
 
-    public final static BitSet FRAGMENT = new BitSet() {
+    public static final BitSet FRAGMENT = new BitSet() {
         {
             or(ALLOWED);
             set('/');

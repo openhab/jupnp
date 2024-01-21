@@ -44,7 +44,7 @@ public class AsyncServlet extends HttpServlet {
      */
     private static final long serialVersionUID = -5751553619541219814L;
 
-    final private Logger log = LoggerFactory.getLogger(AsyncServlet.class);
+    private final Logger log = LoggerFactory.getLogger(AsyncServlet.class);
 
     private final Router router;
 

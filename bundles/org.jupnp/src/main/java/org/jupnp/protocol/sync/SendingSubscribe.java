@@ -46,9 +46,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessage, IncomingSubscribeResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(SendingSubscribe.class);
+    private final Logger log = LoggerFactory.getLogger(SendingSubscribe.class);
 
-    final protected RemoteGENASubscription subscription;
+    protected final RemoteGENASubscription subscription;
 
     public SendingSubscribe(UpnpService upnpService, RemoteGENASubscription subscription,
             List<NetworkAddress> activeStreamServers) {

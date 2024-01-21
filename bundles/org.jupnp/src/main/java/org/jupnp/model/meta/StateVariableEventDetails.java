@@ -21,9 +21,9 @@ package org.jupnp.model.meta;
  */
 public class StateVariableEventDetails {
 
-    final private boolean sendEvents;
-    final private int eventMaximumRateMilliseconds;
-    final private int eventMinimumDelta;
+    private final boolean sendEvents;
+    private final int eventMaximumRateMilliseconds;
+    private final int eventMinimumDelta;
 
     public StateVariableEventDetails() {
         this(true, 0, 0);

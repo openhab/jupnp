@@ -319,7 +319,7 @@ public class SearchCommand {
             Collections.sort(results, comparator);
         }
 
-        private final static String STRING_WITH_SPACES = "                           ";
+        private static final String STRING_WITH_SPACES = "                           ";
 
         private String fixedWidth(String s, int width) {
             if (s == null) {

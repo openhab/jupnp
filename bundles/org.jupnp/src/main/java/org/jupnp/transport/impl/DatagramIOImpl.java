@@ -58,7 +58,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
      * 
      */
 
-    final protected DatagramIOConfigurationImpl configuration;
+    protected final DatagramIOConfigurationImpl configuration;
 
     protected Router router;
     protected DatagramProcessor datagramProcessor;
@@ -74,8 +74,8 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         return configuration;
     }
 
-    synchronized public void init(InetAddress bindAddress, int bindPort, Router router,
-            DatagramProcessor datagramProcessor) throws InitializationException {
+    public synchronized void init(InetAddress bindAddress, int bindPort, Router router,
+                                  DatagramProcessor datagramProcessor) throws InitializationException {
 
         this.router = router;
         this.datagramProcessor = datagramProcessor;
@@ -95,7 +95,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         }
     }
 
-    synchronized public void stop() {
+    public synchronized void stop() {
         if (socket != null && !socket.isClosed()) {
             socket.close();
         }
@@ -137,7 +137,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         }
     }
 
-    synchronized public void send(OutgoingDatagramMessage message) {
+    public synchronized void send(OutgoingDatagramMessage message) {
         log.debug("Sending message from address: {}", localAddress);
 
         DatagramPacket packet = datagramProcessor.write(message);
@@ -148,7 +148,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         send(packet);
     }
 
-    synchronized public void send(DatagramPacket datagram) {
+    public synchronized void send(DatagramPacket datagram) {
         log.debug("Sending message from address: {}", localAddress);
 
         try {

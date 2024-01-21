@@ -61,8 +61,8 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
         }
     }
 
-    final private DeviceDetails defaultDeviceDetails;
-    final private Map<Key, DeviceDetails> headerDetails;
+    private final DeviceDetails defaultDeviceDetails;
+    private final Map<Key, DeviceDetails> headerDetails;
 
     public HeaderDeviceDetailsProvider(DeviceDetails defaultDeviceDetails) {
         this(defaultDeviceDetails, null);

@@ -45,9 +45,9 @@ import org.slf4j.LoggerFactory;
 public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage>
         extends ReceivingAsync<IN> {
 
-    final private Logger log = LoggerFactory.getLogger(UpnpService.class);
+    private final Logger log = LoggerFactory.getLogger(UpnpService.class);
 
-    final protected RemoteClientInfo remoteClientInfo;
+    protected final RemoteClientInfo remoteClientInfo;
     protected OUT outputMessage;
 
     protected ReceivingSync(UpnpService upnpService, IN inputMessage) {
@@ -59,7 +59,7 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
         return outputMessage;
     }
 
-    final protected void execute() throws RouterException {
+    protected final void execute() throws RouterException {
         outputMessage = executeSync();
 
         if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {

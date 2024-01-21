@@ -38,9 +38,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMessage, StreamResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(SendingUnsubscribe.class);
+    private final Logger log = LoggerFactory.getLogger(SendingUnsubscribe.class);
 
-    final protected RemoteGENASubscription subscription;
+    protected final RemoteGENASubscription subscription;
 
     public SendingUnsubscribe(UpnpService upnpService, RemoteGENASubscription subscription) {
         super(upnpService, new OutgoingUnsubscribeRequestMessage(subscription,

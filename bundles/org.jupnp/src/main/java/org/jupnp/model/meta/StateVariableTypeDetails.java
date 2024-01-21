@@ -31,10 +31,10 @@ import org.jupnp.util.SpecificationViolationReporter;
  */
 public class StateVariableTypeDetails implements Validatable {
 
-    final private Datatype datatype;
-    final private String defaultValue;
-    final private String[] allowedValues;
-    final private StateVariableAllowedValueRange allowedValueRange;
+    private final Datatype datatype;
+    private final String defaultValue;
+    private final String[] allowedValues;
+    private final StateVariableAllowedValueRange allowedValueRange;
 
     public StateVariableTypeDetails(Datatype datatype) {
         this(datatype, null, null, null);

@@ -41,9 +41,9 @@ import org.jupnp.model.types.UDN;
  */
 public class RemoteDeviceIdentity extends DeviceIdentity {
 
-    final private URL descriptorURL;
-    final private byte[] interfaceMacAddress;
-    final private InetAddress discoveredOnLocalAddress;
+    private final URL descriptorURL;
+    private final byte[] interfaceMacAddress;
+    private final InetAddress discoveredOnLocalAddress;
 
     public RemoteDeviceIdentity(UDN udn, RemoteDeviceIdentity template) {
         this(udn, template.getMaxAgeSeconds(), template.getDescriptorURL(), template.getInterfaceMacAddress(),

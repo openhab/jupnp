@@ -40,9 +40,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, IncomingSubscribeResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(SendingRenewal.class);
+    private final Logger log = LoggerFactory.getLogger(SendingRenewal.class);
 
-    final protected RemoteGENASubscription subscription;
+    protected final RemoteGENASubscription subscription;
 
     public SendingRenewal(UpnpService upnpService, RemoteGENASubscription subscription) {
         super(upnpService, new OutgoingRenewalRequestMessage(subscription,

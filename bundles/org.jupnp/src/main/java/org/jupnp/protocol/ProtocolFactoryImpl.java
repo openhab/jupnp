@@ -62,7 +62,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ProtocolFactoryImpl implements ProtocolFactory {
 
-    final private Logger log = LoggerFactory.getLogger(ProtocolFactory.class);
+    private final Logger log = LoggerFactory.getLogger(ProtocolFactory.class);
 
     protected final UpnpService upnpService;
 

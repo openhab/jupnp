@@ -17,7 +17,7 @@ package org.jupnp.model.types;
 /**
  * @author Christian Bauer
  */
-final public class UnsignedIntegerOneByte extends UnsignedVariableInteger {
+public final class UnsignedIntegerOneByte extends UnsignedVariableInteger {
 
     public UnsignedIntegerOneByte(long value) throws NumberFormatException {
         super(value);

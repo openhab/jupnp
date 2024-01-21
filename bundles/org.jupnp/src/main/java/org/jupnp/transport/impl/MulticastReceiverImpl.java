@@ -44,7 +44,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
     private Logger log = LoggerFactory.getLogger(MulticastReceiver.class);
 
-    final protected MulticastReceiverConfigurationImpl configuration;
+    protected final MulticastReceiverConfigurationImpl configuration;
 
     protected Router router;
     protected NetworkAddressFactory networkAddressFactory;
@@ -62,8 +62,8 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
         return configuration;
     }
 
-    synchronized public void init(NetworkInterface networkInterface, Router router,
-            NetworkAddressFactory networkAddressFactory, DatagramProcessor datagramProcessor)
+    public synchronized void init(NetworkInterface networkInterface, Router router,
+                                  NetworkAddressFactory networkAddressFactory, DatagramProcessor datagramProcessor)
             throws InitializationException {
 
         this.router = router;
@@ -90,7 +90,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
         }
     }
 
-    synchronized public void stop() {
+    public synchronized void stop() {
         if (socket != null && !socket.isClosed()) {
             try {
                 log.debug("Leaving multicast group");

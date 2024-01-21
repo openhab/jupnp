@@ -145,23 +145,23 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
      * Create a proprietary representation of this request, log warnings and
      * return <code>null</code> if creation fails.
      */
-    abstract protected REQUEST createRequest(StreamRequestMessage requestMessage);
+    protected abstract REQUEST createRequest(StreamRequestMessage requestMessage);
 
     /**
      * Create a callable procedure that will execute the request.
      */
-    abstract protected Callable<StreamResponseMessage> createCallable(StreamRequestMessage requestMessage,
+    protected abstract Callable<StreamResponseMessage> createCallable(StreamRequestMessage requestMessage,
             REQUEST request);
 
     /**
      * Cancel and abort the request immediately, with the proprietary API.
      */
-    abstract protected void abort(REQUEST request);
+    protected abstract void abort(REQUEST request);
 
     /**
      * @return <code>true</code> if no more logging of this exception should be done.
      */
-    abstract protected boolean logExecutionException(Throwable t);
+    protected abstract boolean logExecutionException(Throwable t);
 
     protected void onFinally(REQUEST request) {
         // Do nothing

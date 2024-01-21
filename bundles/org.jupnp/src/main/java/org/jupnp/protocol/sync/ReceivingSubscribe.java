@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, OutgoingSubscribeResponseMessage> {
 
-    final private Logger log = LoggerFactory.getLogger(ReceivingSubscribe.class);
+    private final Logger log = LoggerFactory.getLogger(ReceivingSubscribe.class);
 
     protected LocalGENASubscription subscription;
 
