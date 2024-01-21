@@ -75,7 +75,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
     }
 
     public synchronized void init(InetAddress bindAddress, int bindPort, Router router,
-                                  DatagramProcessor datagramProcessor) throws InitializationException {
+            DatagramProcessor datagramProcessor) throws InitializationException {
 
         this.router = router;
         this.datagramProcessor = datagramProcessor;

@@ -45,5 +45,5 @@ public interface LocalServiceBinder {
      * @throws LocalServiceBindingException If binding failed.
      */
     LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
-                      Class[] stringConvertibleTypes) throws LocalServiceBindingException;
+            Class[] stringConvertibleTypes) throws LocalServiceBindingException;
 }

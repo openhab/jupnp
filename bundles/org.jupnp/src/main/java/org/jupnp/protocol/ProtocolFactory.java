@@ -99,8 +99,7 @@ public interface ProtocolFactory {
     /**
      * Called by the {@link org.jupnp.controlpoint.ControlPoint}, creates a protocol for GENA subscription.
      */
-    SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription)
-            throws ProtocolCreationException;
+    SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription) throws ProtocolCreationException;
 
     /**
      * Called by the {@link org.jupnp.controlpoint.ControlPoint}, creates a protocol for GENA renewal.

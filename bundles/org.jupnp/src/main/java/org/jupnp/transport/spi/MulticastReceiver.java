@@ -53,7 +53,7 @@ public interface MulticastReceiver<C extends MulticastReceiverConfiguration> ext
      * @throws InitializationException If the service could not be initialized or started.
      */
     void init(NetworkInterface networkInterface, Router router, NetworkAddressFactory networkAddressFactory,
-              DatagramProcessor datagramProcessor) throws InitializationException;
+            DatagramProcessor datagramProcessor) throws InitializationException;
 
     /**
      * Stops the service, closes any listening sockets.

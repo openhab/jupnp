@@ -69,6 +69,5 @@ public interface SOAPActionProcessor {
      * @param actionInvocation The action invocation on which output argument values are set.
      * @throws UnsupportedDataException
      */
-    void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation)
-            throws UnsupportedDataException;
+    void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation) throws UnsupportedDataException;
 }

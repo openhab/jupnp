@@ -63,7 +63,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
     }
 
     public synchronized void init(NetworkInterface networkInterface, Router router,
-                                  NetworkAddressFactory networkAddressFactory, DatagramProcessor datagramProcessor)
+            NetworkAddressFactory networkAddressFactory, DatagramProcessor datagramProcessor)
             throws InitializationException {
 
         this.router = router;

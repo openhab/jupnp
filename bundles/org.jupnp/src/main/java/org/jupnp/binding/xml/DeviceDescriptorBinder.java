@@ -35,6 +35,5 @@ public interface DeviceDescriptorBinder {
 
     String generate(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
 
-    Document buildDOM(Device device, RemoteClientInfo info, Namespace namespace)
-            throws DescriptorBindingException;
+    Document buildDOM(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
 }
