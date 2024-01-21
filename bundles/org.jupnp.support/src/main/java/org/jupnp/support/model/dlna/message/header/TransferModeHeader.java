@@ -38,7 +38,7 @@ public class TransferModeHeader extends DLNAHeader<TransferModeHeader.Type> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 setValue(TransferModeHeader.Type.valueOf(s));
                 return;

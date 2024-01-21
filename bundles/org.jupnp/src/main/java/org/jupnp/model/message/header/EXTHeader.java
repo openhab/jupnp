@@ -27,7 +27,7 @@ public class EXTHeader extends UpnpHeader<String> {
     }
 
     public void setString(String s) throws InvalidHeaderException {
-        if (s != null && s.length() > 0) {
+        if (s != null && !s.isEmpty()) {
             throw new InvalidHeaderException("Invalid EXT header, it has no value: " + s);
         }
     }

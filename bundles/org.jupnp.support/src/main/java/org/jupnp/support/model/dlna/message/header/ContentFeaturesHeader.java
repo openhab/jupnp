@@ -30,7 +30,7 @@ public class ContentFeaturesHeader extends DLNAHeader<EnumMap<DLNAAttribute.Type
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             String[] atts = s.split(";");
             for (String att : atts) {
                 String[] attNameValue = att.split("=");
@@ -50,8 +50,8 @@ public class ContentFeaturesHeader extends DLNAHeader<EnumMap<DLNAAttribute.Type
         String s = "";
         for (DLNAAttribute.Type type : DLNAAttribute.Type.values()) {
             String value = getValue().containsKey(type) ? getValue().get(type).getString() : null;
-            if (value != null && value.length() != 0) {
-                s += (s.length() == 0 ? "" : ";") + type.getAttributeName() + "=" + value;
+            if (value != null && !value.isEmpty()) {
+                s += (s.isEmpty() ? "" : ";") + type.getAttributeName() + "=" + value;
             }
         }
         return s;

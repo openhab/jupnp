@@ -208,7 +208,7 @@ public class RouterImpl implements Router {
     public List<NetworkAddress> getActiveStreamServers(InetAddress preferredAddress) throws RouterException {
         lock(readLock);
         try {
-            if (enabled && streamServers.size() > 0) {
+            if (enabled && !streamServers.isEmpty()) {
                 List<NetworkAddress> streamServerAddresses = new ArrayList<NetworkAddress>();
 
                 StreamServer preferredServer;

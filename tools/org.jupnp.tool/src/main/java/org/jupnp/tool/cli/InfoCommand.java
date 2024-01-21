@@ -127,7 +127,7 @@ public class InfoCommand {
         } else {
             String s;
             if (o instanceof String) {
-                if (((String) o).length() == 0) {
+                if (((String) o).isEmpty()) {
                     s = "\"\"";
                 } else {
                     s = (String) o;

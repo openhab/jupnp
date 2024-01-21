@@ -36,7 +36,7 @@ public class DLNACaps {
     }
 
     public static DLNACaps valueOf(String s) throws InvalidValueException {
-        if (s == null || s.length() == 0)
+        if (s == null || s.isEmpty())
             return new DLNACaps(new String[0]);
         String[] caps = s.split(",");
         String[] trimmed = new String[caps.length];

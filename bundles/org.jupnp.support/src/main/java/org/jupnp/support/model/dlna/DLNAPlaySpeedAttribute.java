@@ -45,7 +45,7 @@ public class DLNAPlaySpeedAttribute extends DLNAAttribute<TransportPlaySpeed[]> 
 
     public void setString(String s, String cf) {
         TransportPlaySpeed[] value = null;
-        if (s != null && s.length() != 0) {
+        if (s != null && !s.isEmpty()) {
             String[] speeds = s.split(",");
             try {
                 value = new TransportPlaySpeed[speeds.length];

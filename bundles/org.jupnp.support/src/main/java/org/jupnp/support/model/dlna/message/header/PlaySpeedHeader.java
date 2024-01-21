@@ -33,7 +33,7 @@ public class PlaySpeedHeader extends DLNAHeader<TransportPlaySpeed> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 TransportPlaySpeed t = new TransportPlaySpeed(s);
                 setValue(t);

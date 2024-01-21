@@ -62,7 +62,7 @@ public class LastChange {
     }
 
     public LastChange(LastChangeParser parser, String xml) throws Exception {
-        if (xml != null && xml.length() > 0) {
+        if (xml != null && !xml.isEmpty()) {
             this.event = parser.parse(xml);
         } else {
             this.event = new Event();
@@ -110,7 +110,7 @@ public class LastChange {
 
     public synchronized void fire(PropertyChangeSupport propertyChangeSupport) {
         String lastChanges = toString();
-        if (lastChanges != null && lastChanges.length() > 0) {
+        if (lastChanges != null && !lastChanges.isEmpty()) {
             propertyChangeSupport.firePropertyChange("LastChange", previousValue, lastChanges);
             reset();
         }

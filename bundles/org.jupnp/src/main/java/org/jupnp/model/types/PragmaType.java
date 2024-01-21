@@ -68,7 +68,7 @@ public class PragmaType {
     }
 
     public static PragmaType valueOf(String s) throws InvalidValueException {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             String token = null, value = null;
             boolean quote = false;
             String[] params = s.split("=");

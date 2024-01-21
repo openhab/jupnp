@@ -109,7 +109,7 @@ public class DIDLParser extends SAXParser {
      */
     public DIDLContent parse(String xml) throws Exception {
 
-        if (xml == null || xml.length() == 0) {
+        if (xml == null || xml.isEmpty()) {
             throw new RuntimeException("Null or empty XML");
         }
 
@@ -577,7 +577,7 @@ public class DIDLParser extends SAXParser {
             boolean appendDerivation) {
         Element classElement = appendNewElementIfNotNull(descriptor, parent, element, clazz.getValue(),
                 DIDLObject.Property.UPNP.NAMESPACE.URI);
-        if (clazz.getFriendlyName() != null && clazz.getFriendlyName().length() > 0)
+        if (clazz.getFriendlyName() != null && !clazz.getFriendlyName().isEmpty())
             classElement.setAttribute("name", clazz.getFriendlyName());
         if (appendDerivation)
             classElement.setAttribute("includeDerived", Boolean.toString(clazz.isIncludeDerived()));
@@ -964,7 +964,7 @@ public class DIDLParser extends SAXParser {
                 return;
 
             // Ignore whitespace
-            if (getCharacters().length() > 0 && !getCharacters().matches("[\\t\\n\\x0B\\f\\r\\s]+"))
+            if (!getCharacters().isEmpty() && !getCharacters().matches("[\\t\\n\\x0B\\f\\r\\s]+"))
                 current.appendChild(getInstance().getMetadata().createTextNode(getCharacters()));
 
             current = (Element) current.getParentNode();

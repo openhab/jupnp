@@ -137,7 +137,7 @@ public class RemoteDevice extends Device<RemoteDeviceIdentity, RemoteDevice, Rem
     public RemoteDevice newInstance(UDN udn, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons,
             RemoteService[] services, List<RemoteDevice> embeddedDevices) throws ValidationException {
         return new RemoteDevice(new RemoteDeviceIdentity(udn, getIdentity()), version, type, details, icons, services,
-                embeddedDevices.size() > 0 ? embeddedDevices.toArray(new RemoteDevice[embeddedDevices.size()]) : null);
+                !embeddedDevices.isEmpty() ? embeddedDevices.toArray(new RemoteDevice[embeddedDevices.size()]) : null);
     }
 
     @Override

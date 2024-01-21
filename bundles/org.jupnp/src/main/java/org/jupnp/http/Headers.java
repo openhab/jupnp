@@ -54,7 +54,7 @@ public class Headers implements Map<String, List<String>> {
         Headers headers = new Headers();
         String line = readLine(sb, inputStream);
         String lastHeader = null;
-        if (line.length() != 0) {
+        if (!line.isEmpty()) {
             do {
                 char firstChar = line.charAt(0);
                 if (lastHeader != null && (firstChar == ' ' || firstChar == '\t')) {
@@ -70,7 +70,7 @@ public class Headers implements Map<String, List<String>> {
 
                 sb.delete(0, sb.length());
                 line = readLine(sb, inputStream);
-            } while (line.length() != 0);
+            } while (!line.isEmpty());
         }
         putAll(headers);
     }
@@ -140,7 +140,7 @@ public class Headers implements Map<String, List<String>> {
 
     public String getFirstHeader(String key) {
         List<String> l = map.get(normalize(key));
-        return l != null && l.size() > 0 ? l.get(0) : null;
+        return l != null && !l.isEmpty() ? l.get(0) : null;
     }
 
     public void add(String key, String value) {
@@ -165,7 +165,7 @@ public class Headers implements Map<String, List<String>> {
         if (normalizeHeaders) {
             if (key == null)
                 return null;
-            if (key.length() == 0)
+            if (key.isEmpty())
                 return key;
             char[] b;
             b = key.toCharArray();

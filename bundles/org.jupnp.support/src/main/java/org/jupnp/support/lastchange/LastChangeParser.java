@@ -106,7 +106,7 @@ public abstract class LastChangeParser extends SAXParser {
 
     public Event parse(String xml) throws Exception {
 
-        if (xml == null || xml.length() == 0) {
+        if (xml == null || xml.isEmpty()) {
             throw new RuntimeException("Null or empty XML");
         }
 

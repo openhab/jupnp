@@ -78,7 +78,7 @@ public class AnnotationActionBinder {
     public Action appendAction(Map<Action, ActionExecutor> actions) throws LocalServiceBindingException {
 
         String name;
-        if (getAnnotation().name().length() != 0) {
+        if (!getAnnotation().name().isEmpty()) {
             name = getAnnotation().name();
         } else {
             name = AnnotationLocalServiceBinder.toUpnpActionName(getMethod().getName());
@@ -168,7 +168,7 @@ public class AnnotationActionBinder {
                     argumentName, getMethod().getName());
 
             // Might-just-work attempt, try the name of the getter
-            if (stateVariable == null && outputArgumentAnnotation.getterName().length() > 0) {
+            if (stateVariable == null && !outputArgumentAnnotation.getterName().isEmpty()) {
                 stateVariable = findRelatedStateVariable(null, null, outputArgumentAnnotation.getterName());
             }
 
@@ -198,7 +198,7 @@ public class AnnotationActionBinder {
 
         if (isVoid) {
 
-            if (getterName != null && getterName.length() > 0) {
+            if (getterName != null && !getterName.isEmpty()) {
                 log.trace("Action method is void, will use getter method named: {}", getterName);
 
                 // Use the same class as the action method
@@ -216,7 +216,7 @@ public class AnnotationActionBinder {
                 return getStateVariables().get(stateVariable);
             }
 
-        } else if (getterName != null && getterName.length() > 0) {
+        } else if (getterName != null && !getterName.isEmpty()) {
             log.trace("Action method is not void, will use getter method on returned instance: {}", getterName);
 
             // Use the returned class
@@ -242,17 +242,17 @@ public class AnnotationActionBinder {
 
         StateVariable relatedStateVariable = null;
 
-        if (declaredName != null && declaredName.length() > 0) {
+        if (declaredName != null && !declaredName.isEmpty()) {
             relatedStateVariable = getStateVariable(declaredName);
         }
 
-        if (relatedStateVariable == null && argumentName != null && argumentName.length() > 0) {
+        if (relatedStateVariable == null && argumentName != null && !argumentName.isEmpty()) {
             String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(argumentName);
             log.trace("Finding related state variable with argument name (converted to UPnP name): {}", actualName);
             relatedStateVariable = getStateVariable(argumentName);
         }
 
-        if (relatedStateVariable == null && argumentName != null && argumentName.length() > 0) {
+        if (relatedStateVariable == null && argumentName != null && !argumentName.isEmpty()) {
             // Try with A_ARG_TYPE prefix
             String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(argumentName);
             actualName = Constants.ARG_TYPE_PREFIX + actualName;
@@ -261,7 +261,7 @@ public class AnnotationActionBinder {
             relatedStateVariable = getStateVariable(actualName);
         }
 
-        if (relatedStateVariable == null && methodName != null && methodName.length() > 0) {
+        if (relatedStateVariable == null && methodName != null && !methodName.isEmpty()) {
             // TODO: Well, this is often a nice shortcut but sometimes might have false positives
             String methodPropertyName = Reflections.getMethodPropertyName(methodName);
             if (methodPropertyName != null) {

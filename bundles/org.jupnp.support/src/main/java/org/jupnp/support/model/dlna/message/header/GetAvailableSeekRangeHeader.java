@@ -28,7 +28,7 @@ public class GetAvailableSeekRangeHeader extends DLNAHeader<Integer> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 int t = Integer.parseInt(s);
                 if (t == 1)

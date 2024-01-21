@@ -140,7 +140,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             ActionArgumentValue<LocalService> inputValue = actionInvocation.getInput(argument);
 
             // If it's a primitive argument, we need a value
-            if (methodParameterType.isPrimitive() && (inputValue == null || inputValue.toString().length() == 0))
+            if (methodParameterType.isPrimitive() && (inputValue == null || inputValue.toString().isEmpty()))
                 throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID, "Primitive action method argument '"
                         + argument.getName() + "' requires input value, can't be null or empty string");
 
@@ -153,7 +153,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             // If it's not null, maybe it was a string-convertible type, if so, try to instantiate it
             String inputCallValueString = inputValue.toString();
             // Empty string means null and we can't instantiate Enums!
-            if (inputCallValueString.length() > 0 && service.isStringConvertibleType(methodParameterType)
+            if (!inputCallValueString.isEmpty() && service.isStringConvertibleType(methodParameterType)
                     && !methodParameterType.isEnum()) {
                 try {
                     Constructor<String> ctor = methodParameterType.getConstructor(String.class);

@@ -150,7 +150,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             UpnpStateVariables variables = clazz.getAnnotation(UpnpStateVariables.class);
             for (UpnpStateVariable v : variables.value()) {
 
-                if (v.name().length() == 0)
+                if (v.name().isEmpty())
                     throw new LocalServiceBindingException(
                             "Class-level @UpnpStateVariable name attribute value required");
 
@@ -186,7 +186,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             StateVariableAccessor accessor = new FieldStateVariableAccessor(field);
 
             StateVariable stateVar = new AnnotationStateVariableBinder(svAnnotation,
-                    svAnnotation.name().length() == 0 ? toUpnpStateVariableName(field.getName()) : svAnnotation.name(),
+                    svAnnotation.name().isEmpty() ? toUpnpStateVariableName(field.getName()) : svAnnotation.name(),
                     accessor, stringConvertibleTypes).createStateVariable();
 
             map.put(stateVar, accessor);
@@ -209,7 +209,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             StateVariableAccessor accessor = new GetterStateVariableAccessor(getter);
 
             StateVariable stateVar = new AnnotationStateVariableBinder(svAnnotation,
-                    svAnnotation.name().length() == 0 ? toUpnpStateVariableName(propertyName) : svAnnotation.name(),
+                    svAnnotation.name().isEmpty() ? toUpnpStateVariableName(propertyName) : svAnnotation.name(),
                     accessor, stringConvertibleTypes).createStateVariable();
 
             map.put(stateVar, accessor);
@@ -246,28 +246,28 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
     // TODO: I don't like the exceptions much, user has no idea what to do
 
     static String toUpnpStateVariableName(String javaName) {
-        if (javaName.length() < 1) {
+        if (javaName.isEmpty()) {
             throw new IllegalArgumentException("Variable name must be at least 1 character long");
         }
         return javaName.substring(0, 1).toUpperCase(Locale.ENGLISH) + javaName.substring(1);
     }
 
     static String toJavaStateVariableName(String upnpName) {
-        if (upnpName.length() < 1) {
+        if (upnpName.isEmpty()) {
             throw new IllegalArgumentException("Variable name must be at least 1 character long");
         }
         return upnpName.substring(0, 1).toLowerCase(Locale.ENGLISH) + upnpName.substring(1);
     }
 
     static String toUpnpActionName(String javaName) {
-        if (javaName.length() < 1) {
+        if (javaName.isEmpty()) {
             throw new IllegalArgumentException("Action name must be at least 1 character long");
         }
         return javaName.substring(0, 1).toUpperCase(Locale.ENGLISH) + javaName.substring(1);
     }
 
     static String toJavaActionName(String upnpName) {
-        if (upnpName.length() < 1) {
+        if (upnpName.isEmpty()) {
             throw new IllegalArgumentException("Variable name must be at least 1 character long");
         }
         return upnpName.substring(0, 1).toLowerCase(Locale.ENGLISH) + upnpName.substring(1);

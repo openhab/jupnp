@@ -139,7 +139,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         List<URL> callbackURLs = requestMessage.getCallbackURLs();
 
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
-        if (callbackURLs == null || callbackURLs.size() == 0) {
+        if (callbackURLs == null || callbackURLs.isEmpty()) {
             log.trace("Missing or invalid Callback URLs in subscribe request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }

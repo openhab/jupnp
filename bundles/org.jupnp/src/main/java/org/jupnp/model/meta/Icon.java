@@ -60,7 +60,7 @@ public class Icon implements Validatable {
      * Used internally by jUPnP when {@link RemoteDevice} is discovered, you shouldn't have to call this.
      */
     public Icon(String mimeType, int width, int height, int depth, URI uri) {
-        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, uri,
+        this(mimeType != null && !mimeType.isEmpty() ? MimeType.valueOf(mimeType) : null, width, height, depth, uri,
                 null);
     }
 
@@ -98,7 +98,7 @@ public class Icon implements Validatable {
      * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
      */
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, byte[] data) {
-        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth,
+        this(mimeType != null && !mimeType.isEmpty() ? MimeType.valueOf(mimeType) : null, width, height, depth,
                 URI.create(uniqueName), data);
     }
 

@@ -117,7 +117,7 @@ public class MimeType {
             throw new IllegalArgumentException("Error parsing string: " + stringValue);
         }
 
-        if (params != null && params.length() > 0) {
+        if (params != null && !params.isEmpty()) {
             HashMap<String, String> map = new HashMap();
 
             int start = 0;
@@ -228,7 +228,7 @@ public class MimeType {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(toStringNoParameters());
-        if (getParameters() != null || getParameters().size() > 0) {
+        if (getParameters() != null || !getParameters().isEmpty()) {
             for (String name : getParameters().keySet()) {
                 sb.append(";").append(name).append("=\"").append(getParameters().get(name)).append("\"");
             }

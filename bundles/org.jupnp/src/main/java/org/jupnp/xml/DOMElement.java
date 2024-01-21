@@ -73,7 +73,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
 
     public String getAttribute(String attribute) {
         String v = getW3CElement().getAttribute(attribute);
-        return v.length() > 0 ? v : null;
+        return !v.isEmpty() ? v : null;
     }
 
     public DOMElement setAttribute(String attribute, String value) {
@@ -191,7 +191,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
             Node attr = map.item(i);
             sb.append(" ").append(attr.getNodeName()).append("=\"").append(attr.getTextContent()).append("\"");
         }
-        if (getContent().length() > 0) {
+        if (!getContent().isEmpty()) {
             sb.append(">").append(getContent()).append("</").append(getElementName()).append(">");
         } else {
             sb.append("/>");

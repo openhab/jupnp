@@ -67,7 +67,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
             throws DescriptorBindingException, ValidationException {
-        if (descriptorXml == null || descriptorXml.length() == 0) {
+        if (descriptorXml == null || descriptorXml.isEmpty()) {
             throw new DescriptorBindingException("Null or empty descriptor");
         }
 

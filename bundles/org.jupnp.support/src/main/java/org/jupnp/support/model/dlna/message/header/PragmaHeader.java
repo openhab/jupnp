@@ -36,7 +36,7 @@ public class PragmaHeader extends DLNAHeader<List<PragmaType>> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             if (s.endsWith(";")) {
                 s = s.substring(0, s.length() - 1);
             }

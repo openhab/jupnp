@@ -53,7 +53,7 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
         this.eventSubscriptionURI = eventSubscriptionURI;
 
         List<ValidationError> errors = validateThis();
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             throw new ValidationException("Validation of device graph failed, call getErrors() on exception", errors);
         }
     }

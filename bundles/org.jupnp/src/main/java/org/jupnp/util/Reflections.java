@@ -431,7 +431,7 @@ public class Reflections {
     public static String decapitalize(String name) {
         if (name == null)
             return null;
-        if (name.length() == 0 || (name.length() > 1 && Character.isUpperCase(name.charAt(1)))) {
+        if (name.isEmpty() || (name.length() > 1 && Character.isUpperCase(name.charAt(1)))) {
             return name;
         }
         char[] chars = name.toCharArray();

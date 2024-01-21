@@ -30,7 +30,7 @@ public class RealTimeInfoHeader extends DLNAHeader<NormalPlayTime> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0 && s.startsWith(PREFIX)) {
+        if (!s.isEmpty() && s.startsWith(PREFIX)) {
             try {
                 s = s.substring(PREFIX.length());
                 setValue(s.equals("*") ? null : NormalPlayTime.valueOf(s));

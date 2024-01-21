@@ -205,7 +205,7 @@ public class CacheControl {
             append("max-age", sb).append("=").append(getMaxAge());
         if (isNoCache()) {
             List<String> fields = getNoCacheFields();
-            if (fields.size() < 1)
+            if (fields.isEmpty())
                 append("no-cache", sb);
             else {
                 for (String field : getNoCacheFields()) {
@@ -215,7 +215,7 @@ public class CacheControl {
         }
         if (isPrivateFlag()) {
             List<String> fields = getPrivateFields();
-            if (fields.size() < 1)
+            if (fields.isEmpty())
                 append("private", sb);
             else {
                 for (String field : getPrivateFields()) {

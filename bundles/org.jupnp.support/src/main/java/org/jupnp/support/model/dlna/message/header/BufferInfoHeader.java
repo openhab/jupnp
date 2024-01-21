@@ -28,7 +28,7 @@ public class BufferInfoHeader extends DLNAHeader<BufferInfoType> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 setValue(BufferInfoType.valueOf(s));
                 return;

@@ -32,7 +32,7 @@ public class FriendlyNameHeader extends DLNAHeader<String> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             setValue(s);
             return;
         }

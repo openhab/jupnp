@@ -45,7 +45,7 @@ public class URIUtil {
         } else {
             assert base != null;
             // If the given base URI has no path we give it a root path
-            if (base.getPath().length() == 0) {
+            if (base.getPath().isEmpty()) {
                 try {
                     base = new URI(base.getScheme(), base.getAuthority(), "/", base.getQuery(), base.getFragment());
                 } catch (Exception ex) {

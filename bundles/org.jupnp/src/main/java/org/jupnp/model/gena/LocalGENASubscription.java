@@ -156,7 +156,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
             }
         }
 
-        if (currentValues.size() > 0) {
+        if (!currentValues.isEmpty()) {
             log.trace("Propagating new state variable values to subscription: {}", this);
             // TODO: I'm not happy with this design, this dispatches to a separate thread which _then_
             // is supposed to lock and read the values off this instance. That obviously doesn't work

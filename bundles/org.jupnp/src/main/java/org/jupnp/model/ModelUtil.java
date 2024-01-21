@@ -83,9 +83,9 @@ public class ModelUtil {
      */
     public static boolean isValidUDAName(String name) {
         if (ANDROID_RUNTIME) {
-            return name != null && name.length() != 0;
+            return name != null && !name.isEmpty();
         }
-        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ENGLISH).startsWith("xml")
+        return name != null && !name.isEmpty() && !name.toLowerCase(Locale.ENGLISH).startsWith("xml")
                 && name.matches(Constants.REGEX_UDA_NAME);
     }
 
@@ -147,7 +147,7 @@ public class ModelUtil {
      * optionally unescaping backslashed commas.
      */
     public static String[] fromCommaSeparatedList(String s, boolean unescapeCommas) {
-        if (s == null || s.length() == 0) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
 

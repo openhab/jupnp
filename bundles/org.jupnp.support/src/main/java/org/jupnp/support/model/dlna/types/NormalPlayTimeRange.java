@@ -101,15 +101,15 @@ public class NormalPlayTimeRange {
             String[] params = s.substring(PREFIX.length()).split("[-/]");
             switch (params.length) {
                 case 3:
-                    if (params[2].length() != 0 && !params[2].equals("*")) {
+                    if (!params[2].isEmpty() && !params[2].equals("*")) {
                         timeDuration = NormalPlayTime.valueOf(params[2]);
                     }
                 case 2:
-                    if (params[1].length() != 0) {
+                    if (!params[1].isEmpty()) {
                         timeEnd = NormalPlayTime.valueOf(params[1]);
                     }
                 case 1:
-                    if (params[0].length() != 0 && (!mandatoryTimeEnd || (mandatoryTimeEnd && params.length > 1))) {
+                    if (!params[0].isEmpty() && (!mandatoryTimeEnd || (mandatoryTimeEnd && params.length > 1))) {
                         timeStart = NormalPlayTime.valueOf(params[0]);
                         return new NormalPlayTimeRange(timeStart, timeEnd, timeDuration);
                     }
