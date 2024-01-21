@@ -64,8 +64,8 @@ public class IO {
             }
     }
 
-    public static interface FileFinder {
-        public void found(File file);
+    public interface FileFinder {
+        void found(File file);
     }
 
     public static boolean deleteFile(File path) {

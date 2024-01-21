@@ -28,21 +28,21 @@ import org.jupnp.registry.Registry;
  */
 public interface ControlPoint {
 
-    public UpnpServiceConfiguration getConfiguration();
+    UpnpServiceConfiguration getConfiguration();
 
-    public ProtocolFactory getProtocolFactory();
+    ProtocolFactory getProtocolFactory();
 
-    public Registry getRegistry();
+    Registry getRegistry();
 
-    public void search();
+    void search();
 
-    public void search(UpnpHeader searchType);
+    void search(UpnpHeader searchType);
 
-    public void search(int mxSeconds);
+    void search(int mxSeconds);
 
-    public void search(UpnpHeader searchType, int mxSeconds);
+    void search(UpnpHeader searchType, int mxSeconds);
 
-    public Future execute(ActionCallback callback);
+    Future execute(ActionCallback callback);
 
-    public void execute(SubscriptionCallback callback);
+    void execute(SubscriptionCallback callback);
 }

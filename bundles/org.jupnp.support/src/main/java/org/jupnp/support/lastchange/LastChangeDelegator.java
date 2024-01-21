@@ -30,9 +30,9 @@ import org.jupnp.model.types.UnsignedIntegerFourBytes;
  */
 public interface LastChangeDelegator {
 
-    public LastChange getLastChange();
+    LastChange getLastChange();
 
-    public void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception;
+    void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception;
 
-    public abstract UnsignedIntegerFourBytes[] getCurrentInstanceIds();
+    UnsignedIntegerFourBytes[] getCurrentInstanceIds();
 }

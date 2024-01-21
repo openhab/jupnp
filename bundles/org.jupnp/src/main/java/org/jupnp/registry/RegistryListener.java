@@ -55,7 +55,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with anemic service metadata.
      */
-    public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
+    void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
 
     /**
      * Called when service metadata couldn't be initialized.
@@ -69,7 +69,7 @@ public interface RegistryListener {
      * @param ex The reason why service metadata could not be initialized, or <code>null</code> if service
      *            descriptors couldn't be retrieved at all.
      */
-    public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
+    void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
 
     /**
      * Called when complete metadata of a newly discovered device is available.
@@ -77,7 +77,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
-    public void remoteDeviceAdded(Registry registry, RemoteDevice device);
+    void remoteDeviceAdded(Registry registry, RemoteDevice device);
 
     /**
      * Called when a discovered device's expiration timestamp is updated.
@@ -89,7 +89,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
-    public void remoteDeviceUpdated(Registry registry, RemoteDevice device);
+    void remoteDeviceUpdated(Registry registry, RemoteDevice device);
 
     /**
      * Called when a previously discovered device disappears.
@@ -102,7 +102,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
-    public void remoteDeviceRemoved(Registry registry, RemoteDevice device);
+    void remoteDeviceRemoved(Registry registry, RemoteDevice device);
 
     /**
      * Called after you add your own device to the {@link org.jupnp.registry.Registry}.
@@ -110,7 +110,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device The local device added to the {@link org.jupnp.registry.Registry}.
      */
-    public void localDeviceAdded(Registry registry, LocalDevice device);
+    void localDeviceAdded(Registry registry, LocalDevice device);
 
     /**
      * Called after you remove your own device from the {@link org.jupnp.registry.Registry}.
@@ -121,7 +121,7 @@ public interface RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device The local device removed from the {@link org.jupnp.registry.Registry}.
      */
-    public void localDeviceRemoved(Registry registry, LocalDevice device);
+    void localDeviceRemoved(Registry registry, LocalDevice device);
 
     /**
      * Called after registry maintenance stops but before the registry is cleared.
@@ -131,7 +131,7 @@ public interface RegistryListener {
      * 
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      */
-    public void beforeShutdown(Registry registry);
+    void beforeShutdown(Registry registry);
 
     /**
      * Called after the registry has been cleared on shutdown.
@@ -139,5 +139,5 @@ public interface RegistryListener {
      * This method should typically not block, it executes in the thread that shuts down the UPnP stack.
      * </p>
      */
-    public void afterShutdown();
+    void afterShutdown();
 }

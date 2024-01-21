@@ -21,11 +21,11 @@ package org.jupnp.model.message.control;
  */
 public interface ActionMessage {
 
-    public String getActionNamespace();
+    String getActionNamespace();
 
-    public boolean isBodyNonEmptyString();
+    boolean isBodyNonEmptyString();
 
-    public String getBodyString();
+    String getBodyString();
 
-    public void setBody(String string);
+    void setBody(String string);
 }

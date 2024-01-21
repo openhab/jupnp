@@ -30,27 +30,27 @@ public interface StreamClientConfiguration {
      *
      * @return The <code>ExecutorService</code> to use for actual sending of HTTP requests.
      */
-    public ExecutorService getRequestExecutorService();
+    ExecutorService getRequestExecutorService();
 
     /**
      * @return The number of seconds to wait for a request to expire, spanning connect and data-reads.
      */
-    public int getTimeoutSeconds();
+    int getTimeoutSeconds();
 
     /**
      * @return Configured value or default of 5 retries.
      */
-    public int getRetryIterations();
+    int getRetryIterations();
 
     /**
      * @return If the request completion takes longer than this, a warning will be logged (<code>0</code> to disable)
      */
-    public int getLogWarningSeconds();
+    int getLogWarningSeconds();
 
     /**
      * @return A request will not be executed again if it has failed in the last X seconds ({@code 0} to disable)
      */
-    public int getRetryAfterSeconds();
+    int getRetryAfterSeconds();
 
     /**
      * Used for outgoing HTTP requests if no other value was already set on messages.
@@ -59,5 +59,5 @@ public interface StreamClientConfiguration {
      * @param minorVersion The UPnP UDA minor version.
      * @return The HTTP user agent value.
      */
-    public String getUserAgentValue(int majorVersion, int minorVersion);
+    String getUserAgentValue(int majorVersion, int minorVersion);
 }

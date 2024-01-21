@@ -19,9 +19,9 @@ package org.jupnp.binding;
  */
 public interface AllowedValueRangeProvider {
 
-    public long getMinimum();
+    long getMinimum();
 
-    public long getMaximum();
+    long getMaximum();
 
-    public long getStep();
+    long getStep();
 }

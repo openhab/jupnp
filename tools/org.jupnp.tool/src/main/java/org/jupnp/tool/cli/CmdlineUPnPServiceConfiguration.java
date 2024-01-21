@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-    static final transient Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
+    static final Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
     static int MAIN_POOL_SIZE = 20;
     static int ASYNC_POOL_SIZE = 20;

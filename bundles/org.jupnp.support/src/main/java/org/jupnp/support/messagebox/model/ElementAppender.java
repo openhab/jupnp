@@ -22,5 +22,5 @@ import org.jupnp.support.messagebox.parser.MessageElement;
  */
 public interface ElementAppender {
 
-    public void appendMessageElements(MessageElement parent);
+    void appendMessageElements(MessageElement parent);
 }

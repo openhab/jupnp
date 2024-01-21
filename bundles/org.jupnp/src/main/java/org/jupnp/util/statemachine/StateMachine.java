@@ -19,10 +19,10 @@ package org.jupnp.util.statemachine;
  */
 public interface StateMachine<S> {
 
-    public static final String METHOD_CURRENT_STATE = "getCurrentState";
-    public static final String METHOD_FORCE_STATE = "forceState";
+    String METHOD_CURRENT_STATE = "getCurrentState";
+    String METHOD_FORCE_STATE = "forceState";
 
-    public S getCurrentState();
+    S getCurrentState();
 
-    public void forceState(Class<? extends S> state);
+    void forceState(Class<? extends S> state);
 }

@@ -66,15 +66,15 @@ public interface StreamClient<C extends StreamClientConfiguration> {
      * @return The response or <code>null</code> if no response has been received or an error occurred.
      * @throws InterruptedException if you interrupt the calling thread.
      */
-    public StreamResponseMessage sendRequest(StreamRequestMessage message) throws InterruptedException;
+    StreamResponseMessage sendRequest(StreamRequestMessage message) throws InterruptedException;
 
     /**
      * Stops the service, closes any connection pools etc.
      */
-    public void stop();
+    void stop();
 
     /**
      * @return This service's configuration.
      */
-    public C getConfiguration();
+    C getConfiguration();
 }

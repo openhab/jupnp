@@ -26,8 +26,8 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
     /** Statistical data collected. */
     private MonitoredQueueingThreadPoolExecutor.Statistics stats;
 
-    static final transient Logger logger = LoggerFactory.getLogger(MonitoredQueueingThreadPoolExecutor.class);
-    static final transient Logger statsLogger = LoggerFactory.getLogger("org.jupnp.tool.cli.stats");
+    static final Logger logger = LoggerFactory.getLogger(MonitoredQueueingThreadPoolExecutor.class);
+    static final Logger statsLogger = LoggerFactory.getLogger("org.jupnp.tool.cli.stats");
 
     public MonitoredQueueingThreadPoolExecutor(String poolName, int threadPoolSize) {
         super(poolName, threadPoolSize);

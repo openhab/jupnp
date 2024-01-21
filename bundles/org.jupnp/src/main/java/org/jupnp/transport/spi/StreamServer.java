@@ -78,7 +78,7 @@ public interface StreamServer<C extends StreamServerConfiguration> extends Runna
      * @param router The router which handles the incoming {@link org.jupnp.transport.spi.UpnpStream}.
      * @throws InitializationException If the service could not be initialized or started.
      */
-    public void init(InetAddress bindAddress, Router router) throws InitializationException;
+    void init(InetAddress bindAddress, Router router) throws InitializationException;
 
     /**
      * This method will be called potentially right after
@@ -87,15 +87,15 @@ public interface StreamServer<C extends StreamServerConfiguration> extends Runna
      *
      * @return The TCP port this service is listening on, e.g. the actual ephemeral port.
      */
-    public int getPort();
+    int getPort();
 
     /**
      * Stops the service, closes any listening sockets.
      */
-    public void stop();
+    void stop();
 
     /**
      * @return This service's configuration.
      */
-    public C getConfiguration();
+    C getConfiguration();
 }

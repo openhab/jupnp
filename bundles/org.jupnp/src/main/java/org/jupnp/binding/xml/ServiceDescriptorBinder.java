@@ -25,13 +25,13 @@ import org.w3c.dom.Document;
  */
 public interface ServiceDescriptorBinder {
 
-    public <T extends Service> T describe(T undescribedService, String descriptorXml)
+    <T extends Service> T describe(T undescribedService, String descriptorXml)
             throws DescriptorBindingException, ValidationException;
 
-    public <T extends Service> T describe(T undescribedService, Document dom)
+    <T extends Service> T describe(T undescribedService, Document dom)
             throws DescriptorBindingException, ValidationException;
 
-    public String generate(Service service) throws DescriptorBindingException;
+    String generate(Service service) throws DescriptorBindingException;
 
-    public Document buildDOM(Service service) throws DescriptorBindingException;
+    Document buildDOM(Service service) throws DescriptorBindingException;
 }

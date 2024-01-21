@@ -21,5 +21,5 @@ package org.jupnp.model;
  */
 public interface Command<T> {
 
-    public void execute(ServiceManager<T> manager) throws Exception;
+    void execute(ServiceManager<T> manager) throws Exception;
 }

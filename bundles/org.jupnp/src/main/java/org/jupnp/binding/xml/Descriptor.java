@@ -25,13 +25,13 @@ public abstract class Descriptor {
 
     public interface Device {
 
-        public static final String NAMESPACE_URI = "urn:schemas-upnp-org:device-1-0";
-        public static final String DLNA_NAMESPACE_URI = "urn:schemas-dlna-org:device-1-0";
-        public static final String DLNA_PREFIX = "dlna";
-        public static final String SEC_NAMESPACE_URI = "http://www.sec.co.kr/dlna";
-        public static final String SEC_PREFIX = "sec";
+        String NAMESPACE_URI = "urn:schemas-upnp-org:device-1-0";
+        String DLNA_NAMESPACE_URI = "urn:schemas-dlna-org:device-1-0";
+        String DLNA_PREFIX = "dlna";
+        String SEC_NAMESPACE_URI = "http://www.sec.co.kr/dlna";
+        String SEC_PREFIX = "sec";
 
-        public enum ELEMENT {
+        enum ELEMENT {
             root,
             specVersion,
             major,
@@ -86,9 +86,9 @@ public abstract class Descriptor {
 
     public interface Service {
 
-        public static final String NAMESPACE_URI = "urn:schemas-upnp-org:service-1-0";
+        String NAMESPACE_URI = "urn:schemas-upnp-org:service-1-0";
 
-        public enum ELEMENT {
+        enum ELEMENT {
             scpd,
             specVersion,
             major,
@@ -125,7 +125,7 @@ public abstract class Descriptor {
             }
         }
 
-        public enum ATTRIBUTE {
+        enum ATTRIBUTE {
             sendEvents
         }
     }

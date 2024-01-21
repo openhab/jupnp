@@ -83,7 +83,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
         private Class<? extends DLNAHeader<?>>[] headerTypes;
 
         @SafeVarargs
-        private Type(String httpName, Class<? extends DLNAHeader<?>>... headerClass) {
+        Type(String httpName, Class<? extends DLNAHeader<?>>... headerClass) {
             this.httpName = httpName;
             this.headerTypes = headerClass;
         }

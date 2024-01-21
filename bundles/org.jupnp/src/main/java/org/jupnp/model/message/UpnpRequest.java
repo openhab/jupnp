@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class UpnpRequest extends UpnpOperation {
 
-    public static enum Method {
+    public enum Method {
 
         GET("GET"),
         POST("POST"),

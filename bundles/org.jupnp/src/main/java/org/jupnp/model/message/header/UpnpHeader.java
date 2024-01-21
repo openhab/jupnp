@@ -35,7 +35,7 @@ public abstract class UpnpHeader<T> {
     /**
      * Maps a standardized UPnP header to potential header subtypes.
      */
-    public static enum Type {
+    public enum Type {
 
         USN("USN", USNRootDeviceHeader.class, DeviceUSNHeader.class, ServiceUSNHeader.class, UDNHeader.class),
         NT("NT", RootDeviceHeader.class, UDADeviceTypeHeader.class, UDAServiceTypeHeader.class, DeviceTypeHeader.class,
@@ -75,7 +75,7 @@ public abstract class UpnpHeader<T> {
         private String httpName;
         private Class<? extends UpnpHeader>[] headerTypes;
 
-        private Type(String httpName, Class<? extends UpnpHeader>... headerClass) {
+        Type(String httpName, Class<? extends UpnpHeader>... headerClass) {
             this.httpName = httpName;
             this.headerTypes = headerClass;
         }

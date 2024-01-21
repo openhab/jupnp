@@ -19,5 +19,5 @@ package org.jupnp.binding;
  */
 public interface AllowedValueProvider {
 
-    public String[] getValues();
+    String[] getValues();
 }

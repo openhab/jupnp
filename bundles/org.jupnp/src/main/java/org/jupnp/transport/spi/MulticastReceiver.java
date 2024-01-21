@@ -52,16 +52,16 @@ public interface MulticastReceiver<C extends MulticastReceiverConfiguration> ext
      * @param datagramProcessor Reads and writes datagrams.
      * @throws InitializationException If the service could not be initialized or started.
      */
-    public void init(NetworkInterface networkInterface, Router router, NetworkAddressFactory networkAddressFactory,
-            DatagramProcessor datagramProcessor) throws InitializationException;
+    void init(NetworkInterface networkInterface, Router router, NetworkAddressFactory networkAddressFactory,
+              DatagramProcessor datagramProcessor) throws InitializationException;
 
     /**
      * Stops the service, closes any listening sockets.
      */
-    public void stop();
+    void stop();
 
     /**
      * @return This service's configuration.
      */
-    public C getConfiguration();
+    C getConfiguration();
 }

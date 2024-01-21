@@ -59,11 +59,11 @@ import org.jupnp.protocol.ProtocolFactory;
  */
 public interface Registry {
 
-    public UpnpService getUpnpService();
+    UpnpService getUpnpService();
 
-    public UpnpServiceConfiguration getConfiguration();
+    UpnpServiceConfiguration getConfiguration();
 
-    public ProtocolFactory getProtocolFactory();
+    ProtocolFactory getProtocolFactory();
 
     // #################################################################################################
 
@@ -73,7 +73,7 @@ public interface Registry {
      * Unsubscribes all local devices and GENA subscriptions.
      * </p>
      */
-    public void shutdown();
+    void shutdown();
 
     /**
      * Stops background maintenance (thread) of registered items.
@@ -93,7 +93,7 @@ public interface Registry {
      * stops sending subscription renewal messages.
      * </p>
      */
-    public void pause();
+    void pause();
 
     /**
      * Resumes background maintenance (thread) of registered items.
@@ -142,21 +142,21 @@ public interface Registry {
      * resume maintenance. This subscription will be cleaned up immediately on resume.
      * </p>
      */
-    public void resume();
+    void resume();
 
     /**
      * @return <code>true</code> if the registry has currently no running background
      *         maintenance (thread).
      */
-    public boolean isPaused();
+    boolean isPaused();
 
     // #################################################################################################
 
-    public void addListener(RegistryListener listener);
+    void addListener(RegistryListener listener);
 
-    public void removeListener(RegistryListener listener);
+    void removeListener(RegistryListener listener);
 
-    public Collection<RegistryListener> getListeners();
+    Collection<RegistryListener> getListeners();
 
     /**
      * Called internally by the UPnP stack when the discovery protocol starts.
@@ -168,7 +168,7 @@ public interface Registry {
      * @param device The half-hydrated (without services) metadata of the discovered device.
      * @return <code>false</code> if the device was already registered.
      */
-    public boolean notifyDiscoveryStart(RemoteDevice device);
+    boolean notifyDiscoveryStart(RemoteDevice device);
 
     /**
      * Called internally by the UPnP stack when the discovery protocol stopped abnormaly.
@@ -179,7 +179,7 @@ public interface Registry {
      * @param device The half-hydrated (without services) metadata of the discovered device.
      * @param ex The cause for the interruption of the discovery protocol.
      */
-    public void notifyDiscoveryFailure(RemoteDevice device, Exception ex);
+    void notifyDiscoveryFailure(RemoteDevice device, Exception ex);
 
     // #################################################################################################
 
@@ -189,7 +189,7 @@ public interface Registry {
      * @param localDevice The device to add and maintain.
      * @throws RegistrationException If a conflict with an already registered device was detected.
      */
-    public void addDevice(LocalDevice localDevice) throws RegistrationException;
+    void addDevice(LocalDevice localDevice) throws RegistrationException;
 
     /**
      * Call this method to add your local device metadata.
@@ -198,116 +198,116 @@ public interface Registry {
      * @param options Immediately effective when this device is registered.
      * @throws RegistrationException If a conflict with an already registered device was detected.
      */
-    public void addDevice(LocalDevice localDevice, DiscoveryOptions options) throws RegistrationException;
+    void addDevice(LocalDevice localDevice, DiscoveryOptions options) throws RegistrationException;
 
     /**
      * Change the active {@link DiscoveryOptions} for the given (local device) UDN.
      *
      * @param options Set to <code>null</code> to disable any options.
      */
-    public void setDiscoveryOptions(UDN udn, DiscoveryOptions options);
+    void setDiscoveryOptions(UDN udn, DiscoveryOptions options);
 
     /**
      * Get the currently active {@link DiscoveryOptions} for the given (local device) UDN.
      *
      * @return <code>null</code> if there are no active discovery options for the given UDN.
      */
-    public DiscoveryOptions getDiscoveryOptions(UDN udn);
+    DiscoveryOptions getDiscoveryOptions(UDN udn);
 
     /**
      * Called internally by the UPnP discovery protocol.
      *
      * @throws RegistrationException If a conflict with an already registered device was detected.
      */
-    public void addDevice(RemoteDevice remoteDevice) throws RegistrationException;
+    void addDevice(RemoteDevice remoteDevice) throws RegistrationException;
 
     /**
      * Called internally by the UPnP discovery protocol.
      */
-    public boolean update(RemoteDeviceIdentity rdIdentity);
+    boolean update(RemoteDeviceIdentity rdIdentity);
 
     /**
      * Call this to remove your local device metadata.
      *
      * @return <code>true</code> if the device was registered and has been removed.
      */
-    public boolean removeDevice(LocalDevice localDevice);
+    boolean removeDevice(LocalDevice localDevice);
 
     /**
      * Called internally by the UPnP discovery protocol.
      */
-    public boolean removeDevice(RemoteDevice remoteDevice);
+    boolean removeDevice(RemoteDevice remoteDevice);
 
     /**
      * Call this to remove any device metadata with the given UDN.
      *
      * @return <code>true</code> if the device was registered and has been removed.
      */
-    public boolean removeDevice(UDN udn);
+    boolean removeDevice(UDN udn);
 
     /**
      * Clear the registry of all locally registered device metadata.
      */
-    public void removeAllLocalDevices();
+    void removeAllLocalDevices();
 
     /**
      * Clear the registry of all discovered remote device metadata.
      */
-    public void removeAllRemoteDevices();
+    void removeAllRemoteDevices();
 
     /**
      * @param udn The device name to lookup.
      * @param rootOnly If <code>true</code>, only matches of root devices are returned.
      * @return The registered root or embedded device metadata, or <code>null</code>.
      */
-    public Device getDevice(UDN udn, boolean rootOnly);
+    Device getDevice(UDN udn, boolean rootOnly);
 
     /**
      * @param udn The device name to lookup.
      * @param rootOnly If <code>true</code>, only matches of root devices are returned.
      * @return The registered root or embedded device metadata, or <code>null</code>.
      */
-    public LocalDevice getLocalDevice(UDN udn, boolean rootOnly);
+    LocalDevice getLocalDevice(UDN udn, boolean rootOnly);
 
     /**
      * @param udn The device name to lookup.
      * @param rootOnly If <code>true</code>, only matches of root devices are returned.
      * @return The registered root or embedded device metadata, or <code>null</code>.
      */
-    public RemoteDevice getRemoteDevice(UDN udn, boolean rootOnly);
+    RemoteDevice getRemoteDevice(UDN udn, boolean rootOnly);
 
     /**
      * @return All locally registered device metadata, in no particular order, or an empty collection.
      */
-    public Collection<LocalDevice> getLocalDevices();
+    Collection<LocalDevice> getLocalDevices();
 
     /**
      * @return All discovered remote device metadata, in no particular order, or an empty collection.
      */
-    public Collection<RemoteDevice> getRemoteDevices();
+    Collection<RemoteDevice> getRemoteDevices();
 
     /**
      * @return All device metadata, in no particular order, or an empty collection.
      */
-    public Collection<Device> getDevices();
+    Collection<Device> getDevices();
 
     /**
      * @return All device metadata of devices which implement the given type, in no particular order,
      *         or an empty collection.
      */
-    public Collection<Device> getDevices(DeviceType deviceType);
+    Collection<Device> getDevices(DeviceType deviceType);
 
     /**
      * @return All device metadata of devices which have a service that implements the given type,
      *         in no particular order, or an empty collection.
      */
-    public Collection<Device> getDevices(ServiceType serviceType);
+    Collection<Device> getDevices(ServiceType serviceType);
 
     /**
      * @return Complete service metadata.for a service reference or <code>null</code> if no service
      *         for the given reference has been registered.
      */
-    public Service getService(ServiceReference serviceReference);
+    Service getService(ServiceReference serviceReference);
 
     // #################################################################################################
 
@@ -316,7 +316,7 @@ public interface Registry {
      *
      * @param resource The resource to maintain indefinitely (until it is manually removed).
      */
-    public void addResource(Resource resource);
+    void addResource(Resource resource);
 
     /**
      * Stores an arbitrary resource in the registry.
@@ -327,7 +327,7 @@ public interface Registry {
      * @param resource The resource to maintain.
      * @param maxAgeSeconds The time after which the registry will automatically remove the resource.
      */
-    public void addResource(Resource resource, int maxAgeSeconds);
+    void addResource(Resource resource, int maxAgeSeconds);
 
     /**
      * Removes a resource from the registry.
@@ -335,7 +335,7 @@ public interface Registry {
      * @param resource The resource to remove.
      * @return <code>true</code> if the resource was registered and has been removed.
      */
-    public boolean removeResource(Resource resource);
+    boolean removeResource(Resource resource);
 
     /**
      * @param pathQuery The path and optional query string of the resource's
@@ -343,7 +343,7 @@ public interface Registry {
      * @return Any registered resource that matches the given URI path.
      * @throws IllegalArgumentException If the given URI was absolute, only path and query are allowed.
      */
-    public Resource getResource(URI pathQuery) throws IllegalArgumentException;
+    Resource getResource(URI pathQuery) throws IllegalArgumentException;
 
     /**
      * @param <T> The required subtype of the {@link org.jupnp.model.resource.Resource}.
@@ -353,61 +353,61 @@ public interface Registry {
      * @return Any registered resource that matches the given URI path and subtype.
      * @throws IllegalArgumentException If the given URI was absolute, only path and query are allowed.
      */
-    public <T extends Resource> T getResource(Class<T> resourceType, URI pathQuery) throws IllegalArgumentException;
+    <T extends Resource> T getResource(Class<T> resourceType, URI pathQuery) throws IllegalArgumentException;
 
     /**
      * @return All registered resources, in no particular order, or an empty collection.
      */
-    public Collection<Resource> getResources();
+    Collection<Resource> getResources();
 
     /**
      * @param <T> The required subtype of the {@link org.jupnp.model.resource.Resource}.
      * @param resourceType The required subtype of the {@link org.jupnp.model.resource.Resource}.
      * @return Any registered resource that matches the given subtype.
      */
-    public <T extends Resource> Collection<T> getResources(Class<T> resourceType);
+    <T extends Resource> Collection<T> getResources(Class<T> resourceType);
 
     // #################################################################################################
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public void addLocalSubscription(LocalGENASubscription subscription);
+    void addLocalSubscription(LocalGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public LocalGENASubscription getLocalSubscription(String subscriptionId);
+    LocalGENASubscription getLocalSubscription(String subscriptionId);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public boolean updateLocalSubscription(LocalGENASubscription subscription);
+    boolean updateLocalSubscription(LocalGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public boolean removeLocalSubscription(LocalGENASubscription subscription);
+    boolean removeLocalSubscription(LocalGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public void addRemoteSubscription(RemoteGENASubscription subscription);
+    void addRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public RemoteGENASubscription getRemoteSubscription(String subscriptionId);
+    RemoteGENASubscription getRemoteSubscription(String subscriptionId);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public void updateRemoteSubscription(RemoteGENASubscription subscription);
+    void updateRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
      */
-    public void removeRemoteSubscription(RemoteGENASubscription subscription);
+    void removeRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
@@ -418,7 +418,7 @@ public interface Registry {
      * executing.
      * </p>
      */
-    public void registerPendingRemoteSubscription(RemoteGENASubscription subscription);
+    void registerPendingRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
@@ -426,7 +426,7 @@ public interface Registry {
      * Notify that the subscription procedure has terminated.
      * </p>
      */
-    public void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription);
+    void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
@@ -436,7 +436,7 @@ public interface Registry {
      * has been found or until there are no more pending subscription procedures.
      * </p>
      */
-    public RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId);
+    RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId);
 
     // #################################################################################################
 
@@ -447,5 +447,5 @@ public interface Registry {
      * {@link DiscoveryOptions}!
      * </p>
      */
-    public void advertiseLocalDevices();
+    void advertiseLocalDevices();
 }

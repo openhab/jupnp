@@ -44,7 +44,7 @@ public interface DatagramProcessor {
      * @throws org.jupnp.model.UnsupportedDataException If the datagram could not be read, or didn't contain required
      *             data.
      */
-    public IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram)
+    IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram)
             throws UnsupportedDataException;
 
     /**
@@ -58,5 +58,5 @@ public interface DatagramProcessor {
      * @return An actual UDP datagram.
      * @throws UnsupportedDataException If the datagram could not be created.
      */
-    public DatagramPacket write(OutgoingDatagramMessage message) throws UnsupportedDataException;
+    DatagramPacket write(OutgoingDatagramMessage message) throws UnsupportedDataException;
 }

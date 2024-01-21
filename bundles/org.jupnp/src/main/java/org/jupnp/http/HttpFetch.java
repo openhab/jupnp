@@ -99,8 +99,8 @@ public class HttpFetch {
         }
     }
 
-    public static interface RepresentationFactory<E> {
-        public Representation<E> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException;
+    public interface RepresentationFactory<E> {
+        Representation<E> createRepresentation(URLConnection urlConnection, InputStream is) throws IOException;
     }
 
     public static void validate(URL url) throws IOException {

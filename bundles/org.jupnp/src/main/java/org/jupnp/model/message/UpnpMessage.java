@@ -38,7 +38,7 @@ import org.jupnp.model.message.header.UpnpHeader;
  */
 public abstract class UpnpMessage<O extends UpnpOperation> {
 
-    public static enum BodyType {
+    public enum BodyType {
         STRING,
         BYTES
     }

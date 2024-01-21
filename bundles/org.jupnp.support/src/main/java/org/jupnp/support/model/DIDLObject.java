@@ -138,7 +138,7 @@ public abstract class DIDLObject {
         public static class DC {
 
             public interface NAMESPACE extends Property.NAMESPACE {
-                public static final String URI = "http://purl.org/dc/elements/1.1/";
+                String URI = "http://purl.org/dc/elements/1.1/";
             }
 
             public static class DESCRIPTION extends Property<String> implements NAMESPACE {
@@ -208,7 +208,7 @@ public abstract class DIDLObject {
         public static abstract class SEC {
 
             public interface NAMESPACE extends Property.NAMESPACE {
-                public static final String URI = "http://www.sec.co.kr/";
+                String URI = "http://www.sec.co.kr/";
             }
 
             public static class CAPTIONINFOEX extends Property<URI> implements NAMESPACE {
@@ -253,7 +253,7 @@ public abstract class DIDLObject {
         public static abstract class UPNP {
 
             public interface NAMESPACE extends Property.NAMESPACE {
-                public static final String URI = "urn:schemas-upnp-org:metadata-1-0/upnp/";
+                String URI = "urn:schemas-upnp-org:metadata-1-0/upnp/";
             }
 
             public static class ARTIST extends PropertyPersonWithRole implements NAMESPACE {
@@ -563,7 +563,7 @@ public abstract class DIDLObject {
         public static abstract class DLNA {
 
             public interface NAMESPACE extends Property.NAMESPACE {
-                public static final String URI = "urn:schemas-dlna-org:metadata-1-0/";
+                String URI = "urn:schemas-dlna-org:metadata-1-0/";
             }
 
             public static class PROFILE_ID extends Property<DIDLAttribute> implements NAMESPACE {

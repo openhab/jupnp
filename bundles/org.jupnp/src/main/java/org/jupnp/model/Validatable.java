@@ -26,5 +26,5 @@ public interface Validatable {
     /**
      * @return An empty <code>List</code> if all rules validated properly, otherwise, the detected errors.
      */
-    public List<ValidationError> validate();
+    List<ValidationError> validate();
 }

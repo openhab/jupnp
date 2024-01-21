@@ -24,10 +24,10 @@ public interface DatagramIOConfiguration {
     /**
      * @return The TTL of a UDP datagram sent to a multicast address.
      */
-    public int getTimeToLive();
+    int getTimeToLive();
 
     /**
      * @return The maximum buffer size of received UDP datagrams.
      */
-    public int getMaxDatagramBytes();
+    int getMaxDatagramBytes();
 }

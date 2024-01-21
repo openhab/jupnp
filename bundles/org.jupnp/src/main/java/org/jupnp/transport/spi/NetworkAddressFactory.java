@@ -30,35 +30,35 @@ import java.util.Iterator;
 public interface NetworkAddressFactory {
 
     // An implementation can honor these if it wants (the default does)
-    public static final String SYSTEM_PROPERTY_NET_IFACES = "org.jupnp.network.useInterfaces";
-    public static final String SYSTEM_PROPERTY_NET_ADDRESSES = "org.jupnp.network.useAddresses";
+    String SYSTEM_PROPERTY_NET_IFACES = "org.jupnp.network.useInterfaces";
+    String SYSTEM_PROPERTY_NET_ADDRESSES = "org.jupnp.network.useAddresses";
 
     /**
      * @return The UDP multicast group to join.
      */
-    public InetAddress getMulticastGroup();
+    InetAddress getMulticastGroup();
 
     /**
      * @return The UDP multicast port to listen on.
      */
-    public int getMulticastPort();
+    int getMulticastPort();
 
     /**
      * @return The UDP port to listen on for search responses.
      */
-    public int getMulticastResponsePort();
+    int getMulticastResponsePort();
 
     /**
      * @return The TCP (HTTP) stream request port to listen on.
      */
-    public int getStreamListenPort();
+    int getStreamListenPort();
 
     /**
      * The caller might <code>remove()</code> an interface if initialization fails.
      *
      * @return The local network interfaces on which multicast groups will be joined.
      */
-    public Iterator<NetworkInterface> getNetworkInterfaces();
+    Iterator<NetworkInterface> getNetworkInterfaces();
 
     /**
      * The caller might <code>remove()</code> an address if initialization fails.
@@ -66,31 +66,31 @@ public interface NetworkAddressFactory {
      * @return The local addresses of the network interfaces bound to
      *         sockets listening for unicast datagrams and TCP requests.
      */
-    public Iterator<InetAddress> getBindAddresses();
+    Iterator<InetAddress> getBindAddresses();
 
     /**
      * @return <code>true</code> if there is at least one usable network interface and bind address.
      */
-    public boolean hasUsableNetwork();
+    boolean hasUsableNetwork();
 
     /**
      * @return The network prefix length of this address or <code>null</code>.
      */
-    public Short getAddressNetworkPrefixLength(InetAddress inetAddress);
+    Short getAddressNetworkPrefixLength(InetAddress inetAddress);
 
     /**
      * @param inetAddress An address of a local network interface.
      * @return The MAC hardware address of the network interface or <code>null</code> if no
      *         hardware address could be obtained.
      */
-    public byte[] getHardwareAddress(InetAddress inetAddress);
+    byte[] getHardwareAddress(InetAddress inetAddress);
 
     /**
      * @param inetAddress An address of a local network interface.
      * @return The broadcast address of the network (interface) or <code>null</code> if no
      *         broadcast address could be obtained.
      */
-    public InetAddress getBroadcastAddress(InetAddress inetAddress);
+    InetAddress getBroadcastAddress(InetAddress inetAddress);
 
     /**
      * Best-effort attempt finding a reachable local address for a given remote host.
@@ -107,11 +107,11 @@ public interface NetworkAddressFactory {
      * @return A local address that is reachable from the given remote address.
      * @throws IllegalStateException If no local address reachable by the remote address has been found.
      */
-    public InetAddress getLocalAddress(NetworkInterface networkInterface, boolean isIPv6, InetAddress remoteAddress)
+    InetAddress getLocalAddress(NetworkInterface networkInterface, boolean isIPv6, InetAddress remoteAddress)
             throws IllegalStateException;
 
     /**
      * For debugging, logs all "usable" network interface(s) details with INFO level.
      */
-    public void logInterfaceInformation();
+    void logInterfaceInformation();
 }

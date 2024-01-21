@@ -27,14 +27,14 @@ import org.w3c.dom.Document;
  */
 public interface DeviceDescriptorBinder {
 
-    public <T extends Device> T describe(T undescribedDevice, String descriptorXml)
+    <T extends Device> T describe(T undescribedDevice, String descriptorXml)
             throws DescriptorBindingException, ValidationException;
 
-    public <T extends Device> T describe(T undescribedDevice, Document dom)
+    <T extends Device> T describe(T undescribedDevice, Document dom)
             throws DescriptorBindingException, ValidationException;
 
-    public String generate(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
+    String generate(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
 
-    public Document buildDOM(Device device, RemoteClientInfo info, Namespace namespace)
+    Document buildDOM(Device device, RemoteClientInfo info, Namespace namespace)
             throws DescriptorBindingException;
 }

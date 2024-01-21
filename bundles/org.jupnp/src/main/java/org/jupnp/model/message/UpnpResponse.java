@@ -21,7 +21,7 @@ package org.jupnp.model.message;
  */
 public class UpnpResponse extends UpnpOperation {
 
-    public static enum Status {
+    public enum Status {
 
         OK(200, "OK"),
         BAD_REQUEST(400, "Bad Request"),

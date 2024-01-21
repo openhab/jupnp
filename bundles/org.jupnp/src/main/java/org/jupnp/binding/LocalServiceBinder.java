@@ -30,7 +30,7 @@ public interface LocalServiceBinder {
      * @return The produced metadata.
      * @throws LocalServiceBindingException If binding failed.
      */
-    public LocalService read(Class<?> clazz) throws LocalServiceBindingException;
+    LocalService read(Class<?> clazz) throws LocalServiceBindingException;
 
     /**
      *
@@ -44,6 +44,6 @@ public interface LocalServiceBinder {
      * @return The produced metadata.
      * @throws LocalServiceBindingException If binding failed.
      */
-    public LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
-            Class[] stringConvertibleTypes) throws LocalServiceBindingException;
+    LocalService read(Class<?> clazz, ServiceId id, ServiceType type, boolean supportsQueryStateVariables,
+                      Class[] stringConvertibleTypes) throws LocalServiceBindingException;
 }

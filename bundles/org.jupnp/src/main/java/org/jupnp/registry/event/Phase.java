@@ -29,25 +29,25 @@ public interface Phase {
 
     @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
-    public @interface Alive {
+    @interface Alive {
 
     }
 
     @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
-    public @interface Complete {
+    @interface Complete {
 
     }
 
     @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
-    public @interface Byebye {
+    @interface Byebye {
 
     }
 
     @Target({ FIELD, PARAMETER })
     @Retention(RUNTIME)
-    public @interface Updated {
+    @interface Updated {
 
     }
 }
