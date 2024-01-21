@@ -14,7 +14,6 @@
 
 package org.jupnp.tool.cli;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -38,8 +37,7 @@ public class PrintUtils {
         for (int i = 0; i < maxColumnSizes.length; i++) {
             maxColumnSizes[i] = 0;
         }
-        for (Iterator<String[]> iter = table.iterator(); iter.hasNext();) {
-            String[] line = iter.next();
+        for (String[] line : table) {
             for (int i = 0; i < line.length; i++) {
                 if (line[i] != null) {
                     maxColumnSizes[i] = Math.max(maxColumnSizes[i], line[i].length());
@@ -48,8 +46,7 @@ public class PrintUtils {
         }
         // now print
         StringBuilder sb = new StringBuilder();
-        for (Iterator<String[]> iter = table.iterator(); iter.hasNext();) {
-            String[] row = iter.next();
+        for (String[] row : table) {
             for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
                 sb.append(row[columnIndex]);
                 // add required number of spaces

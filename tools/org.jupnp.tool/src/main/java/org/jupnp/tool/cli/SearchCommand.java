@@ -17,7 +17,6 @@ package org.jupnp.tool.cli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jupnp.UpnpService;
@@ -78,8 +77,7 @@ public class SearchCommand {
         logger.debug("Processing results...");
         Registry registry = upnpService.getRegistry();
 
-        for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
-            RemoteDevice device = iter.next();
+        for (RemoteDevice device : registry.getRemoteDevices()) {
             handleRemoteDevice(device, printer, sortBy, filter, verbose);
         }
 
@@ -280,8 +278,7 @@ public class SearchCommand {
             } else {
                 table.add(new String[] { "IP address", "Model", "SerialNumber" });
             }
-            for (Iterator<Result> iter = results.iterator(); iter.hasNext();) {
-                Result result = iter.next();
+            for (Result result : results) {
                 if (verbose) {
                     table.add(new String[] { result.ipAddress, result.model, result.manufacturer, result.serialNumber,
                             result.udn });
