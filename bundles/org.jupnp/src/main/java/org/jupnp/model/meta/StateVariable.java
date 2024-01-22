@@ -73,7 +73,7 @@ public class StateVariable<S extends Service> implements Validatable {
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList();
 
-        if (getName() == null || getName().length() == 0) {
+        if (getName() == null || getName().isEmpty()) {
             errors.add(new ValidationError(getClass(), "name", "StateVariable without name of: " + getService()));
         } else if (!ModelUtil.isValidUDAName(getName())) {
             SpecificationViolationReporter.report(getService().getDevice(), "Invalid state variable name: {}", this);

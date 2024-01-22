@@ -36,7 +36,7 @@ public class RandomToken {
 
     public String generate() {
         String token = null;
-        while (token == null || token.length() == 0) {
+        while (token == null || token.isEmpty()) {
             long r0 = random.nextLong();
             if (r0 < 0)
                 r0 = -r0;

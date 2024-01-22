@@ -91,7 +91,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         discoverNetworkInterfaces();
         discoverBindAddresses();
 
-        if ((networkInterfaces.size() == 0 || bindAddresses.size() == 0)) {
+        if ((networkInterfaces.isEmpty() || bindAddresses.isEmpty())) {
             log.warn("No usable network interface or addresses found");
             if (requiresNetworkInterface()) {
                 throw new NoNetworkException("Could not discover any usable network interfaces and/or addresses");
@@ -176,7 +176,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     @Override
     public boolean hasUsableNetwork() {
-        return networkInterfaces.size() > 0 && bindAddresses.size() > 0;
+        return !networkInterfaces.isEmpty() && !bindAddresses.isEmpty();
     }
 
     @Override
@@ -368,7 +368,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (getInetAddresses(iface).size() == 0) {
+        if (getInetAddresses(iface).isEmpty()) {
             log.trace("Skipping network interface without bound IP addresses: {}", iface.getDisplayName());
             return false;
         }
@@ -409,7 +409,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (useInterfaces.size() > 0 && !useInterfaces.contains(iface.getName())) {
+        if (!useInterfaces.isEmpty() && !useInterfaces.contains(iface.getName())) {
             log.trace("Skipping unwanted network interface (-D {} ): {}", SYSTEM_PROPERTY_NET_IFACES, iface.getName());
             return false;
         }
@@ -490,7 +490,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (useAddresses.size() > 0 && !useAddresses.contains(address.getHostAddress())) {
+        if (!useAddresses.isEmpty() && !useAddresses.contains(address.getHostAddress())) {
             log.trace("Skipping unwanted address: {}", address);
             return false;
         }

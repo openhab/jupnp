@@ -163,7 +163,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         }
 
         String descriptorContent = deviceDescMsg.getBodyString();
-        if (descriptorContent == null || descriptorContent.length() == 0) {
+        if (descriptorContent == null || descriptorContent.isEmpty()) {
             log.warn("Received empty device descriptor: {}", rd.getIdentity().getDescriptorURL());
             return;
         }
@@ -260,8 +260,8 @@ public class RetrieveRemoteDescriptors implements Runnable {
             }
         }
 
-        if ((currentDevice.hasServices() && describedServices.size() == 0)
-                || (currentDevice.hasEmbeddedDevices() && describedEmbeddedDevices.size() == 0)) {
+        if ((currentDevice.hasServices() && describedServices.isEmpty())
+                || (currentDevice.hasEmbeddedDevices() && describedEmbeddedDevices.isEmpty())) {
             // we cannot return a fully hydrated device, so we return null instead
             return null;
         }
@@ -317,7 +317,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         }
 
         String descriptorContent = serviceDescMsg.getBodyString();
-        if (descriptorContent == null || descriptorContent.length() == 0) {
+        if (descriptorContent == null || descriptorContent.isEmpty()) {
             log.warn("Received empty service descriptor: {}", descriptorURL);
             return null;
         }

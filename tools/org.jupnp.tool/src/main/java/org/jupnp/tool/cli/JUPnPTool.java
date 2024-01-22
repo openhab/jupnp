@@ -146,7 +146,7 @@ public class JUPnPTool {
             List<String> ipAddressOrUdns = infoArgs.ipAddressOrUdnList;
             boolean verbose = cmdLineArgs.verbose;
 
-            if ((ipAddressOrUdns == null) || (ipAddressOrUdns.size() == 0)) {
+            if ((ipAddressOrUdns == null) || (ipAddressOrUdns.isEmpty())) {
                 return RC_MISSING_ARGUMENTS;
             }
 

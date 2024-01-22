@@ -382,7 +382,7 @@ public enum DLNAProfiles {
     public static DLNAProfiles valueOf(String code, String contentFormat) {
         for (DLNAProfiles errorCode : values()) {
             if (errorCode.getCode().equals(code)
-                    && (contentFormat.length() == 0 || errorCode.getContentFormat().equals(contentFormat))) {
+                    && (contentFormat.isEmpty() || errorCode.getContentFormat().equals(contentFormat))) {
                 return errorCode;
             }
         }

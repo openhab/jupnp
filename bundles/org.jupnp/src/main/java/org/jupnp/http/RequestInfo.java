@@ -101,8 +101,7 @@ public class RequestInfo {
         int l = cookies.length;
         if (l > 0) {
             builder.append("Cookies:\n");
-            for (int i = 0; i < l; ++i) {
-                Cookie cookie = cookies[i];
+            for (Cookie cookie : cookies) {
                 builder.append("    ").append(cookie.getName()).append(" = ").append(cookie.getValue()).append('\n');
             }
         }

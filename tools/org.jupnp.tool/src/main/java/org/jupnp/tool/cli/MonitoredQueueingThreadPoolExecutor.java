@@ -3,7 +3,6 @@ package org.jupnp.tool.cli;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -145,8 +144,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
         public void dumpPoolStats() {
             statsLogger.info("Dump Pool Statistics for poolName: {}", poolName);
             statsLogger.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
-            for (Iterator<Statistics.PoolStatPoint> iter = points.iterator(); iter.hasNext();) {
-                Statistics.PoolStatPoint p = iter.next();
+            for (PoolStatPoint p : points) {
                 statsLogger.info("{},{},{},{},{},{},{}", p.timestamp, p.corePoolSize, p.poolSize, p.maxPoolSize,
                         p.activeCounts, p.queueSize, p.completedTasks);
             }

@@ -104,15 +104,15 @@ public class BytesRange {
             String[] params = s.substring(((rangePrefix != null) ? rangePrefix : PREFIX).length()).split("[-/]");
             switch (params.length) {
                 case 3:
-                    if (params[2].length() != 0 && !params[2].equals("*")) {
+                    if (!params[2].isEmpty() && !params[2].equals("*")) {
                         byteLength = Long.parseLong(params[2]);
                     }
                 case 2:
-                    if (params[1].length() != 0) {
+                    if (!params[1].isEmpty()) {
                         lastByte = Long.parseLong(params[1]);
                     }
                 case 1:
-                    if (params[0].length() != 0) {
+                    if (!params[0].isEmpty()) {
                         firstByte = Long.parseLong(params[0]);
                     }
                     if (firstByte != null || lastByte != null)

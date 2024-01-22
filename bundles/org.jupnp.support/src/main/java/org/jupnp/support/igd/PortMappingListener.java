@@ -133,7 +133,7 @@ public class PortMappingListener extends DefaultRegistryListener {
                 if (!activeEntry.getKey().equals(service))
                     continue;
 
-                if (activeEntry.getValue().size() > 0)
+                if (!activeEntry.getValue().isEmpty())
                     handleFailureMessage(
                             "Device disappeared, couldn't delete port mappings: " + activeEntry.getValue().size());
 

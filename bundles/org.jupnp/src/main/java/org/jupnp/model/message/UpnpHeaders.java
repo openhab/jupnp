@@ -176,7 +176,7 @@ public class UpnpHeaders extends Headers {
                     log.trace("VALUE: {}", v);
                 }
             }
-            if (parsedHeaders != null && parsedHeaders.size() > 0) {
+            if (parsedHeaders != null && !parsedHeaders.isEmpty()) {
                 log.trace("########################## PARSED HEADERS ##########################");
                 for (Map.Entry<UpnpHeader.Type, List<UpnpHeader>> entry : parsedHeaders.entrySet()) {
                     log.trace("=== TYPE: {}", entry.getKey());

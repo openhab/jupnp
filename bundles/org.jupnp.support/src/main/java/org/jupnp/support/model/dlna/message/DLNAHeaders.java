@@ -172,7 +172,7 @@ public class DLNAHeaders extends UpnpHeaders {
     public void log() {
         if (logger.isTraceEnabled()) {
             super.log();
-            if (parsedDLNAHeaders != null && parsedDLNAHeaders.size() > 0) {
+            if (parsedDLNAHeaders != null && !parsedDLNAHeaders.isEmpty()) {
                 logger.trace("########################## PARSED DLNA HEADERS ##########################");
                 for (Map.Entry<DLNAHeader.Type, List<UpnpHeader<?>>> entry : parsedDLNAHeaders.entrySet()) {
                     logger.trace("=== TYPE: {}", entry.getKey());

@@ -170,7 +170,7 @@ public class Namespace {
                         "Local URI namespace conflict between resources of device: " + resource));
             }
         }
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             throw new ValidationException("Validation of device graph failed, call getErrors() on exception", errors);
         }
         return resources.toArray(new Resource[resources.size()]);

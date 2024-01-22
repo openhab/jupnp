@@ -27,7 +27,7 @@ public class IO {
 
     public static String makeRelativePath(String path, String base) {
         String p = "";
-        if (path != null && path.length() > 0) {
+        if (path != null && !path.isEmpty()) {
             if (path.startsWith("/")) {
                 if (path.startsWith(base)) {
                     p = path.substring(base.length());
@@ -226,7 +226,7 @@ public class IO {
                 if (commentChar != null && line.matches("^\\s*" + commentChar + ".*"))
                     continue;
                 String l = trimLines ? line.trim() : line;
-                if (skipEmptyLines && l.length() == 0)
+                if (skipEmptyLines && l.isEmpty())
                     continue;
                 contents.add(l);
             }

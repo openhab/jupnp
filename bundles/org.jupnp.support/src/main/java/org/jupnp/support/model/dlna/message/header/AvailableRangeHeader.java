@@ -28,7 +28,7 @@ public class AvailableRangeHeader extends DLNAHeader<NormalPlayTimeRange> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 setValue(NormalPlayTimeRange.valueOf(s, true));
                 return;

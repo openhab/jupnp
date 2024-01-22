@@ -690,7 +690,7 @@ public class RegistryImpl implements Registry {
                 else
                     pendingExecution.run();
             }
-            if (pendingExecutions.size() > 0) {
+            if (!pendingExecutions.isEmpty()) {
                 pendingExecutions.clear();
             }
         }

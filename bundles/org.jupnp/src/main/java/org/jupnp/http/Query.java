@@ -91,7 +91,7 @@ public class Query {
         if (values == null)
             return "";
 
-        if (values.size() == 0)
+        if (values.isEmpty())
             return "";
 
         return values.get(0);
@@ -132,7 +132,7 @@ public class Query {
     }
 
     public boolean isEmpty() {
-        return parameters.size() == 0;
+        return parameters.isEmpty();
     }
 
     public Query cloneAndAdd(String name, String... values) {
@@ -151,7 +151,7 @@ public class Query {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             for (String v : entry.getValue()) {
-                if (v == null || v.length() == 0)
+                if (v == null || v.isEmpty())
                     continue;
                 if (sb.length() > 0)
                     sb.append("&");

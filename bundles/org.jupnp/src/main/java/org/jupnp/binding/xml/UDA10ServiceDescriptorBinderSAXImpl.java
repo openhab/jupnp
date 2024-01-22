@@ -55,7 +55,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
             throws DescriptorBindingException, ValidationException {
 
-        if (descriptorXml == null || descriptorXml.length() == 0) {
+        if (descriptorXml == null || descriptorXml.isEmpty()) {
             throw new DescriptorBindingException("Null or empty descriptor");
         }
 

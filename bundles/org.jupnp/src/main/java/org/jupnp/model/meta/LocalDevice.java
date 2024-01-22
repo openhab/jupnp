@@ -187,7 +187,7 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
             LocalService[] services, List<LocalDevice> embeddedDevices) throws ValidationException {
         return new LocalDevice(new DeviceIdentity(udn, getIdentity().getMaxAgeSeconds()), version, type, details, icons,
                 services,
-                embeddedDevices.size() > 0 ? embeddedDevices.toArray(new LocalDevice[embeddedDevices.size()]) : null);
+                !embeddedDevices.isEmpty() ? embeddedDevices.toArray(new LocalDevice[embeddedDevices.size()]) : null);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
 
     public void setString(String s) throws InvalidHeaderException {
 
-        if (s.length() == 0) {
+        if (s.isEmpty()) {
             // Well, no callback URLs are not useful but we have to consider this state
             return;
         }

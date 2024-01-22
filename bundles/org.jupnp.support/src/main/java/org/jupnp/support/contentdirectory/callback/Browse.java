@@ -100,7 +100,7 @@ public abstract class Browse extends ActionCallback {
 
         boolean proceed = receivedRaw(invocation, result);
 
-        if (proceed && result.getCountLong() > 0 && result.getResult().length() > 0) {
+        if (proceed && result.getCountLong() > 0 && !result.getResult().isEmpty()) {
 
             try {
 

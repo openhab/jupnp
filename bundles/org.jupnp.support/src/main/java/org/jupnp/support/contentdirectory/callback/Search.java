@@ -99,7 +99,7 @@ public abstract class Search extends ActionCallback {
 
         boolean proceed = receivedRaw(actionInvocation, result);
 
-        if (proceed && result.getCountLong() > 0 && result.getResult().length() > 0) {
+        if (proceed && result.getCountLong() > 0 && !result.getResult().isEmpty()) {
             try {
                 DIDLParser didlParser = new DIDLParser();
                 DIDLContent didl = didlParser.parse(result.getResult());

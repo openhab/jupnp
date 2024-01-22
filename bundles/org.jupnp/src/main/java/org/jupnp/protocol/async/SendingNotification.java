@@ -60,7 +60,7 @@ public abstract class SendingNotification extends SendingAsync {
     protected void execute() throws RouterException {
 
         List<NetworkAddress> activeStreamServers = getUpnpService().getRouter().getActiveStreamServers(null);
-        if (activeStreamServers.size() == 0) {
+        if (activeStreamServers.isEmpty()) {
             log.trace("Aborting notifications, no active stream servers found (network disabled?)");
             return;
         }
@@ -116,7 +116,7 @@ public abstract class SendingNotification extends SendingAsync {
         }
 
         List<OutgoingNotificationRequest> serviceTypeMsgs = createServiceTypeMessages(getDevice(), descriptorLocation);
-        if (serviceTypeMsgs.size() > 0) {
+        if (!serviceTypeMsgs.isEmpty()) {
             log.trace("Sending service type messages");
             for (OutgoingNotificationRequest upnpMessage : serviceTypeMsgs) {
                 getUpnpService().getRouter().send(upnpMessage);

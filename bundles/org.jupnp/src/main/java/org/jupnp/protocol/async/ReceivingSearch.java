@@ -95,7 +95,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
         List<NetworkAddress> activeStreamServers = getUpnpService().getRouter()
                 .getActiveStreamServers(getInputMessage().getLocalAddress());
-        if (activeStreamServers.size() == 0) {
+        if (activeStreamServers.isEmpty()) {
             log.trace("Aborting search response, no active stream servers found (network disabled?)");
             return;
         }
@@ -122,7 +122,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             mx = MXHeader.DEFAULT_VALUE;
 
         // Only wait if there is something to wait for
-        if (getUpnpService().getRegistry().getLocalDevices().size() > 0) {
+        if (!getUpnpService().getRegistry().getLocalDevices().isEmpty()) {
             int sleepTime = randomGenerator.nextInt(mx * 1000);
             log.trace("Sleeping {} milliseconds to avoid flooding with search responses", sleepTime);
             Thread.sleep(sleepTime);
@@ -189,7 +189,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             }
 
             List<OutgoingSearchResponse> serviceTypeMsgs = createServiceTypeMessages(localDevice, activeStreamServer);
-            if (serviceTypeMsgs.size() > 0) {
+            if (!serviceTypeMsgs.isEmpty()) {
                 if (LOG_ENABLED) {
                     log.trace("Sending service type messages");
                 }

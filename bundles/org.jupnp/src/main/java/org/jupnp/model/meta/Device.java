@@ -121,7 +121,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         this.embeddedDevices = embeddedDevices == null || allNullEmbedded ? null : embeddedDevices;
 
         List<ValidationError> errors = validate();
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             if (log.isTraceEnabled()) {
                 for (ValidationError error : errors) {
                     log.trace(error.toString());
@@ -301,7 +301,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     public S findService(ServiceType serviceType) {
         Collection<S> services = findServices(serviceType, null, (D) this);
-        return services.size() > 0 ? services.iterator().next() : null;
+        return !services.isEmpty() ? services.iterator().next() : null;
     }
 
     public ServiceType[] findServiceTypes() {
@@ -374,8 +374,8 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             }
         }
 
-        sb.append((cleanModelName != null && cleanModelName.length() > 0 ? " " + cleanModelName : ""));
-        sb.append((cleanModelNumber != null && cleanModelNumber.length() > 0 ? " " + cleanModelNumber.trim() : ""));
+        sb.append((cleanModelName != null && !cleanModelName.isEmpty() ? " " + cleanModelName : ""));
+        sb.append((cleanModelNumber != null && !cleanModelNumber.isEmpty() ? " " + cleanModelNumber.trim() : ""));
         return sb.toString();
     }
 

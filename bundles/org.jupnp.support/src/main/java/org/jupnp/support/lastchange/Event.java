@@ -88,7 +88,7 @@ public class Event {
 
     public boolean hasChanges() {
         for (InstanceID instanceID : instanceIDs) {
-            if (instanceID.getValues().size() > 0)
+            if (!instanceID.getValues().isEmpty())
                 return true;
         }
         return false;

@@ -14,7 +14,6 @@
 
 package org.jupnp.internal.compat.java.beans;
 
-import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -65,8 +64,7 @@ public class PropertyChangeSupport {
     public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         if (oldValue == null || newValue == null || !oldValue.equals(newValue)) {
             PropertyChangeEvent event = new PropertyChangeEvent(this.source, propertyName, oldValue, newValue);
-            for (Iterator<PropertyChangeListener> iter = listeners.iterator(); iter.hasNext();) {
-                PropertyChangeListener listener = iter.next();
+            for (PropertyChangeListener listener : listeners) {
                 listener.propertyChange(event);
             }
 

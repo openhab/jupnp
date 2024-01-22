@@ -116,7 +116,7 @@ public class ActionArgument<S extends Service> implements Validatable {
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList();
 
-        if (getName() == null || getName().length() == 0) {
+        if (getName() == null || getName().isEmpty()) {
             errors.add(new ValidationError(getClass(), "name", "Argument without name of: " + getAction()));
         } else if (!ModelUtil.isValidUDAName(getName())) {
             SpecificationViolationReporter.report(getAction().getService().getDevice(), "Invalid argument name: {}",

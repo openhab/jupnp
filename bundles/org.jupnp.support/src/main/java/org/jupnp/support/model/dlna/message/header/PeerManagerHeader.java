@@ -28,7 +28,7 @@ public class PeerManagerHeader extends DLNAHeader<ServiceReference> {
 
     @Override
     public void setString(String s) {
-        if (s.length() != 0) {
+        if (!s.isEmpty()) {
             try {
                 ServiceReference serviceReference = new ServiceReference(s);
                 if (serviceReference.getUdn() != null && serviceReference.getServiceId() != null) {

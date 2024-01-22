@@ -176,7 +176,7 @@ public class AnnotationStateVariableBinder {
 
         String declaredDatatype = getAnnotation().datatype();
 
-        if (declaredDatatype.length() == 0 && getAccessor() != null) {
+        if (declaredDatatype.isEmpty() && getAccessor() != null) {
             Class returnType = getAccessor().getReturnType();
             log.trace("Using accessor return type as state variable type: {}", returnType);
 
@@ -194,14 +194,14 @@ public class AnnotationStateVariableBinder {
         }
 
         // We can also guess that if the allowed values are set then it's a string
-        if ((declaredDatatype == null || declaredDatatype.length() == 0)
+        if ((declaredDatatype == null || declaredDatatype.isEmpty())
                 && (getAnnotation().allowedValues().length > 0 || getAnnotation().allowedValuesEnum() != void.class)) {
             log.trace("State variable has restricted allowed values, hence using 'string' datatype");
             declaredDatatype = "string";
         }
 
         // If we still don't have it, there is nothing more we can do
-        if (declaredDatatype == null || declaredDatatype.length() == 0) {
+        if (declaredDatatype == null || declaredDatatype.isEmpty()) {
             throw new LocalServiceBindingException("Could not detect datatype of state variable: " + getName());
         }
 
@@ -222,7 +222,7 @@ public class AnnotationStateVariableBinder {
     protected String createDefaultValue(Datatype datatype) throws LocalServiceBindingException {
 
         // Next, the default value of the state variable, first the declared one
-        if (getAnnotation().defaultValue().length() != 0) {
+        if (!getAnnotation().defaultValue().isEmpty()) {
             // The declared default value needs to match the datatype
             try {
                 datatype.valueOf(getAnnotation().defaultValue());

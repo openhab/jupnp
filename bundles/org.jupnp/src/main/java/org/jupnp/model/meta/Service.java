@@ -166,7 +166,7 @@ public abstract class Service<D extends Device, S extends Service> {
                 // errors.addAll(action.validate());
 
                 List<ValidationError> actionErrors = action.validate();
-                if (actionErrors.size() > 0) {
+                if (!actionErrors.isEmpty()) {
                     actions.remove(action.getName()); // Remove it
                     log.warn("Discarding invalid action of service '{}': {}", getServiceId(), action.getName());
                     // log details only in debug level

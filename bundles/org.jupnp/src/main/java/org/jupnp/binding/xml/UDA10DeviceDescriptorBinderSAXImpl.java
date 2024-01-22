@@ -56,7 +56,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
     public <D extends Device> D describe(D undescribedDevice, String descriptorXml)
             throws DescriptorBindingException, ValidationException {
 
-        if (descriptorXml == null || descriptorXml.length() == 0) {
+        if (descriptorXml == null || descriptorXml.isEmpty()) {
             throw new DescriptorBindingException("Null or empty descriptor");
         }
 
@@ -111,7 +111,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 case URLBase:
                     try {
                         String urlString = getCharacters();
-                        if (urlString != null && urlString.length() > 0) {
+                        if (urlString != null && !urlString.isEmpty()) {
                             // We hope it's RFC 2396 and RFC 2732 compliant
                             getInstance().baseURL = new URL(urlString);
                         }

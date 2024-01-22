@@ -201,7 +201,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
     }
 
     public boolean isBodyNonEmptyString() {
-        return hasBody() && getBodyType().equals(UpnpMessage.BodyType.STRING) && getBodyString().length() > 0;
+        return hasBody() && getBodyType().equals(UpnpMessage.BodyType.STRING) && !getBodyString().isEmpty();
     }
 
     @Override

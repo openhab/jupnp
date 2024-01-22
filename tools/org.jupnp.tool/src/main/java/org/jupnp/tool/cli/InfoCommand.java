@@ -14,7 +14,6 @@
 
 package org.jupnp.tool.cli;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.jupnp.UpnpService;
@@ -58,15 +57,12 @@ public class InfoCommand {
         }
 
         Registry registry = upnpService.getRegistry();
-        for (Iterator<RemoteDevice> iter = registry.getRemoteDevices().iterator(); iter.hasNext();) {
-            RemoteDevice device = iter.next();
-
+        for (RemoteDevice device : registry.getRemoteDevices()) {
             String ipAddress = device.getIdentity().getDescriptorURL().getHost();
             String udn = device.getIdentity().getUdn().getIdentifierString();
             logger.info("ip: {}, udn={}", ipAddress, udn);
 
-            for (Iterator<String> searchIiter = ipAddressOrUdns.iterator(); searchIiter.hasNext();) {
-                String ipAddressOrUdn = searchIiter.next();
+            for (String ipAddressOrUdn : ipAddressOrUdns) {
                 boolean match = false;
                 if (isSameUdn(udn, ipAddressOrUdn)) {
                     match = true;
@@ -127,7 +123,7 @@ public class InfoCommand {
         } else {
             String s;
             if (o instanceof String) {
-                if (((String) o).length() == 0) {
+                if (((String) o).isEmpty()) {
                     s = "\"\"";
                 } else {
                     s = (String) o;
@@ -144,8 +140,8 @@ public class InfoCommand {
 
     private String flatList(List<String> l) {
         StringBuilder sb = new StringBuilder();
-        for (Iterator<String> iter = l.iterator(); iter.hasNext();) {
-            sb.append(iter.next());
+        for (String s : l) {
+            sb.append(s);
             sb.append(" ");
         }
         return sb.toString();
