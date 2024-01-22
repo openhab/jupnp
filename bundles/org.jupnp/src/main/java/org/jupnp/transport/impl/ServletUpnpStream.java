@@ -123,9 +123,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
 
         // Body
         byte[] bodyBytes;
-        InputStream is = null;
-        try {
-            is = getRequest().getInputStream();
+        try (InputStream is = getRequest().getInputStream()) {
 
             // Needed as on some bad HTTP Stack implementations the inputStream may block when trying to read a request
             // without a body (GET)
@@ -134,9 +132,6 @@ public abstract class ServletUpnpStream extends UpnpStream {
             } else {
                 bodyBytes = IO.readBytes(is);
             }
-        } finally {
-            if (is != null)
-                is.close();
         }
         log.trace("Reading request body bytes: {}", bodyBytes.length);
 

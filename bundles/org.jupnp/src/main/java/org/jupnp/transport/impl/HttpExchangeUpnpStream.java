@@ -92,13 +92,8 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
             // Body
             byte[] bodyBytes;
-            InputStream is = null;
-            try {
-                is = getHttpExchange().getRequestBody();
+            try (InputStream is = getHttpExchange().getRequestBody()) {
                 bodyBytes = IO.readBytes(is);
-            } finally {
-                if (is != null)
-                    is.close();
             }
 
             log.trace("Reading request body bytes: {}", bodyBytes.length);
@@ -132,14 +127,9 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
                 if (contentLength > 0) {
                     log.trace("Response message has body, writing bytes to stream...");
-                    OutputStream os = null;
-                    try {
-                        os = getHttpExchange().getResponseBody();
+                    try (OutputStream os = getHttpExchange().getResponseBody()) {
                         IO.writeBytes(os, responseBodyBytes);
                         os.flush();
-                    } finally {
-                        if (os != null)
-                            os.close();
                     }
                 }
 

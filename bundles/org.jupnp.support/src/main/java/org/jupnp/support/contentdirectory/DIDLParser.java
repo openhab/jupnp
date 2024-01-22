@@ -90,13 +90,8 @@ public class DIDLParser extends SAXParser {
      * @throws Exception
      */
     public DIDLContent parseResource(String resource) throws Exception {
-        InputStream is = null;
-        try {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource)) {
             return parse(IO.readLines(is));
-        } finally {
-            if (is != null)
-                is.close();
         }
     }
 

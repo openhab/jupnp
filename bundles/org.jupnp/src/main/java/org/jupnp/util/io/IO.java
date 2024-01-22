@@ -89,29 +89,11 @@ public class IO {
             destFile.createNewFile();
         }
 
-        FileInputStream fis = null;
-        FileChannel source = null;
-        FileOutputStream fos = null;
-        FileChannel destination = null;
-        try {
-            fis = new FileInputStream(sourceFile);
-            source = fis.getChannel();
-            fos = new FileOutputStream(destFile);
-            destination = fos.getChannel();
+        try (FileInputStream fis = new FileInputStream(sourceFile);
+                FileChannel source = fis.getChannel();
+                FileOutputStream fos = new FileOutputStream(destFile);
+                FileChannel destination = fos.getChannel()) {
             destination.transferFrom(source, 0, source.size());
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-            if (source != null) {
-                source.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
-            if (destination != null) {
-                destination.close();
-            }
         }
     }
 
@@ -122,11 +104,8 @@ public class IO {
     }
 
     public static byte[] readBytes(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
-        try {
+        try (InputStream is = new FileInputStream(file)) {
             return readBytes(is);
-        } finally {
-            is.close();
         }
     }
 
@@ -148,12 +127,9 @@ public class IO {
             throw new IllegalArgumentException("File cannot be written: " + file);
         }
 
-        OutputStream os = new FileOutputStream(file);
-        try {
+        try (OutputStream os = new FileOutputStream(file)) {
             writeBytes(os, data);
             os.flush();
-        } finally {
-            os.close();
         }
     }
 
@@ -175,12 +151,9 @@ public class IO {
             throw new IllegalArgumentException("File cannot be written: " + file);
         }
 
-        OutputStream os = new FileOutputStream(file);
-        try {
+        try (OutputStream os = new FileOutputStream(file)) {
             writeUTF8(os, contents);
             os.flush();
-        } finally {
-            os.close();
         }
     }
 
@@ -201,11 +174,8 @@ public class IO {
     }
 
     public static String readLines(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
-        try {
+        try (InputStream is = new FileInputStream(file)) {
             return readLines(is);
-        } finally {
-            is.close();
         }
     }
 
@@ -220,8 +190,7 @@ public class IO {
     public static String[] readLines(File file, boolean trimLines, Character commentChar, boolean skipEmptyLines)
             throws IOException {
         List<String> contents = new ArrayList();
-        BufferedReader input = new BufferedReader(new FileReader(file));
-        try {
+        try (BufferedReader input = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = input.readLine()) != null) {
                 if (commentChar != null && line.matches("^\\s*" + commentChar + ".*"))
@@ -231,8 +200,6 @@ public class IO {
                     continue;
                 contents.add(l);
             }
-        } finally {
-            input.close();
         }
         return contents.toArray(new String[contents.size()]);
     }

@@ -94,13 +94,8 @@ public abstract class LastChangeParser extends SAXParser {
      * @throws Exception
      */
     public Event parseResource(String resource) throws Exception {
-        InputStream is = null;
-        try {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource)) {
             return parse(IO.readLines(is));
-        } finally {
-            if (is != null)
-                is.close();
         }
     }
 
