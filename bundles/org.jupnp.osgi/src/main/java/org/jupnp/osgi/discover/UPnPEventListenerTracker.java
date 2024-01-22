@@ -58,7 +58,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
 
     private UpnpService upnpService;
     private UPnPDeviceImpl device;
-    private Map<ServiceReference, List<SubscriptionCallback>> listenerCallbacks = new Hashtable();
+    private Map<ServiceReference, List<SubscriptionCallback>> listenerCallbacks = new Hashtable<>();
 
     public UPnPEventListenerTracker(BundleContext context, Filter filter, UpnpService upnpService,
             UPnPDeviceImpl device) {

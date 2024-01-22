@@ -43,8 +43,8 @@ public class Action<S extends Service> implements Validatable {
         this.name = name;
         if (arguments != null) {
 
-            List<ActionArgument> inputList = new ArrayList();
-            List<ActionArgument> outputList = new ArrayList();
+            List<ActionArgument> inputList = new ArrayList<>();
+            List<ActionArgument> outputList = new ArrayList<>();
 
             for (ActionArgument argument : arguments) {
                 argument.setAction(this);
@@ -137,7 +137,7 @@ public class Action<S extends Service> implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getName() == null || getName().isEmpty()) {
             errors.add(new ValidationError(getClass(), "name", "Action without name of: " + getService()));

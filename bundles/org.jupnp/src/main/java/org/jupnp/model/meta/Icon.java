@@ -158,7 +158,7 @@ public class Icon implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getMimeType() == null) {
             SpecificationViolationReporter.report(getDevice(), "Invalid icon, missing mime type: {}", this);

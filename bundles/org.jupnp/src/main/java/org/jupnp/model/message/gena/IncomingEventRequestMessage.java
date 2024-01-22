@@ -34,7 +34,7 @@ import org.jupnp.model.types.UnsignedIntegerFourBytes;
  */
 public class IncomingEventRequestMessage extends StreamRequestMessage {
 
-    private final List<StateVariableValue> stateVariableValues = new ArrayList();
+    private final List<StateVariableValue> stateVariableValues = new ArrayList<>();
     private final RemoteService service;
 
     public IncomingEventRequestMessage(StreamRequestMessage source, RemoteService service) {

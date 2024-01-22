@@ -81,7 +81,7 @@ class ActionInvokeIncomingTest {
 
     @Test
     void incomingRemoteCallClientInfo() throws Exception {
-        UpnpMessage response = incomingRemoteCallGet(
+        UpnpMessage<UpnpResponse> response = incomingRemoteCallGet(
                 ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceWithClientInfo.class));
 
         assertEquals(4, response.getHeaders().size());
@@ -269,7 +269,7 @@ class ActionInvokeIncomingTest {
 
         prot.run();
 
-        UpnpMessage response = prot.getOutputMessage();
+        UpnpMessage<UpnpResponse> response = prot.getOutputMessage();
 
         assertNull(response);
         // The StreamServer will send a 404 response

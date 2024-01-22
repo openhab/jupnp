@@ -65,7 +65,7 @@ public class BinaryLightServer implements Runnable {
 
         LocalService<SwitchPower> switchPowerService = new AnnotationLocalServiceBinder().read(SwitchPower.class);
 
-        switchPowerService.setManager(new DefaultServiceManager(switchPowerService, SwitchPower.class));
+        switchPowerService.setManager(new DefaultServiceManager<>(switchPowerService, SwitchPower.class));
 
         return new LocalDevice(identity, type, details, icon, switchPowerService);
 

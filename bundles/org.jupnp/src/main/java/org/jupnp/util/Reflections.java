@@ -146,7 +146,7 @@ public class Reflections {
     // ####################
 
     public static List<Method> getMethods(Class clazz, Class annotation) {
-        List<Method> methods = new ArrayList();
+        List<Method> methods = new ArrayList<>();
         for (Class superClass = clazz; superClass != null
                 && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Method method : superClass.getDeclaredMethods()) {
@@ -174,7 +174,7 @@ public class Reflections {
     // ####################
 
     public static List<Field> getFields(Class clazz, Class annotation) {
-        List<Field> fields = new ArrayList();
+        List<Field> fields = new ArrayList<>();
         for (Class superClass = clazz; superClass != null
                 && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Field field : superClass.getDeclaredFields()) {
@@ -202,7 +202,7 @@ public class Reflections {
         while (!getClass(type).equals(baseClass)) {
             if (type instanceof Class) {
                 // there is no useful information for us in raw types, so just keep going.
-                type = ((Class) type).getGenericSuperclass();
+                type = ((Class<?>) type).getGenericSuperclass();
             } else {
                 ParameterizedType parameterizedType = (ParameterizedType) type;
                 Class<?> rawType = (Class) parameterizedType.getRawType();

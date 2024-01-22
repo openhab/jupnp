@@ -230,7 +230,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
 
             // Finally, remove the device from the registry
-            getDeviceItems().remove(new RegistryItem(registeredDevice.getIdentity().getUdn()));
+            getDeviceItems().remove(new RegistryItem<>(registeredDevice.getIdentity().getUdn()));
 
             return true;
         }
@@ -261,7 +261,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             return;
 
         // Remove expired remote devices
-        Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap();
+        Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap<>();
         for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             log.trace("Device '{}' expires in seconds: {}", remoteItem.getItem(),
                     remoteItem.getExpirationDetails().getSecondsUntilExpiration());
@@ -275,7 +275,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
 
         // Renew outgoing subscriptions
-        Set<RemoteGENASubscription> expiredOutgoingSubscriptions = new HashSet();
+        Set<RemoteGENASubscription> expiredOutgoingSubscriptions = new HashSet<>();
         for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             ExpirationDetails expirationDetails = item.getExpirationDetails();
             if (expirationDetails.getRenewAttempts() < 1 && expirationDetails.hasExpired(true)) {
@@ -302,7 +302,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     void shutdown() {
         log.trace("Cancelling all outgoing subscriptions to remote devices during shutdown");
-        List<RemoteGENASubscription> remoteSubscriptions = new ArrayList();
+        List<RemoteGENASubscription> remoteSubscriptions = new ArrayList<>();
         for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             remoteSubscriptions.add(item.getItem());
         }

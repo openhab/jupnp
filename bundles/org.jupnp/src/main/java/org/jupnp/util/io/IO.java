@@ -219,7 +219,7 @@ public class IO {
 
     public static String[] readLines(File file, boolean trimLines, Character commentChar, boolean skipEmptyLines)
             throws IOException {
-        List<String> contents = new ArrayList();
+        List<String> contents = new ArrayList<>();
         BufferedReader input = new BufferedReader(new FileReader(file));
         try {
             String line;

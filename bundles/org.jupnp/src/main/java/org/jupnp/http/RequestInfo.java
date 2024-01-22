@@ -63,7 +63,7 @@ public class RequestInfo {
     }
 
     public static void reportParameters(StringBuilder builder, HttpServletRequest req) {
-        Enumeration names = req.getParameterNames();
+        Enumeration<String> names = req.getParameterNames();
         if (names == null)
             return;
 
@@ -82,7 +82,7 @@ public class RequestInfo {
     }
 
     public static void reportHeaders(StringBuilder builder, HttpServletRequest req) {
-        Enumeration names = req.getHeaderNames();
+        Enumeration<String> names = req.getHeaderNames();
         if (names == null)
             return;
         if (names.hasMoreElements()) {
@@ -167,7 +167,7 @@ public class RequestInfo {
         Logger log = LoggerFactory.getLogger(RequestInfo.class);
         log.info(text);
         dumpRequestString(timestamp, request);
-        Enumeration headers = request.getHeaderNames();
+        Enumeration<String> headers = request.getHeaderNames();
         if (headers != null) {
             while (headers.hasMoreElements()) {
                 String headerName = (String) headers.nextElement();

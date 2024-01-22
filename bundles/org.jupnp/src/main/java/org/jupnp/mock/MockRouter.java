@@ -48,11 +48,11 @@ import org.jupnp.transport.spi.UpnpStream;
 public class MockRouter implements Router {
 
     public int counter = -1;
-    public List<IncomingDatagramMessage> incomingDatagramMessages = new ArrayList();
-    public List<OutgoingDatagramMessage> outgoingDatagramMessages = new ArrayList();
-    public List<UpnpStream> receivedUpnpStreams = new ArrayList();
-    public List<StreamRequestMessage> sentStreamRequestMessages = new ArrayList();
-    public List<byte[]> broadcastedBytes = new ArrayList();
+    public List<IncomingDatagramMessage> incomingDatagramMessages = new ArrayList<>();
+    public List<OutgoingDatagramMessage> outgoingDatagramMessages = new ArrayList<>();
+    public List<UpnpStream> receivedUpnpStreams = new ArrayList<>();
+    public List<StreamRequestMessage> sentStreamRequestMessages = new ArrayList<>();
+    public List<byte[]> broadcastedBytes = new ArrayList<>();
 
     protected UpnpServiceConfiguration configuration;
     protected ProtocolFactory protocolFactory;

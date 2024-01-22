@@ -237,7 +237,7 @@ public class SampleData {
     }
 
     public static <T> LocalService<T> readService(LocalService<T> service, Class<T> clazz) {
-        service.setManager(new DefaultServiceManager(service, clazz));
+        service.setManager(new DefaultServiceManager<>(service, clazz));
         return service;
     }
 }

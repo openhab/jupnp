@@ -95,13 +95,13 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         @Override
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
             if (element.equals(ActionListHandler.EL)) {
-                List<MutableAction> actions = new ArrayList();
+                List<MutableAction> actions = new ArrayList<>();
                 getInstance().actions = actions;
                 new ActionListHandler(actions, this);
             }
 
             if (element.equals(StateVariableListHandler.EL)) {
-                List<MutableStateVariable> stateVariables = new ArrayList();
+                List<MutableStateVariable> stateVariables = new ArrayList<>();
                 getInstance().stateVariables = stateVariables;
                 new StateVariableListHandler(stateVariables, this);
             }
@@ -142,7 +142,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         @Override
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
             if (element.equals(ActionArgumentListHandler.EL)) {
-                List<MutableActionArgument> arguments = new ArrayList();
+                List<MutableActionArgument> arguments = new ArrayList<>();
                 getInstance().arguments = arguments;
                 new ActionArgumentListHandler(arguments, this);
             }
@@ -266,7 +266,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         @Override
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
             if (element.equals(AllowedValueListHandler.EL)) {
-                List<String> allowedValues = new ArrayList();
+                List<String> allowedValues = new ArrayList<>();
                 getInstance().allowedValues = allowedValues;
                 new AllowedValueListHandler(allowedValues, this);
             }

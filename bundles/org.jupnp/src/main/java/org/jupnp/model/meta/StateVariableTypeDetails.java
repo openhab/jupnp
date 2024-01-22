@@ -86,7 +86,7 @@ public class StateVariableTypeDetails implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getDatatype() == null) {
             errors.add(new ValidationError(getClass(), "datatype", "Service state variable has no datatype"));

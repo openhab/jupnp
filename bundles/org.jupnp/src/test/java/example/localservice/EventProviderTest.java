@@ -245,7 +245,7 @@ class EventProviderTest extends EventSubscriptionTest {
         };
         upnpService.startup();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerModerated.class);
@@ -355,7 +355,7 @@ class EventProviderTest extends EventSubscriptionTest {
         };
         upnpService.startup();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerModerated.class);

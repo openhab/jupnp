@@ -115,7 +115,7 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getName() == null || getName().isEmpty()) {
             errors.add(new ValidationError(getClass(), "name", "Argument without name of: " + getAction()));

@@ -72,7 +72,7 @@ public abstract class CSV<T> extends ArrayList<T> {
 
     @Override
     public String toString() {
-        List<String> stringValues = new ArrayList();
+        List<String> stringValues = new ArrayList<>();
         for (T t : this) {
             stringValues.add(datatype.getDatatype().getString(t));
         }

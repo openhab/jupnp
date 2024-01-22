@@ -58,7 +58,7 @@ public class RegistryImpl implements Registry {
 
     protected UpnpService upnpService;
     protected RegistryMaintainer registryMaintainer;
-    protected final Set<RemoteGENASubscription> pendingSubscriptionsLock = new HashSet();
+    protected final Set<RemoteGENASubscription> pendingSubscriptionsLock = new HashSet<>();
     protected Object lock = new Object();
 
     public RegistryImpl() {
@@ -99,10 +99,10 @@ public class RegistryImpl implements Registry {
 
     // #################################################################################################
 
-    protected final Set<RegistryListener> registryListeners = new CopyOnWriteArraySet();
+    protected final Set<RegistryListener> registryListeners = new CopyOnWriteArraySet<>();
     protected final Set<RegistryItem<URI, Resource>> resourceItems = Collections
             .newSetFromMap(new ConcurrentHashMap<>());
-    protected final List<Runnable> pendingExecutions = new LinkedList();
+    protected final List<Runnable> pendingExecutions = new LinkedList<>();
 
     // in the methods that acquire both locks at the same time always acquire remoteItemsLock first
     protected final ReentrantReadWriteLock remoteItemsLock = new ReentrantReadWriteLock(true);
@@ -431,7 +431,7 @@ public class RegistryImpl implements Registry {
     }
 
     public Collection<Resource> getResources() {
-        Collection<Resource> s = new HashSet(resourceItems.size());
+        Collection<Resource> s = new HashSet<>(resourceItems.size());
 
         for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
             s.add(resourceItem.getItem());
@@ -440,7 +440,7 @@ public class RegistryImpl implements Registry {
     }
 
     public <T extends Resource> Collection<T> getResources(Class<T> resourceType) {
-        Collection<T> s = new HashSet(resourceItems.size());
+        Collection<T> s = new HashSet<>(resourceItems.size());
         for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
             if (resourceType.isAssignableFrom(resourceItem.getItem().getClass()))
                 s.add((T) resourceItem.getItem());
@@ -460,7 +460,7 @@ public class RegistryImpl implements Registry {
     }
 
     public boolean removeResource(Resource resource) {
-        return resourceItems.remove(new RegistryItem(resource.getPathQuery()));
+        return resourceItems.remove(new RegistryItem<>(resource.getPathQuery()));
     }
 
     // #################################################################################################

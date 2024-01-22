@@ -217,7 +217,7 @@ class ActionInvokeOutgoingTest {
 
         // Register remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
+        Service<RemoteDevice, RemoteService> service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getAction("GetTarget");
@@ -281,7 +281,7 @@ class ActionInvokeOutgoingTest {
 
         // Registery remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
+        Service<RemoteDevice, RemoteService> service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getAction("GetTarget");
@@ -328,7 +328,7 @@ class ActionInvokeOutgoingTest {
 
         // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
+        Service<RemoteDevice, RemoteService> service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getAction("GetTarget");
@@ -366,7 +366,7 @@ class ActionInvokeOutgoingTest {
 
         // Registry remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
+        Service<RemoteDevice, RemoteService> service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getAction("GetTarget");
@@ -425,7 +425,7 @@ class ActionInvokeOutgoingTest {
 
         upnpService.getRegistry().addDevice(device);
 
-        Action action = device.getServices()[0].getAction("GetNegativeValue");
+        Action<RemoteService> action = device.getServices()[0].getAction("GetNegativeValue");
 
         ActionInvocation actionInvocation = new ActionInvocation(action);
         final boolean[] assertions = new boolean[1];
@@ -465,7 +465,7 @@ class ActionInvokeOutgoingTest {
 
         // Registery remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
-        Service service = SampleData.getFirstService(device);
+        Service<RemoteDevice, RemoteService> service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getQueryStateVariableAction();
