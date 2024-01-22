@@ -26,7 +26,7 @@ public class TransferModeHeader extends DLNAHeader<TransferModeHeader.Type> {
     public enum Type {
         Streaming,
         Interactive,
-        Background;
+        Background
     }
 
     public TransferModeHeader() {

@@ -24,7 +24,7 @@ public class CodedDataBuffer {
     public enum TransferMechanism {
         IMMEDIATELY,
         TIMESTAMP,
-        OTHER;
+        OTHER
     }
 
     private Long size;
