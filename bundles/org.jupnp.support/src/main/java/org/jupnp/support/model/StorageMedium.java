@@ -60,7 +60,7 @@ public enum StorageMedium {
     NOT_IMPLEMENTED,
     VENDOR_SPECIFIC;
 
-    private static Map<String, StorageMedium> byProtocolString = new HashMap<>() {
+    private static final Map<String, StorageMedium> byProtocolString = new HashMap<>() {
         private static final long serialVersionUID = 1635734229355713298L;
 
         {
@@ -70,7 +70,7 @@ public enum StorageMedium {
         }
     };
 
-    private String protocolString;
+    private final String protocolString;
 
     StorageMedium() {
         this(null);

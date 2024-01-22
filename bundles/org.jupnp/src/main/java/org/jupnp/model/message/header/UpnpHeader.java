@@ -65,7 +65,7 @@ public abstract class UpnpHeader<T> {
         EXT_IFACE_MAC("X-CLING-IFACE-MAC", InterfaceMacHeader.class),
         EXT_AV_CLIENT_INFO("X-AV-CLIENT-INFO", AVClientInfoHeader.class);
 
-        private static Map<String, Type> byName = new HashMap<>() {
+        private static final Map<String, Type> byName = new HashMap<>() {
             {
                 for (Type t : Type.values()) {
                     put(t.getHttpName(), t);
@@ -73,8 +73,8 @@ public abstract class UpnpHeader<T> {
             }
         };
 
-        private String httpName;
-        private Class<? extends UpnpHeader>[] headerTypes;
+        private final String httpName;
+        private final Class<? extends UpnpHeader>[] headerTypes;
 
         Type(String httpName, Class<? extends UpnpHeader>... headerClass) {
             this.httpName = httpName;

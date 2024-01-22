@@ -364,8 +364,8 @@ public enum DLNAProfiles {
     VC1_ASF_AP_L2_WMA_WMV("VC1_ASF_AP_L2_WMA", DLNAMimeTypes.MIME_VIDEO_WMV),
     VC1_ASF_AP_L3_WMA_WMV("VC1_ASF_AP_L3_WMA", DLNAMimeTypes.MIME_VIDEO_WMV);
 
-    private String code;
-    private String contentFormat;
+    private final String code;
+    private final String contentFormat;
 
     DLNAProfiles(String code, String contentFormat) {
         this.code = code;

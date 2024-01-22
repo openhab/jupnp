@@ -32,8 +32,8 @@ public enum ConnectionManagerErrorCode {
     NOT_IN_NETWORK(707,
             "The connection cannot be established because the ConnectionManagers are not part of the same physical network.");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     ConnectionManagerErrorCode(int code, String description) {
         this.code = code;

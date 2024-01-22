@@ -24,8 +24,8 @@ public enum ContentDirectoryErrorCode {
     UNSUPPORTED_SORT_CRITERIA(709, "Unsupported or invalid sort criteria"),
     CANNOT_PROCESS(720, "Cannot process the request");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     ContentDirectoryErrorCode(int code, String description) {
         this.code = code;

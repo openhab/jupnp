@@ -61,8 +61,8 @@ public interface Datatype<V> {
         BYTES(byte[].class, Builtin.BIN_BASE64),
         URI(java.net.URI.class, Builtin.URI);
 
-        private Class javaType;
-        private Builtin builtinType;
+        private final Class javaType;
+        private final Builtin builtinType;
 
         Default(Class javaType, Builtin builtinType) {
             this.javaType = javaType;
@@ -126,7 +126,7 @@ public interface Datatype<V> {
         URI("uri", new URIDatatype()),
         UUID("uuid", new StringDatatype());
 
-        private static Map<String, Builtin> byName = new HashMap<>() {
+        private static final Map<String, Builtin> byName = new HashMap<>() {
             {
                 for (Builtin b : Builtin.values()) {
                     // Lowercase descriptor name!
@@ -137,8 +137,8 @@ public interface Datatype<V> {
             }
         };
 
-        private String descriptorName;
-        private Datatype datatype;
+        private final String descriptorName;
+        private final Datatype datatype;
 
         <VT> Builtin(String descriptorName, AbstractDatatype<VT> datatype) {
             datatype.setBuiltin(this); // Protected, we actually want this to be immutable

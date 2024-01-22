@@ -29,7 +29,7 @@ public enum NotificationSubtype {
     DISCOVER("ssdp:discover"),
     PROPCHANGE("upnp:propchange");
 
-    private String headerString;
+    private final String headerString;
 
     NotificationSubtype(String headerString) {
         this.headerString = headerString;

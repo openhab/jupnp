@@ -24,7 +24,7 @@ public enum BrowseFlag {
     METADATA("BrowseMetadata"),
     DIRECT_CHILDREN("BrowseDirectChildren");
 
-    private String protocolString;
+    private final String protocolString;
 
     BrowseFlag(String protocolString) {
         this.protocolString = protocolString;

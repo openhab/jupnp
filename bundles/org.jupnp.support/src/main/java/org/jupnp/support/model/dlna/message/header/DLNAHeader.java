@@ -69,7 +69,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
         RTPAMRWBPlusDeInterleaving("rtp-amrwbplus-deint-buf-cap.dlna.org", BufferBytesHeader.class),
         PRAGMA("PRAGMA", PragmaHeader.class);
 
-        private static Map<String, Type> byName = new HashMap<>() {
+        private static final Map<String, Type> byName = new HashMap<>() {
             private static final long serialVersionUID = 2786641076120338594L;
 
             {
@@ -79,8 +79,8 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
             }
         };
 
-        private String httpName;
-        private Class<? extends DLNAHeader<?>>[] headerTypes;
+        private final String httpName;
+        private final Class<? extends DLNAHeader<?>>[] headerTypes;
 
         @SafeVarargs
         Type(String httpName, Class<? extends DLNAHeader<?>>... headerClass) {

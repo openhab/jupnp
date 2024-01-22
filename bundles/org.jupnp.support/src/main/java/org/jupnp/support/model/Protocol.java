@@ -34,7 +34,7 @@ public enum Protocol {
 
     private static final Logger logger = LoggerFactory.getLogger(Protocol.class);
 
-    private String protocolString;
+    private final String protocolString;
 
     Protocol(String protocolString) {
         this.protocolString = protocolString;

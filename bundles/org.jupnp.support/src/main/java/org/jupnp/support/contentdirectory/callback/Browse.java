@@ -45,7 +45,7 @@ public abstract class Browse extends ActionCallback {
         LOADING("Loading..."),
         OK("OK");
 
-        private String defaultMessage;
+        private final String defaultMessage;
 
         Status(String defaultMessage) {
             this.defaultMessage = defaultMessage;

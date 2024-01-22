@@ -35,7 +35,7 @@ public class DLNADoc {
         V1_0("1.00"),
         V1_5("1.50");
 
-        String s;
+        final String s;
 
         Version(String s) {
             this.s = s;
