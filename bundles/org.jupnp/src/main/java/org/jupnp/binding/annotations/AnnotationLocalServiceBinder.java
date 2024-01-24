@@ -130,7 +130,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
                                 + stringConvertibleType);
             }
         }
-        Set<Class> stringConvertibleTypes = new HashSet(Arrays.asList(declaredTypes));
+        Set<Class> stringConvertibleTypes = new HashSet<>(Arrays.asList(declaredTypes));
 
         // Some defaults
         stringConvertibleTypes.add(URI.class);
@@ -143,7 +143,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
     protected Map<StateVariable, StateVariableAccessor> readStateVariables(Class<?> clazz,
             Set<Class> stringConvertibleTypes) throws LocalServiceBindingException {
 
-        Map<StateVariable, StateVariableAccessor> map = new HashMap();
+        Map<StateVariable, StateVariableAccessor> map = new HashMap<>();
 
         // State variables declared on the class
         if (clazz.isAnnotationPresent(UpnpStateVariables.class)) {
@@ -222,7 +222,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             Map<StateVariable, StateVariableAccessor> stateVariables, Set<Class> stringConvertibleTypes)
             throws LocalServiceBindingException {
 
-        Map<Action, ActionExecutor> map = new HashMap();
+        Map<Action, ActionExecutor> map = new HashMap<>();
 
         for (Method method : Reflections.getMethods(clazz, UpnpAction.class)) {
             AnnotationActionBinder actionBinder = new AnnotationActionBinder(method, stateVariables,

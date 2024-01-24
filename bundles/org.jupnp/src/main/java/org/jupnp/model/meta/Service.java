@@ -41,8 +41,8 @@ public abstract class Service<D extends Device, S extends Service> {
     private final ServiceType serviceType;
     private final ServiceId serviceId;
 
-    private final Map<String, Action> actions = new HashMap();
-    private final Map<String, StateVariable> stateVariables = new HashMap();
+    private final Map<String, Action> actions = new HashMap<>();
+    private final Map<String, StateVariable> stateVariables = new HashMap<>();
 
     // Package mutable state
     private D device;
@@ -115,11 +115,11 @@ public abstract class Service<D extends Device, S extends Service> {
     public StateVariable<S> getStateVariable(String name) {
         // Some magic necessary for the deprecated 'query state variable' action stuff
         if (QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT.equals(name)) {
-            return new StateVariable(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT,
+            return new StateVariable<>(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_INPUT,
                     new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype()));
         }
         if (QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT.equals(name)) {
-            return new StateVariable(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT,
+            return new StateVariable<>(QueryStateVariableAction.VIRTUAL_STATEVARIABLE_OUTPUT,
                     new StateVariableTypeDetails(Datatype.Builtin.STRING.getDatatype()));
         }
         return stateVariables == null ? null : stateVariables.get(name);
@@ -138,7 +138,7 @@ public abstract class Service<D extends Device, S extends Service> {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getServiceType() == null) {
             errors.add(new ValidationError(getClass(), "serviceType", "Service type/info is required"));

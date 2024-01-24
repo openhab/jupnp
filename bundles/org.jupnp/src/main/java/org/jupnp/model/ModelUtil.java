@@ -36,7 +36,7 @@ public class ModelUtil {
     static {
         boolean foundAndroid = false;
         try {
-            Class androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
+            Class<?> androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
             foundAndroid = androidBuild.getField("ID").get(null) != null;
         } catch (Exception ex) {
             // Ignore
@@ -51,7 +51,7 @@ public class ModelUtil {
     static {
         boolean foundEmulator = false;
         try {
-            Class androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
+            Class<?> androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
             String product = (String) androidBuild.getField("PRODUCT").get(null);
             if ("google_sdk".equals(product) || ("sdk".equals(product)))
                 foundEmulator = true;

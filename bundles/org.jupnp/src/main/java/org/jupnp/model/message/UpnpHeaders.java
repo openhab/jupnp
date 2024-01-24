@@ -55,7 +55,7 @@ public class UpnpHeaders extends Headers {
 
     protected void parseHeaders() {
         // This runs as late as possible and only when necessary (getter called and map is dirty)
-        parsedHeaders = new LinkedHashMap();
+        parsedHeaders = new LinkedHashMap<>();
         log.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
@@ -84,7 +84,7 @@ public class UpnpHeaders extends Headers {
         log.trace("Adding parsed header: {}", value);
         List<UpnpHeader> list = parsedHeaders.get(type);
         if (list == null) {
-            list = new LinkedList();
+            list = new LinkedList<>();
             parsedHeaders.put(type, list);
         }
         list.add(value);

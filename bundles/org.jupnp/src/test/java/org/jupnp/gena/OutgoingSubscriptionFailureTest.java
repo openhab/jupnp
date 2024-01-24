@@ -130,7 +130,7 @@ class OutgoingSubscriptionFailureTest {
         };
         upnpService.startup();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
@@ -218,7 +218,7 @@ class OutgoingSubscriptionFailureTest {
     protected IncomingEventRequestMessage createEventRequestMessage(UpnpService upnpService,
             SubscriptionCallback callback, int sequence) {
 
-        List<StateVariableValue> values = new ArrayList();
+        List<StateVariableValue> values = new ArrayList<>();
         values.add(new StateVariableValue(callback.getService().getStateVariable("Status"), false));
         values.add(new StateVariableValue(callback.getService().getStateVariable("Target"), true));
 

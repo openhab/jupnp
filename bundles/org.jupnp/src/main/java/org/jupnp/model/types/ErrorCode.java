@@ -44,8 +44,8 @@ public enum ErrorCode {
     TRANSPORT_LOCKED(705, "Transport locked"),
     ILLEGAL_MIME_TYPE(714, "Illegal mime-type");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     ErrorCode(int code, String description) {
         this.code = code;

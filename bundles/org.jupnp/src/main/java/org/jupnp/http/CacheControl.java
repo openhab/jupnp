@@ -29,17 +29,17 @@ public class CacheControl {
     private int sharedMaxAge = -1;
 
     private boolean noCache = false;
-    private List<String> noCacheFields = new ArrayList();
+    private List<String> noCacheFields = new ArrayList<>();
 
     private boolean privateFlag = false;
-    private List<String> privateFields = new ArrayList();
+    private List<String> privateFields = new ArrayList<>();
 
     private boolean noStore = false;
     private boolean noTransform = true;
     private boolean mustRevalidate = false;
     private boolean proxyRevalidate = false;
 
-    private Map<String, String> cacheExtensions = new HashMap();
+    private Map<String, String> cacheExtensions = new HashMap<>();
 
     public int getMaxAge() {
         return maxAge;

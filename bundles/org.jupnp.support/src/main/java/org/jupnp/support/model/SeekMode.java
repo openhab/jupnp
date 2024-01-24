@@ -34,7 +34,7 @@ public enum SeekMode {
     TAPE_INDEX("TAPE-INDEX"),
     FRAME("FRAME");
 
-    private String protocolString;
+    private final String protocolString;
 
     SeekMode(String protocolString) {
         this.protocolString = protocolString;

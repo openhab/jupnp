@@ -124,7 +124,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
     }
 
     Collection<LocalDevice> get() {
-        Set<LocalDevice> c = new HashSet();
+        Set<LocalDevice> c = new HashSet<>();
         for (RegistryItem<UDN, LocalDevice> item : getDeviceItems()) {
             c.add(item.getItem());
         }
@@ -143,7 +143,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
             log.trace("Removing local device from registry: {}", localDevice);
 
             setDiscoveryOptions(localDevice.getIdentity().getUdn(), null);
-            getDeviceItems().remove(new RegistryItem(localDevice.getIdentity().getUdn()));
+            getDeviceItems().remove(new RegistryItem<>(localDevice.getIdentity().getUdn()));
 
             for (Resource deviceResource : getResources(localDevice)) {
                 if (registry.removeResource(deviceResource)) {
@@ -217,7 +217,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         if (getDeviceItems().isEmpty())
             return;
 
-        Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet();
+        Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet<>();
 
         // "Flooding" is enabled, check if we need to send advertisements for all devices
         int aliveIntervalMillis = registry.getConfiguration().getAliveIntervalMillis();
@@ -253,7 +253,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         }
 
         // Expire incoming subscriptions
-        Set<RegistryItem<String, LocalGENASubscription>> expiredIncomingSubscriptions = new HashSet();
+        Set<RegistryItem<String, LocalGENASubscription>> expiredIncomingSubscriptions = new HashSet<>();
         for (RegistryItem<String, LocalGENASubscription> item : getSubscriptionItems()) {
             if (item.getExpirationDetails().hasExpired(false)) {
                 expiredIncomingSubscriptions.add(item);

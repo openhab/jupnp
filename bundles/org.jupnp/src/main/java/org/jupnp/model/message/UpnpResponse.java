@@ -33,8 +33,8 @@ public class UpnpResponse extends UpnpOperation {
         INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
         NOT_IMPLEMENTED(501, "Not Implemented");
 
-        private int statusCode;
-        private String statusMsg;
+        private final int statusCode;
+        private final String statusMsg;
 
         Status(int statusCode, String statusMsg) {
             this.statusCode = statusCode;

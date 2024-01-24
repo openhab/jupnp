@@ -139,7 +139,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
                         "Obtained initial state variable values for event, skipping individual state variable accessors");
                 return values;
             }
-            values = new ArrayList();
+            values = new ArrayList<>();
             for (StateVariable stateVariable : getService().getStateVariables()) {
                 if (stateVariable.getEventDetails().isSendEvents()) {
                     StateVariableAccessor accessor = getService().getAccessor(stateVariable);
@@ -161,7 +161,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
             for (String variableName : variableNames) {
                 variableName = variableName.trim();
 
-                StateVariable stateVariable = getService().getStateVariable(variableName);
+                StateVariable<LocalService> stateVariable = getService().getStateVariable(variableName);
                 if (stateVariable == null || !stateVariable.getEventDetails().isSendEvents()) {
                     log.trace("Ignoring unknown or non-evented state variable: {}", variableName);
                     continue;

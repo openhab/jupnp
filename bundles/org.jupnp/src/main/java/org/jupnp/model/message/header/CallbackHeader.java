@@ -32,7 +32,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
     private final Logger log = LoggerFactory.getLogger(CallbackHeader.class);
 
     public CallbackHeader() {
-        setValue(new ArrayList());
+        setValue(new ArrayList<>());
     }
 
     public CallbackHeader(List<URL> urls) {
@@ -59,7 +59,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
         s = s.replaceAll("<", "");
         String[] split = s.split(">");
         try {
-            List<URL> urls = new ArrayList();
+            List<URL> urls = new ArrayList<>();
             for (String sp : split) {
                 sp = sp.trim();
 

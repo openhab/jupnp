@@ -33,7 +33,7 @@ public enum DLNAOperations {
     RANGE(0x01),
     TIMESEEK(0x10);
 
-    private int code;
+    private final int code;
 
     DLNAOperations(int code) {
         this.code = code;

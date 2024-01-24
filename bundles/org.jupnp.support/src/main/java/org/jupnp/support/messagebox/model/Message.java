@@ -37,7 +37,7 @@ public abstract class Message implements ElementAppender {
         INCOMING_CALL("Incoming Call"),
         SCHEDULE_REMINDER("Schedule Reminder");
 
-        public String text;
+        public final String text;
 
         Category(String text) {
             this.text = text;
@@ -49,7 +49,7 @@ public abstract class Message implements ElementAppender {
         MINIMUM("Minimum"),
         MAXIMUM("Maximum");
 
-        public String text;
+        public final String text;
 
         DisplayType(String text) {
             this.text = text;

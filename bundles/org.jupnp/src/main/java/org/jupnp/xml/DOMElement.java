@@ -88,7 +88,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
 
     public CHILD[] getChildren() {
         NodeList nodes = getW3CElement().getChildNodes();
-        List<CHILD> children = new ArrayList();
+        List<CHILD> children = new ArrayList<>();
         for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {

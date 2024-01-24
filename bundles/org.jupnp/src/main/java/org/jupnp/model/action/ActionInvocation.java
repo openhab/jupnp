@@ -37,8 +37,8 @@ public class ActionInvocation<S extends Service> {
 
     // We don't necessarily have to preserve insertion order but it's nicer if the arrays returned
     // by the getters are reliable
-    protected Map<String, ActionArgumentValue<S>> input = new LinkedHashMap();
-    protected Map<String, ActionArgumentValue<S>> output = new LinkedHashMap();
+    protected Map<String, ActionArgumentValue<S>> input = new LinkedHashMap<>();
+    protected Map<String, ActionArgumentValue<S>> output = new LinkedHashMap<>();
 
     protected ActionException failure = null;
 
@@ -120,7 +120,7 @@ public class ActionInvocation<S extends Service> {
     }
 
     public void setInput(String argumentName, Object value) throws InvalidValueException {
-        setInput(new ActionArgumentValue(getInputArgument(argumentName), value));
+        setInput(new ActionArgumentValue<>(getInputArgument(argumentName), value));
     }
 
     public void setInput(ActionArgumentValue<S> value) {
@@ -136,7 +136,7 @@ public class ActionInvocation<S extends Service> {
     }
 
     public void setOutput(String argumentName, Object value) throws InvalidValueException {
-        setOutput(new ActionArgumentValue(getOutputArgument(argumentName), value));
+        setOutput(new ActionArgumentValue<>(getOutputArgument(argumentName), value));
     }
 
     public void setOutput(ActionArgumentValue<S> value) {

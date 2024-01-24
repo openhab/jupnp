@@ -178,7 +178,7 @@ public class AnnotationStateVariableBinder {
         String declaredDatatype = getAnnotation().datatype();
 
         if (declaredDatatype.isEmpty() && getAccessor() != null) {
-            Class returnType = getAccessor().getReturnType();
+            Class<?> returnType = getAccessor().getReturnType();
             log.trace("Using accessor return type as state variable type: {}", returnType);
 
             if (ModelUtil.isStringConvertibleType(getStringConvertibleTypes(), returnType)) {

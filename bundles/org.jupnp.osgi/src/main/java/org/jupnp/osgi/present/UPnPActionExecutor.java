@@ -59,7 +59,7 @@ class UPnPActionExecutor implements ActionExecutor {
         }
 
         try {
-            Dictionary out = action.invoke(args);
+            Dictionary<String, Object> out = action.invoke(args);
 
             if (out != null) {
                 for (String key : (List<String>) Collections.list(out.keys())) {

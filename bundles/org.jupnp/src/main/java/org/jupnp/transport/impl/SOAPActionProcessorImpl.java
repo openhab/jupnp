@@ -514,13 +514,13 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
      */
     protected List<Node> getMatchingNodes(NodeList nodeList, ActionArgument[] args) throws ActionException {
 
-        List<String> names = new ArrayList();
+        List<String> names = new ArrayList<>();
         for (ActionArgument argument : args) {
             names.add(argument.getName());
             names.addAll(Arrays.asList(argument.getAliases()));
         }
 
-        List<Node> matches = new ArrayList();
+        List<Node> matches = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node child = nodeList.item(i);
 

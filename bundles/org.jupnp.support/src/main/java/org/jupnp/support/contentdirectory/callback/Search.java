@@ -44,7 +44,7 @@ public abstract class Search extends ActionCallback {
         LOADING("Loading..."),
         OK("OK");
 
-        private String defaultMessage;
+        private final String defaultMessage;
 
         Status(String defaultMessage) {
             this.defaultMessage = defaultMessage;

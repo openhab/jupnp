@@ -158,7 +158,7 @@ class OutgoingSubscriptionLifecycleTest {
     protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService,
             final SubscriptionCallback callback) {
 
-        List<StateVariableValue> values = new ArrayList();
+        List<StateVariableValue> values = new ArrayList<>();
         values.add(new StateVariableValue(callback.getService().getStateVariable("Status"), false));
         values.add(new StateVariableValue(callback.getService().getStateVariable("Target"), true));
 

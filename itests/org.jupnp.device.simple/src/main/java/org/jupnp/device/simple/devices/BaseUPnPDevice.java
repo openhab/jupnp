@@ -24,7 +24,7 @@ import org.osgi.service.upnp.UPnPDevice;
 
 public abstract class BaseUPnPDevice implements UPnPDevice {
     private UPnPDevice parent;
-    private List<String> children = new ArrayList();
+    private List<String> children = new ArrayList<>();
 
     private Dictionary<String, Object> descriptions = new Hashtable<>();
 

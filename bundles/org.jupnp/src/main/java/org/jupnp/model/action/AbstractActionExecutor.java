@@ -141,10 +141,10 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
                 if (service.isStringConvertibleType(result)) {
                     log.trace(
                             "Result of invocation matches convertible type, setting toString() single output argument value");
-                    actionInvocation.setOutput(new ActionArgumentValue(argument, result.toString()));
+                    actionInvocation.setOutput(new ActionArgumentValue<>(argument, result.toString()));
                 } else {
                     log.trace("Result of invocation is Object, setting single output argument value");
-                    actionInvocation.setOutput(new ActionArgumentValue(argument, result));
+                    actionInvocation.setOutput(new ActionArgumentValue<>(argument, result));
                 }
             } catch (InvalidValueException ex) {
                 throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,

@@ -30,7 +30,7 @@ public enum DLNAConversionIndicator {
     NONE(0),
     TRANSCODED(1);
 
-    private int code;
+    private final int code;
 
     DLNAConversionIndicator(int code) {
         this.code = code;

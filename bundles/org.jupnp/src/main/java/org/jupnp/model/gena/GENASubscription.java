@@ -40,7 +40,7 @@ public abstract class GENASubscription<S extends Service> {
     protected volatile int requestedDurationSeconds = UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
     protected volatile int actualDurationSeconds;
     protected volatile UnsignedIntegerFourBytes currentSequence;
-    protected Map<String, StateVariableValue<S>> currentValues = new ConcurrentHashMap();
+    protected Map<String, StateVariableValue<S>> currentValues = new ConcurrentHashMap<>();
 
     /**
      * Defaults to {@link org.jupnp.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.

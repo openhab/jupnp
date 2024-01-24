@@ -95,7 +95,7 @@ class DatagramParsingTest {
                 NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT, HexBin.stringToBytes("00:17:AB:E9:65:A0", ":")),
                 "/some/path/123/desc/xml");
 
-        OutgoingDatagramMessage msg = new OutgoingNotificationRequestRootDevice(location,
+        OutgoingDatagramMessage<UpnpRequest> msg = new OutgoingNotificationRequestRootDevice(location,
                 SampleData.createLocalDevice(), NotificationSubtype.ALIVE);
 
         msg.getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader()); // Again, the empty header value

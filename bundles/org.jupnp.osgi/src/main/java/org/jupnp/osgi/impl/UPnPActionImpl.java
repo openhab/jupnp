@@ -122,13 +122,13 @@ public class UPnPActionImpl implements UPnPAction {
                     // System.out.printf("key: %s value: %s\n", key, value);
                 }
 
-                input.add(new ActionArgumentValue(argument, value));
+                input.add(new ActionArgumentValue<>(argument, value));
             }
         }
 
         ControlPoint controlPoint = OSGiContext.getUpnpService().getControlPoint();
-        ActionInvocation<?> actionInvocation = new ActionInvocation(action,
-                input.toArray(new ActionArgumentValue<?>[input.size()]));
+        ActionInvocation actionInvocation = new ActionInvocation(action,
+                input.toArray(new ActionArgumentValue[input.size()]));
 
         new ActionCallback.Default(actionInvocation, controlPoint).run();
 

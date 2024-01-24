@@ -53,7 +53,7 @@ public enum DLNAFlags {
     CONNECTION_STALL(1 << 21),
     DLNA_V15(1 << 20);
 
-    private int code;
+    private final int code;
 
     DLNAFlags(int code) {
         this.code = code;

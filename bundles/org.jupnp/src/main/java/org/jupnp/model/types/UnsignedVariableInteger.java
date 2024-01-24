@@ -31,7 +31,7 @@ public abstract class UnsignedVariableInteger {
         TWENTYFOUR(0xffffffL),
         THIRTYTWO(0xffffffffL);
 
-        private long maxValue;
+        private final long maxValue;
 
         Bits(long maxValue) {
             this.maxValue = maxValue;

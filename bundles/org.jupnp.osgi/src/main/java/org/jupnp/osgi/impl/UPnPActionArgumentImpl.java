@@ -44,7 +44,7 @@ public class UPnPActionArgumentImpl extends UPnPStateVariableImpl {
     @Override
     public Class getJavaDataType() {
         String type = argument.getDatatype().getBuiltin().getDescriptorName();
-        Class clazz = UPnPTypeUtil.getUPnPClass(type);
+        Class<?> clazz = UPnPTypeUtil.getUPnPClass(type);
         if (clazz == null) {
             log.warn("Cannot covert UPnP type {} to UPnP Java type", type);
         }

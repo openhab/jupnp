@@ -41,8 +41,8 @@ public enum AVTransportErrorCode {
     RESOURCE_NOT_FOUND(716, "The specified resource cannot be found in the network"),
     INVALID_INSTANCE_ID(718, "The specified instanceID is invalid for this AVTransport");
 
-    private int code;
-    private String description;
+    private final int code;
+    private final String description;
 
     AVTransportErrorCode(int code, String description) {
         this.code = code;

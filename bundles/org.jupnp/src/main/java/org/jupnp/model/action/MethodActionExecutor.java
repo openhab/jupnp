@@ -132,11 +132,11 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         LocalService service = actionInvocation.getAction().getService();
 
-        List values = new ArrayList();
+        List<Object> values = new ArrayList<>();
         int i = 0;
         for (ActionArgument<LocalService> argument : actionInvocation.getAction().getInputArguments()) {
 
-            Class methodParameterType = method.getParameterTypes()[i];
+            Class<?> methodParameterType = method.getParameterTypes()[i];
 
             ActionArgumentValue<LocalService> inputValue = actionInvocation.getInput(argument);
 
@@ -157,7 +157,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             if (!inputCallValueString.isEmpty() && service.isStringConvertibleType(methodParameterType)
                     && !methodParameterType.isEnum()) {
                 try {
-                    Constructor<String> ctor = methodParameterType.getConstructor(String.class);
+                    Constructor<?> ctor = methodParameterType.getConstructor(String.class);
                     log.trace("Creating new input argument value instance with String.class constructor of type: {}",
                             methodParameterType);
                     Object o = ctor.newInstance(inputCallValueString);

@@ -119,7 +119,7 @@ public class MimeType {
         }
 
         if (params != null && !params.isEmpty()) {
-            HashMap<String, String> map = new HashMap();
+            HashMap<String, String> map = new HashMap<>();
 
             int start = 0;
 

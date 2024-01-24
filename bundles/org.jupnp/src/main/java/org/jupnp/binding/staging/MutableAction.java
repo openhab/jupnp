@@ -27,7 +27,7 @@ import org.jupnp.model.meta.ActionArgument;
 public class MutableAction {
 
     public String name;
-    public List<MutableActionArgument> arguments = new ArrayList();
+    public List<MutableActionArgument> arguments = new ArrayList<>();
 
     public Action build() {
         return new Action(name, createActionArguments());

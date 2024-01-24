@@ -39,7 +39,7 @@ public class UpnpRequest extends UpnpOperation {
         UNSUBSCRIBE("UNSUBSCRIBE"),
         UNKNOWN("UNKNOWN");
 
-        private static Map<String, Method> byName = new HashMap<>() {
+        private static final Map<String, Method> byName = new HashMap<>() {
             {
                 for (Method m : Method.values()) {
                     put(m.getHttpName(), m);
@@ -47,7 +47,7 @@ public class UpnpRequest extends UpnpOperation {
             }
         };
 
-        private String httpName;
+        private final String httpName;
 
         Method(String httpName) {
             this.httpName = httpName;

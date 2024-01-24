@@ -67,7 +67,7 @@ public abstract class SendingNotification extends SendingAsync {
         }
 
         // Prepare it once, it's the same for each repetition
-        List<Location> descriptorLocations = new ArrayList();
+        List<Location> descriptorLocations = new ArrayList<>();
         for (NetworkAddress activeStreamServer : activeStreamServers) {
             descriptorLocations.add(new Location(activeStreamServer,
                     getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(getDevice())));
@@ -126,7 +126,7 @@ public abstract class SendingNotification extends SendingAsync {
     }
 
     protected List<OutgoingNotificationRequest> createDeviceMessages(LocalDevice device, Location descriptorLocation) {
-        List<OutgoingNotificationRequest> msgs = new ArrayList();
+        List<OutgoingNotificationRequest> msgs = new ArrayList<>();
 
         // See the tables in UDA 1.0 section 1.1.2
 
@@ -142,7 +142,7 @@ public abstract class SendingNotification extends SendingAsync {
 
     protected List<OutgoingNotificationRequest> createServiceTypeMessages(LocalDevice device,
             Location descriptorLocation) {
-        List<OutgoingNotificationRequest> msgs = new ArrayList();
+        List<OutgoingNotificationRequest> msgs = new ArrayList<>();
 
         for (ServiceType serviceType : device.findServiceTypes()) {
             msgs.add(new OutgoingNotificationRequestServiceType(descriptorLocation, device, getNotificationSubtype(),

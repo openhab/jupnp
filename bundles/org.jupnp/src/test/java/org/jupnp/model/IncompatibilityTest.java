@@ -27,6 +27,7 @@ import org.jupnp.mock.MockUpnpService;
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.RemoteDevice;
 import org.jupnp.model.meta.RemoteDeviceIdentity;
+import org.jupnp.model.meta.RemoteService;
 import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.meta.StateVariableAllowedValueRange;
 import org.jupnp.model.meta.StateVariableTypeDetails;
@@ -163,7 +164,7 @@ class IncompatibilityTest {
     @Test
     void validateCallbackURILength() throws Exception {
         UpnpService upnpService = new MockUpnpService();
-        Device dev = SampleData
+        Device<RemoteDeviceIdentity, RemoteDevice, RemoteService> dev = SampleData
                 .createRemoteDevice(new RemoteDeviceIdentity(UDN.uniqueSystemIdentifier("I'mARokuSoundbridge"), 1800,
                         SampleDeviceRoot.getDeviceDescriptorURL(), null, SampleData.getLocalBaseAddress()));
         Resource[] resources = upnpService.getConfiguration().getNamespace().getResources(dev);

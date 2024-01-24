@@ -71,7 +71,7 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
 
     public HeaderDeviceDetailsProvider(DeviceDetails defaultDeviceDetails, Map<Key, DeviceDetails> headerDetails) {
         this.defaultDeviceDetails = defaultDeviceDetails;
-        this.headerDetails = headerDetails != null ? headerDetails : new HashMap();
+        this.headerDetails = headerDetails != null ? headerDetails : new HashMap<>();
     }
 
     public DeviceDetails getDefaultDeviceDetails() {

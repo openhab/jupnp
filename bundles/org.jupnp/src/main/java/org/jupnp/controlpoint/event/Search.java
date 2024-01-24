@@ -18,13 +18,14 @@ package org.jupnp.controlpoint.event;
 import org.jupnp.model.message.header.MXHeader;
 import org.jupnp.model.message.header.STAllHeader;
 import org.jupnp.model.message.header.UpnpHeader;
+import org.jupnp.model.types.NotificationSubtype;
 
 /**
  * @author Christian Bauer
  */
 public class Search {
 
-    protected UpnpHeader searchType = new STAllHeader();
+    protected UpnpHeader<NotificationSubtype> searchType = new STAllHeader();
     protected int mxSeconds = MXHeader.DEFAULT_VALUE;
 
     public Search() {

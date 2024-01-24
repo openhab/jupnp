@@ -137,7 +137,7 @@ public class Query {
     }
 
     public Query cloneAndAdd(String name, String... values) {
-        Map<String, List<String>> params = new HashMap(getMapWithLists());
+        Map<String, List<String>> params = new HashMap<>(getMapWithLists());
         List<String> existingValues = params.get(name);
         if (existingValues == null) {
             existingValues = new ArrayList<>();

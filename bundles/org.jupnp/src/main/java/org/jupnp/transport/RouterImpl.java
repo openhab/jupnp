@@ -74,9 +74,9 @@ public class RouterImpl implements Router {
     // These are created/destroyed when the router is enabled/disabled
     protected NetworkAddressFactory networkAddressFactory;
     protected StreamClient streamClient;
-    protected final Map<NetworkInterface, MulticastReceiver> multicastReceivers = new HashMap();
-    protected final Map<InetAddress, DatagramIO> datagramIOs = new HashMap();
-    protected final Map<InetAddress, StreamServer> streamServers = new HashMap();
+    protected final Map<NetworkInterface, MulticastReceiver> multicastReceivers = new HashMap<>();
+    protected final Map<InetAddress, DatagramIO> datagramIOs = new HashMap<>();
+    protected final Map<InetAddress, StreamServer> streamServers = new HashMap<>();
 
     protected RouterImpl() {
     }
