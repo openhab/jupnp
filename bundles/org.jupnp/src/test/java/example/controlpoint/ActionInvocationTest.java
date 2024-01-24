@@ -368,7 +368,7 @@ class ActionInvocationTest {
             return new MyStringHolder(myString);
         }
 
-        public class StatusHolder {
+        public static class StatusHolder {
             boolean st;
 
             public StatusHolder(boolean st) {
@@ -380,7 +380,7 @@ class ActionInvocationTest {
             }
         }
 
-        public class MyStringHolder {
+        public static class MyStringHolder {
             MyString myString;
 
             public MyStringHolder(MyString myString) {

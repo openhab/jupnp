@@ -60,7 +60,7 @@ public class SwitchPowerBeanReturn {
         return new StatusHolder(status);
     }
 
-    public class StatusHolder {
+    public static class StatusHolder {
         boolean wrapped;
 
         public StatusHolder(boolean wrapped) {

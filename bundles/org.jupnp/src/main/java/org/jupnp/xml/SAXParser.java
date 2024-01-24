@@ -115,7 +115,7 @@ public class SAXParser {
     /**
      * Always throws exceptions and stops parsing.
      */
-    public class SimpleErrorHandler implements ErrorHandler {
+    public static class SimpleErrorHandler implements ErrorHandler {
         public void warning(SAXParseException e) throws SAXException {
             throw new SAXException(e);
         }

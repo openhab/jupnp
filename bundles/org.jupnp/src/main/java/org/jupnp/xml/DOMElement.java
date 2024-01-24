@@ -262,7 +262,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
         }
     }
 
-    public abstract class Builder<T extends DOMElement> {
+    public abstract static class Builder<T extends DOMElement> {
         public DOMElement element;
 
         protected Builder(DOMElement element) {
@@ -277,7 +277,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
         }
     }
 
-    public abstract class ArrayBuilder<T extends DOMElement> extends Builder<T> {
+    public abstract static class ArrayBuilder<T extends DOMElement> extends Builder<T> {
 
         protected ArrayBuilder(DOMElement element) {
             super(element);

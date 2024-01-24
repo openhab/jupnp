@@ -178,7 +178,7 @@ class RegistryListenerTest {
         assertTrue(listener.valid);
     }
 
-    public class QuickstartRegistryListener extends DefaultRegistryListener {
+    public static class QuickstartRegistryListener extends DefaultRegistryListener {
         public boolean valid = false; // DOC: EXC1
 
         @Override
@@ -201,7 +201,7 @@ class RegistryListenerTest {
         }
     }
 
-    public class FailureQuickstartRegistryListener extends DefaultRegistryListener {
+    public static class FailureQuickstartRegistryListener extends DefaultRegistryListener {
         public boolean valid = false;
 
         @Override
