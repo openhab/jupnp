@@ -464,7 +464,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                     stateVariable.getTypeDetails().getAllowedValueRange().getMinimum());
             appendNewElementIfNotNull(descriptor, allowedValueRangeElement, ELEMENT.maximum,
                     stateVariable.getTypeDetails().getAllowedValueRange().getMaximum());
-            if (stateVariable.getTypeDetails().getAllowedValueRange().getStep() >= 1l) {
+            if (stateVariable.getTypeDetails().getAllowedValueRange().getStep() >= 1L) {
                 appendNewElementIfNotNull(descriptor, allowedValueRangeElement, ELEMENT.step,
                         stateVariable.getTypeDetails().getAllowedValueRange().getStep());
             }

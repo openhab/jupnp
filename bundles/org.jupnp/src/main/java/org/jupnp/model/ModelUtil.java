@@ -217,7 +217,7 @@ public class ModelUtil {
         try {
             String hostname = InetAddress.getLocalHost().getHostName();
             return includeDomain ? hostname
-                    : hostname.indexOf(".") != -1 ? hostname.substring(0, hostname.indexOf(".")) : hostname;
+                    : hostname.contains(".") ? hostname.substring(0, hostname.indexOf(".")) : hostname;
 
         } catch (Exception ex) {
             // Return a dummy String

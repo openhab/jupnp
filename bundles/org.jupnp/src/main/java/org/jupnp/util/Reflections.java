@@ -426,7 +426,7 @@ public class Reflections {
     }
 
     public static String unqualify(String name, char sep) {
-        return name.substring(name.lastIndexOf(sep) + 1, name.length());
+        return name.substring(name.lastIndexOf(sep) + 1);
     }
 
     public static String decapitalize(String name) {

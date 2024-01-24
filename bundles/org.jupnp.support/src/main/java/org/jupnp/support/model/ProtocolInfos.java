@@ -16,6 +16,7 @@
 package org.jupnp.support.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.jupnp.model.ModelUtil;
 
@@ -28,9 +29,7 @@ public class ProtocolInfos extends ArrayList<ProtocolInfo> {
     private static final long serialVersionUID = 5044783488205827065L;
 
     public ProtocolInfos(ProtocolInfo... info) {
-        for (ProtocolInfo protocolInfo : info) {
-            add(protocolInfo);
-        }
+        this.addAll(Arrays.asList(info));
     }
 
     public ProtocolInfos(String s) {

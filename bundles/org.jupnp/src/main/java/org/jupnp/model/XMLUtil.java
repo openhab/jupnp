@@ -199,7 +199,7 @@ public class XMLUtil {
 
     // TODO: Of course, there is no Element.getTextContent() either...
     public static String getTextContent(Node node) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         NodeList childList = node.getChildNodes();
         for (int i = 0; i < childList.getLength(); i++) {
             Node child = childList.item(i);

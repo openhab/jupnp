@@ -70,7 +70,7 @@ public class RequestInfo {
         if (names.hasMoreElements()) {
             builder.append("Parameters:\n");
             while (names.hasMoreElements()) {
-                String name = (String) names.nextElement();
+                String name = names.nextElement();
                 String[] values = req.getParameterValues(name);
                 if (values != null) {
                     for (String value : values) {
@@ -88,7 +88,7 @@ public class RequestInfo {
         if (names.hasMoreElements()) {
             builder.append("Headers:\n");
             while (names.hasMoreElements()) {
-                String name = (String) names.nextElement();
+                String name = names.nextElement();
                 String value = req.getHeader(name);
                 builder.append("    ").append(name).append(": ").append(value).append('\n');
             }
@@ -170,7 +170,7 @@ public class RequestInfo {
         Enumeration<String> headers = request.getHeaderNames();
         if (headers != null) {
             while (headers.hasMoreElements()) {
-                String headerName = (String) headers.nextElement();
+                String headerName = headers.nextElement();
                 log.info("{}: {}", headerName, request.getHeader(headerName));
             }
         }
@@ -193,7 +193,7 @@ public class RequestInfo {
         String queryString = req.getQueryString(); // d=789
 
         // Reconstruct original requesting URL
-        StringBuffer url = new StringBuffer();
+        StringBuilder url = new StringBuilder();
         url.append(scheme).append("://").append(serverName);
 
         if ((serverPort != 80) && (serverPort != 443)) {

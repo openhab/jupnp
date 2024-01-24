@@ -102,7 +102,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
         if (log.isTraceEnabled()) {
             log.trace("Writing message data for: {}", message);
             log.trace("---------------------------------------------------------------------------------");
-            log.trace(messageData.toString().substring(0, messageData.length() - 2)); // Don't print the blank lines
+            log.trace(messageData.substring(0, messageData.length() - 2)); // Don't print the blank lines
             log.trace("---------------------------------------------------------------------------------");
         }
 

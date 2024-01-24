@@ -47,9 +47,7 @@ public class MimeType {
                     return o1.compareToIgnoreCase(o2);
                 }
             });
-            for (Map.Entry<String, String> e : parameters.entrySet()) {
-                map.put(e.getKey(), e.getValue());
-            }
+            map.putAll(parameters);
             this.parameters = Collections.unmodifiableMap(map);
         }
     }
@@ -195,7 +193,7 @@ public class MimeType {
             return semicolon;
         if (semicolon == -1)
             return equals;
-        return (equals < semicolon) ? equals : semicolon;
+        return Math.min(equals, semicolon);
     }
 
     @Override

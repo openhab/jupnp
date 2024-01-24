@@ -534,13 +534,11 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         if (convertSpaces) {
             // Converts the _beginning_ of line whitespaces into non-breaking spaces
             Matcher matcher = Pattern.compile("(\\n+)(\\s*)(.*)").matcher(result);
-            StringBuffer temp = new StringBuffer();
+            StringBuilder temp = new StringBuilder();
             while (matcher.find()) {
                 String group = matcher.group(2);
                 StringBuilder spaces = new StringBuilder();
-                for (int i = 0; i < group.length(); i++) {
-                    spaces.append("&#160;");
-                }
+                spaces.append("&#160;".repeat(group.length()));
                 matcher.appendReplacement(temp, "$1" + spaces + "$3");
             }
             matcher.appendTail(temp);

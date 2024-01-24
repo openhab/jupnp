@@ -74,7 +74,7 @@ public class UPnPActionImpl implements UPnPAction {
             list.add(argument.getName());
         }
 
-        return !list.isEmpty() ? (String[]) list.toArray(new String[list.size()]) : null;
+        return !list.isEmpty() ? list.toArray(new String[list.size()]) : null;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class UPnPActionImpl implements UPnPAction {
             list.add(argument.getName());
         }
 
-        return !list.isEmpty() ? (String[]) list.toArray(new String[list.size()]) : null;
+        return !list.isEmpty() ? list.toArray(new String[list.size()]) : null;
     }
 
     @Override

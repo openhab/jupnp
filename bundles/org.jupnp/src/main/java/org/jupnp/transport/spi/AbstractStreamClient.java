@@ -203,7 +203,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         Iterator<Map.Entry<URI, Long>> it = failedRequests.entrySet().iterator();
         while (it.hasNext()) {
-            Long elapsedTime = currentTime - it.next().getValue();
+            long elapsedTime = currentTime - it.next().getValue();
             if (elapsedTime > TimeUnit.SECONDS.toNanos(getConfiguration().getRetryAfterSeconds())) {
                 it.remove();
             }

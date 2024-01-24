@@ -83,7 +83,7 @@ public class InitialIntegrationTest extends BaseIntegration {
                 for (ActionArgumentValue output : outputs) {
                     ActionArgument argument = output.getArgument();
                     String name = argument.getName();
-                    String type = (String) name;
+                    String type = name;
                     Object value = output.getValue();
                     Object desired = data.getOSGiUPnPValue(name, type);
 

@@ -329,7 +329,7 @@ public class OSGiUPnPStringConverter {
      * Integer ui1, ui2, i1, i2, i4, int
      */
     private static Integer toInteger(String string, Integer value) {
-        return string != null ? Integer.valueOf(string) : value != null ? value : new Integer(0);
+        return string != null ? Integer.valueOf(string) : value != null ? value : Integer.valueOf(0);
     }
 
     private static long toMilliseconds(int hours, int mins, int secs) {
@@ -367,7 +367,7 @@ public class OSGiUPnPStringConverter {
         }
 
         if (value == null) {
-            value = object != null ? object : new Long(0);
+            value = object != null ? object : Long.valueOf(0);
         }
 
         return value;
@@ -398,7 +398,7 @@ public class OSGiUPnPStringConverter {
      * String string, uri, uuid
      */
     private static String toString(String string, String value) {
-        return string != null ? string : value != null ? value : new String();
+        return string != null ? string : value != null ? value : "";
     }
 
     /*
@@ -433,7 +433,7 @@ public class OSGiUPnPStringConverter {
      * Boolean boolean
      */
     private static Boolean toBoolean(String string, Boolean value) {
-        return string != null ? Boolean.valueOf(string) : value != null ? value : new Boolean(false);
+        return string != null ? Boolean.valueOf(string) : value != null ? value : Boolean.FALSE;
     }
 
     /*
