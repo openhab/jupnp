@@ -40,6 +40,10 @@ public class ServiceType {
     public static final Pattern BROKEN_PATTERN = Pattern
             .compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
+    private static final Pattern PATTERN_WHITESPACE = Pattern.compile("\\s");
+    private static final Pattern PATTERN_NAMESPACE = Pattern.compile(Constants.REGEX_NAMESPACE);
+    private static final Pattern PATTERN_TYPE = Pattern.compile(Constants.REGEX_TYPE);
+
     private String namespace;
     private String type;
     private int version = 1;
@@ -49,13 +53,12 @@ public class ServiceType {
     }
 
     public ServiceType(String namespace, String type, int version) {
-
-        if (namespace != null && !namespace.matches(Constants.REGEX_NAMESPACE)) {
+        if (namespace != null && !PATTERN_NAMESPACE.matcher(namespace).matches()) {
             throw new IllegalArgumentException("Service type namespace contains illegal characters");
         }
         this.namespace = namespace;
 
-        if (type != null && !type.matches(Constants.REGEX_TYPE)) {
+        if (type != null && !PATTERN_TYPE.matcher(type).matches()) {
             throw new IllegalArgumentException("Service type suffix too long (64) or contains illegal characters");
         }
         this.type = type;
@@ -85,7 +88,7 @@ public class ServiceType {
         ServiceType serviceType = null;
 
         // Sometimes crazy UPnP devices deliver spaces in a URN, don't ask...
-        s = s.replaceAll("\\s", "");
+        s = PATTERN_WHITESPACE.matcher(s).replaceAll("");
 
         // First try UDAServiceType parse
         try {
