@@ -170,10 +170,12 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         // the entity body is bytes. However, to support broken UPnP devices which also violate the
         // UPnP spec and do not send any content type at all, we need to assume no content type
         // means a textual entity body is available.
-        if (contentTypeHeader == null)
+        if (contentTypeHeader == null) {
             return true;
-        if (contentTypeHeader.isText())
+        }
+        if (contentTypeHeader.isText()) {
             return true;
+        }
         // Only if there was any content-type header and none was text
         return false;
     }

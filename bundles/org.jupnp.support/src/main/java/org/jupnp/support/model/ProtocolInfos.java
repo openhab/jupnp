@@ -35,9 +35,11 @@ public class ProtocolInfos extends ArrayList<ProtocolInfo> {
 
     public ProtocolInfos(String s) {
         String[] infos = ModelUtil.fromCommaSeparatedList(s);
-        if (infos != null)
-            for (String info : infos)
+        if (infos != null) {
+            for (String info : infos) {
                 add(new ProtocolInfo(info));
+            }
+        }
     }
 
     @Override

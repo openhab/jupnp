@@ -64,8 +64,9 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
     protected synchronized int getNewConnectionId() {
         int currentHighestID = -1;
         for (Integer key : activeConnections.keySet()) {
-            if (key > currentHighestID)
+            if (key > currentHighestID) {
                 currentHighestID = key;
+            }
         }
         return ++currentHighestID;
     }

@@ -155,8 +155,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < rootChildren.getLength(); i++) {
             Node rootChild = rootChildren.item(i);
 
-            if (rootChild.getNodeType() != Node.ELEMENT_NODE)
+            if (rootChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.specVersion.equals(rootChild)) {
                 hydrateSpecVersion(descriptor, rootChild);
@@ -172,8 +173,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 }
             } else if (ELEMENT.device.equals(rootChild)) {
                 // Just sanity check here...
-                if (deviceNode != null)
+                if (deviceNode != null) {
                     throw new DescriptorBindingException("Found multiple <device> elements in <root>");
+                }
                 deviceNode = rootChild;
             } else {
                 log.trace("Ignoring unknown element: {}", rootChild.getNodeName());
@@ -192,8 +194,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < specVersionChildren.getLength(); i++) {
             Node specVersionChild = specVersionChildren.item(i);
 
-            if (specVersionChild.getNodeType() != Node.ELEMENT_NODE)
+            if (specVersionChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.major.equals(specVersionChild)) {
                 String version = XMLUtil.getTextContent(specVersionChild).trim();
@@ -220,8 +223,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < deviceNodeChildren.getLength(); i++) {
             Node deviceNodeChild = deviceNodeChildren.item(i);
 
-            if (deviceNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (deviceNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.deviceType.equals(deviceNodeChild)) {
                 descriptor.deviceType = XMLUtil.getTextContent(deviceNodeChild);
@@ -274,8 +278,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < iconListNodeChildren.getLength(); i++) {
             Node iconListNodeChild = iconListNodeChildren.item(i);
 
-            if (iconListNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (iconListNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.icon.equals(iconListNodeChild)) {
 
@@ -286,8 +291,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 for (int x = 0; x < iconChildren.getLength(); x++) {
                     Node iconChild = iconChildren.item(x);
 
-                    if (iconChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (iconChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
                     if (ELEMENT.width.equals(iconChild)) {
                         icon.width = (Integer.valueOf(XMLUtil.getTextContent(iconChild)));
@@ -328,8 +334,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < serviceListNodeChildren.getLength(); i++) {
             Node serviceListNodeChild = serviceListNodeChildren.item(i);
 
-            if (serviceListNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (serviceListNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.service.equals(serviceListNodeChild)) {
 
@@ -341,8 +348,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     for (int x = 0; x < serviceChildren.getLength(); x++) {
                         Node serviceChild = serviceChildren.item(x);
 
-                        if (serviceChild.getNodeType() != Node.ELEMENT_NODE)
+                        if (serviceChild.getNodeType() != Node.ELEMENT_NODE) {
                             continue;
+                        }
 
                         if (ELEMENT.serviceType.equals(serviceChild)) {
                             service.serviceType = (ServiceType.valueOf(XMLUtil.getTextContent(serviceChild)));
@@ -373,8 +381,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         for (int i = 0; i < deviceListNodeChildren.getLength(); i++) {
             Node deviceListNodeChild = deviceListNodeChildren.item(i);
 
-            if (deviceListNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (deviceListNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.device.equals(deviceListNodeChild)) {
                 MutableDevice embeddedDevice = new MutableDevice();
@@ -496,8 +505,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     protected void generateIconList(Namespace namespace, Device deviceModel, Document descriptor,
             Element deviceElement) {
-        if (!deviceModel.hasIcons())
+        if (!deviceModel.hasIcons()) {
             return;
+        }
 
         Element iconListElement = appendNewElement(descriptor, deviceElement, ELEMENT.iconList);
 
@@ -518,8 +528,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     protected void generateServiceList(Namespace namespace, Device deviceModel, Document descriptor,
             Element deviceElement) {
-        if (!deviceModel.hasServices())
+        if (!deviceModel.hasServices()) {
             return;
+        }
 
         Element serviceListElement = appendNewElement(descriptor, deviceElement, ELEMENT.serviceList);
 
@@ -546,8 +557,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     protected void generateDeviceList(Namespace namespace, Device deviceModel, Document descriptor,
             Element deviceElement, RemoteClientInfo info) {
-        if (!deviceModel.hasEmbeddedDevices())
+        if (!deviceModel.hasEmbeddedDevices()) {
             return;
+        }
 
         Element deviceListElement = appendNewElement(descriptor, deviceElement, ELEMENT.deviceList);
 

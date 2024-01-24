@@ -82,8 +82,9 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         }
 
         REQUEST request = createRequest(requestMessage);
-        if (request == null)
+        if (request == null) {
             return null;
+        }
 
         Callable<StreamResponseMessage> callable = createCallable(requestMessage, request);
         RequestWrapper requestWrapper = new RequestWrapper(callable);

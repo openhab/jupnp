@@ -56,8 +56,9 @@ public enum RecordQualityMode {
 
     public static RecordQualityMode[] valueOfCommaSeparatedList(String s) {
         String[] strings = ModelUtil.fromCommaSeparatedList(s);
-        if (strings == null)
+        if (strings == null) {
             return new RecordQualityMode[0];
+        }
         List<RecordQualityMode> result = new ArrayList<>();
         for (String rqm : strings) {
             for (RecordQualityMode recordQualityMode : values()) {

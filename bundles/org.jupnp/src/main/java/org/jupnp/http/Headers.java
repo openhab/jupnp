@@ -164,10 +164,12 @@ public class Headers implements Map<String, List<String>> {
         String result = key;
 
         if (normalizeHeaders) {
-            if (key == null)
+            if (key == null) {
                 return null;
-            if (key.isEmpty())
+            }
+            if (key.isEmpty()) {
                 return key;
+            }
             char[] b;
             b = key.toCharArray();
             final int caseDiff = 'a' - 'A';// android optimization

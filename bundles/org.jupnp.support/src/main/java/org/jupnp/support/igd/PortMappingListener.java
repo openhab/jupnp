@@ -98,8 +98,9 @@ public class PortMappingListener extends DefaultRegistryListener {
     public synchronized void deviceAdded(Registry registry, Device device) {
 
         Service<?, ?> connectionService;
-        if ((connectionService = discoverConnectionService(device)) == null)
+        if ((connectionService = discoverConnectionService(device)) == null) {
             return;
+        }
 
         logger.debug("Activating port mappings on: {}", connectionService);
 
@@ -130,12 +131,14 @@ public class PortMappingListener extends DefaultRegistryListener {
             Iterator<Map.Entry<Service<?, ?>, List<PortMapping>>> it = activePortMappings.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Service<?, ?>, List<PortMapping>> activeEntry = it.next();
-                if (!activeEntry.getKey().equals(service))
+                if (!activeEntry.getKey().equals(service)) {
                     continue;
+                }
 
-                if (!activeEntry.getValue().isEmpty())
+                if (!activeEntry.getValue().isEmpty()) {
                     handleFailureMessage(
                             "Device disappeared, couldn't delete port mappings: " + activeEntry.getValue().size());
+                }
 
                 it.remove();
             }

@@ -63,17 +63,21 @@ public class NamedServiceType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof NamedServiceType))
+        }
+        if (o == null || !(o instanceof NamedServiceType)) {
             return false;
+        }
 
         NamedServiceType that = (NamedServiceType) o;
 
-        if (!serviceType.equals(that.serviceType))
+        if (!serviceType.equals(that.serviceType)) {
             return false;
-        if (!udn.equals(that.udn))
+        }
+        if (!udn.equals(that.udn)) {
             return false;
+        }
 
         return true;
     }

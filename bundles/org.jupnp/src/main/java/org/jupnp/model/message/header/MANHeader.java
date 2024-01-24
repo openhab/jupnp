@@ -61,12 +61,14 @@ public class MANHeader extends UpnpHeader<String> {
     }
 
     public String getString() {
-        if (getValue() == null)
+        if (getValue() == null) {
             return null;
+        }
         StringBuilder s = new StringBuilder();
         s.append("\"").append(getValue()).append("\"");
-        if (getNamespace() != null)
+        if (getNamespace() != null) {
             s.append("; ns=").append(getNamespace());
+        }
         return s.toString();
     }
 

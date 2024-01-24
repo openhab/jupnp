@@ -56,8 +56,9 @@ public abstract class EventedValue<V> {
     protected V valueOf(Map.Entry<String, String>[] attributes) {
         V v = null;
         for (Map.Entry<String, String> attribute : attributes) {
-            if (attribute.getKey().equals("val"))
+            if (attribute.getKey().equals("val")) {
                 v = valueOf(attribute.getValue());
+            }
         }
         return v;
     }

@@ -55,8 +55,9 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
 
             int numberOfSpaces = 0;
             for (int i = 0; i < s.length(); i++) {
-                if (s.charAt(i) == ' ')
+                if (s.charAt(i) == ' ') {
                     numberOfSpaces++;
+                }
             }
 
             String[] osNameVersion;

@@ -79,8 +79,9 @@ public class RemoteClientInfo extends ClientInfo {
      * @throws InterruptedException if {@link #isRequestCancelled()} returns <code>true</code>.
      */
     public void throwIfRequestCancelled() throws InterruptedException {
-        if (isRequestCancelled())
+        if (isRequestCancelled()) {
             throw new InterruptedException("Client's request cancelled");
+        }
     }
 
     public InetAddress getRemoteAddress() {

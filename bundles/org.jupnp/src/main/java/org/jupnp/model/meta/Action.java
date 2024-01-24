@@ -104,8 +104,9 @@ public class Action<S extends Service> implements Validatable {
 
     public ActionArgument<S> getInputArgument(String name) {
         for (ActionArgument<S> arg : getInputArguments()) {
-            if (arg.isNameOrAlias(name))
+            if (arg.isNameOrAlias(name)) {
                 return arg;
+            }
         }
         return null;
     }
@@ -116,8 +117,9 @@ public class Action<S extends Service> implements Validatable {
 
     public ActionArgument<S> getOutputArgument(String name) {
         for (ActionArgument<S> arg : getOutputArguments()) {
-            if (arg.getName().equals(name))
+            if (arg.getName().equals(name)) {
                 return arg;
+            }
         }
         return null;
     }

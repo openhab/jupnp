@@ -150,9 +150,10 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             UpnpStateVariables variables = clazz.getAnnotation(UpnpStateVariables.class);
             for (UpnpStateVariable v : variables.value()) {
 
-                if (v.name().isEmpty())
+                if (v.name().isEmpty()) {
                     throw new LocalServiceBindingException(
                             "Class-level @UpnpStateVariable name attribute value required");
+                }
 
                 String javaPropertyName = toJavaStateVariableName(v.name());
 
@@ -200,9 +201,10 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
                 throw new LocalServiceBindingException("Annotated method is not a getter method (: " + getter);
             }
 
-            if (getter.getParameterTypes().length > 0)
+            if (getter.getParameterTypes().length > 0) {
                 throw new LocalServiceBindingException(
                         "Getter method defined as @UpnpStateVariable can not have parameters: " + getter);
+            }
 
             UpnpStateVariable svAnnotation = getter.getAnnotation(UpnpStateVariable.class);
 

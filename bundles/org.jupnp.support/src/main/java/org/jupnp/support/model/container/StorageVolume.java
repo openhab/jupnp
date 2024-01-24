@@ -42,14 +42,18 @@ public class StorageVolume extends Container {
     public StorageVolume(String id, String parentID, String title, String creator, Integer childCount,
             Long storageTotal, Long storageUsed, Long storageFree, StorageMedium storageMedium) {
         super(id, parentID, title, creator, CLASS, childCount);
-        if (storageTotal != null)
+        if (storageTotal != null) {
             setStorageTotal(storageTotal);
-        if (storageUsed != null)
+        }
+        if (storageUsed != null) {
             setStorageUsed(storageUsed);
-        if (storageFree != null)
+        }
+        if (storageFree != null) {
             setStorageFree(storageFree);
-        if (storageMedium != null)
+        }
+        if (storageMedium != null) {
             setStorageMedium(storageMedium);
+        }
     }
 
     public Long getStorageTotal() {

@@ -54,8 +54,9 @@ public class DLNAOperationsAttribute extends DLNAAttribute<EnumSet<DLNAOperation
             // no need to take any measure
         }
 
-        if (value.isEmpty())
+        if (value.isEmpty()) {
             throw new InvalidDLNAProtocolAttributeException("Can't parse DLNA operations integer from: " + s);
+        }
 
         setValue(value);
     }

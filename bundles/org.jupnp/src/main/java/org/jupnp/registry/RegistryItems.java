@@ -79,8 +79,9 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
             }
             if (!rootOnly) {
                 D foundDevice = (D) item.getItem().findDevice(udn);
-                if (foundDevice != null)
+                if (foundDevice != null) {
                     return foundDevice;
+                }
             }
         }
         return null;

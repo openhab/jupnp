@@ -30,8 +30,9 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     }
 
     public byte[] valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return null;
+        }
         try {
             return Base64.getDecoder().decode(s);
         } catch (Exception ex) {
@@ -41,8 +42,9 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
 
     @Override
     public String getString(byte[] value) throws InvalidValueException {
-        if (value == null)
+        if (value == null) {
             return "";
+        }
         try {
             return Base64.getEncoder().encodeToString(value);
         } catch (Exception ex) {

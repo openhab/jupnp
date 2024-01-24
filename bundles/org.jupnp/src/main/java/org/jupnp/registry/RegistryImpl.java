@@ -266,20 +266,24 @@ public class RegistryImpl implements Registry {
 
     public boolean removeDevice(UDN udn) {
         Device device = getDevice(udn, true);
-        if (device != null && device instanceof LocalDevice)
+        if (device != null && device instanceof LocalDevice) {
             return removeDevice((LocalDevice) device);
-        if (device != null && device instanceof RemoteDevice)
+        }
+        if (device != null && device instanceof RemoteDevice) {
             return removeDevice((RemoteDevice) device);
+        }
         return false;
     }
 
     public Device getDevice(UDN udn, boolean rootOnly) {
         Device device;
 
-        if ((device = getLocalDevice(udn, rootOnly)) != null)
+        if ((device = getLocalDevice(udn, rootOnly)) != null) {
             return device;
-        if ((device = getRemoteDevice(udn, rootOnly)) != null)
+        }
+        if ((device = getRemoteDevice(udn, rootOnly)) != null) {
             return device;
+        }
 
         return null;
     }
@@ -442,8 +446,9 @@ public class RegistryImpl implements Registry {
     public <T extends Resource> Collection<T> getResources(Class<T> resourceType) {
         Collection<T> s = new HashSet<>(resourceItems.size());
         for (RegistryItem<URI, Resource> resourceItem : resourceItems) {
-            if (resourceType.isAssignableFrom(resourceItem.getItem().getClass()))
+            if (resourceType.isAssignableFrom(resourceItem.getItem().getClass())) {
                 s.add((T) resourceItem.getItem());
+            }
         }
         return s;
     }
@@ -555,8 +560,9 @@ public class RegistryImpl implements Registry {
         log.trace("Shutting down registry...");
 
         synchronized (lock) {
-            if (registryMaintainer != null)
+            if (registryMaintainer != null) {
                 registryMaintainer.stop();
+            }
         }
 
         // Final cleanup run to flush out pending executions which might
@@ -686,10 +692,11 @@ public class RegistryImpl implements Registry {
         synchronized (pendingExecutions) {
             log.trace("Executing pending operations: {}", pendingExecutions.size());
             for (Runnable pendingExecution : pendingExecutions) {
-                if (async)
+                if (async) {
                     getConfiguration().getAsyncProtocolExecutor().execute(pendingExecution);
-                else
+                } else {
                     pendingExecution.run();
+                }
             }
             if (!pendingExecutions.isEmpty()) {
                 pendingExecutions.clear();

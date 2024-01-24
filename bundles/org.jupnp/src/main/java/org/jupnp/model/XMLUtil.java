@@ -73,8 +73,9 @@ public class XMLUtil {
                 NamedNodeMap map = element.getAttributes();
                 for (int i = 0; i < map.getLength(); i++) {
                     Node attr = map.item(i);
-                    if (attr.getNodeName().startsWith("xmlns"))
+                    if (attr.getNodeName().startsWith("xmlns")) {
                         continue;
+                    }
                     if (attr.getPrefix() != null && !parentPrefixes.contains(attr.getPrefix())) {
                         thisLevelPrefixes.put(attr.getPrefix(), element.getNamespaceURI());
                     }
@@ -168,8 +169,9 @@ public class XMLUtil {
 
     public static Element appendNewElementIfNotNull(Document document, Element parent, String element, Object content,
             String namespace) {
-        if (content == null)
+        if (content == null) {
             return parent;
+        }
         return appendNewElement(document, parent, element, content, namespace);
     }
 
@@ -203,8 +205,9 @@ public class XMLUtil {
         NodeList childList = node.getChildNodes();
         for (int i = 0; i < childList.getLength(); i++) {
             Node child = childList.item(i);
-            if (child.getNodeType() != Node.TEXT_NODE)
+            if (child.getNodeType() != Node.TEXT_NODE) {
                 continue; // skip non-text nodes
+            }
             buffer.append(child.getNodeValue());
         }
         return buffer.toString();

@@ -32,8 +32,9 @@ public class GetContentFeaturesHeader extends DLNAHeader<Integer> {
         if (!s.isEmpty()) {
             try {
                 int t = Integer.parseInt(s);
-                if (t == 1)
+                if (t == 1) {
                     return;
+                }
             } catch (Exception ex) {
                 // no need to take any precaution measure
             }

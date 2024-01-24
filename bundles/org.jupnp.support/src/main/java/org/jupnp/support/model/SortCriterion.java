@@ -34,8 +34,9 @@ public class SortCriterion {
 
     public SortCriterion(String criterion) {
         this(criterion.startsWith("+"), criterion.substring(1));
-        if (!(criterion.startsWith("-") || criterion.startsWith("+")))
+        if (!(criterion.startsWith("-") || criterion.startsWith("+"))) {
             throw new IllegalArgumentException("Missing sort prefix +/- on criterion: " + criterion);
+        }
     }
 
     public boolean isAscending() {
@@ -47,8 +48,9 @@ public class SortCriterion {
     }
 
     public static SortCriterion[] valueOf(String s) {
-        if (s == null || s.isEmpty())
+        if (s == null || s.isEmpty()) {
             return new SortCriterion[0];
+        }
         List<SortCriterion> list = new ArrayList<>();
         String[] criteria = s.split(",");
         for (String criterion : criteria) {
@@ -58,14 +60,16 @@ public class SortCriterion {
     }
 
     public static String toString(SortCriterion[] criteria) {
-        if (criteria == null)
+        if (criteria == null) {
             return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (SortCriterion sortCriterion : criteria) {
             sb.append(sortCriterion.toString()).append(",");
         }
-        if (sb.toString().endsWith(","))
+        if (sb.toString().endsWith(",")) {
             sb.deleteCharAt(sb.length() - 1);
+        }
         return sb.toString();
     }
 

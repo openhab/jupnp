@@ -40,8 +40,9 @@ public class StorageFolder extends Container {
     public StorageFolder(String id, String parentID, String title, String creator, Integer childCount,
             Long storageUsed) {
         super(id, parentID, title, creator, CLASS, childCount);
-        if (storageUsed != null)
+        if (storageUsed != null) {
             setStorageUsed(storageUsed);
+        }
     }
 
     public Long getStorageUsed() {

@@ -45,16 +45,21 @@ public class StorageSystem extends Container {
             Long storageTotal, Long storageUsed, Long storageFree, Long storageMaxPartition,
             StorageMedium storageMedium) {
         super(id, parentID, title, creator, CLASS, childCount);
-        if (storageTotal != null)
+        if (storageTotal != null) {
             setStorageTotal(storageTotal);
-        if (storageUsed != null)
+        }
+        if (storageUsed != null) {
             setStorageUsed(storageUsed);
-        if (storageFree != null)
+        }
+        if (storageFree != null) {
             setStorageFree(storageFree);
-        if (storageMaxPartition != null)
+        }
+        if (storageMaxPartition != null) {
             setStorageMaxPartition(storageMaxPartition);
-        if (storageMedium != null)
+        }
+        if (storageMedium != null) {
             setStorageMedium(storageMedium);
+        }
     }
 
     public Long getStorageTotal() {

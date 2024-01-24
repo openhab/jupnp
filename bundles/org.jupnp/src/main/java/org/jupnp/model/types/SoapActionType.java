@@ -95,8 +95,9 @@ public class SoapActionType {
     }
 
     public ServiceType getServiceType() {
-        if (version == null)
+        if (version == null) {
             return null;
+        }
         return new ServiceType(namespace, type, version);
     }
 
@@ -115,21 +116,27 @@ public class SoapActionType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof SoapActionType))
+        }
+        if (o == null || !(o instanceof SoapActionType)) {
             return false;
+        }
 
         SoapActionType that = (SoapActionType) o;
 
-        if (!actionName.equals(that.actionName))
+        if (!actionName.equals(that.actionName)) {
             return false;
-        if (!namespace.equals(that.namespace))
+        }
+        if (!namespace.equals(that.namespace)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
-        if (version != null ? !version.equals(that.version) : that.version != null)
+        }
+        if (version != null ? !version.equals(that.version) : that.version != null) {
             return false;
+        }
 
         return true;
     }

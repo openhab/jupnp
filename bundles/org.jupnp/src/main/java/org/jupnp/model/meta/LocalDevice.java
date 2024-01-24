@@ -281,8 +281,9 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
 
     @Override
     public LocalDevice getRoot() {
-        if (isRoot())
+        if (isRoot()) {
             return this;
+        }
         LocalDevice current = this;
         while (current.getParentDevice() != null) {
             current = current.getParentDevice();

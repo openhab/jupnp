@@ -130,20 +130,24 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             return false;
         }
         ServiceType[] exclusiveServiceTypes = config.getExclusiveServiceTypes();
-        if (exclusiveServiceTypes == null)
+        if (exclusiveServiceTypes == null) {
             return false; // Discovery is disabled
-        if (exclusiveServiceTypes.length == 0)
+        }
+        if (exclusiveServiceTypes.length == 0) {
             return true; // Any advertisement is fine
+        }
 
         String usnHeader = message.getHeaders().getFirstHeader(UpnpHeader.Type.USN.getHttpName());
-        if (usnHeader == null)
+        if (usnHeader == null) {
             return false; // Not a service advertisement, drop it
+        }
 
         try {
             NamedServiceType nst = NamedServiceType.valueOf(usnHeader);
             for (ServiceType exclusiveServiceType : exclusiveServiceTypes) {
-                if (nst.getServiceType().implementsVersion(exclusiveServiceType))
+                if (nst.getServiceType().implementsVersion(exclusiveServiceType)) {
                     return true;
+                }
             }
         } catch (InvalidValueException ex) {
             log.trace("Not a named service type header value: {}", usnHeader);

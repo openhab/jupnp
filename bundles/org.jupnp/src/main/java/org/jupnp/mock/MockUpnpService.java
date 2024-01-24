@@ -114,8 +114,9 @@ public class MockUpnpService implements UpnpService {
             return new SendingNotificationAlive(getUpnpService(), localDevice) {
                 @Override
                 protected void execute() throws RouterException {
-                    if (sendsAlive)
+                    if (sendsAlive) {
                         super.execute();
+                    }
                 }
             };
         }

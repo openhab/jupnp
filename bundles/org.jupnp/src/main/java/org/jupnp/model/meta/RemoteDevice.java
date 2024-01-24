@@ -170,16 +170,18 @@ public class RemoteDevice extends Device<RemoteDeviceIdentity, RemoteDevice, Rem
 
         // Services
         for (RemoteService service : getServices()) {
-            if (service == null)
+            if (service == null) {
                 continue;
+            }
             discovered.add(new ServiceEventCallbackResource(namespace.getEventCallbackPath(service), service));
         }
 
         // Embedded devices
         if (hasEmbeddedDevices()) {
             for (Device embeddedDevice : getEmbeddedDevices()) {
-                if (embeddedDevice == null)
+                if (embeddedDevice == null) {
                     continue;
+                }
                 discovered.addAll(Arrays.asList(embeddedDevice.discoverResources(namespace)));
             }
         }
@@ -189,8 +191,9 @@ public class RemoteDevice extends Device<RemoteDeviceIdentity, RemoteDevice, Rem
 
     @Override
     public RemoteDevice getRoot() {
-        if (isRoot())
+        if (isRoot()) {
             return this;
+        }
         RemoteDevice current = this;
         while (current.getParentDevice() != null) {
             current = current.getParentDevice();

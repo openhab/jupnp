@@ -232,8 +232,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         for (int i = 0; i < envelopeElementChildren.getLength(); i++) {
             Node envelopeChild = envelopeElementChildren.item(i);
 
-            if (envelopeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (envelopeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (getUnprefixedNodeName(envelopeChild).equals("Body")) {
                 return (Element) envelopeChild;
@@ -266,15 +267,17 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         for (int i = 0; i < bodyChildren.getLength(); i++) {
             Node bodyChild = bodyChildren.item(i);
 
-            if (bodyChild.getNodeType() != Node.ELEMENT_NODE)
+            if (bodyChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             String unprefixedName = getUnprefixedNodeName(bodyChild);
             if (unprefixedName.equals(actionInvocation.getAction().getName())) {
                 if (bodyChild.getNamespaceURI() == null
-                        || !bodyChild.getNamespaceURI().equals(message.getActionNamespace()))
+                        || !bodyChild.getNamespaceURI().equals(message.getActionNamespace())) {
                     throw new UnsupportedDataException(
                             "Illegal or missing namespace on action request element: " + bodyChild);
+                }
                 log.trace("Reading action request element: {}", unprefixedName);
                 return (Element) bodyChild;
             }
@@ -302,8 +305,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         for (int i = 0; i < bodyChildren.getLength(); i++) {
             Node bodyChild = bodyChildren.item(i);
 
-            if (bodyChild.getNodeType() != Node.ELEMENT_NODE)
+            if (bodyChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (getUnprefixedNodeName(bodyChild).equals(actionInvocation.getAction().getName() + "Response")) {
                 log.trace("Reading action response element: {}", getUnprefixedNodeName(bodyChild));
@@ -391,8 +395,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         for (int i = 0; i < bodyChildren.getLength(); i++) {
             Node bodyChild = bodyChildren.item(i);
 
-            if (bodyChild.getNodeType() != Node.ELEMENT_NODE)
+            if (bodyChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (getUnprefixedNodeName(bodyChild).equals("Fault")) {
 
@@ -403,8 +408,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                 for (int j = 0; j < faultChildren.getLength(); j++) {
                     Node faultChild = faultChildren.item(j);
 
-                    if (faultChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (faultChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
                     if (getUnprefixedNodeName(faultChild).equals("detail")) {
 
@@ -412,8 +418,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                         for (int x = 0; x < detailChildren.getLength(); x++) {
                             Node detailChild = detailChildren.item(x);
 
-                            if (detailChild.getNodeType() != Node.ELEMENT_NODE)
+                            if (detailChild.getNodeType() != Node.ELEMENT_NODE) {
                                 continue;
+                            }
 
                             if (getUnprefixedNodeName(detailChild).equals("UPnPError")) {
 
@@ -421,14 +428,17 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                                 for (int y = 0; y < errorChildren.getLength(); y++) {
                                     Node errorChild = errorChildren.item(y);
 
-                                    if (errorChild.getNodeType() != Node.ELEMENT_NODE)
+                                    if (errorChild.getNodeType() != Node.ELEMENT_NODE) {
                                         continue;
+                                    }
 
-                                    if (getUnprefixedNodeName(errorChild).equals("errorCode"))
+                                    if (getUnprefixedNodeName(errorChild).equals("errorCode")) {
                                         errorCode = XMLUtil.getTextContent(errorChild);
+                                    }
 
-                                    if (getUnprefixedNodeName(errorChild).equals("errorDescription"))
+                                    if (getUnprefixedNodeName(errorChild).equals("errorDescription")) {
                                         errorDescription = XMLUtil.getTextContent(errorChild);
+                                    }
                                 }
                             }
                         }
@@ -460,8 +470,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     /* ##################################################################################################### */
 
     protected String getMessageBody(ActionMessage message) throws UnsupportedDataException {
-        if (!message.isBodyNonEmptyString())
+        if (!message.isBodyNonEmptyString()) {
             throw new UnsupportedDataException("Can't transform null or non-string/zero-length body of: " + message);
+        }
         return message.getBodyString().trim();
     }
 
@@ -524,11 +535,13 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node child = nodeList.item(i);
 
-            if (child.getNodeType() != Node.ELEMENT_NODE)
+            if (child.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
-            if (names.contains(getUnprefixedNodeName(child)))
+            if (names.contains(getUnprefixedNodeName(child))) {
                 matches.add(child);
+            }
         }
 
         if (matches.size() < args.length) {
@@ -559,8 +572,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
      */
     protected Node findActionArgumentNode(List<Node> nodes, ActionArgument arg) {
         for (Node node : nodes) {
-            if (arg.isNameOrAlias(getUnprefixedNodeName(node)))
+            if (arg.isNameOrAlias(getUnprefixedNodeName(node))) {
                 return node;
+            }
         }
         return null;
     }

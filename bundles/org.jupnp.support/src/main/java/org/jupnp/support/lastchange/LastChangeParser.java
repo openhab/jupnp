@@ -173,8 +173,9 @@ public abstract class LastChangeParser extends SAXParser {
             }
             try {
                 EventedValue<?> esv = createValue(localName, attributeMap);
-                if (esv != null)
+                if (esv != null) {
                     getInstance().getValues().add(esv);
+                }
             } catch (Exception ex) {
                 // Don't exit, just log a warning
                 logger.warn("Error reading event XML, ignoring value: {}", Exceptions.unwrap(ex));
@@ -210,8 +211,9 @@ public abstract class LastChangeParser extends SAXParser {
 
     protected void generateInstanceIDs(Event event, Document descriptor, Element rootElement) {
         for (InstanceID instanceID : event.getInstanceIDs()) {
-            if (instanceID.getId() == null)
+            if (instanceID.getId() == null) {
                 continue;
+            }
             Element instanceIDElement = appendNewElement(descriptor, rootElement, CONSTANTS.InstanceID.name());
             instanceIDElement.setAttribute(CONSTANTS.val.name(), instanceID.getId().toString());
 

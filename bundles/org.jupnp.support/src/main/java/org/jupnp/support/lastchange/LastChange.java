@@ -81,8 +81,9 @@ public class LastChange {
 
     public synchronized void setEventedValue(UnsignedIntegerFourBytes instanceID, EventedValue<?>... ev) {
         for (EventedValue<?> eventedValue : ev) {
-            if (eventedValue != null)
+            if (eventedValue != null) {
                 event.setEventedValue(instanceID, eventedValue);
+            }
 
         }
     }
@@ -118,8 +119,9 @@ public class LastChange {
 
     @Override
     public synchronized String toString() {
-        if (!event.hasChanges())
+        if (!event.hasChanges()) {
             return "";
+        }
         try {
             return parser.generate(event);
         } catch (Exception ex) {

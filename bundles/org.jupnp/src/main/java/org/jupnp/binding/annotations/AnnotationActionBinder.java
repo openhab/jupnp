@@ -156,8 +156,9 @@ public class AnnotationActionBinder {
         Map<ActionArgument<LocalService>, StateVariableAccessor> map = new LinkedHashMap<>(); // !!! Insertion order!
 
         UpnpAction actionAnnotation = getMethod().getAnnotation(UpnpAction.class);
-        if (actionAnnotation.out().length == 0)
+        if (actionAnnotation.out().length == 0) {
             return map;
+        }
 
         boolean hasMultipleOutputArguments = actionAnnotation.out().length > 1;
 
@@ -204,9 +205,10 @@ public class AnnotationActionBinder {
 
                 // Use the same class as the action method
                 Method getter = Reflections.getMethod(getMethod().getDeclaringClass(), getterName);
-                if (getter == null)
+                if (getter == null) {
                     throw new LocalServiceBindingException("Declared getter method '" + getterName + "' not found on: "
                             + getMethod().getDeclaringClass());
+                }
 
                 validateType(stateVariable, getter.getReturnType());
 
@@ -222,9 +224,10 @@ public class AnnotationActionBinder {
 
             // Use the returned class
             Method getter = Reflections.getMethod(getMethod().getReturnType(), getterName);
-            if (getter == null)
+            if (getter == null) {
                 throw new LocalServiceBindingException("Declared getter method '" + getterName
                         + "' not found on return type: " + getMethod().getReturnType());
+            }
 
             validateType(stateVariable, getter.getReturnType());
 

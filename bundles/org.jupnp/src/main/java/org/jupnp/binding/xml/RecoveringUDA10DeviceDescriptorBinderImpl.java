@@ -46,8 +46,9 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         DescriptorBindingException originalException = null;
         try {
             try {
-                if (descriptorXml != null)
+                if (descriptorXml != null) {
                     descriptorXml = descriptorXml.trim(); // Always trim whitespace
+                }
                 String fixedXml = fixMimeTypes(descriptorXml);
                 fixedXml = fixWrongNamespaces(fixedXml);
                 fixedXml = fixWemoMakerUDN(fixedXml);
@@ -114,8 +115,9 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
 
         } catch (ValidationException ex) {
             device = handleInvalidDevice(descriptorXml, device, ex);
-            if (device != null)
+            if (device != null) {
                 return device;
+            }
         }
         throw new IllegalStateException("No device produced, did you swallow exceptions in your subclass?");
     }
@@ -140,8 +142,9 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
          */
 
         int index = descriptorXml.indexOf("<?xml");
-        if (index == -1)
+        if (index == -1) {
             return descriptorXml;
+        }
         return descriptorXml.substring(index);
     }
 
@@ -186,19 +189,22 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
 
         // We can only handle certain exceptions, depending on their type and message
         Throwable cause = ex.getCause();
-        if (!((cause instanceof SAXParseException) || (cause instanceof ParserException)))
+        if (!((cause instanceof SAXParseException) || (cause instanceof ParserException))) {
             return null;
+        }
         String message = cause.getMessage();
-        if (message == null)
+        if (message == null) {
             return null;
+        }
 
         Pattern pattern = Pattern.compile("The prefix \"(.*)\" for element"); // Windows
         Matcher matcher = pattern.matcher(message);
         if (!matcher.find() || matcher.groupCount() != 1) {
             pattern = Pattern.compile("undefined prefix: ([^ ]*)"); // Android
             matcher = pattern.matcher(message);
-            if (!matcher.find() || matcher.groupCount() != 1)
+            if (!matcher.find() || matcher.groupCount() != 1) {
                 return null;
+            }
         }
 
         String missingNS = matcher.group(1);

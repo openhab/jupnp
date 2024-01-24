@@ -50,8 +50,9 @@ public enum ConnectionManagerErrorCode {
 
     public static ConnectionManagerErrorCode getByCode(int code) {
         for (ConnectionManagerErrorCode errorCode : ConnectionManagerErrorCode.values()) {
-            if (errorCode.getCode() == code)
+            if (errorCode.getCode() == code) {
                 return errorCode;
+            }
         }
         return null;
     }

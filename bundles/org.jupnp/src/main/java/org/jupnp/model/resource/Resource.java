@@ -91,15 +91,18 @@ public class Resource<M> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         Resource resource = (Resource) o;
 
-        if (!getPathQuery().equals(resource.getPathQuery()))
+        if (!getPathQuery().equals(resource.getPathQuery())) {
             return false;
+        }
 
         return true;
     }

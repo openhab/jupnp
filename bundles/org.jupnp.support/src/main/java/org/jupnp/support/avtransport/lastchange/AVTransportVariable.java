@@ -340,8 +340,9 @@ public class AVTransportVariable {
 
         @Override
         protected TransportAction[] enumValueOf(String[] names) {
-            if (names == null)
+            if (names == null) {
                 return new TransportAction[0];
+            }
             List<TransportAction> list = new ArrayList<>();
             for (String s : names) {
                 list.add(TransportAction.valueOf(s));

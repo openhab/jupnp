@@ -35,8 +35,9 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
     }
 
     public Calendar valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return null;
+        }
 
         Date d = getDateValue(s, readFormats);
         if (d == null) {
@@ -51,8 +52,9 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
 
     @Override
     public String getString(Calendar value) throws InvalidValueException {
-        if (value == null)
+        if (value == null) {
             return "";
+        }
         SimpleDateFormat sdt = new SimpleDateFormat(writeFormat);
         sdt.setTimeZone(getTimeZone());
         return sdt.format(value.getTime());

@@ -61,8 +61,9 @@ public class MyServiceWithStringConvertibles {
     @UpnpAction(out = @UpnpOutputArgument(name = "Out"))
     public CSV<Integer> getMyNumbers() {
         CSVInteger wrapper = new CSVInteger();
-        if (myNumbers != null)
+        if (myNumbers != null) {
             wrapper.addAll(myNumbers);
+        }
         return wrapper;
     }
 

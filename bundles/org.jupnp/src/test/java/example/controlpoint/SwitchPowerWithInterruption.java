@@ -163,12 +163,14 @@ public class SwitchPowerWithInterruption {
             // Do some long-running work and periodically test if you should continue...
 
             // ... for local service invocation
-            if (Thread.interrupted())
+            if (Thread.interrupted()) {
                 interrupted = true;
+            }
 
             // ... for remote service invocation
-            if (remoteClientInfo != null && remoteClientInfo.isRequestCancelled())
+            if (remoteClientInfo != null && remoteClientInfo.isRequestCancelled()) {
                 interrupted = true;
+            }
         }
         throw new InterruptedException("Execution interrupted");
     }

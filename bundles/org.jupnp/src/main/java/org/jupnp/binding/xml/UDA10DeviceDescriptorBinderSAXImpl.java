@@ -346,8 +346,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 Iterator<MutableService> it = getInstance().iterator();
                 while (it.hasNext()) {
                     MutableService service = it.next();
-                    if (service.serviceType == null || service.serviceId == null)
+                    if (service.serviceType == null || service.serviceId == null) {
                         it.remove();
+                    }
                 }
             }
             return last;
@@ -439,8 +440,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 throws SAXException {
             super.startElement(uri, localName, qName, attributes);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null)
+            if (el == null) {
                 return;
+            }
             startElement(el, attributes);
         }
 
@@ -448,8 +450,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void endElement(String uri, String localName, String qName) throws SAXException {
             super.endElement(uri, localName, qName);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null)
+            if (el == null) {
                 return;
+            }
             endElement(el);
         }
 

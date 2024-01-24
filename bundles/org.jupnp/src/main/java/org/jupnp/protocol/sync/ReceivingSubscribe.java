@@ -185,8 +185,9 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     @Override
     public void responseSent(StreamResponseMessage responseMessage) {
-        if (subscription == null)
+        if (subscription == null) {
             return; // Preconditions failed very early on
+        }
         if (responseMessage != null && !responseMessage.getOperation().isFailed()
                 && subscription.getCurrentSequence().getValue() == 0) { // Note that renewals should not have 0
 
@@ -217,8 +218,9 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     @Override
     public void responseException(Throwable t) {
-        if (subscription == null)
+        if (subscription == null) {
             return; // Nothing to do, we didn't get that far
+        }
         log.trace("Response could not be send to subscriber, removing local GENA subscription: {}", subscription);
         getUpnpService().getRegistry().removeLocalSubscription(subscription);
     }

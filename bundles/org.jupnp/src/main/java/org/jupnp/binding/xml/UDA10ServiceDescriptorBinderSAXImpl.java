@@ -380,8 +380,9 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 throws SAXException {
             super.startElement(uri, localName, qName, attributes);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null)
+            if (el == null) {
                 return;
+            }
             startElement(el, attributes);
         }
 
@@ -389,8 +390,9 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         public void endElement(String uri, String localName, String qName) throws SAXException {
             super.endElement(uri, localName, qName);
             ELEMENT el = ELEMENT.valueOrNullOf(localName);
-            if (el == null)
+            if (el == null) {
                 return;
+            }
             endElement(el);
         }
 

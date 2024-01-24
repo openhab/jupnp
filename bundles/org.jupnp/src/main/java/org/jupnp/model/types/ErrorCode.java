@@ -62,8 +62,9 @@ public enum ErrorCode {
 
     public static ErrorCode getByCode(int code) {
         for (ErrorCode errorCode : values()) {
-            if (errorCode.getCode() == code)
+            if (errorCode.getCode() == code) {
                 return errorCode;
+            }
         }
         return null;
     }

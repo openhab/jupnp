@@ -257,8 +257,9 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     void maintain() {
 
-        if (getDeviceItems().isEmpty())
+        if (getDeviceItems().isEmpty()) {
             return;
+        }
 
         // Remove expired remote devices
         Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap<>();

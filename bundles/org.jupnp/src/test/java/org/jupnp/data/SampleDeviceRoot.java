@@ -112,8 +112,9 @@ public class SampleDeviceRoot extends SampleDevice {
 
     protected static Resource getLocalResource(Resource[] resources, URI localPathQuery) {
         for (Resource localResource : resources) {
-            if (localResource.matches(localPathQuery))
+            if (localResource.matches(localPathQuery)) {
                 return localResource;
+            }
         }
         return null;
     }
@@ -126,8 +127,9 @@ public class SampleDeviceRoot extends SampleDevice {
         assertEquals(0, a.validate().size());
         assertEquals(0, b.validate().size());
 
-        if (checkType)
+        if (checkType) {
             assertEquals(a, b); // Checking equals() method
+        }
         assertEquals(a.getIdentity().getUdn(), b.getIdentity().getUdn());
         assertEquals(a.getVersion().getMajor(), b.getVersion().getMajor());
         assertEquals(a.getVersion().getMinor(), b.getVersion().getMinor());

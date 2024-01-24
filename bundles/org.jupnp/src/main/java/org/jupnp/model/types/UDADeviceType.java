@@ -46,8 +46,9 @@ public class UDADeviceType extends DeviceType {
         Matcher matcher = PATTERN.matcher(s);
 
         try {
-            if (matcher.matches())
+            if (matcher.matches()) {
                 return new UDADeviceType(matcher.group(1), Integer.valueOf(matcher.group(2)));
+            }
         } catch (RuntimeException e) {
             throw new InvalidValueException(
                     String.format("Can't parse UDA device type string (namespace/type/version) '%s'", s), e);

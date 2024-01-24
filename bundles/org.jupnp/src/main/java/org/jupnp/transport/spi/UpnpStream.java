@@ -101,8 +101,9 @@ public abstract class UpnpStream implements Runnable {
      * @param responseMessage The response message successfully sent to the client.
      */
     protected void responseSent(StreamResponseMessage responseMessage) {
-        if (syncProtocol != null)
+        if (syncProtocol != null) {
             syncProtocol.responseSent(responseMessage);
+        }
     }
 
     /**
@@ -111,8 +112,9 @@ public abstract class UpnpStream implements Runnable {
      * @param t The reason why the response wasn't delivered.
      */
     protected void responseException(Throwable t) {
-        if (syncProtocol != null)
+        if (syncProtocol != null) {
             syncProtocol.responseException(t);
+        }
     }
 
     @Override

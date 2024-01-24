@@ -79,19 +79,22 @@ public class MimeType {
     }
 
     public boolean isCompatible(MimeType other) {
-        if (other == null)
+        if (other == null) {
             return false;
-        if (type.equals(WILDCARD) || other.type.equals(WILDCARD))
+        }
+        if (type.equals(WILDCARD) || other.type.equals(WILDCARD)) {
             return true;
-        else if (type.equalsIgnoreCase(other.type) && (subtype.equals(WILDCARD) || other.subtype.equals(WILDCARD)))
+        } else if (type.equalsIgnoreCase(other.type) && (subtype.equals(WILDCARD) || other.subtype.equals(WILDCARD))) {
             return true;
-        else
+        } else {
             return this.type.equalsIgnoreCase(other.type) && this.subtype.equalsIgnoreCase(other.subtype);
+        }
     }
 
     public static MimeType valueOf(String stringValue) throws IllegalArgumentException {
-        if (stringValue == null)
+        if (stringValue == null) {
             throw new IllegalArgumentException("String value is null");
+        }
 
         String params = null;
         int semicolonIndex = stringValue.indexOf(";");
@@ -138,8 +141,9 @@ public class MimeType {
 
         int end = getEnd(params, start);
         String name = params.substring(start, end).trim();
-        if (end < params.length() && params.charAt(end) == '=')
+        if (end < params.length() && params.charAt(end) == '=') {
             end++;
+        }
 
         StringBuilder buffer = new StringBuilder(params.length() - end);
         int i = end;
@@ -189,30 +193,38 @@ public class MimeType {
     protected static int getEnd(String params, int start) {
         int equals = params.indexOf('=', start);
         int semicolon = params.indexOf(';', start);
-        if (equals == -1 && semicolon == -1)
+        if (equals == -1 && semicolon == -1) {
             return params.length();
-        if (equals == -1)
+        }
+        if (equals == -1) {
             return semicolon;
-        if (semicolon == -1)
+        }
+        if (semicolon == -1) {
             return equals;
+        }
         return (equals < semicolon) ? equals : semicolon;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         MimeType mimeType = (MimeType) o;
 
-        if (parameters != null ? !parameters.equals(mimeType.parameters) : mimeType.parameters != null)
+        if (parameters != null ? !parameters.equals(mimeType.parameters) : mimeType.parameters != null) {
             return false;
-        if (!subtype.equalsIgnoreCase(mimeType.subtype))
+        }
+        if (!subtype.equalsIgnoreCase(mimeType.subtype)) {
             return false;
-        if (!type.equalsIgnoreCase(mimeType.type))
+        }
+        if (!type.equalsIgnoreCase(mimeType.type)) {
             return false;
+        }
 
         return true;
     }

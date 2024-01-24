@@ -143,8 +143,9 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
             for (StateVariable stateVariable : getService().getStateVariables()) {
                 if (stateVariable.getEventDetails().isSendEvents()) {
                     StateVariableAccessor accessor = getService().getAccessor(stateVariable);
-                    if (accessor == null)
+                    if (accessor == null) {
                         throw new IllegalStateException("No accessor for evented state variable");
+                    }
                     values.add(accessor.read(stateVariable, getImplementation()));
                 }
             }
@@ -242,8 +243,9 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
             log.trace("Property change event on local service: {}", e.getPropertyName());
 
             // Prevent recursion
-            if (e.getPropertyName().equals(EVENTED_STATE_VARIABLES))
+            if (e.getPropertyName().equals(EVENTED_STATE_VARIABLES)) {
                 return;
+            }
 
             String[] variableNames = ModelUtil.fromCommaSeparatedList(e.getPropertyName());
             if (log.isTraceEnabled()) {

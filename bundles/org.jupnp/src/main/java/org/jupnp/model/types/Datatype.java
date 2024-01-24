@@ -130,8 +130,9 @@ public interface Datatype<V> {
             {
                 for (Builtin b : Builtin.values()) {
                     // Lowercase descriptor name!
-                    if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH)))
+                    if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH))) {
                         continue; // Ignore double-declarations, take first one only
+                    }
                     put(b.getDescriptorName().toLowerCase(Locale.ENGLISH), b);
                 }
             }
@@ -158,8 +159,9 @@ public interface Datatype<V> {
             // The UPnP spec clearly says "must be one of these values", so I'm assuming
             // they are case sensitive. But we want to work with broken devices, which of
             // course produce mixed upper/lowercase values.
-            if (descriptorName == null)
+            if (descriptorName == null) {
                 return null;
+            }
             return byName.get(descriptorName.toLowerCase(Locale.ENGLISH));
         }
 

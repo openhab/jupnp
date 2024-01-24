@@ -55,8 +55,9 @@ public class SAXParser {
 
     public SAXParser(DefaultHandler handler) {
         this.xr = create();
-        if (handler != null)
+        if (handler != null) {
             xr.setContentHandler(handler);
+        }
     }
 
     public void setContentHandler(ContentHandler handler) {

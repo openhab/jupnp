@@ -131,8 +131,9 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * values, calls {@link #eventReceived()}.
      */
     public synchronized void propertyChange(PropertyChangeEvent e) {
-        if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES))
+        if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES)) {
             return;
+        }
 
         log.trace("Eventing triggered, getting state for subscription: {}", getSubscriptionId());
 

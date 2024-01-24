@@ -151,8 +151,9 @@ public class PositionInfo {
     public int getElapsedPercent() {
         long elapsed = getTrackElapsedSeconds();
         long total = getTrackDurationSeconds();
-        if (elapsed == 0 || total == 0)
+        if (elapsed == 0 || total == 0) {
             return 0;
+        }
         return new Double(elapsed / ((double) total / 100)).intValue();
     }
 

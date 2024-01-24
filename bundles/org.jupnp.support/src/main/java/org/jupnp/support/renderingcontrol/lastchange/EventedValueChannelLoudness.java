@@ -42,10 +42,12 @@ public class EventedValueChannelLoudness extends EventedValue<ChannelLoudness> {
         Channel channel = null;
         Boolean loudness = null;
         for (Map.Entry<String, String> attribute : attributes) {
-            if (attribute.getKey().equals("channel"))
+            if (attribute.getKey().equals("channel")) {
                 channel = Channel.valueOf(attribute.getValue());
-            if (attribute.getKey().equals("val"))
+            }
+            if (attribute.getKey().equals("val")) {
                 loudness = new BooleanDatatype().valueOf(attribute.getValue());
+            }
         }
         return channel != null && loudness != null ? new ChannelLoudness(channel, loudness) : null;
     }

@@ -146,8 +146,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < rootChildren.getLength(); i++) {
             Node rootChild = rootChildren.item(i);
 
-            if (rootChild.getNodeType() != Node.ELEMENT_NODE)
+            if (rootChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.specVersion.equals(rootChild)) {
                 log.trace("Ignoring UDA major/minor specVersion");
@@ -167,8 +168,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < actionListChildren.getLength(); i++) {
             Node actionListChild = actionListChildren.item(i);
 
-            if (actionListChild.getNodeType() != Node.ELEMENT_NODE)
+            if (actionListChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.action.equals(actionListChild)) {
                 MutableAction action = new MutableAction();
@@ -184,8 +186,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < actionNodeChildren.getLength(); i++) {
             Node actionNodeChild = actionNodeChildren.item(i);
 
-            if (actionNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (actionNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.name.equals(actionNodeChild)) {
                 action.name = XMLUtil.getTextContent(actionNodeChild);
@@ -195,8 +198,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 for (int j = 0; j < argumentChildren.getLength(); j++) {
                     Node argumentChild = argumentChildren.item(j);
 
-                    if (argumentChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (argumentChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
                     MutableActionArgument actionArgument = new MutableActionArgument();
                     hydrateActionArgument(actionArgument, argumentChild);
@@ -212,8 +216,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < argumentNodeChildren.getLength(); i++) {
             Node argumentNodeChild = argumentNodeChildren.item(i);
 
-            if (argumentNodeChild.getNodeType() != Node.ELEMENT_NODE)
+            if (argumentNodeChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.name.equals(argumentNodeChild)) {
                 actionArgument.name = XMLUtil.getTextContent(argumentNodeChild);
@@ -242,8 +247,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < serviceStateTableChildren.getLength(); i++) {
             Node serviceStateTableChild = serviceStateTableChildren.item(i);
 
-            if (serviceStateTableChild.getNodeType() != Node.ELEMENT_NODE)
+            if (serviceStateTableChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.stateVariable.equals(serviceStateTableChild)) {
                 MutableStateVariable stateVariable = new MutableStateVariable();
@@ -263,8 +269,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         for (int i = 0; i < stateVariableChildren.getLength(); i++) {
             Node stateVariableChild = stateVariableChildren.item(i);
 
-            if (stateVariableChild.getNodeType() != Node.ELEMENT_NODE)
+            if (stateVariableChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (ELEMENT.name.equals(stateVariableChild)) {
                 stateVariable.name = XMLUtil.getTextContent(stateVariableChild);
@@ -282,11 +289,13 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 for (int j = 0; j < allowedValueListChildren.getLength(); j++) {
                     Node allowedValueListChild = allowedValueListChildren.item(j);
 
-                    if (allowedValueListChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (allowedValueListChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
-                    if (ELEMENT.allowedValue.equals(allowedValueListChild))
+                    if (ELEMENT.allowedValue.equals(allowedValueListChild)) {
                         allowedValues.add(XMLUtil.getTextContent(allowedValueListChild));
+                    }
                 }
 
                 stateVariable.allowedValues = allowedValues;
@@ -299,8 +308,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 for (int j = 0; j < allowedValueRangeChildren.getLength(); j++) {
                     Node allowedValueRangeChild = allowedValueRangeChildren.item(j);
 
-                    if (allowedValueRangeChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (allowedValueRangeChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
                     if (ELEMENT.minimum.equals(allowedValueRangeChild)) {
                         try {
@@ -379,8 +389,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         Element actionListElement = appendNewElement(descriptor, scpdElement, ELEMENT.actionList);
 
         for (Action action : serviceModel.getActions()) {
-            if (!action.getName().equals(QueryStateVariableAction.ACTION_NAME))
+            if (!action.getName().equals(QueryStateVariableAction.ACTION_NAME)) {
                 generateAction(action, descriptor, actionListElement);
+            }
         }
     }
 

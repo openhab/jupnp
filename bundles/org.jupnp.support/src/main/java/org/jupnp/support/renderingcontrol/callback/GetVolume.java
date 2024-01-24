@@ -50,8 +50,9 @@ public abstract class GetVolume extends ActionCallback {
             failure(invocation, null);
             ok = false;
         }
-        if (ok)
+        if (ok) {
             received(invocation, currentVolume);
+        }
     }
 
     public abstract void received(ActionInvocation<?> actionInvocation, int currentVolume);

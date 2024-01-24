@@ -87,8 +87,9 @@ public enum StorageMedium {
 
     public static StorageMedium valueOrExceptionOf(String s) {
         StorageMedium sm = byProtocolString.get(s);
-        if (sm != null)
+        if (sm != null) {
             return sm;
+        }
         throw new IllegalArgumentException("Invalid storage medium string: " + s);
     }
 
@@ -99,8 +100,9 @@ public enum StorageMedium {
 
     public static StorageMedium[] valueOfCommaSeparatedList(String s) {
         String[] strings = ModelUtil.fromCommaSeparatedList(s);
-        if (strings == null)
+        if (strings == null) {
             return new StorageMedium[0];
+        }
         StorageMedium[] result = new StorageMedium[strings.length];
         for (int i = 0; i < strings.length; i++) {
             result[i] = valueOrVendorSpecificOf(strings[i]);

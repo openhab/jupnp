@@ -185,8 +185,9 @@ public abstract class SubscriptionCallback implements Runnable {
 
         } catch (Exception ex) {
             log.trace("Local callback creation failed", ex);
-            if (localSubscription != null)
+            if (localSubscription != null) {
                 getControlPoint().getRegistry().removeLocalSubscription(localSubscription);
+            }
             failed(localSubscription, null, ex);
         }
     }
@@ -245,8 +246,9 @@ public abstract class SubscriptionCallback implements Runnable {
     }
 
     public synchronized void end() {
-        if (subscription == null)
+        if (subscription == null) {
             return;
+        }
         if (subscription instanceof LocalGENASubscription) {
             endLocalSubscription((LocalGENASubscription) subscription);
         } else if (subscription instanceof RemoteGENASubscription) {

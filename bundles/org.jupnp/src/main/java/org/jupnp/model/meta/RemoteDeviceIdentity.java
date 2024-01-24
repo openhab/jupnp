@@ -82,8 +82,9 @@ public class RemoteDeviceIdentity extends DeviceIdentity {
     }
 
     public byte[] getWakeOnLANBytes() {
-        if (getInterfaceMacAddress() == null)
+        if (getInterfaceMacAddress() == null) {
             return null;
+        }
         byte[] bytes = new byte[6 + 16 * getInterfaceMacAddress().length];
         for (int i = 0; i < 6; i++) {
             bytes[i] = (byte) 0xff;

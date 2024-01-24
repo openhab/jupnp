@@ -30,8 +30,9 @@ public class SupportedHeader extends DLNAHeader<String[]> {
     @Override
     public void setString(String s) {
         if (!s.isEmpty()) {
-            if (s.endsWith(";"))
+            if (s.endsWith(";")) {
                 s = s.substring(0, s.length() - 1);
+            }
             setValue(s.split("\\s*,\\s*"));
             return;
         }

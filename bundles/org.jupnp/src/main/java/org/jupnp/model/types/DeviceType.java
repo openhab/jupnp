@@ -88,8 +88,9 @@ public class DeviceType {
             // Ignore
         }
 
-        if (deviceType != null)
+        if (deviceType != null) {
             return deviceType;
+        }
 
         try {
             // Now try a generic DeviceType parse
@@ -125,12 +126,15 @@ public class DeviceType {
     }
 
     public boolean implementsVersion(DeviceType that) {
-        if (!namespace.equals(that.namespace))
+        if (!namespace.equals(that.namespace)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
-        if (version < that.version)
+        }
+        if (version < that.version) {
             return false;
+        }
         return true;
     }
 
@@ -145,19 +149,24 @@ public class DeviceType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof DeviceType))
+        }
+        if (o == null || !(o instanceof DeviceType)) {
             return false;
+        }
 
         DeviceType that = (DeviceType) o;
 
-        if (version != that.version)
+        if (version != that.version) {
             return false;
-        if (!namespace.equals(that.namespace))
+        }
+        if (!namespace.equals(that.namespace)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
+        }
 
         return true;
     }

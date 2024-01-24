@@ -103,8 +103,9 @@ public abstract class Service<D extends Device, S extends Service> {
     }
 
     void setDevice(D device) {
-        if (this.device != null)
+        if (this.device != null) {
             throw new IllegalStateException("Final value has been set already, model is immutable");
+        }
         this.device = device;
     }
 

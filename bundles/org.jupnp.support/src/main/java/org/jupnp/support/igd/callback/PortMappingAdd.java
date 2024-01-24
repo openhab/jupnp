@@ -44,9 +44,11 @@ public abstract class PortMappingAdd extends ActionCallback {
         getActionInvocation().setInput("NewInternalPort", portMapping.getInternalPort());
         getActionInvocation().setInput("NewLeaseDuration", portMapping.getLeaseDurationSeconds());
         getActionInvocation().setInput("NewEnabled", portMapping.isEnabled());
-        if (portMapping.hasRemoteHost())
+        if (portMapping.hasRemoteHost()) {
             getActionInvocation().setInput("NewRemoteHost", portMapping.getRemoteHost());
-        if (portMapping.hasDescription())
+        }
+        if (portMapping.hasDescription()) {
             getActionInvocation().setInput("NewPortMappingDescription", portMapping.getDescription());
+        }
     }
 }

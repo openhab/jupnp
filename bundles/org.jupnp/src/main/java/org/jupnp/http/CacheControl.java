@@ -130,8 +130,9 @@ public class CacheControl {
     }
 
     public static CacheControl valueOf(String s) throws IllegalArgumentException {
-        if (s == null)
+        if (s == null) {
             return null;
+        }
         CacheControl result = new CacheControl();
 
         String[] directives = s.split(",");
@@ -143,10 +144,12 @@ public class CacheControl {
             String value = null;
             if (nameValue.length > 1) {
                 value = nameValue[1].trim();
-                if (value.startsWith("\""))
+                if (value.startsWith("\"")) {
                     value = value.substring(1);
-                if (value.endsWith("\""))
+                }
+                if (value.endsWith("\"")) {
                     value = value.substring(0, value.length() - 1);
+                }
             }
 
             String lowercase = name.toLowerCase();
@@ -163,12 +166,14 @@ public class CacheControl {
             } else if ("no-store".equals(lowercase)) {
                 result.setNoStore(true);
             } else if ("max-age".equals(lowercase)) {
-                if (value == null)
+                if (value == null) {
                     throw new IllegalArgumentException("CacheControl max-age header does not have a value: " + value);
+                }
                 result.setMaxAge(Integer.valueOf(value));
             } else if ("s-maxage".equals(lowercase)) {
-                if (value == null)
+                if (value == null) {
                     throw new IllegalArgumentException("CacheControl s-maxage header does not have a value: " + value);
+                }
                 result.setSharedMaxAge(Integer.valueOf(value));
             } else if ("no-transform".equals(lowercase)) {
                 result.setNoTransform(true);
@@ -179,8 +184,9 @@ public class CacheControl {
             } else if ("public".equals(lowercase)) {
                 // ignore
             } else {
-                if (value == null)
+                if (value == null) {
                     value = "";
+                }
                 result.getCacheExtensions().put(name, value);
             }
         }
@@ -190,25 +196,32 @@ public class CacheControl {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (!isPrivateFlag())
+        if (!isPrivateFlag()) {
             sb.append("public");
-        if (isMustRevalidate())
+        }
+        if (isMustRevalidate()) {
             append("must-revalidate", sb);
-        if (isNoTransform())
+        }
+        if (isNoTransform()) {
             append("no-transform", sb);
-        if (isNoStore())
+        }
+        if (isNoStore()) {
             append("no-store", sb);
-        if (isProxyRevalidate())
+        }
+        if (isProxyRevalidate()) {
             append("proxy-revalidate", sb);
-        if (getSharedMaxAge() > -1)
+        }
+        if (getSharedMaxAge() > -1) {
             append("s-maxage", sb).append("=").append(getSharedMaxAge());
-        if (getMaxAge() > -1)
+        }
+        if (getMaxAge() > -1) {
             append("max-age", sb).append("=").append(getMaxAge());
+        }
         if (isNoCache()) {
             List<String> fields = getNoCacheFields();
-            if (fields.isEmpty())
+            if (fields.isEmpty()) {
                 append("no-cache", sb);
-            else {
+            } else {
                 for (String field : getNoCacheFields()) {
                     append("no-cache", sb).append("=\"").append(field).append("\"");
                 }
@@ -216,9 +229,9 @@ public class CacheControl {
         }
         if (isPrivateFlag()) {
             List<String> fields = getPrivateFields();
-            if (fields.isEmpty())
+            if (fields.isEmpty()) {
                 append("private", sb);
-            else {
+            } else {
                 for (String field : getPrivateFields()) {
                     append("private", sb).append("=\"").append(field).append("\"");
                 }
@@ -235,43 +248,57 @@ public class CacheControl {
     }
 
     private StringBuilder append(String s, StringBuilder sb) {
-        if (sb.length() > 0)
+        if (sb.length() > 0) {
             sb.append(", ");
+        }
         sb.append(s);
         return sb;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         CacheControl that = (CacheControl) o;
 
-        if (maxAge != that.maxAge)
+        if (maxAge != that.maxAge) {
             return false;
-        if (mustRevalidate != that.mustRevalidate)
+        }
+        if (mustRevalidate != that.mustRevalidate) {
             return false;
-        if (noCache != that.noCache)
+        }
+        if (noCache != that.noCache) {
             return false;
-        if (noStore != that.noStore)
+        }
+        if (noStore != that.noStore) {
             return false;
-        if (noTransform != that.noTransform)
+        }
+        if (noTransform != that.noTransform) {
             return false;
-        if (privateFlag != that.privateFlag)
+        }
+        if (privateFlag != that.privateFlag) {
             return false;
-        if (proxyRevalidate != that.proxyRevalidate)
+        }
+        if (proxyRevalidate != that.proxyRevalidate) {
             return false;
-        if (sharedMaxAge != that.sharedMaxAge)
+        }
+        if (sharedMaxAge != that.sharedMaxAge) {
             return false;
-        if (!cacheExtensions.equals(that.cacheExtensions))
+        }
+        if (!cacheExtensions.equals(that.cacheExtensions)) {
             return false;
-        if (!noCacheFields.equals(that.noCacheFields))
+        }
+        if (!noCacheFields.equals(that.noCacheFields)) {
             return false;
-        if (!privateFields.equals(that.privateFields))
+        }
+        if (!privateFields.equals(that.privateFields)) {
             return false;
+        }
 
         return true;
     }

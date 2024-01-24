@@ -42,8 +42,9 @@ public enum ContentDirectoryErrorCode {
 
     public static ContentDirectoryErrorCode getByCode(int code) {
         for (ContentDirectoryErrorCode errorCode : values()) {
-            if (errorCode.getCode() == code)
+            if (errorCode.getCode() == code) {
                 return errorCode;
+            }
         }
         return null;
     }

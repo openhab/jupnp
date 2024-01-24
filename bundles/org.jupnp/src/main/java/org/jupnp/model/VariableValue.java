@@ -52,8 +52,9 @@ public class VariableValue {
         this.datatype = datatype;
         this.value = value instanceof String ? datatype.valueOf((String) value) : value;
 
-        if (ModelUtil.ANDROID_RUNTIME)
+        if (ModelUtil.ANDROID_RUNTIME) {
             return; // Skipping validation on Android
+        }
 
         // We can skip this validation because we can catch invalid values
         // of any remote service (action invocation, event value) before, they are

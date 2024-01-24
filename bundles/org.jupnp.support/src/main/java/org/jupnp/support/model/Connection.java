@@ -57,19 +57,24 @@ public class Connection {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o)
+            if (this == o) {
                 return true;
-            if (o == null || getClass() != o.getClass())
+            }
+            if (o == null || getClass() != o.getClass()) {
                 return false;
+            }
 
             StatusInfo that = (StatusInfo) o;
 
-            if (uptimeSeconds != that.uptimeSeconds)
+            if (uptimeSeconds != that.uptimeSeconds) {
                 return false;
-            if (lastError != that.lastError)
+            }
+            if (lastError != that.lastError) {
                 return false;
-            if (status != that.status)
+            }
+            if (status != that.status) {
                 return false;
+            }
 
             return true;
         }

@@ -141,9 +141,10 @@ public class MethodActionExecutor extends AbstractActionExecutor {
             ActionArgumentValue<LocalService> inputValue = actionInvocation.getInput(argument);
 
             // If it's a primitive argument, we need a value
-            if (methodParameterType.isPrimitive() && (inputValue == null || inputValue.toString().isEmpty()))
+            if (methodParameterType.isPrimitive() && (inputValue == null || inputValue.toString().isEmpty())) {
                 throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID, "Primitive action method argument '"
                         + argument.getName() + "' requires input value, can't be null or empty string");
+            }
 
             // It's not primitive and we have no value, that's fine too
             if (inputValue == null) {

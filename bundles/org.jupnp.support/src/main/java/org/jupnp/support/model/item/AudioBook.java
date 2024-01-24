@@ -53,12 +53,15 @@ public class AudioBook extends AudioItem {
             String date, Res... resource) {
         super(id, parentID, title, creator, resource);
         setClazz(CLASS);
-        if (producer != null)
+        if (producer != null) {
             addProperty(new UPNP.PRODUCER(producer));
-        if (contributor != null)
+        }
+        if (contributor != null) {
             addProperty(new DC.CONTRIBUTOR(contributor));
-        if (date != null)
+        }
+        if (date != null) {
             setDate(date);
+        }
     }
 
     public StorageMedium getStorageMedium() {

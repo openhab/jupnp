@@ -28,8 +28,9 @@ public enum RecordMediumWriteStatus {
     NOT_IMPLEMENTED;
 
     public static RecordMediumWriteStatus valueOrUnknownOf(String s) {
-        if (s == null)
+        if (s == null) {
             return UNKNOWN;
+        }
         try {
             return valueOf(s);
         } catch (IllegalArgumentException ex) {

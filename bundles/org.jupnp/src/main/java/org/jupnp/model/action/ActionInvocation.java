@@ -128,8 +128,9 @@ public class ActionInvocation<S extends Service> {
     }
 
     public void setInput(ActionArgumentValue<S>[] input) {
-        if (input == null)
+        if (input == null) {
             return;
+        }
         for (ActionArgumentValue<S> argumentValue : input) {
             this.input.put(argumentValue.getArgument().getName(), argumentValue);
         }
@@ -144,8 +145,9 @@ public class ActionInvocation<S extends Service> {
     }
 
     public void setOutput(ActionArgumentValue<S>[] output) {
-        if (output == null)
+        if (output == null) {
             return;
+        }
         for (ActionArgumentValue<S> argumentValue : output) {
             this.output.put(argumentValue.getArgument().getName(), argumentValue);
         }
@@ -153,15 +155,17 @@ public class ActionInvocation<S extends Service> {
 
     protected ActionArgument<S> getInputArgument(String name) {
         ActionArgument<S> argument = getAction().getInputArgument(name);
-        if (argument == null)
+        if (argument == null) {
             throw new IllegalArgumentException("Argument not found: " + name);
+        }
         return argument;
     }
 
     protected ActionArgument<S> getOutputArgument(String name) {
         ActionArgument<S> argument = getAction().getOutputArgument(name);
-        if (argument == null)
+        if (argument == null) {
             throw new IllegalArgumentException("Argument not found: " + name);
+        }
         return argument;
     }
 

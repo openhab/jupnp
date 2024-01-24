@@ -130,8 +130,9 @@ public abstract class DIDLObject {
 
             @Override
             public void setOnElement(Element element) {
-                if (getValue() != null)
+                if (getValue() != null) {
                     getValue().setOnElement(element);
+                }
             }
         }
 
@@ -761,20 +762,23 @@ public abstract class DIDLObject {
     }
 
     public DIDLObject addProperty(Property property) {
-        if (property == null)
+        if (property == null) {
             return this;
+        }
         getProperties().add(property);
         return this;
     }
 
     public DIDLObject replaceFirstProperty(Property<?> property) {
-        if (property == null)
+        if (property == null) {
             return this;
+        }
         Iterator<Property<?>> it = getProperties().iterator();
         while (it.hasNext()) {
             Property<?> p = it.next();
-            if (p.getClass().isAssignableFrom(property.getClass()))
+            if (p.getClass().isAssignableFrom(property.getClass())) {
                 it.remove();
+            }
         }
         addProperty(property);
         return this;
@@ -782,15 +786,17 @@ public abstract class DIDLObject {
 
     public DIDLObject replaceProperties(java.lang.Class<? extends Property<?>> propertyClass,
             Property<?>[] properties) {
-        if (properties.length == 0)
+        if (properties.length == 0) {
             return this;
+        }
         removeProperties(propertyClass);
         return addProperties(properties);
     }
 
     public DIDLObject addProperties(Property<?>[] properties) {
-        if (properties == null)
+        if (properties == null) {
             return this;
+        }
         for (Property<?> property : properties) {
             addProperty(property);
         }
@@ -801,24 +807,27 @@ public abstract class DIDLObject {
         Iterator<Property<?>> it = getProperties().iterator();
         while (it.hasNext()) {
             Property<?> property = it.next();
-            if (propertyClass.isInstance(property))
+            if (propertyClass.isInstance(property)) {
                 it.remove();
+            }
         }
         return this;
     }
 
     public boolean hasProperty(java.lang.Class<? extends Property<?>> propertyClass) {
         for (Property<?> property : getProperties()) {
-            if (propertyClass.isInstance(property))
+            if (propertyClass.isInstance(property)) {
                 return true;
+            }
         }
         return false;
     }
 
     public <V> Property<V> getFirstProperty(java.lang.Class<? extends Property<V>> propertyClass) {
         for (Property property : getProperties()) {
-            if (propertyClass.isInstance(property))
+            if (propertyClass.isInstance(property)) {
                 return property;
+            }
         }
         return null;
     }
@@ -826,8 +835,9 @@ public abstract class DIDLObject {
     public <V> Property<V> getLastProperty(java.lang.Class<? extends Property<V>> propertyClass) {
         Property found = null;
         for (Property property : getProperties()) {
-            if (propertyClass.isInstance(property))
+            if (propertyClass.isInstance(property)) {
                 found = property;
+            }
         }
         return found;
     }
@@ -835,8 +845,9 @@ public abstract class DIDLObject {
     public <V> Property<V>[] getProperties(java.lang.Class<? extends Property<V>> propertyClass) {
         List<Property<V>> list = new ArrayList<>();
         for (Property property : getProperties()) {
-            if (propertyClass.isInstance(property))
+            if (propertyClass.isInstance(property)) {
                 list.add(property);
+            }
         }
         return list.toArray(new Property[list.size()]);
     }
@@ -844,8 +855,9 @@ public abstract class DIDLObject {
     public <V> Property<V>[] getPropertiesByNamespace(java.lang.Class<? extends Property.NAMESPACE> namespace) {
         List<Property<V>> list = new ArrayList<>();
         for (Property property : getProperties()) {
-            if (namespace.isInstance(property))
+            if (namespace.isInstance(property)) {
                 list.add(property);
+            }
         }
         return list.toArray(new Property[list.size()]);
     }
@@ -878,15 +890,18 @@ public abstract class DIDLObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         DIDLObject that = (DIDLObject) o;
 
-        if (!id.equals(that.id))
+        if (!id.equals(that.id)) {
             return false;
+        }
 
         return true;
     }

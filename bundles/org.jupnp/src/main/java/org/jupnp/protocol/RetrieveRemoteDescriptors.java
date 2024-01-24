@@ -132,8 +132,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
 
             // Extra headers
             UpnpHeaders headers = getUpnpService().getConfiguration().getDescriptorRetrievalHeaders(rd.getIdentity());
-            if (headers != null)
+            if (headers != null) {
                 deviceDescRetrievalMsg.getHeaders().putAll(headers);
+            }
 
             log.debug("Sending device descriptor retrieval message: {}", deviceDescRetrievalMsg);
             deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
@@ -219,19 +220,22 @@ public class RetrieveRemoteDescriptors implements Runnable {
                 for (ValidationError validationError : ex.getErrors()) {
                     log.warn(validationError.toString());
                 }
-                if (describedDevice != null && notifiedStart)
+                if (describedDevice != null && notifiedStart) {
                     getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+                }
             }
 
         } catch (DescriptorBindingException ex) {
             log.warn("Could not hydrate device or its services from descriptor: {}", rd, ex);
-            if (describedDevice != null && notifiedStart)
+            if (describedDevice != null && notifiedStart) {
                 getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+            }
 
         } catch (RegistrationException ex) {
             log.warn("Adding hydrated device to registry failed: {}", rd, ex);
-            if (describedDevice != null && notifiedStart)
+            if (describedDevice != null && notifiedStart) {
                 getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+            }
         }
     }
 
@@ -252,8 +256,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
         List<RemoteDevice> describedEmbeddedDevices = new ArrayList<>();
         if (currentDevice.hasEmbeddedDevices()) {
             for (RemoteDevice embeddedDevice : currentDevice.getEmbeddedDevices()) {
-                if (embeddedDevice == null)
+                if (embeddedDevice == null) {
                     continue;
+                }
                 RemoteDevice describedEmbeddedDevice = describeServices(embeddedDevice);
                 if (describedEmbeddedDevice != null) {
                     describedEmbeddedDevices.add(describedEmbeddedDevice);
@@ -295,8 +300,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
         // Extra headers
         UpnpHeaders headers = getUpnpService().getConfiguration()
                 .getDescriptorRetrievalHeaders(service.getDevice().getIdentity());
-        if (headers != null)
+        if (headers != null) {
             serviceDescRetrievalMsg.getHeaders().putAll(headers);
+        }
 
         log.debug("Sending service descriptor retrieval message: {}", serviceDescRetrievalMsg);
         StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
@@ -333,8 +339,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
     protected List<RemoteService> filterExclusiveServices(RemoteService[] services) {
         ServiceType[] exclusiveTypes = getUpnpService().getConfiguration().getExclusiveServiceTypes();
 
-        if (exclusiveTypes == null || exclusiveTypes.length == 0)
+        if (exclusiveTypes == null || exclusiveTypes.length == 0) {
             return Arrays.asList(services);
+        }
 
         List<RemoteService> exclusiveServices = new ArrayList<>();
         for (RemoteService discoveredService : services) {

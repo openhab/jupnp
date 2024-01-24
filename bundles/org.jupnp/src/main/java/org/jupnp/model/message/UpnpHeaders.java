@@ -59,8 +59,9 @@ public class UpnpHeaders extends Headers {
         log.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
-            if (entry.getKey() == null)
+            if (entry.getKey() == null) {
                 continue; // Oh yes, the JDK has 'null' HTTP headers
+            }
 
             UpnpHeader.Type type = UpnpHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
@@ -115,32 +116,37 @@ public class UpnpHeaders extends Headers {
     }
 
     public boolean containsKey(UpnpHeader.Type type) {
-        if (parsedHeaders == null)
+        if (parsedHeaders == null) {
             parseHeaders();
+        }
         return parsedHeaders.containsKey(type);
     }
 
     public List<UpnpHeader> get(UpnpHeader.Type type) {
-        if (parsedHeaders == null)
+        if (parsedHeaders == null) {
             parseHeaders();
+        }
         return parsedHeaders.get(type);
     }
 
     public void add(UpnpHeader.Type type, UpnpHeader value) {
         super.add(type.getHttpName(), value.getString());
-        if (parsedHeaders != null)
+        if (parsedHeaders != null) {
             addParsedValue(type, value);
+        }
     }
 
     public void remove(UpnpHeader.Type type) {
         super.remove(type.getHttpName());
-        if (parsedHeaders != null)
+        if (parsedHeaders != null) {
             parsedHeaders.remove(type);
+        }
     }
 
     public UpnpHeader[] getAsArray(UpnpHeader.Type type) {
-        if (parsedHeaders == null)
+        if (parsedHeaders == null) {
             parseHeaders();
+        }
         return parsedHeaders.get(type) != null
                 ? parsedHeaders.get(type).toArray(new UpnpHeader[parsedHeaders.get(type).size()])
                 : new UpnpHeader[0];
@@ -152,8 +158,9 @@ public class UpnpHeaders extends Headers {
 
     public <H extends UpnpHeader> H getFirstHeader(UpnpHeader.Type type, Class<H> subtype) {
         UpnpHeader[] headers = getAsArray(type);
-        if (headers.length == 0)
+        if (headers.length == 0) {
             return null;
+        }
 
         for (UpnpHeader header : headers) {
             if (subtype.isAssignableFrom(header.getClass())) {

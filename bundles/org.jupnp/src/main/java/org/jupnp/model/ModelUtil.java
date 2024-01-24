@@ -53,8 +53,9 @@ public class ModelUtil {
         try {
             Class<?> androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
             String product = (String) androidBuild.getField("PRODUCT").get(null);
-            if ("google_sdk".equals(product) || ("sdk".equals(product)))
+            if ("google_sdk".equals(product) || ("sdk".equals(product))) {
                 foundEmulator = true;
+            }
         } catch (Exception ex) {
             // Ignore
         }
@@ -67,8 +68,9 @@ public class ModelUtil {
      * @return <code>true</code> if the given interface is an Enum, or if the collection contains a super-interface.
      */
     public static boolean isStringConvertibleType(Set<Class> stringConvertibleTypes, Class clazz) {
-        if (clazz.isEnum())
+        if (clazz.isEnum()) {
             return true;
+        }
         for (Class toStringOutputType : stringConvertibleTypes) {
             if (toStringOutputType.isAssignableFrom(clazz)) {
                 return true;
@@ -182,11 +184,13 @@ public class ModelUtil {
      */
     public static long fromTimeString(String s) {
         // Handle "00:00:00.000" pattern, drop the milliseconds
-        if (s.lastIndexOf(".") != -1)
+        if (s.lastIndexOf(".") != -1) {
             s = s.substring(0, s.lastIndexOf("."));
+        }
         String[] split = s.split(":");
-        if (split.length != 3)
+        if (split.length != 3) {
             throw new IllegalArgumentException("Can't parse time string: " + s);
+        }
         return (Long.parseLong(split[0]) * 3600) + (Long.parseLong(split[1]) * 60) + (Long.parseLong(split[2]));
     }
 

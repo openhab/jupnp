@@ -225,13 +225,15 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     protected D find(UDN udn, D current) {
-        if (current.getIdentity().getUdn().equals(udn))
+        if (current.getIdentity().getUdn().equals(udn)) {
             return current;
+        }
         if (current.hasEmbeddedDevices()) {
             for (D embeddedDevice : (D[]) current.getEmbeddedDevices()) {
                 D match;
-                if ((match = find(udn, embeddedDevice)) != null)
+                if ((match = find(udn, embeddedDevice)) != null) {
                     return match;
+                }
             }
         }
         return null;
@@ -323,8 +325,9 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     public boolean isFullyHydrated() {
         S[] services = findServices();
         for (S service : services) {
-            if (service.hasStateVariables())
+            if (service.hasStateVariables()) {
                 return true;
+            }
         }
         return false;
     }
@@ -420,15 +423,18 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         Device device = (Device) o;
 
-        if (!identity.equals(device.identity))
+        if (!identity.equals(device.identity)) {
             return false;
+        }
 
         return true;
     }

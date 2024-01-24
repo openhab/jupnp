@@ -109,8 +109,9 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
          * @param httpName A case-insensitive HTTP header name.
          */
         public static Type getByHttpName(String httpName) {
-            if (httpName == null)
+            if (httpName == null) {
                 return null;
+            }
             return byName.get(httpName);
         }
     }

@@ -164,8 +164,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
-            if (isAdvertisementDisabled(localDevice))
+            if (isAdvertisementDisabled(localDevice)) {
                 continue;
+            }
 
             // We are re-using the regular notification messages here but override the NT with the ST header
             if (LOG_ENABLED) {
@@ -241,8 +242,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         log.trace("Responding to root device search with advertisement messages for all local root devices");
         for (LocalDevice device : getUpnpService().getRegistry().getLocalDevices()) {
 
-            if (isAdvertisementDisabled(device))
+            if (isAdvertisementDisabled(device)) {
                 continue;
+            }
 
             OutgoingSearchResponse message = new OutgoingSearchResponseRootDevice(getInputMessage(),
                     getDescriptorLocation(activeStreamServer, device), device);
@@ -255,8 +257,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Device device = getUpnpService().getRegistry().getDevice(udn, false);
         if (device != null && device instanceof LocalDevice) {
 
-            if (isAdvertisementDisabled((LocalDevice) device))
+            if (isAdvertisementDisabled((LocalDevice) device)) {
                 return;
+            }
 
             log.trace("Responding to UDN device search: {}", udn);
             OutgoingSearchResponse message = new OutgoingSearchResponseUDN(getInputMessage(),
@@ -273,8 +276,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if (isAdvertisementDisabled((LocalDevice) device))
+                if (isAdvertisementDisabled((LocalDevice) device)) {
                     continue;
+                }
 
                 log.trace("Sending matching device type search result for: {}", device);
                 OutgoingSearchResponse message = new OutgoingSearchResponseDeviceType(getInputMessage(),
@@ -292,8 +296,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if (isAdvertisementDisabled((LocalDevice) device))
+                if (isAdvertisementDisabled((LocalDevice) device)) {
                     continue;
+                }
 
                 log.trace("Sending matching service type search result: {}", device);
                 OutgoingSearchResponse message = new OutgoingSearchResponseServiceType(getInputMessage(),

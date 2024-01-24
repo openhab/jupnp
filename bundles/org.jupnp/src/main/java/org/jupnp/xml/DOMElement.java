@@ -119,8 +119,9 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
     public CHILD findChildWithIdentifier(final String id) {
         Collection<CHILD> list = getXPathChildElements(CHILD_BUILDER,
                 "descendant::" + prefix("*") + "[@id=\"" + id + "\"]");
-        if (list.size() == 1)
+        if (list.size() == 1) {
             return list.iterator().next();
+        }
         return null;
     }
 

@@ -132,30 +132,40 @@ public class ConnectionInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         ConnectionInfo that = (ConnectionInfo) o;
 
-        if (avTransportID != that.avTransportID)
+        if (avTransportID != that.avTransportID) {
             return false;
-        if (connectionID != that.connectionID)
+        }
+        if (connectionID != that.connectionID) {
             return false;
-        if (peerConnectionID != that.peerConnectionID)
+        }
+        if (peerConnectionID != that.peerConnectionID) {
             return false;
-        if (rcsID != that.rcsID)
+        }
+        if (rcsID != that.rcsID) {
             return false;
-        if (connectionStatus != that.connectionStatus)
+        }
+        if (connectionStatus != that.connectionStatus) {
             return false;
-        if (direction != that.direction)
+        }
+        if (direction != that.direction) {
             return false;
+        }
         if (peerConnectionManager != null ? !peerConnectionManager.equals(that.peerConnectionManager)
-                : that.peerConnectionManager != null)
+                : that.peerConnectionManager != null) {
             return false;
-        if (protocolInfo != null ? !protocolInfo.equals(that.protocolInfo) : that.protocolInfo != null)
+        }
+        if (protocolInfo != null ? !protocolInfo.equals(that.protocolInfo) : that.protocolInfo != null) {
             return false;
+        }
 
         return true;
     }

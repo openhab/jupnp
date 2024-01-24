@@ -46,8 +46,9 @@ public class RealTimeInfoHeader extends DLNAHeader<NormalPlayTime> {
     @Override
     public String getString() {
         NormalPlayTime v = getValue();
-        if (v == null)
+        if (v == null) {
             return PREFIX + "*";
+        }
         return PREFIX + v.getString();
     }
 }

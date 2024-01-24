@@ -53,11 +53,13 @@ class DeviceGraphTest {
         boolean haveOne = false, haveTwo = false;
 
         for (LocalDevice em : embedded) {
-            if (em.getIdentity().getUdn().equals(ld.getEmbeddedDevices()[0].getIdentity().getUdn()))
+            if (em.getIdentity().getUdn().equals(ld.getEmbeddedDevices()[0].getIdentity().getUdn())) {
                 haveOne = true;
+            }
             if (em.getIdentity().getUdn()
-                    .equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getIdentity().getUdn()))
+                    .equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getIdentity().getUdn())) {
                 haveTwo = true;
+            }
         }
 
         assertTrue(haveOne);
@@ -132,12 +134,15 @@ class DeviceGraphTest {
 
         boolean haveOne = false, haveTwo = false, haveThree = false;
         for (Service service : services) {
-            if (service.getServiceId().equals(one.getServiceId()))
+            if (service.getServiceId().equals(one.getServiceId())) {
                 haveOne = true;
-            if (service.getServiceId().equals(two.getServiceId()))
+            }
+            if (service.getServiceId().equals(two.getServiceId())) {
                 haveTwo = true;
-            if (service.getServiceId().equals(three.getServiceId()))
+            }
+            if (service.getServiceId().equals(three.getServiceId())) {
                 haveThree = true;
+            }
         }
         assertTrue(haveOne);
         assertTrue(haveTwo);
@@ -211,12 +216,15 @@ class DeviceGraphTest {
         boolean haveOne = false, haveTwo = false, haveThree = false;
 
         for (ServiceType svcType : svcTypes) {
-            if (svcType.equals(ld.getServices()[0].getServiceType()))
+            if (svcType.equals(ld.getServices()[0].getServiceType())) {
                 haveOne = true;
-            if (svcType.equals(ld.getEmbeddedDevices()[0].getServices()[0].getServiceType()))
+            }
+            if (svcType.equals(ld.getEmbeddedDevices()[0].getServices()[0].getServiceType())) {
                 haveTwo = true;
-            if (svcType.equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0].getServiceType()))
+            }
+            if (svcType.equals(ld.getEmbeddedDevices()[0].getEmbeddedDevices()[0].getServices()[0].getServiceType())) {
                 haveThree = true;
+            }
         }
 
         assertTrue(haveOne);

@@ -128,15 +128,18 @@ public class Reflections {
                 && superClass != Object.class; superClass = superClass.getSuperclass()) {
             for (Method method : superClass.getDeclaredMethods()) {
                 String methodName = method.getName();
-                if (method.getParameterTypes().length != 0)
+                if (method.getParameterTypes().length != 0) {
                     continue;
+                }
 
                 if (methodName.startsWith("get")) {
-                    if (decapitalize(methodName.substring(3)).equals(name))
+                    if (decapitalize(methodName.substring(3)).equals(name)) {
                         return method;
+                    }
                 } else if (methodName.startsWith("is")) {
-                    if (decapitalize(methodName.substring(2)).equals(name))
+                    if (decapitalize(methodName.substring(2)).equals(name)) {
                         return method;
+                    }
                 }
             }
         }
@@ -407,8 +410,9 @@ public class Reflections {
     }
 
     public static String toClassNameString(String sep, Object... objects) {
-        if (objects.length == 0)
+        if (objects.length == 0) {
             return "";
+        }
         StringBuilder builder = new StringBuilder();
         for (Object object : objects) {
             builder.append(sep);
@@ -430,8 +434,9 @@ public class Reflections {
     }
 
     public static String decapitalize(String name) {
-        if (name == null)
+        if (name == null) {
             return null;
+        }
         if (name.isEmpty() || (name.length() > 1 && Character.isUpperCase(name.charAt(1)))) {
             return name;
         }

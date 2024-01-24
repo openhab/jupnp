@@ -37,8 +37,9 @@ public enum BrowseFlag {
 
     public static BrowseFlag valueOrNullOf(String s) {
         for (BrowseFlag browseFlag : values()) {
-            if (browseFlag.toString().equals(s))
+            if (browseFlag.toString().equals(s)) {
                 return browseFlag;
+            }
         }
         return null;
     }

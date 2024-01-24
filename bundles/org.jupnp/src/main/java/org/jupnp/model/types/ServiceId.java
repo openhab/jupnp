@@ -71,8 +71,9 @@ public class ServiceId {
             // Ignore
         }
 
-        if (serviceId != null)
+        if (serviceId != null) {
             return serviceId;
+        }
 
         // Now try a generic ServiceId parse
         Matcher matcher = ServiceId.PATTERN.matcher(s);
@@ -110,17 +111,21 @@ public class ServiceId {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof ServiceId))
+        }
+        if (o == null || !(o instanceof ServiceId)) {
             return false;
+        }
 
         ServiceId serviceId = (ServiceId) o;
 
-        if (!id.equals(serviceId.id))
+        if (!id.equals(serviceId.id)) {
             return false;
-        if (!namespace.equals(serviceId.namespace))
+        }
+        if (!namespace.equals(serviceId.namespace)) {
             return false;
+        }
 
         return true;
     }

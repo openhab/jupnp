@@ -61,8 +61,9 @@ public class Query {
     }
 
     public Query(String qs) {
-        if (qs == null)
+        if (qs == null) {
             return;
+        }
 
         // Parse query string
         String pairs[] = qs.split("&");
@@ -89,19 +90,22 @@ public class Query {
 
     public String get(String name) {
         List<String> values = parameters.get(name);
-        if (values == null)
+        if (values == null) {
             return "";
+        }
 
-        if (values.isEmpty())
+        if (values.isEmpty()) {
             return "";
+        }
 
         return values.get(0);
     }
 
     public String[] getValues(String name) {
         List<String> values = parameters.get(name);
-        if (values == null)
+        if (values == null) {
             return null;
+        }
 
         return values.toArray(new String[values.size()]);
     }
@@ -119,10 +123,11 @@ public class Query {
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             List<String> list = entry.getValue();
             String[] values;
-            if (list == null)
+            if (list == null) {
                 values = null;
-            else
+            } else {
                 values = list.toArray(new String[list.size()]);
+            }
             map.put(entry.getKey(), values);
         }
         return map;
@@ -152,10 +157,12 @@ public class Query {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
             for (String v : entry.getValue()) {
-                if (v == null || v.isEmpty())
+                if (v == null || v.isEmpty()) {
                     continue;
-                if (sb.length() > 0)
+                }
+                if (sb.length() > 0) {
                     sb.append("&");
+                }
                 sb.append(entry.getKey());
                 sb.append("=");
                 sb.append(v);

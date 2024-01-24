@@ -173,8 +173,9 @@ class IncompatibilityTest {
             if (!(resource instanceof ServiceEventCallbackResource)) {
                 continue;
             }
-            if (resource.getPathQuery().toString().length() < 100)
+            if (resource.getPathQuery().toString().length() < 100) {
                 test = true;
+            }
         }
         assertTrue(test);
     }
@@ -207,8 +208,9 @@ class IncompatibilityTest {
 
         boolean foundA = false;
         for (String s : stateVariable.getTypeDetails().getAllowedValues()) {
-            if (s.equals("A"))
+            if (s.equals("A")) {
                 foundA = true;
+            }
         }
         assertTrue(foundA);
         assertEquals(3, stateVariable.getTypeDetails().getAllowedValues().length);

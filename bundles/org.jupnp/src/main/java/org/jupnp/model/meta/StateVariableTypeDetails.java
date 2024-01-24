@@ -76,11 +76,13 @@ public class StateVariableTypeDetails implements Validatable {
     }
 
     protected boolean foundDefaultInAllowedValues(String defaultValue, String[] allowedValues) {
-        if (defaultValue == null || allowedValues == null)
+        if (defaultValue == null || allowedValues == null) {
             return true;
+        }
         for (String s : allowedValues) {
-            if (s.equals(defaultValue))
+            if (s.equals(defaultValue)) {
                 return true;
+            }
         }
         return false;
     }

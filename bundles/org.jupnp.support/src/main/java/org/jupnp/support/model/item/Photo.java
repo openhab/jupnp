@@ -42,8 +42,9 @@ public class Photo extends ImageItem {
     public Photo(String id, String parentID, String title, String creator, String album, Res... resource) {
         super(id, parentID, title, creator, resource);
         setClazz(CLASS);
-        if (album != null)
+        if (album != null) {
             setAlbum(album);
+        }
     }
 
     public String getAlbum() {

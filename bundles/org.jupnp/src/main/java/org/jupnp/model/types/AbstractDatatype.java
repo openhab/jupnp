@@ -47,8 +47,9 @@ public abstract class AbstractDatatype<V> implements Datatype<V> {
     }
 
     public String getString(V value) throws InvalidValueException {
-        if (value == null)
+        if (value == null) {
             return "";
+        }
         if (!isValid(value)) {
             throw new InvalidValueException("Value is not valid: " + value);
         }

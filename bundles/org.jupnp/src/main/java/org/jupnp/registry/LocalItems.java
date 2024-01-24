@@ -51,10 +51,11 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
     }
 
     protected void setDiscoveryOptions(UDN udn, DiscoveryOptions options) {
-        if (options != null)
+        if (options != null) {
             this.discoveryOptions.put(udn, options);
-        else
+        } else {
             this.discoveryOptions.remove(udn);
+        }
     }
 
     protected DiscoveryOptions getDiscoveryOptions(UDN udn) {
@@ -108,11 +109,13 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         getDeviceItems().add(localItem);
         log.trace("Registered local device: {}", localItem);
 
-        if (isByeByeBeforeFirstAlive(localItem.getKey()))
+        if (isByeByeBeforeFirstAlive(localItem.getKey())) {
             advertiseByebye(localDevice, true);
+        }
 
-        if (isAdvertised(localItem.getKey()))
+        if (isAdvertised(localItem.getKey())) {
             advertiseAlive(localDevice);
+        }
 
         for (final RegistryListener listener : registry.getListeners()) {
             registry.getConfiguration().getRegistryListenerExecutor().execute(new Runnable() {
@@ -171,8 +174,9 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
                 }
             }
 
-            if (isAdvertised(localDevice.getIdentity().getUdn()))
+            if (isAdvertised(localDevice.getIdentity().getUdn())) {
                 advertiseByebye(localDevice, !shuttingDown);
+            }
 
             if (!shuttingDown) {
                 for (final RegistryListener listener : registry.getListeners()) {
@@ -205,8 +209,9 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     public void advertiseLocalDevices() {
         for (RegistryItem<UDN, LocalDevice> localItem : deviceItems) {
-            if (isAdvertised(localItem.getKey()))
+            if (isAdvertised(localItem.getKey())) {
                 advertiseAlive(localItem.getItem());
+            }
         }
     }
 
@@ -214,8 +219,9 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     void maintain() {
 
-        if (getDeviceItems().isEmpty())
+        if (getDeviceItems().isEmpty()) {
             return;
+        }
 
         Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet<>();
 

@@ -52,17 +52,21 @@ public class Location {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         Location location = (Location) o;
 
-        if (!networkAddress.equals(location.networkAddress))
+        if (!networkAddress.equals(location.networkAddress)) {
             return false;
-        if (!path.equals(location.path))
+        }
+        if (!path.equals(location.path)) {
             return false;
+        }
 
         return true;
     }

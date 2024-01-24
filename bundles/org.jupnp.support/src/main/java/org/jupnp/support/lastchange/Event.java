@@ -42,8 +42,9 @@ public class Event {
 
     public InstanceID getInstanceID(UnsignedIntegerFourBytes id) {
         for (InstanceID instanceID : instanceIDs) {
-            if (instanceID.getId().equals(id))
+            if (instanceID.getId().equals(id)) {
                 return instanceID;
+            }
         }
         return null;
     }
@@ -78,8 +79,9 @@ public class Event {
         for (InstanceID instanceID : getInstanceIDs()) {
             if (instanceID.getId().equals(id)) {
                 for (EventedValue<?> eventedValue : instanceID.getValues()) {
-                    if (eventedValue.getClass().equals(type))
+                    if (eventedValue.getClass().equals(type)) {
                         return (EV) eventedValue;
+                    }
                 }
             }
         }
@@ -88,8 +90,9 @@ public class Event {
 
     public boolean hasChanges() {
         for (InstanceID instanceID : instanceIDs) {
-            if (!instanceID.getValues().isEmpty())
+            if (!instanceID.getValues().isEmpty()) {
                 return true;
+            }
         }
         return false;
     }

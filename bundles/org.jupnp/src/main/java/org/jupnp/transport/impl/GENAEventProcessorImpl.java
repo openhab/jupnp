@@ -139,8 +139,9 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
         for (int i = 0; i < propertysetElementChildren.getLength(); i++) {
             Node propertysetChild = propertysetElementChildren.item(i);
 
-            if (propertysetChild.getNodeType() != Node.ELEMENT_NODE)
+            if (propertysetChild.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
+            }
 
             if (getUnprefixedNodeName(propertysetChild).equals("property")) {
 
@@ -149,8 +150,9 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                 for (int j = 0; j < propertyChildren.getLength(); j++) {
                     Node propertyChild = propertyChildren.item(j);
 
-                    if (propertyChild.getNodeType() != Node.ELEMENT_NODE)
+                    if (propertyChild.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
 
                     String stateVariableName = getUnprefixedNodeName(propertyChild);
                     for (StateVariable stateVariable : stateVariables) {
@@ -175,8 +177,9 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
     /* ##################################################################################################### */
 
     protected String getMessageBody(UpnpMessage message) throws UnsupportedDataException {
-        if (!message.isBodyNonEmptyString())
+        if (!message.isBodyNonEmptyString()) {
             throw new UnsupportedDataException("Can't transform null or non-string/zero-length body of: " + message);
+        }
         return message.getBodyString().trim();
     }
 

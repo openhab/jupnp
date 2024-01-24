@@ -59,8 +59,9 @@ public class PhotoAlbum extends Album {
     public Photo[] getPhotos() {
         List<Photo> list = new ArrayList<>();
         for (Item item : getItems()) {
-            if (item instanceof Photo)
+            if (item instanceof Photo) {
                 list.add((Photo) item);
+            }
         }
         return list.toArray(new Photo[list.size()]);
     }

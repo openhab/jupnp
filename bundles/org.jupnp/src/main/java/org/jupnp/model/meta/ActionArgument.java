@@ -79,11 +79,13 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public boolean isNameOrAlias(String name) {
-        if (getName().equalsIgnoreCase(name))
+        if (getName().equalsIgnoreCase(name)) {
             return true;
+        }
         for (String alias : aliases) {
-            if (alias.equalsIgnoreCase(name))
+            if (alias.equalsIgnoreCase(name)) {
                 return true;
+            }
         }
         return false;
     }
@@ -105,8 +107,9 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     void setAction(Action<S> action) {
-        if (this.action != null)
+        if (this.action != null) {
             throw new IllegalStateException("Final value has been set already, model is immutable");
+        }
         this.action = action;
     }
 

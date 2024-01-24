@@ -118,12 +118,14 @@ public class URIUtil {
         // Remove all "../" segments
         String uriString = normalizedURI.toString();
         int idx;
-        while ((idx = uriString.indexOf("../")) != -1)
+        while ((idx = uriString.indexOf("../")) != -1) {
             uriString = uriString.substring(0, idx) + uriString.substring(idx + 3);
+        }
 
         // Make relative path
-        while (uriString.startsWith("/"))
+        while (uriString.startsWith("/")) {
             uriString = uriString.substring(1);
+        }
 
         return URI.create(uriString);
     }
@@ -168,8 +170,9 @@ public class URIUtil {
     }
 
     public static URL toURL(URI uri) {
-        if (uri == null)
+        if (uri == null) {
             return null;
+        }
         try {
             return uri.toURL();
         } catch (MalformedURLException ex) {
@@ -178,8 +181,9 @@ public class URIUtil {
     }
 
     public static URI toURI(URL url) {
-        if (url == null)
+        if (url == null) {
             return null;
+        }
         try {
             return url.toURI();
         } catch (URISyntaxException ex) {
@@ -294,8 +298,9 @@ public class URIUtil {
     }
 
     public static String encode(BitSet allowedCharacters, String s, String charset) {
-        if (s == null)
+        if (s == null) {
             return null;
+        }
         final StringBuilder encoded = new StringBuilder(s.length() * 3);
         final char[] characters = s.toCharArray();
         try {
@@ -304,8 +309,9 @@ public class URIUtil {
                     encoded.append(c);
                 } else {
                     byte[] bytes = String.valueOf(c).getBytes(charset);
-                    for (byte b : bytes)
+                    for (byte b : bytes) {
                         encoded.append(String.format("%%%1$02X", b & 0xFF));
+                    }
                 }
             }
         } catch (Exception ex) {

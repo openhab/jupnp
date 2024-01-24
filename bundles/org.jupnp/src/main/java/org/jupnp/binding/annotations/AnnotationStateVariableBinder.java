@@ -270,9 +270,10 @@ public class AnnotationStateVariableBinder {
 
     protected String[] getAllowedValuesFromProvider() throws LocalServiceBindingException {
         Class provider = getAnnotation().allowedValueProvider();
-        if (!AllowedValueProvider.class.isAssignableFrom(provider))
+        if (!AllowedValueProvider.class.isAssignableFrom(provider)) {
             throw new LocalServiceBindingException(
                     "Allowed value provider is not of type " + AllowedValueProvider.class + ": " + getName());
+        }
         try {
             return ((Class<? extends AllowedValueProvider>) provider).newInstance().getValues();
         } catch (Exception ex) {
@@ -282,9 +283,10 @@ public class AnnotationStateVariableBinder {
 
     protected StateVariableAllowedValueRange getAllowedRangeFromProvider() throws LocalServiceBindingException {
         Class provider = getAnnotation().allowedValueRangeProvider();
-        if (!AllowedValueRangeProvider.class.isAssignableFrom(provider))
+        if (!AllowedValueRangeProvider.class.isAssignableFrom(provider)) {
             throw new LocalServiceBindingException("Allowed value range provider is not of type "
                     + AllowedValueRangeProvider.class + ": " + getName());
+        }
         try {
             AllowedValueRangeProvider providerInstance = ((Class<? extends AllowedValueRangeProvider>) provider)
                     .newInstance();

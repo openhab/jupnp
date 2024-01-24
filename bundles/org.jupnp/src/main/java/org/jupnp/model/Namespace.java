@@ -155,8 +155,9 @@ public class Namespace {
     }
 
     public Resource[] getResources(Device device) throws ValidationException {
-        if (!device.isRoot())
+        if (!device.isRoot()) {
             return null;
+        }
 
         Set<Resource> resources = new HashSet<>();
         List<ValidationError> errors = new ArrayList<>();

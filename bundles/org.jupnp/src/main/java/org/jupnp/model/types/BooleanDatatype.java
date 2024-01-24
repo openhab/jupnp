@@ -31,8 +31,9 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
     }
 
     public Boolean valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return null;
+        }
         if (s.equals("1") || s.toUpperCase(Locale.ENGLISH).equals("YES")
                 || s.toUpperCase(Locale.ENGLISH).equals("TRUE")) {
             return true;
@@ -45,8 +46,9 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
     }
 
     public String getString(Boolean value) throws InvalidValueException {
-        if (value == null)
+        if (value == null) {
             return "";
+        }
         return value ? "1" : "0";
     }
 }

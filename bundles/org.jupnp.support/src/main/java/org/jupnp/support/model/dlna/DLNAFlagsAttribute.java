@@ -54,8 +54,9 @@ public class DLNAFlagsAttribute extends DLNAAttribute<EnumSet<DLNAFlags>> {
             // not required
         }
 
-        if (value.isEmpty())
+        if (value.isEmpty()) {
             throw new InvalidDLNAProtocolAttributeException("Can't parse DLNA flags integer from: " + s);
+        }
 
         setValue(value);
     }

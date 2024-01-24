@@ -53,19 +53,24 @@ public class NetworkAddress {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         NetworkAddress that = (NetworkAddress) o;
 
-        if (port != that.port)
+        if (port != that.port) {
             return false;
-        if (!address.equals(that.address))
+        }
+        if (!address.equals(that.address)) {
             return false;
-        if (!Arrays.equals(hardwareAddress, that.hardwareAddress))
+        }
+        if (!Arrays.equals(hardwareAddress, that.hardwareAddress)) {
             return false;
+        }
 
         return true;
     }

@@ -65,8 +65,9 @@ public abstract class Message implements ElementAppender {
     }
 
     public Message(int id, Category category, DisplayType displayType) {
-        if (id == 0)
+        if (id == 0) {
             id = randomGenerator.nextInt(Integer.MAX_VALUE);
+        }
         this.id = id;
         this.category = category;
         this.displayType = displayType;
@@ -86,15 +87,18 @@ public abstract class Message implements ElementAppender {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         Message message = (Message) o;
 
-        if (id != message.id)
+        if (id != message.id) {
             return false;
+        }
 
         return true;
     }

@@ -38,8 +38,9 @@ public class IO {
             } else {
                 p = path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
             }
-            if (p.startsWith("/"))
+            if (p.startsWith("/")) {
                 p = p.substring(1);
+            }
         }
         return p;
     }
@@ -59,10 +60,11 @@ public class IO {
     public static void findFiles(File file, FileFinder finder) {
         finder.found(file);
         File[] children = file.listFiles();
-        if (children != null)
+        if (children != null) {
             for (File child : children) {
                 findFiles(child, finder);
             }
+        }
     }
 
     public interface FileFinder {
@@ -72,7 +74,7 @@ public class IO {
     public static boolean deleteFile(File path) {
         if (path.exists()) {
             File[] files = path.listFiles();
-            if (files != null)
+            if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
                         deleteFile(file);
@@ -80,6 +82,7 @@ public class IO {
                         file.delete();
                     }
                 }
+            }
         }
         return (path.delete());
     }
@@ -158,8 +161,9 @@ public class IO {
     }
 
     public static String readLines(InputStream is) throws IOException {
-        if (is == null)
+        if (is == null) {
             throw new IllegalArgumentException("Inputstream was null");
+        }
 
         BufferedReader inputReader;
         inputReader = new BufferedReader(new InputStreamReader(is));
@@ -193,11 +197,13 @@ public class IO {
         try (BufferedReader input = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = input.readLine()) != null) {
-                if (commentChar != null && line.matches("^\\s*" + commentChar + ".*"))
+                if (commentChar != null && line.matches("^\\s*" + commentChar + ".*")) {
                     continue;
+                }
                 String l = trimLines ? line.trim() : line;
-                if (skipEmptyLines && l.isEmpty())
+                if (skipEmptyLines && l.isEmpty()) {
                     continue;
+                }
                 contents.add(l);
             }
         }

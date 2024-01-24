@@ -34,8 +34,9 @@ public class ProtocolInfo {
     protected String additionalInfo = WILDCARD;
 
     public ProtocolInfo(String s) {
-        if (s == null)
+        if (s == null) {
             throw new NullPointerException();
+        }
         s = s.trim();
         String[] split = s.split(":");
         if (split.length != 4) {
@@ -81,21 +82,27 @@ public class ProtocolInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         ProtocolInfo that = (ProtocolInfo) o;
 
-        if (!additionalInfo.equals(that.additionalInfo))
+        if (!additionalInfo.equals(that.additionalInfo)) {
             return false;
-        if (!contentFormat.equals(that.contentFormat))
+        }
+        if (!contentFormat.equals(that.contentFormat)) {
             return false;
-        if (!network.equals(that.network))
+        }
+        if (!network.equals(that.network)) {
             return false;
-        if (protocol != that.protocol)
+        }
+        if (protocol != that.protocol) {
             return false;
+        }
 
         return true;
     }

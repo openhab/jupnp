@@ -61,10 +61,12 @@ public class MusicTrack extends AudioItem {
             Res... resource) {
         super(id, parentID, title, creator, resource);
         setClazz(CLASS);
-        if (album != null)
+        if (album != null) {
             setAlbum(album);
-        if (artist != null)
+        }
+        if (artist != null) {
             addProperty(new UPNP.ARTIST(artist));
+        }
     }
 
     public PersonWithRole getFirstArtist() {

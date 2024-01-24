@@ -67,22 +67,26 @@ public class IncomingNotificationRequest extends IncomingDatagramMessage<UpnpReq
         // This processes the headers as specified in UDA 1.0, tables in section 1.1.12
 
         UpnpHeader<UDN> udnHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, USNRootDeviceHeader.class);
-        if (udnHeader != null)
+        if (udnHeader != null) {
             return udnHeader.getValue();
+        }
 
         udnHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN, UDNHeader.class);
-        if (udnHeader != null)
+        if (udnHeader != null) {
             return udnHeader.getValue();
+        }
 
         UpnpHeader<NamedDeviceType> deviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN,
                 DeviceUSNHeader.class);
-        if (deviceTypeHeader != null)
+        if (deviceTypeHeader != null) {
             return deviceTypeHeader.getValue().getUdn();
+        }
 
         UpnpHeader<NamedServiceType> serviceTypeHeader = getHeaders().getFirstHeader(UpnpHeader.Type.USN,
                 ServiceUSNHeader.class);
-        if (serviceTypeHeader != null)
+        if (serviceTypeHeader != null) {
             return serviceTypeHeader.getValue().getUdn();
+        }
 
         return null;
     }

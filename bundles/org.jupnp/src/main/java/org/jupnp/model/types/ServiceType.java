@@ -79,8 +79,9 @@ public class ServiceType {
      * @return Either a {@link UDAServiceType} or a more generic {@link ServiceType}.
      */
     public static ServiceType valueOf(String s) throws InvalidValueException {
-        if (s == null)
+        if (s == null) {
             throw new InvalidValueException("Can't parse null string");
+        }
 
         ServiceType serviceType = null;
 
@@ -94,8 +95,9 @@ public class ServiceType {
             // Ignore
         }
 
-        if (serviceType != null)
+        if (serviceType != null) {
             return serviceType;
+        }
 
         // Now try a generic ServiceType parse
         try {
@@ -142,14 +144,18 @@ public class ServiceType {
      *         this type's version is equal or higher than the given types version.
      */
     public boolean implementsVersion(ServiceType that) {
-        if (that == null)
+        if (that == null) {
             return false;
-        if (!namespace.equals(that.namespace))
+        }
+        if (!namespace.equals(that.namespace)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
-        if (version < that.version)
+        }
+        if (version < that.version) {
             return false;
+        }
         return true;
     }
 
@@ -164,19 +170,24 @@ public class ServiceType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || !(o instanceof ServiceType))
+        }
+        if (o == null || !(o instanceof ServiceType)) {
             return false;
+        }
 
         ServiceType that = (ServiceType) o;
 
-        if (version != that.version)
+        if (version != that.version) {
             return false;
-        if (!namespace.equals(that.namespace))
+        }
+        if (!namespace.equals(that.namespace)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
+        }
 
         return true;
     }

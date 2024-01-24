@@ -61,8 +61,9 @@ public class PragmaType {
      */
     public String getString() {
         String s = "";
-        if (token != null)
+        if (token != null) {
             s += token + "=";
+        }
 
         s += quote ? "\"" + value + "\"" : value;
         return s;

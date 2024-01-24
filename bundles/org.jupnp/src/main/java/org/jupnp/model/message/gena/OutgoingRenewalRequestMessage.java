@@ -36,7 +36,8 @@ public class OutgoingRenewalRequestMessage extends StreamRequestMessage {
 
         getHeaders().add(UpnpHeader.Type.TIMEOUT, new TimeoutHeader(subscription.getRequestedDurationSeconds()));
 
-        if (extraHeaders != null)
+        if (extraHeaders != null) {
             getHeaders().putAll(extraHeaders);
+        }
     }
 }

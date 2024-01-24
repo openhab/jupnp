@@ -42,8 +42,9 @@ public abstract class GetSystemUpdateID extends ActionCallback {
             failure(invocation, null);
             ok = false;
         }
-        if (ok)
+        if (ok) {
             received(invocation, id);
+        }
     }
 
     public abstract void received(ActionInvocation<?> invocation, long systemUpdateID);

@@ -33,7 +33,8 @@ public class OutgoingUnsubscribeRequestMessage extends StreamRequestMessage {
 
         getHeaders().add(UpnpHeader.Type.SID, new SubscriptionIdHeader(subscription.getSubscriptionId()));
 
-        if (extraHeaders != null)
+        if (extraHeaders != null) {
             getHeaders().putAll(extraHeaders);
+        }
     }
 }

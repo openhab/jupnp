@@ -148,25 +148,33 @@ public class ServerClientTokens {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         ServerClientTokens that = (ServerClientTokens) o;
 
-        if (majorVersion != that.majorVersion)
+        if (majorVersion != that.majorVersion) {
             return false;
-        if (minorVersion != that.minorVersion)
+        }
+        if (minorVersion != that.minorVersion) {
             return false;
-        if (!osName.equals(that.osName))
+        }
+        if (!osName.equals(that.osName)) {
             return false;
-        if (!osVersion.equals(that.osVersion))
+        }
+        if (!osVersion.equals(that.osVersion)) {
             return false;
-        if (!productName.equals(that.productName))
+        }
+        if (!productName.equals(that.productName)) {
             return false;
-        if (!productVersion.equals(that.productVersion))
+        }
+        if (!productVersion.equals(that.productVersion)) {
             return false;
+        }
 
         return true;
     }

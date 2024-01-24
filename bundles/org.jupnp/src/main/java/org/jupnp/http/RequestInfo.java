@@ -43,8 +43,9 @@ public class RequestInfo {
         builder.append(" - ");
 
         String sessionId = req.getRequestedSessionId();
-        if (sessionId != null)
+        if (sessionId != null) {
             builder.append("\nSession ID: ");
+        }
         if (sessionId == null) {
             builder.append("No Session");
         } else if (req.isRequestedSessionIdValid()) {
@@ -64,8 +65,9 @@ public class RequestInfo {
 
     public static void reportParameters(StringBuilder builder, HttpServletRequest req) {
         Enumeration<String> names = req.getParameterNames();
-        if (names == null)
+        if (names == null) {
             return;
+        }
 
         if (names.hasMoreElements()) {
             builder.append("Parameters:\n");
@@ -83,8 +85,9 @@ public class RequestInfo {
 
     public static void reportHeaders(StringBuilder builder, HttpServletRequest req) {
         Enumeration<String> names = req.getHeaderNames();
-        if (names == null)
+        if (names == null) {
             return;
+        }
         if (names.hasMoreElements()) {
             builder.append("Headers:\n");
             while (names.hasMoreElements()) {
@@ -97,8 +100,9 @@ public class RequestInfo {
 
     public static void reportCookies(StringBuilder builder, HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
-        if (cookies == null)
+        if (cookies == null) {
             return;
+        }
         int l = cookies.length;
         if (l > 0) {
             builder.append("Cookies:\n");
@@ -110,11 +114,13 @@ public class RequestInfo {
 
     public static void reportClient(StringBuilder builder, HttpServletRequest req) {
         builder.append("Remote Address: ").append(req.getRemoteAddr()).append("\n");
-        if (!req.getRemoteAddr().equals(req.getRemoteHost()))
+        if (!req.getRemoteAddr().equals(req.getRemoteHost())) {
             builder.append("Remote Host: ").append(req.getRemoteHost()).append("\n");
+        }
         builder.append("Remote Port: ").append(req.getRemotePort()).append("\n");
-        if (req.getRemoteUser() != null)
+        if (req.getRemoteUser() != null) {
             builder.append("Remote User: ").append(req.getRemoteUser()).append("\n");
+        }
     }
 
     public static boolean isPS3Request(String userAgent, String avClientInfo) {

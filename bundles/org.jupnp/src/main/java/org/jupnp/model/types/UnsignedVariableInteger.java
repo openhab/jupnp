@@ -96,15 +96,18 @@ public abstract class UnsignedVariableInteger {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         UnsignedVariableInteger that = (UnsignedVariableInteger) o;
 
-        if (value != that.value)
+        if (value != that.value) {
             return false;
+        }
 
         return true;
     }

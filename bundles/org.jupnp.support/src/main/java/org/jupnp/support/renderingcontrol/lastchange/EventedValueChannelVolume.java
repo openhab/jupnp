@@ -43,12 +43,12 @@ public class EventedValueChannelVolume extends EventedValue<ChannelVolume> {
         Channel channel = null;
         Integer volume = null;
         for (Map.Entry<String, String> attribute : attributes) {
-            if (attribute.getKey().equals("channel"))
+            if (attribute.getKey().equals("channel")) {
                 channel = Channel.valueOf(attribute.getValue());
-            if (attribute.getKey().equals("val"))
-                volume = (new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue())).getValue().intValue(); // Java
-                                                                                                                      // is
-                                                                                                                      // fun!
+            }
+            if (attribute.getKey().equals("val")) {
+                volume = (new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue())).getValue().intValue();
+            }
         }
         return channel != null && volume != null ? new ChannelVolume(channel, volume) : null;
     }

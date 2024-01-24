@@ -42,10 +42,12 @@ public class EventedValueChannelMute extends EventedValue<ChannelMute> {
         Channel channel = null;
         Boolean mute = null;
         for (Map.Entry<String, String> attribute : attributes) {
-            if (attribute.getKey().equals("channel"))
+            if (attribute.getKey().equals("channel")) {
                 channel = Channel.valueOf(attribute.getValue());
-            if (attribute.getKey().equals("val"))
+            }
+            if (attribute.getKey().equals("val")) {
                 mute = new BooleanDatatype().valueOf(attribute.getValue());
+            }
         }
         return channel != null && mute != null ? new ChannelMute(channel, mute) : null;
     }

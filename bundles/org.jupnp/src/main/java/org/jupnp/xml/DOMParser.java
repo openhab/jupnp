@@ -188,8 +188,9 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
             }
 
             transformer.setOutputProperty(OutputKeys.INDENT, indent > 0 ? "yes" : "no");
-            if (indent > 0)
+            if (indent > 0) {
                 transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(indent));
+            }
             transformer.setOutputProperty(OutputKeys.METHOD, method);
 
             return transformer;
@@ -225,8 +226,9 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public D parse(URL url, boolean validate) throws ParserException {
-        if (url == null)
+        if (url == null) {
             throw new IllegalArgumentException("Can't parse null URL");
+        }
         try {
             return parse(url.openStream(), validate);
         } catch (Exception ex) {
@@ -235,14 +237,16 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public D parse(String string, boolean validate) throws ParserException {
-        if (string == null)
+        if (string == null) {
             throw new IllegalArgumentException("Can't parse null string");
+        }
         return parse(new InputSource(new StringReader(string)), validate);
     }
 
     public D parse(File file, boolean validate) throws ParserException {
-        if (file == null)
+        if (file == null) {
             throw new IllegalArgumentException("Can't parse null file");
+        }
         try {
             return parse(file.toURI().toURL(), validate);
         } catch (Exception ex) {
@@ -277,15 +281,17 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     // =================================================================================================
 
     public void validate(URL url) throws ParserException {
-        if (url == null)
+        if (url == null) {
             throw new IllegalArgumentException("Can't validate null URL");
+        }
         log.trace("Validating XML of URL: {}", url);
         validate(new StreamSource(url.toString()));
     }
 
     public void validate(String string) throws ParserException {
-        if (string == null)
+        if (string == null) {
             throw new IllegalArgumentException("Can't validate null string");
+        }
         log.trace("Validating XML string characters: {}", string.length());
         validate(new SAXSource(new InputSource(new StringReader(string))));
     }
@@ -502,8 +508,9 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public static String escape(String string, boolean convertNewlines, boolean convertSpaces) {
-        if (string == null)
+        if (string == null) {
             return null;
+        }
         StringBuilder sb = new StringBuilder();
         String entity;
         char c;
@@ -553,24 +560,28 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     }
 
     public static String stripElements(String xml) {
-        if (xml == null)
+        if (xml == null) {
             return null;
+        }
         return xml.replaceAll("<([a-zA-Z]|/).*?>", "");
     }
 
     public static void accept(Node node, NodeVisitor visitor) {
-        if (node == null)
+        if (node == null) {
             return;
-        if (visitor.isHalted())
+        }
+        if (visitor.isHalted()) {
             return;
+        }
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = children.item(i);
             boolean cont = true;
             if (child.getNodeType() == visitor.nodeType) {
                 visitor.visit(child);
-                if (visitor.isHalted())
+                if (visitor.isHalted()) {
                     break;
+                }
             }
             accept(child, visitor);
         }

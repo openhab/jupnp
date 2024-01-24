@@ -29,8 +29,9 @@ public class DoubleDatatype extends AbstractDatatype<Double> {
     }
 
     public Double valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return null;
+        }
         try {
             return Double.parseDouble(s);
         } catch (NumberFormatException ex) {

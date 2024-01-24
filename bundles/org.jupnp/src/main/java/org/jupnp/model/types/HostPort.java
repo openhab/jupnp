@@ -51,17 +51,21 @@ public class HostPort {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         HostPort hostPort = (HostPort) o;
 
-        if (port != hostPort.port)
+        if (port != hostPort.port) {
             return false;
-        if (!host.equals(hostPort.host))
+        }
+        if (!host.equals(hostPort.host)) {
             return false;
+        }
 
         return true;
     }

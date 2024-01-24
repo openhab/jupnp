@@ -152,8 +152,9 @@ public class Icon implements Validatable {
     }
 
     void setDevice(Device device) {
-        if (this.device != null)
+        if (this.device != null) {
             throw new IllegalStateException("Final value has been set already, model is immutable");
+        }
         this.device = device;
     }
 
@@ -178,8 +179,9 @@ public class Icon implements Validatable {
         } else {
             try {
                 URL testURI = getUri().toURL();
-                if (testURI == null)
+                if (testURI == null) {
                     throw new MalformedURLException();
+                }
             } catch (MalformedURLException ex) {
                 errors.add(new ValidationError(getClass(), "uri", "URL must be valid: " + ex.getMessage()));
             } catch (IllegalArgumentException ex) {

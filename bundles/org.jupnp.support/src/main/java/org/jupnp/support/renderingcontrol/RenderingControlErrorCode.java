@@ -41,8 +41,9 @@ public enum RenderingControlErrorCode {
 
     public static RenderingControlErrorCode getByCode(int code) {
         for (RenderingControlErrorCode errorCode : RenderingControlErrorCode.values()) {
-            if (errorCode.getCode() == code)
+            if (errorCode.getCode() == code) {
                 return errorCode;
+            }
         }
         return null;
     }

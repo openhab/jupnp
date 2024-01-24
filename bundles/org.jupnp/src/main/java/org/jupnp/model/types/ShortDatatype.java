@@ -27,8 +27,9 @@ public class ShortDatatype extends AbstractDatatype<Short> {
     }
 
     public Short valueOf(String s) throws InvalidValueException {
-        if (s.isEmpty())
+        if (s.isEmpty()) {
             return null;
+        }
         try {
             Short value = Short.parseShort(s.trim());
             if (!isValid(value)) {
