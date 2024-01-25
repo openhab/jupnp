@@ -35,7 +35,7 @@ public class MXHeader extends UpnpHeader<Integer> {
     }
 
     public void setString(String s) throws InvalidHeaderException {
-        Integer value;
+        int value;
         try {
             value = Integer.parseInt(s);
         } catch (Exception ex) {

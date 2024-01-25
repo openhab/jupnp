@@ -83,11 +83,7 @@ public class UpnpHeaders extends Headers {
 
     protected void addParsedValue(UpnpHeader.Type type, UpnpHeader value) {
         log.trace("Adding parsed header: {}", value);
-        List<UpnpHeader> list = parsedHeaders.get(type);
-        if (list == null) {
-            list = new LinkedList<>();
-            parsedHeaders.put(type, list);
-        }
+        List<UpnpHeader> list = parsedHeaders.computeIfAbsent(type, k -> new LinkedList<>());
         list.add(value);
     }
 

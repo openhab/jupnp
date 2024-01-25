@@ -47,31 +47,31 @@ public class SimpleTestService implements UPnPService {
 
     private static Object[][] records = {
             // Integer ui1, ui2, i1, i2, i4, int
-            { UPnPLocalStateVariable.TYPE_UI1, Integer.class, new Integer(0), new Integer(1) },
-            { UPnPLocalStateVariable.TYPE_UI2, Integer.class, new Integer(0), new Integer(2) },
-            { UPnPLocalStateVariable.TYPE_I1, Integer.class, new Integer(0), new Integer(3) },
-            { UPnPLocalStateVariable.TYPE_I2, Integer.class, new Integer(0), new Integer(4) },
-            { UPnPLocalStateVariable.TYPE_I4, Integer.class, new Integer(0), new Integer(5) },
-            { UPnPLocalStateVariable.TYPE_INT, Integer.class, new Integer(0), new Integer(6) },
+            { UPnPLocalStateVariable.TYPE_UI1, Integer.class, 0, 1 },
+            { UPnPLocalStateVariable.TYPE_UI2, Integer.class, 0, 2 },
+            { UPnPLocalStateVariable.TYPE_I1, Integer.class, 0, 3 },
+            { UPnPLocalStateVariable.TYPE_I2, Integer.class, 0, 4 },
+            { UPnPLocalStateVariable.TYPE_I4, Integer.class, 0, 5 },
+            { UPnPLocalStateVariable.TYPE_INT, Integer.class, 0, 6 },
             // Long ui4, time, time.tz
             // time Time in a subset of ISO 8601 format with no date and no time zone.
             // time.tz Time in a subset of ISO 8601 format with optional time zone but no date.
-            { UPnPLocalStateVariable.TYPE_UI4, Long.class, new Long(0), new Long(7) },
-            { UPnPLocalStateVariable.TYPE_TIME, Long.class, new Long(0), new Long(time) },
-            { UPnPLocalStateVariable.TYPE_TIME_TZ, Long.class, new Long(0), new Long(time) },
+            { UPnPLocalStateVariable.TYPE_UI4, Long.class, 0L, 7L },
+            { UPnPLocalStateVariable.TYPE_TIME, Long.class, 0L, time },
+            { UPnPLocalStateVariable.TYPE_TIME_TZ, Long.class, 0L, time },
             // Float r4, float
-            { UPnPLocalStateVariable.TYPE_R4, Float.class, new Float(0), new Float(10.09) },
-            { UPnPLocalStateVariable.TYPE_FLOAT, Float.class, new Float(0), new Float(11.2) },
+            { UPnPLocalStateVariable.TYPE_R4, Float.class, (float) 0, 10.09F },
+            { UPnPLocalStateVariable.TYPE_FLOAT, Float.class, (float) 0, 11.2F },
             // Double r8, number, fixed.14.4
-            { UPnPLocalStateVariable.TYPE_R8, Double.class, new Double(0), new Double(12.3) },
-            { UPnPLocalStateVariable.TYPE_NUMBER, Double.class, new Double(0), new Double(13.3) },
-            { UPnPLocalStateVariable.TYPE_FIXED_14_4, Double.class, new Double(0), new Double(14.4) },
+            { UPnPLocalStateVariable.TYPE_R8, Double.class, (double) 0, 12.3 },
+            { UPnPLocalStateVariable.TYPE_NUMBER, Double.class, (double) 0, 13.3 },
+            { UPnPLocalStateVariable.TYPE_FIXED_14_4, Double.class, (double) 0, 14.4 },
             // Character char
-            { UPnPLocalStateVariable.TYPE_CHAR, Character.class, new Character('A'), new Character('A') },
+            { UPnPLocalStateVariable.TYPE_CHAR, Character.class, 'A', 'A' },
             // String string, uri, uuid
-            { UPnPLocalStateVariable.TYPE_STRING, String.class, new String(), new String("string") },
-            { UPnPLocalStateVariable.TYPE_URI, String.class, new String(), new String("uri") },
-            { UPnPLocalStateVariable.TYPE_UUID, String.class, new String(), new String("uuid") },
+            { UPnPLocalStateVariable.TYPE_STRING, String.class, "", "string" },
+            { UPnPLocalStateVariable.TYPE_URI, String.class, "", "uri" },
+            { UPnPLocalStateVariable.TYPE_UUID, String.class, "", "uuid" },
             // Date date, dateTime, dateTime.tz
             // date Date in a subset of ISO 8601 format without time data.
             // dateTime Date in ISO 8601 format with optional time but no time zone.
@@ -80,7 +80,7 @@ public class SimpleTestService implements UPnPService {
             { UPnPLocalStateVariable.TYPE_DATETIME, Date.class, new Date(), new Date(time) },
             { UPnPLocalStateVariable.TYPE_DATETIME_TZ, Date.class, new Date(), new Date(time) },
             // Boolean
-            { UPnPLocalStateVariable.TYPE_BOOLEAN, Boolean.class, new Boolean(false), new Boolean(true) },
+            { UPnPLocalStateVariable.TYPE_BOOLEAN, Boolean.class, Boolean.FALSE, Boolean.TRUE },
             // byte[] bin.base64, bin.hex
             { UPnPLocalStateVariable.TYPE_BIN_BASE64, byte[].class, new byte[] {},
                     new byte[] { (byte) 0x01, (byte) 0x02, (byte) 0x03 } },

@@ -72,7 +72,7 @@ public class SetAction implements UPnPAction {
     public Dictionary invoke(Dictionary args) throws Exception {
         for (Object key : Collections.list(args.keys())) {
             String name = (String) key;
-            Object value = (Object) args.get(key);
+            Object value = args.get(key);
 
             TestStateVariable variable = (TestStateVariable) variables.get(name);
             variable.setCurrentValue(value);

@@ -28,7 +28,7 @@ public class MainCommandMutlicastResponsePortValidator implements IParameterVali
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--multicastResponsePort")) {
             try {
-                Integer port = Integer.valueOf(value);
+                int port = Integer.parseInt(value);
                 if ((port < 0) || (port > 65535)) {
                     throw new ParameterException(ERROR_MSG + "must be between 0..65535");
                 }

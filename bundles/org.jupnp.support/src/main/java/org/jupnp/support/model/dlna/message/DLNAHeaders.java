@@ -86,11 +86,7 @@ public class DLNAHeaders extends UpnpHeaders {
 
     protected void addParsedValue(DLNAHeader.Type type, UpnpHeader<?> value) {
         logger.debug("Adding parsed header: {}", value);
-        List<UpnpHeader<?>> list = parsedDLNAHeaders.get(type);
-        if (list == null) {
-            list = new LinkedList<>();
-            parsedDLNAHeaders.put(type, list);
-        }
+        List<UpnpHeader<?>> list = parsedDLNAHeaders.computeIfAbsent(type, k -> new LinkedList<>());
         list.add(value);
     }
 

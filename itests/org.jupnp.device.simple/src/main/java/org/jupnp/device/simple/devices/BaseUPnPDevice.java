@@ -33,7 +33,7 @@ public abstract class BaseUPnPDevice implements UPnPDevice {
         if (parent == null) {
             getDescriptions(null).remove(UPnPDevice.PARENT_UDN);
         } else {
-            getDescriptions(null).put(UPnPDevice.PARENT_UDN, (String) parent.getDescriptions(null).get(UPnPDevice.UDN));
+            getDescriptions(null).put(UPnPDevice.PARENT_UDN, parent.getDescriptions(null).get(UPnPDevice.UDN));
         }
     }
 

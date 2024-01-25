@@ -18,7 +18,6 @@ package org.jupnp.osgi.present;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.jupnp.model.action.ActionArgumentValue;
 import org.jupnp.model.action.ActionExecutor;
@@ -62,7 +61,7 @@ class UPnPActionExecutor implements ActionExecutor {
             Dictionary<String, Object> out = action.invoke(args);
 
             if (out != null) {
-                for (String key : (List<String>) Collections.list(out.keys())) {
+                for (String key : Collections.list(out.keys())) {
 
                     Object value = out.get(key);
                     if (value != null) {

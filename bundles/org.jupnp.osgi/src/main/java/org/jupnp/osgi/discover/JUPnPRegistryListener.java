@@ -68,7 +68,7 @@ class JUPnPRegistryListener extends DefaultRegistryListener {
     private final BundleContext context;
     private final UpnpService upnpService;
 
-    class UPnPDeviceBinding {
+    static class UPnPDeviceBinding {
         private ServiceRegistration reference;
         private ServiceTracker tracker;
 

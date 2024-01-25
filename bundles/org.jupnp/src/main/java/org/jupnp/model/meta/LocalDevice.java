@@ -215,8 +215,7 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
 
     @Override
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList<>();
-        errors.addAll(super.validate());
+        List<ValidationError> errors = new ArrayList<>(super.validate());
 
         // We have special rules for local icons, the URI must always be a relative path which will
         // be added to the device base URI!

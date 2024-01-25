@@ -946,7 +946,7 @@ public class DIDLParser extends SAXParser {
         }
     }
 
-    protected class ResHandler extends Handler<Res> {
+    protected static class ResHandler extends Handler<Res> {
         public ResHandler(Res instance, Handler<?> parent) {
             super(instance, parent);
         }
@@ -971,7 +971,7 @@ public class DIDLParser extends SAXParser {
      * </p>
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public class DescMetaHandler extends Handler<DescMeta> {
+    public static class DescMetaHandler extends Handler<DescMeta> {
 
         protected Element current;
 

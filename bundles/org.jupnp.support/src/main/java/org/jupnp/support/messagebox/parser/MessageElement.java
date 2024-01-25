@@ -38,7 +38,7 @@ public class MessageElement extends DOMElement<MessageElement, MessageElement> {
 
     @Override
     protected Builder<MessageElement> createParentBuilder(DOMElement el) {
-        return new Builder<MessageElement>(el) {
+        return new Builder<>(el) {
             @Override
             public MessageElement build(Element element) {
                 return new MessageElement(getXpath(), element);
@@ -48,7 +48,7 @@ public class MessageElement extends DOMElement<MessageElement, MessageElement> {
 
     @Override
     protected ArrayBuilder<MessageElement> createChildBuilder(DOMElement el) {
-        return new ArrayBuilder<MessageElement>(el) {
+        return new ArrayBuilder<>(el) {
             @Override
             public MessageElement[] newChildrenArray(int length) {
                 return new MessageElement[length];

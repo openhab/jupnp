@@ -77,13 +77,9 @@ public class Query {
                 value = null;
             } else {
                 name = URLDecoder.decode(pair.substring(0, pos), StandardCharsets.UTF_8);
-                value = URLDecoder.decode(pair.substring(pos + 1, pair.length()), StandardCharsets.UTF_8);
+                value = URLDecoder.decode(pair.substring(pos + 1), StandardCharsets.UTF_8);
             }
-            List<String> list = parameters.get(name);
-            if (list == null) {
-                list = new ArrayList<>();
-                parameters.put(name, list);
-            }
+            List<String> list = parameters.computeIfAbsent(name, k -> new ArrayList<>());
             list.add(value);
         }
     }
@@ -143,11 +139,7 @@ public class Query {
 
     public Query cloneAndAdd(String name, String... values) {
         Map<String, List<String>> params = new HashMap<>(getMapWithLists());
-        List<String> existingValues = params.get(name);
-        if (existingValues == null) {
-            existingValues = new ArrayList<>();
-            params.put(name, existingValues);
-        }
+        List<String> existingValues = params.computeIfAbsent(name, k -> new ArrayList<>());
         existingValues.addAll(Arrays.asList(values));
         return Query.newInstance(params);
     }

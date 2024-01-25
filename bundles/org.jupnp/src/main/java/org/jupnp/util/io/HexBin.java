@@ -29,6 +29,7 @@
 package org.jupnp.util.io;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * format validation
@@ -46,9 +47,7 @@ public final class HexBin {
     private static byte[] lookUpHexAlphabet = new byte[LOOKUPLENGTH];
 
     static {
-        for (int i = 0; i < BASELENGTH; i++) {
-            hexNumberTable[i] = -1;
-        }
+        Arrays.fill(hexNumberTable, (byte) -1);
         for (int i = '9'; i >= '0'; i--) {
             hexNumberTable[i] = (byte) (i - '0');
         }

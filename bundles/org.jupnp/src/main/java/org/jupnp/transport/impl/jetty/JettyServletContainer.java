@@ -31,9 +31,8 @@ import org.slf4j.LoggerFactory;
 /**
  * A singleton wrapper of a <code>org.eclipse.jetty.server.Server</code>.
  * <p>
- * This {@link org.fourthline.cling.transport.spi.ServletContainerAdapter} starts
- * a Jetty 9.3.x instance on its own and stops it. Only one single context and servlet
- * is registered, to handle UPnP requests.
+ * This {@link ServletContainerAdapter} starts a Jetty 9.4.x instance on its own and stops it.
+ * Only one single context and servlet is registered, to handle UPnP requests.
  * </p>
  * <p>
  * This implementation might work on Android (not tested within JUPnP), dependencies are <code>jetty-server</code>

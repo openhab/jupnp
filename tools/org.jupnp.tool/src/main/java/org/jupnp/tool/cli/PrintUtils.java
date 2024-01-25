@@ -15,6 +15,7 @@
  */
 package org.jupnp.tool.cli;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,9 +27,7 @@ public class PrintUtils {
     private static final String STRING_OF_SPACES;
 
     static {
-        for (int i = 0; i < BYTEARRAY_OF_SPACES.length; i++) {
-            BYTEARRAY_OF_SPACES[i] = ' ';
-        }
+        Arrays.fill(BYTEARRAY_OF_SPACES, ' ');
         STRING_OF_SPACES = String.valueOf(BYTEARRAY_OF_SPACES);
     }
 
@@ -51,8 +50,8 @@ public class PrintUtils {
             for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
                 sb.append(row[columnIndex]);
                 // add required number of spaces
-                sb.append(STRING_OF_SPACES.substring(0,
-                        maxColumnSizes[columnIndex] - row[columnIndex].length() + spaceBetweenColumns));
+                sb.append(STRING_OF_SPACES, 0,
+                        maxColumnSizes[columnIndex] - row[columnIndex].length() + spaceBetweenColumns);
             }
             sb.append('\n');
         }

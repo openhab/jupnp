@@ -146,11 +146,7 @@ public class Headers implements Map<String, List<String>> {
 
     public void add(String key, String value) {
         String k = normalize(key);
-        List<String> l = map.get(k);
-        if (l == null) {
-            l = new LinkedList<>();
-            map.put(k, l);
-        }
+        List<String> l = map.computeIfAbsent(k, k1 -> new LinkedList<>());
         l.add(value);
     }
 
