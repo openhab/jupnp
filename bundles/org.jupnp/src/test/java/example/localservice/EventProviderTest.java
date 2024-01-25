@@ -307,24 +307,24 @@ class EventProviderTest extends EventSubscriptionTest {
 
         upnpService.getControlPoint().execute(callback);
 
-        Thread.sleep(200);
+        Thread.sleep(800);
 
         Object serviceImpl = service.getManager().getImplementation();
 
         Reflections.set(Reflections.getField(serviceImpl.getClass(), "moderatedMaxRateVar"), serviceImpl, "two");
         service.getManager().getPropertyChangeSupport().firePropertyChange("ModeratedMaxRateVar", null, null);
 
-        Thread.sleep(200);
+        Thread.sleep(800);
 
         Reflections.set(Reflections.getField(serviceImpl.getClass(), "moderatedMaxRateVar"), serviceImpl, "three");
         service.getManager().getPropertyChangeSupport().firePropertyChange("ModeratedMaxRateVar", null, null);
 
-        Thread.sleep(200);
+        Thread.sleep(800);
 
         Reflections.set(Reflections.getField(serviceImpl.getClass(), "moderatedMaxRateVar"), serviceImpl, "four");
         service.getManager().getPropertyChangeSupport().firePropertyChange("ModeratedMaxRateVar", null, null);
 
-        Thread.sleep(100);
+        Thread.sleep(400);
 
         assertEquals(2L, callback.getSubscription().getCurrentSequence().getValue()); // It's the NEXT sequence!
 

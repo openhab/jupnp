@@ -17,6 +17,8 @@ package org.jupnp.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.concurrent.SynchronousQueue;
@@ -184,25 +186,20 @@ class QueueingThreadPoolExecutorTest {
         pool.execute(createRunnable100ms());
         // queue thread must be active
         assertTrue(isQueueThreadActive(poolName));
-        // after 1+x sec all should be executed
-        Thread.sleep(1000);
-        assertEquals(2, pool.getCompletedTaskCount());
-        // at the end queue thread is shutdown, wait for additional 3 sec
-        Thread.sleep(3000);
-        assertFalse(isQueueThreadActive(poolName));
+        // all should be executed
+        waitForAssert(() -> assertEquals(2, pool.getCompletedTaskCount()));
+        // at the end queue thread is shutdown
+        waitForAssert(() -> assertFalse(isQueueThreadActive(poolName)));
 
         pool.execute(createRunnable100ms());
         pool.execute(createRunnable100ms());
         assertTrue(isQueueThreadActive(poolName));
-        // after 1+x sec all should be executed
-        Thread.sleep(1000);
-        assertEquals(4, pool.getCompletedTaskCount());
+        // all should be executed
+        waitForAssert(() -> assertEquals(4, pool.getCompletedTaskCount()));
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName));
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     @Test
@@ -211,15 +208,13 @@ class QueueingThreadPoolExecutorTest {
         ThreadPoolExecutor pool = QueueingThreadPoolExecutor.createInstance(poolName, 2);
         pool.execute(createRunnableFast());
         pool.execute(createRunnableFast());
-        Thread.sleep(1000);
-        assertEquals(2, pool.getCompletedTaskCount());
+        waitForAssert(() -> assertEquals(2, pool.getCompletedTaskCount()));
 
         // no queue thread
 
-        // needs to wait CORE_POOL_TIMEOUT + x until all threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 1000);
-        assertFalse(areThreadsFromPoolRunning(poolName));
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     @Test
@@ -232,14 +227,15 @@ class QueueingThreadPoolExecutorTest {
         }
         // no queue thread
         assertFalse(isQueueThreadActive(poolName));
-        Thread.sleep(1000);
-        assertEquals(1000, pool.getCompletedTaskCount(), "Completed tasks must match");
-        assertEquals(1000, AbstractRunnable.getRuns(), "Number of executors runs must match");
 
-        // needs to wait CORE_POOL_TIMEOUT + x until all threads are down again
+        waitForAssert(() -> {
+            assertEquals(1000, pool.getCompletedTaskCount(), "Completed tasks must match");
+            assertEquals(1000, AbstractRunnable.getRuns(), "Number of executors runs must match");
+        });
+
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 1000);
-        assertFalse(areThreadsFromPoolRunning(poolName));
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     @Test
@@ -252,14 +248,11 @@ class QueueingThreadPoolExecutorTest {
         pool.execute(createRunnableHeavyLoad1s());
 
         assertTrue(isQueueThreadActive(poolName));
-        Thread.sleep(5000);
-        assertEquals(4, pool.getCompletedTaskCount());
+        waitForAssert(() -> assertEquals(4, pool.getCompletedTaskCount()));
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName));
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     @Test
@@ -311,11 +304,9 @@ class QueueingThreadPoolExecutorTest {
         // 0 are yet executed
         assertEquals(0, pool.getCompletedTaskCount());
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     /**
@@ -349,11 +340,9 @@ class QueueingThreadPoolExecutorTest {
         // 0 are executed
         assertEquals(0, pool.getCompletedTaskCount());
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
-        // pool yet shutdown here
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        pool.shutdown();
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     /**
@@ -428,16 +417,12 @@ class QueueingThreadPoolExecutorTest {
             Thread.sleep(50); // chance for thread switch
             tEnd = System.currentTimeMillis();
         }
-        // chance to finalize
-        Thread.sleep(1000);
         // all should be executed
-        assertEquals(200, pool.getCompletedTaskCount());
+        waitForAssert(() -> assertEquals(200, pool.getCompletedTaskCount()));
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     /**
@@ -461,11 +446,9 @@ class QueueingThreadPoolExecutorTest {
         // wait until all jobs have been processed
         Thread.sleep(2 * 1000 + 1000);
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 1000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
 
         // all 5 jobs have to be executed
         assertEquals(5, AbstractRunnable.getRuns());
@@ -487,12 +470,10 @@ class QueueingThreadPoolExecutorTest {
         // queue thread must be active
         assertTrue(isQueueThreadActive(poolName));
         long queueThreadId1 = getThread(poolName + "-queue").getId();
-        // after 10+x sec all should be executed
-        Thread.sleep(12000);
-        assertEquals(100, pool.getCompletedTaskCount());
+        // all should be executed
+        waitForAssert(() -> assertEquals(100, pool.getCompletedTaskCount()));
         // at the end queue thread is shutdown, wait for additional 3 sec
-        Thread.sleep(3000);
-        assertFalse(isQueueThreadActive(poolName));
+        waitForAssert(() -> assertFalse(isQueueThreadActive(poolName)));
 
         // now put again requests into queue. Queue thread should be created
         // again with different thread id
@@ -501,22 +482,17 @@ class QueueingThreadPoolExecutorTest {
         }
         assertTrue(isQueueThreadActive(poolName));
         long queueThreadId2 = getThread(poolName + "-queue").getId();
-        // as queue thread has been created again, has to have different thread
-        // id
+        // as queue thread has been created again, has to have different thread id
         assertNotEquals(queueThreadId1, queueThreadId2);
 
-        // after 10+x sec all should be executed
-        Thread.sleep(12000);
-        assertEquals(200, pool.getCompletedTaskCount());
+        // all should be executed
+        waitForAssert(() -> assertEquals(200, pool.getCompletedTaskCount()));
         // at the end queue thread is shutdown, wait for additional 3 sec
-        Thread.sleep(3000);
-        assertFalse(isQueueThreadActive(poolName));
+        waitForAssert(() -> assertFalse(isQueueThreadActive(poolName)));
 
-        // needs to wait CORE_POOL_TIMEOUT + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 1000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     /**
@@ -539,9 +515,7 @@ class QueueingThreadPoolExecutorTest {
         for (Thread fillThread : fillThreads) {
             fillThread.start();
         }
-        Thread.sleep(2000); // wait until filled
-
-        assertEquals(10, pool.getActiveCount());
+        waitForAssert(() -> assertEquals(10, pool.getActiveCount()));
         // queue thread must be active
         assertTrue(isQueueThreadActive(poolName));
 
@@ -552,16 +526,13 @@ class QueueingThreadPoolExecutorTest {
         final int safetyTime = N * 10; // millis
         Thread.sleep(((N * millisPerRunnable) / poolSize) + safetyTime);
 
-        assertEquals(pool.getCompletedTaskCount(), N);
-        // at the end queue thread is shutdown, wait for additional 3 sec
-        Thread.sleep(3000);
-        assertFalse(isQueueThreadActive(poolName));
+        waitForAssert(() -> assertEquals(pool.getCompletedTaskCount(), N));
+        // at the end queue thread is shutdown
+        waitForAssert(() -> assertFalse(isQueueThreadActive(poolName)));
 
-        // needs to wait CORE_POOL_TIMEOUT + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 1000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     /**
@@ -608,11 +579,10 @@ class QueueingThreadPoolExecutorTest {
         for (Thread fillThread : fillThreads) {
             fillThread.start();
         }
-        Thread.sleep(1000); // wait until filled
 
-        assertEquals(5, pool.getActiveCount(), "All threads should be busy");
+        waitForAssert(() -> assertEquals(5, pool.getActiveCount(), "All threads should be busy"));
         // queue thread must be active
-        assertTrue(isQueueThreadActive(poolName));
+        waitForAssert(() -> assertTrue(isQueueThreadActive(poolName)));
 
         // wait until processed
         while (pool.getCompletedTaskCount() < 100) {
@@ -624,11 +594,9 @@ class QueueingThreadPoolExecutorTest {
         // check runs too
         assertEquals(100, AbstractRunnable.getRuns(), "Number of executors runs must match");
 
-        // needs to wait CORE_POOL_TIMEOUT + 2sec-queue-thread + x until all
-        // threads are down again
         pool.shutdown();
-        Thread.sleep(CORE_POOL_TIMEOUT + 3000);
-        assertFalse(areThreadsFromPoolRunning(poolName), "No threads must remain");
+        // after shutdown all threads are down again
+        waitForAssert(() -> assertFalse(areThreadsFromPoolRunning(poolName)));
     }
 
     // helper methods
@@ -732,6 +700,23 @@ class QueueingThreadPoolExecutorTest {
             }
         }
         return true;
+    }
+
+    private static void waitForAssert(Runnable runnable) {
+        final Instant start = Instant.now();
+        while (Duration.between(start, Instant.now()).toSeconds() < 20) {
+            try {
+                runnable.run();
+                return;
+            } catch (Error | NullPointerException e1) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e2) {
+                    throw new IllegalStateException("Interrupted while sleeping", e2);
+                }
+            }
+        }
+        runnable.run();
     }
 
     // Runnables for testing

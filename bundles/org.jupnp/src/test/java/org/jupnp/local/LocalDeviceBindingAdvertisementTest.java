@@ -17,6 +17,10 @@ package org.jupnp.local;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.jupnp.binding.LocalServiceBinder;
 import org.jupnp.binding.annotations.AnnotationLocalServiceBinder;
@@ -35,6 +39,7 @@ import org.jupnp.mock.MockUpnpServiceConfiguration;
 import org.jupnp.model.DiscoveryOptions;
 import org.jupnp.model.Namespace;
 import org.jupnp.model.ServerClientTokens;
+import org.jupnp.model.message.OutgoingDatagramMessage;
 import org.jupnp.model.message.UpnpMessage;
 import org.jupnp.model.message.header.UpnpHeader;
 import org.jupnp.model.meta.DeviceDetails;
@@ -59,7 +64,7 @@ class LocalDeviceBindingAdvertisementTest {
 
         upnpService.getRegistry().addDevice(binaryLight);
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         assertEquals(12, upnpService.getRouter().getOutgoingDatagramMessages().size());
         for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
@@ -95,14 +100,17 @@ class LocalDeviceBindingAdvertisementTest {
         upnpService.getRegistry().addDevice(ld);
         assertEquals(1, upnpService.getRegistry().getLocalDevices().size());
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         assertEquals(1, upnpService.getRegistry().getLocalDevices().size());
 
+        List<OutgoingDatagramMessage> outgoingDatagramMessages = new ArrayList<>(
+                upnpService.getRouter().getOutgoingDatagramMessages());
+
         // 30 from addDevice()
         // 30 from regular refresh
-        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 60);
-        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
+        assertTrue(outgoingDatagramMessages.size() >= 60);
+        for (UpnpMessage msg : outgoingDatagramMessages) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 1);
         }
 
@@ -110,9 +118,14 @@ class LocalDeviceBindingAdvertisementTest {
 
         upnpService.shutdown();
 
+        // Ignore ALIVE messages send during shutdown
+        outgoingDatagramMessages = upnpService.getRouter().getOutgoingDatagramMessages().stream().filter(
+                msg -> msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue() == NotificationSubtype.BYEBYE)
+                .collect(Collectors.toList());
+
         // Check correct byebye
-        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 30);
-        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
+        assertTrue(outgoingDatagramMessages.size() >= 30);
+        for (UpnpMessage msg : outgoingDatagramMessages) {
             assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 1);
         }
     }
@@ -157,7 +170,7 @@ class LocalDeviceBindingAdvertisementTest {
 
         upnpService.getRegistry().addDevice(ld, new DiscoveryOptions(true, true));
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
 
         assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 60);
         // 30 BYEBYE

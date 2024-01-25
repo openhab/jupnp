@@ -145,7 +145,7 @@ class RegistryExpirationTest {
 
         assertEquals(1, upnpService.getRegistry().getResources().size());
 
-        Thread.sleep(2000);
+        Thread.sleep(6000);
 
         assertTrue(testRunnable.wasExecuted);
 

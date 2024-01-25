@@ -21,7 +21,7 @@ import example.binarylight.SwitchPower;
 
 public class SwitchPowerModerated extends SwitchPower {
 
-    @UpnpStateVariable(eventMaximumRateMilliseconds = 500)
+    @UpnpStateVariable(eventMaximumRateMilliseconds = 2000)
     public String moderatedMaxRateVar = "one";
 
     @UpnpStateVariable(eventMinimumDelta = 3)
