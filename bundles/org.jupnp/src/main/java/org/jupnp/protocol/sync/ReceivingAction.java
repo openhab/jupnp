@@ -84,7 +84,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         log.trace("Found local action resource matching relative request URI: {}", getInputMessage().getUri());
 
         RemoteActionInvocation invocation;
-        OutgoingActionResponseMessage responseMessage = null;
+        OutgoingActionResponseMessage responseMessage;
 
         try {
 

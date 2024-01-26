@@ -16,7 +16,6 @@
 package org.jupnp.support.lastchange;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
@@ -65,13 +64,7 @@ public class Event {
             getInstanceIDs().add(instanceID);
         }
 
-        Iterator<EventedValue<?>> it = instanceID.getValues().iterator();
-        while (it.hasNext()) {
-            EventedValue<?> existingEv = it.next();
-            if (existingEv.getClass().equals(ev.getClass())) {
-                it.remove();
-            }
-        }
+        instanceID.getValues().removeIf(existingEv -> existingEv.getClass().equals(ev.getClass()));
         instanceID.getValues().add(ev);
     }
 

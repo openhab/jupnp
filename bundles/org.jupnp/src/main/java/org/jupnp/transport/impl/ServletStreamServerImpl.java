@@ -64,7 +64,7 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
             String contextPath = router.getConfiguration().getNamespace().getBasePath().getPath();
 
             // Instantiate async or blocking servlet depending on javax.servlet runtime version
-            Servlet servlet = null;
+            Servlet servlet;
             if (AsyncUtil.SERVLET3_SUPPORT) {
                 servlet = createAsyncServlet(router);
             } else {

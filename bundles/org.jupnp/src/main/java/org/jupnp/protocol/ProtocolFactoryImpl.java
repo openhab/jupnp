@@ -84,22 +84,17 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         log.trace("Creating protocol for incoming asynchronous: {}", message);
 
         if (message.getOperation() instanceof UpnpRequest) {
-            IncomingDatagramMessage<UpnpRequest> incomingRequest = message;
-
-            switch (incomingRequest.getOperation().getMethod()) {
+            switch (((IncomingDatagramMessage<UpnpRequest>) message).getOperation().getMethod()) {
                 case NOTIFY:
-                    return isByeBye(incomingRequest) || isSupportedServiceAdvertisement(incomingRequest)
-                            ? createReceivingNotification(incomingRequest)
+                    return isByeBye(message) || isSupportedServiceAdvertisement(message)
+                            ? createReceivingNotification(message)
                             : null;
                 case MSEARCH:
-                    return createReceivingSearch(incomingRequest);
+                    return createReceivingSearch(message);
             }
 
         } else if (message.getOperation() instanceof UpnpResponse) {
-            IncomingDatagramMessage<UpnpResponse> incomingResponse = message;
-
-            return isSupportedServiceAdvertisement(incomingResponse) ? createReceivingSearchResponse(incomingResponse)
-                    : null;
+            return isSupportedServiceAdvertisement(message) ? createReceivingSearchResponse(message) : null;
         }
 
         throw new ProtocolCreationException("Protocol for incoming datagram message not found: " + message);

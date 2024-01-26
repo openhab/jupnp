@@ -17,7 +17,6 @@ package org.jupnp.support.model;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -773,13 +772,7 @@ public abstract class DIDLObject {
         if (property == null) {
             return this;
         }
-        Iterator<Property<?>> it = getProperties().iterator();
-        while (it.hasNext()) {
-            Property<?> p = it.next();
-            if (p.getClass().isAssignableFrom(property.getClass())) {
-                it.remove();
-            }
-        }
+        getProperties().removeIf(p -> p.getClass().isAssignableFrom(property.getClass()));
         addProperty(property);
         return this;
     }
@@ -804,13 +797,7 @@ public abstract class DIDLObject {
     }
 
     public DIDLObject removeProperties(java.lang.Class<? extends Property<?>> propertyClass) {
-        Iterator<Property<?>> it = getProperties().iterator();
-        while (it.hasNext()) {
-            Property<?> property = it.next();
-            if (propertyClass.isInstance(property)) {
-                it.remove();
-            }
-        }
+        getProperties().removeIf(propertyClass::isInstance);
         return this;
     }
 

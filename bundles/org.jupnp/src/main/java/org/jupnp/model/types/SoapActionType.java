@@ -15,6 +15,7 @@
  */
 package org.jupnp.model.types;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,7 +135,7 @@ public class SoapActionType {
         if (!type.equals(that.type)) {
             return false;
         }
-        if (version != null ? !version.equals(that.version) : that.version != null) {
+        if (!Objects.equals(version, that.version)) {
             return false;
         }
 

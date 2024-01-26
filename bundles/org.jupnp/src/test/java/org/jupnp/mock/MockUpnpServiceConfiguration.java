@@ -84,11 +84,7 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
     @Override
     public Executor getRegistryMaintainerExecutor() {
         if (isMaintainsRegistry()) {
-            return new Executor() {
-                public void execute(Runnable runnable) {
-                    new Thread(runnable).start();
-                }
-            };
+            return runnable -> new Thread(runnable).start();
         }
         return getDefaultExecutorService();
     }

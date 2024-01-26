@@ -16,8 +16,6 @@
 package org.jupnp.tool.cli;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -171,12 +169,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
 
             List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<>(executors.entrySet());
             // sort the entries by number of calls
-            Collections.sort(entries, new Comparator<>() {
-                public int compare(ConcurrentHashMap.Entry<String, AtomicInteger> a,
-                        ConcurrentHashMap.Entry<String, AtomicInteger> b) {
-                    return Integer.compare(b.getValue().get(), a.getValue().get());
-                }
-            });
+            entries.sort((a, b) -> Integer.compare(b.getValue().get(), a.getValue().get()));
 
             statsLogger.info("[executorClassName,numberOfExecutes]");
             for (ConcurrentHashMap.Entry<String, AtomicInteger> e : entries) {

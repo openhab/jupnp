@@ -34,24 +34,14 @@ public class HttpFetch {
 
     public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis)
             throws IOException {
-        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<>() {
-            @Override
-            public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is)
-                    throws IOException {
-                return new Representation<>(urlConnection, is.readAllBytes());
-            }
-        });
+        return fetch(url, connectTimeoutMillis, readTimeoutMillis,
+                (urlConnection, is) -> new Representation<>(urlConnection, is.readAllBytes()));
     }
 
     public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis)
             throws IOException {
-        return fetch(url, connectTimeoutMillis, readTimeoutMillis, new RepresentationFactory<>() {
-            @Override
-            public Representation<String> createRepresentation(URLConnection urlConnection, InputStream is)
-                    throws IOException {
-                return new Representation<>(urlConnection, IO.readLines(is));
-            }
-        });
+        return fetch(url, connectTimeoutMillis, readTimeoutMillis,
+                (urlConnection, is) -> new Representation<>(urlConnection, IO.readLines(is)));
     }
 
     public static <E> Representation<E> fetch(URL url, int connectTimeoutMillis, int readTimeoutMillis,
@@ -104,11 +94,7 @@ public class HttpFetch {
     }
 
     public static void validate(URL url) throws IOException {
-        fetch(url, "HEAD", 500, 500, new RepresentationFactory() {
-            @Override
-            public Representation createRepresentation(URLConnection urlConnection, InputStream is) throws IOException {
-                return new Representation(urlConnection, null);
-            }
-        });
+        fetch(url, "HEAD", 500, 500,
+                (RepresentationFactory) (urlConnection, is) -> new Representation(urlConnection, null));
     }
 }

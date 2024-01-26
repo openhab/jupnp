@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TestVariable extends Observable {
-    private static Logger log = LoggerFactory.getLogger(TestVariable.class);
+    private static final Logger log = LoggerFactory.getLogger(TestVariable.class);
     private Object value;
 
     public TestVariable(Object value) {

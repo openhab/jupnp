@@ -139,8 +139,7 @@ public class JUPnPTool {
             printToolStartMessage("Search for UPnP devices for " + timeout + " seconds sorted by " + sortBy
                     + " and filtered by " + filter);
             SearchCommand cmd = new SearchCommand(this);
-            int rc = cmd.run(timeout, sortBy, filter, verbose);
-            return rc;
+            return cmd.run(timeout, sortBy, filter, verbose);
         } else if (COMMAND_INFO.equals(commander.getParsedCommand())) {
             JCommander infoCommander = commander.getCommands().get(COMMAND_INFO);
             InfoCommandArgs infoArgs = (InfoCommandArgs) infoCommander.getObjects().get(0);
@@ -153,8 +152,7 @@ public class JUPnPTool {
 
             printToolStartMessage("Info for UPnP devices for " + ipAddressOrUdns);
             InfoCommand cmd = new InfoCommand(this);
-            int rc = cmd.run(ipAddressOrUdns, verbose);
-            return rc;
+            return cmd.run(ipAddressOrUdns, verbose);
         } else if (COMMAND_NOP.equals(commander.getParsedCommand())) {
             // for NOP command we create a UPnP service, start and shutdown
             // immediately. This helps during testing

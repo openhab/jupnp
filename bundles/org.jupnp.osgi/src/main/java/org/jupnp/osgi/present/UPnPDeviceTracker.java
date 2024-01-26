@@ -252,13 +252,8 @@ class UPnPDeviceTracker extends ServiceTracker {
                 upnpService.getRegistry().addDevice(local);
                 registrations.put(device, local);
             }
-
-        } catch (ValidationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (ValidationException | IOException | URISyntaxException e) {
+            log.warn("Failed to add UPnPDevice for service: {}", reference, e);
         }
 
         return device;

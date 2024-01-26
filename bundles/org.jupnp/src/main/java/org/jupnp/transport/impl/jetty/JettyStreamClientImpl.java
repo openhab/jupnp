@@ -153,46 +153,43 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     @Override
     protected Callable<StreamResponseMessage> createCallable(final StreamRequestMessage requestMessage,
             final Request request) {
-        return new Callable<>() {
-            @Override
-            public StreamResponseMessage call() throws Exception {
-                log.trace("Sending HTTP request: {}", requestMessage);
-                try {
-                    final ContentResponse httpResponse = request.send();
+        return () -> {
+            log.trace("Sending HTTP request: {}", requestMessage);
+            try {
+                final ContentResponse httpResponse = request.send();
 
-                    log.trace("Received HTTP response: {}", httpResponse.getReason());
+                log.trace("Received HTTP response: {}", httpResponse.getReason());
 
-                    // Status
-                    final UpnpResponse responseOperation = new UpnpResponse(httpResponse.getStatus(),
-                            httpResponse.getReason());
+                // Status
+                final UpnpResponse responseOperation = new UpnpResponse(httpResponse.getStatus(),
+                        httpResponse.getReason());
 
-                    // Message
-                    final StreamResponseMessage responseMessage = new StreamResponseMessage(responseOperation);
+                // Message
+                final StreamResponseMessage responseMessage = new StreamResponseMessage(responseOperation);
 
-                    // Headers
-                    responseMessage.setHeaders(new UpnpHeaders(HeaderUtil.get(httpResponse)));
+                // Headers
+                responseMessage.setHeaders(new UpnpHeaders(HeaderUtil.get(httpResponse)));
 
-                    // Body
-                    final byte[] bytes = httpResponse.getContent();
-                    if (bytes == null || 0 == bytes.length) {
-                        log.trace("HTTP response message has no entity");
-
-                        return responseMessage;
-                    }
-
-                    if (responseMessage.isContentTypeMissingOrText()) {
-                        log.trace("HTTP response message contains text entity");
-                    } else {
-                        log.trace("HTTP response message contains binary entity");
-                    }
-
-                    responseMessage.setBodyCharacters(bytes);
+                // Body
+                final byte[] bytes = httpResponse.getContent();
+                if (bytes == null || 0 == bytes.length) {
+                    log.trace("HTTP response message has no entity");
 
                     return responseMessage;
-                } catch (final RuntimeException e) {
-                    log.error("Request: {} failed", request, e);
-                    throw e;
                 }
+
+                if (responseMessage.isContentTypeMissingOrText()) {
+                    log.trace("HTTP response message contains text entity");
+                } else {
+                    log.trace("HTTP response message contains binary entity");
+                }
+
+                responseMessage.setBodyCharacters(bytes);
+
+                return responseMessage;
+            } catch (final RuntimeException e) {
+                log.error("Request: {} failed", request, e);
+                throw e;
             }
         };
     }

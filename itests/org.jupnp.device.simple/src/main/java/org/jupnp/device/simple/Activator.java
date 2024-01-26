@@ -32,11 +32,14 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Header(name = Constants.BUNDLE_ACTIVATOR, value = "${@class}")
 public class Activator implements BundleActivator {
     private static Activator plugin;
     private static BundleContext context;
+    private final Logger log = LoggerFactory.getLogger(Activator.class);
     private ServiceTracker tracker;
     private List<ServiceReference> references = new ArrayList<>();
 
@@ -59,7 +62,7 @@ public class Activator implements BundleActivator {
             tracker = new ServiceTracker(context, filter, null);
             tracker.open();
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            log.warn("Failed to create service tracker filter: {}", string, e);
         }
 
         BaseUPnPDevice simpleTestDevice = new SimpleTestDevice(new Simple());

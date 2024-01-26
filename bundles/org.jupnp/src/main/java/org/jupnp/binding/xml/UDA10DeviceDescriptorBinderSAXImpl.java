@@ -18,7 +18,6 @@ package org.jupnp.binding.xml;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.jupnp.binding.staging.MutableDevice;
@@ -343,13 +342,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public boolean isLastElement(ELEMENT element) {
             boolean last = element.equals(EL);
             if (last) {
-                Iterator<MutableService> it = getInstance().iterator();
-                while (it.hasNext()) {
-                    MutableService service = it.next();
-                    if (service.serviceType == null || service.serviceId == null) {
-                        it.remove();
-                    }
-                }
+                getInstance().removeIf(service -> service.serviceType == null || service.serviceId == null);
             }
             return last;
         }

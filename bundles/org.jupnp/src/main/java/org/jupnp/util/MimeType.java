@@ -16,9 +16,9 @@
 package org.jupnp.util;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -42,11 +42,7 @@ public class MimeType {
         if (parameters == null) {
             this.parameters = Map.of();
         } else {
-            Map<String, String> map = new TreeMap<>(new Comparator<>() {
-                public int compare(String o1, String o2) {
-                    return o1.compareToIgnoreCase(o2);
-                }
-            });
+            Map<String, String> map = new TreeMap<>(String::compareToIgnoreCase);
             map.putAll(parameters);
             this.parameters = Collections.unmodifiableMap(map);
         }
@@ -214,7 +210,7 @@ public class MimeType {
 
         MimeType mimeType = (MimeType) o;
 
-        if (parameters != null ? !parameters.equals(mimeType.parameters) : mimeType.parameters != null) {
+        if (!Objects.equals(parameters, mimeType.parameters)) {
             return false;
         }
         if (!subtype.equalsIgnoreCase(mimeType.subtype)) {

@@ -15,6 +15,8 @@
  */
 package org.jupnp.support.model;
 
+import java.util.Objects;
+
 import org.jupnp.model.ServiceReference;
 
 /**
@@ -159,11 +161,10 @@ public class ConnectionInfo {
         if (direction != that.direction) {
             return false;
         }
-        if (peerConnectionManager != null ? !peerConnectionManager.equals(that.peerConnectionManager)
-                : that.peerConnectionManager != null) {
+        if (!Objects.equals(peerConnectionManager, that.peerConnectionManager)) {
             return false;
         }
-        if (protocolInfo != null ? !protocolInfo.equals(that.protocolInfo) : that.protocolInfo != null) {
+        if (!Objects.equals(protocolInfo, that.protocolInfo)) {
             return false;
         }
 

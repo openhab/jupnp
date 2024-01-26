@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InfoCommand {
 
-    private static Logger logger = LoggerFactory.getLogger(InfoCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(InfoCommand.class);
     private JUPnPTool tool;
     private StringBuilder sb;
 

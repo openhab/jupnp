@@ -16,7 +16,6 @@
 package org.jupnp.tool.cli;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SearchCommand {
 
-    private static Logger logger = LoggerFactory.getLogger(SearchCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(SearchCommand.class);
     private JUPnPTool tool;
 
     public SearchCommand(JUPnPTool tool) {
@@ -296,25 +295,22 @@ public class SearchCommand {
         }
 
         private void sortResults(final String columnName) {
-            Comparator<Result> comparator = new Comparator<>() {
-                @Override
-                public int compare(Result o1, Result o2) {
-                    if ("ip".equals(columnName)) {
-                        return IpAddressUtils.compareIpAddress(o1.ipAddress, o2.ipAddress);
-                    } else if ("model".equals(columnName)) {
-                        return o1.model.compareTo(o2.model);
-                    } else if ("serialNumber".equals(columnName)) {
-                        return o1.serialNumber.compareTo(o2.serialNumber);
-                    } else if ("manufacturer".equals(columnName)) {
-                        return o1.manufacturer.compareTo(o2.manufacturer);
-                    } else if ("udn".equals(columnName)) {
-                        return o1.udn.compareTo(o2.udn);
-                    } else {
-                        return 0;
-                    }
+            Comparator<Result> comparator = (o1, o2) -> {
+                if ("ip".equals(columnName)) {
+                    return IpAddressUtils.compareIpAddress(o1.ipAddress, o2.ipAddress);
+                } else if ("model".equals(columnName)) {
+                    return o1.model.compareTo(o2.model);
+                } else if ("serialNumber".equals(columnName)) {
+                    return o1.serialNumber.compareTo(o2.serialNumber);
+                } else if ("manufacturer".equals(columnName)) {
+                    return o1.manufacturer.compareTo(o2.manufacturer);
+                } else if ("udn".equals(columnName)) {
+                    return o1.udn.compareTo(o2.udn);
+                } else {
+                    return 0;
                 }
             };
-            Collections.sort(results, comparator);
+            results.sort(comparator);
         }
 
         private static final String STRING_WITH_SPACES = "                           ";

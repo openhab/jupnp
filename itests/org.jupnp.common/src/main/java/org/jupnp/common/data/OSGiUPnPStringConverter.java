@@ -25,6 +25,8 @@ import java.util.TimeZone;
 
 import org.osgi.service.upnp.UPnPLocalStateVariable;
 import org.osgi.service.upnp.UPnPStateVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OSGiUPnPStringConverter {
     /**
@@ -236,6 +238,8 @@ public class OSGiUPnPStringConverter {
      */
     static final String TYPE_UUID = "uuid";
 
+    private static final Logger log = LoggerFactory.getLogger(OSGiUPnPStringConverter.class);
+
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final SimpleDateFormat dateTimeTZFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -362,7 +366,7 @@ public class OSGiUPnPStringConverter {
                     value = Long.valueOf(string);
                 }
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.warn("Failed to parse long of type '{}': {}", type, string, e);
             }
         }
 
@@ -416,9 +420,8 @@ public class OSGiUPnPStringConverter {
                 } else {
                     date = dateTimeTZFormat.parse(string);
                 }
-
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.warn("Failed to parse date of type '{}': {}", type, string, e);
             }
         }
 

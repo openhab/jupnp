@@ -182,45 +182,41 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
     private Thread createNewQueueThread() {
-        Thread thread = getThreadFactory().newThread(new Runnable() {
-
-            @Override
-            public void run() {
-                while (true) {
-                    // check if some thread from the pool is idle
-                    if (QueueingThreadPoolExecutor.this.getActiveCount() < QueueingThreadPoolExecutor.this
-                            .getMaximumPoolSize()) {
-                        try {
-                            // keep waiting for max 2 seconds if further tasks are pushed to the queue
-                            Runnable runnable = taskQueue.poll(2, TimeUnit.SECONDS);
-                            if (runnable != null) {
-                                logger.debug("Executing queued task of thread pool '{}'.", threadPoolName);
-                                QueueingThreadPoolExecutor.super.execute(runnable);
-                            } else {
-                                lock.writeLock().lock();
-                                try {
-                                    if (taskQueue.isEmpty()) {
-                                        queueThread = null;
-                                        break;
-                                    }
-                                } finally {
-                                    lock.writeLock().unlock();
+        Thread thread = getThreadFactory().newThread(() -> {
+            while (true) {
+                // check if some thread from the pool is idle
+                if (QueueingThreadPoolExecutor.this.getActiveCount() < QueueingThreadPoolExecutor.this
+                        .getMaximumPoolSize()) {
+                    try {
+                        // keep waiting for max 2 seconds if further tasks are pushed to the queue
+                        Runnable runnable = taskQueue.poll(2, TimeUnit.SECONDS);
+                        if (runnable != null) {
+                            logger.debug("Executing queued task of thread pool '{}'.", threadPoolName);
+                            QueueingThreadPoolExecutor.super.execute(runnable);
+                        } else {
+                            lock.writeLock().lock();
+                            try {
+                                if (taskQueue.isEmpty()) {
+                                    queueThread = null;
+                                    break;
                                 }
+                            } finally {
+                                lock.writeLock().unlock();
                             }
-                        } catch (InterruptedException e) {
                         }
-                    } else {
-                        // let's wait for a thread to become available, but max. 1 second
-                        try {
-                            synchronized (semaphore) {
-                                semaphore.wait(1000);
-                            }
-                        } catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
+                    }
+                } else {
+                    // let's wait for a thread to become available, but max. 1 second
+                    try {
+                        synchronized (semaphore) {
+                            semaphore.wait(1000);
                         }
+                    } catch (InterruptedException e) {
                     }
                 }
-                logger.debug("Queue for thread pool '{}' fully processed - terminating queue thread.", threadPoolName);
             }
+            logger.debug("Queue for thread pool '{}' fully processed - terminating queue thread.", threadPoolName);
         });
         thread.setName(threadPoolName + "-queue");
         return thread;
