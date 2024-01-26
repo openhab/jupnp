@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
 import org.jupnp.model.ValidationException;
 import org.jupnp.model.meta.Device;
 import org.jupnp.model.meta.RemoteDevice;
-import org.jupnp.util.Exceptions;
 import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.xml.ParserException;
 import org.slf4j.Logger;
@@ -64,7 +63,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 return device;
 
             } catch (DescriptorBindingException ex) {
-                log.warn("Regular parsing failed: {}", Exceptions.unwrap(ex).getMessage());
+                log.warn("Regular parsing failed", ex);
                 originalException = ex;
             } catch (IllegalArgumentException e) {
                 handleInvalidDescriptor(descriptorXml, new DescriptorBindingException(e.getMessage()));
@@ -79,7 +78,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
                 } catch (DescriptorBindingException ex) {
-                    log.warn("Removing leading garbage didn't work: {}", Exceptions.unwrap(ex).getMessage());
+                    log.warn("Removing leading garbage didn't work", ex);
                 }
             }
 
@@ -89,7 +88,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
                 } catch (DescriptorBindingException ex) {
-                    log.warn("Removing trailing garbage didn't work: {}", Exceptions.unwrap(ex).getMessage());
+                    log.warn("Removing trailing garbage didn't work", ex);
                 }
             }
 
@@ -103,7 +102,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                         device = super.describe(undescribedDevice, fixedXml);
                         return device;
                     } catch (DescriptorBindingException ex) {
-                        log.warn("Fixing namespace prefix didn't work: {}", Exceptions.unwrap(ex).getMessage());
+                        log.warn("Fixing namespace prefix didn't work", ex);
                         lastException = ex;
                     }
                 } else {
@@ -155,7 +154,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
             return null;
         }
         if (descriptorXml.length() != index + "</root>".length()) {
-            SpecificationViolationReporter.report("Detected garbage characters after <root> node, removing", null);
+            SpecificationViolationReporter.report("Detected garbage characters after <root> node, removing");
             return descriptorXml.substring(0, index) + "</root>";
         }
         return null;
@@ -163,8 +162,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
 
     protected String fixMimeTypes(String descriptorXml) {
         if (descriptorXml.contains("<mimetype>jpg</mimetype>")) {
-            SpecificationViolationReporter.report("Detected invalid mimetype 'jpg', replacing it with 'image/jpeg'",
-                    null);
+            SpecificationViolationReporter.report("Detected invalid mimetype 'jpg', replacing it with 'image/jpeg'");
             return descriptorXml.replaceAll("<mimetype>jpg</mimetype>", "<mimetype>image/jpeg</mimetype>");
         }
         return descriptorXml;
@@ -243,7 +241,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
     // Belkin WeMo Maker contains illegal strings in UDN values
     protected String fixWemoMakerUDN(String descriptorXml) {
         if (descriptorXml.contains(":sensor:switch")) {
-            SpecificationViolationReporter.report("Detected invalid UDN value ':sensor:switch', replacing it", null);
+            SpecificationViolationReporter.report("Detected invalid UDN value ':sensor:switch', replacing it");
             descriptorXml = descriptorXml.replaceAll(":sensor:switch", "");
             return descriptorXml.replaceAll(":sensor:switch", "");
         }

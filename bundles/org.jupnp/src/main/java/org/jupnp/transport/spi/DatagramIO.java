@@ -54,7 +54,6 @@ public interface DatagramIO<C extends DatagramIOConfiguration> extends Runnable 
     /**
      * Configures the service and starts any listening sockets.
      *
-     * @param bindAddress The address to bind any sockets on.
      * @param bindAddress The port to bind any sockets on. 0 means choosing an ephemeral port
      * @param router The router which handles received {@link org.jupnp.model.message.IncomingDatagramMessage}s.
      * @param datagramProcessor Reads and writes datagrams.

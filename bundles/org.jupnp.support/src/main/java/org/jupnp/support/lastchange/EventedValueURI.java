@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.InvalidValueException;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,7 @@ public class EventedValueURI extends EventedValue<URI> {
             // to parse whatever devices give us, like the Roku which sends "unknown url".
             return super.valueOf(s);
         } catch (InvalidValueException ex) {
-            logger.debug("Ignoring invalid URI in evented value '{}'", s, Exceptions.unwrap(ex));
+            logger.debug("Ignoring invalid URI in evented value '{}'", s, ex);
             return null;
         }
     }

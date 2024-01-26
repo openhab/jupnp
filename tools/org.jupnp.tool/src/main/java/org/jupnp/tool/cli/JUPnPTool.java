@@ -231,7 +231,7 @@ public class JUPnPTool {
             // StatusPrinter will handle this
         }
         // see https://issues.apache.org/jira/browse/SLING-3045
-        // there can by sync issues when reconfiguring logback
+        // there can be sync issues when reconfiguring logback
         long now = new Date().getTime();
         StatusPrinter.printInCaseOfErrorsOrWarnings(context, now + 1000);
     }

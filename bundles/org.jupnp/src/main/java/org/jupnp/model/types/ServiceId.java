@@ -95,7 +95,7 @@ public class ServiceId {
         }
 
         // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
-        String tokens[] = s.split("[:]");
+        String[] tokens = s.split("[:]");
         if (tokens.length == 4) {
             SpecificationViolationReporter.report("Trying a simple colon-split of: {}", s);
             return new ServiceId(tokens[1], tokens[3]);

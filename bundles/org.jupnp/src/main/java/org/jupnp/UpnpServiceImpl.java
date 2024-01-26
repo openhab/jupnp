@@ -271,7 +271,7 @@ public class UpnpServiceImpl implements UpnpService {
                 try {
                     this.router.enable();
                 } catch (RouterException ex) {
-                    throw new RuntimeException("Enabling network router failed: " + ex, ex);
+                    throw new RuntimeException("Enabling network router failed", ex);
                 }
 
                 this.controlPoint = createControlPoint(protocolFactory, registry);

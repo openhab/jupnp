@@ -48,7 +48,6 @@ import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.model.types.ServiceId;
 import org.jupnp.model.types.ServiceType;
 import org.jupnp.model.types.UDN;
-import org.jupnp.util.Exceptions;
 import org.jupnp.util.MimeType;
 import org.jupnp.util.SpecificationViolationReporter;
 import org.slf4j.Logger;
@@ -201,14 +200,14 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
             if (ELEMENT.major.equals(specVersionChild)) {
                 String version = XMLUtil.getTextContent(specVersionChild).trim();
                 if (!version.equals("1")) {
-                    SpecificationViolationReporter.report("Unsupported UDA major version, ignoring: " + version, null);
+                    SpecificationViolationReporter.report("Unsupported UDA major version, ignoring: " + version);
                     version = "1";
                 }
                 descriptor.udaVersion.major = Integer.valueOf(version);
             } else if (ELEMENT.minor.equals(specVersionChild)) {
                 String version = XMLUtil.getTextContent(specVersionChild).trim();
                 if (!version.equals("0")) {
-                    SpecificationViolationReporter.report("Unsupported UDA minor version, ignoring: " + version, null);
+                    SpecificationViolationReporter.report("Unsupported UDA minor version, ignoring: " + version);
                     version = "0";
                 }
                 descriptor.udaVersion.minor = Integer.valueOf(version);
@@ -315,8 +314,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                             icon.mimeType = XMLUtil.getTextContent(iconChild);
                             MimeType.valueOf(icon.mimeType);
                         } catch (IllegalArgumentException ex) {
-                            SpecificationViolationReporter.report("Ignoring invalid icon mime type: " + icon.mimeType,
-                                    null);
+                            SpecificationViolationReporter.report("Ignoring invalid icon mime type: " + icon.mimeType);
                             icon.mimeType = "";
                         }
                     }
@@ -368,8 +366,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
                     descriptor.services.add(service);
                 } catch (InvalidValueException ex) {
-                    SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage(),
-                            null);
+                    SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage());
                 }
             }
         }
@@ -612,7 +609,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
             //
             return URI.create("./" + uri);
         } catch (IllegalArgumentException ex) {
-            SpecificationViolationReporter.report("Illegal URI '{}', ignoring value: {}", uri, Exceptions.unwrap(ex));
+            SpecificationViolationReporter.report("Illegal URI '{}', ignoring value", uri, ex);
             // Ignore
         }
         return null;

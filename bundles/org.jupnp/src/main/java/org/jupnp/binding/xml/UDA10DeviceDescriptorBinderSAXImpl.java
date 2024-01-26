@@ -139,7 +139,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     String majorVersion = getCharacters().trim();
                     if (!majorVersion.equals("1")) {
                         SpecificationViolationReporter
-                                .report("Unsupported UDA major version, ignoring: " + majorVersion, null);
+                                .report("Unsupported UDA major version, ignoring: " + majorVersion);
                         majorVersion = "1";
                     }
                     getInstance().major = Integer.valueOf(majorVersion);
@@ -148,7 +148,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     String minorVersion = getCharacters().trim();
                     if (!minorVersion.equals("0")) {
                         SpecificationViolationReporter
-                                .report("Unsupported UDA minor version, ignoring: " + minorVersion, null);
+                                .report("Unsupported UDA minor version, ignoring: " + minorVersion);
                         minorVersion = "0";
                     }
                     getInstance().minor = Integer.valueOf(minorVersion);
@@ -384,7 +384,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                         break;
                 }
             } catch (InvalidValueException ex) {
-                SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage(), null);
+                SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage());
             }
         }
 

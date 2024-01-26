@@ -32,7 +32,7 @@ package org.jupnp.support.model.dlna;
  *       200000  21  connectionStallingSupported
  *       100000  20  dlnaVersion15Supported
  *
- *     Example: (1 << 24) | (1 << 22) | (1 << 21) | (1 << 20)
+ *     Example: (1 &lt;&lt; 24) | (1 &lt;&lt; 22) | (1 &lt;&lt; 21) | (1 &lt;&lt; 20)
  *       DLNA.ORG_FLAGS=01700000[000000000000000000000000] // [] show padding
  * </pre>
  *

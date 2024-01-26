@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,6 @@ import org.jupnp.model.types.BinHexDatatype;
 import org.jupnp.util.MimeType;
 import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.util.URIUtil;
-import org.jupnp.util.io.IO;
 
 /**
  * The metadata of a device icon, might include the actual image data of a local icon.
@@ -80,7 +80,7 @@ public class Icon implements Validatable {
      * name must be unique within the scope of a device.
      */
     public Icon(String mimeType, int width, int height, int depth, File file) throws IOException {
-        this(mimeType, width, height, depth, file.getName(), IO.readBytes(file));
+        this(mimeType, width, height, depth, file.getName(), Files.readAllBytes(file.toPath()));
     }
 
     /**
@@ -90,7 +90,7 @@ public class Icon implements Validatable {
      */
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, InputStream is)
             throws IOException {
-        this(mimeType, width, height, depth, uniqueName, IO.readBytes(is));
+        this(mimeType, width, height, depth, uniqueName, is.readAllBytes());
     }
 
     /**

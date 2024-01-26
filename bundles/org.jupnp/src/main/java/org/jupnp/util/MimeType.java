@@ -40,7 +40,7 @@ public class MimeType {
         this.type = type == null ? WILDCARD : type;
         this.subtype = subtype == null ? WILDCARD : subtype;
         if (parameters == null) {
-            this.parameters = Collections.EMPTY_MAP;
+            this.parameters = Map.of();
         } else {
             Map<String, String> map = new TreeMap<>(new Comparator<>() {
                 public int compare(String o1, String o2) {
@@ -53,7 +53,7 @@ public class MimeType {
     }
 
     public MimeType(String type, String subtype) {
-        this(type, subtype, Collections.EMPTY_MAP);
+        this(type, subtype, Map.of());
     }
 
     public String getType() {

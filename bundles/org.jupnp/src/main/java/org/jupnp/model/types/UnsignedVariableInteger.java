@@ -55,8 +55,7 @@ public abstract class UnsignedVariableInteger {
         if (s.startsWith("-")) {
             // Don't throw exception, just cut it!
             // TODO: UPNP VIOLATION: Twonky Player returns "-1" as the track number
-            SpecificationViolationReporter.report("Invalid negative integer value '" + s + "', assuming value 0!",
-                    null);
+            SpecificationViolationReporter.report("Invalid negative integer value '" + s + "', assuming value 0!");
             s = "0";
         }
         setValue(Long.parseLong(s.trim()));

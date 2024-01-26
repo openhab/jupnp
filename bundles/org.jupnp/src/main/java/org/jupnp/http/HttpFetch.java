@@ -38,7 +38,7 @@ public class HttpFetch {
             @Override
             public Representation<byte[]> createRepresentation(URLConnection urlConnection, InputStream is)
                     throws IOException {
-                return new Representation<>(urlConnection, IO.readBytes(is));
+                return new Representation<>(urlConnection, is.readAllBytes());
             }
         });
     }
@@ -87,7 +87,6 @@ public class HttpFetch {
                     errorStream.close();
                 }
                 throw new IOException("Fetching resource failed, returned status code: " + responseCode);
-                // String responseBody = IO.readString(urlConnection.getErrorStream());
             }
             throw ex;
         } finally {

@@ -66,7 +66,7 @@ public class Query {
         }
 
         // Parse query string
-        String pairs[] = qs.split("&");
+        String[] pairs = qs.split("&");
         for (String pair : pairs) {
             String name;
             String value;

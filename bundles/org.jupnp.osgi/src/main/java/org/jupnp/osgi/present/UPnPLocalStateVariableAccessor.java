@@ -18,7 +18,6 @@ package org.jupnp.osgi.present;
 import java.text.SimpleDateFormat;
 
 import org.jupnp.model.state.StateVariableAccessor;
-import org.jupnp.model.types.InvalidValueException;
 import org.jupnp.osgi.util.OSGiDataConverter;
 import org.osgi.service.upnp.UPnPLocalStateVariable;
 import org.slf4j.Logger;
@@ -50,12 +49,6 @@ class UPnPLocalStateVariableAccessor extends StateVariableAccessor {
         Object value = variable.getCurrentValue();
         if (value != null) {
             value = OSGiDataConverter.tojUPnPValue(variable.getUPnPDataType(), value);
-
-            try {
-            } catch (InvalidValueException e) {
-                logger.error("Error accessing variable {}.", variable.getName());
-                logger.error(e.getMessage());
-            }
         }
 
         return value;

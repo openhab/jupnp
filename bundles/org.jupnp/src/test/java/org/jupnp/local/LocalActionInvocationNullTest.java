@@ -114,7 +114,7 @@ class LocalActionInvocationNullTest {
 
         @UpnpAction
         public void setPrimitive(@UpnpInputArgument(name = "Primitive") boolean b) {
-            this.primitive = primitive;
+            this.primitive = b;
         }
     }
 

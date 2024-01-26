@@ -29,8 +29,6 @@ import org.jupnp.model.message.UpnpMessage;
 import org.jupnp.model.message.UpnpRequest;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.transport.spi.UpnpStream;
-import org.jupnp.util.Exceptions;
-import org.jupnp.util.io.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +91,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
             // Body
             byte[] bodyBytes;
             try (InputStream is = getHttpExchange().getRequestBody()) {
-                bodyBytes = IO.readBytes(is);
+                bodyBytes = is.readAllBytes();
             }
 
             log.trace("Reading request body bytes: {}", bodyBytes.length);
@@ -128,7 +126,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
                 if (contentLength > 0) {
                     log.trace("Response message has body, writing bytes to stream...");
                     try (OutputStream os = getHttpExchange().getResponseBody()) {
-                        IO.writeBytes(os, responseBodyBytes);
+                        os.write(responseBodyBytes);
                         os.flush();
                     }
                 }
@@ -152,10 +150,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
             // TODO: We should only send an error if the problem was on our side
             // You don't have to catch Throwable unless, like we do here in unit tests,
             // you might run into Errors as well (assertions).
-            log.trace("Exception occured during UPnP stream processing: {}", ex);
-            if (log.isTraceEnabled()) {
-                log.trace("Cause: {}", Exceptions.unwrap(ex), Exceptions.unwrap(ex));
-            }
+            log.trace("Exception occurred during UPnP stream processing", ex);
             try {
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
             } catch (IOException ioe) {

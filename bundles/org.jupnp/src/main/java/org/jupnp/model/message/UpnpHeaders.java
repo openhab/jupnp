@@ -154,9 +154,6 @@ public class UpnpHeaders extends Headers {
 
     public <H extends UpnpHeader> H getFirstHeader(UpnpHeader.Type type, Class<H> subtype) {
         UpnpHeader[] headers = getAsArray(type);
-        if (headers.length == 0) {
-            return null;
-        }
 
         for (UpnpHeader header : headers) {
             if (subtype.isAssignableFrom(header.getClass())) {

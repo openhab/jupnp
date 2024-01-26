@@ -190,7 +190,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
             } else {
                 try {
                     rejectLock.lock();
-                    if (displayedErrorOnce == false) {
+                    if (!displayedErrorOnce) {
                         logger.error("Thread pool rejected executions, consider to resize pool sizing");
                         displayedErrorOnce = true;
                     }

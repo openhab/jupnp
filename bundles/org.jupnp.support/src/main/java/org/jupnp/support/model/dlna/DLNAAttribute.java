@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +140,7 @@ public abstract class DLNAAttribute<T> {
                 attr = null;
             } catch (Exception ex) {
                 logger.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue,
-                        Exceptions.unwrap(ex));
+                        ex);
             }
         }
         return attr;

@@ -43,7 +43,6 @@ import org.jupnp.support.model.StorageMedium;
 import org.jupnp.support.model.WriteStatus;
 import org.jupnp.support.model.container.Container;
 import org.jupnp.support.model.item.Item;
-import org.jupnp.util.Exceptions;
 import org.jupnp.util.io.IO;
 import org.jupnp.xml.SAXParser;
 import org.slf4j.Logger;
@@ -196,7 +195,7 @@ public class DIDLParser extends SAXParser {
         try {
             res.setProtocolInfo(new ProtocolInfo(attributes.getValue("protocolInfo")));
         } catch (InvalidValueException ex) {
-            logger.warn("In DIDL content, invalid resource protocol info", Exceptions.unwrap(ex));
+            logger.warn("In DIDL content, invalid resource protocol info", ex);
             return null;
         }
 

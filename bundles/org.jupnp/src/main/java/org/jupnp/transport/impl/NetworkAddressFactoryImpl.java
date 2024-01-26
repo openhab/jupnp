@@ -42,10 +42,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of network interface and address configuration/discovery.
- * <p
+ * <p>
  * This implementation has been tested on Windows XP, Windows Vista, Mac OS X 10.8,
  * and whatever kernel ships in Ubuntu 9.04. This implementation does not support IPv6.
- * </p>
  *
  * @author Christian Bauer
  * @author Kai Kreuzer - added multicast response port
@@ -322,8 +321,6 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
             Enumeration<NetworkInterface> interfaceEnumeration = NetworkInterface.getNetworkInterfaces();
             for (NetworkInterface iface : Collections.list(interfaceEnumeration)) {
-                // displayInterfaceInformation(iface);
-
                 log.trace("Analyzing network interface: {}", iface.getDisplayName());
                 if (isUsableNetworkInterface(iface)) {
                     log.trace("Discovered usable network interface: {}", iface.getDisplayName());
@@ -336,7 +333,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             }
 
         } catch (Exception ex) {
-            throw new InitializationException("Could not not analyze local network interfaces: " + ex, ex);
+            throw new InitializationException("Could not not analyze local network interfaces", ex);
         }
     }
 
@@ -459,7 +456,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             }
 
         } catch (Exception ex) {
-            throw new InitializationException("Could not not analyze local network interfaces: " + ex, ex);
+            throw new InitializationException("Could not not analyze local network interfaces", ex);
         }
     }
 

@@ -72,7 +72,7 @@ public class SearchCommand {
         try {
             Thread.sleep(timeout * 1000);
         } catch (InterruptedException e) {
-            logger.error("{}", e);
+            logger.error("Interrupted while waiting before shutdown", e);
         }
 
         logger.debug("Processing results...");

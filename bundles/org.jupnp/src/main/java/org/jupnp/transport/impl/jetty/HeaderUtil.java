@@ -117,7 +117,7 @@ public class HeaderUtil {
         for (final ByteBuffer next : provider) {
             final byte[] bytes = new byte[next.capacity()];
             next.get(bytes);
-            // Should by "payload"
+            // Should be "payload"
             final String content = new String(bytes, StandardCharsets.UTF_8);
             sb.append(content);
         }
@@ -139,7 +139,7 @@ public class HeaderUtil {
             final byte[] bytes = new byte[next.capacity()];
             next.get(bytes);
 
-            // Should by "payload"
+            // Should be "payload"
             bos.write(bytes, 0, bytes.length);
         }
 

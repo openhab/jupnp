@@ -15,7 +15,7 @@
  */
 package org.jupnp.controlpoint;
 
-import java.util.Collections;
+import java.util.List;
 
 import org.jupnp.model.UnsupportedDataException;
 import org.jupnp.model.UserConstants;
@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  *
  *     public void eventReceived(GENASubscription sub) {
  *         System.out.println("Event: " + sub.getCurrentSequence().getValue());
- *         Map&lt;String, StateVariableValue> values = sub.getCurrentValues();
+ *         Map&lt;String, StateVariableValue&gt; values = sub.getCurrentValues();
  *         StateVariableValue status = values.get("Status");
  *         System.out.println("Status is: " + status.toString());
  *     }
@@ -136,7 +136,7 @@ public abstract class SubscriptionCallback implements Runnable {
 
         LocalGENASubscription localSubscription = null;
         try {
-            localSubscription = new LocalGENASubscription(service, Integer.MAX_VALUE, Collections.EMPTY_LIST) {
+            localSubscription = new LocalGENASubscription(service, Integer.MAX_VALUE, List.of()) {
 
                 public void failed(Exception ex) {
                     synchronized (SubscriptionCallback.this) {
@@ -336,7 +336,7 @@ public abstract class SubscriptionCallback implements Runnable {
         if (responseStatus != null) {
             message = message + " HTTP response was: " + responseStatus.getResponseDetails();
         } else if (exception != null) {
-            message = message + " Exception occured: " + exception;
+            message = message + " Exception occurred: " + exception;
         } else {
             message = message + " No response received.";
         }

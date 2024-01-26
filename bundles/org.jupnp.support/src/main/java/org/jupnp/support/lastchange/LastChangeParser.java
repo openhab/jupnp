@@ -29,7 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.jupnp.model.XMLUtil;
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
 import org.jupnp.support.shared.AbstractMap;
-import org.jupnp.util.Exceptions;
 import org.jupnp.util.io.IO;
 import org.jupnp.xml.DOMParser;
 import org.jupnp.xml.SAXParser;
@@ -178,7 +177,7 @@ public abstract class LastChangeParser extends SAXParser {
                 }
             } catch (Exception ex) {
                 // Don't exit, just log a warning
-                logger.warn("Error reading event XML, ignoring value: {}", Exceptions.unwrap(ex));
+                logger.warn("Error reading event XML, ignoring value", ex);
             }
         }
 

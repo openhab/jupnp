@@ -57,9 +57,9 @@ public class StateMachineInvocationHandler implements InvocationHandler {
                 stateObjects.put(stateClass, state);
 
             } catch (NoSuchMethodException ex) {
-                throw new RuntimeException("State " + stateClass.getName() + " has the wrong constructor: " + ex, ex);
+                throw new RuntimeException("State " + stateClass.getName() + " has the wrong constructor", ex);
             } catch (Exception ex) {
-                throw new RuntimeException("State " + stateClass.getName() + " can't be instantiated: " + ex, ex);
+                throw new RuntimeException("State " + stateClass.getName() + " can't be instantiated", ex);
             }
         }
 
@@ -128,8 +128,8 @@ public class StateMachineInvocationHandler implements InvocationHandler {
             logger.debug("No entry method found on state: {}", state.getClass().getName());
             // That's OK, just don't call it
         } catch (Exception ex) {
-            throw new TransitionException(
-                    "State '" + state.getClass().getName() + "' entry method threw exception: " + ex, ex);
+            throw new TransitionException("State '" + state.getClass().getName() + "' entry method threw exception",
+                    ex);
         }
     }
 
@@ -142,8 +142,7 @@ public class StateMachineInvocationHandler implements InvocationHandler {
             logger.debug("No exit method found on state: {}", state.getClass().getName());
             // That's OK, just don't call it
         } catch (Exception ex) {
-            throw new TransitionException(
-                    "State '" + state.getClass().getName() + "' exit method threw exception: " + ex, ex);
+            throw new TransitionException("State '" + state.getClass().getName() + "' exit method threw exception", ex);
         }
     }
 }

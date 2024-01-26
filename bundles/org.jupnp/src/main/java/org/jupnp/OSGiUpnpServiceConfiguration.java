@@ -56,8 +56,6 @@ import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -121,9 +119,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     private BundleContext context;
 
     @SuppressWarnings("rawtypes")
-    private ServiceRegistration serviceReg;
-
-    @SuppressWarnings("rawtypes")
     private ServiceReference httpServiceReference;
 
     @SuppressWarnings("rawtypes")
@@ -165,7 +160,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     @Activate
-    protected void activate(BundleContext context, Map<String, Object> configProps) throws ConfigurationException {
+    protected void activate(BundleContext context, Map<String, Object> configProps) {
         this.context = context;
 
         setConfigValues(configProps);
@@ -184,10 +179,6 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Deactivate
     protected void deactivate() {
-        if (serviceReg != null) {
-            serviceReg.unregister();
-        }
-
         if (httpServiceReference != null) {
             context.ungetService(httpServiceReference);
         }
@@ -331,7 +322,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Override
     public ExecutorService getAsyncProtocolExecutor() {
-        if (asyncThreadPool == true) {
+        if (asyncThreadPool) {
             return asyncExecutorService;
         } else {
             return Executors.newCachedThreadPool();
@@ -418,7 +409,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected ExecutorService getRemoteExecutorService() {
-        if (remoteThreadPool == true) {
+        if (remoteThreadPool) {
             return remoteExecutorService;
         } else {
             return Executors.newCachedThreadPool();
@@ -426,7 +417,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected ExecutorService getMainExecutorService() {
-        if (mainThreadPool == true) {
+        if (mainThreadPool) {
             return mainExecutorService;
         } else {
             return Executors.newCachedThreadPool();
@@ -434,21 +425,21 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     private void createExecutorServices() {
-        if (mainThreadPool == true) {
+        if (mainThreadPool) {
             log.debug("Creating mainThreadPool");
             mainExecutorService = createMainExecutorService();
         } else {
             log.debug("Skipping mainThreadPool creation.");
         }
 
-        if (asyncThreadPool == true) {
+        if (asyncThreadPool) {
             log.debug("Creating asyncThreadPool");
             asyncExecutorService = createAsyncProtocolExecutorService();
         } else {
             log.debug("Skipping asyncThreadPool creation.");
         }
 
-        if (remoteThreadPool == true) {
+        if (remoteThreadPool) {
             log.debug("Creating remoteThreadPool");
             remoteExecutorService = createRemoteProtocolExecutorService();
         } else {
@@ -468,7 +459,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         return QueueingThreadPoolExecutor.createInstance("upnp-remote", remoteThreadPoolSize);
     }
 
-    private void setConfigValues(Map<String, Object> properties) throws ConfigurationException {
+    private void setConfigValues(Map<String, Object> properties) {
         if (properties == null) {
             return;
         }
@@ -476,12 +467,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         Object prop = properties.get("threadPoolSize");
         if (prop instanceof String) {
             try {
-                threadPoolSize = Integer.valueOf((String) prop);
-                if (threadPoolSize == -1) {
-                    mainThreadPool = false;
-                } else {
-                    mainThreadPool = true;
-                }
+                threadPoolSize = Integer.parseInt((String) prop);
+                mainThreadPool = threadPoolSize != -1;
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
             }
@@ -492,12 +479,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         prop = properties.get("asyncThreadPoolSize");
         if (prop instanceof String) {
             try {
-                asyncThreadPoolSize = Integer.valueOf((String) prop);
-                if (asyncThreadPoolSize == -1) {
-                    asyncThreadPool = false;
-                } else {
-                    asyncThreadPool = true;
-                }
+                asyncThreadPoolSize = Integer.parseInt((String) prop);
+                asyncThreadPool = asyncThreadPoolSize != -1;
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for asyncThreadPoolSize - using default value '{}'", prop,
                         asyncThreadPoolSize);
@@ -509,7 +492,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         prop = properties.get("multicastResponsePort");
         if (prop instanceof String) {
             try {
-                multicastResponsePort = Integer.valueOf((String) prop);
+                multicastResponsePort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for multicastResponsePort - using default value '{}'", prop,
                         multicastResponsePort);
@@ -521,7 +504,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         prop = properties.get("streamListenPort");
         if (prop instanceof String) {
             try {
-                streamListenPort = Integer.valueOf((String) prop);
+                streamListenPort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for streamListenPort - using default value '{}'", prop, streamListenPort);
             }
@@ -529,7 +512,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             streamListenPort = (Integer) prop;
         } else if (System.getProperty(OSGI_SERVICE_HTTP_PORT) != null) {
             try {
-                streamListenPort = Integer.valueOf(System.getProperty(OSGI_SERVICE_HTTP_PORT));
+                streamListenPort = Integer.parseInt(System.getProperty(OSGI_SERVICE_HTTP_PORT));
             } catch (NumberFormatException e) {
                 log.debug("Invalid value '{}' for osgi.http.port - using default value '{}'", prop, streamListenPort);
             }
@@ -547,7 +530,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         prop = properties.get("httpProxyPort");
         if (prop instanceof String) {
             try {
-                httpProxyPort = Integer.valueOf((String) prop);
+                httpProxyPort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
                 log.error("Invalid value '{}' for httpProxyPort - using default value '{}'", prop, httpProxyPort);
             }
@@ -592,7 +575,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         log.info("OSGiUpnpServiceConfiguration timeoutSeconds = {}", timeoutSeconds);
 
         // let's automatically determine the size for the remoteThreadPool
-        if ((mainThreadPool == false) || (asyncThreadPool == false)) {
+        if (!mainThreadPool || !asyncThreadPool) {
             remoteThreadPool = false;
             remoteThreadPoolSize = -1;
         } else {

@@ -23,7 +23,6 @@ import java.util.Iterator;
  * Configuration utility for network interfaces and addresses.
  * <p>
  * An implementation has to be thread-safe.
- * </p>
  *
  * @author Christian Bauer
  * @author Kai Kreuzer - added multicast response port
@@ -100,7 +99,6 @@ public interface NetworkAddressFactory {
      * able to communicate with the sender using UDP unicast and we need to tell the sender
      * how we are reachable with TCP requests. We need a local address that is in the same
      * subnet as the senders address, that is reachable from the senders point of view.
-     * </p>
      *
      * @param networkInterface The network interface to examine.
      * @param isIPv6 True if the given remote address is an IPv6 address.

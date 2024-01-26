@@ -21,7 +21,6 @@ import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.protocol.ProtocolCreationException;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.protocol.ReceivingSync;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +74,7 @@ public abstract class UpnpStream implements Runnable {
             // Try to get a protocol implementation that matches the request message
             syncProtocol = getProtocolFactory().createReceivingSync(requestMsg);
         } catch (ProtocolCreationException ex) {
-            log.warn("Processing stream request failed - {}", Exceptions.unwrap(ex).toString());
+            log.warn("Processing stream request failed", ex);
             return new StreamResponseMessage(UpnpResponse.Status.NOT_IMPLEMENTED);
         }
 

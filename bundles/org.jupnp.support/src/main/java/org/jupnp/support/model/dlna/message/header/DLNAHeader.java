@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.jupnp.model.message.header.InvalidHeaderException;
 import org.jupnp.model.message.header.UpnpHeader;
-import org.jupnp.util.Exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,8 +145,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
                         ex.getMessage());
                 upnpHeader = null;
             } catch (Exception ex) {
-                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue,
-                        Exceptions.unwrap(ex));
+                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue, ex);
             }
 
         }

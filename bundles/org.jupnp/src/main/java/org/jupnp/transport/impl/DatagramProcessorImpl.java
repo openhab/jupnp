@@ -59,14 +59,14 @@ public class DatagramProcessorImpl implements DatagramProcessor {
 
             String[] startLine = Headers.readLine(is).split(" ");
             if (startLine[0].startsWith("HTTP/1.")) {
-                return readResponseMessage(receivedOnAddress, datagram, is, Integer.valueOf(startLine[1]), startLine[2],
-                        startLine[0]);
+                return readResponseMessage(receivedOnAddress, datagram, is, Integer.parseInt(startLine[1]),
+                        startLine[2], startLine[0]);
             } else {
                 return readRequestMessage(receivedOnAddress, datagram, is, startLine[0], startLine[2]);
             }
 
         } catch (Exception ex) {
-            throw new UnsupportedDataException("Could not parse headers: " + ex, ex, datagram.getData());
+            throw new UnsupportedDataException("Could not parse headers", ex, datagram.getData());
         }
     }
 

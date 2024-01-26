@@ -20,7 +20,6 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -228,7 +227,7 @@ public class RouterImpl implements Router {
                 }
                 return streamServerAddresses;
             } else {
-                return Collections.EMPTY_LIST;
+                return List.of();
             }
         } finally {
             unlock(readLock);
@@ -261,7 +260,7 @@ public class RouterImpl implements Router {
             log.debug("Received asynchronous message: {}", msg);
             getConfiguration().getRemoteListenerExecutor().execute(protocol);
         } catch (ProtocolCreationException ex) {
-            log.warn("Handling received datagram failed - {}", Exceptions.unwrap(ex).toString());
+            log.warn("Handling received datagram failed", ex);
         }
     }
 

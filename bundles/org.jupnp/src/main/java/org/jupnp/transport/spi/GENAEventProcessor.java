@@ -35,7 +35,7 @@ public interface GENAEventProcessor {
     void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException;
 
     /**
-     * Transforms an XML message body and adds to a collection of {@link org.jupnp.model.state.StateVariableValue}s..
+     * Transforms an XML message body and adds to a collection of {@link org.jupnp.model.state.StateVariableValue}s.
      *
      * @param requestMessage The message to transform.
      * @throws UnsupportedDataException

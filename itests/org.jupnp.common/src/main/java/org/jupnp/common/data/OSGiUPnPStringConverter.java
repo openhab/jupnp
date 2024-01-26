@@ -377,21 +377,21 @@ public class OSGiUPnPStringConverter {
      * Float r4, float
      */
     private static Float toFloat(String string, Float value) {
-        return string != null ? Float.valueOf(string) : value != null ? value : new Float(0);
+        return string != null ? Float.valueOf(string) : value != null ? value : Float.valueOf(0);
     }
 
     /*
      * Double r8, number, fixed.14.4
      */
     private static Double toDouble(String string, Double value) {
-        return string != null ? Double.valueOf(string) : value != null ? value : new Double(0);
+        return string != null ? Double.valueOf(string) : value != null ? value : Double.valueOf(0);
     }
 
     /*
      * Character char
      */
     private static Character toCharacter(String string, Character value) {
-        return string != null ? Character.valueOf(string.charAt(0)) : value != null ? value : new Character('A');
+        return string != null ? Character.valueOf(string.charAt(0)) : value != null ? value : Character.valueOf('A');
     }
 
     /*

@@ -44,7 +44,7 @@ public class BinaryLightClient implements Runnable {
             // Broadcast a search message for all devices
             upnpService.getControlPoint().search(new STAllHeader());
         } catch (Exception ex) {
-            System.err.println("Exception occured: " + ex);
+            System.err.println("Exception occurred: " + ex);
             System.exit(1);
         }
     }

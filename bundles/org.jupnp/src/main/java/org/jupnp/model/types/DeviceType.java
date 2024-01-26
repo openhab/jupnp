@@ -107,8 +107,7 @@ public class DeviceType {
             // urn:schemas-upnp-org:device::1
             matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device::([0-9]+).*").matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 2) {
-                SpecificationViolationReporter.report("No device type token, defaulting to " + UNKNOWN + ": " + s,
-                        null);
+                SpecificationViolationReporter.report("No device type token, defaulting to " + UNKNOWN + ": " + s);
                 return new DeviceType(matcher.group(1), UNKNOWN, Integer.valueOf(matcher.group(2)));
             }
 

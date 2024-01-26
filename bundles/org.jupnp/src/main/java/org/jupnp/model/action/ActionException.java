@@ -18,7 +18,7 @@ package org.jupnp.model.action;
 import org.jupnp.model.types.ErrorCode;
 
 /**
- * Thrown (or encapsulated in {@link org.jupnp.model.action.ActionInvocation} when an action execution failed.
+ * Thrown (or encapsulated in {@link org.jupnp.model.action.ActionInvocation}) when an action execution failed.
  *
  * @author Christian Bauer
  */

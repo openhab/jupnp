@@ -15,7 +15,6 @@
  */
 package org.jupnp.model.meta;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.jupnp.model.ValidationError;
@@ -54,6 +53,6 @@ public class QueryStateVariableAction<S extends Service> extends Action<S> {
 
     @Override
     public List<ValidationError> validate() {
-        return Collections.EMPTY_LIST;
+        return List.of();
     }
 }
