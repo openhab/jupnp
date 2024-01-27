@@ -226,12 +226,9 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     protected <O extends UpnpOperation> ContentProvider.Typed createContentProvider(final UpnpMessage<O> upnpMessage) {
         if (upnpMessage.getBodyType().equals(UpnpMessage.BodyType.STRING)) {
             log.trace("Preparing HTTP request entity as String");
-
-            final String charset = upnpMessage.getContentTypeCharset();
-            return new StringContentProvider(upnpMessage.getBodyString(), charset != null ? charset : "UTF-8");
+            return new StringContentProvider(upnpMessage.getBodyString(), upnpMessage.getContentTypeCharset());
         } else {
             log.trace("Preparing HTTP request entity as byte[]");
-
             return new BytesContentProvider(upnpMessage.getBodyBytes());
         }
     }

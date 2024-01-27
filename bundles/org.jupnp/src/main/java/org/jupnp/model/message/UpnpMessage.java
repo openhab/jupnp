@@ -15,11 +15,14 @@
  */
 package org.jupnp.model.message;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
 
 import org.jupnp.model.message.header.ContentTypeHeader;
 import org.jupnp.model.message.header.UpnpHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A non-streaming message, the interface between the transport layer and the protocols.
@@ -38,6 +41,8 @@ import org.jupnp.model.message.header.UpnpHeader;
  * @author Christian Bauer
  */
 public abstract class UpnpMessage<O extends UpnpOperation> {
+
+    private static final Logger log = LoggerFactory.getLogger(UpnpMessage.class);
 
     public enum BodyType {
         STRING,
@@ -109,9 +114,8 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         this.body = body;
     }
 
-    public void setBodyCharacters(byte[] characterData) throws UnsupportedEncodingException {
-        setBody(UpnpMessage.BodyType.STRING,
-                new String(characterData, getContentTypeCharset() != null ? getContentTypeCharset() : "UTF-8"));
+    public void setBodyCharacters(byte[] characterData) {
+        setBody(UpnpMessage.BodyType.STRING, new String(characterData, getContentTypeCharset()));
     }
 
     public boolean hasBody() {
@@ -138,7 +142,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
                 }
                 return body;
             } else {
-                return new String((byte[]) getBody(), StandardCharsets.UTF_8);
+                return new String((byte[]) getBody(), getContentTypeCharset());
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -151,7 +155,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
                 return null;
             }
             if (getBodyType().equals(BodyType.STRING)) {
-                return getBodyString().getBytes();
+                return getBodyString().getBytes(getContentTypeCharset());
             } else {
                 return (byte[]) getBody();
             }
@@ -194,9 +198,23 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         return ct != null && ct.isUDACompliantXML();
     }
 
-    public String getContentTypeCharset() {
+    public Charset getContentTypeCharset() {
         ContentTypeHeader ct = getContentTypeHeader();
-        return ct != null ? ct.getValue().getParameters().get("charset") : null;
+        if (ct == null) {
+            return StandardCharsets.UTF_8;
+        }
+
+        String charsetValue = ct.getValue().getParameters().get("charset");
+        if (charsetValue == null) {
+            return StandardCharsets.UTF_8;
+        }
+
+        try {
+            return Charset.forName(charsetValue);
+        } catch (UnsupportedCharsetException e) {
+            log.warn("UpnpMessage has unsupported charset '{}' using UTF-8 instead", charsetValue, e);
+            return StandardCharsets.UTF_8;
+        }
     }
 
     public boolean hasHostHeader() {
