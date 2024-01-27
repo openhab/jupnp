@@ -39,6 +39,7 @@ public abstract class GetVolume extends ActionCallback {
         getActionInvocation().setInput("Channel", Channel.Master.toString());
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         boolean ok = true;
         int currentVolume = 0;

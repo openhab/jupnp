@@ -117,14 +117,17 @@ public class SAXParser {
      * Always throws exceptions and stops parsing.
      */
     public static class SimpleErrorHandler implements ErrorHandler {
+        @Override
         public void warning(SAXParseException e) throws SAXException {
             throw new SAXException(e);
         }
 
+        @Override
         public void error(SAXParseException e) throws SAXException {
             throw new SAXException(e);
         }
 
+        @Override
         public void fatalError(SAXParseException e) throws SAXException {
             throw new SAXException(e);
         }

@@ -37,6 +37,7 @@ public class MaxAgeHeader extends UpnpHeader<Integer> {
         setValue(Constants.MIN_ADVERTISEMENT_AGE_SECONDS);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
 
         Matcher matcher = MAX_AGE_REGEX.matcher(s.toLowerCase(Locale.ENGLISH));
@@ -48,6 +49,7 @@ public class MaxAgeHeader extends UpnpHeader<Integer> {
         setValue(maxAge);
     }
 
+    @Override
     public String getString() {
         return "max-age=" + getValue().toString();
     }

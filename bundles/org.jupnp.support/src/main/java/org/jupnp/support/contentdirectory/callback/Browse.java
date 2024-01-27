@@ -90,6 +90,7 @@ public abstract class Browse extends ActionCallback {
         super.run();
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         logger.debug("Successful browse action, reading output argument values");
 

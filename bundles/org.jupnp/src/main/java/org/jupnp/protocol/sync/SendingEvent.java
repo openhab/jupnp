@@ -70,6 +70,7 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
         subscription.incrementSequence();
     }
 
+    @Override
     protected StreamResponseMessage executeSync() throws RouterException {
 
         log.trace("Sending event for subscription: {}", subscriptionId);

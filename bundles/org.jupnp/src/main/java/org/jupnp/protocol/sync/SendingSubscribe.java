@@ -62,6 +62,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
         this.subscription = subscription;
     }
 
+    @Override
     protected IncomingSubscribeResponseMessage executeSync() throws RouterException {
 
         if (!getInputMessage().hasCallbackURLs()) {

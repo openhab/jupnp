@@ -35,6 +35,7 @@ public class DeviceTypeHeader extends UpnpHeader<DeviceType> {
         setValue(value);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(DeviceType.valueOf(s));
@@ -43,6 +44,7 @@ public class DeviceTypeHeader extends UpnpHeader<DeviceType> {
         }
     }
 
+    @Override
     public String getString() {
         return getValue().toString();
     }

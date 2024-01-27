@@ -99,10 +99,12 @@ class OutgoingSubscriptionFailureTest {
                 testAssertions.add(false);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 testAssertions.add(false);
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
@@ -159,12 +161,14 @@ class OutgoingSubscriptionFailureTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 assertEquals("0", subscription.getCurrentValues().get("Status").toString());
                 assertEquals("1", subscription.getCurrentValues().get("Target").toString());
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 assertEquals(2, numberOfMissedEvents);
                 testAssertions.add(true);

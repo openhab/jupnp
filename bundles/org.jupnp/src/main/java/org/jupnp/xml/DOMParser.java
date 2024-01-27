@@ -465,14 +465,17 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     // =================================================================================================
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         log.warn(e.toString());
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw new SAXException(new ParserException(e));
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw new SAXException(new ParserException(e));
     }
@@ -487,6 +490,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     // =================================================================================================
 
+    @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
         // By default this builds an EntityResolver that _stays offline_.
         // Damn you XML clowns, just because a URI looks like a URL does NOT mean you should fetch it!

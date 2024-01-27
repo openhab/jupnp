@@ -30,6 +30,7 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
         return type == Boolean.TYPE || Boolean.class.isAssignableFrom(type);
     }
 
+    @Override
     public Boolean valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;
@@ -45,6 +46,7 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
         }
     }
 
+    @Override
     public String getString(Boolean value) throws InvalidValueException {
         if (value == null) {
             return "";

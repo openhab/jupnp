@@ -71,6 +71,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
     private final Logger log = LoggerFactory.getLogger(DeviceDescriptorBinder.class);
 
+    @Override
     public <D extends Device> D describe(D undescribedDevice, String descriptorXml)
             throws DescriptorBindingException, ValidationException {
 
@@ -110,6 +111,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         }
     }
 
+    @Override
     public <D extends Device> D describe(D undescribedDevice, Document dom)
             throws DescriptorBindingException, ValidationException {
         try {
@@ -391,6 +393,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         }
     }
 
+    @Override
     public String generate(Device deviceModel, RemoteClientInfo info, Namespace namespace)
             throws DescriptorBindingException {
         try {
@@ -403,6 +406,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         }
     }
 
+    @Override
     public Document buildDOM(Device deviceModel, RemoteClientInfo info, Namespace namespace)
             throws DescriptorBindingException {
 
@@ -565,14 +569,17 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
         }
     }
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         log.warn(e.toString());
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw e;
     }

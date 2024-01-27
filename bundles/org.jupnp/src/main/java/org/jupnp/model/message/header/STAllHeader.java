@@ -26,12 +26,14 @@ public class STAllHeader extends UpnpHeader<NotificationSubtype> {
         setValue(NotificationSubtype.ALL);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         if (!s.equals(NotificationSubtype.ALL.getHeaderString())) {
             throw new InvalidHeaderException("Invalid ST header value (not " + NotificationSubtype.ALL + "): " + s);
         }
     }
 
+    @Override
     public String getString() {
         return getValue().getHeaderString();
     }

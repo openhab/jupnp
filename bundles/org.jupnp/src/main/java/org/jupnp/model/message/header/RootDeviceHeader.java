@@ -26,12 +26,14 @@ public class RootDeviceHeader extends UpnpHeader<String> {
         setValue("upnp:rootdevice");
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         if (!s.toLowerCase(Locale.ENGLISH).equals(getValue())) {
             throw new InvalidHeaderException("Invalid root device NT header value: " + s);
         }
     }
 
+    @Override
     public String getString() {
         return getValue();
     }

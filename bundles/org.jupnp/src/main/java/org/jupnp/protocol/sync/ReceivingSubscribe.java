@@ -65,6 +65,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         super(upnpService, inputMessage);
     }
 
+    @Override
     protected OutgoingSubscribeResponseMessage executeSync() throws RouterException {
 
         ServiceEventSubscriptionResource resource = getUpnpService().getRegistry()
@@ -159,12 +160,15 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
         try {
             subscription = new LocalGENASubscription(service, timeoutSeconds, callbackURLs) {
+                @Override
                 public void established() {
                 }
 
+                @Override
                 public void ended(CancelReason reason) {
                 }
 
+                @Override
                 public void eventReceived() {
                     // The only thing we are interested in, sending an event when the state changes
                     getUpnpService().getConfiguration().getSyncProtocolExecutorService()

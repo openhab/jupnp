@@ -29,6 +29,7 @@ public class DLNAConversionIndicatorAttribute extends DLNAAttribute<DLNAConversi
         setValue(indicator);
     }
 
+    @Override
     public void setString(String s, String cf) {
         DLNAConversionIndicator value = null;
         try {
@@ -41,6 +42,7 @@ public class DLNAConversionIndicatorAttribute extends DLNAAttribute<DLNAConversi
         setValue(value);
     }
 
+    @Override
     public String getString() {
         return Integer.toString(getValue().getCode());
     }

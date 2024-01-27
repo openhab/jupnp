@@ -54,6 +54,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
         return DocumentBuilderFactory.newInstance();
     }
 
+    @Override
     public void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException {
         log.trace("Writing body of: {}", requestMessage);
 
@@ -79,6 +80,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
         }
     }
 
+    @Override
     public void readBody(IncomingEventRequestMessage requestMessage) throws UnsupportedDataException {
 
         log.trace("Reading body of: {}", requestMessage);
@@ -198,14 +200,17 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                 : node.getNodeName();
     }
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         log.warn(e.toString());
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw e;
     }

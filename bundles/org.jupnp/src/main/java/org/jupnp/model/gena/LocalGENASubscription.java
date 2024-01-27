@@ -130,6 +130,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      * Moderates {@link org.jupnp.model.ServiceManager#EVENTED_STATE_VARIABLES} events and state variable
      * values, calls {@link #eventReceived()}.
      */
+    @Override
     public synchronized void propertyChange(PropertyChangeEvent e) {
         if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES)) {
             return;

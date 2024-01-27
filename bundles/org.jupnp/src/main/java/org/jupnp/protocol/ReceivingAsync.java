@@ -56,6 +56,7 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
         return inputMessage;
     }
 
+    @Override
     public void run() {
         boolean proceed;
         try {

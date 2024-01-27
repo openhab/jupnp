@@ -32,6 +32,7 @@ import javax.xml.namespace.NamespaceContext;
  */
 public abstract class NamespaceContextMap extends HashMap<String, String> implements NamespaceContext {
 
+    @Override
     public String getNamespaceURI(String prefix) {
         if (prefix == null) {
             throw new IllegalArgumentException("No prefix provided!");
@@ -45,11 +46,13 @@ public abstract class NamespaceContextMap extends HashMap<String, String> implem
     }
 
     // Whatever, we don't care
+    @Override
     public String getPrefix(String namespaceURI) {
         return null;
     }
 
     // Whatever, we don't care
+    @Override
     public Iterator getPrefixes(String s) {
         return null;
     }

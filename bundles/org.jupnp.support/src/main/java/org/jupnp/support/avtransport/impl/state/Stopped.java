@@ -60,6 +60,7 @@ public abstract class Stopped<T extends AVTransport> extends AbstractState<T> {
 
     public abstract Class<? extends AbstractState<?>> seek(SeekMode unit, String target);
 
+    @Override
     public TransportAction[] getCurrentTransportActions() {
         return new TransportAction[] { TransportAction.Stop, TransportAction.Play, TransportAction.Next,
                 TransportAction.Previous, TransportAction.Seek };

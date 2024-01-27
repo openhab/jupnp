@@ -165,26 +165,32 @@ public class UpnpServiceImpl implements UpnpService {
         return new ControlPointImpl(getConfiguration(), protocolFactory, registry);
     }
 
+    @Override
     public UpnpServiceConfiguration getConfiguration() {
         return configuration;
     }
 
+    @Override
     public ControlPoint getControlPoint() {
         return controlPoint;
     }
 
+    @Override
     public ProtocolFactory getProtocolFactory() {
         return protocolFactory;
     }
 
+    @Override
     public Registry getRegistry() {
         return registry;
     }
 
+    @Override
     public Router getRouter() {
         return router;
     }
 
+    @Override
     public synchronized void shutdown() {
         shutdown(false);
     }
@@ -255,6 +261,7 @@ public class UpnpServiceImpl implements UpnpService {
         scheduledFuture = scheduledExecutorService.schedule(startup, msDelay, TimeUnit.MILLISECONDS);
     }
 
+    @Override
     public void startup() {
         synchronized (lock) {
             if (!isRunning) {

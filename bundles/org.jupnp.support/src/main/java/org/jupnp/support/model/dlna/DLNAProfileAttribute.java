@@ -29,6 +29,7 @@ public class DLNAProfileAttribute extends DLNAAttribute<DLNAProfiles> {
         setValue(profile);
     }
 
+    @Override
     public void setString(String s, String cf) {
         DLNAProfiles value = DLNAProfiles.valueOf(s, cf);
         if (value == null) {
@@ -37,6 +38,7 @@ public class DLNAProfileAttribute extends DLNAAttribute<DLNAProfiles> {
         setValue(value);
     }
 
+    @Override
     public String getString() {
         return getValue().getCode();
     }

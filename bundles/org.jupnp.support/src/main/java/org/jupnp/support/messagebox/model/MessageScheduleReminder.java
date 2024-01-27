@@ -70,6 +70,7 @@ public class MessageScheduleReminder extends Message {
         return body;
     }
 
+    @Override
     public void appendMessageElements(MessageElement parent) {
         getStartTime().appendMessageElements(parent.createChild("StartTime"));
         getOwner().appendMessageElements(parent.createChild("Owner"));

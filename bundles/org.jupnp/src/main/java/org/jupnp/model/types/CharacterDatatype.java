@@ -28,6 +28,7 @@ public class CharacterDatatype extends AbstractDatatype<Character> {
         return type == Character.TYPE || Character.class.isAssignableFrom(type);
     }
 
+    @Override
     public Character valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

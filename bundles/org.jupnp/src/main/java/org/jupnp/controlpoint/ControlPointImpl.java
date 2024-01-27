@@ -58,14 +58,17 @@ public class ControlPointImpl implements ControlPoint {
         this.registry = registry;
     }
 
+    @Override
     public UpnpServiceConfiguration getConfiguration() {
         return configuration;
     }
 
+    @Override
     public ProtocolFactory getProtocolFactory() {
         return protocolFactory;
     }
 
+    @Override
     public Registry getRegistry() {
         return registry;
     }
@@ -74,18 +77,22 @@ public class ControlPointImpl implements ControlPoint {
         search(search.getSearchType(), search.getMxSeconds());
     }
 
+    @Override
     public void search() {
         search(new STAllHeader(), MXHeader.DEFAULT_VALUE);
     }
 
+    @Override
     public void search(UpnpHeader searchType) {
         search(searchType, MXHeader.DEFAULT_VALUE);
     }
 
+    @Override
     public void search(int mxSeconds) {
         search(new STAllHeader(), mxSeconds);
     }
 
+    @Override
     public void search(UpnpHeader searchType, int mxSeconds) {
         log.trace("Sending asynchronous search for: {}", searchType.getString());
         getConfiguration().getAsyncProtocolExecutor()
@@ -96,6 +103,7 @@ public class ControlPointImpl implements ControlPoint {
         execute(executeAction.getCallback());
     }
 
+    @Override
     public Future execute(ActionCallback callback) {
         log.trace("Invoking action in background: {}", callback);
         callback.setControlPoint(this);
@@ -103,6 +111,7 @@ public class ControlPointImpl implements ControlPoint {
         return executor.submit(callback);
     }
 
+    @Override
     public void execute(SubscriptionCallback callback) {
         log.trace("Invoking subscription in background: {}", callback);
         callback.setControlPoint(this);

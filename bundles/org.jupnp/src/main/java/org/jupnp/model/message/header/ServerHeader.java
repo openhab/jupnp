@@ -30,6 +30,7 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
         setValue(tokens);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         // TODO: This parsing is not as robust as I'd like, probably should use regexs instead
 
@@ -122,6 +123,7 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
         setValue(serverClientTokens);
     }
 
+    @Override
     public String getString() {
         return getValue().getHttpToken();
     }

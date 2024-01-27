@@ -77,6 +77,7 @@ public class SendingSearch extends SendingAsync {
         return mxSeconds;
     }
 
+    @Override
     protected void execute() throws RouterException {
 
         log.trace("Executing search for target: {} with MX seconds: {}", searchTarget.getString(), getMxSeconds());

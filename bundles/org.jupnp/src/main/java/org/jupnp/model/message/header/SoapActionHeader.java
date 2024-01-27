@@ -39,6 +39,7 @@ public class SoapActionHeader extends UpnpHeader<SoapActionType> {
         setString(s);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
             if (!s.startsWith("\"") && s.endsWith("\"")) {
@@ -52,6 +53,7 @@ public class SoapActionHeader extends UpnpHeader<SoapActionType> {
         }
     }
 
+    @Override
     public String getString() {
         return "\"" + getValue().toString() + "\"";
     }

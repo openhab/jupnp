@@ -49,6 +49,7 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
         this.subscription = subscription;
     }
 
+    @Override
     protected StreamResponseMessage executeSync() throws RouterException {
 
         log.trace("Sending unsubscribe request: {}", getInputMessage());

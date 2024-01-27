@@ -37,6 +37,7 @@ public abstract class GetMute extends ActionCallback {
         getActionInvocation().setInput("Channel", Channel.Master.toString());
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         boolean currentMute = (Boolean) invocation.getOutput("CurrentMute").getValue();
         received(invocation, currentMute);

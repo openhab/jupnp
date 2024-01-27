@@ -40,6 +40,7 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
         super(upnpService, inputMessage);
     }
 
+    @Override
     protected StreamResponseMessage executeSync() throws RouterException {
 
         ServiceEventSubscriptionResource resource = getUpnpService().getRegistry()

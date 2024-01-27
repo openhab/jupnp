@@ -138,6 +138,7 @@ public class Action<S extends Service> implements Validatable {
                 + (getArguments() != null ? getArguments().length : "NO ARGS") + ") " + getName();
     }
 
+    @Override
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
 

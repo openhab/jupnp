@@ -57,6 +57,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     public SOAPActionProcessorImpl() {
     }
 
+    @Override
     public void writeBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
@@ -81,6 +82,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         }
     }
 
+    @Override
     public void writeBody(ActionResponseMessage responseMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
@@ -109,6 +111,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         }
     }
 
+    @Override
     public void readBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
@@ -132,6 +135,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         }
     }
 
+    @Override
     public void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
@@ -579,14 +583,17 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         return null;
     }
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         log.warn(e.toString());
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw e;
     }

@@ -62,6 +62,7 @@ public class SampleDeviceRoot extends SampleDevice {
                 new DLNACaps(new String[] { "av-upload", "image-upload", "audio-upload" }));
     }
 
+    @Override
     public DeviceDetailsProvider getDeviceDetailsProvider() {
         return info -> getDeviceDetails();
     }

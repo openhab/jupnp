@@ -132,26 +132,32 @@ public class MockUpnpService implements UpnpService {
         }
     }
 
+    @Override
     public UpnpServiceConfiguration getConfiguration() {
         return configuration;
     }
 
+    @Override
     public ControlPoint getControlPoint() {
         return controlPoint;
     }
 
+    @Override
     public ProtocolFactory getProtocolFactory() {
         return protocolFactory;
     }
 
+    @Override
     public Registry getRegistry() {
         return registry;
     }
 
+    @Override
     public MockRouter getRouter() {
         return router;
     }
 
+    @Override
     public void shutdown() {
         getRegistry().shutdown();
         getConfiguration().shutdown();

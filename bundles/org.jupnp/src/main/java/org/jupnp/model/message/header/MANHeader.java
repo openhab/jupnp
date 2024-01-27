@@ -40,6 +40,7 @@ public class MANHeader extends UpnpHeader<String> {
         this.namespace = namespace;
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
 
         Matcher matcher = PATTERN.matcher(s);
@@ -60,6 +61,7 @@ public class MANHeader extends UpnpHeader<String> {
         }
     }
 
+    @Override
     public String getString() {
         if (getValue() == null) {
             return null;

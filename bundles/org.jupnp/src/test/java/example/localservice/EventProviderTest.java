@@ -121,6 +121,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
                     assertEquals("0", subscription.getCurrentValues().get("Status").toString());
@@ -133,6 +134,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 }
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
@@ -191,6 +193,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
                     assertEquals("0", subscription.getCurrentValues().get("Target").toString());
@@ -205,6 +208,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 }
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
@@ -274,6 +278,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
@@ -300,6 +305,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 }
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }
@@ -384,6 +390,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
@@ -410,6 +417,7 @@ class EventProviderTest extends EventSubscriptionTest {
                 }
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }

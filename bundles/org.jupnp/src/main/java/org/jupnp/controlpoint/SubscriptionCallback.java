@@ -110,6 +110,7 @@ public abstract class SubscriptionCallback implements Runnable {
         this.subscription = subscription;
     }
 
+    @Override
     public synchronized void run() {
         if (getControlPoint() == null) {
             throw new IllegalStateException("Callback must be executed through ControlPoint");
@@ -145,6 +146,7 @@ public abstract class SubscriptionCallback implements Runnable {
                     }
                 }
 
+                @Override
                 public void established() {
                     synchronized (SubscriptionCallback.this) {
                         SubscriptionCallback.this.setSubscription(this);
@@ -152,6 +154,7 @@ public abstract class SubscriptionCallback implements Runnable {
                     }
                 }
 
+                @Override
                 public void ended(CancelReason reason) {
                     synchronized (SubscriptionCallback.this) {
                         SubscriptionCallback.this.setSubscription(null);
@@ -159,6 +162,7 @@ public abstract class SubscriptionCallback implements Runnable {
                     }
                 }
 
+                @Override
                 public void eventReceived() {
                     synchronized (SubscriptionCallback.this) {
                         log.trace("Local service state updated, notifying callback, sequence is: {}",
@@ -195,6 +199,7 @@ public abstract class SubscriptionCallback implements Runnable {
     private void establishRemoteSubscription(RemoteService service) {
         RemoteGENASubscription remoteSubscription = new RemoteGENASubscription(service, requestedDurationSeconds) {
 
+            @Override
             public void failed(UpnpResponse responseStatus) {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.setSubscription(null);
@@ -202,6 +207,7 @@ public abstract class SubscriptionCallback implements Runnable {
                 }
             }
 
+            @Override
             public void established() {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.setSubscription(this);
@@ -209,6 +215,7 @@ public abstract class SubscriptionCallback implements Runnable {
                 }
             }
 
+            @Override
             public void ended(CancelReason reason, UpnpResponse responseStatus) {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.setSubscription(null);
@@ -216,18 +223,21 @@ public abstract class SubscriptionCallback implements Runnable {
                 }
             }
 
+            @Override
             public void eventReceived() {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.eventReceived(this);
                 }
             }
 
+            @Override
             public void eventsMissed(int numberOfMissedEvents) {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.eventsMissed(this, numberOfMissedEvents);
                 }
             }
 
+            @Override
             public void invalidMessage(UnsupportedDataException ex) {
                 synchronized (SubscriptionCallback.this) {
                     SubscriptionCallback.this.invalidMessage(this, ex);

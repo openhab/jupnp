@@ -383,6 +383,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         return sb.toString();
     }
 
+    @Override
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
 

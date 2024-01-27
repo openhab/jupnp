@@ -37,10 +37,12 @@ public class ContentTypeHeader extends UpnpHeader<MimeType> {
         setString(s);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         setValue(MimeType.valueOf(s));
     }
 
+    @Override
     public String getString() {
         return getValue().toString();
     }

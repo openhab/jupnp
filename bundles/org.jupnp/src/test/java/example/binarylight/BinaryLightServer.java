@@ -34,6 +34,7 @@ public class BinaryLightServer implements Runnable {
         serverThread.start();
     }
 
+    @Override
     public void run() {
         try {
 

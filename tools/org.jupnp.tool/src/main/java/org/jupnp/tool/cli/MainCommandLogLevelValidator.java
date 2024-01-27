@@ -22,6 +22,7 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class MainCommandLogLevelValidator implements IParameterValidator {
+    @Override
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--loglevel")) {
             if ((value.equalsIgnoreCase("TRACE")) || (value.equalsIgnoreCase("DEBUG"))

@@ -60,6 +60,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
      *
      * @param device The remote device to be added
      */
+    @Override
     void add(final RemoteDevice device) {
 
         if (update(device.getIdentity())) {
@@ -181,6 +182,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
      * @param remoteDevice The device to remove from the registry.
      * @return <tt>true</tt> if the given device was found and removed from the registry, false if it wasn't registered.
      */
+    @Override
     boolean remove(final RemoteDevice remoteDevice) {
         return remove(remoteDevice, false);
     }
@@ -238,6 +240,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         return false;
     }
 
+    @Override
     void removeAll() {
         removeAll(false);
     }
@@ -255,6 +258,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         // Noop
     }
 
+    @Override
     void maintain() {
 
         if (getDeviceItems().isEmpty()) {
@@ -301,6 +305,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
     }
 
+    @Override
     void shutdown() {
         log.trace("Cancelling all outgoing subscriptions to remote devices during shutdown");
         List<RemoteGENASubscription> remoteSubscriptions = new ArrayList<>();

@@ -44,6 +44,7 @@ public class JUPnPToolWithRedirectionOfOutput extends JUPnPTool {
     /**
      * Add an appender to Root-Logger with redirection to stdout.
      */
+    @Override
     protected void setLogging(String resourceName, String rootAppenderLogLevel) {
         super.setLogging(resourceName, rootAppenderLogLevel);
 

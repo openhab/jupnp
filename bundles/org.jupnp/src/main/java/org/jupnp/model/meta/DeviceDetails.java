@@ -195,6 +195,7 @@ public class DeviceDetails implements Validatable {
         return secProductCaps;
     }
 
+    @Override
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
 

@@ -38,6 +38,7 @@ public class DatagramIOConfigurationImpl implements DatagramIOConfiguration {
         this.maxDatagramBytes = maxDatagramBytes;
     }
 
+    @Override
     public int getTimeToLive() {
         return timeToLive;
     }
@@ -46,6 +47,7 @@ public class DatagramIOConfigurationImpl implements DatagramIOConfiguration {
         this.timeToLive = timeToLive;
     }
 
+    @Override
     public int getMaxDatagramBytes() {
         return maxDatagramBytes;
     }

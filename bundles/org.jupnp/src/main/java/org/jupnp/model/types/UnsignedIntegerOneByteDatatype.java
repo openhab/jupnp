@@ -20,6 +20,7 @@ package org.jupnp.model.types;
  */
 public class UnsignedIntegerOneByteDatatype extends AbstractDatatype<UnsignedIntegerOneByte> {
 
+    @Override
     public UnsignedIntegerOneByte valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

@@ -31,6 +31,7 @@ public abstract class GetSystemUpdateID extends ActionCallback {
         super(new ActionInvocation<>(service.getAction("GetSystemUpdateID")));
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         boolean ok = true;
         long id = 0;

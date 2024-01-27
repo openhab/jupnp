@@ -55,6 +55,7 @@ public class ServletStreamServerConfigurationImpl implements StreamServerConfigu
     /**
      * @return Defaults to <code>0</code>.
      */
+    @Override
     public int getListenPort() {
         return listenPort;
     }

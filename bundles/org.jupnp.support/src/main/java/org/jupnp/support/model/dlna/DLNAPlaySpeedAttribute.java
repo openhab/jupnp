@@ -44,6 +44,7 @@ public class DLNAPlaySpeedAttribute extends DLNAAttribute<TransportPlaySpeed[]> 
         setValue(sp);
     }
 
+    @Override
     public void setString(String s, String cf) {
         TransportPlaySpeed[] value = null;
         if (s != null && !s.isEmpty()) {
@@ -63,6 +64,7 @@ public class DLNAPlaySpeedAttribute extends DLNAAttribute<TransportPlaySpeed[]> 
         setValue(value);
     }
 
+    @Override
     public String getString() {
         StringBuilder sb = new StringBuilder();
         for (TransportPlaySpeed speed : getValue()) {

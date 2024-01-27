@@ -92,12 +92,14 @@ class OutgoingSubscriptionLifecycleTest {
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventReceived(GENASubscription subscription) {
                 assertEquals("0", subscription.getCurrentValues().get("Status").toString());
                 assertEquals("1", subscription.getCurrentValues().get("Target").toString());
                 testAssertions.add(true);
             }
 
+            @Override
             public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
                 testAssertions.add(false);
             }

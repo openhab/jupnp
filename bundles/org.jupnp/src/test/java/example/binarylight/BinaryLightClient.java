@@ -34,6 +34,7 @@ public class BinaryLightClient implements Runnable {
         clientThread.start();
     }
 
+    @Override
     public void run() {
         try {
             UpnpService upnpService = new UpnpServiceImpl();

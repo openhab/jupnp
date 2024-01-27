@@ -23,6 +23,7 @@ public class StringDatatype extends AbstractDatatype<String> {
     public StringDatatype() {
     }
 
+    @Override
     public String valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

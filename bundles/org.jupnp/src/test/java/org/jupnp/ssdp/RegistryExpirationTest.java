@@ -155,6 +155,7 @@ class RegistryExpirationTest {
     protected static class TestRunnable implements Runnable {
         boolean wasExecuted = false;
 
+        @Override
         public void run() {
             wasExecuted = true;
         }

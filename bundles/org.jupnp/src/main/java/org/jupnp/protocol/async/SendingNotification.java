@@ -58,6 +58,7 @@ public abstract class SendingNotification extends SendingAsync {
         return device;
     }
 
+    @Override
     protected void execute() throws RouterException {
 
         List<NetworkAddress> activeStreamServers = getUpnpService().getRouter().getActiveStreamServers(null);

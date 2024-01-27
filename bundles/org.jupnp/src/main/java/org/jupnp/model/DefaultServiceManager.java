@@ -92,10 +92,12 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         return 500;
     }
 
+    @Override
     public LocalService<T> getService() {
         return service;
     }
 
+    @Override
     public T getImplementation() {
         lock();
         try {
@@ -108,6 +110,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         }
     }
 
+    @Override
     public PropertyChangeSupport getPropertyChangeSupport() {
         lock();
         try {
@@ -120,6 +123,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         }
     }
 
+    @Override
     public void execute(Command<T> cmd) throws Exception {
         lock();
         try {
@@ -239,6 +243,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
 
     protected class DefaultPropertyChangeListener implements PropertyChangeListener {
 
+        @Override
         public void propertyChange(PropertyChangeEvent e) {
             log.trace("Property change event on local service: {}", e.getPropertyName());
 

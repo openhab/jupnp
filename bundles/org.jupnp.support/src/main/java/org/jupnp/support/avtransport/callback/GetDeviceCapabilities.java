@@ -36,6 +36,7 @@ public abstract class GetDeviceCapabilities extends ActionCallback {
         getActionInvocation().setInput("InstanceID", instanceId);
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         DeviceCapabilities caps = new DeviceCapabilities(invocation.getOutputMap());
         received(invocation, caps);

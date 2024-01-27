@@ -36,6 +36,7 @@ public class RangeHeader extends UpnpHeader<BytesRange> {
         setString(s);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(BytesRange.valueOf(s));
@@ -44,6 +45,7 @@ public class RangeHeader extends UpnpHeader<BytesRange> {
         }
     }
 
+    @Override
     public String getString() {
         return getValue().getString();
     }

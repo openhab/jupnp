@@ -48,6 +48,7 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
         super(upnpService, inputMessage);
     }
 
+    @Override
     protected OutgoingEventResponseMessage executeSync() throws RouterException {
 
         if (!getInputMessage().isContentTypeTextUDA()) {

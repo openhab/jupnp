@@ -77,12 +77,15 @@ class EventXMLProcessingTest {
                 throw new RuntimeException("TEST SUBSCRIPTION FAILED: " + ex);
             }
 
+            @Override
             public void ended(CancelReason reason) {
             }
 
+            @Override
             public void established() {
             }
 
+            @Override
             public void eventReceived() {
             }
         };

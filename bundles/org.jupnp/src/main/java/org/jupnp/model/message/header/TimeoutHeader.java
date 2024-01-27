@@ -45,6 +45,7 @@ public class TimeoutHeader extends UpnpHeader<Integer> {
         setValue(timeoutSeconds);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
 
         Matcher matcher = PATTERN.matcher(s);
@@ -59,6 +60,7 @@ public class TimeoutHeader extends UpnpHeader<Integer> {
         }
     }
 
+    @Override
     public String getString() {
         return "Second-" + (getValue().equals(INFINITE_VALUE) ? "infinite" : getValue());
     }

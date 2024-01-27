@@ -28,6 +28,7 @@ public final class UnsignedIntegerFourBytes extends UnsignedVariableInteger {
         super(s);
     }
 
+    @Override
     public Bits getBits() {
         return Bits.THIRTYTWO;
     }

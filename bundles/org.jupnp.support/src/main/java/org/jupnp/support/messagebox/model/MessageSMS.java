@@ -63,6 +63,7 @@ public class MessageSMS extends Message {
         return body;
     }
 
+    @Override
     public void appendMessageElements(MessageElement parent) {
         getReceiveTime().appendMessageElements(parent.createChild("ReceiveTime"));
         getReceiver().appendMessageElements(parent.createChild("Receiver"));

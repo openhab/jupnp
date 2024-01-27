@@ -26,12 +26,14 @@ public class NTEventHeader extends UpnpHeader<String> {
         setValue("upnp:event");
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         if (!s.toLowerCase(Locale.ENGLISH).equals(getValue())) {
             throw new InvalidHeaderException("Invalid event NT header value: " + s);
         }
     }
 
+    @Override
     public String getString() {
         return getValue();
     }

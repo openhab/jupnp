@@ -28,6 +28,7 @@ public class FloatDatatype extends AbstractDatatype<Float> {
         return type == Float.TYPE || Float.class.isAssignableFrom(type);
     }
 
+    @Override
     public Float valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

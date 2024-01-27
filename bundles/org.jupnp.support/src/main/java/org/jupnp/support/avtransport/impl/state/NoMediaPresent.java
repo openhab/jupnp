@@ -49,6 +49,7 @@ public abstract class NoMediaPresent<T extends AVTransport> extends AbstractStat
 
     public abstract Class<? extends AbstractState<?>> setTransportURI(URI uri, String metaData);
 
+    @Override
     public TransportAction[] getCurrentTransportActions() {
         return new TransportAction[] { TransportAction.Stop };
     }

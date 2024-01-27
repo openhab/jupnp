@@ -20,6 +20,7 @@ package org.jupnp.model.types;
  */
 public class UnsignedIntegerFourBytesDatatype extends AbstractDatatype<UnsignedIntegerFourBytes> {
 
+    @Override
     public UnsignedIntegerFourBytes valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

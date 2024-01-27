@@ -38,6 +38,7 @@ public class HostHeader extends UpnpHeader<HostPort> {
         setValue(new HostPort(host, port));
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         // UDA 1.1/1.0 section 1.2.2
         if (s.contains(":")) {
@@ -56,6 +57,7 @@ public class HostHeader extends UpnpHeader<HostPort> {
         }
     }
 
+    @Override
     public String getString() {
         return getValue().toString();
     }

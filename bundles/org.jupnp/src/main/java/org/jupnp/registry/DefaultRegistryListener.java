@@ -31,9 +31,11 @@ import org.jupnp.model.meta.RemoteDevice;
  */
 public class DefaultRegistryListener implements RegistryListener {
 
+    @Override
     public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
     }
 
+    @Override
     public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
     }
 
@@ -43,10 +45,12 @@ public class DefaultRegistryListener implements RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
+    @Override
     public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
         deviceAdded(registry, device);
     }
 
+    @Override
     public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
     }
 
@@ -56,6 +60,7 @@ public class DefaultRegistryListener implements RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with complete service metadata.
      */
+    @Override
     public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
         deviceRemoved(registry, device);
     }
@@ -66,6 +71,7 @@ public class DefaultRegistryListener implements RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device The local device added to the {@link org.jupnp.registry.Registry}.
      */
+    @Override
     public void localDeviceAdded(Registry registry, LocalDevice device) {
         deviceAdded(registry, device);
     }
@@ -76,6 +82,7 @@ public class DefaultRegistryListener implements RegistryListener {
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device The local device removed from the {@link org.jupnp.registry.Registry}.
      */
+    @Override
     public void localDeviceRemoved(Registry registry, LocalDevice device) {
         deviceRemoved(registry, device);
     }
@@ -86,9 +93,11 @@ public class DefaultRegistryListener implements RegistryListener {
     public void deviceRemoved(Registry registry, Device device) {
     }
 
+    @Override
     public void beforeShutdown(Registry registry) {
     }
 
+    @Override
     public void afterShutdown() {
     }
 }

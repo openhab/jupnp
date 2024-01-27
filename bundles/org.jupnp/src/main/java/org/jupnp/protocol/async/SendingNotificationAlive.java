@@ -41,6 +41,7 @@ public class SendingNotificationAlive extends SendingNotification {
         super.execute();
     }
 
+    @Override
     protected NotificationSubtype getNotificationSubtype() {
         return NotificationSubtype.ALIVE;
     }

@@ -25,10 +25,12 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     public Base64Datatype() {
     }
 
+    @Override
     public Class<byte[]> getValueType() {
         return byte[].class;
     }
 
+    @Override
     public byte[] valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

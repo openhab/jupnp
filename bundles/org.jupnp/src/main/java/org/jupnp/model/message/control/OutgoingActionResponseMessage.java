@@ -61,6 +61,7 @@ public class OutgoingActionResponseMessage extends StreamResponseMessage impleme
         getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
     }
 
+    @Override
     public String getActionNamespace() {
         return actionNamespace;
     }

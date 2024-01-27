@@ -29,6 +29,7 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
     private static final String ERROR_MSG = "Paramer --pool must be of format "
             + "'<mainPoolSize>,<asyncPoolSize>[,stats]'";
 
+    @Override
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--pool")) {
             // pool config is sth like "20,20,stats"

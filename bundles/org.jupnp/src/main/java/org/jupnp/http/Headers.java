@@ -80,34 +80,42 @@ public class Headers implements Map<String, List<String>> {
         this.normalizeHeaders = normalizeHeaders;
     }
 
+    @Override
     public int size() {
         return map.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
+    @Override
     public boolean containsKey(Object key) {
         return key != null && key instanceof String && map.containsKey(normalize((String) key));
     }
 
+    @Override
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
 
+    @Override
     public List<String> get(Object key) {
         return map.get(normalize((String) key));
     }
 
+    @Override
     public List<String> put(String key, List<String> value) {
         return map.put(normalize(key), value);
     }
 
+    @Override
     public List<String> remove(Object key) {
         return map.remove(normalize((String) key));
     }
 
+    @Override
     public void putAll(Map<? extends String, ? extends List<String>> t) {
         // Enforce key normalization!
         for (Entry<? extends String, ? extends List<String>> entry : t.entrySet()) {
@@ -115,18 +123,22 @@ public class Headers implements Map<String, List<String>> {
         }
     }
 
+    @Override
     public void clear() {
         map.clear();
     }
 
+    @Override
     public Set<String> keySet() {
         return map.keySet();
     }
 
+    @Override
     public Collection<List<String>> values() {
         return map.values();
     }
 
+    @Override
     public Set<Map.Entry<String, List<String>>> entrySet() {
         return map.entrySet();
     }

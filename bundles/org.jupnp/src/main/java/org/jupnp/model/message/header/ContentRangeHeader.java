@@ -38,6 +38,7 @@ public class ContentRangeHeader extends UpnpHeader<BytesRange> {
         setString(s);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(BytesRange.valueOf(s, PREFIX));
@@ -46,6 +47,7 @@ public class ContentRangeHeader extends UpnpHeader<BytesRange> {
         }
     }
 
+    @Override
     public String getString() {
         return getValue().getString(true, PREFIX);
     }

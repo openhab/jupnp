@@ -70,6 +70,7 @@ public class StateVariableAllowedValueRange implements Validatable {
         return value >= getMinimum() && value <= getMaximum() && (value % step) == 0;
     }
 
+    @Override
     public List<ValidationError> validate() {
         return new ArrayList<>();
     }

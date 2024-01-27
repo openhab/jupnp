@@ -28,6 +28,7 @@ public class DoubleDatatype extends AbstractDatatype<Double> {
         return type == Double.TYPE || Double.class.isAssignableFrom(type);
     }
 
+    @Override
     public Double valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;

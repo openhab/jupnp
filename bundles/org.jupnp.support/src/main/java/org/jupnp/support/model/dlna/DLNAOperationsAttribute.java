@@ -40,6 +40,7 @@ public class DLNAOperationsAttribute extends DLNAAttribute<EnumSet<DLNAOperation
         }
     }
 
+    @Override
     public void setString(String s, String cf) {
         EnumSet<DLNAOperations> value = EnumSet.noneOf(DLNAOperations.class);
         try {
@@ -61,6 +62,7 @@ public class DLNAOperationsAttribute extends DLNAAttribute<EnumSet<DLNAOperation
         setValue(value);
     }
 
+    @Override
     public String getString() {
         int code = DLNAOperations.NONE.getCode();
         for (DLNAOperations op : getValue()) {

@@ -22,6 +22,7 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class SearchCommandSortByValidator implements IParameterValidator {
+    @Override
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--sort")) {
             if ((value.equalsIgnoreCase("ip")) || (value.equalsIgnoreCase("model"))

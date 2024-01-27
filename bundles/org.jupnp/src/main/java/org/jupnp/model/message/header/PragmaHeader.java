@@ -36,6 +36,7 @@ public class PragmaHeader extends UpnpHeader<PragmaType> {
         setString(s);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(PragmaType.valueOf(s));
@@ -44,6 +45,7 @@ public class PragmaHeader extends UpnpHeader<PragmaType> {
         }
     }
 
+    @Override
     public String getString() {
         return getValue().getString();
     }

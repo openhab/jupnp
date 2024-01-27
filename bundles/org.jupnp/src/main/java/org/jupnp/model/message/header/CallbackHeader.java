@@ -45,6 +45,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
         getValue().add(url);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
 
         if (s.isEmpty()) {
@@ -95,6 +96,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
         }
     }
 
+    @Override
     public String getString() {
         StringBuilder s = new StringBuilder();
         for (URL url : getValue()) {

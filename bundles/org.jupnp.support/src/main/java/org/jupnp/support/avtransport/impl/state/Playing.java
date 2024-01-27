@@ -62,6 +62,7 @@ public abstract class Playing<T extends AVTransport> extends AbstractState<T> {
 
     public abstract Class<? extends AbstractState<?>> seek(SeekMode unit, String target);
 
+    @Override
     public TransportAction[] getCurrentTransportActions() {
         return new TransportAction[] { TransportAction.Stop, TransportAction.Play, TransportAction.Pause,
                 TransportAction.Next, TransportAction.Previous, TransportAction.Seek };

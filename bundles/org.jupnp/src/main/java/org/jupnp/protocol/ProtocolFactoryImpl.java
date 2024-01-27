@@ -76,10 +76,12 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         this.upnpService = upnpService;
     }
 
+    @Override
     public UpnpService getUpnpService() {
         return upnpService;
     }
 
+    @Override
     public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message) throws ProtocolCreationException {
         log.trace("Creating protocol for incoming asynchronous: {}", message);
 
@@ -156,6 +158,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         return false;
     }
 
+    @Override
     public ReceivingSync createReceivingSync(StreamRequestMessage message) throws ProtocolCreationException {
         log.trace("Creating protocol for incoming synchronous: {}", message);
 
@@ -202,22 +205,27 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         throw new ProtocolCreationException("Protocol for message type not found: " + message);
     }
 
+    @Override
     public SendingNotificationAlive createSendingNotificationAlive(LocalDevice localDevice) {
         return new SendingNotificationAlive(getUpnpService(), localDevice);
     }
 
+    @Override
     public SendingNotificationByebye createSendingNotificationByebye(LocalDevice localDevice) {
         return new SendingNotificationByebye(getUpnpService(), localDevice);
     }
 
+    @Override
     public SendingSearch createSendingSearch(UpnpHeader searchTarget, int mxSeconds) {
         return new SendingSearch(getUpnpService(), searchTarget, mxSeconds);
     }
 
+    @Override
     public SendingAction createSendingAction(ActionInvocation actionInvocation, URL controlURL) {
         return new SendingAction(getUpnpService(), actionInvocation, controlURL);
     }
 
+    @Override
     public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription)
             throws ProtocolCreationException {
         try {
@@ -230,14 +238,17 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         }
     }
 
+    @Override
     public SendingRenewal createSendingRenewal(RemoteGENASubscription subscription) {
         return new SendingRenewal(getUpnpService(), subscription);
     }
 
+    @Override
     public SendingUnsubscribe createSendingUnsubscribe(RemoteGENASubscription subscription) {
         return new SendingUnsubscribe(getUpnpService(), subscription);
     }
 
+    @Override
     public SendingEvent createSendingEvent(LocalGENASubscription subscription) {
         return new SendingEvent(getUpnpService(), subscription);
     }

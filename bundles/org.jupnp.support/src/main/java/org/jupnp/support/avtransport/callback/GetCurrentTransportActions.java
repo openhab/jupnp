@@ -36,6 +36,7 @@ public abstract class GetCurrentTransportActions extends ActionCallback {
         getActionInvocation().setInput("InstanceID", instanceId);
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         String actionsString = (String) invocation.getOutput("Actions").getValue();
         received(invocation, TransportAction.valueOfCommaSeparatedList(actionsString));

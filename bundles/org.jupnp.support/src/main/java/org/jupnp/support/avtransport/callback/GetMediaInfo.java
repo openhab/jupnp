@@ -36,6 +36,7 @@ public abstract class GetMediaInfo extends ActionCallback {
         getActionInvocation().setInput("InstanceID", instanceId);
     }
 
+    @Override
     public void success(ActionInvocation invocation) {
         MediaInfo mediaInfo = new MediaInfo(invocation.getOutputMap());
         received(invocation, mediaInfo);

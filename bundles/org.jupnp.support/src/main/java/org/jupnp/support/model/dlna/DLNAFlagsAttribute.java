@@ -40,6 +40,7 @@ public class DLNAFlagsAttribute extends DLNAAttribute<EnumSet<DLNAFlags>> {
         }
     }
 
+    @Override
     public void setString(String s, String cf) {
         EnumSet<DLNAFlags> value = EnumSet.noneOf(DLNAFlags.class);
         try {
@@ -61,6 +62,7 @@ public class DLNAFlagsAttribute extends DLNAAttribute<EnumSet<DLNAFlags>> {
         setValue(value);
     }
 
+    @Override
     public String getString() {
         int code = 0;
         for (DLNAFlags op : getValue()) {

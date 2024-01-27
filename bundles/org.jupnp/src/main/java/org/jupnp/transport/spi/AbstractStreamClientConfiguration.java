@@ -56,6 +56,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
         this.retryIterations = retryIterations;
     }
 
+    @Override
     public ExecutorService getRequestExecutorService() {
         return requestExecutorService;
     }
@@ -63,6 +64,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     /**
      * @return Configured value or default of 60 seconds.
      */
+    @Override
     public int getTimeoutSeconds() {
         return timeoutSeconds;
     }
@@ -70,6 +72,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     /**
      * @return Configured value or default of 5 retries.
      */
+    @Override
     public int getRetryIterations() {
         return retryIterations;
     }
@@ -77,10 +80,12 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     /**
      * @return Configured value or default of 5 seconds.
      */
+    @Override
     public int getLogWarningSeconds() {
         return logWarningSeconds;
     }
 
+    @Override
     public int getRetryAfterSeconds() {
         return retryAfterSeconds;
     }
@@ -88,6 +93,7 @@ public abstract class AbstractStreamClientConfiguration implements StreamClientC
     /**
      * @return Defaults to string value of {@link org.jupnp.model.ServerClientTokens}.
      */
+    @Override
     public String getUserAgentValue(int majorVersion, int minorVersion) {
         return new ServerClientTokens(majorVersion, minorVersion).toString();
     }

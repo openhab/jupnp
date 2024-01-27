@@ -64,6 +64,7 @@ public class IncomingActionRequestMessage extends StreamRequestMessage implement
         return action;
     }
 
+    @Override
     public String getActionNamespace() {
         return actionNamespace;
     }

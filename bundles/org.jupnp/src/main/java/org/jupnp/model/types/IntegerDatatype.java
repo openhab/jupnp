@@ -33,6 +33,7 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
         return type == Integer.TYPE || Integer.class.isAssignableFrom(type);
     }
 
+    @Override
     public Integer valueOf(String s) throws InvalidValueException {
         if (s.isEmpty()) {
             return null;
@@ -55,6 +56,7 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
         }
     }
 
+    @Override
     public boolean isValid(Integer value) {
         return value == null || (value >= getMinValue() && value <= getMaxValue());
     }

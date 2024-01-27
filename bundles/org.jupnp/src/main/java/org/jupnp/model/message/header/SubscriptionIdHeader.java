@@ -29,6 +29,7 @@ public class SubscriptionIdHeader extends UpnpHeader<String> {
         setValue(value);
     }
 
+    @Override
     public void setString(String s) throws InvalidHeaderException {
         if (!s.startsWith(PREFIX)) {
             throw new InvalidHeaderException(
@@ -37,6 +38,7 @@ public class SubscriptionIdHeader extends UpnpHeader<String> {
         setValue(s);
     }
 
+    @Override
     public String getString() {
         return getValue();
     }

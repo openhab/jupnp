@@ -66,6 +66,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
     private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
+    @Override
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
             throws DescriptorBindingException, ValidationException {
         if (descriptorXml == null || descriptorXml.isEmpty()) {
@@ -94,6 +95,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         }
     }
 
+    @Override
     public <S extends Service> S describe(S undescribedService, Document dom)
             throws DescriptorBindingException, ValidationException {
         try {
@@ -335,6 +337,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         }
     }
 
+    @Override
     public String generate(Service service) throws DescriptorBindingException {
         try {
             log.trace("Generating XML descriptor from service model: {}", service);
@@ -346,6 +349,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         }
     }
 
+    @Override
     public Document buildDOM(Service service) throws DescriptorBindingException {
 
         try {
@@ -482,14 +486,17 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         }
     }
 
+    @Override
     public void warning(SAXParseException e) throws SAXException {
         log.warn(e.toString());
     }
 
+    @Override
     public void error(SAXParseException e) throws SAXException {
         throw e;
     }
 
+    @Override
     public void fatalError(SAXParseException e) throws SAXException {
         throw e;
     }

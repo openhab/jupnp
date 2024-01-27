@@ -30,14 +30,17 @@ public class Iterators {
      */
     public static class Empty<E> implements Iterator<E> {
 
+        @Override
         public boolean hasNext() {
             return false;
         }
 
+        @Override
         public E next() {
             throw new NoSuchElementException();
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -55,15 +58,18 @@ public class Iterators {
             this.element = element;
         }
 
+        @Override
         public boolean hasNext() {
             return current == 0;
         }
 
+        @Override
         public E next() {
             current++;
             return element;
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -87,16 +93,19 @@ public class Iterators {
             this.wrapped = new CopyOnWriteArrayList<>(collection).iterator();
         }
 
+        @Override
         public boolean hasNext() {
             return wrapped.hasNext();
         }
 
+        @Override
         public E next() {
             removedCurrent = false;
             nextIndex++;
             return wrapped.next();
         }
 
+        @Override
         public void remove() {
             if (nextIndex == 0) {
                 throw new IllegalStateException("Call next() first");

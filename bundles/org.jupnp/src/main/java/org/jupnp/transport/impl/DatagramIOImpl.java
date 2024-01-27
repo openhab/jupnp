@@ -71,10 +71,12 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         this.configuration = configuration;
     }
 
+    @Override
     public DatagramIOConfigurationImpl getConfiguration() {
         return configuration;
     }
 
+    @Override
     public synchronized void init(InetAddress bindAddress, int bindPort, Router router,
             DatagramProcessor datagramProcessor) throws InitializationException {
 
@@ -96,12 +98,14 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         }
     }
 
+    @Override
     public synchronized void stop() {
         if (socket != null && !socket.isClosed()) {
             socket.close();
         }
     }
 
+    @Override
     public void run() {
         log.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}:{}", socket.getLocalAddress(),
                 socket.getPort());
@@ -138,6 +142,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         }
     }
 
+    @Override
     public synchronized void send(OutgoingDatagramMessage message) {
         log.debug("Sending message from address: {}", localAddress);
 
@@ -149,6 +154,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         send(packet);
     }
 
+    @Override
     public synchronized void send(DatagramPacket datagram) {
         log.debug("Sending message from address: {}", localAddress);
 
