@@ -79,54 +79,58 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The default {@link org.jupnp.model.Namespace} is configured without any base path or prefix.
  * </p>
+ * This component is enabled by the {@link OSGiUpnpServiceConfigurationEnabler} based on the <code>autoEnable</code>
+ * configuration value. Set <code>autoEnable</code> to <code>false</code> when using a custom
+ * {@link UpnpServiceConfiguration} component.
  *
  * @author Christian Bauer
  * @author Kai Kreuzer - introduced bounded thread pool and http service streaming server
  * @author Victor Toni - consolidated transport abstraction into one interface
+ * @author Wouter Born - conditionally enable component based on autoEnable configuration value
  */
-@Component(configurationPid = "org.jupnp", configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(configurationPid = "org.jupnp", configurationPolicy = ConfigurationPolicy.REQUIRE, enabled = false)
 public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
-    private static final String OSGI_SERVICE_HTTP_PORT = "org.osgi.service.http.port";
+    protected static final String OSGI_SERVICE_HTTP_PORT = "org.osgi.service.http.port";
 
     private Logger log = LoggerFactory.getLogger(OSGiUpnpServiceConfiguration.class);
 
     // configurable properties
-    private int threadPoolSize = 20;
-    private int asyncThreadPoolSize = 20;
-    private int remoteThreadPoolSize = 40;
-    private int multicastResponsePort;
-    private int httpProxyPort = -1;
-    private int streamListenPort = 8080;
-    private boolean asyncThreadPool = true;
-    private boolean mainThreadPool = true;
-    private boolean remoteThreadPool = true;
-    private Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
+    protected int threadPoolSize = 20;
+    protected int asyncThreadPoolSize = 20;
+    protected int remoteThreadPoolSize = 40;
+    protected int multicastResponsePort;
+    protected int httpProxyPort = -1;
+    protected int streamListenPort = 8080;
+    protected boolean asyncThreadPool = true;
+    protected boolean mainThreadPool = true;
+    protected boolean remoteThreadPool = true;
+    protected Namespace callbackURI = new Namespace("http://localhost/upnpcallback");
 
-    private ExecutorService mainExecutorService;
-    private ExecutorService asyncExecutorService;
-    private ExecutorService remoteExecutorService;
+    protected ExecutorService mainExecutorService;
+    protected ExecutorService asyncExecutorService;
+    protected ExecutorService remoteExecutorService;
 
-    private DatagramProcessor datagramProcessor;
-    private SOAPActionProcessor soapActionProcessor;
-    private GENAEventProcessor genaEventProcessor;
+    protected DatagramProcessor datagramProcessor;
+    protected SOAPActionProcessor soapActionProcessor;
+    protected GENAEventProcessor genaEventProcessor;
 
-    private DeviceDescriptorBinder deviceDescriptorBinderUDA10;
-    private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+    protected DeviceDescriptorBinder deviceDescriptorBinderUDA10;
+    protected ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
-    private Namespace namespace;
+    protected Namespace namespace;
 
-    private BundleContext context;
-
-    @SuppressWarnings("rawtypes")
-    private ServiceReference httpServiceReference;
+    protected BundleContext context;
 
     @SuppressWarnings("rawtypes")
-    private TransportConfiguration transportConfiguration;
+    protected ServiceReference httpServiceReference;
 
-    private Integer timeoutSeconds = 10;
-    private Integer retryIterations = 5;
-    private Integer retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
+    @SuppressWarnings("rawtypes")
+    protected TransportConfiguration transportConfiguration;
+
+    protected Integer timeoutSeconds = 10;
+    protected Integer retryIterations = 5;
+    protected Integer retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
 
     /**
      * Defaults to port '0', ephemeral.
@@ -175,6 +179,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         serviceDescriptorBinderUDA10 = createServiceDescriptorBinderUDA10();
 
         namespace = createNamespace();
+
+        log.debug("{} activated", this);
     }
 
     @Deactivate
@@ -184,6 +190,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         }
 
         shutdown();
+
+        log.debug("{} deactivated", this);
     }
 
     @Override
@@ -424,7 +432,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         }
     }
 
-    private void createExecutorServices() {
+    protected void createExecutorServices() {
         if (mainThreadPool) {
             log.debug("Creating mainThreadPool");
             mainExecutorService = createMainExecutorService();
@@ -451,15 +459,15 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
         return QueueingThreadPoolExecutor.createInstance("upnp-main", threadPoolSize);
     }
 
-    private ExecutorService createAsyncProtocolExecutorService() {
+    protected ExecutorService createAsyncProtocolExecutorService() {
         return QueueingThreadPoolExecutor.createInstance("upnp-async", asyncThreadPoolSize);
     }
 
-    private ExecutorService createRemoteProtocolExecutorService() {
+    protected ExecutorService createRemoteProtocolExecutorService() {
         return QueueingThreadPoolExecutor.createInstance("upnp-remote", remoteThreadPoolSize);
     }
 
-    private void setConfigValues(Map<String, Object> properties) {
+    protected void setConfigValues(Map<String, Object> properties) {
         if (properties == null) {
             return;
         }

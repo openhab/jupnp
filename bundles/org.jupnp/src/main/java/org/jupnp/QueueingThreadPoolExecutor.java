@@ -68,7 +68,7 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
     static final int CORE_THREAD_POOL_SIZE = 1;
 
     /** Our queue for queueing tasks that wait for a thread to become available */
-    private final BlockingQueue<Runnable> taskQueue = new LinkedTransferQueue<>();
+    private final BlockingQueue<Runnable> taskQueue;
 
     /** The thread for processing the queued tasks */
     private Thread queueThread;
@@ -82,15 +82,17 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      * Allows to subclass QueueingThreadPoolExecutor.
      */
     protected QueueingThreadPoolExecutor(String name, int threadPoolSize) {
-        this(name, new CommonThreadFactory(name), threadPoolSize,
+        this(name, new CommonThreadFactory(name), threadPoolSize, new LinkedTransferQueue<>(),
                 new QueueingThreadPoolExecutor.QueueingRejectionHandler());
     }
 
     private QueueingThreadPoolExecutor(String threadPoolName, ThreadFactory threadFactory, int threadPoolSize,
-            RejectedExecutionHandler rejectionHandler) {
+            BlockingQueue<Runnable> taskQueue, RejectedExecutionHandler rejectionHandler) {
         super(CORE_THREAD_POOL_SIZE, threadPoolSize, 10L, TimeUnit.SECONDS, new SynchronousQueue<>(), threadFactory,
                 rejectionHandler);
         this.threadPoolName = threadPoolName;
+        this.taskQueue = taskQueue;
+        logger.debug("Using {} as taskQueue implementation", taskQueue.getClass().getCanonicalName());
         allowCoreThreadTimeOut(true);
     }
 
@@ -102,10 +104,23 @@ public class QueueingThreadPoolExecutor extends ThreadPoolExecutor {
      * @return the {@link QueueingThreadPoolExecutor} instance
      */
     public static QueueingThreadPoolExecutor createInstance(String name, int threadPoolSize) {
+        return createInstance(name, threadPoolSize, new LinkedTransferQueue<>());
+    }
+
+    /**
+     * Creates a new instance of {@link QueueingThreadPoolExecutor}
+     *
+     * @param name the name of the thread pool, will be used as a prefix for the name of the threads
+     * @param threadPoolSize the maximum size of the pool
+     * @param taskQueue the task queue to use
+     * @return the {@link QueueingThreadPoolExecutor} instance
+     */
+    public static QueueingThreadPoolExecutor createInstance(String name, int threadPoolSize,
+            BlockingQueue<Runnable> taskQueue) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("A thread pool name must be provided!");
         }
-        return new QueueingThreadPoolExecutor(name, new CommonThreadFactory(name), threadPoolSize,
+        return new QueueingThreadPoolExecutor(name, new CommonThreadFactory(name), threadPoolSize, taskQueue,
                 new QueueingThreadPoolExecutor.QueueingRejectionHandler());
     }
 
