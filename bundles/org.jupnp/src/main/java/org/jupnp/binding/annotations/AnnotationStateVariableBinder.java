@@ -275,7 +275,8 @@ public class AnnotationStateVariableBinder {
                     "Allowed value provider is not of type " + AllowedValueProvider.class + ": " + getName());
         }
         try {
-            return ((Class<? extends AllowedValueProvider>) provider).newInstance().getValues();
+            return ((Class<? extends AllowedValueProvider>) provider).getDeclaredConstructor().newInstance()
+                    .getValues();
         } catch (Exception ex) {
             throw new LocalServiceBindingException("Allowed value provider can't be instantiated: " + getName(), ex);
         }
@@ -289,7 +290,7 @@ public class AnnotationStateVariableBinder {
         }
         try {
             AllowedValueRangeProvider providerInstance = ((Class<? extends AllowedValueRangeProvider>) provider)
-                    .newInstance();
+                    .getDeclaredConstructor().newInstance();
             return getAllowedValueRange(providerInstance.getMinimum(), providerInstance.getMaximum(),
                     providerInstance.getStep());
         } catch (Exception ex) {

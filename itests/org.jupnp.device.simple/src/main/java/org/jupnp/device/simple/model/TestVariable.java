@@ -15,13 +15,15 @@
  */
 package org.jupnp.device.simple.model;
 
-import java.util.Observable;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestVariable extends Observable {
+public class TestVariable {
     private static final Logger log = LoggerFactory.getLogger(TestVariable.class);
+    private final List<ValueChangeListener<TestVariable, Object>> listeners = new CopyOnWriteArrayList<>();
     private Object value;
 
     public TestVariable(Object value) {
@@ -29,17 +31,24 @@ public class TestVariable extends Observable {
     }
 
     public void setValue(Object value) {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "setValue", value);
-        if (this.value == null || !this.value.equals(value)) {
-            log.trace("old: {} new: {}", this.value, value);
-
+        log.trace("ENTRY {}.{}: {}", getClass().getName(), "setValue", value);
+        Object oldValue = this.value;
+        if (oldValue == null || !oldValue.equals(value)) {
+            log.trace("old: {} new: {}", oldValue, value);
             this.value = value;
-            setChanged();
-            notifyObservers(this);
+            listeners.forEach(listener -> listener.valueChanged(this, oldValue, value));
         }
     }
 
     public Object getValue() {
         return value;
+    }
+
+    public void addListener(ValueChangeListener<TestVariable, Object> listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(ValueChangeListener<TestVariable, Object> listener) {
+        listeners.remove(listener);
     }
 }

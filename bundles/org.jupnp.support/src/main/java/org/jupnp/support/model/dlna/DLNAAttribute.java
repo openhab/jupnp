@@ -130,7 +130,7 @@ public abstract class DLNAAttribute<T> {
             Class<? extends DLNAAttribute<?>> attributeClass = type.getAttributeTypes()[i];
             try {
                 logger.trace("Trying to parse DLNA '{}' with class: {}", type, attributeClass.getSimpleName());
-                attr = attributeClass.newInstance();
+                attr = attributeClass.getDeclaredConstructor().newInstance();
                 if (attributeValue != null) {
                     attr.setString(attributeValue, contentFormat);
                 }

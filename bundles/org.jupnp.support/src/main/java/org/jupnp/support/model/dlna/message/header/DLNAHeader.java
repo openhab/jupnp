@@ -136,7 +136,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
             Class<? extends DLNAHeader<?>> headerClass = type.getHeaderTypes()[i];
             try {
                 logger.trace("Trying to parse '{}' with class: {}", type, headerClass.getSimpleName());
-                upnpHeader = headerClass.newInstance();
+                upnpHeader = headerClass.getDeclaredConstructor().newInstance();
                 if (headerValue != null) {
                     upnpHeader.setString(headerValue);
                 }

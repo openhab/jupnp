@@ -211,7 +211,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         } catch (NoSuchMethodException ex) {
             log.trace("Creating new service implementation instance with no-arg constructor: {}",
                     serviceClass.getName());
-            return serviceClass.newInstance();
+            return serviceClass.getDeclaredConstructor().newInstance();
         }
     }
 

@@ -59,7 +59,7 @@ public class Reflections {
     // ####################
 
     public static Object get(Field field, Object target) throws Exception {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(target);
         try {
             field.setAccessible(true);
             return field.get(target);
@@ -88,7 +88,7 @@ public class Reflections {
     // ####################
 
     public static void set(Field field, Object target, Object value) throws Exception {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(target);
         try {
             field.setAccessible(true);
             field.set(target, value);
@@ -266,7 +266,7 @@ public class Reflections {
     }
 
     public static Object getAndWrap(Field field, Object target) {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(target);
         try {
             field.setAccessible(true);
             return get(field, target);
@@ -282,7 +282,7 @@ public class Reflections {
     }
 
     public static void setAndWrap(Field field, Object target, Object value) {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(target);
         try {
             field.setAccessible(true);
             set(field, target, value);

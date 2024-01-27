@@ -51,7 +51,7 @@ public class StateMachineInvocationHandler implements InvocationHandler {
 
                 Object state = constructorArgumentTypes != null
                         ? stateClass.getConstructor(constructorArgumentTypes).newInstance(constructorArguments)
-                        : stateClass.newInstance();
+                        : stateClass.getDeclaredConstructor().newInstance();
 
                 logger.debug("Adding state instance: {}", state.getClass().getName());
                 stateObjects.put(stateClass, state);

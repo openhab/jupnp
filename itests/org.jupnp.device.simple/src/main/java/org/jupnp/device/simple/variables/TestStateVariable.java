@@ -19,18 +19,17 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.jupnp.device.simple.Activator;
 import org.jupnp.device.simple.model.TestVariable;
+import org.jupnp.device.simple.model.ValueChangeListener;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.service.upnp.UPnPLocalStateVariable;
 import org.osgi.service.upnp.UPnPService;
 
-public class TestStateVariable implements Observer, UPnPLocalStateVariable {
+public class TestStateVariable implements UPnPLocalStateVariable, ValueChangeListener<TestVariable, Object> {
     static final String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
     private UPnPDevice device;
     private UPnPService service;
@@ -52,7 +51,7 @@ public class TestStateVariable implements Observer, UPnPLocalStateVariable {
         this.sendsEvents = sendsEvents;
         this.variable = variable;
 
-        this.variable.addObserver(this);
+        this.variable.addListener(this);
     }
 
     @Override
@@ -111,7 +110,7 @@ public class TestStateVariable implements Observer, UPnPLocalStateVariable {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void valueChanged(TestVariable source, Object oldValue, Object newValue) {
         EventAdmin eventAdmin = Activator.getPlugin().getEventAdmin();
         if (eventAdmin != null) {
             Dictionary<String, Object> values = new Hashtable<>();

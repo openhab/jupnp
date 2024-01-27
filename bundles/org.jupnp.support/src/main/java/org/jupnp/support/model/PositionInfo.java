@@ -154,7 +154,7 @@ public class PositionInfo {
         if (elapsed == 0 || total == 0) {
             return 0;
         }
-        return new Double(elapsed / ((double) total / 100)).intValue();
+        return Double.valueOf(elapsed / ((double) total / 100)).intValue();
     }
 
     @Override
