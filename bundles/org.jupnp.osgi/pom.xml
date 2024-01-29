@@ -23,6 +23,13 @@
       <groupId>org.jupnp</groupId>
       <artifactId>org.jupnp</artifactId>
       <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 
