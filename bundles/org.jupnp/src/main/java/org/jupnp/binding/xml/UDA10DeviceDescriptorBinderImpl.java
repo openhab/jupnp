@@ -205,14 +205,14 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     SpecificationViolationReporter.report("Unsupported UDA major version, ignoring: " + version);
                     version = "1";
                 }
-                descriptor.udaVersion.major = Integer.valueOf(version);
+                descriptor.udaVersion.major = Integer.parseInt(version);
             } else if (ELEMENT.minor.equals(specVersionChild)) {
                 String version = XMLUtil.getTextContent(specVersionChild).trim();
                 if (!version.equals("0")) {
                     SpecificationViolationReporter.report("Unsupported UDA minor version, ignoring: " + version);
                     version = "0";
                 }
-                descriptor.udaVersion.minor = Integer.valueOf(version);
+                descriptor.udaVersion.minor = Integer.parseInt(version);
             }
 
         }
@@ -297,13 +297,13 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     }
 
                     if (ELEMENT.width.equals(iconChild)) {
-                        icon.width = (Integer.valueOf(XMLUtil.getTextContent(iconChild)));
+                        icon.width = (Integer.parseInt(XMLUtil.getTextContent(iconChild)));
                     } else if (ELEMENT.height.equals(iconChild)) {
-                        icon.height = (Integer.valueOf(XMLUtil.getTextContent(iconChild)));
+                        icon.height = (Integer.parseInt(XMLUtil.getTextContent(iconChild)));
                     } else if (ELEMENT.depth.equals(iconChild)) {
                         String depth = XMLUtil.getTextContent(iconChild);
                         try {
-                            icon.depth = (Integer.valueOf(depth));
+                            icon.depth = (Integer.parseInt(depth));
                         } catch (NumberFormatException ex) {
                             SpecificationViolationReporter.report("Invalid icon depth '{}', using 16 as default: {}",
                                     depth, ex);

@@ -141,7 +141,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                                 .report("Unsupported UDA major version, ignoring: " + majorVersion);
                         majorVersion = "1";
                     }
-                    getInstance().major = Integer.valueOf(majorVersion);
+                    getInstance().major = Integer.parseInt(majorVersion);
                     break;
                 case minor:
                     String minorVersion = getCharacters().trim();
@@ -150,7 +150,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                                 .report("Unsupported UDA minor version, ignoring: " + minorVersion);
                         minorVersion = "0";
                     }
-                    getInstance().minor = Integer.valueOf(minorVersion);
+                    getInstance().minor = Integer.parseInt(minorVersion);
                     break;
             }
         }
@@ -285,14 +285,14 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void endElement(ELEMENT element) throws SAXException {
             switch (element) {
                 case width:
-                    getInstance().width = Integer.valueOf(getCharacters());
+                    getInstance().width = Integer.parseInt(getCharacters());
                     break;
                 case height:
-                    getInstance().height = Integer.valueOf(getCharacters());
+                    getInstance().height = Integer.parseInt(getCharacters());
                     break;
                 case depth:
                     try {
-                        getInstance().depth = Integer.valueOf(getCharacters());
+                        getInstance().depth = Integer.parseInt(getCharacters());
                     } catch (NumberFormatException ex) {
                         SpecificationViolationReporter.report("Invalid icon depth '{}', using 16 as default: {}",
                                 getCharacters(), ex);

@@ -169,12 +169,12 @@ public class CacheControl {
                 if (value == null) {
                     throw new IllegalArgumentException("CacheControl max-age header does not have a value: " + value);
                 }
-                result.setMaxAge(Integer.valueOf(value));
+                result.setMaxAge(Integer.parseInt(value));
             } else if ("s-maxage".equals(lowercase)) {
                 if (value == null) {
                     throw new IllegalArgumentException("CacheControl s-maxage header does not have a value: " + value);
                 }
-                result.setSharedMaxAge(Integer.valueOf(value));
+                result.setSharedMaxAge(Integer.parseInt(value));
             } else if ("no-transform".equals(lowercase)) {
                 result.setNoTransform(true);
             } else if ("must-revalidate".equals(lowercase)) {

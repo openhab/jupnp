@@ -453,7 +453,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
 
         if (errorCode != null) {
             try {
-                int numericCode = Integer.valueOf(errorCode);
+                int numericCode = Integer.parseInt(errorCode);
                 ErrorCode standardErrorCode = ErrorCode.getByCode(numericCode);
                 if (standardErrorCode != null) {
                     log.trace("Reading fault element: {} - {}", standardErrorCode.getCode(), errorDescription);

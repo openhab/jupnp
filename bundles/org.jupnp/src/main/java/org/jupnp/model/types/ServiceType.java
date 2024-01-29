@@ -106,12 +106,12 @@ public class ServiceType {
         try {
             Matcher matcher = ServiceType.PATTERN.matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 3) {
-                return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
+                return new ServiceType(matcher.group(1), matcher.group(2), Integer.parseInt(matcher.group(3)));
             }
 
             matcher = ServiceType.BROKEN_PATTERN.matcher(s);
             if (matcher.matches() && matcher.groupCount() >= 3) {
-                return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
+                return new ServiceType(matcher.group(1), matcher.group(2), Integer.parseInt(matcher.group(3)));
             }
 
             // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in service type token
@@ -121,7 +121,7 @@ public class ServiceType {
                 String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
                 SpecificationViolationReporter.report("Replacing invalid service type token '{}' with: {}",
                         matcher.group(2), cleanToken);
-                return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+                return new ServiceType(matcher.group(1), cleanToken, Integer.parseInt(matcher.group(3)));
             }
 
             // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of
@@ -132,7 +132,7 @@ public class ServiceType {
                 String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
                 SpecificationViolationReporter.report("Replacing invalid service type token '{}' with: {}",
                         matcher.group(2), cleanToken);
-                return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+                return new ServiceType(matcher.group(1), cleanToken, Integer.parseInt(matcher.group(3)));
             }
         } catch (RuntimeException e) {
             throw new InvalidValueException(

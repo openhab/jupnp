@@ -47,7 +47,7 @@ public class UDAServiceType extends ServiceType {
 
         try {
             if (matcher.matches())
-                return new UDAServiceType(matcher.group(1), Integer.valueOf(matcher.group(2)));
+                return new UDAServiceType(matcher.group(1), Integer.parseInt(matcher.group(2)));
         } catch (RuntimeException e) {
             throw new InvalidValueException(
                     String.format("Can't parse UDA service type string (namespace/type/version) '%s'", s), e);

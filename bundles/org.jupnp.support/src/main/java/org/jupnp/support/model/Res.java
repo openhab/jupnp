@@ -179,13 +179,13 @@ public class Res {
 
     public int getResolutionX() {
         return getResolution() != null && getResolution().split("x").length == 2
-                ? Integer.valueOf(getResolution().split("x")[0])
+                ? Integer.parseInt(getResolution().split("x")[0])
                 : 0;
     }
 
     public int getResolutionY() {
         return getResolution() != null && getResolution().split("x").length == 2
-                ? Integer.valueOf(getResolution().split("x")[1])
+                ? Integer.parseInt(getResolution().split("x")[1])
                 : 0;
     }
 

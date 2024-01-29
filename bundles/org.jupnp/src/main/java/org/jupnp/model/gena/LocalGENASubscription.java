@@ -212,8 +212,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
 
             if (stateVariable.isModeratedNumericType() && lastSentNumericValue.get(stateVariableName) != null) {
 
-                long oldValue = Long.valueOf(lastSentNumericValue.get(stateVariableName));
-                long newValue = Long.valueOf(stateVariableValue.toString());
+                long oldValue = lastSentNumericValue.get(stateVariableName);
+                long newValue = Long.parseLong(stateVariableValue.toString());
                 long minDelta = stateVariable.getEventDetails().getEventMinimumDelta();
 
                 if (newValue > oldValue && newValue - oldValue < minDelta) {

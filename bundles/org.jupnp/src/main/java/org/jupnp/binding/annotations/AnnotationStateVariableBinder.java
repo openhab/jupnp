@@ -127,7 +127,7 @@ public class AnnotationStateVariableBinder {
 
                 long v;
                 try {
-                    v = Long.valueOf(defaultValue);
+                    v = Long.parseLong(defaultValue);
                 } catch (Exception ex) {
                     throw new LocalServiceBindingException("Default value '" + defaultValue
                             + "' is not numeric (for range checking) of: " + getName());

@@ -47,7 +47,7 @@ public class UDADeviceType extends DeviceType {
 
         try {
             if (matcher.matches()) {
-                return new UDADeviceType(matcher.group(1), Integer.valueOf(matcher.group(2)));
+                return new UDADeviceType(matcher.group(1), Integer.parseInt(matcher.group(2)));
             }
         } catch (RuntimeException e) {
             throw new InvalidValueException(
