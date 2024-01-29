@@ -27,11 +27,11 @@ import org.jupnp.support.model.MediaInfo;
  */
 public abstract class GetMediaInfo extends ActionCallback {
 
-    public GetMediaInfo(Service<?, ?> service) {
+    protected GetMediaInfo(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetMediaInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetMediaInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetMediaInfo")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

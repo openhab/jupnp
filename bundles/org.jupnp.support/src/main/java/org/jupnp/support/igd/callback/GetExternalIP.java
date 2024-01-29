@@ -25,7 +25,7 @@ import org.jupnp.model.meta.Service;
  */
 public abstract class GetExternalIP extends ActionCallback {
 
-    public GetExternalIP(Service<?, ?> service) {
+    protected GetExternalIP(Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetExternalIPAddress")));
     }
 

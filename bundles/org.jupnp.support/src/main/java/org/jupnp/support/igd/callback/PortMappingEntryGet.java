@@ -31,7 +31,7 @@ import org.jupnp.support.model.PortMapping;
  */
 public abstract class PortMappingEntryGet extends ActionCallback {
 
-    public PortMappingEntryGet(Service<?, ?> service, long index) {
+    protected PortMappingEntryGet(Service<?, ?> service, long index) {
         this(service, null, index);
     }
 

@@ -34,7 +34,7 @@ public abstract class Playing<T extends AVTransport> extends AbstractState<T> {
 
     private final Logger logger = LoggerFactory.getLogger(Playing.class);
 
-    public Playing(T transport) {
+    protected Playing(T transport) {
         super(transport);
     }
 

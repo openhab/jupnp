@@ -26,7 +26,7 @@ import org.jupnp.model.meta.Service;
  */
 public abstract class ConnectionComplete extends ActionCallback {
 
-    public ConnectionComplete(Service<?, ?> service, int connectionID) {
+    protected ConnectionComplete(Service<?, ?> service, int connectionID) {
         this(service, null, connectionID);
     }
 

@@ -30,19 +30,20 @@ public abstract class SetAVTransportURI extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(SetAVTransportURI.class);
 
-    public SetAVTransportURI(Service<?, ?> service, String uri) {
+    protected SetAVTransportURI(Service<?, ?> service, String uri) {
         this(new UnsignedIntegerFourBytes(0), service, uri, null);
     }
 
-    public SetAVTransportURI(Service<?, ?> service, String uri, String metadata) {
+    protected SetAVTransportURI(Service<?, ?> service, String uri, String metadata) {
         this(new UnsignedIntegerFourBytes(0), service, uri, metadata);
     }
 
-    public SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String uri) {
+    protected SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String uri) {
         this(instanceId, service, uri, null);
     }
 
-    public SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String uri, String metadata) {
+    protected SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String uri,
+            String metadata) {
         super(new ActionInvocation<>(service.getAction("SetAVTransportURI")));
         logger.debug("Creating SetAVTransportURI action for URI: {}", uri);
         getActionInvocation().setInput("InstanceID", instanceId);

@@ -29,11 +29,11 @@ import org.jupnp.support.model.Channel;
  */
 public abstract class GetVolume extends ActionCallback {
 
-    public GetVolume(Service<?, ?> service) {
+    protected GetVolume(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetVolume(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetVolume(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetVolume")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

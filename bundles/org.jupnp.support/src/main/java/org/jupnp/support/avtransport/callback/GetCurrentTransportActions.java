@@ -27,11 +27,11 @@ import org.jupnp.support.model.TransportAction;
  */
 public abstract class GetCurrentTransportActions extends ActionCallback {
 
-    public GetCurrentTransportActions(Service<?, ?> service) {
+    protected GetCurrentTransportActions(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetCurrentTransportActions(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetCurrentTransportActions(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetCurrentTransportActions")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

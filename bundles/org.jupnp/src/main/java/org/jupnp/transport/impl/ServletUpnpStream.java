@@ -50,7 +50,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
 
     protected final Logger log = LoggerFactory.getLogger(ServletUpnpStream.class);
 
-    public ServletUpnpStream(ProtocolFactory protocolFactory) {
+    protected ServletUpnpStream(ProtocolFactory protocolFactory) {
         super(protocolFactory);
     }
 

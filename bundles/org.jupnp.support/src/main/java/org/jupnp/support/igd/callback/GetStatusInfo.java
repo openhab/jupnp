@@ -29,7 +29,7 @@ import org.jupnp.support.model.Connection;
  */
 public abstract class GetStatusInfo extends ActionCallback {
 
-    public GetStatusInfo(Service<?, ?> service) {
+    protected GetStatusInfo(Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetStatusInfo")));
     }
 

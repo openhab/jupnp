@@ -32,11 +32,11 @@ public abstract class SetVolume extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(SetVolume.class);
 
-    public SetVolume(Service<?, ?> service, long newVolume) {
+    protected SetVolume(Service<?, ?> service, long newVolume) {
         this(new UnsignedIntegerFourBytes(0), service, newVolume);
     }
 
-    public SetVolume(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, long newVolume) {
+    protected SetVolume(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, long newVolume) {
         super(new ActionInvocation<>(service.getAction("SetVolume")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

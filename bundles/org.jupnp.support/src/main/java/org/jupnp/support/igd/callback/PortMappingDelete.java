@@ -29,7 +29,7 @@ public abstract class PortMappingDelete extends ActionCallback {
 
     protected final PortMapping portMapping;
 
-    public PortMappingDelete(Service<?, ?> service, PortMapping portMapping) {
+    protected PortMappingDelete(Service<?, ?> service, PortMapping portMapping) {
         this(service, null, portMapping);
     }
 

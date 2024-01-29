@@ -27,11 +27,11 @@ import org.jupnp.support.model.PositionInfo;
  */
 public abstract class GetPositionInfo extends ActionCallback {
 
-    public GetPositionInfo(Service<?, ?> service) {
+    protected GetPositionInfo(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetPositionInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetPositionInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetPositionInfo")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

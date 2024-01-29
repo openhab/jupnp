@@ -43,11 +43,11 @@ public abstract class CSV<T> extends ArrayList<T> {
 
     protected final Datatype.Builtin datatype;
 
-    public CSV() {
+    protected CSV() {
         datatype = getBuiltinDatatype();
     }
 
-    public CSV(String s) throws InvalidValueException {
+    protected CSV(String s) throws InvalidValueException {
         datatype = getBuiltinDatatype();
         addAll(parseString(s));
     }

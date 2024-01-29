@@ -49,7 +49,7 @@ public abstract class SendingNotification extends SendingAsync {
 
     private LocalDevice device;
 
-    public SendingNotification(UpnpService upnpService, LocalDevice device) {
+    protected SendingNotification(UpnpService upnpService, LocalDevice device) {
         super(upnpService);
         this.device = device;
     }

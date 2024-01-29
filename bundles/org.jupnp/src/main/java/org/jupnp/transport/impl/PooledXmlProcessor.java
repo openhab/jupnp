@@ -48,11 +48,11 @@ public abstract class PooledXmlProcessor {
 
     private final transient Logger logger = LoggerFactory.getLogger(PooledXmlProcessor.class);
 
-    public PooledXmlProcessor() {
+    protected PooledXmlProcessor() {
         this(20);
     }
 
-    public PooledXmlProcessor(int basePoolSize) {
+    protected PooledXmlProcessor(int basePoolSize) {
         documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
         builderPool = new ConcurrentLinkedQueue<>();

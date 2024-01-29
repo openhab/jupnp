@@ -33,7 +33,7 @@ public abstract class NoMediaPresent<T extends AVTransport> extends AbstractStat
 
     private final Logger logger = LoggerFactory.getLogger(NoMediaPresent.class);
 
-    public NoMediaPresent(T transport) {
+    protected NoMediaPresent(T transport) {
         super(transport);
     }
 

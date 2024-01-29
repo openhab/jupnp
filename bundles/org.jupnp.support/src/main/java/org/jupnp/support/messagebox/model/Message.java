@@ -60,11 +60,11 @@ public abstract class Message implements ElementAppender {
     private final Category category;
     private DisplayType displayType;
 
-    public Message(Category category, DisplayType displayType) {
+    protected Message(Category category, DisplayType displayType) {
         this(0, category, displayType);
     }
 
-    public Message(int id, Category category, DisplayType displayType) {
+    protected Message(int id, Category category, DisplayType displayType) {
         if (id == 0) {
             id = randomGenerator.nextInt(Integer.MAX_VALUE);
         }

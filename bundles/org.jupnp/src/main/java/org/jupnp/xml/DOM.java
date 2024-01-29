@@ -36,7 +36,7 @@ public abstract class DOM {
 
     private Document dom;
 
-    public DOM(Document dom) {
+    protected DOM(Document dom) {
         this.dom = dom;
     }
 

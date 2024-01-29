@@ -30,11 +30,11 @@ public abstract class Stop extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(Stop.class);
 
-    public Stop(Service<?, ?> service) {
+    protected Stop(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public Stop(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected Stop(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("Stop")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

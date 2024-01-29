@@ -252,7 +252,7 @@ public abstract class StreamServerClientTest {
     public abstract static class TestProtocol extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
         public volatile boolean isComplete;
 
-        public TestProtocol(StreamRequestMessage inputMessage) {
+        protected TestProtocol(StreamRequestMessage inputMessage) {
             super(null, inputMessage);
         }
     }

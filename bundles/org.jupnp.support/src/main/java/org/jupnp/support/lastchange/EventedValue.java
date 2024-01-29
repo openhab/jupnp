@@ -29,11 +29,11 @@ public abstract class EventedValue<V> {
 
     protected final V value;
 
-    public EventedValue(V value) {
+    protected EventedValue(V value) {
         this.value = value;
     }
 
-    public EventedValue(Map.Entry<String, String>[] attributes) {
+    protected EventedValue(Map.Entry<String, String>[] attributes) {
         try {
             this.value = valueOf(attributes);
         } catch (InvalidValueException ex) {

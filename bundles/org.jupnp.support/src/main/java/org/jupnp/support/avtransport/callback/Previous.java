@@ -39,11 +39,11 @@ public abstract class Previous extends ActionCallback {
         super(actionInvocation);
     }
 
-    public Previous(Service<?, ?> service) {
+    protected Previous(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public Previous(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected Previous(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("Previous")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

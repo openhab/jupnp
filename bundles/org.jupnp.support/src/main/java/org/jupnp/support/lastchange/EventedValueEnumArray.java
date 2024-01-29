@@ -26,11 +26,11 @@ import org.jupnp.model.types.Datatype;
  */
 public abstract class EventedValueEnumArray<E extends Enum<E>> extends EventedValue<E[]> {
 
-    public EventedValueEnumArray(E[] e) {
+    protected EventedValueEnumArray(E[] e) {
         super(e);
     }
 
-    public EventedValueEnumArray(Map.Entry<String, String>[] attributes) {
+    protected EventedValueEnumArray(Map.Entry<String, String>[] attributes) {
         super(attributes);
     }
 

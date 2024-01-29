@@ -32,7 +32,7 @@ import org.jupnp.support.model.ProtocolInfo;
  */
 public abstract class GetCurrentConnectionInfo extends ActionCallback {
 
-    public GetCurrentConnectionInfo(Service<?, ?> service, int connectionID) {
+    protected GetCurrentConnectionInfo(Service<?, ?> service, int connectionID) {
         this(service, null, connectionID);
     }
 

@@ -45,7 +45,7 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
     protected final AsyncContext asyncContext;
     protected final HttpServletRequest request;
 
-    public AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext,
+    protected AsyncServletUpnpStream(ProtocolFactory protocolFactory, AsyncContext asyncContext,
             HttpServletRequest request) {
         super(protocolFactory);
         this.asyncContext = asyncContext;

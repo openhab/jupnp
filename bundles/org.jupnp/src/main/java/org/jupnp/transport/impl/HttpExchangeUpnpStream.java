@@ -50,7 +50,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
     private HttpExchange httpExchange;
 
-    public HttpExchangeUpnpStream(ProtocolFactory protocolFactory, HttpExchange httpExchange) {
+    protected HttpExchangeUpnpStream(ProtocolFactory protocolFactory, HttpExchange httpExchange) {
         super(protocolFactory);
         this.httpExchange = httpExchange;
     }

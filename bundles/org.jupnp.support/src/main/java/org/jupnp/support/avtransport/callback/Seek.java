@@ -31,19 +31,19 @@ public abstract class Seek extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(Seek.class);
 
-    public Seek(Service<?, ?> service, String relativeTimeTarget) {
+    protected Seek(Service<?, ?> service, String relativeTimeTarget) {
         this(new UnsignedIntegerFourBytes(0), service, SeekMode.REL_TIME, relativeTimeTarget);
     }
 
-    public Seek(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String relativeTimeTarget) {
+    protected Seek(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, String relativeTimeTarget) {
         this(instanceId, service, SeekMode.REL_TIME, relativeTimeTarget);
     }
 
-    public Seek(Service<?, ?> service, SeekMode mode, String target) {
+    protected Seek(Service<?, ?> service, SeekMode mode, String target) {
         this(new UnsignedIntegerFourBytes(0), service, mode, target);
     }
 
-    public Seek(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, SeekMode mode, String target) {
+    protected Seek(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, SeekMode mode, String target) {
         super(new ActionInvocation<>(service.getAction("Seek")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Unit", mode.name());

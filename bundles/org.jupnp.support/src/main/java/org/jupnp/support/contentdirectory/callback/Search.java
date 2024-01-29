@@ -60,14 +60,14 @@ public abstract class Search extends ActionCallback {
     /**
      * Search with first result 0 and {@link #getDefaultMaxResults()}, filters with {@link #CAPS_WILDCARD}.
      */
-    public Search(Service<?, ?> service, String containerId, String searchCriteria) {
+    protected Search(Service<?, ?> service, String containerId, String searchCriteria) {
         this(service, containerId, searchCriteria, CAPS_WILDCARD, 0, null);
     }
 
     /**
      * @param maxResults Can be <code>null</code>, then {@link #getDefaultMaxResults()} is used.
      */
-    public Search(Service<?, ?> service, String containerId, String searchCriteria, String filter, long firstResult,
+    protected Search(Service<?, ?> service, String containerId, String searchCriteria, String filter, long firstResult,
             Long maxResults, SortCriterion... orderBy) {
         super(new ActionInvocation<>(service.getAction("Search")));
 

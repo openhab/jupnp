@@ -82,11 +82,11 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     protected Source[] schemaSources;
     protected Schema schema;
 
-    public DOMParser() {
+    protected DOMParser() {
         this(null);
     }
 
-    public DOMParser(Source[] schemaSources) {
+    protected DOMParser(Source[] schemaSources) {
         this.schemaSources = schemaSources;
     }
 

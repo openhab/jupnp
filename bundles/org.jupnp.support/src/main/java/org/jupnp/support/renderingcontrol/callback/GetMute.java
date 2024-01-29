@@ -27,11 +27,11 @@ import org.jupnp.support.model.Channel;
  */
 public abstract class GetMute extends ActionCallback {
 
-    public GetMute(Service<?, ?> service) {
+    protected GetMute(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetMute(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetMute(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetMute")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

@@ -22,7 +22,7 @@ public abstract class AbstractState<T extends AVTransport> {
 
     private T transport;
 
-    public AbstractState(T transport) {
+    protected AbstractState(T transport) {
         this.transport = transport;
     }
 

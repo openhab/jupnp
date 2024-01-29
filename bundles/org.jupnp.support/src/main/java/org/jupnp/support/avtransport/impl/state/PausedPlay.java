@@ -33,7 +33,7 @@ public abstract class PausedPlay<T extends AVTransport> extends AbstractState<T>
 
     private final Logger logger = LoggerFactory.getLogger(PausedPlay.class);
 
-    public PausedPlay(T transport) {
+    protected PausedPlay(T transport) {
         super(transport);
     }
 

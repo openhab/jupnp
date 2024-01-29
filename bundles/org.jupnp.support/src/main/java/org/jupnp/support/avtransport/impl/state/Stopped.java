@@ -34,7 +34,7 @@ public abstract class Stopped<T extends AVTransport> extends AbstractState<T> {
 
     private final Logger logger = LoggerFactory.getLogger(Stopped.class);
 
-    public Stopped(T transport) {
+    protected Stopped(T transport) {
         super(transport);
     }
 

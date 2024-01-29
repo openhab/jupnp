@@ -68,7 +68,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         this.callbackURLs = callbackURLs;
     }
 
-    public LocalGENASubscription(LocalService service, Integer requestedDurationSeconds, List<URL> callbackURLs)
+    protected LocalGENASubscription(LocalService service, Integer requestedDurationSeconds, List<URL> callbackURLs)
             throws Exception {
         super(service);
 

@@ -27,7 +27,7 @@ import org.jupnp.model.types.ErrorCode;
  */
 public abstract class GetSystemUpdateID extends ActionCallback {
 
-    public GetSystemUpdateID(Service<?, ?> service) {
+    protected GetSystemUpdateID(Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetSystemUpdateID")));
     }
 

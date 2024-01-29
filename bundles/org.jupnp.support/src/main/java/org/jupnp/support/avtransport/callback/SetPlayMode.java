@@ -31,11 +31,11 @@ public abstract class SetPlayMode extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(SetPlayMode.class);
 
-    public SetPlayMode(Service<?, ?> service, PlayMode playMode) {
+    protected SetPlayMode(Service<?, ?> service, PlayMode playMode) {
         this(new UnsignedIntegerFourBytes(0), service, playMode);
     }
 
-    public SetPlayMode(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, PlayMode playMode) {
+    protected SetPlayMode(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, PlayMode playMode) {
         super(new ActionInvocation<>(service.getAction("SetPlayMode")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("NewPlayMode", playMode.toString());

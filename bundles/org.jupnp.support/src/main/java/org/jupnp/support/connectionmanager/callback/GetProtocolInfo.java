@@ -30,7 +30,7 @@ import org.jupnp.support.model.ProtocolInfos;
  */
 public abstract class GetProtocolInfo extends ActionCallback {
 
-    public GetProtocolInfo(Service<?, ?> service) {
+    protected GetProtocolInfo(Service<?, ?> service) {
         this(service, null);
     }
 

@@ -48,7 +48,7 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
     private final XPath xpath;
     private Element element;
 
-    public DOMElement(XPath xpath, Element element) {
+    protected DOMElement(XPath xpath, Element element) {
         this.xpath = xpath;
         this.element = element;
         this.PARENT_BUILDER = createParentBuilder(this);

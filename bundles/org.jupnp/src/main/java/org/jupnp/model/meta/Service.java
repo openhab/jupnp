@@ -47,12 +47,12 @@ public abstract class Service<D extends Device, S extends Service> {
     // Package mutable state
     private D device;
 
-    public Service(ServiceType serviceType, ServiceId serviceId) throws ValidationException {
+    protected Service(ServiceType serviceType, ServiceId serviceId) throws ValidationException {
         this(serviceType, serviceId, null, null);
     }
 
-    public Service(ServiceType serviceType, ServiceId serviceId, Action<S>[] actions, StateVariable<S>[] stateVariables)
-            throws ValidationException {
+    protected Service(ServiceType serviceType, ServiceId serviceId, Action<S>[] actions,
+            StateVariable<S>[] stateVariables) throws ValidationException {
 
         this.serviceType = serviceType;
         this.serviceId = serviceId;

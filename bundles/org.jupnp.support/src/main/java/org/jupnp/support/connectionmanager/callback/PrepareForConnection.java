@@ -30,12 +30,12 @@ import org.jupnp.support.model.ProtocolInfo;
  */
 public abstract class PrepareForConnection extends ActionCallback {
 
-    public PrepareForConnection(Service<?, ?> service, ProtocolInfo remoteProtocolInfo,
+    protected PrepareForConnection(Service<?, ?> service, ProtocolInfo remoteProtocolInfo,
             ServiceReference peerConnectionManager, int peerConnectionID, ConnectionInfo.Direction direction) {
         this(service, null, remoteProtocolInfo, peerConnectionManager, peerConnectionID, direction);
     }
 
-    public PrepareForConnection(Service<?, ?> service, ControlPoint controlPoint, ProtocolInfo remoteProtocolInfo,
+    protected PrepareForConnection(Service<?, ?> service, ControlPoint controlPoint, ProtocolInfo remoteProtocolInfo,
             ServiceReference peerConnectionManager, int peerConnectionID, ConnectionInfo.Direction direction) {
         super(new ActionInvocation<>(service.getAction("PrepareForConnection")), controlPoint);
 

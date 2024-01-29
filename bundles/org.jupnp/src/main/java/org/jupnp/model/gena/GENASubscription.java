@@ -49,7 +49,7 @@ public abstract class GENASubscription<S extends Service> {
         this.service = service;
     }
 
-    public GENASubscription(S service, int requestedDurationSeconds) {
+    protected GENASubscription(S service, int requestedDurationSeconds) {
         this(service);
         this.requestedDurationSeconds = requestedDurationSeconds;
     }

@@ -28,11 +28,11 @@ import org.jupnp.support.messagebox.model.Message;
  */
 public abstract class RemoveMessage extends ActionCallback {
 
-    public RemoveMessage(Service<?, ?> service, Message message) {
+    protected RemoveMessage(Service<?, ?> service, Message message) {
         this(service, message.getId());
     }
 
-    public RemoveMessage(Service<?, ?> service, int id) {
+    protected RemoveMessage(Service<?, ?> service, int id) {
         super(new ActionInvocation<>(service.getAction("RemoveMessage")));
         getActionInvocation().setInput("MessageID", id);
     }

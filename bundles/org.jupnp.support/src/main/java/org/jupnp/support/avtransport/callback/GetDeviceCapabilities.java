@@ -27,11 +27,11 @@ import org.jupnp.support.model.DeviceCapabilities;
  */
 public abstract class GetDeviceCapabilities extends ActionCallback {
 
-    public GetDeviceCapabilities(Service<?, ?> service) {
+    protected GetDeviceCapabilities(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetDeviceCapabilities(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetDeviceCapabilities(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetDeviceCapabilities")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

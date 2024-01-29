@@ -39,11 +39,11 @@ public abstract class Next extends ActionCallback {
         super(actionInvocation);
     }
 
-    public Next(Service<?, ?> service) {
+    protected Next(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public Next(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected Next(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("Next")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

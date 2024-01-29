@@ -37,7 +37,7 @@ public abstract class BlockingServletUpnpStream extends ServletUpnpStream {
 
     protected StreamResponseMessage responseMessage;
 
-    public BlockingServletUpnpStream(ProtocolFactory protocolFactory, FauxAsyncContext asyncContext) {
+    protected BlockingServletUpnpStream(ProtocolFactory protocolFactory, FauxAsyncContext asyncContext) {
         super(protocolFactory);
         this.asyncContext = asyncContext;
     }

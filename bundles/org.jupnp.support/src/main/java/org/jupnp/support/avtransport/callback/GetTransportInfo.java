@@ -27,11 +27,11 @@ import org.jupnp.support.model.TransportInfo;
  */
 public abstract class GetTransportInfo extends ActionCallback {
 
-    public GetTransportInfo(Service<?, ?> service) {
+    protected GetTransportInfo(Service<?, ?> service) {
         this(new UnsignedIntegerFourBytes(0), service);
     }
 
-    public GetTransportInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
+    protected GetTransportInfo(UnsignedIntegerFourBytes instanceId, Service<?, ?> service) {
         super(new ActionInvocation<>(service.getAction("GetTransportInfo")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

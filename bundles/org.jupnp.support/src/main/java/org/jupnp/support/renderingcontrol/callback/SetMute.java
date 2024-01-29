@@ -31,11 +31,11 @@ public abstract class SetMute extends ActionCallback {
 
     private final Logger logger = LoggerFactory.getLogger(SetMute.class.getName());
 
-    public SetMute(Service<?, ?> service, boolean desiredMute) {
+    protected SetMute(Service<?, ?> service, boolean desiredMute) {
         this(new UnsignedIntegerFourBytes(0), service, desiredMute);
     }
 
-    public SetMute(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, boolean desiredMute) {
+    protected SetMute(UnsignedIntegerFourBytes instanceId, Service<?, ?> service, boolean desiredMute) {
         super(new ActionInvocation<>(service.getAction("SetMute")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

@@ -772,7 +772,7 @@ class QueueingThreadPoolExecutorTest {
 
         protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        public AbstractRunnable() {
+        protected AbstractRunnable() {
             uniqueId = lastUniqueId.incrementAndGet();
         }
 

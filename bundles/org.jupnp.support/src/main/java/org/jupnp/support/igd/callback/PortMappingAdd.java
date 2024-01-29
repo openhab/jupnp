@@ -29,7 +29,7 @@ public abstract class PortMappingAdd extends ActionCallback {
 
     protected final PortMapping portMapping;
 
-    public PortMappingAdd(Service<?, ?> service, PortMapping portMapping) {
+    protected PortMappingAdd(Service<?, ?> service, PortMapping portMapping) {
         this(service, null, portMapping);
     }
 

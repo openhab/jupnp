@@ -29,7 +29,7 @@ public abstract class AddMessage extends ActionCallback {
 
     protected final MimeType mimeType = MimeType.valueOf("text/xml;charset=\"utf-8\"");
 
-    public AddMessage(Service<?, ?> service, Message message) {
+    protected AddMessage(Service<?, ?> service, Message message) {
         super(new ActionInvocation<>(service.getAction("AddMessage")));
 
         getActionInvocation().setInput("MessageID", Integer.toString(message.getId()));

@@ -61,14 +61,14 @@ public abstract class Browse extends ActionCallback {
     /**
      * Browse with first result 0 and {@link #getDefaultMaxResults()}, filters with {@link #CAPS_WILDCARD}.
      */
-    public Browse(Service<?, ?> service, String containerId, BrowseFlag flag) {
+    protected Browse(Service<?, ?> service, String containerId, BrowseFlag flag) {
         this(service, containerId, flag, CAPS_WILDCARD, 0, null);
     }
 
     /**
      * @param maxResults Can be <code>null</code>, then {@link #getDefaultMaxResults()} is used.
      */
-    public Browse(Service<?, ?> service, String objectID, BrowseFlag flag, String filter, long firstResult,
+    protected Browse(Service<?, ?> service, String objectID, BrowseFlag flag, String filter, long firstResult,
             Long maxResults, SortCriterion... orderBy) {
 
         super(new ActionInvocation<>(service.getAction("Browse")));

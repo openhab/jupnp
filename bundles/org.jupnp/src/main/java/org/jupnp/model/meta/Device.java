@@ -58,22 +58,22 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     // Package mutable state
     private D parentDevice;
 
-    public Device(DI identity) throws ValidationException {
+    protected Device(DI identity) throws ValidationException {
         this(identity, null, null, null, null, null);
     }
 
-    public Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services)
+    protected Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services)
             throws ValidationException {
         this(identity, null, type, details, icons, services, null);
     }
 
-    public Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services, D[] embeddedDevices)
-            throws ValidationException {
+    protected Device(DI identity, DeviceType type, DeviceDetails details, Icon[] icons, S[] services,
+            D[] embeddedDevices) throws ValidationException {
         this(identity, null, type, details, icons, services, embeddedDevices);
     }
 
-    public Device(DI identity, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons, S[] services,
-            D[] embeddedDevices) throws ValidationException {
+    protected Device(DI identity, UDAVersion version, DeviceType type, DeviceDetails details, Icon[] icons,
+            S[] services, D[] embeddedDevices) throws ValidationException {
 
         this.identity = identity;
         this.version = version == null ? new UDAVersion() : version;
