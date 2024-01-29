@@ -17,6 +17,7 @@
 
   <modules>
     <module>org.jupnp</module>
+    <module>org.jupnp.android</module>
     <module>org.jupnp.osgi</module>
     <module>org.jupnp.support</module>
   </modules>

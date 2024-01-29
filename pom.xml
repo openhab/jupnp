@@ -66,6 +66,7 @@
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+    <android.version>4.1.1.4</android.version>
     <args4j.version>2.0.12</args4j.version>
     <bnd.version>6.4.0</bnd.version>
     <jetty.version>9.4.53.v20231009</jetty.version>

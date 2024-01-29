@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jupnp.pom</groupId>
+    <artifactId>bundles</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.jupnp</groupId>
+  <artifactId>org.jupnp.android</artifactId>
+
+  <name>jUPnP Android Library</name>
+
+  <properties>
+    <basedirRoot>../..</basedirRoot>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jupnp</groupId>
+      <artifactId>org.jupnp</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>${android.version}</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+      <exclusions>
+        <!-- Of course, kxml2 is actually used by Android at runtime -->
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3</artifactId>
+        </exclusion>
+        <!-- Don't need these to compile -->
+        <exclusion>
+          <groupId>org.khronos</groupId>
+          <artifactId>opengl-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+</project>
