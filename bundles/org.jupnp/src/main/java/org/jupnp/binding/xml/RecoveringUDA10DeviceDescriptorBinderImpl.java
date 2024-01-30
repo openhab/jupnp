@@ -187,7 +187,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
 
         // We can only handle certain exceptions, depending on their type and message
         Throwable cause = ex.getCause();
-        if (!((cause instanceof SAXParseException) || (cause instanceof ParserException))) {
+        if (!(cause instanceof SAXParseException || cause instanceof ParserException)) {
             return null;
         }
         String message = cause.getMessage();

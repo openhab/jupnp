@@ -52,45 +52,44 @@ public class OSGiDataConverter {
      */
 
     private static boolean isInteger(Builtin builtin) {
-        return (builtin.equals(Builtin.UI1) || builtin.equals(Builtin.UI2) || builtin.equals(Builtin.I1)
-                || builtin.equals(Builtin.I2) || builtin.equals(Builtin.I4) || builtin.equals(Builtin.INT));
+        return builtin.equals(Builtin.UI1) || builtin.equals(Builtin.UI2) || builtin.equals(Builtin.I1)
+                || builtin.equals(Builtin.I2) || builtin.equals(Builtin.I4) || builtin.equals(Builtin.INT);
     }
 
     private static boolean isLong(Builtin builtin) {
-        return (builtin.equals(Builtin.UI4) || builtin.equals(Builtin.TIME) || builtin.equals(Builtin.TIME_TZ));
+        return builtin.equals(Builtin.UI4) || builtin.equals(Builtin.TIME) || builtin.equals(Builtin.TIME_TZ);
     }
 
     private static boolean isFloat(Builtin builtin) {
-        return (builtin.equals(Builtin.R4) || builtin.equals(Builtin.FLOAT));
+        return builtin.equals(Builtin.R4) || builtin.equals(Builtin.FLOAT);
     }
 
     private static boolean isDouble(Builtin builtin) {
-        return (builtin.equals(Builtin.R8) || builtin.equals(Builtin.NUMBER) || builtin.equals(Builtin.FIXED144));
+        return builtin.equals(Builtin.R8) || builtin.equals(Builtin.NUMBER) || builtin.equals(Builtin.FIXED144);
     }
 
     private static boolean isCharacter(Builtin builtin) {
-        return (builtin.equals(Builtin.CHAR));
+        return builtin.equals(Builtin.CHAR);
     }
 
     private static boolean isString(Builtin builtin) {
-        return (builtin.equals(Builtin.STRING) || builtin.equals(Builtin.URI) || builtin.equals(Builtin.UUID));
+        return builtin.equals(Builtin.STRING) || builtin.equals(Builtin.URI) || builtin.equals(Builtin.UUID);
     }
 
     private static boolean isDate(Builtin builtin) {
-        return (builtin.equals(Builtin.DATE) || builtin.equals(Builtin.DATETIME)
-                || builtin.equals(Builtin.DATETIME_TZ));
+        return builtin.equals(Builtin.DATE) || builtin.equals(Builtin.DATETIME) || builtin.equals(Builtin.DATETIME_TZ);
     }
 
     private static boolean isBoolean(Builtin builtin) {
-        return (builtin.equals(Builtin.BOOLEAN));
+        return builtin.equals(Builtin.BOOLEAN);
     }
 
     private static boolean isByte(Builtin builtin) {
-        return (builtin.equals(Builtin.BIN_HEX));
+        return builtin.equals(Builtin.BIN_HEX);
     }
 
     private static boolean isBase64(Builtin builtin) {
-        return (builtin.equals(Builtin.BIN_BASE64));
+        return builtin.equals(Builtin.BIN_BASE64);
     }
 
     public static Object toOSGiValue(Datatype type, Object input) {
@@ -314,7 +313,7 @@ public class OSGiDataConverter {
                 value = Base64.getEncoder().encode((byte[]) value);
             }
 
-            byte[] bytes = ((byte[]) value);
+            byte[] bytes = (byte[]) value;
             Byte[] Bytes = new Byte[bytes.length];
             for (int i = 0; i < bytes.length; i++) {
                 Bytes[i] = bytes[i];

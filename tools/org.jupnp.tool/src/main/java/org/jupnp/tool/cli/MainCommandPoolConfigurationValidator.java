@@ -35,7 +35,7 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
             // pool config is sth like "20,20,stats"
             StringTokenizer tokenizer = new StringTokenizer(value, ",");
             // must have 2..3 args
-            if ((tokenizer.countTokens() < 2) || (tokenizer.countTokens() > 3)) {
+            if (tokenizer.countTokens() < 2 || tokenizer.countTokens() > 3) {
                 throw new ParameterException(ERROR_MSG + " (not 2 or 3 parameters)");
             } else {
                 try {
@@ -43,7 +43,7 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
                     int asyncPoolSize = Integer.parseInt(tokenizer.nextToken());
 
                     // all >0
-                    if ((mainPoolSize <= 0) || (asyncPoolSize <= 0)) {
+                    if (mainPoolSize <= 0 || asyncPoolSize <= 0) {
                         throw new ParameterException(ERROR_MSG + " (all values must be greater than 0)");
                     }
                     // one token left?

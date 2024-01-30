@@ -202,7 +202,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
             if (stateVariable.getEventDetails().getEventMaximumRateMilliseconds() > 0) {
                 long timestampLastSent = lastSentTimestamp.get(stateVariableName);
                 long timestampNextSend = timestampLastSent
-                        + (stateVariable.getEventDetails().getEventMaximumRateMilliseconds());
+                        + stateVariable.getEventDetails().getEventMaximumRateMilliseconds();
                 if (currentTime <= timestampNextSend) {
                     log.trace("Excluding state variable with maximum rate: {}", stateVariable);
                     excludedVariables.add(stateVariableName);

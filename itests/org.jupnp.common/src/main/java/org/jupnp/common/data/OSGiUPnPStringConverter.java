@@ -259,40 +259,40 @@ public class OSGiUPnPStringConverter {
      */
 
     private static boolean isInteger(String type) {
-        return (type.equals(TYPE_UI1) || type.equals(TYPE_UI2) || type.equals(TYPE_I1) || type.equals(TYPE_I2)
-                || type.equals(TYPE_I4) || type.equals(TYPE_INT));
+        return type.equals(TYPE_UI1) || type.equals(TYPE_UI2) || type.equals(TYPE_I1) || type.equals(TYPE_I2)
+                || type.equals(TYPE_I4) || type.equals(TYPE_INT);
     }
 
     private static boolean isLong(String type) {
-        return (type.equals(TYPE_UI4) || type.equals(TYPE_TIME) || type.equals(TYPE_TIME_TZ));
+        return type.equals(TYPE_UI4) || type.equals(TYPE_TIME) || type.equals(TYPE_TIME_TZ);
     }
 
     private static boolean isFloat(String type) {
-        return (type.equals(TYPE_R4) || type.equals(TYPE_FLOAT));
+        return type.equals(TYPE_R4) || type.equals(TYPE_FLOAT);
     }
 
     private static boolean isDouble(String type) {
-        return (type.equals(TYPE_R8) || type.equals(TYPE_NUMBER) || type.equals(TYPE_FIXED_14_4));
+        return type.equals(TYPE_R8) || type.equals(TYPE_NUMBER) || type.equals(TYPE_FIXED_14_4);
     }
 
     private static boolean isCharacter(String type) {
-        return (type.equals(TYPE_CHAR));
+        return type.equals(TYPE_CHAR);
     }
 
     private static boolean isString(String type) {
-        return (type.equals(TYPE_STRING) || type.equals(TYPE_URI) || type.equals(TYPE_UUID));
+        return type.equals(TYPE_STRING) || type.equals(TYPE_URI) || type.equals(TYPE_UUID);
     }
 
     private static boolean isDate(String type) {
-        return (type.equals(TYPE_DATE) || type.equals(TYPE_DATETIME) || type.equals(TYPE_DATETIME_TZ));
+        return type.equals(TYPE_DATE) || type.equals(TYPE_DATETIME) || type.equals(TYPE_DATETIME_TZ);
     }
 
     private static boolean isBoolean(String type) {
-        return (type.equals(TYPE_BOOLEAN));
+        return type.equals(TYPE_BOOLEAN);
     }
 
     private static boolean isByte(String type) {
-        return (type.equals(TYPE_BIN_BASE64) || type.equals(TYPE_BIN_HEX));
+        return type.equals(TYPE_BIN_BASE64) || type.equals(TYPE_BIN_HEX);
     }
 
     public static Object toOSGiUPnPValue(String type, String string, Object value) {

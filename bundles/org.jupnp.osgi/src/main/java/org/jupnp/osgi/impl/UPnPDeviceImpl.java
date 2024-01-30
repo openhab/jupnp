@@ -123,7 +123,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 
     @Override
     public UPnPService getService(String serviceId) {
-        return (servicesIndex != null) ? servicesIndex.get(serviceId) : null;
+        return servicesIndex != null ? servicesIndex.get(serviceId) : null;
     }
 
     @Override

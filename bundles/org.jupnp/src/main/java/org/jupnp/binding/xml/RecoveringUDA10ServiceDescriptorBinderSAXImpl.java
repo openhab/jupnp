@@ -62,7 +62,7 @@ public class RecoveringUDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceD
         if (descriptorXml.contains("<scpd xmlns=\"urn:Belkin:service-1-0\">")) {
             descriptorXml = descriptorXml.trim().replaceFirst("^([\\W]+)<", "<");
             String newXml;
-            Matcher junkMatcher = (Pattern.compile("^([\\W]+)<")).matcher(descriptorXml.trim());
+            Matcher junkMatcher = Pattern.compile("^([\\W]+)<").matcher(descriptorXml.trim());
             newXml = junkMatcher.replaceFirst("<");
             SpecificationViolationReporter.report("Detected UTF-8 BOM, replacing it");
             return newXml.replaceAll("\0", " ");

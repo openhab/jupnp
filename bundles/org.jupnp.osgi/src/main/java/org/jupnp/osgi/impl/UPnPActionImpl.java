@@ -100,7 +100,7 @@ public class UPnPActionImpl implements UPnPAction {
             variable = action.getService().getStateVariable(name);
         }
 
-        return (argument != null) ? new UPnPStateVariableImpl(variable) : null;
+        return argument != null ? new UPnPStateVariableImpl(variable) : null;
     }
 
     @Override

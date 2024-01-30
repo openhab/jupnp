@@ -45,7 +45,7 @@ public class ActionException extends Exception {
     }
 
     public ActionException(ErrorCode errorCode, String message, boolean concatMessages) {
-        this(errorCode.getCode(), concatMessages ? (errorCode.getDescription() + ". " + message + ".") : message);
+        this(errorCode.getCode(), concatMessages ? errorCode.getDescription() + ". " + message + "." : message);
     }
 
     public ActionException(ErrorCode errorCode, String message, Throwable cause) {

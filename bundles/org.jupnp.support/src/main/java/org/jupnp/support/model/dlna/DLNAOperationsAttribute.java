@@ -47,7 +47,7 @@ public class DLNAOperationsAttribute extends DLNAAttribute<EnumSet<DLNAOperation
             int parseInt = Integer.parseInt(s, 16);
             for (DLNAOperations op : DLNAOperations.values()) {
                 int code = op.getCode() & parseInt;
-                if (op != DLNAOperations.NONE && (op.getCode() == code)) {
+                if (op != DLNAOperations.NONE && op.getCode() == code) {
                     value.add(op);
                 }
             }

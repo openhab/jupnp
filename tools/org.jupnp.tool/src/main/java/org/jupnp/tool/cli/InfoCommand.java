@@ -153,7 +153,7 @@ public class InfoCommand {
     }
 
     private boolean isSameUdn(String udn1, String udn2) {
-        if ((udn1 == null) || (udn2 == null)) {
+        if (udn1 == null || udn2 == null) {
             return false;
         }
         return udn1.equals(udn2);

@@ -378,8 +378,8 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             }
         }
 
-        sb.append((cleanModelName != null && !cleanModelName.isEmpty() ? " " + cleanModelName : ""));
-        sb.append((cleanModelNumber != null && !cleanModelNumber.isEmpty() ? " " + cleanModelNumber.trim() : ""));
+        sb.append(cleanModelName != null && !cleanModelName.isEmpty() ? " " + cleanModelName : "");
+        sb.append(cleanModelNumber != null && !cleanModelNumber.isEmpty() ? " " + cleanModelNumber.trim() : "");
         return sb.toString();
     }
 

@@ -25,9 +25,9 @@ public class MainCommandLogLevelValidator implements IParameterValidator {
     @Override
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--loglevel")) {
-            if ((value.equalsIgnoreCase("TRACE")) || (value.equalsIgnoreCase("DEBUG"))
-                    || (value.equalsIgnoreCase("INFO")) || (value.equalsIgnoreCase("WARN"))
-                    || (value.equalsIgnoreCase("ERROR")) || (value.equalsIgnoreCase("OFF"))) {
+            if (value.equalsIgnoreCase("TRACE") || value.equalsIgnoreCase("DEBUG") || value.equalsIgnoreCase("INFO")
+                    || value.equalsIgnoreCase("WARN") || value.equalsIgnoreCase("ERROR")
+                    || value.equalsIgnoreCase("OFF")) {
             } else {
                 throw new ParameterException(
                         "Parameter " + name + " must be {OFF|ERROR|WARN|INFO|DEBUG|TRACE} (found " + value + ")");

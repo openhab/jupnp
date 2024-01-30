@@ -53,7 +53,7 @@ public class ModelUtil {
         try {
             Class<?> androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
             String product = (String) androidBuild.getField("PRODUCT").get(null);
-            if ("google_sdk".equals(product) || ("sdk".equals(product))) {
+            if ("google_sdk".equals(product) || "sdk".equals(product)) {
                 foundEmulator = true;
             }
         } catch (Exception ex) {

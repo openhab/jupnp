@@ -195,7 +195,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
                         displayedErrorOnce = true;
                     }
                     // check for changed runnable class names
-                    if ((lastRejectedClass == null) || (!lastRejectedClass.equals(runnable.getClass().getName()))) {
+                    if (lastRejectedClass == null || !lastRejectedClass.equals(runnable.getClass().getName())) {
                         logger.warn("Thread pool rejected execution of {}", runnable);
                         noOfRejects = 0;
                         lastRejectedClass = runnable.getClass().getName();

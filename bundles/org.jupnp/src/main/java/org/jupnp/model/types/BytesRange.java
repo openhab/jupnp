@@ -81,7 +81,7 @@ public class BytesRange {
      * @return String format of Bytes Range for response message header
      */
     public String getString(boolean includeDuration, String rangePrefix) {
-        String s = (rangePrefix != null) ? rangePrefix : PREFIX;
+        String s = rangePrefix != null ? rangePrefix : PREFIX;
 
         if (firstByte != null)
             s += firstByte.toString();
@@ -100,9 +100,9 @@ public class BytesRange {
     }
 
     public static BytesRange valueOf(String s, String rangePrefix) throws InvalidValueException {
-        if (s.startsWith((rangePrefix != null) ? rangePrefix : PREFIX)) {
+        if (s.startsWith(rangePrefix != null ? rangePrefix : PREFIX)) {
             Long firstByte = null, lastByte = null, byteLength = null;
-            String[] params = s.substring(((rangePrefix != null) ? rangePrefix : PREFIX).length()).split("[-/]");
+            String[] params = s.substring((rangePrefix != null ? rangePrefix : PREFIX).length()).split("[-/]");
             switch (params.length) {
                 case 3:
                     if (!params[2].isEmpty() && !params[2].equals("*")) {

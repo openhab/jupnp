@@ -94,13 +94,13 @@ class IncomingSubscriptionLifecycleTest {
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
         assertEquals(2, sentMessages.size());
         for (int i = 0; i < 2; i++) {
-            assertEquals(UpnpRequest.Method.NOTIFY, (sentMessages.get(i).getOperation()).getMethod());
+            assertEquals(UpnpRequest.Method.NOTIFY, sentMessages.get(i).getOperation().getMethod());
         }
         assertEquals(subscriptionId, sentMessages.get(0).getHeaders()
                 .getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue());
         assertEquals(subscriptionId, sentMessages.get(1).getHeaders()
                 .getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue());
-        assertEquals(callbackURL.toString(), (sentMessages.get(0).getOperation()).getURI().toString());
+        assertEquals(callbackURL.toString(), sentMessages.get(0).getOperation().getURI().toString());
         assertEquals(0L, sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class)
                 .getValue().getValue());
         assertEquals(1L, sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class)

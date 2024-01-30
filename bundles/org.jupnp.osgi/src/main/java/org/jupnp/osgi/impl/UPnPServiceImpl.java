@@ -84,7 +84,7 @@ public class UPnPServiceImpl implements UPnPService {
 
     @Override
     public UPnPAction getAction(String name) {
-        return (actionsIndex != null) ? actionsIndex.get(name) : null;
+        return actionsIndex != null ? actionsIndex.get(name) : null;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class UPnPServiceImpl implements UPnPService {
 
     @Override
     public UPnPStateVariable getStateVariable(String name) {
-        return (variablesIndex != null) ? variablesIndex.get(name) : null;
+        return variablesIndex != null ? variablesIndex.get(name) : null;
     }
 
     public Service<?, ?> getService() {

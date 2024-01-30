@@ -91,7 +91,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         discoverNetworkInterfaces();
         discoverBindAddresses();
 
-        if ((networkInterfaces.isEmpty() || bindAddresses.isEmpty())) {
+        if (networkInterfaces.isEmpty() || bindAddresses.isEmpty()) {
             log.warn("No usable network interface or addresses found");
             if (requiresNetworkInterface()) {
                 throw new NoNetworkException("Could not discover any usable network interfaces and/or addresses");

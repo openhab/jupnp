@@ -133,7 +133,7 @@ class OutgoingSubscriptionLifecycleTest {
 
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
         assertEquals(2, sentMessages.size());
-        assertEquals(UpnpRequest.Method.SUBSCRIBE, (sentMessages.get(0).getOperation()).getMethod());
+        assertEquals(UpnpRequest.Method.SUBSCRIBE, sentMessages.get(0).getOperation().getMethod());
         assertEquals(1800, sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class)
                 .getValue());
 
@@ -141,7 +141,7 @@ class OutgoingSubscriptionLifecycleTest {
         assertEquals(callbackURLs.get(0), sentMessages.get(0).getHeaders()
                 .getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0));
 
-        assertEquals(UpnpRequest.Method.UNSUBSCRIBE, (sentMessages.get(1).getOperation()).getMethod());
+        assertEquals(UpnpRequest.Method.UNSUBSCRIBE, sentMessages.get(1).getOperation().getMethod());
         assertEquals("uuid:1234", sentMessages.get(1).getHeaders()
                 .getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue());
     }

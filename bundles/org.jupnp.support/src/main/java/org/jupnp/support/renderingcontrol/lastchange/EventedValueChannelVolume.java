@@ -47,7 +47,7 @@ public class EventedValueChannelVolume extends EventedValue<ChannelVolume> {
                 channel = Channel.valueOf(attribute.getValue());
             }
             if (attribute.getKey().equals("val")) {
-                volume = (new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue())).getValue().intValue();
+                volume = new UnsignedIntegerTwoBytesDatatype().valueOf(attribute.getValue()).getValue().intValue();
             }
         }
         return channel != null && volume != null ? new ChannelVolume(channel, volume) : null;

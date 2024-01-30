@@ -90,7 +90,7 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
             Throwable rootCause = Exceptions.unwrap(ex);
             log.trace("Execution has thrown, wrapping root cause in ActionException and returning", ex);
             actionInvocation.setFailure(new ActionException(ErrorCode.ACTION_FAILED,
-                    (rootCause.getMessage() != null ? rootCause.getMessage() : rootCause.toString()), rootCause));
+                    rootCause.getMessage() != null ? rootCause.getMessage() : rootCause.toString(), rootCause));
         }
     }
 

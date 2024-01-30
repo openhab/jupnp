@@ -141,7 +141,7 @@ public class DIDLParser extends SAXParser {
         container.setId(attributes.getValue("id"));
         container.setParentID(attributes.getValue("parentID"));
 
-        if ((attributes.getValue("childCount") != null)) {
+        if (attributes.getValue("childCount") != null) {
             container.setChildCount(Integer.valueOf(attributes.getValue("childCount")));
         }
 
@@ -178,7 +178,7 @@ public class DIDLParser extends SAXParser {
             // Ignore
         }
 
-        if ((attributes.getValue("refID") != null)) {
+        if (attributes.getValue("refID") != null) {
             item.setRefID(attributes.getValue("refID"));
         }
 
@@ -251,11 +251,11 @@ public class DIDLParser extends SAXParser {
 
         desc.setId(attributes.getValue("id"));
 
-        if ((attributes.getValue("type") != null)) {
+        if (attributes.getValue("type") != null) {
             desc.setType(attributes.getValue("type"));
         }
 
-        if ((attributes.getValue("nameSpace") != null)) {
+        if (attributes.getValue("nameSpace") != null) {
             desc.setNameSpace(URI.create(attributes.getValue("nameSpace")));
         }
 

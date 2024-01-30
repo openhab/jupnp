@@ -71,12 +71,12 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
         return new NetworkAddressFactoryImpl(streamListenPort, multicastResponsePort) {
             @Override
             protected boolean isUsableNetworkInterface(NetworkInterface iface) throws Exception {
-                return (iface.isLoopback());
+                return iface.isLoopback();
             }
 
             @Override
             protected boolean isUsableAddress(NetworkInterface networkInterface, InetAddress address) {
-                return (address.isLoopbackAddress() && address instanceof Inet4Address);
+                return address.isLoopbackAddress() && address instanceof Inet4Address;
             }
         };
     }

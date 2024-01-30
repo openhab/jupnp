@@ -297,13 +297,13 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     }
 
                     if (ELEMENT.width.equals(iconChild)) {
-                        icon.width = (Integer.parseInt(XMLUtil.getTextContent(iconChild)));
+                        icon.width = Integer.parseInt(XMLUtil.getTextContent(iconChild));
                     } else if (ELEMENT.height.equals(iconChild)) {
-                        icon.height = (Integer.parseInt(XMLUtil.getTextContent(iconChild)));
+                        icon.height = Integer.parseInt(XMLUtil.getTextContent(iconChild));
                     } else if (ELEMENT.depth.equals(iconChild)) {
                         String depth = XMLUtil.getTextContent(iconChild);
                         try {
-                            icon.depth = (Integer.parseInt(depth));
+                            icon.depth = Integer.parseInt(depth);
                         } catch (NumberFormatException ex) {
                             SpecificationViolationReporter.report("Invalid icon depth '{}', using 16 as default: {}",
                                     depth, ex);
@@ -353,9 +353,9 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                         }
 
                         if (ELEMENT.serviceType.equals(serviceChild)) {
-                            service.serviceType = (ServiceType.valueOf(XMLUtil.getTextContent(serviceChild)));
+                            service.serviceType = ServiceType.valueOf(XMLUtil.getTextContent(serviceChild));
                         } else if (ELEMENT.serviceId.equals(serviceChild)) {
-                            service.serviceId = (ServiceId.valueOf(XMLUtil.getTextContent(serviceChild)));
+                            service.serviceId = ServiceId.valueOf(XMLUtil.getTextContent(serviceChild));
                         } else if (ELEMENT.SCPDURL.equals(serviceChild)) {
                             service.descriptorURI = parseURI(XMLUtil.getTextContent(serviceChild));
                         } else if (ELEMENT.controlURL.equals(serviceChild)) {

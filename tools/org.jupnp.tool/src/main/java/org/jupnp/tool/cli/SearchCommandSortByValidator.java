@@ -25,9 +25,9 @@ public class SearchCommandSortByValidator implements IParameterValidator {
     @Override
     public void validate(String name, String value) throws ParameterException {
         if (name.equals("--sort")) {
-            if ((value.equalsIgnoreCase("ip")) || (value.equalsIgnoreCase("model"))
-                    || (value.equalsIgnoreCase("serialNumber")) || (value.equalsIgnoreCase("manufacturer"))
-                    || (value.equalsIgnoreCase("udn"))) {
+            if (value.equalsIgnoreCase("ip") || value.equalsIgnoreCase("model")
+                    || value.equalsIgnoreCase("serialNumber") || value.equalsIgnoreCase("manufacturer")
+                    || value.equalsIgnoreCase("udn")) {
             } else {
                 throw new ParameterException(
                         "Parameter " + name + " must be {ip|model|serialNumber} (found " + value + ")");

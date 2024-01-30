@@ -33,7 +33,7 @@ public class IpAddressUtils {
     }
 
     public static boolean isSameIpAddress(String ip1, String ip2) throws IllegalArgumentException {
-        if ((ip1 == null) || (ip2 == null)) {
+        if (ip1 == null || ip2 == null) {
             return false;
         }
         String[] ip1Parts = ip1.split("[\\.]");

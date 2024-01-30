@@ -136,7 +136,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
                 return null;
             }
             if (getBodyType().equals(BodyType.STRING)) {
-                String body = ((String) getBody());
+                String body = (String) getBody();
                 if (body.charAt(0) == '\ufeff') { /* utf8 BOM */
                     body = body.substring(1);
                 }

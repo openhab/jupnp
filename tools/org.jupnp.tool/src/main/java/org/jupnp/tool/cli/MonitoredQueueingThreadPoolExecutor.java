@@ -68,7 +68,7 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
         super.afterExecute(runnable, throwable);
         if (throwable != null) {
             Throwable cause = Exceptions.unwrap(throwable);
-            if ((cause instanceof InterruptedException) && isTerminating()) {
+            if (cause instanceof InterruptedException && isTerminating()) {
                 // Ignore this, might happen when we shutdownNow() the
                 // executor. We can't
                 // log at this point as the logging system might be stopped

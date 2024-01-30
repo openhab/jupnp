@@ -63,21 +63,21 @@ public class UPnPStateVariableImpl implements UPnPStateVariable {
 
     @Override
     public Number getMinimum() {
-        return (variable.getTypeDetails().getAllowedValueRange() != null)
+        return variable.getTypeDetails().getAllowedValueRange() != null
                 ? variable.getTypeDetails().getAllowedValueRange().getMinimum()
                 : null;
     }
 
     @Override
     public Number getMaximum() {
-        return (variable.getTypeDetails().getAllowedValueRange() != null)
+        return variable.getTypeDetails().getAllowedValueRange() != null
                 ? variable.getTypeDetails().getAllowedValueRange().getMaximum()
                 : null;
     }
 
     @Override
     public Number getStep() {
-        return (variable.getTypeDetails().getAllowedValueRange() != null)
+        return variable.getTypeDetails().getAllowedValueRange() != null
                 ? variable.getTypeDetails().getAllowedValueRange().getStep()
                 : null;
     }

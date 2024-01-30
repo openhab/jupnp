@@ -187,7 +187,7 @@ class UPnPDeviceTracker extends ServiceTracker {
             }
         }
 
-        return (list != null) ? list.toArray(new LocalService[list.size()]) : null;
+        return list != null ? list.toArray(new LocalService[list.size()]) : null;
     }
 
     private Icon[] createIcons(UPnPIcon[] icons) throws IOException, URISyntaxException {
@@ -205,15 +205,15 @@ class UPnPDeviceTracker extends ServiceTracker {
             }
         }
 
-        return (list != null) ? list.toArray(new Icon[list.size()]) : null;
+        return list != null ? list.toArray(new Icon[list.size()]) : null;
     }
 
     private String getSafeString(Object object) {
-        return (object != null) ? object.toString() : null;
+        return object != null ? object.toString() : null;
     }
 
     private URI getSafeURI(Object object) {
-        return (object != null) ? URI.create(object.toString()) : null;
+        return object != null ? URI.create(object.toString()) : null;
     }
 
     private LocalDevice createDevice(UPnPDevice in) throws ValidationException, IOException, URISyntaxException {

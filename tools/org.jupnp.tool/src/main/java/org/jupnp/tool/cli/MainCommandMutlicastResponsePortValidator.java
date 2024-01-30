@@ -30,7 +30,7 @@ public class MainCommandMutlicastResponsePortValidator implements IParameterVali
         if (name.equals("--multicastResponsePort")) {
             try {
                 int port = Integer.parseInt(value);
-                if ((port < 0) || (port > 65535)) {
+                if (port < 0 || port > 65535) {
                     throw new ParameterException(ERROR_MSG + "must be between 0..65535");
                 }
             } catch (NumberFormatException ex) {

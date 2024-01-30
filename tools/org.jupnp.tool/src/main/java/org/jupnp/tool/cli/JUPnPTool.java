@@ -132,7 +132,7 @@ public class JUPnPTool {
             String filter = searchArgs.filter;
             boolean verbose = cmdLineArgs.verbose;
             // if udn or manufacturer will be specified: auto-enable verbose
-            if (("udn".equals(sortBy)) || ("manufacturer".equals(sortBy))) {
+            if ("udn".equals(sortBy) || "manufacturer".equals(sortBy)) {
                 verbose = true;
             }
 
@@ -146,7 +146,7 @@ public class JUPnPTool {
             List<String> ipAddressOrUdns = infoArgs.ipAddressOrUdnList;
             boolean verbose = cmdLineArgs.verbose;
 
-            if ((ipAddressOrUdns == null) || (ipAddressOrUdns.isEmpty())) {
+            if (ipAddressOrUdns == null || ipAddressOrUdns.isEmpty()) {
                 return RC_MISSING_ARGUMENTS;
             }
 
@@ -248,9 +248,8 @@ public class JUPnPTool {
 
     private void printToolStartMessage(String msg) {
         printStdout(getToolNameVersion() + ": " + msg
-                + ((poolConfiguration != null) ? (" (poolConfiguration='" + poolConfiguration + "'") : "")
-                + ((multicastResponsePort != null) ? (", multicastResponsePort=" + multicastResponsePort.intValue())
-                        : "")
+                + (poolConfiguration != null ? " (poolConfiguration='" + poolConfiguration + "'" : "")
+                + (multicastResponsePort != null ? ", multicastResponsePort=" + multicastResponsePort.intValue() : "")
                 + ")");
     }
 

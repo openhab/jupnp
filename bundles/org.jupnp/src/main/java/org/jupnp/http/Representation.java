@@ -85,7 +85,7 @@ public class Representation<E> implements Serializable {
     }
 
     public Long getMaxAgeOrNull() {
-        return (getCacheControl() == null || getCacheControl().getMaxAge() == -1 || getCacheControl().getMaxAge() == 0)
+        return getCacheControl() == null || getCacheControl().getMaxAge() == -1 || getCacheControl().getMaxAge() == 0
                 ? null
                 : (long) getCacheControl().getMaxAge();
     }

@@ -107,7 +107,7 @@ public class SearchCommand {
             String serialNumber = device.getDetails().getSerialNumber();
             // some devices will return "null" as serialNumber
             // TODO needs check where this happens in JUPnP
-            if ((serialNumber == null) || ("null".equals(serialNumber))) {
+            if (serialNumber == null || "null".equals(serialNumber)) {
                 serialNumber = "-";
             }
 
