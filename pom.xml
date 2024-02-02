@@ -10,11 +10,11 @@
 
   <name>jUPnP</name>
   <description>UPnP/DLNA library for Java</description>
-  <url>https://jupnp.org</url>
+  <url>https://www.jupnp.org</url>
 
   <organization>
     <name>jUPnP.org</name>
-    <url>https://jupnp.org</url>
+    <url>https://www.jupnp.org</url>
   </organization>
 
   <licenses>
@@ -31,7 +31,7 @@
       <name>Kai Kreuzer</name>
       <email>kai@openhab.org</email>
       <organization>jUPnP.org</organization>
-      <organizationUrl>https://jupnp.org</organizationUrl>
+      <organizationUrl>https://www.jupnp.org</organizationUrl>
     </developer>
   </developers>
 
