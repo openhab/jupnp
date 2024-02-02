@@ -24,69 +24,60 @@ public class Main {
         // UPnP discovery is asynchronous, we need a callback
         RegistryListener listener = new RegistryListener() {
 
-            public void remoteDeviceDiscoveryStarted(Registry registry,
-                                                     RemoteDevice device) {
-                System.out.println(
-                        "Discovery started: " + device.getDisplayString()
-                );
+            @Override
+            public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
+                System.out.println("Discovery started: " + device.getDisplayString());
             }
 
-            public void remoteDeviceDiscoveryFailed(Registry registry,
-                                                    RemoteDevice device,
-                                                    Exception ex) {
-                System.out.println(
-                        "Discovery failed: " + device.getDisplayString() + " => " + ex
-                );
+            @Override
+            public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+                System.out.println("Discovery failed: " + device.getDisplayString() + " => " + ex);
             }
 
+            @Override
             public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-                System.out.println(
-                        "Remote device available: " + device.getDisplayString()
-                );
+                System.out.println("Remote device available: " + device.getDisplayString());
             }
 
+            @Override
             public void remoteDeviceUpdated(Registry registry, RemoteDevice device) {
-                System.out.println(
-                        "Remote device updated: " + device.getDisplayString()
-                );
+                System.out.println("Remote device updated: " + device.getDisplayString());
             }
 
+            @Override
             public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
-                System.out.println(
-                        "Remote device removed: " + device.getDisplayString()
-                );
+                System.out.println("Remote device removed: " + device.getDisplayString());
             }
 
+            @Override
             public void localDeviceAdded(Registry registry, LocalDevice device) {
-                System.out.println(
-                        "Local device added: " + device.getDisplayString()
-                );
+                System.out.println("Local device added: " + device.getDisplayString());
             }
 
+            @Override
             public void localDeviceRemoved(Registry registry, LocalDevice device) {
-                System.out.println(
-                        "Local device removed: " + device.getDisplayString()
-                );
+                System.out.println("Local device removed: " + device.getDisplayString());
             }
 
+            @Override
             public void beforeShutdown(Registry registry) {
-                System.out.println(
-                        "Before shutdown, the registry has devices: "
-                        + registry.getDevices().size()
-                );
+                System.out.println("Before shutdown, the registry has devices: " + registry.getDevices().size());
             }
 
+            @Override
             public void afterShutdown() {
                 System.out.println("Shutdown of registry complete!");
-
             }
         };
 
         // This will create necessary network resources for UPnP right away
         System.out.println("Starting jUPnP...");
-        UpnpService upnpService = new UpnpServiceImpl(listener);
+        UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
+        upnpService.startup();
+        upnpService.getRegistry().addListener(listener);
 
         // Send a search message to all devices and services, they should respond soon
+        System.out.println("Sending SEARCH message to all devices...");
         upnpService.getControlPoint().search(new STAllHeader());
 
         // Let's wait 10 seconds for them to respond
@@ -101,8 +92,8 @@ public class Main {
         </div>
 
         <p>
-            You need <code>jupnp-core.jar</code> and its dependencies (<code>seamless-*.jar</code>
-            files) on your classpath to build and run this code.
+            You need <code>org.jupnp-x.y.z.jar</code> and its dependencies (javax.servlet-api, 
+            jetty-client, jetty-server, slf4j-api JAR files) on your classpath to build and run this code.
         </p>
 
     </div>

@@ -79,9 +79,9 @@ public class Main {
 
         // This will create necessary network resources for UPnP right away
         System.out.println("Starting jUPnP...");
-        UpnpService upnpService = new UpnpServiceImpl();
-        upnpService.getRegistry().addListener(listener);
+        UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration());
         upnpService.startup();
+        upnpService.getRegistry().addListener(listener);
 
         // Send a search message to all devices and services, they should respond soon
         System.out.println("Sending SEARCH message to all devices...");
