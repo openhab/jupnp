@@ -35,7 +35,7 @@ public class CommandLineArgs {
     public String logLevel = "DISABLED";
 
     @Parameter(names = { "--multicastResponsePort",
-            "-m" }, description = "Specify Multicast Response Port", validateWith = MainCommandMutlicastResponsePortValidator.class)
+            "-m" }, description = "Specify Multicast Response Port", validateWith = MainCommandMulticastResponsePortValidator.class)
     public Integer multicastResponsePort = 0;
 
     @Parameter(names = { "--pool",

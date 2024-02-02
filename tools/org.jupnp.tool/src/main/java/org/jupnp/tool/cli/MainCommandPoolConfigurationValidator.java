@@ -16,6 +16,7 @@
 package org.jupnp.tool.cli;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.beust.jcommander.IParameterValidator;
@@ -26,17 +27,17 @@ import com.beust.jcommander.ParameterException;
  */
 public class MainCommandPoolConfigurationValidator implements IParameterValidator {
 
-    private static final String ERROR_MSG = "Paramer --pool must be of format "
-            + "'<mainPoolSize>,<asyncPoolSize>[,stats]'";
+    private static final Set<String> PARAMETER_NAMES = Set.of("--pool", "-p");
 
     @Override
     public void validate(String name, String value) throws ParameterException {
-        if (name.equals("--pool")) {
+        if (PARAMETER_NAMES.contains(name)) {
+            String errorMsg = "Parameter " + name + " must be of format '<mainPoolSize>,<asyncPoolSize>[,stats]'";
             // pool config is sth like "20,20,stats"
             StringTokenizer tokenizer = new StringTokenizer(value, ",");
             // must have 2..3 args
             if (tokenizer.countTokens() < 2 || tokenizer.countTokens() > 3) {
-                throw new ParameterException(ERROR_MSG + " (not 2 or 3 parameters)");
+                throw new ParameterException(errorMsg + " (not 2 or 3 parameters)");
             } else {
                 try {
                     int mainPoolSize = Integer.parseInt(tokenizer.nextToken());
@@ -44,23 +45,23 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
 
                     // all >0
                     if (mainPoolSize <= 0 || asyncPoolSize <= 0) {
-                        throw new ParameterException(ERROR_MSG + " (all values must be greater than 0)");
+                        throw new ParameterException(errorMsg + " (all values must be greater than 0)");
                     }
                     // one token left?
                     if (tokenizer.countTokens() == 1) {
                         String option = tokenizer.nextToken();
                         if (!CommandLineArgs.POOL_CONFIG_STATS_OPTION.equalsIgnoreCase(option)) {
-                            throw new ParameterException(ERROR_MSG + " (only "
-                                    + CommandLineArgs.POOL_CONFIG_STATS_OPTION + " allowed as last option)");
+                            throw new ParameterException(errorMsg + " (only " + CommandLineArgs.POOL_CONFIG_STATS_OPTION
+                                    + " allowed as last option)");
                         }
                     }
                     // all fine otherwise
                 } catch (NoSuchElementException ex) {
                     // hmm, not enough tokens, should never happen
-                    throw new ParameterException(ERROR_MSG + " (not enough arguments)");
+                    throw new ParameterException(errorMsg + " (not enough arguments)");
                 } catch (NumberFormatException ex) {
                     // must be valid numbers
-                    throw new ParameterException(ERROR_MSG + " (numbers wrong)");
+                    throw new ParameterException(errorMsg + " (numbers wrong)");
                 }
             }
         }

@@ -80,7 +80,7 @@ class CommandLineTest extends AbstractTestCase {
         // check stderr, must contain 3x error message, and wrong options
         String e = err.toString();
         // -1 as there is a result BEFORE first Usage
-        assertThat(e.split("Unknown").length - 1, is(equalTo(3)));
+        assertThat(e.split("Expected a command").length - 1, is(equalTo(3)));
         assertThat(e, containsString("-x"));
         assertThat(e, containsString("--xxx"));
         assertThat(e, containsString("--blablub"));

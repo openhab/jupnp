@@ -52,7 +52,7 @@ public abstract class AbstractTestCase {
     }
 
     public void checkCommandLine(final JUPnPTool tool, final int rcExpected, final String argsAsString) {
-        final String[] args = argsAsString.split(" ");
+        final String[] args = argsAsString.isBlank() ? new String[0] : argsAsString.split(" ");
         final int rc = tool.doMain(args);
         assertEquals(rcExpected, rc);
     }

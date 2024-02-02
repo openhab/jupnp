@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-    static final Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
+    static final Logger logger = LoggerFactory.getLogger(CmdlineUPnPServiceConfiguration.class);
 
     static int MAIN_POOL_SIZE = 20;
     static int ASYNC_POOL_SIZE = 20;
@@ -137,8 +137,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
         logger.debug("Shutting down executor services");
         shutdownExecutorServices();
 
-        // create the executor again ready for reuse in case the runtime is
-        // started up again.
+        // create the executor again ready for reuse in case the runtime is started up again.
         createExecutorServices();
     }
 
@@ -174,7 +173,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
      */
     public static class SmartLoggingDiscardPolicy extends ThreadPoolExecutor.DiscardPolicy {
 
-        private static Lock rejectLock = new ReentrantLock();
+        private static final Lock rejectLock = new ReentrantLock();
 
         private static boolean displayedErrorOnce = false;
         private static String lastRejectedClass = null;
@@ -186,7 +185,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
         public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
             if (threadPoolExecutor.isTerminating()) {
                 // do log rejects during shutdown in debug level only
-                logger.debug("Thread pool rejected during termination execution of {}", runnable.toString());
+                logger.debug("Thread pool rejected during termination execution of {}", runnable);
             } else {
                 try {
                     rejectLock.lock();

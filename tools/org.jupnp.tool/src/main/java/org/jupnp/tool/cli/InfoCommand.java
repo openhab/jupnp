@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class InfoCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(InfoCommand.class);
-    private JUPnPTool tool;
+    private final JUPnPTool tool;
     private StringBuilder sb;
 
     public InfoCommand(JUPnPTool tool) {

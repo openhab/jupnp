@@ -15,6 +15,8 @@
  */
 package org.jupnp.tool.cli;
 
+import java.util.Set;
+
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
@@ -22,16 +24,15 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class MainCommandLogLevelValidator implements IParameterValidator {
+
+    private static final Set<String> PARAMETER_NAMES = Set.of("--loglevel", "-l");
+    private static final Set<String> VALID_VALUES = Set.of("OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE");
+
     @Override
     public void validate(String name, String value) throws ParameterException {
-        if (name.equals("--loglevel")) {
-            if (value.equalsIgnoreCase("TRACE") || value.equalsIgnoreCase("DEBUG") || value.equalsIgnoreCase("INFO")
-                    || value.equalsIgnoreCase("WARN") || value.equalsIgnoreCase("ERROR")
-                    || value.equalsIgnoreCase("OFF")) {
-            } else {
-                throw new ParameterException(
-                        "Parameter " + name + " must be {OFF|ERROR|WARN|INFO|DEBUG|TRACE} (found " + value + ")");
-            }
+        if (PARAMETER_NAMES.contains(name) && VALID_VALUES.stream().noneMatch(v -> v.equalsIgnoreCase(value))) {
+            throw new ParameterException(
+                    "Parameter " + name + " must be {" + String.join("|", VALID_VALUES) + "} (found " + value + ")");
         }
     }
 }

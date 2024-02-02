@@ -15,6 +15,8 @@
  */
 package org.jupnp.tool.cli;
 
+import java.util.Set;
+
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
@@ -22,16 +24,16 @@ import com.beust.jcommander.ParameterException;
  * @author Jochen Hiller - Initial contribution
  */
 public class SearchCommandSortByValidator implements IParameterValidator {
+
+    private static final Set<String> PARAMETER_NAMES = Set.of("--sort", "-s");
+    private static final Set<String> VALID_VALUES = Set.of("none", "ip", "model", "serialNumber", "manufacturer",
+            "udn");
+
     @Override
     public void validate(String name, String value) throws ParameterException {
-        if (name.equals("--sort")) {
-            if (value.equalsIgnoreCase("ip") || value.equalsIgnoreCase("model")
-                    || value.equalsIgnoreCase("serialNumber") || value.equalsIgnoreCase("manufacturer")
-                    || value.equalsIgnoreCase("udn")) {
-            } else {
-                throw new ParameterException(
-                        "Parameter " + name + " must be {ip|model|serialNumber} (found " + value + ")");
-            }
+        if (PARAMETER_NAMES.contains(name) && VALID_VALUES.stream().noneMatch(v -> v.equalsIgnoreCase(value))) {
+            throw new ParameterException(
+                    "Parameter " + name + " must be {" + String.join("|", VALID_VALUES) + "} (found " + value + ")");
         }
     }
 }

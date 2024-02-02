@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.internal.DefaultConsole;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
@@ -93,6 +94,7 @@ public class JUPnPTool {
         commander.addCommand(COMMAND_SEARCH, new SearchCommandArgs());
         commander.addCommand(COMMAND_INFO, new InfoCommandArgs());
         commander.addCommand(COMMAND_NOP, new NopCommandArgs());
+        commander.setConsole(new DefaultConsole(outputStream));
         commander.setProgramName(TOOL_NAME);
         try {
             commander.parse(args);
@@ -121,7 +123,7 @@ public class JUPnPTool {
         }
 
         // dispatch commands
-        if (cmdLineArgs.doHelp) {
+        if (Boolean.TRUE.equals(cmdLineArgs.doHelp)) {
             printToolUsage(commander);
             return RC_HELP;
         } else if (COMMAND_SEARCH.equals(commander.getParsedCommand())) {
@@ -184,8 +186,8 @@ public class JUPnPTool {
         // sets the pool configuration
         if (poolConfiguration != null) {
             StringTokenizer tokenizer = new StringTokenizer(poolConfiguration, ",");
-            int mainPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
-            int asyncPoolSize = Integer.valueOf(tokenizer.nextToken()).intValue();
+            int mainPoolSize = Integer.parseInt(tokenizer.nextToken());
+            int asyncPoolSize = Integer.parseInt(tokenizer.nextToken());
 
             CmdlineUPnPServiceConfiguration.setPoolConfiguration(mainPoolSize, asyncPoolSize);
             // one token left for stats option?
@@ -211,7 +213,7 @@ public class JUPnPTool {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         try {
             // will assume to find logback XML files in root of JAR file
-            URL url = this.getClass().getResource("/" + resourceName);
+            URL url = getClass().getResource("/" + resourceName);
             JoranConfigurator configurator = new JoranConfigurator();
             configurator.setContext(context);
 
@@ -249,14 +251,11 @@ public class JUPnPTool {
     private void printToolStartMessage(String msg) {
         printStdout(getToolNameVersion() + ": " + msg
                 + (poolConfiguration != null ? " (poolConfiguration='" + poolConfiguration + "'" : "")
-                + (multicastResponsePort != null ? ", multicastResponsePort=" + multicastResponsePort.intValue() : "")
-                + ")");
+                + (multicastResponsePort != null ? ", multicastResponsePort=" + multicastResponsePort : "") + ")");
     }
 
     private void printToolUsage(JCommander commander) {
-        StringBuilder sb = new StringBuilder();
-        commander.usage(sb);
-        printStdout(sb.toString());
+        commander.usage();
     }
 
     private String getToolNameVersion() {

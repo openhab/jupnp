@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class SearchCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(SearchCommand.class);
-    private JUPnPTool tool;
+    private final JUPnPTool tool;
 
     public SearchCommand(JUPnPTool tool) {
         this.tool = tool;
@@ -78,7 +78,7 @@ public class SearchCommand {
         Registry registry = upnpService.getRegistry();
 
         for (RemoteDevice device : registry.getRemoteDevices()) {
-            handleRemoteDevice(device, printer, sortBy, filter, verbose);
+            handleRemoteDevice(device, printer, filter);
         }
 
         printer.printBody();
@@ -95,10 +95,8 @@ public class SearchCommand {
         return JUPnPTool.RC_OK;
     }
 
-    private void handleRemoteDevice(RemoteDevice device, SearchResultPrinter searchResult, String sortBy, String filter,
-            boolean verbose) {
+    private void handleRemoteDevice(RemoteDevice device, SearchResultPrinter searchResult, String filter) {
         if (device.isRoot()) {
-            // logStdout(device.toString());
             String ipAddress = device.getIdentity().getDescriptorURL().getHost();
             String model = device.getDetails().getModelDetails().getModelName();
             String manu = device.getDetails().getManufacturerDetails().getManufacturer();
@@ -123,8 +121,7 @@ public class SearchCommand {
                 logger.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
             }
 
-            // filter out: very simple: details from above should include
-            // this text
+            // filter out: very simple: details from above should include this text
             if (filterOK) {
                 searchResult.add(ipAddress, model, serialNumber, manu, udn);
             }
@@ -157,7 +154,7 @@ public class SearchCommand {
 
         @Override
         public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-            handleRemoteDevice(device, printer, sortBy, filter, verbose);
+            handleRemoteDevice(device, printer, filter);
         }
 
         @Override
@@ -212,7 +209,7 @@ public class SearchCommand {
             }
         }
 
-        private final int[] COLUMN_WIDTH = new int[] { 17, 25, 25, 25, 25 };
+        private final int[] columnWidth = new int[] { 17, 25, 25, 25, 25 };
         private final List<Result> results = new ArrayList<>();
         private final List<String> udns = new ArrayList<>();
         private final String sortBy;
@@ -230,12 +227,12 @@ public class SearchCommand {
             }
             String msg;
             if (verbose) {
-                msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
-                        + fixedWidth("Manufacturer", COLUMN_WIDTH[2]) + fixedWidth("SerialNumber", COLUMN_WIDTH[3])
-                        + fixedWidth("UDN", COLUMN_WIDTH[4]);
+                msg = fixedWidth("IP address", columnWidth[0]) + fixedWidth("Model", columnWidth[1])
+                        + fixedWidth("Manufacturer", columnWidth[2]) + fixedWidth("SerialNumber", columnWidth[3])
+                        + fixedWidth("UDN", columnWidth[4]);
             } else {
-                msg = fixedWidth("IP address", COLUMN_WIDTH[0]) + fixedWidth("Model", COLUMN_WIDTH[1])
-                        + fixedWidth("SerialNumber", COLUMN_WIDTH[3]);
+                msg = fixedWidth("IP address", columnWidth[0]) + fixedWidth("Model", columnWidth[1])
+                        + fixedWidth("SerialNumber", columnWidth[3]);
             }
             tool.printStdout(msg);
         }
@@ -246,12 +243,12 @@ public class SearchCommand {
                 if (!hasToSort(sortBy)) {
                     String msg;
                     if (verbose) {
-                        msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
-                                + fixedWidth(manu, COLUMN_WIDTH[2]) + fixedWidth(serialNumber, COLUMN_WIDTH[3])
-                                + fixedWidth(udn, COLUMN_WIDTH[4]);
+                        msg = fixedWidth(ip, columnWidth[0]) + fixedWidth(model, columnWidth[1])
+                                + fixedWidth(manu, columnWidth[2]) + fixedWidth(serialNumber, columnWidth[3])
+                                + fixedWidth(udn, columnWidth[4]);
                     } else {
-                        msg = fixedWidth(ip, COLUMN_WIDTH[0]) + fixedWidth(model, COLUMN_WIDTH[1])
-                                + fixedWidth(serialNumber, COLUMN_WIDTH[3]);
+                        msg = fixedWidth(ip, columnWidth[0]) + fixedWidth(model, columnWidth[1])
+                                + fixedWidth(serialNumber, columnWidth[3]);
                     }
                     tool.printStdout(msg);
                 }

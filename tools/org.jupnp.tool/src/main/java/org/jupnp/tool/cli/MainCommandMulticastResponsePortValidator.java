@@ -15,27 +15,30 @@
  */
 package org.jupnp.tool.cli;
 
+import java.util.Set;
+
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
 
 /**
  * @author Jochen Hiller - Initial contribution
  */
-public class MainCommandMutlicastResponsePortValidator implements IParameterValidator {
+public class MainCommandMulticastResponsePortValidator implements IParameterValidator {
 
-    private static final String ERROR_MSG = "Parameter --multicastResponsePort ";
+    private static final Set<String> PARAMETER_NAMES = Set.of("--multicastResponsePort", "-m");
 
     @Override
     public void validate(String name, String value) throws ParameterException {
-        if (name.equals("--multicastResponsePort")) {
+        if (PARAMETER_NAMES.contains(name)) {
+            String errorMsg = "Parameter " + name + " ";
             try {
                 int port = Integer.parseInt(value);
                 if (port < 0 || port > 65535) {
-                    throw new ParameterException(ERROR_MSG + "must be between 0..65535");
+                    throw new ParameterException(errorMsg + "must be between 0..65535");
                 }
             } catch (NumberFormatException ex) {
                 // must be valid port number
-                throw new ParameterException(ERROR_MSG + " is not a valid number)");
+                throw new ParameterException(errorMsg + "is not a valid number)");
             }
         }
     }
