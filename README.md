@@ -40,6 +40,28 @@ To build jUPnP from the sources, Maven takes care of everything:
 
 The build result will be available in the folder `target`.
 
+To improve build times you can add the following options to the command:
+
+| Option                        | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| `-DskipTests`                 | Skip the execution of tests                         |
+| `-Dmaven.test.skip=true`      | Skip the compilation and execution of tests         |
+| `-Dmaven.javadoc.skip=true`   | Skip the creation of Javadoc JARs                   |
+| `-Dmaven.source.skip=true`    | Skip the creation of source code JARs               |
+| `-Dlicense.skip=true`         | Skip the license header checks                      |
+| `-Dsort.skip=true`            | Skip the POM sort order checks                      |
+| `-Dspotless.check.skip=true`  | Skip the Spotless code style checks                 |
+| `-T 1C`                       | Build in parallel, using 1 thread per core          |
+
+For example you can skip tests and the Spotless checks during development with:
+
+```shell
+mvn clean install -DskipTests -Dspotless.check.skip=true
+```
+
+Adding these options improves the build time but could hide problems in your code.
+Parallel builds are also less easy to debug and the increased load may cause timing sensitive tests to fail.
+
 ## Code style
 
 The code style used by jUPnP is available as an Eclipse XML configuration in [codestyle.xml](tools/spotless/codestyle.xml).
