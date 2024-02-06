@@ -97,7 +97,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 factory.setAttribute("http://apache.org/xml/properties/locale", Locale.ROOT);
             } catch (IllegalArgumentException e) {
                 // Android parsers may not support this attribute
-                log.debug("Parser does not support 'http://apache.org/xml/properties/locale' attribute", e);
+                logger.debug("Parser does not support 'http://apache.org/xml/properties/locale' attribute", e);
             }
             DocumentBuilder documentBuilder = factory.newDocumentBuilder();
             documentBuilder.setErrorHandler(this);
