@@ -48,16 +48,16 @@ public class SampleData {
     public static InetAddress getLocalBaseAddress() {
         try {
             return InetAddress.getByName("127.0.0.1");
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static InetAddress getSecondLocalBaseAddress() {
         try {
             return InetAddress.getByName("127.0.0.2");
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -99,8 +99,8 @@ public class SampleData {
         try {
             return LocalDevice.class.getConstructor(DeviceIdentity.class, DeviceType.class, DeviceDetails.class,
                     Icon[].class, LocalService.class, LocalDevice.class);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -108,8 +108,8 @@ public class SampleData {
         try {
             return LocalDevice.class.getConstructor(DeviceIdentity.class, DeviceType.class, DeviceDetailsProvider.class,
                     Icon[].class, LocalService.class, LocalDevice.class);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -117,8 +117,8 @@ public class SampleData {
         try {
             return LocalService.class.getConstructor(ServiceType.class, ServiceId.class, Action[].class,
                     StateVariable[].class);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -178,8 +178,8 @@ public class SampleData {
         try {
             return RemoteDevice.class.getConstructor(RemoteDeviceIdentity.class, DeviceType.class, DeviceDetails.class,
                     Icon[].class, RemoteService.class, RemoteDevice.class);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -187,8 +187,8 @@ public class SampleData {
         try {
             return RemoteService.class.getConstructor(ServiceType.class, ServiceId.class, URI.class, URI.class,
                     URI.class, Action[].class, StateVariable[].class);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

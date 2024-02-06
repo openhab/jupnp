@@ -40,8 +40,8 @@ public class Resource<M> {
     public Resource(URI pathQuery, M model) {
         try {
             this.pathQuery = new URI(null, null, pathQuery.getPath(), pathQuery.getQuery(), null);
-        } catch (URISyntaxException ex) {
-            throw new RuntimeException(ex);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         this.model = model;
         if (model == null) {

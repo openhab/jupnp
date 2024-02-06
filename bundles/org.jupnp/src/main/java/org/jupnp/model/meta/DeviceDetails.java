@@ -207,7 +207,7 @@ public class DeviceDetails implements Validatable {
             } else {
                 try {
                     Long.parseLong(getUpc());
-                } catch (NumberFormatException ex) {
+                } catch (NumberFormatException e) {
                     SpecificationViolationReporter.report("UPC must be 12 digits all-numeric: '{}' for device '{}'",
                             getUpc(), getFriendlyName());
                 }

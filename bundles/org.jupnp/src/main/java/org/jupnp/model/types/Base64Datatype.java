@@ -37,8 +37,8 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
         }
         try {
             return Base64.getDecoder().decode(s);
-        } catch (Exception ex) {
-            throw new InvalidValueException(ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage(), e);
         }
     }
 
@@ -49,8 +49,8 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
         }
         try {
             return Base64.getEncoder().encodeToString(value);
-        } catch (Exception ex) {
-            throw new InvalidValueException(ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage(), e);
         }
     }
 }

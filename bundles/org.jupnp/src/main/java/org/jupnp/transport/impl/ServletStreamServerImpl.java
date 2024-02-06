@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ServletStreamServerImpl implements StreamServer<ServletStreamServerConfigurationImpl> {
 
-    private final Logger log = LoggerFactory.getLogger(ServletStreamServerImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ServletStreamServerImpl.class);
 
     protected final ServletStreamServerConfigurationImpl configuration;
     protected int localPort;
@@ -53,11 +53,11 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
     @Override
     public synchronized void init(InetAddress bindAddress, final Router router) throws InitializationException {
         try {
-            log.debug("Setting executor service on servlet container adapter");
+            logger.debug("Setting executor service on servlet container adapter");
             getConfiguration().getServletContainerAdapter()
                     .setExecutorService(router.getConfiguration().getStreamServerExecutorService());
 
-            log.debug("Adding connector: {}:{}", bindAddress, getConfiguration().getListenPort());
+            logger.debug("Adding connector: {}:{}", bindAddress, getConfiguration().getListenPort());
             localPort = getConfiguration().getServletContainerAdapter().addConnector(bindAddress.getHostAddress(),
                     getConfiguration().getListenPort());
 
@@ -72,8 +72,8 @@ public class ServletStreamServerImpl implements StreamServer<ServletStreamServer
             }
 
             getConfiguration().getServletContainerAdapter().registerServlet(contextPath, servlet);
-        } catch (Exception ex) {
-            throw new InitializationException("Could not initialize " + getClass().getSimpleName(), ex);
+        } catch (Exception e) {
+            throw new InitializationException("Could not initialize " + getClass().getSimpleName(), e);
         }
     }
 

@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractStreamClient<C extends StreamClientConfiguration, REQUEST> implements StreamClient<C> {
 
-    private final Logger log = LoggerFactory.getLogger(StreamClient.class);
+    private final Logger logger = LoggerFactory.getLogger(StreamClient.class);
 
     private static final int FAILED_REQUESTS_MAX_SIZE = 100;
     private Map<URI, Long> failedRequests = new ConcurrentHashMap<>();
@@ -47,7 +47,7 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
     @Override
     public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) throws InterruptedException {
-        log.trace("Preparing HTTP request: {}", requestMessage);
+        logger.trace("Preparing HTTP request: {}", requestMessage);
 
         String[] split = requestMessage.getUri().toString().split(":");
         String protocol = split[0];
@@ -68,14 +68,14 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
         if (getConfiguration().getRetryAfterSeconds() > 0 && previeousFailureTime != null) {
             if (start - previeousFailureTime < TimeUnit.SECONDS.toNanos(getConfiguration().getRetryAfterSeconds())
                     && numberOfTries >= getConfiguration().getRetryIterations()) {
-                log.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
+                logger.debug("Will not attempt request because it failed {} times in the last {} seconds: {}",
                         numberOfTries, getConfiguration().getRetryAfterSeconds(), requestMessage);
                 return null;
             } else if (start - previeousFailureTime < TimeUnit.SECONDS
                     .toNanos(getConfiguration().getRetryAfterSeconds()) && numberOfTries > 0) {
-                log.debug("Previous attempt failed {} times.  Will retry {}", numberOfTries, requestMessage);
+                logger.debug("Previous attempt failed {} times.  Will retry {}", numberOfTries, requestMessage);
             } else {
-                log.debug("Clearing failed attempt after {} tries", numberOfTries);
+                logger.debug("Clearing failed attempt after {} tries", numberOfTries);
                 failedRequests.remove(requestMessage.getUri());
                 failedTries.put(requestMessage.getUri(), (long) 0);
             }
@@ -94,45 +94,45 @@ public abstract class AbstractStreamClient<C extends StreamClientConfiguration, 
 
         // Wait on the current thread for completion
         try {
-            log.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(),
+            logger.trace("Waiting {} seconds for HTTP request to complete: {}", getConfiguration().getTimeoutSeconds(),
                     requestMessage);
             StreamResponseMessage response = future.get(getConfiguration().getTimeoutSeconds(), TimeUnit.SECONDS);
 
             // Log a warning if it took too long
             long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
-            log.trace("Got HTTP response in {} ms: {}", elapsed, requestMessage);
+            logger.trace("Got HTTP response in {} ms: {}", elapsed, requestMessage);
             if (getConfiguration().getLogWarningSeconds() > 0
                     && elapsed > TimeUnit.SECONDS.toMillis(getConfiguration().getLogWarningSeconds())) {
-                log.warn("HTTP request took a long time ({} ms): {}", elapsed, requestMessage);
+                logger.warn("HTTP request took a long time ({} ms): {}", elapsed, requestMessage);
             }
 
             return response;
 
-        } catch (InterruptedException ex) {
-            log.trace("Interruption, aborting request: {}", requestMessage);
+        } catch (InterruptedException e) {
+            logger.trace("Interruption, aborting request: {}", requestMessage);
             abort(request);
             throw new InterruptedException("HTTP request interrupted and aborted");
 
-        } catch (TimeoutException ex) {
+        } catch (TimeoutException e) {
 
-            log.info("Timeout of {} seconds while waiting for HTTP request to complete, aborting: {}",
+            logger.info("Timeout of {} seconds while waiting for HTTP request to complete, aborting: {}",
                     getConfiguration().getTimeoutSeconds(), requestMessage);
             abort(request);
 
             handleRequestTimeout(requestMessage, requestWrapper);
             return null;
 
-        } catch (ExecutionException ex) {
-            Throwable cause = ex.getCause();
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
             if (!logExecutionException(cause)) {
                 String message = "HTTP request failed: " + requestMessage;
 
-                if (log.isDebugEnabled()) {
+                if (logger.isDebugEnabled()) {
                     // if debug then the warning will additionally contain the stacktrace of the causing exception
-                    log.warn(message, Exceptions.unwrap(cause));
+                    logger.warn(message, Exceptions.unwrap(cause));
                 } else {
                     // compact logging
-                    log.warn("{} ({})", message, Exceptions.unwrap(cause).getMessage());
+                    logger.warn("{} ({})", message, Exceptions.unwrap(cause).getMessage());
                 }
             }
 

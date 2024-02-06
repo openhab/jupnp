@@ -62,7 +62,7 @@ import org.slf4j.LoggerFactory;
 @Component
 class JUPnPRegistryListener extends DefaultRegistryListener {
 
-    private final Logger log = LoggerFactory.getLogger(JUPnPRegistryListener.class);
+    private final Logger logger = LoggerFactory.getLogger(JUPnPRegistryListener.class);
 
     private Map<Device, UPnPDeviceBinding> deviceBindings = new Hashtable<>();
     private final BundleContext context;
@@ -105,7 +105,7 @@ class JUPnPRegistryListener extends DefaultRegistryListener {
      */
     @Override
     public void deviceAdded(Registry registry, @SuppressWarnings("rawtypes") Device device) {
-        log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "deviceAdded", registry, device);
+        logger.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "deviceAdded", registry, device);
 
         UPnPDeviceImpl upnpDevice = new UPnPDeviceImpl(device);
         if (device instanceof RemoteDevice) {
@@ -120,20 +120,20 @@ class JUPnPRegistryListener extends DefaultRegistryListener {
                         upnpDevice.getDescriptions(null));
                 deviceBindings.put(device, new UPnPDeviceBinding(registration, tracker));
             } catch (InvalidSyntaxException e) {
-                log.error("Cannot add remote ({}).", device.getIdentity().getUdn().toString());
-                log.error(e.getMessage());
+                logger.error("Cannot add remote ({}).", device.getIdentity().getUdn().toString());
+                logger.error(e.getMessage());
             }
         }
     }
 
     @Override
     public void deviceRemoved(Registry registry, @SuppressWarnings("rawtypes") Device device) {
-        log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "deviceRemoved", registry, device);
+        logger.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "deviceRemoved", registry, device);
 
         if (device instanceof RemoteDevice) {
             UPnPDeviceBinding data = deviceBindings.get(device);
             if (data == null) {
-                log.warn("Unknown device {} removed.", device.getIdentity().getUdn().toString());
+                logger.warn("Unknown device {} removed.", device.getIdentity().getUdn().toString());
             } else {
                 data.getServiceRegistration().unregister();
                 data.getServiceTracker().close();

@@ -289,7 +289,7 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
             @UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             return ModelUtil.toCommaSeparatedList(getCurrentTransportActions(instanceId));
-        } catch (Exception ex) {
+        } catch (Exception e) {
             return ""; // TODO: Empty string is not defined in spec but seems reasonable for no available action?
         }
     }

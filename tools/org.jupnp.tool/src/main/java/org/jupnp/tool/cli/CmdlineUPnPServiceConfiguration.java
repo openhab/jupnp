@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-    static final Logger logger = LoggerFactory.getLogger(CmdlineUPnPServiceConfiguration.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(CmdlineUPnPServiceConfiguration.class);
 
     static int MAIN_POOL_SIZE = 20;
     static int ASYNC_POOL_SIZE = 20;
@@ -134,7 +134,7 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
 
     @Override
     public void shutdown() {
-        logger.debug("Shutting down executor services");
+        LOGGER.debug("Shutting down executor services");
         shutdownExecutorServices();
 
         // create the executor again ready for reuse in case the runtime is started up again.
@@ -185,24 +185,24 @@ public class CmdlineUPnPServiceConfiguration extends DefaultUpnpServiceConfigura
         public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
             if (threadPoolExecutor.isTerminating()) {
                 // do log rejects during shutdown in debug level only
-                logger.debug("Thread pool rejected during termination execution of {}", runnable);
+                LOGGER.debug("Thread pool rejected during termination execution of {}", runnable);
             } else {
                 try {
                     rejectLock.lock();
                     if (!displayedErrorOnce) {
-                        logger.error("Thread pool rejected executions, consider to resize pool sizing");
+                        LOGGER.error("Thread pool rejected executions, consider to resize pool sizing");
                         displayedErrorOnce = true;
                     }
                     // check for changed runnable class names
                     if (lastRejectedClass == null || !lastRejectedClass.equals(runnable.getClass().getName())) {
-                        logger.warn("Thread pool rejected execution of {}", runnable);
+                        LOGGER.warn("Thread pool rejected execution of {}", runnable);
                         noOfRejects = 0;
                         lastRejectedClass = runnable.getClass().getName();
                     } else {
                         // same runnable class name, increment number of calls
                         noOfRejects = noOfRejects + 1;
                         if (noOfRejects >= MAX_NO_OF_REJECTS_TO_LOG) {
-                            logger.warn("Thread pool rejected execution of ({} times) {}", noOfRejects, runnable);
+                            LOGGER.warn("Thread pool rejected execution of ({} times) {}", noOfRejects, runnable);
                             noOfRejects = 0;
                         }
                     }

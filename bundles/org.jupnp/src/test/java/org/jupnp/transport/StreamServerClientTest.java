@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class StreamServerClientTest {
 
-    private static final Logger log = LoggerFactory.getLogger(StreamServerClientTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StreamServerClientTest.class);
 
     public static final String TEST_HOST = "localhost";
     public static final int TEST_PORT = getAvailablePort();
@@ -159,8 +159,8 @@ public abstract class StreamServerClientTest {
         final Thread requestThread = new Thread(() -> {
             try {
                 client.sendRequest(createRequestMessage(DelayedResponse.PATH));
-            } catch (InterruptedException ex) {
-                log.info("Request thread interrupted as expected");
+            } catch (InterruptedException e) {
+                LOGGER.info("Request thread interrupted as expected");
                 interrupted.set(true);
             }
         });
@@ -215,8 +215,8 @@ public abstract class StreamServerClientTest {
         final Thread requestThread = new Thread(() -> {
             try {
                 client.sendRequest(createRequestMessage(CheckAliveResponse.PATH));
-            } catch (InterruptedException ex) {
-                log.info("Request thread interrupted as expected");
+            } catch (InterruptedException e) {
+                LOGGER.info("Request thread interrupted as expected");
                 interrupted.set(true);
                 CheckAliveResponse.requestCancelled = true;
             }
@@ -313,10 +313,10 @@ public abstract class StreamServerClientTest {
         @Override
         protected StreamResponseMessage executeSync() {
             try {
-                log.info("Sleeping for {}ms before completion...", SLEEP_MS);
+                LOGGER.info("Sleeping for {}ms before completion...", SLEEP_MS);
                 Thread.sleep(SLEEP_MS);
-            } catch (InterruptedException ex) {
-                fail("Interrupted while sleeping in DelayedResponse", ex);
+            } catch (InterruptedException e) {
+                fail("Interrupted while sleeping in DelayedResponse", e);
             }
             isComplete = true;
             return new StreamResponseMessage(UpnpResponse.Status.OK);
@@ -335,10 +335,10 @@ public abstract class StreamServerClientTest {
         @Override
         protected StreamResponseMessage executeSync() {
             try {
-                log.info("Sleeping for {} before completion...", SLEEP_MS);
+                LOGGER.info("Sleeping for {} before completion...", SLEEP_MS);
                 Thread.sleep(SLEEP_MS);
-            } catch (InterruptedException ex) {
-                fail("Interrupted while sleeping in TooLongResponse", ex);
+            } catch (InterruptedException e) {
+                fail("Interrupted while sleeping in TooLongResponse", e);
             }
             isComplete = true;
             return new StreamResponseMessage(UpnpResponse.Status.OK);
@@ -360,14 +360,14 @@ public abstract class StreamServerClientTest {
             // Return OK response after 2 seconds, check if client connection every 500ms
             for (int i = 0; i < 4; i++) {
                 try {
-                    log.info("Sleeping for 500ms before checking connection...");
+                    LOGGER.info("Sleeping for 500ms before checking connection...");
                     Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    fail("Interrupted while sleeping in CheckAliveResponse", ex);
+                } catch (InterruptedException e) {
+                    fail("Interrupted while sleeping in CheckAliveResponse", e);
                     return null;
                 }
                 if (requestCancelled) {
-                    log.info("Request got cancelled");
+                    LOGGER.info("Request got cancelled");
                     return null;
                 }
             }
@@ -391,14 +391,14 @@ public abstract class StreamServerClientTest {
             // Return OK response after 5 seconds, check if client connection every 500ms
             for (int i = 0; i < 10; i++) {
                 try {
-                    log.info("Sleeping for 500ms before checking connection...");
+                    LOGGER.info("Sleeping for 500ms before checking connection...");
                     Thread.sleep(500);
-                } catch (InterruptedException ex) {
-                    fail("Interrupted while sleeping in CheckAliveLongResponse", ex);
+                } catch (InterruptedException e) {
+                    fail("Interrupted while sleeping in CheckAliveLongResponse", e);
                     return null;
                 }
                 if (requestCancelled) {
-                    log.info("Request got cancelled");
+                    LOGGER.info("Request got cancelled");
                     return null;
                 }
             }

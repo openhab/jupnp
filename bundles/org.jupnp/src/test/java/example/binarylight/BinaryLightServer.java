@@ -45,9 +45,9 @@ public class BinaryLightServer implements Runnable {
             // Add the bound local device to the registry
             upnpService.getRegistry().addDevice(createDevice());
 
-        } catch (Exception ex) {
-            System.err.println("Exception occurred: " + ex);
-            ex.printStackTrace(System.err);
+        } catch (Exception e) {
+            System.err.println("Exception occurred: " + e);
+            e.printStackTrace(System.err);
             System.exit(1);
         }
     }

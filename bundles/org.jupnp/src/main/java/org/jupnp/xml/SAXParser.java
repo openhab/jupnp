@@ -78,8 +78,8 @@ public class SAXParser {
             }
             xmlReader.setErrorHandler(getErrorHandler());
             return xmlReader;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -92,8 +92,8 @@ public class SAXParser {
                 }
             }));
             return schemaFactory.newSchema(schemaSources);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -108,8 +108,8 @@ public class SAXParser {
     public void parse(InputSource source) throws ParserException {
         try {
             xr.parse(source);
-        } catch (Exception ex) {
-            throw new ParserException(ex);
+        } catch (Exception e) {
+            throw new ParserException(e);
         }
     }
 
@@ -134,7 +134,7 @@ public class SAXParser {
     }
 
     public static class Handler<I> extends DefaultHandler {
-        private final Logger log = LoggerFactory.getLogger(SAXParser.class);
+        private final Logger logger = LoggerFactory.getLogger(SAXParser.class);
 
         protected SAXParser parser;
         protected I instance;
@@ -192,7 +192,7 @@ public class SAXParser {
             this.characters = new StringBuilder();
             this.attributes = new AttributesImpl(attributes); // see http://docstore.mik.ua/orelly/xml/sax2/ch05_01.htm,
                                                               // section 5.1.1
-            log.trace("{} starting: {}", getClass().getSimpleName(), localName);
+            logger.trace("{} starting: {}", getClass().getSimpleName(), localName);
         }
 
         @Override
@@ -204,12 +204,12 @@ public class SAXParser {
         public void endElement(String uri, String localName, String qName) throws SAXException {
 
             if (isLastElement(uri, localName, qName)) {
-                log.trace("{}: last element, switching to parent: {}", getClass().getSimpleName(), localName);
+                logger.trace("{}: last element, switching to parent: {}", getClass().getSimpleName(), localName);
                 switchToParent();
                 return;
             }
 
-            log.trace("{} ending: {}", getClass().getSimpleName(), localName);
+            logger.trace("{} ending: {}", getClass().getSimpleName(), localName);
         }
 
         protected boolean isLastElement(String uri, String localName, String qName) {

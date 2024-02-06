@@ -60,7 +60,7 @@ class RegistryListenerTest {
 
         void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
 
-        void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
+        void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e);
 
         void remoteDeviceAdded(Registry registry, RemoteDevice device);
 
@@ -121,8 +121,8 @@ class RegistryListenerTest {
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
                                     new StreamResponseMessage(serviceThreeXML,
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 };
@@ -155,8 +155,8 @@ class RegistryListenerTest {
                         try {
                             deviceDescriptorXML = binder.generate(hydratedDevice, new RemoteClientInfo(),
                                     getConfiguration().getNamespace());
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                         return new StreamResponseMessage[] { new StreamResponseMessage(deviceDescriptorXML,
                                 ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8), null, null, null // Don't return any
@@ -196,7 +196,7 @@ class RegistryListenerTest {
         }
 
         @Override
-        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e) {
             // You might want to drop the device, its services couldn't be hydrated
         }
     }
@@ -205,7 +205,7 @@ class RegistryListenerTest {
         public boolean valid = false;
 
         @Override
-        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e) {
             valid = true;
         }
     }
@@ -254,8 +254,8 @@ class RegistryListenerTest {
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
                                     new StreamResponseMessage(serviceThreeXML,
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 };
@@ -304,8 +304,8 @@ class RegistryListenerTest {
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
                                     new StreamResponseMessage(serviceThreeXML,
                                             ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8) };
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 };

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UPnPActionArgumentImpl extends UPnPStateVariableImpl {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPActionArgumentImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPActionArgumentImpl.class);
 
     private ActionArgument<?> argument;
 
@@ -46,7 +46,7 @@ public class UPnPActionArgumentImpl extends UPnPStateVariableImpl {
         String type = argument.getDatatype().getBuiltin().getDescriptorName();
         Class<?> clazz = UPnPTypeUtil.getUPnPClass(type);
         if (clazz == null) {
-            log.warn("Cannot covert UPnP type {} to UPnP Java type", type);
+            logger.warn("Cannot covert UPnP type {} to UPnP Java type", type);
         }
         return clazz != null ? clazz : argument.getDatatype().getClass();
     }

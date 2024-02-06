@@ -88,7 +88,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
-    private Logger log = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
+    private final Logger logger = LoggerFactory.getLogger(DefaultUpnpServiceConfiguration.class);
 
     // set a fairly large core threadpool size, expecting that core timeout policy will
     // allow the pool to reduce in size after inactivity. note that ThreadPoolExecutor
@@ -306,7 +306,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     @Override
     public void shutdown() {
-        log.trace("Shutting down default executor service");
+        logger.trace("Shutting down default executor service");
         getDefaultExecutorService().shutdownNow();
     }
 

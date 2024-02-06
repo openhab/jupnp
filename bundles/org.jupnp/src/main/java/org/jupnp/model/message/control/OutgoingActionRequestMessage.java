@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class OutgoingActionRequestMessage extends StreamRequestMessage implements ActionRequestMessage {
 
-    private Logger log = LoggerFactory.getLogger(OutgoingActionRequestMessage.class);
+    private final Logger logger = LoggerFactory.getLogger(OutgoingActionRequestMessage.class);
 
     private final String actionNamespace;
 
@@ -64,7 +64,7 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
 
         SoapActionHeader soapActionHeader;
         if (action instanceof QueryStateVariableAction) {
-            log.trace("Adding magic control SOAP action header for state variable query action");
+            logger.trace("Adding magic control SOAP action header for state variable query action");
             soapActionHeader = new SoapActionHeader(new SoapActionType(SoapActionType.MAGIC_CONTROL_NS,
                     SoapActionType.MAGIC_CONTROL_TYPE, null, action.getName()));
         } else {
@@ -77,7 +77,7 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
 
         if (getOperation().getMethod().equals(UpnpRequest.Method.POST)) {
             getHeaders().add(UpnpHeader.Type.SOAPACTION, soapActionHeader);
-            log.trace("Added SOAP action header: {}", soapActionHeader);
+            logger.trace("Added SOAP action header: {}", soapActionHeader);
         } else {
             throw new IllegalArgumentException("Can't send action with request method: " + getOperation().getMethod());
         }

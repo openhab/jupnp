@@ -36,8 +36,8 @@ public abstract class EventedValue<V> {
     protected EventedValue(Map.Entry<String, String>[] attributes) {
         try {
             this.value = valueOf(attributes);
-        } catch (InvalidValueException ex) {
-            throw new RuntimeException(ex);
+        } catch (InvalidValueException e) {
+            throw new RuntimeException(e);
         }
     }
 

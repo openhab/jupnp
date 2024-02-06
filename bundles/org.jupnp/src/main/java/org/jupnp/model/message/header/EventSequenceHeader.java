@@ -41,8 +41,8 @@ public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
 
         try {
             setValue(new UnsignedIntegerFourBytes(s));
-        } catch (NumberFormatException ex) {
-            throw new InvalidHeaderException("Invalid event sequence, " + ex.getMessage(), ex);
+        } catch (NumberFormatException e) {
+            throw new InvalidHeaderException("Invalid event sequence, " + e.getMessage(), e);
         }
     }
 

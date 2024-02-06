@@ -35,8 +35,8 @@ public class FloatDatatype extends AbstractDatatype<Float> {
         }
         try {
             return Float.parseFloat(s.trim());
-        } catch (NumberFormatException ex) {
-            throw new InvalidValueException("Can't convert string to number: " + s, ex);
+        } catch (NumberFormatException e) {
+            throw new InvalidValueException("Can't convert string to number: " + s, e);
         }
     }
 }

@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage>
         extends ReceivingAsync<IN> {
 
-    private final Logger log = LoggerFactory.getLogger(UpnpService.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpService.class);
 
     protected final RemoteClientInfo remoteClientInfo;
     protected OUT outputMessage;
@@ -65,7 +65,7 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
         outputMessage = executeSync();
 
         if (outputMessage != null && !getRemoteClientInfo().getExtraResponseHeaders().isEmpty()) {
-            log.trace("Setting extra headers on response message: {}",
+            logger.trace("Setting extra headers on response message: {}",
                     getRemoteClientInfo().getExtraResponseHeaders().size());
             outputMessage.getHeaders().putAll(getRemoteClientInfo().getExtraResponseHeaders());
         }

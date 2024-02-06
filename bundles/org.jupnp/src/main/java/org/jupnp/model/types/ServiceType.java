@@ -94,7 +94,7 @@ public class ServiceType {
         // First try UDAServiceType parse
         try {
             serviceType = UDAServiceType.valueOf(s);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
 

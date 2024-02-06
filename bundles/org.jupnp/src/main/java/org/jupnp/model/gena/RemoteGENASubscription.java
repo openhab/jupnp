@@ -111,7 +111,7 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
         eventReceived();
     }
 
-    public abstract void invalidMessage(UnsupportedDataException ex);
+    public abstract void invalidMessage(UnsupportedDataException e);
 
     public abstract void failed(UpnpResponse responseStatus);
 

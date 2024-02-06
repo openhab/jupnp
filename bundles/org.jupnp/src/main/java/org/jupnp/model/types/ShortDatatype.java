@@ -37,8 +37,8 @@ public class ShortDatatype extends AbstractDatatype<Short> {
                 throw new InvalidValueException("Not a valid short: " + s);
             }
             return value;
-        } catch (NumberFormatException ex) {
-            throw new InvalidValueException("Can't convert string to number: " + s, ex);
+        } catch (NumberFormatException e) {
+            throw new InvalidValueException("Can't convert string to number: " + s, e);
         }
     }
 }

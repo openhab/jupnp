@@ -74,7 +74,7 @@ public abstract class Descriptor {
             public static ELEMENT valueOrNullOf(String s) {
                 try {
                     return valueOf(s);
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException e) {
                     return null;
                 }
             }
@@ -116,7 +116,7 @@ public abstract class Descriptor {
             public static ELEMENT valueOrNullOf(String s) {
                 try {
                     return valueOf(s);
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException e) {
                     return null;
                 }
             }

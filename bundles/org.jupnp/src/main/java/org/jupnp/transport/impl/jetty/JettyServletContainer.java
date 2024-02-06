@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JettyServletContainer implements ServletContainerAdapter {
 
-    private Logger log = LoggerFactory.getLogger(JettyServletContainer.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(JettyServletContainer.class.getName());
 
     // Singleton
     public static final JettyServletContainer INSTANCE = new JettyServletContainer();
@@ -72,10 +72,10 @@ public class JettyServletContainer implements ServletContainerAdapter {
     @Override
     public synchronized void registerServlet(String contextPath, Servlet servlet) {
         if (server.getHandler() != null) {
-            log.trace("Server handler is already set: {}", server.getHandler());
+            logger.trace("Server handler is already set: {}", server.getHandler());
             return;
         }
-        log.info("Registering UPnP servlet under context path: {}", contextPath);
+        logger.info("Registering UPnP servlet under context path: {}", contextPath);
         ServletContextHandler servletHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         if (contextPath != null && !contextPath.isEmpty()) {
             servletHandler.setContextPath(contextPath);
@@ -88,12 +88,12 @@ public class JettyServletContainer implements ServletContainerAdapter {
     @Override
     public synchronized void startIfNotRunning() {
         if (!server.isStarted() && !server.isStarting()) {
-            log.info("Starting Jetty server... ");
+            logger.info("Starting Jetty server... ");
             try {
                 server.start();
-            } catch (Exception ex) {
-                log.error("Couldn't start Jetty server", ex);
-                throw new RuntimeException(ex);
+            } catch (Exception e) {
+                logger.error("Couldn't start Jetty server", e);
+                throw new RuntimeException(e);
             }
         }
     }
@@ -101,12 +101,12 @@ public class JettyServletContainer implements ServletContainerAdapter {
     @Override
     public synchronized void stopIfRunning() {
         if (!server.isStopped() && !server.isStopping()) {
-            log.info("Stopping Jetty server...");
+            logger.info("Stopping Jetty server...");
             try {
                 server.stop();
-            } catch (Exception ex) {
-                log.error("Couldn't stop Jetty server", ex);
-                throw new RuntimeException(ex);
+            } catch (Exception e) {
+                logger.error("Couldn't stop Jetty server", e);
+                throw new RuntimeException(e);
             } finally {
                 resetServer();
             }

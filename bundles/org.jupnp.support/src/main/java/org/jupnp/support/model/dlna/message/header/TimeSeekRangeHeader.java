@@ -46,9 +46,9 @@ public class TimeSeekRangeHeader extends DLNAHeader<TimeSeekRangeType> {
                     }
                     setValue(t);
                     return;
-                } catch (InvalidValueException ex) {
-                    throw new InvalidHeaderException(
-                            "Invalid TimeSeekRange header value: " + s + "; " + ex.getMessage(), ex);
+                } catch (InvalidValueException e) {
+                    throw new InvalidHeaderException("Invalid TimeSeekRange header value: " + s + "; " + e.getMessage(),
+                            e);
                 }
             }
         }

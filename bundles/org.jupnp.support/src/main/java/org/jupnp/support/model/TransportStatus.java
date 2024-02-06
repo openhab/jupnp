@@ -42,7 +42,7 @@ public enum TransportStatus {
     public static TransportStatus valueOrCustomOf(String s) {
         try {
             return TransportStatus.valueOf(s);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             return TransportStatus.CUSTOM.setValue(s);
         }
     }

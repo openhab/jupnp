@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingSearch extends SendingAsync {
 
-    private final Logger log = LoggerFactory.getLogger(SendingSearch.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingSearch.class);
 
     private final UpnpHeader searchTarget;
     private final int mxSeconds;
@@ -80,7 +80,7 @@ public class SendingSearch extends SendingAsync {
     @Override
     protected void execute() throws RouterException {
 
-        log.trace("Executing search for target: {} with MX seconds: {}", searchTarget.getString(), getMxSeconds());
+        logger.trace("Executing search for target: {} with MX seconds: {}", searchTarget.getString(), getMxSeconds());
 
         OutgoingSearchRequest msg = new OutgoingSearchRequest(searchTarget, getMxSeconds());
         prepareOutgoingSearchRequest(msg);
@@ -91,10 +91,10 @@ public class SendingSearch extends SendingAsync {
                 getUpnpService().getRouter().send(msg);
 
                 // UDA 1.0 is silent about this but UDA 1.1 recommends "a few hundred milliseconds"
-                log.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
+                logger.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
                 Thread.sleep(getBulkIntervalMilliseconds());
 
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException e) {
                 // Interruption means we stop sending search messages, e.g. on shutdown of thread pool
                 break;
             }

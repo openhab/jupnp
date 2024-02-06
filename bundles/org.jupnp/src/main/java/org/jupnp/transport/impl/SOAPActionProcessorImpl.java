@@ -52,7 +52,7 @@ import org.xml.sax.SAXParseException;
  */
 public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPActionProcessor, ErrorHandler {
 
-    private Logger log = LoggerFactory.getLogger(SOAPActionProcessor.class);
+    private final Logger logger = LoggerFactory.getLogger(SOAPActionProcessor.class);
 
     public SOAPActionProcessorImpl() {
     }
@@ -61,7 +61,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     public void writeBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
-        log.trace("Writing body of {} for: {}", requestMessage, actionInvocation);
+        logger.trace("Writing body of {} for: {}", requestMessage, actionInvocation);
 
         try {
             Document d = newDocument();
@@ -69,16 +69,16 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
 
             writeBodyRequest(d, body, requestMessage, actionInvocation);
 
-            if (log.isTraceEnabled()) {
-                log.trace(
+            if (logger.isTraceEnabled()) {
+                logger.trace(
                         "===================================== SOAP BODY BEGIN ============================================");
-                log.trace(requestMessage.getBodyString());
-                log.trace(
+                logger.trace(requestMessage.getBodyString());
+                logger.trace(
                         "-===================================== SOAP BODY END ============================================");
             }
 
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload", ex);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload", e);
         }
     }
 
@@ -86,7 +86,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     public void writeBody(ActionResponseMessage responseMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
-        log.trace("Writing body of {} for: {}", responseMessage, actionInvocation);
+        logger.trace("Writing body of {} for: {}", responseMessage, actionInvocation);
 
         try {
             Document d = newDocument();
@@ -98,16 +98,16 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                 writeBodyResponse(d, body, responseMessage, actionInvocation);
             }
 
-            if (log.isTraceEnabled()) {
-                log.trace(
+            if (logger.isTraceEnabled()) {
+                logger.trace(
                         "===================================== SOAP BODY BEGIN ============================================");
-                log.trace(responseMessage.getBodyString());
-                log.trace(
+                logger.trace(responseMessage.getBodyString());
+                logger.trace(
                         "-===================================== SOAP BODY END ============================================");
             }
 
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload", ex);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload", e);
         }
     }
 
@@ -115,12 +115,12 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     public void readBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
-        log.trace("Reading body of {} for: {}", requestMessage, actionInvocation);
-        if (log.isTraceEnabled()) {
-            log.trace(
+        logger.trace("Reading body of {} for: {}", requestMessage, actionInvocation);
+        if (logger.isTraceEnabled()) {
+            logger.trace(
                     "===================================== SOAP BODY BEGIN ============================================");
-            log.trace(requestMessage.getBodyString());
-            log.trace(
+            logger.trace(requestMessage.getBodyString());
+            logger.trace(
                     "-===================================== SOAP BODY END ============================================");
         }
 
@@ -130,8 +130,8 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             Element bodyElement = readBodyElement(d);
 
             readBodyRequest(d, bodyElement, requestMessage, actionInvocation);
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload", ex, body);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload", e, body);
         }
     }
 
@@ -139,12 +139,12 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     public void readBody(ActionResponseMessage responseMsg, ActionInvocation actionInvocation)
             throws UnsupportedDataException {
 
-        log.trace("Reading body of {} for: {}", responseMsg, actionInvocation);
-        if (log.isTraceEnabled()) {
-            log.trace(
+        logger.trace("Reading body of {} for: {}", responseMsg, actionInvocation);
+        if (logger.isTraceEnabled()) {
+            logger.trace(
                     "===================================== SOAP BODY BEGIN ============================================");
-            log.trace(responseMsg.getBodyString());
-            log.trace(
+            logger.trace(responseMsg.getBodyString());
+            logger.trace(
                     "-===================================== SOAP BODY END ============================================");
         }
 
@@ -160,8 +160,8 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             } else {
                 actionInvocation.setFailure(failure);
             }
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload", ex, body);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload", e, body);
         }
     }
 
@@ -253,7 +253,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     protected Element writeActionRequestElement(Document d, Element bodyElement, ActionRequestMessage message,
             ActionInvocation actionInvocation) {
 
-        log.trace("Writing action request element: {}", actionInvocation.getAction().getName());
+        logger.trace("Writing action request element: {}", actionInvocation.getAction().getName());
 
         Element actionRequestElement = d.createElementNS(message.getActionNamespace(),
                 "u:" + actionInvocation.getAction().getName());
@@ -266,7 +266,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             ActionInvocation actionInvocation) {
         NodeList bodyChildren = bodyElement.getChildNodes();
 
-        log.trace("Looking for action request element matching namespace: {}", message.getActionNamespace());
+        logger.trace("Looking for action request element matching namespace: {}", message.getActionNamespace());
 
         for (int i = 0; i < bodyChildren.getLength(); i++) {
             Node bodyChild = bodyChildren.item(i);
@@ -282,7 +282,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                     throw new UnsupportedDataException(
                             "Illegal or missing namespace on action request element: " + bodyChild);
                 }
-                log.trace("Reading action request element: {}", unprefixedName);
+                logger.trace("Reading action request element: {}", unprefixedName);
                 return (Element) bodyChild;
             }
         }
@@ -295,7 +295,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     protected Element writeActionResponseElement(Document d, Element bodyElement, ActionResponseMessage message,
             ActionInvocation actionInvocation) {
 
-        log.trace("Writing action response element: {}", actionInvocation.getAction().getName());
+        logger.trace("Writing action response element: {}", actionInvocation.getAction().getName());
         Element actionResponseElement = d.createElementNS(message.getActionNamespace(),
                 "u:" + actionInvocation.getAction().getName() + "Response");
         bodyElement.appendChild(actionResponseElement);
@@ -314,11 +314,11 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             }
 
             if (getUnprefixedNodeName(bodyChild).equals(actionInvocation.getAction().getName() + "Response")) {
-                log.trace("Reading action response element: {}", getUnprefixedNodeName(bodyChild));
+                logger.trace("Reading action response element: {}", getUnprefixedNodeName(bodyChild));
                 return (Element) bodyChild;
             }
         }
-        log.trace("Could not read action response element");
+        logger.trace("Could not read action response element");
         return null;
     }
 
@@ -328,7 +328,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             ActionInvocation actionInvocation) {
 
         for (ActionArgument argument : actionInvocation.getAction().getInputArguments()) {
-            log.trace("Writing action input argument: {}", argument.getName());
+            logger.trace("Writing action input argument: {}", argument.getName());
             String value = actionInvocation.getInput(argument) != null ? actionInvocation.getInput(argument).toString()
                     : "";
             XMLUtil.appendNewElement(d, actionRequestElement, argument.getName(), value);
@@ -347,7 +347,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
             ActionInvocation actionInvocation) {
 
         for (ActionArgument argument : actionInvocation.getAction().getOutputArguments()) {
-            log.trace("Writing action output argument: {}", argument.getName());
+            logger.trace("Writing action output argument: {}", argument.getName());
             String value = actionInvocation.getOutput(argument) != null
                     ? actionInvocation.getOutput(argument).toString()
                     : "";
@@ -382,7 +382,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
         int errorCode = actionInvocation.getFailure().getErrorCode();
         String errorDescription = actionInvocation.getFailure().getMessage();
 
-        log.trace("Writing fault element: {} - {}", errorCode, errorDescription);
+        logger.trace("Writing fault element: {} - {}", errorCode, errorDescription);
 
         XMLUtil.appendNewElement(d, upnpErrorElement, "errorCode", Integer.toString(errorCode));
         XMLUtil.appendNewElement(d, upnpErrorElement, "errorDescription", errorDescription);
@@ -456,14 +456,14 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                 int numericCode = Integer.parseInt(errorCode);
                 ErrorCode standardErrorCode = ErrorCode.getByCode(numericCode);
                 if (standardErrorCode != null) {
-                    log.trace("Reading fault element: {} - {}", standardErrorCode.getCode(), errorDescription);
+                    logger.trace("Reading fault element: {} - {}", standardErrorCode.getCode(), errorDescription);
                     return new ActionException(standardErrorCode, errorDescription, false);
                 } else {
-                    log.trace("Reading fault element: {} - {}", numericCode, errorDescription);
+                    logger.trace("Reading fault element: {} - {}", numericCode, errorDescription);
                     return new ActionException(numericCode, errorDescription);
                 }
-            } catch (NumberFormatException ex) {
-                throw new RuntimeException("Error code was not a number", ex);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Error code was not a number", e);
             }
         } else if (receivedFaultElement) {
             throw new RuntimeException("Received fault element but no error code");
@@ -516,7 +516,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
                 throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
                         "Could not find argument '" + arg.getName() + "' node");
             }
-            log.trace("Reading action argument: {}", arg.getName());
+            logger.trace("Reading action argument: {}", arg.getName());
             String value = XMLUtil.getTextContent(node);
             values[i] = createValue(arg, value);
         }
@@ -564,9 +564,9 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
     protected ActionArgumentValue createValue(ActionArgument arg, String value) throws ActionException {
         try {
             return new ActionArgumentValue(arg, value);
-        } catch (InvalidValueException ex) {
+        } catch (InvalidValueException e) {
             throw new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID,
-                    "Wrong type or invalid value for '" + arg.getName() + "': " + ex.getMessage(), ex);
+                    "Wrong type or invalid value for '" + arg.getName() + "': " + e.getMessage(), e);
         }
     }
 
@@ -585,7 +585,7 @@ public class SOAPActionProcessorImpl extends PooledXmlProcessor implements SOAPA
 
     @Override
     public void warning(SAXParseException e) throws SAXException {
-        log.warn(e.toString());
+        logger.warn(e.toString());
     }
 
     @Override

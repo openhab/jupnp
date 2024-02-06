@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RegistryMaintainer implements Runnable {
 
-    private Logger log = LoggerFactory.getLogger(RegistryMaintainer.class);
+    private final Logger logger = LoggerFactory.getLogger(RegistryMaintainer.class);
 
     private final RegistryImpl registry;
     private final int sleepIntervalMillis;
@@ -38,24 +38,24 @@ public class RegistryMaintainer implements Runnable {
     }
 
     public void stop() {
-        log.trace("Setting stopped status on thread");
+        logger.trace("Setting stopped status on thread");
         stopped = true;
     }
 
     @Override
     public void run() {
         stopped = false;
-        log.trace("Running registry maintenance loop every milliseconds: {}", sleepIntervalMillis);
+        logger.trace("Running registry maintenance loop every milliseconds: {}", sleepIntervalMillis);
         while (!stopped) {
 
             try {
                 registry.maintain();
                 Thread.sleep(sleepIntervalMillis);
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException e) {
                 stopped = true;
             }
 
         }
-        log.trace("Stopped status on thread received, ending maintenance loop");
+        logger.trace("Stopped status on thread received, ending maintenance loop");
     }
 }

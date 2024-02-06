@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultServiceManager<T> implements ServiceManager<T> {
 
-    private Logger log = LoggerFactory.getLogger(DefaultServiceManager.class);
+    private final Logger logger = LoggerFactory.getLogger(DefaultServiceManager.class);
 
     protected final LocalService<T> service;
     protected final Class<T> serviceClass;
@@ -74,7 +74,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
     protected void lock() {
         try {
             if (lock.tryLock(getLockTimeoutMillis(), TimeUnit.MILLISECONDS)) {
-                log.trace("Acquired lock");
+                logger.trace("Acquired lock");
             } else {
                 throw new RuntimeException("Failed to acquire lock in milliseconds: " + getLockTimeoutMillis());
             }
@@ -84,7 +84,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
     }
 
     protected void unlock() {
-        log.trace("Releasing lock");
+        logger.trace("Releasing lock");
         lock.unlock();
     }
 
@@ -139,7 +139,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         try {
             Collection<StateVariableValue> values = readInitialEventedStateVariableValues();
             if (values != null) {
-                log.trace(
+                logger.trace(
                         "Obtained initial state variable values for event, skipping individual state variable accessors");
                 return values;
             }
@@ -168,13 +168,13 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
 
                 StateVariable<LocalService> stateVariable = getService().getStateVariable(variableName);
                 if (stateVariable == null || !stateVariable.getEventDetails().isSendEvents()) {
-                    log.trace("Ignoring unknown or non-evented state variable: {}", variableName);
+                    logger.trace("Ignoring unknown or non-evented state variable: {}", variableName);
                     continue;
                 }
 
                 StateVariableAccessor accessor = getService().getAccessor(stateVariable);
                 if (accessor == null) {
-                    log.warn("Ignoring evented state variable without accessor: {}", variableName);
+                    logger.warn("Ignoring evented state variable without accessor: {}", variableName);
                     continue;
                 }
                 values.add(accessor.read(stateVariable, getImplementation()));
@@ -186,7 +186,7 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
     }
 
     protected void init() {
-        log.trace("No service implementation instance available, initializing...");
+        logger.trace("No service implementation instance available, initializing...");
         try {
             // The actual instance we ware going to use and hold a reference to (1:1 instance for manager)
             serviceImpl = createServiceInstance();
@@ -195,8 +195,8 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
             propertyChangeSupport = createPropertyChangeSupport(serviceImpl);
             propertyChangeSupport.addPropertyChangeListener(createPropertyChangeListener(serviceImpl));
 
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not initialize implementation", ex);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not initialize implementation", e);
         }
     }
 
@@ -208,8 +208,8 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         try {
             // Use this constructor if possible
             return serviceClass.getConstructor(LocalService.class).newInstance(getService());
-        } catch (NoSuchMethodException ex) {
-            log.trace("Creating new service implementation instance with no-arg constructor: {}",
+        } catch (NoSuchMethodException e) {
+            logger.trace("Creating new service implementation instance with no-arg constructor: {}",
                     serviceClass.getName());
             return serviceClass.getDeclaredConstructor().newInstance();
         }
@@ -219,11 +219,11 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
         Method m;
         if ((m = Reflections.getGetterMethod(serviceImpl.getClass(), "propertyChangeSupport")) != null
                 && PropertyChangeSupport.class.isAssignableFrom(m.getReturnType())) {
-            log.trace("Service implementation instance offers PropertyChangeSupport, using that: {}",
+            logger.trace("Service implementation instance offers PropertyChangeSupport, using that: {}",
                     serviceImpl.getClass().getName());
             return (PropertyChangeSupport) m.invoke(serviceImpl);
         }
-        log.trace("Creating new PropertyChangeSupport for service implementation: {}",
+        logger.trace("Creating new PropertyChangeSupport for service implementation: {}",
                 serviceImpl.getClass().getName());
         return new PropertyChangeSupport(serviceImpl);
     }
@@ -244,17 +244,17 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
     protected class DefaultPropertyChangeListener implements PropertyChangeListener {
 
         @Override
-        public void propertyChange(PropertyChangeEvent e) {
-            log.trace("Property change event on local service: {}", e.getPropertyName());
+        public void propertyChange(PropertyChangeEvent pce) {
+            logger.trace("Property change event on local service: {}", pce.getPropertyName());
 
             // Prevent recursion
-            if (e.getPropertyName().equals(EVENTED_STATE_VARIABLES)) {
+            if (pce.getPropertyName().equals(EVENTED_STATE_VARIABLES)) {
                 return;
             }
 
-            String[] variableNames = ModelUtil.fromCommaSeparatedList(e.getPropertyName());
-            if (log.isTraceEnabled()) {
-                log.trace("Changed variable names: {}", Arrays.toString(variableNames));
+            String[] variableNames = ModelUtil.fromCommaSeparatedList(pce.getPropertyName());
+            if (logger.isTraceEnabled()) {
+                logger.trace("Changed variable names: {}", Arrays.toString(variableNames));
             }
 
             try {
@@ -264,9 +264,9 @@ public class DefaultServiceManager<T> implements ServiceManager<T> {
                     getPropertyChangeSupport().firePropertyChange(EVENTED_STATE_VARIABLES, null, currentValues);
                 }
 
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // TODO: Is it OK to only log this error? It means we keep running although we couldn't send events?
-                log.error("Error reading state of service after state variable update event", ex);
+                logger.error("Error reading state of service after state variable update event", e);
             }
         }
     }

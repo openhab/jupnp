@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RetrieveRemoteDescriptors implements Runnable {
 
-    private final Logger log = LoggerFactory.getLogger(RetrieveRemoteDescriptors.class);
+    private final Logger logger = LoggerFactory.getLogger(RetrieveRemoteDescriptors.class);
 
     private final UpnpService upnpService;
     private RemoteDevice rd;
@@ -89,7 +89,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         // Exit if it has been discovered already, most likely because we have been waiting in the executor queue too
         // long
         if (getUpnpService().getRegistry().getRemoteDevice(rd.getIdentity().getUdn(), true) != null) {
-            log.trace("Exiting early, already discovered: {}", deviceURL);
+            logger.trace("Exiting early, already discovered: {}", deviceURL);
             return;
         }
 
@@ -98,14 +98,14 @@ public class RetrieveRemoteDescriptors implements Runnable {
         // processing this several times concurrently.
 
         if (activeRetrievals.putIfAbsent(deviceURL, Boolean.TRUE) != null) {
-            log.trace("Exiting early, active retrieval for URL already in progress: {}", deviceURL);
+            logger.trace("Exiting early, active retrieval for URL already in progress: {}", deviceURL);
             return;
         }
 
         try {
             describe();
-        } catch (RouterException ex) {
-            log.warn("Descriptor retrieval failed: {}", deviceURL, ex);
+        } catch (RouterException e) {
+            logger.warn("Descriptor retrieval failed: {}", deviceURL, e);
         } finally {
             activeRetrievals.remove(deviceURL);
         }
@@ -119,7 +119,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         // call of this method has to be really necessary and rare.
 
         if (getUpnpService().getRouter() == null) {
-            log.warn("Router not yet initialized");
+            logger.warn("Router not yet initialized");
             return;
         }
 
@@ -137,41 +137,41 @@ public class RetrieveRemoteDescriptors implements Runnable {
                 deviceDescRetrievalMsg.getHeaders().putAll(headers);
             }
 
-            log.debug("Sending device descriptor retrieval message: {}", deviceDescRetrievalMsg);
+            logger.debug("Sending device descriptor retrieval message: {}", deviceDescRetrievalMsg);
             deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
 
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             // UpnpRequest constructor can throw IllegalArgumentException on invalid URI
             // IllegalArgumentException can also be thrown by Apache HttpClient on blank URI in send()
-            log.warn("Device descriptor retrieval failed: {}, possibly invalid URL",
-                    rd.getIdentity().getDescriptorURL(), ex);
+            logger.warn("Device descriptor retrieval failed: {}, possibly invalid URL",
+                    rd.getIdentity().getDescriptorURL(), e);
             return;
         }
 
         if (deviceDescMsg == null) {
-            log.warn("Device descriptor retrieval failed, no response: {}", rd.getIdentity().getDescriptorURL());
+            logger.warn("Device descriptor retrieval failed, no response: {}", rd.getIdentity().getDescriptorURL());
             return;
         }
 
         if (deviceDescMsg.getOperation().isFailed()) {
-            log.warn("Device descriptor retrieval failed: {}, {}", rd.getIdentity().getDescriptorURL(),
+            logger.warn("Device descriptor retrieval failed: {}, {}", rd.getIdentity().getDescriptorURL(),
                     deviceDescMsg.getOperation().getResponseDetails());
             return;
         }
 
         if (!deviceDescMsg.isContentTypeTextUDA()) {
-            log.debug("Received device descriptor without or with invalid Content-Type: {}",
+            logger.debug("Received device descriptor without or with invalid Content-Type: {}",
                     rd.getIdentity().getDescriptorURL());
             // We continue despite the invalid UPnP message because we can still hope to convert the content
         }
 
         String descriptorContent = deviceDescMsg.getBodyString();
         if (descriptorContent == null || descriptorContent.isEmpty()) {
-            log.warn("Received empty device descriptor: {}", rd.getIdentity().getDescriptorURL());
+            logger.warn("Received empty device descriptor: {}", rd.getIdentity().getDescriptorURL());
             return;
         }
 
-        log.debug("Received root device descriptor: {}", deviceDescMsg);
+        logger.debug("Received root device descriptor: {}", deviceDescMsg);
         describe(descriptorContent);
     }
 
@@ -186,56 +186,56 @@ public class RetrieveRemoteDescriptors implements Runnable {
 
             describedDevice = deviceDescriptorBinder.describe(rd, descriptorXML);
 
-            log.debug("Remote device described (without services) notifying listeners: {}", describedDevice);
+            logger.debug("Remote device described (without services) notifying listeners: {}", describedDevice);
             notifiedStart = getUpnpService().getRegistry().notifyDiscoveryStart(describedDevice);
 
-            log.debug("Hydrating described device's services: {}", describedDevice);
+            logger.debug("Hydrating described device's services: {}", describedDevice);
             RemoteDevice hydratedDevice = describeServices(describedDevice);
             if (hydratedDevice == null) {
                 if (!errorsAlreadyLogged.contains(rd.getIdentity().getUdn())) {
                     errorsAlreadyLogged.add(rd.getIdentity().getUdn());
-                    log.warn("Device service description failed: {}", rd);
+                    logger.warn("Device service description failed: {}", rd);
                 }
                 if (notifiedStart) {
                     getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice,
                             new DescriptorBindingException("Device service description failed: " + rd));
 
                     // Even though not all services could be described, we want to have the device in the registry.
-                    log.debug("Adding described remote device to registry: {}", describedDevice);
+                    logger.debug("Adding described remote device to registry: {}", describedDevice);
                     getUpnpService().getRegistry().addDevice(describedDevice);
                     return;
                 }
             } else {
-                log.debug("Adding fully hydrated remote device to registry: {}", hydratedDevice);
+                logger.debug("Adding fully hydrated remote device to registry: {}", hydratedDevice);
                 // The registry will do the right thing: A new root device is going to be added, if it's
                 // already present or we just received the descriptor again (because we got an embedded
                 // devices' notification), it will simply update the expiration timestamp of the root
                 // device.
                 getUpnpService().getRegistry().addDevice(hydratedDevice);
             }
-        } catch (ValidationException ex) {
+        } catch (ValidationException e) {
             // Avoid error log spam each time device is discovered, errors are logged once per device.
             if (!errorsAlreadyLogged.contains(rd.getIdentity().getUdn())) {
                 errorsAlreadyLogged.add(rd.getIdentity().getUdn());
-                log.warn("Could not validate device model: {}", rd);
-                for (ValidationError validationError : ex.getErrors()) {
-                    log.warn(validationError.toString());
+                logger.warn("Could not validate device model: {}", rd);
+                for (ValidationError validationError : e.getErrors()) {
+                    logger.warn(validationError.toString());
                 }
                 if (describedDevice != null && notifiedStart) {
-                    getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+                    getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, e);
                 }
             }
 
-        } catch (DescriptorBindingException ex) {
-            log.warn("Could not hydrate device or its services from descriptor: {}", rd, ex);
+        } catch (DescriptorBindingException e) {
+            logger.warn("Could not hydrate device or its services from descriptor: {}", rd, e);
             if (describedDevice != null && notifiedStart) {
-                getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+                getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, e);
             }
 
-        } catch (RegistrationException ex) {
-            log.warn("Adding hydrated device to registry failed: {}", rd, ex);
+        } catch (RegistrationException e) {
+            logger.warn("Adding hydrated device to registry failed: {}", rd, e);
             if (describedDevice != null && notifiedStart) {
-                getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, ex);
+                getUpnpService().getRegistry().notifyDiscoveryFailure(describedDevice, e);
             }
         }
     }
@@ -292,7 +292,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         try {
             descriptorURL = service.getDevice().normalizeURI(service.getDescriptorURI());
         } catch (IllegalArgumentException e) {
-            log.warn("Could not normalize service descriptor URL: {}", service.getDescriptorURI());
+            logger.warn("Could not normalize service descriptor URL: {}", service.getDescriptorURI());
             return null;
         }
 
@@ -305,32 +305,32 @@ public class RetrieveRemoteDescriptors implements Runnable {
             serviceDescRetrievalMsg.getHeaders().putAll(headers);
         }
 
-        log.debug("Sending service descriptor retrieval message: {}", serviceDescRetrievalMsg);
+        logger.debug("Sending service descriptor retrieval message: {}", serviceDescRetrievalMsg);
         StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
 
         if (serviceDescMsg == null) {
-            log.warn("Could not retrieve service descriptor, no response: {}", service);
+            logger.warn("Could not retrieve service descriptor, no response: {}", service);
             return null;
         }
 
         if (serviceDescMsg.getOperation().isFailed()) {
-            log.warn("Service descriptor retrieval failed: {}, {}", descriptorURL,
+            logger.warn("Service descriptor retrieval failed: {}, {}", descriptorURL,
                     serviceDescMsg.getOperation().getResponseDetails());
             return null;
         }
 
         if (!serviceDescMsg.isContentTypeTextUDA()) {
-            log.debug("Received service descriptor without or with invalid Content-Type: {}", descriptorURL);
+            logger.debug("Received service descriptor without or with invalid Content-Type: {}", descriptorURL);
             // We continue despite the invalid UPnP message because we can still hope to convert the content
         }
 
         String descriptorContent = serviceDescMsg.getBodyString();
         if (descriptorContent == null || descriptorContent.isEmpty()) {
-            log.warn("Received empty service descriptor: {}", descriptorURL);
+            logger.warn("Received empty service descriptor: {}", descriptorURL);
             return null;
         }
 
-        log.debug("Received service descriptor, hydrating service model: {}", serviceDescMsg);
+        logger.debug("Received service descriptor, hydrating service model: {}", serviceDescMsg);
         ServiceDescriptorBinder serviceDescriptorBinder = getUpnpService().getConfiguration()
                 .getServiceDescriptorBinderUDA10();
 
@@ -348,10 +348,10 @@ public class RetrieveRemoteDescriptors implements Runnable {
         for (RemoteService discoveredService : services) {
             for (ServiceType exclusiveType : exclusiveTypes) {
                 if (discoveredService.getServiceType().implementsVersion(exclusiveType)) {
-                    log.debug("Including exclusive service: {}", discoveredService);
+                    logger.debug("Including exclusive service: {}", discoveredService);
                     exclusiveServices.add(discoveredService);
                 } else {
-                    log.debug("Excluding unwanted service: {}", exclusiveType);
+                    logger.debug("Excluding unwanted service: {}", exclusiveType);
                 }
             }
         }

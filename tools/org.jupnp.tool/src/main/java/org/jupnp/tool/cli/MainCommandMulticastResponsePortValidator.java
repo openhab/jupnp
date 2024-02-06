@@ -36,7 +36,7 @@ public class MainCommandMulticastResponsePortValidator implements IParameterVali
                 if (port < 0 || port > 65535) {
                     throw new ParameterException(errorMsg + "must be between 0..65535");
                 }
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException e) {
                 // must be valid port number
                 throw new ParameterException(errorMsg + "is not a valid number)");
             }

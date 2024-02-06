@@ -180,7 +180,7 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
     protected Channel getChannel(String channelName) throws RenderingControlException {
         try {
             return Channel.valueOf(channelName);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             throw new RenderingControlException(ErrorCode.ARGUMENT_VALUE_INVALID,
                     "Unsupported audio channel: " + channelName);
         }

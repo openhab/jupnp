@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AsyncServletUpnpStream extends ServletUpnpStream implements AsyncListener {
 
-    private final Logger log = LoggerFactory.getLogger(AsyncServletUpnpStream.class);
+    private final Logger logger = LoggerFactory.getLogger(AsyncServletUpnpStream.class);
 
     protected final AsyncContext asyncContext;
     protected final HttpServletRequest request;
@@ -71,10 +71,10 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
     protected void complete() {
         try {
             asyncContext.complete();
-        } catch (IllegalStateException ex) {
+        } catch (IllegalStateException e) {
             // If Jetty's connection, for whatever reason, is in an illegal state, this will be thrown
             // and we can "probably" ignore it. The request is complete, no matter how it ended.
-            log.info("Error calling servlet container's AsyncContext#complete() method", ex);
+            logger.info("Error calling servlet container's AsyncContext#complete() method", e);
         }
     }
 
@@ -86,19 +86,19 @@ public abstract class AsyncServletUpnpStream extends ServletUpnpStream implement
 
     @Override
     public void onComplete(AsyncEvent event) throws IOException {
-        log.trace("Completed asynchronous processing of HTTP request: {}", event.getSuppliedRequest());
+        logger.trace("Completed asynchronous processing of HTTP request: {}", event.getSuppliedRequest());
         responseSent(responseMessage);
     }
 
     @Override
     public void onTimeout(AsyncEvent event) throws IOException {
-        log.trace("Asynchronous processing of HTTP request timed out: {}", event.getSuppliedRequest());
+        logger.trace("Asynchronous processing of HTTP request timed out: {}", event.getSuppliedRequest());
         responseException(new Exception("Asynchronous request timed out"));
     }
 
     @Override
     public void onError(AsyncEvent event) throws IOException {
-        log.trace("Asynchronous processing of HTTP request error", event.getThrowable());
+        logger.trace("Asynchronous processing of HTTP request error", event.getThrowable());
         responseException(event.getThrowable());
     }
 

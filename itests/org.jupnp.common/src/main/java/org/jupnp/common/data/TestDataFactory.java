@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TestDataFactory {
-    private static final Logger log = LoggerFactory.getLogger(TestDataFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestDataFactory.class);
     private static String DEFAULT_FILE = "test-data-factory.properties";
     private static String DEFAULT_KEY = "org.jupnp.osgi.test.data.factory.properties";
     public static TestDataFactory instance;
@@ -48,13 +48,13 @@ public class TestDataFactory {
             properties = new Properties();
             InputStream in = this.getClass().getResourceAsStream(DEFAULT_FILE);
             if (in == null) {
-                log.error("No test data factory file {}.", file);
+                LOGGER.error("No test data factory file {}.", file);
             } else {
                 try {
                     properties.load(in);
                     in.close();
                 } catch (IOException e) {
-                    log.error("Cannot read test data factory file {}.", file);
+                    LOGGER.error("Cannot read test data factory file {}.", file);
                 }
             }
         }

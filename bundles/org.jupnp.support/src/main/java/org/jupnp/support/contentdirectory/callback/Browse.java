@@ -110,9 +110,9 @@ public abstract class Browse extends ActionCallback {
                 received(invocation, didl);
                 updateStatus(Status.OK);
 
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 invocation.setFailure(
-                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex));
+                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + e, e));
                 failure(invocation, null);
             }
 

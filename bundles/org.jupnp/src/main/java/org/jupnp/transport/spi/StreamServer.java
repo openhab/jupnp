@@ -56,8 +56,8 @@ import org.jupnp.transport.Router;
  *              StreamResponseMessage response = process(request);
  *              // ... Send response
  *              responseSent(response))
- *          } catch (Exception ex) {
- *              responseException(ex);
+ *          } catch (Exception e) {
+ *              responseException(e);
  *          }
  *      }
  * }

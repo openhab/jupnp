@@ -33,7 +33,7 @@ public class AvailableRangeHeader extends DLNAHeader<NormalPlayTimeRange> {
             try {
                 setValue(NormalPlayTimeRange.valueOf(s, true));
                 return;
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // no need to take preventive measure
             }
         }

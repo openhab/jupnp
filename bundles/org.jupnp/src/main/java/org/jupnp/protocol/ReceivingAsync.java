@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable {
 
-    private final Logger log = LoggerFactory.getLogger(UpnpService.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpService.class);
 
     private final UpnpService upnpService;
 
@@ -61,21 +61,21 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
         boolean proceed;
         try {
             proceed = waitBeforeExecution();
-        } catch (InterruptedException ex) {
-            log.info("Protocol wait before execution interrupted (on shutdown?): {}", getClass().getSimpleName());
+        } catch (InterruptedException e) {
+            logger.info("Protocol wait before execution interrupted (on shutdown?): {}", getClass().getSimpleName());
             proceed = false;
         }
 
         if (proceed) {
             try {
                 execute();
-            } catch (Exception ex) {
-                Throwable cause = Exceptions.unwrap(ex);
+            } catch (Exception e) {
+                Throwable cause = Exceptions.unwrap(e);
                 if (cause instanceof InterruptedException) {
-                    log.info("Interrupted protocol '{}'", getClass().getSimpleName(), ex);
+                    logger.info("Interrupted protocol '{}'", getClass().getSimpleName(), e);
                 } else {
                     throw new RuntimeException(
-                            "Fatal error while executing protocol '" + getClass().getSimpleName() + "'", ex);
+                            "Fatal error while executing protocol '" + getClass().getSimpleName() + "'", e);
                 }
             }
         }

@@ -43,8 +43,8 @@ class UtilTest {
         try {
             this.documentBuilderFactory.setNamespaceAware(true);
             this.documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

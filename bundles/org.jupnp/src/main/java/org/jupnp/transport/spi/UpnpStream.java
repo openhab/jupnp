@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class UpnpStream implements Runnable {
 
-    private Logger log = LoggerFactory.getLogger(UpnpStream.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpStream.class);
 
     protected final ProtocolFactory protocolFactory;
     protected ReceivingSync syncProtocol;
@@ -68,18 +68,18 @@ public abstract class UpnpStream implements Runnable {
      * @return The TCP (HTTP) stream response message, or <code>null</code> if a 404 should be send to the client.
      */
     public StreamResponseMessage process(StreamRequestMessage requestMsg) {
-        log.trace("Processing stream request message: {}", requestMsg);
+        logger.trace("Processing stream request message: {}", requestMsg);
 
         try {
             // Try to get a protocol implementation that matches the request message
             syncProtocol = getProtocolFactory().createReceivingSync(requestMsg);
-        } catch (ProtocolCreationException ex) {
-            log.warn("Processing stream request failed", ex);
+        } catch (ProtocolCreationException e) {
+            logger.warn("Processing stream request failed", e);
             return new StreamResponseMessage(UpnpResponse.Status.NOT_IMPLEMENTED);
         }
 
         // Run it
-        log.trace("Running protocol for synchronous message processing: {}", syncProtocol);
+        logger.trace("Running protocol for synchronous message processing: {}", syncProtocol);
         syncProtocol.run();
 
         // ... then grab the response
@@ -87,10 +87,10 @@ public abstract class UpnpStream implements Runnable {
 
         if (responseMsg == null) {
             // That's ok, the caller is supposed to handle this properly (e.g. convert it to HTTP 404)
-            log.trace("Protocol did not return any response message");
+            logger.trace("Protocol did not return any response message");
             return null;
         }
-        log.trace("Protocol returned response: {}", responseMsg);
+        logger.trace("Protocol returned response: {}", responseMsg);
         return responseMsg;
     }
 

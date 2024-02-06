@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InfoCommand {
 
-    private static final Logger logger = LoggerFactory.getLogger(InfoCommand.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InfoCommand.class);
     private final JUPnPTool tool;
     private StringBuilder sb;
 
@@ -40,11 +40,11 @@ public class InfoCommand {
     }
 
     public int run(List<String> ipAddressOrUdns, boolean verbose) {
-        logger.info("Show information for devices {}", flatList(ipAddressOrUdns));
+        LOGGER.info("Show information for devices {}", flatList(ipAddressOrUdns));
         if (verbose) {
             SpecificationViolationReporter.enableReporting();
         } else {
-            logger.debug("Disable UPnP specification violation reportings");
+            LOGGER.debug("Disable UPnP specification violation reportings");
             SpecificationViolationReporter.disableReporting();
         }
 
@@ -61,7 +61,7 @@ public class InfoCommand {
         for (RemoteDevice device : registry.getRemoteDevices()) {
             String ipAddress = device.getIdentity().getDescriptorURL().getHost();
             String udn = device.getIdentity().getUdn().getIdentifierString();
-            logger.info("ip: {}, udn={}", ipAddress, udn);
+            LOGGER.info("ip: {}, udn={}", ipAddress, udn);
 
             for (String ipAddressOrUdn : ipAddressOrUdns) {
                 boolean match = false;
@@ -72,7 +72,7 @@ public class InfoCommand {
                         if (isSameIpAddress(ipAddress, ipAddressOrUdn)) {
                             match = true;
                         }
-                    } catch (IllegalArgumentException ex) {
+                    } catch (IllegalArgumentException e) {
                         // ignore errors
                     }
                 }
@@ -87,7 +87,7 @@ public class InfoCommand {
     }
 
     private void showDeviceInfo(RemoteDevice device, String searchCriteria, boolean verbose) {
-        logger.info(device.toString());
+        LOGGER.info("{}", device);
         sb = new StringBuilder();
         sb.append("Device info for ");
         sb.append(searchCriteria);

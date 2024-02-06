@@ -65,9 +65,9 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingSearch.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingSearch.class);
 
-    private final boolean LOG_ENABLED = log.isTraceEnabled();
+    private final boolean LOG_ENABLED = logger.isTraceEnabled();
 
     protected final Random randomGenerator = new Random();
 
@@ -79,26 +79,26 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     protected void execute() throws RouterException {
         if (getUpnpService().getRouter() == null) {
             // TODO: http://mailinglists.945824.n3.nabble.com/rare-NPE-on-start-tp3078213p3142767.html
-            log.trace("Router hasn't completed initialization, ignoring received search message");
+            logger.trace("Router hasn't completed initialization, ignoring received search message");
             return;
         }
 
         if (!getInputMessage().isMANSSDPDiscover()) {
-            log.trace("Invalid search request, no or invalid MAN ssdp:discover header: {}", getInputMessage());
+            logger.trace("Invalid search request, no or invalid MAN ssdp:discover header: {}", getInputMessage());
             return;
         }
 
         UpnpHeader searchTarget = getInputMessage().getSearchTarget();
 
         if (searchTarget == null) {
-            log.trace("Invalid search request, did not contain ST header: {}", getInputMessage());
+            logger.trace("Invalid search request, did not contain ST header: {}", getInputMessage());
             return;
         }
 
         List<NetworkAddress> activeStreamServers = getUpnpService().getRouter()
                 .getActiveStreamServers(getInputMessage().getLocalAddress());
         if (activeStreamServers.isEmpty()) {
-            log.trace("Aborting search response, no active stream servers found (network disabled?)");
+            logger.trace("Aborting search response, no active stream servers found (network disabled?)");
             return;
         }
 
@@ -113,7 +113,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Integer mx = getInputMessage().getMX();
 
         if (mx == null) {
-            log.trace("Invalid search request, did not contain MX header: {}", getInputMessage());
+            logger.trace("Invalid search request, did not contain MX header: {}", getInputMessage());
             return false;
         }
 
@@ -126,7 +126,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         // Only wait if there is something to wait for
         if (!getUpnpService().getRegistry().getLocalDevices().isEmpty()) {
             int sleepTime = randomGenerator.nextInt(mx * 1000);
-            log.trace("Sleeping {} milliseconds to avoid flooding with search responses", sleepTime);
+            logger.trace("Sleeping {} milliseconds to avoid flooding with search responses", sleepTime);
             Thread.sleep(sleepTime);
         }
 
@@ -155,13 +155,13 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             sendSearchResponseServiceType((ServiceType) searchTarget.getValue(), activeStreamServer);
 
         } else {
-            log.warn("Non-implemented search request target: {}", searchTarget.getClass());
+            logger.warn("Non-implemented search request target: {}", searchTarget.getClass());
         }
     }
 
     protected void sendSearchResponseAll(NetworkAddress activeStreamServer) throws RouterException {
         if (LOG_ENABLED) {
-            log.trace("Responding to 'all' search with advertisement messages for all local devices");
+            logger.trace("Responding to 'all' search with advertisement messages for all local devices");
         }
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
@@ -171,7 +171,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
             // We are re-using the regular notification messages here but override the NT with the ST header
             if (LOG_ENABLED) {
-                log.trace("Sending root device messages: {}", localDevice);
+                logger.trace("Sending root device messages: {}", localDevice);
             }
             List<OutgoingSearchResponse> rootDeviceMsgs = createDeviceMessages(localDevice, activeStreamServer);
             for (OutgoingSearchResponse upnpMessage : rootDeviceMsgs) {
@@ -181,7 +181,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             if (localDevice.hasEmbeddedDevices()) {
                 for (LocalDevice embeddedDevice : localDevice.findEmbeddedDevices()) {
                     if (LOG_ENABLED) {
-                        log.trace("Sending embedded device messages: {}", embeddedDevice);
+                        logger.trace("Sending embedded device messages: {}", embeddedDevice);
                     }
                     List<OutgoingSearchResponse> embeddedDeviceMsgs = createDeviceMessages(embeddedDevice,
                             activeStreamServer);
@@ -194,7 +194,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             List<OutgoingSearchResponse> serviceTypeMsgs = createServiceTypeMessages(localDevice, activeStreamServer);
             if (!serviceTypeMsgs.isEmpty()) {
                 if (LOG_ENABLED) {
-                    log.trace("Sending service type messages");
+                    logger.trace("Sending service type messages");
                 }
                 for (OutgoingSearchResponse upnpMessage : serviceTypeMsgs) {
                     getUpnpService().getRouter().send(upnpMessage);
@@ -240,7 +240,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     }
 
     protected void sendSearchResponseRootDevices(NetworkAddress activeStreamServer) throws RouterException {
-        log.trace("Responding to root device search with advertisement messages for all local root devices");
+        logger.trace("Responding to root device search with advertisement messages for all local root devices");
         for (LocalDevice device : getUpnpService().getRegistry().getLocalDevices()) {
 
             if (isAdvertisementDisabled(device)) {
@@ -262,7 +262,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                 return;
             }
 
-            log.trace("Responding to UDN device search: {}", udn);
+            logger.trace("Responding to UDN device search: {}", udn);
             OutgoingSearchResponse message = new OutgoingSearchResponseUDN(getInputMessage(),
                     getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device);
             prepareOutgoingSearchResponse(message);
@@ -272,7 +272,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     protected void sendSearchResponseDeviceType(DeviceType deviceType, NetworkAddress activeStreamServer)
             throws RouterException {
-        log.trace("Responding to device type search: {}", deviceType);
+        logger.trace("Responding to device type search: {}", deviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(deviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
@@ -281,7 +281,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                     continue;
                 }
 
-                log.trace("Sending matching device type search result for: {}", device);
+                logger.trace("Sending matching device type search result for: {}", device);
                 OutgoingSearchResponse message = new OutgoingSearchResponseDeviceType(getInputMessage(),
                         getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device);
                 prepareOutgoingSearchResponse(message);
@@ -292,7 +292,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     protected void sendSearchResponseServiceType(ServiceType serviceType, NetworkAddress activeStreamServer)
             throws RouterException {
-        log.trace("Responding to service type search: {}", serviceType);
+        logger.trace("Responding to service type search: {}", serviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(serviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
@@ -301,7 +301,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                     continue;
                 }
 
-                log.trace("Sending matching service type search result: {}", device);
+                logger.trace("Sending matching service type search result: {}", device);
                 OutgoingSearchResponse message = new OutgoingSearchResponseServiceType(getInputMessage(),
                         getDescriptorLocation(activeStreamServer, (LocalDevice) device), (LocalDevice) device,
                         serviceType);

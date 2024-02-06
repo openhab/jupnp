@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingNotificationByebye extends SendingNotification {
 
-    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingNotification.class);
 
     public SendingNotificationByebye(UpnpService upnpService, LocalDevice device) {
         super(upnpService, device);
@@ -46,7 +46,7 @@ public class SendingNotificationByebye extends SendingNotification {
 
     @Override
     protected void execute() throws RouterException {
-        log.trace("Sending byebye messages ({} times) for: {}", getBulkRepeat(), getDevice());
+        logger.trace("Sending byebye messages ({} times) for: {}", getBulkRepeat(), getDevice());
         super.execute();
     }
 

@@ -92,10 +92,10 @@ public interface Router {
     /**
      * Called by the {@link #enable()} method before it returns.
      *
-     * @param ex The cause of the failure.
+     * @param e The cause of the failure.
      * @throws InitializationException if the exception was not recoverable.
      */
-    void handleStartFailure(InitializationException ex) throws InitializationException;
+    void handleStartFailure(InitializationException e) throws InitializationException;
 
     /**
      * @param preferredAddress A preferred stream server bound address or <code>null</code>.

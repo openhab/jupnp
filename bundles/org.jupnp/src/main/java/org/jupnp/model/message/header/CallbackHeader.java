@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CallbackHeader extends UpnpHeader<List<URL>> {
 
-    private final Logger log = LoggerFactory.getLogger(CallbackHeader.class);
+    private final Logger logger = LoggerFactory.getLogger(CallbackHeader.class);
 
     public CallbackHeader() {
         setValue(new ArrayList<>());
@@ -65,7 +65,7 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
                 sp = sp.trim();
 
                 if (!sp.startsWith("http://")) {
-                    log.warn("Discarding non-http callback URL: {}", sp);
+                    logger.warn("Discarding non-http callback URL: {}", sp);
                     continue;
                 }
 
@@ -83,16 +83,16 @@ public class CallbackHeader extends UpnpHeader<List<URL>> {
                      * at java.net.URL.toURI(URL.java:497)
                      */
                     url.toURI();
-                } catch (URISyntaxException ex) {
-                    log.warn("Discarding callback URL, not a valid URI on this platform: {}", url, ex);
+                } catch (URISyntaxException e) {
+                    logger.warn("Discarding callback URL, not a valid URI on this platform: {}", url, e);
                     continue;
                 }
 
                 urls.add(url);
             }
             setValue(urls);
-        } catch (MalformedURLException ex) {
-            throw new InvalidHeaderException("Can't parse callback URLs from '" + s + "'", ex);
+        } catch (MalformedURLException e) {
+            throw new InvalidHeaderException("Can't parse callback URLs from '" + s + "'", e);
         }
     }
 

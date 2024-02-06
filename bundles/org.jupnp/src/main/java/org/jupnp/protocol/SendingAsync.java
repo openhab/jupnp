@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class SendingAsync implements Runnable {
 
-    private final Logger log = LoggerFactory.getLogger(UpnpService.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpService.class);
 
     private final UpnpService upnpService;
 
@@ -52,13 +52,13 @@ public abstract class SendingAsync implements Runnable {
     public void run() {
         try {
             execute();
-        } catch (Exception ex) {
-            Throwable cause = Exceptions.unwrap(ex);
+        } catch (Exception e) {
+            Throwable cause = Exceptions.unwrap(e);
             if (cause instanceof InterruptedException) {
-                log.info("Interrupted protocol", ex);
+                logger.info("Interrupted protocol", e);
             } else {
                 throw new RuntimeException("Fatal error while executing protocol '" + getClass().getSimpleName() + "'",
-                        ex);
+                        e);
             }
         }
     }

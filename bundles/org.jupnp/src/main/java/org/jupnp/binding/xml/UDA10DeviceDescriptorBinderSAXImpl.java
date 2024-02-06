@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
  */
 public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBinderImpl {
 
-    private final Logger log = LoggerFactory.getLogger(DeviceDescriptorBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(DeviceDescriptorBinder.class);
 
     @Override
     public <D extends Device> D describe(D undescribedDevice, String descriptorXml)
@@ -61,7 +61,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         }
 
         try {
-            log.trace("Populating device from XML descriptor: {}", undescribedDevice);
+            logger.trace("Populating device from XML descriptor: {}", undescribedDevice);
 
             // Read the XML into a mutable descriptor graph
 
@@ -78,10 +78,10 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
             // Build the immutable descriptor graph
             return (D) descriptor.build(undescribedDevice);
 
-        } catch (ValidationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse device descriptor", ex);
+        } catch (ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not parse device descriptor", e);
         }
     }
 
@@ -115,8 +115,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                             // We hope it's RFC 2396 and RFC 2732 compliant
                             getInstance().baseURL = new URL(urlString);
                         }
-                    } catch (Exception ex) {
-                        throw new SAXException("Invalid URLBase", ex);
+                    } catch (Exception e) {
+                        throw new SAXException("Invalid URLBase", e);
                     }
                     break;
             }
@@ -234,7 +234,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     String txt = getCharacters();
                     try {
                         getInstance().dlnaDocs.add(DLNADoc.valueOf(txt));
-                    } catch (InvalidValueException ex) {
+                    } catch (InvalidValueException e) {
                         SpecificationViolationReporter.report("Invalid X_DLNADOC value, ignoring value: {}", txt);
                     }
                     break;
@@ -293,9 +293,9 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 case depth:
                     try {
                         getInstance().depth = Integer.parseInt(getCharacters());
-                    } catch (NumberFormatException ex) {
+                    } catch (NumberFormatException e) {
                         SpecificationViolationReporter.report("Invalid icon depth '{}', using 16 as default: {}",
-                                getCharacters(), ex);
+                                getCharacters(), e);
                         getInstance().depth = 16;
                     }
                     break;
@@ -306,7 +306,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     try {
                         getInstance().mimeType = getCharacters();
                         MimeType.valueOf(getInstance().mimeType);
-                    } catch (IllegalArgumentException ex) {
+                    } catch (IllegalArgumentException e) {
                         SpecificationViolationReporter.report("Ignoring invalid icon mime type: {}",
                                 getInstance().mimeType);
                         getInstance().mimeType = "";
@@ -376,8 +376,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                         getInstance().eventSubscriptionURI = parseURI(getCharacters());
                         break;
                 }
-            } catch (InvalidValueException ex) {
-                SpecificationViolationReporter.report("Skipping invalid service declaration. " + ex.getMessage());
+            } catch (InvalidValueException e) {
+                SpecificationViolationReporter.report("Skipping invalid service declaration. " + e.getMessage());
             }
         }
 

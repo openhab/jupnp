@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingNotificationAlive extends SendingNotification {
 
-    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingNotification.class);
 
     public SendingNotificationAlive(UpnpService upnpService, LocalDevice device) {
         super(upnpService, device);
@@ -37,7 +37,7 @@ public class SendingNotificationAlive extends SendingNotification {
 
     @Override
     protected void execute() throws RouterException {
-        log.trace("Sending alive messages ({} times) for: {}", getBulkRepeat(), getDevice());
+        logger.trace("Sending alive messages ({} times) for: {}", getBulkRepeat(), getDevice());
         super.execute();
     }
 

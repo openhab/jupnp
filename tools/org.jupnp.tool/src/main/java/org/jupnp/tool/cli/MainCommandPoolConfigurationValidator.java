@@ -56,10 +56,10 @@ public class MainCommandPoolConfigurationValidator implements IParameterValidato
                         }
                     }
                     // all fine otherwise
-                } catch (NoSuchElementException ex) {
+                } catch (NoSuchElementException e) {
                     // hmm, not enough tokens, should never happen
                     throw new ParameterException(errorMsg + " (not enough arguments)");
-                } catch (NumberFormatException ex) {
+                } catch (NumberFormatException e) {
                     // must be valid numbers
                     throw new ParameterException(errorMsg + " (numbers wrong)");
                 }

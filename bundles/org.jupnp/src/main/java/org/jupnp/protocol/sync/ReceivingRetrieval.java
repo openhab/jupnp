@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingRetrieval.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingRetrieval.class);
 
     public ReceivingRetrieval(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);
@@ -64,7 +64,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
     protected StreamResponseMessage executeSync() throws RouterException {
 
         if (!getInputMessage().hasHostHeader()) {
-            log.trace("Ignoring message, missing HOST header: {}", getInputMessage());
+            logger.trace("Ignoring message, missing HOST header: {}", getInputMessage());
             return new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.PRECONDITION_FAILED));
         }
 
@@ -75,7 +75,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
         if (foundResource == null) {
             foundResource = onResourceNotFound(requestedURI);
             if (foundResource == null) {
-                log.trace("No local resource found: {}", getInputMessage());
+                logger.trace("No local resource found: {}", getInputMessage());
                 return null;
             }
         }
@@ -91,7 +91,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
 
             if (DeviceDescriptorResource.class.isAssignableFrom(resource.getClass())) {
 
-                log.trace("Found local device matching relative request URI: {}", requestedURI);
+                logger.trace("Found local device matching relative request URI: {}", requestedURI);
                 LocalDevice device = (LocalDevice) resource.getModel();
 
                 DeviceDescriptorBinder deviceDescriptorBinder = getUpnpService().getConfiguration()
@@ -102,7 +102,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
                         new ContentTypeHeader(ContentTypeHeader.DEFAULT_CONTENT_TYPE));
             } else if (ServiceDescriptorResource.class.isAssignableFrom(resource.getClass())) {
 
-                log.trace("Found local service matching relative request URI: {}", requestedURI);
+                logger.trace("Found local service matching relative request URI: {}", requestedURI);
                 LocalService service = (LocalService) resource.getModel();
 
                 ServiceDescriptorBinder serviceDescriptorBinder = getUpnpService().getConfiguration()
@@ -113,18 +113,18 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
 
             } else if (IconResource.class.isAssignableFrom(resource.getClass())) {
 
-                log.trace("Found local icon matching relative request URI: {}", requestedURI);
+                logger.trace("Found local icon matching relative request URI: {}", requestedURI);
                 Icon icon = (Icon) resource.getModel();
                 response = new StreamResponseMessage(icon.getData(), icon.getMimeType());
 
             } else {
 
-                log.trace("Ignoring GET for found local resource: {}", resource);
+                logger.trace("Ignoring GET for found local resource: {}", resource);
                 return null;
             }
 
-        } catch (DescriptorBindingException ex) {
-            log.warn("Error generating requested device/service descriptor", ex);
+        } catch (DescriptorBindingException e) {
+            logger.warn("Error generating requested device/service descriptor", e);
             response = new StreamResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
 

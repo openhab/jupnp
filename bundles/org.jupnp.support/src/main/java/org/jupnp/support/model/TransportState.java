@@ -47,7 +47,7 @@ public enum TransportState {
     public static TransportState valueOrCustomOf(String s) {
         try {
             return TransportState.valueOf(s);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             return TransportState.CUSTOM.setValue(s);
         }
     }

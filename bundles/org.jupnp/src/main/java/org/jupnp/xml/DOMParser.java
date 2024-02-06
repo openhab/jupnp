@@ -74,7 +74,7 @@ import org.xml.sax.SAXParseException;
  */
 public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityResolver {
 
-    private Logger log = LoggerFactory.getLogger(DOMParser.class);
+    private final Logger logger = LoggerFactory.getLogger(DOMParser.class);
 
     public static final URL XML_SCHEMA_RESOURCE = Thread.currentThread().getContextClassLoader()
             .getResource("org.jupnp/schemas/xml.xsd");
@@ -111,8 +111,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
                     schema = schemaFactory.newSchema();
                 }
 
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
         return schema;
@@ -156,9 +156,9 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
                 factory.setFeature("http://apache.org/xml/features/validation/dynamic", true);
             }
 
-        } catch (ParserConfigurationException ex) {
+        } catch (ParserConfigurationException e) {
             // Lovely, of course it couldn't have been a RuntimeException!
-            throw new ParserException(ex);
+            throw new ParserException(e);
         }
         return factory;
     }
@@ -170,7 +170,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
             if (indent > 0) {
                 try {
                     transFactory.setAttribute("indent-number", indent);
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException e) {
                     // Fuck you, Apache morons.
                 }
             }
@@ -194,16 +194,16 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
             transformer.setOutputProperty(OutputKeys.METHOD, method);
 
             return transformer;
-        } catch (Exception ex) {
-            throw new ParserException(ex);
+        } catch (Exception e) {
+            throw new ParserException(e);
         }
     }
 
     public D createDocument() {
         try {
             return createDOM(createFactory(false).newDocumentBuilder().newDocument());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -231,8 +231,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         }
         try {
             return parse(url.openStream(), validate);
-        } catch (Exception ex) {
-            throw new ParserException("Parsing URL failed: " + url, ex);
+        } catch (Exception e) {
+            throw new ParserException("Parsing URL failed: " + url, e);
         }
     }
 
@@ -249,8 +249,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         }
         try {
             return parse(file.toURI().toURL(), validate);
-        } catch (Exception ex) {
-            throw new ParserException("Parsing file failed: " + file, ex);
+        } catch (Exception e) {
+            throw new ParserException("Parsing file failed: " + file, e);
         }
     }
 
@@ -273,8 +273,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
             return createDOM(dom);
 
-        } catch (Exception ex) {
-            throw unwrapException(ex);
+        } catch (Exception e) {
+            throw unwrapException(e);
         }
     }
 
@@ -284,7 +284,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         if (url == null) {
             throw new IllegalArgumentException("Can't validate null URL");
         }
-        log.trace("Validating XML of URL: {}", url);
+        logger.trace("Validating XML of URL: {}", url);
         validate(new StreamSource(url.toString()));
     }
 
@@ -292,7 +292,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         if (string == null) {
             throw new IllegalArgumentException("Can't validate null string");
         }
-        log.trace("Validating XML string characters: {}", string.length());
+        logger.trace("Validating XML string characters: {}", string.length());
         validate(new SAXSource(new InputSource(new StringReader(string))));
     }
 
@@ -309,8 +309,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
             Validator validator = getSchema().newValidator();
             validator.setErrorHandler(this);
             validator.validate(source);
-        } catch (Exception ex) {
-            throw unwrapException(ex);
+        } catch (Exception e) {
+            throw unwrapException(e);
         }
     }
 
@@ -342,10 +342,10 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     public Object getXPathResult(Node context, XPath xpath, String expr, QName result) {
         try {
-            log.trace("Evaluating xpath query: {}", expr);
+            logger.trace("Evaluating xpath query: {}", expr);
             return xpath.evaluate(expr, context, result);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -439,8 +439,8 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
             return output;
 
-        } catch (Exception ex) {
-            throw new ParserException(ex);
+        } catch (Exception e) {
+            throw new ParserException(e);
         }
     }
 
@@ -467,7 +467,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
 
     @Override
     public void warning(SAXParseException e) throws SAXException {
-        log.warn(e.toString());
+        logger.warn(e.toString());
     }
 
     @Override
@@ -480,12 +480,12 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
         throw new SAXException(new ParserException(e));
     }
 
-    protected ParserException unwrapException(Exception ex) {
+    protected ParserException unwrapException(Exception e) {
         // Another historic moment in Java XML API design!
-        if (ex.getCause() != null && ex.getCause() instanceof ParserException) {
-            return (ParserException) ex.getCause();
+        if (e.getCause() != null && e.getCause() instanceof ParserException) {
+            return (ParserException) e.getCause();
         }
-        return new ParserException(ex);
+        return new ParserException(e);
     }
 
     // =================================================================================================

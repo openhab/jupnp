@@ -62,7 +62,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class UPnPPresent {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPPresent.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPPresent.class);
 
     private static final String UPNP_EVENT_TOPIC = "org/osgi/service/upnp/UPnPEvent";
     private UPnPDeviceTracker deviceTracker;
@@ -80,9 +80,9 @@ public class UPnPPresent {
             deviceTracker = new UPnPDeviceTracker(context, upnpService, filter);
             deviceTracker.open();
         } catch (InvalidSyntaxException e) {
-            log.error("Cannot create UPnPDevice tracker.");
-            log.error("Cannot export UPnPDevices.");
-            log.error(e.getMessage());
+            logger.error("Cannot create UPnPDevice tracker.");
+            logger.error("Cannot export UPnPDevices.");
+            logger.error(e.getMessage());
         }
 
         /*

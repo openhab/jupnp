@@ -103,7 +103,7 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
         ConnectionInfo.Direction dir;
         try {
             dir = ConnectionInfo.Direction.valueOf(direction);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             throw new ConnectionManagerException(ErrorCode.ARGUMENT_VALUE_INVALID,
                     "Unsupported direction: " + direction);
         }

@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DataAdapter implements UPnPEventListener {
 
-    private final Logger log = LoggerFactory.getLogger(DataAdapter.class);
+    private final Logger logger = LoggerFactory.getLogger(DataAdapter.class);
 
     private PropertyChangeSupport propertyChangeSupport;
 
@@ -52,7 +52,7 @@ public class DataAdapter implements UPnPEventListener {
         LocalDevice device = service.getDevice();
         String string = String.format("(&(%s=%s)(%s=%s))", UPnPDevice.UDN,
                 device.getIdentity().getUdn().getIdentifierString(), UPnPService.ID, service.getServiceId());
-        log.trace("filter: {}", string);
+        logger.trace("filter: {}", string);
 
         try {
             BundleContext context = OSGiContext.getBundleContext();
@@ -62,14 +62,15 @@ public class DataAdapter implements UPnPEventListener {
             properties.put(UPnPEventListener.UPNP_FILTER, filter);
             context.registerService(UPnPEventListener.class.getName(), this, properties);
         } catch (InvalidSyntaxException e) {
-            log.error("Cannot create DataAdapter ({}).", service.getServiceId());
-            log.error(e.getMessage());
+            logger.error("Cannot create DataAdapter ({}).", service.getServiceId());
+            logger.error(e.getMessage());
         }
     }
 
     @Override
     public void notifyUPnPEvent(String deviceId, String serviceId, Dictionary events) {
-        log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "notifyUPnPEvent", deviceId, serviceId, events);
+        logger.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "notifyUPnPEvent", deviceId, serviceId,
+                events);
 
         for (String key : (List<String>) Collections.list(events.keys())) {
             Object value = events.get(key);

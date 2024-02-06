@@ -67,7 +67,7 @@ public class ServiceId {
         // First try UDAServiceId parse
         try {
             serviceId = UDAServiceId.valueOf(s);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
 

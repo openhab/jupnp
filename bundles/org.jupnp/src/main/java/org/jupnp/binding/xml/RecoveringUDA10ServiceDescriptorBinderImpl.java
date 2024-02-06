@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RecoveringUDA10ServiceDescriptorBinderImpl extends UDA10ServiceDescriptorBinderImpl {
 
-    private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
     @Override
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
@@ -39,7 +39,7 @@ public class RecoveringUDA10ServiceDescriptorBinderImpl extends UDA10ServiceDesc
             String fixedXml = fixWrongNamespaces(descriptorXml);
             return super.describe(undescribedService, fixedXml);
         } catch (DescriptorBindingException e) {
-            log.warn(e.getMessage());
+            logger.warn(e.getMessage());
         }
         return null;
     }

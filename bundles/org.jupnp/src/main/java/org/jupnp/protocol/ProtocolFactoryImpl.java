@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ProtocolFactoryImpl implements ProtocolFactory {
 
-    private final Logger log = LoggerFactory.getLogger(ProtocolFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(ProtocolFactory.class);
 
     protected final UpnpService upnpService;
 
@@ -72,7 +72,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
     }
 
     public ProtocolFactoryImpl(UpnpService upnpService) {
-        log.trace("Creating ProtocolFactory: {}", getClass().getName());
+        logger.trace("Creating ProtocolFactory: {}", getClass().getName());
         this.upnpService = upnpService;
     }
 
@@ -83,7 +83,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
 
     @Override
     public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message) throws ProtocolCreationException {
-        log.trace("Creating protocol for incoming asynchronous: {}", message);
+        logger.trace("Creating protocol for incoming asynchronous: {}", message);
 
         if (message.getOperation() instanceof UpnpRequest) {
             switch (((IncomingDatagramMessage<UpnpRequest>) message).getOperation().getMethod()) {
@@ -146,16 +146,16 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
                     return true;
                 }
             }
-        } catch (InvalidValueException ex) {
-            log.trace("Not a named service type header value: {}", usnHeader);
+        } catch (InvalidValueException e) {
+            logger.trace("Not a named service type header value: {}", usnHeader);
         }
-        log.trace("Service advertisement not supported, dropping it: {}", usnHeader);
+        logger.trace("Service advertisement not supported, dropping it: {}", usnHeader);
         return false;
     }
 
     @Override
     public ReceivingSync createReceivingSync(StreamRequestMessage message) throws ProtocolCreationException {
-        log.trace("Creating protocol for incoming synchronous: {}", message);
+        logger.trace("Creating protocol for incoming synchronous: {}", message);
 
         if (message.getOperation().getMethod().equals(UpnpRequest.Method.GET)) {
 
@@ -186,7 +186,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             // TODO: UPNP VIOLATION: Yamaha does the same
             // /dev/9ab0c000-f668-11de-9976-00a0de870fd4/svc/upnp-org/RenderingControl/event/cb><http://10.189.150.197:42082/dev/9ab0c000-f668-11de-9976-00a0de870fd4/svc/upnp-org/RenderingControl/event/cb
             if (message.getUri().getPath().contains(Namespace.EVENTS + Namespace.CALLBACK_FILE)) {
-                log.warn("Fixing trailing garbage in event message path: {}", message.getUri().getPath());
+                logger.warn("Fixing trailing garbage in event message path: {}", message.getUri().getPath());
                 String invalid = message.getUri().toString();
                 message.setUri(URI.create(invalid.substring(0,
                         invalid.indexOf(Namespace.CALLBACK_FILE) + Namespace.CALLBACK_FILE.length())));
@@ -227,9 +227,9 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             List<NetworkAddress> activeStreamServers = getUpnpService().getRouter().getActiveStreamServers(
                     subscription.getService().getDevice().getIdentity().getDiscoveredOnLocalAddress());
             return new SendingSubscribe(getUpnpService(), subscription, activeStreamServers);
-        } catch (RouterException ex) {
+        } catch (RouterException e) {
             throw new ProtocolCreationException(
-                    "Failed to obtain local stream servers (for event callback URL creation) from router", ex);
+                    "Failed to obtain local stream servers (for event callback URL creation) from router", e);
         }
     }
 

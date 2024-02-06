@@ -111,8 +111,8 @@ class LocalActionInvocationDatatypesTest {
 
             try {
                 dataString = new String(data, StandardCharsets.UTF_8);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 

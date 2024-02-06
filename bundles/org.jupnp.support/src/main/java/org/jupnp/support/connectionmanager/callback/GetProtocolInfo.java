@@ -47,9 +47,9 @@ public abstract class GetProtocolInfo extends ActionCallback {
             received(invocation, sink != null ? new ProtocolInfos(sink.toString()) : null,
                     source != null ? new ProtocolInfos(source.toString()) : null);
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
             invocation.setFailure(
-                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ProtocolInfo response: " + ex, ex));
+                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ProtocolInfo response: " + e, e));
             failure(invocation, null);
         }
     }

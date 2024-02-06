@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
-    private Logger log = LoggerFactory.getLogger(DatagramIOImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(DatagramIOImpl.class);
 
     /*
      * Implementation notes for unicast/multicast UDP:
@@ -88,13 +88,13 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
             // TODO: UPNP VIOLATION: The spec does not prohibit using the 1900 port here again, however, the
             // Netgear ReadyNAS miniDLNA implementation will no longer answer if it has to send search response
             // back via UDP unicast to port 1900... so we use an ephemeral port
-            log.debug("Creating bound socket (for datagram input/output) on: {}:{}", bindAddress, bindPort);
+            logger.debug("Creating bound socket (for datagram input/output) on: {}:{}", bindAddress, bindPort);
             localAddress = new InetSocketAddress(bindAddress, bindPort);
             socket = new MulticastSocket(localAddress);
             socket.setTimeToLive(configuration.getTimeToLive());
             socket.setReceiveBufferSize(262144); // Keep a backlog of incoming datagrams if we are not fast enough
-        } catch (Exception ex) {
-            throw new InitializationException("Could not initialize " + getClass().getSimpleName(), ex);
+        } catch (Exception e) {
+            throw new InitializationException("Could not initialize " + getClass().getSimpleName(), e);
         }
     }
 
@@ -107,8 +107,8 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
     @Override
     public void run() {
-        log.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}:{}", socket.getLocalAddress(),
-                socket.getPort());
+        logger.debug("Entering blocking receiving loop, listening for UDP datagrams on: {}:{}",
+                socket.getLocalAddress(), socket.getPort());
 
         while (true) {
 
@@ -118,37 +118,37 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
                 socket.receive(datagram);
 
-                log.debug("UDP datagram received from: {}:{} on: {}", datagram.getAddress().getHostAddress(),
+                logger.debug("UDP datagram received from: {}:{} on: {}", datagram.getAddress().getHostAddress(),
                         datagram.getPort(), localAddress);
 
                 router.received(datagramProcessor.read(localAddress.getAddress(), datagram));
 
-            } catch (SocketException ex) {
-                log.debug("Socket closed");
+            } catch (SocketException e) {
+                logger.debug("Socket closed");
                 break;
-            } catch (UnsupportedDataException ex) {
-                log.info("Could not read datagram: {}", ex.getMessage());
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+            } catch (UnsupportedDataException e) {
+                logger.info("Could not read datagram: {}", e.getMessage());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
         try {
             if (!socket.isClosed()) {
-                log.debug("Closing unicast socket");
+                logger.debug("Closing unicast socket");
                 socket.close();
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public synchronized void send(OutgoingDatagramMessage message) {
-        log.debug("Sending message from address: {}", localAddress);
+        logger.debug("Sending message from address: {}", localAddress);
 
         DatagramPacket packet = datagramProcessor.write(message);
 
-        log.debug("Sending UDP datagram packet to: {}:{}", message.getDestinationAddress(),
+        logger.debug("Sending UDP datagram packet to: {}:{}", message.getDestinationAddress(),
                 message.getDestinationPort());
 
         send(packet);
@@ -156,26 +156,26 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
     @Override
     public synchronized void send(DatagramPacket datagram) {
-        log.debug("Sending message from address: {}", localAddress);
+        logger.debug("Sending message from address: {}", localAddress);
 
         try {
             socket.send(datagram);
-        } catch (SocketException ex) {
-            log.debug("Socket closed, aborting datagram send to: {}", datagram.getAddress());
-        } catch (RuntimeException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            log.error("Exception sending datagram to: {}", datagram.getAddress(), ex);
-            log.error("  Details: datagram.socketAddress={}, length={}, offset={}, data.bytes={}",
+        } catch (SocketException e) {
+            logger.debug("Socket closed, aborting datagram send to: {}", datagram.getAddress());
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Exception sending datagram to: {}", datagram.getAddress(), e);
+            logger.error("  Details: datagram.socketAddress={}, length={}, offset={}, data.bytes={}",
                     datagram.getSocketAddress(), datagram.getLength(), datagram.getOffset(), datagram.getData().length);
             try {
-                log.error(
+                logger.error(
                         "  Details: socket={}, closed={}, bound={}, inetAddress={}, "
                                 + "remoteSocketAddress={}, networkInterface={}",
                         socket.toString(), socket.isClosed(), socket.isBound(), socket.getInetAddress(),
                         socket.getRemoteSocketAddress(), socket.getNetworkInterface());
             } catch (SocketException ex2) {
-                log.error("  Details: could not get network interface", ex2);
+                logger.error("  Details: could not get network interface", ex2);
             }
         }
     }

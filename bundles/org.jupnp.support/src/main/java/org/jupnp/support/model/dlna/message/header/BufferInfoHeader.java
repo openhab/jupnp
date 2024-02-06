@@ -33,7 +33,7 @@ public class BufferInfoHeader extends DLNAHeader<BufferInfoType> {
             try {
                 setValue(BufferInfoType.valueOf(s));
                 return;
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // no need to take any precaution measure
             }
         }

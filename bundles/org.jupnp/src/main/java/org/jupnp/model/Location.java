@@ -89,8 +89,8 @@ public class Location {
     private static URL createAbsoluteURL(InetAddress address, int localStreamPort, String path) {
         try {
             return new URL("http", address.getHostAddress(), localStreamPort, path);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Address, port, and URI can not be converted to URL", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Address, port, and URI can not be converted to URL", e);
         }
     }
 }

@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SearchCommand {
 
-    private static final Logger logger = LoggerFactory.getLogger(SearchCommand.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SearchCommand.class);
     private final JUPnPTool tool;
 
     public SearchCommand(JUPnPTool tool) {
@@ -45,11 +45,11 @@ public class SearchCommand {
 
     public int run(int timeout, String sortBy, String filter, boolean verbose) {
         // This will create necessary network resources for UPnP right away
-        logger.debug("Starting jUPnP search...");
+        LOGGER.debug("Starting jUPnP search...");
         if (verbose) {
             SpecificationViolationReporter.enableReporting();
         } else {
-            logger.debug("Disable UPnP specification violation reportings");
+            LOGGER.debug("Disable UPnP specification violation reportings");
             SpecificationViolationReporter.disableReporting();
         }
         UpnpService upnpService = tool.createUpnpService();
@@ -63,18 +63,18 @@ public class SearchCommand {
 
         // Send a search message to all devices and services, they should
         // respond soon
-        logger.debug("Sending SEARCH message to all devices...");
+        LOGGER.debug("Sending SEARCH message to all devices...");
         upnpService.getControlPoint().search(new STAllHeader());
 
         // Let's wait "timeout" for them to respond
-        logger.debug("Waiting {} seconds before shutting down...", timeout);
+        LOGGER.debug("Waiting {} seconds before shutting down...", timeout);
         try {
             Thread.sleep(timeout * 1000);
         } catch (InterruptedException e) {
-            logger.error("Interrupted while waiting before shutdown", e);
+            LOGGER.error("Interrupted while waiting before shutdown", e);
         }
 
-        logger.debug("Processing results...");
+        LOGGER.debug("Processing results...");
         Registry registry = upnpService.getRegistry();
 
         for (RemoteDevice device : registry.getRemoteDevices()) {
@@ -84,13 +84,13 @@ public class SearchCommand {
         printer.printBody();
 
         // Release all resources and advertise BYEBYE to other UPnP devices
-        logger.debug("Stopping jUPnP...");
+        LOGGER.debug("Stopping jUPnP...");
         try {
             upnpService.shutdown();
-        } catch (Exception ex) {
-            logger.error("Error during shutdown", ex);
+        } catch (Exception e) {
+            LOGGER.error("Error during shutdown", e);
         }
-        logger.debug("Stopped jUPnP...");
+        LOGGER.debug("Stopped jUPnP...");
 
         return JUPnPTool.RC_OK;
     }
@@ -115,10 +115,10 @@ public class SearchCommand {
             if ("*".equals(filter)) {
                 filterOK = true;
             } else if (fullDeviceInformationString.contains(filter)) {
-                logger.debug("Filter check: filter '{}' matched '{}'", filter, fullDeviceInformationString);
+                LOGGER.debug("Filter check: filter '{}' matched '{}'", filter, fullDeviceInformationString);
                 filterOK = true;
             } else {
-                logger.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
+                LOGGER.debug("Filter check: filter '{}' NOT matched '{}'", filter, fullDeviceInformationString);
             }
 
             // filter out: very simple: details from above should include this text
@@ -148,7 +148,7 @@ public class SearchCommand {
         }
 
         @Override
-        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+        public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e) {
             // ignore
         }
 

@@ -170,17 +170,17 @@ public class RequestInfo {
     }
 
     public static void dumpRequestHeaders(long timestamp, String text, HttpServletRequest request) {
-        Logger log = LoggerFactory.getLogger(RequestInfo.class);
-        log.info(text);
+        Logger logger = LoggerFactory.getLogger(RequestInfo.class);
+        logger.info(text);
         dumpRequestString(timestamp, request);
         Enumeration<String> headers = request.getHeaderNames();
         if (headers != null) {
             while (headers.hasMoreElements()) {
                 String headerName = headers.nextElement();
-                log.info("{}: {}", headerName, request.getHeader(headerName));
+                logger.info("{}: {}", headerName, request.getHeader(headerName));
             }
         }
-        log.info("----------------------------------------");
+        logger.info("----------------------------------------");
     }
 
     public static String getRequestInfoString(long timestamp, HttpServletRequest request) {

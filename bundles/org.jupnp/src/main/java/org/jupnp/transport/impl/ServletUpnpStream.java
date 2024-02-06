@@ -48,7 +48,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
 
     protected StreamResponseMessage responseMessage;
 
-    protected final Logger log = LoggerFactory.getLogger(ServletUpnpStream.class);
+    protected final Logger logger = LoggerFactory.getLogger(ServletUpnpStream.class);
 
     protected ServletUpnpStream(ProtocolFactory protocolFactory) {
         super(protocolFactory);
@@ -58,28 +58,28 @@ public abstract class ServletUpnpStream extends UpnpStream {
     public void run() {
         try {
             StreamRequestMessage requestMessage = readRequestMessage();
-            log.trace("Processing new request message: {}", requestMessage);
+            logger.trace("Processing new request message: {}", requestMessage);
 
             responseMessage = process(requestMessage);
 
             if (responseMessage != null) {
-                log.trace("Preparing HTTP response message: {}", responseMessage);
+                logger.trace("Preparing HTTP response message: {}", responseMessage);
                 writeResponseMessage(responseMessage);
             } else {
                 // If it's null, it's 404
-                log.trace("Sending HTTP response status: {}", HttpURLConnection.HTTP_NOT_FOUND);
+                logger.trace("Sending HTTP response status: {}", HttpURLConnection.HTTP_NOT_FOUND);
                 getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
 
-        } catch (Exception ex) {
-            log.info("Exception occurred during UPnP stream processing", ex);
+        } catch (Exception e) {
+            logger.info("Exception occurred during UPnP stream processing", e);
             if (!getResponse().isCommitted()) {
-                log.trace("Response hasn't been committed, returning INTERNAL SERVER ERROR to client");
+                logger.trace("Response hasn't been committed, returning INTERNAL SERVER ERROR to client");
                 getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } else {
-                log.info("Could not return INTERNAL SERVER ERROR to client, response was already committed");
+                logger.info("Could not return INTERNAL SERVER ERROR to client, response was already committed");
             }
-            responseException(ex);
+            responseException(e);
         } finally {
             complete();
         }
@@ -90,14 +90,14 @@ public abstract class ServletUpnpStream extends UpnpStream {
         String requestMethod = getRequest().getMethod();
         String requestURI = getRequest().getRequestURI();
 
-        log.trace("Processing HTTP request: {} {} ", requestMethod, requestURI);
+        logger.trace("Processing HTTP request: {} {} ", requestMethod, requestURI);
 
         StreamRequestMessage requestMessage;
         try {
             requestMessage = new StreamRequestMessage(UpnpRequest.Method.getByHttpName(requestMethod),
                     URI.create(requestURI));
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Invalid request URI: " + requestURI, ex);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid request URI: " + requestURI, e);
         }
 
         if (requestMessage.getOperation().getMethod().equals(UpnpRequest.Method.UNKNOWN)) {
@@ -132,25 +132,25 @@ public abstract class ServletUpnpStream extends UpnpStream {
                 bodyBytes = is.readAllBytes();
             }
         }
-        log.trace("Reading request body bytes: {}", bodyBytes.length);
+        logger.trace("Reading request body bytes: {}", bodyBytes.length);
 
         if (bodyBytes.length > 0 && requestMessage.isContentTypeMissingOrText()) {
-            log.trace("Request contains textual entity body, converting then setting string on message");
+            logger.trace("Request contains textual entity body, converting then setting string on message");
             requestMessage.setBodyCharacters(bodyBytes);
 
         } else if (bodyBytes.length > 0) {
-            log.trace("Request contains binary entity body, setting bytes on message");
+            logger.trace("Request contains binary entity body, setting bytes on message");
             requestMessage.setBody(UpnpMessage.BodyType.BYTES, bodyBytes);
 
         } else {
-            log.trace("Request did not contain entity body");
+            logger.trace("Request did not contain entity body");
         }
 
         return requestMessage;
     }
 
     protected void writeResponseMessage(StreamResponseMessage responseMessage) throws IOException {
-        log.trace("Sending HTTP response status: {}", responseMessage.getOperation().getStatusCode());
+        logger.trace("Sending HTTP response status: {}", responseMessage.getOperation().getStatusCode());
 
         getResponse().setStatus(responseMessage.getOperation().getStatusCode());
 
@@ -169,7 +169,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
 
         if (contentLength > 0) {
             getResponse().setContentLength(contentLength);
-            log.trace("Response message has body, writing bytes to stream...");
+            logger.trace("Response message has body, writing bytes to stream...");
             getResponse().getOutputStream().write(responseBodyBytes);
         }
     }

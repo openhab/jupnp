@@ -33,7 +33,7 @@ public enum RecordMediumWriteStatus {
         }
         try {
             return valueOf(s);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             return UNKNOWN;
         }
     }

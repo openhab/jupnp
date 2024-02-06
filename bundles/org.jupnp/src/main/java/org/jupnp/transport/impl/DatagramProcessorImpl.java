@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DatagramProcessorImpl implements DatagramProcessor {
 
-    private Logger log = LoggerFactory.getLogger(DatagramProcessor.class);
+    private final Logger logger = LoggerFactory.getLogger(DatagramProcessor.class);
 
     @Override
     public IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram)
@@ -48,11 +48,11 @@ public class DatagramProcessorImpl implements DatagramProcessor {
 
         try {
 
-            if (log.isTraceEnabled()) {
-                log.trace(
+            if (logger.isTraceEnabled()) {
+                logger.trace(
                         "===================================== DATAGRAM BEGIN ============================================");
-                log.trace(new String(datagram.getData()));
-                log.trace(
+                logger.trace(new String(datagram.getData()));
+                logger.trace(
                         "-===================================== DATAGRAM END =============================================");
             }
 
@@ -66,8 +66,8 @@ public class DatagramProcessorImpl implements DatagramProcessor {
                 return readRequestMessage(receivedOnAddress, datagram, is, startLine[0], startLine[2]);
             }
 
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Could not parse headers", ex, datagram.getData());
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Could not parse headers", e, datagram.getData());
         }
     }
 
@@ -101,18 +101,18 @@ public class DatagramProcessorImpl implements DatagramProcessor {
 
         messageData.append(message.getHeaders().toString()).append("\r\n");
 
-        if (log.isTraceEnabled()) {
-            log.trace("Writing message data for: {}", message);
-            log.trace("---------------------------------------------------------------------------------");
-            log.trace(messageData.substring(0, messageData.length() - 2)); // Don't print the blank lines
-            log.trace("---------------------------------------------------------------------------------");
+        if (logger.isTraceEnabled()) {
+            logger.trace("Writing message data for: {}", message);
+            logger.trace("---------------------------------------------------------------------------------");
+            logger.trace(messageData.substring(0, messageData.length() - 2)); // Don't print the blank lines
+            logger.trace("---------------------------------------------------------------------------------");
         }
 
         // According to HTTP 1.0 RFC, headers and their values are US-ASCII
         // TODO: Probably should look into escaping rules, too
         byte[] data = messageData.toString().getBytes(StandardCharsets.US_ASCII);
 
-        log.trace("Writing new datagram packet with {} bytes for: {}", data.length, message);
+        logger.trace("Writing new datagram packet with {} bytes for: {}", data.length, message);
         return new DatagramPacket(data, data.length, message.getDestinationAddress(), message.getDestinationPort());
     }
 

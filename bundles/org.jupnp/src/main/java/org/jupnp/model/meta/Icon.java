@@ -183,9 +183,9 @@ public class Icon implements Validatable {
                 if (testURI == null) {
                     throw new MalformedURLException();
                 }
-            } catch (MalformedURLException ex) {
-                errors.add(new ValidationError(getClass(), "uri", "URL must be valid: " + ex.getMessage()));
-            } catch (IllegalArgumentException ex) {
+            } catch (MalformedURLException e) {
+                errors.add(new ValidationError(getClass(), "uri", "URL must be valid: " + e.getMessage()));
+            } catch (IllegalArgumentException e) {
                 // Relative URI is fine here!
             }
         }

@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 
 public class BaseIntegration {
 
-    private final Logger log = LoggerFactory.getLogger(BaseIntegration.class);
+    private final Logger logger = LoggerFactory.getLogger(BaseIntegration.class);
 
     protected BundleContext bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
     protected UpnpService upnpService;
@@ -93,31 +93,31 @@ public class BaseIntegration {
 
     public void dumpEnvironment() {
         for (Object key : System.getenv().keySet()) {
-            log.info("{}: {}", key, System.getenv().get(key));
+            logger.info("{}: {}", key, System.getenv().get(key));
         }
 
-        log.info("current directory: {}", new File(".").getAbsolutePath());
+        logger.info("current directory: {}", new File(".").getAbsolutePath());
     }
 
     public void dumpBundles(Bundle[] bundles) {
-        log.info("This is running inside Equinox.");
+        logger.info("This is running inside Equinox.");
         for (Bundle bundle : bundles) {
-            log.info(String.format("%2d|%-12s| %s", bundle.getBundleId(), BundleUtil.getBundleState(bundle),
+            logger.info(String.format("%2d|%-12s| %s", bundle.getBundleId(), BundleUtil.getBundleState(bundle),
                     bundle.getSymbolicName()));
         }
     }
 
     public void dumpRegistry() {
-        log.info("*** UPnP Devices ***");
+        logger.info("*** UPnP Devices ***");
         for (Device device : upnpService.getRegistry().getDevices()) {
-            log.info("{}: {}", device.getIdentity().getUdn(), device.getType().getType());
+            logger.info("{}: {}", device.getIdentity().getUdn(), device.getType().getType());
         }
     }
 
     public void dumpUPnPDevice(UPnPDevice device) {
-        log.info("{}", device);
+        logger.info("{}", device);
         for (Object key : Collections.list(device.getDescriptions(null).keys())) {
-            log.info("   {}: {}", key, device.getDescriptions(null).get(key));
+            logger.info("   {}: {}", key, device.getDescriptions(null).get(key));
         }
     }
 
@@ -194,10 +194,10 @@ public class BaseIntegration {
     public boolean validate(String name, String type, Object value, Object desired) {
         boolean matches;
 
-        log.info("=========================================\n");
-        log.info("data type: {}", type);
-        log.info("    value: {} ({})", valueToString(value), value.getClass().getName());
-        log.info("  desired: {} ({})", valueToString(desired), desired.getClass().getName());
+        logger.info("=========================================\n");
+        logger.info("data type: {}", type);
+        logger.info("    value: {} ({})", valueToString(value), value.getClass().getName());
+        logger.info("  desired: {} ({})", valueToString(desired), desired.getClass().getName());
 
         if (value instanceof UnsignedVariableInteger) {
             value = Integer.valueOf(((UnsignedVariableInteger) value).getValue().intValue());
@@ -227,7 +227,7 @@ public class BaseIntegration {
             }
         }
 
-        log.info("  matches: {}", matches);
+        logger.info("  matches: {}", matches);
 
         return matches;
     }

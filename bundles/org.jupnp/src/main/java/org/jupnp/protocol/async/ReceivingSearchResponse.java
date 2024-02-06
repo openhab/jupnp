@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchResponse> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingSearchResponse.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingSearchResponse.class);
 
     public ReceivingSearchResponse(UpnpService upnpService, IncomingDatagramMessage<UpnpResponse> inputMessage) {
         super(upnpService, new IncomingSearchResponse(inputMessage));
@@ -55,42 +55,42 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
     protected void execute() throws RouterException {
 
         if (!getInputMessage().isSearchResponseMessage()) {
-            log.trace("Ignoring invalid search response message: {}", getInputMessage());
+            logger.trace("Ignoring invalid search response message: {}", getInputMessage());
             return;
         }
 
         UDN udn = getInputMessage().getRootDeviceUDN();
         if (udn == null) {
-            log.trace("Ignoring search response message without UDN: {}", getInputMessage());
+            logger.trace("Ignoring search response message without UDN: {}", getInputMessage());
             return;
         }
 
         RemoteDeviceIdentity rdIdentity = new RemoteDeviceIdentity(getInputMessage());
-        log.trace("Received device search response: {}", rdIdentity);
+        logger.trace("Received device search response: {}", rdIdentity);
 
         if (getUpnpService().getRegistry().update(rdIdentity)) {
-            log.trace("Remote device was already known: {}", udn);
+            logger.trace("Remote device was already known: {}", udn);
             return;
         }
 
         RemoteDevice rd;
         try {
             rd = new RemoteDevice(rdIdentity);
-        } catch (ValidationException ex) {
-            log.warn("Validation errors of device during discovery: {}", rdIdentity);
-            for (ValidationError validationError : ex.getErrors()) {
-                log.warn(validationError.toString());
+        } catch (ValidationException e) {
+            logger.warn("Validation errors of device during discovery: {}", rdIdentity);
+            for (ValidationError validationError : e.getErrors()) {
+                logger.warn(validationError.toString());
             }
             return;
         }
 
         if (rdIdentity.getDescriptorURL() == null) {
-            log.trace("Ignoring message without location URL header: {}", getInputMessage());
+            logger.trace("Ignoring message without location URL header: {}", getInputMessage());
             return;
         }
 
         if (rdIdentity.getMaxAgeSeconds() == null) {
-            log.trace("Ignoring message without max-age header: {}", getInputMessage());
+            logger.trace("Ignoring message without max-age header: {}", getInputMessage());
             return;
         }
 
@@ -98,7 +98,7 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
         // have no idea if it's a root or embedded device
 
         if (RetrieveRemoteDescriptors.isRetrievalInProgress(rd)) {
-            log.trace("Skip submitting task, active retrieval for URL already in progress: {}",
+            logger.trace("Skip submitting task, active retrieval for URL already in progress: {}",
                     rd.getIdentity().getDescriptorURL());
             return;
         }

@@ -67,8 +67,8 @@ public class QueryStateVariableExecutor extends AbstractActionExecutor {
         try {
             setOutputArgumentValue(actionInvocation, actionInvocation.getAction().getOutputArgument("return"),
                     accessor.read(stateVariable, serviceImpl).toString());
-        } catch (Exception ex) {
-            throw new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage());
+        } catch (Exception e) {
+            throw new ActionException(ErrorCode.ACTION_FAILED, e.getMessage());
         }
     }
 }

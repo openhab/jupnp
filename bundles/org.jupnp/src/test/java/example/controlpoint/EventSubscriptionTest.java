@@ -163,7 +163,7 @@ public class EventSubscriptionTest {
             }
 
             @Override
-            protected void invalidMessage(RemoteGENASubscription sub, UnsupportedDataException ex) {
+            protected void invalidMessage(RemoteGENASubscription sub, UnsupportedDataException e) {
                 // Log/send an error report?
             }
         };

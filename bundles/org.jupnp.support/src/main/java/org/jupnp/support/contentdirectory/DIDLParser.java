@@ -155,7 +155,7 @@ public class DIDLParser extends SAXParser {
             if (value != null) {
                 container.setSearchable(value);
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
 
@@ -174,7 +174,7 @@ public class DIDLParser extends SAXParser {
                 item.setRestricted(value);
             }
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
 
@@ -194,8 +194,8 @@ public class DIDLParser extends SAXParser {
 
         try {
             res.setProtocolInfo(new ProtocolInfo(attributes.getValue("protocolInfo")));
-        } catch (InvalidValueException ex) {
-            logger.warn("In DIDL content, invalid resource protocol info", ex);
+        } catch (InvalidValueException e) {
+            logger.warn("In DIDL content, invalid resource protocol info", e);
             return null;
         }
 
@@ -677,7 +677,7 @@ public class DIDLParser extends SAXParser {
                 if ("writeStatus".equals(localName)) {
                     try {
                         getInstance().setWriteStatus(WriteStatus.valueOf(getCharacters()));
-                    } catch (Exception ex) {
+                    } catch (Exception e) {
                         logger.info("Ignoring invalid writeStatus value: {}", getCharacters());
                     }
                 } else if ("class".equals(localName)) {

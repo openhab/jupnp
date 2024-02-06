@@ -125,8 +125,8 @@ public abstract class Message implements ElementAppender {
             // random element soup which I'm sure the Samsung guys think is XML...
             return s.replaceAll("<Message xmlns=\"urn:samsung-com:messagebox-1-0\">", "").replaceAll("</Message>", "");
 
-        } catch (ParserException ex) {
-            throw new RuntimeException(ex);
+        } catch (ParserException e) {
+            throw new RuntimeException(e);
         }
     }
 }

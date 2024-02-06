@@ -35,7 +35,7 @@ import org.xml.sax.SAXParseException;
  */
 public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescriptorBinderImpl {
 
-    private final Logger log = LoggerFactory.getLogger(RecoveringUDA10DeviceDescriptorBinderImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(RecoveringUDA10DeviceDescriptorBinderImpl.class);
 
     @Override
     public <D extends Device> D describe(D undescribedDevice, String descriptorXml)
@@ -62,9 +62,9 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 }
                 return device;
 
-            } catch (DescriptorBindingException ex) {
-                log.warn("Regular parsing failed", ex);
-                originalException = ex;
+            } catch (DescriptorBindingException e) {
+                logger.warn("Regular parsing failed", e);
+                originalException = e;
             } catch (IllegalArgumentException e) {
                 handleInvalidDescriptor(descriptorXml, new DescriptorBindingException(e.getMessage()));
             }
@@ -77,8 +77,8 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 try {
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
-                } catch (DescriptorBindingException ex) {
-                    log.warn("Removing leading garbage didn't work", ex);
+                } catch (DescriptorBindingException e) {
+                    logger.warn("Removing leading garbage didn't work", e);
                 }
             }
 
@@ -87,8 +87,8 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                 try {
                     device = super.describe(undescribedDevice, fixedXml);
                     return device;
-                } catch (DescriptorBindingException ex) {
-                    log.warn("Removing trailing garbage didn't work", ex);
+                } catch (DescriptorBindingException e) {
+                    logger.warn("Removing trailing garbage didn't work", e);
                 }
             }
 
@@ -101,9 +101,9 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
                     try {
                         device = super.describe(undescribedDevice, fixedXml);
                         return device;
-                    } catch (DescriptorBindingException ex) {
-                        log.warn("Fixing namespace prefix didn't work", ex);
-                        lastException = ex;
+                    } catch (DescriptorBindingException e) {
+                        logger.warn("Fixing namespace prefix didn't work", e);
+                        lastException = e;
                     }
                 } else {
                     break; // We can stop, no more namespace fixing can be done
@@ -112,8 +112,8 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
 
             handleInvalidDescriptor(descriptorXml, originalException);
 
-        } catch (ValidationException ex) {
-            device = handleInvalidDevice(descriptorXml, device, ex);
+        } catch (ValidationException e) {
+            device = handleInvalidDevice(descriptorXml, device, e);
             if (device != null) {
                 return device;
             }
@@ -147,7 +147,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         return descriptorXml.substring(index);
     }
 
-    protected String fixGarbageTrailingChars(String descriptorXml, DescriptorBindingException ex) {
+    protected String fixGarbageTrailingChars(String descriptorXml, DescriptorBindingException e) {
         int index = descriptorXml.indexOf("</root>");
         if (index == -1) {
             SpecificationViolationReporter.report("No closing </root> element in descriptor");
@@ -178,7 +178,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         return descriptorXml;
     }
 
-    protected String fixMissingNamespaces(String descriptorXml, DescriptorBindingException ex) {
+    protected String fixMissingNamespaces(String descriptorXml, DescriptorBindingException e) {
         // Windows: org.jupnp.binding.xml.DescriptorBindingException: Could not parse device descriptor:
         // org.jupnp.xml.ParserException: org.xml.sax.SAXParseException: The prefix "dlna" for element "dlna:X_DLNADOC"
         // is not bound.
@@ -186,7 +186,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         // <{null}dlna:X_DLNADOC>@19:17 in java.io.StringReader@406dff48)
 
         // We can only handle certain exceptions, depending on their type and message
-        Throwable cause = ex.getCause();
+        Throwable cause = e.getCause();
         if (!(cause instanceof SAXParseException || cause instanceof ParserException)) {
             return null;
         }
@@ -212,18 +212,18 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         pattern = Pattern.compile("<root([^>]*)");
         matcher = pattern.matcher(descriptorXml);
         if (!matcher.find() || matcher.groupCount() != 1) {
-            log.trace("Could not find <root> element attributes");
+            logger.trace("Could not find <root> element attributes");
             return null;
         }
 
         String rootAttributes = matcher.group(1);
-        log.trace("Preserving existing <root> element attributes/namespace declarations: {}", matcher.group(0));
+        logger.trace("Preserving existing <root> element attributes/namespace declarations: {}", matcher.group(0));
 
         // Extract <root> body
         pattern = Pattern.compile("<root[^>]*>(.*)</root>", Pattern.DOTALL);
         matcher = pattern.matcher(descriptorXml);
         if (!matcher.find() || matcher.groupCount() != 1) {
-            log.trace("Could not extract body of <root> element");
+            logger.trace("Could not extract body of <root> element");
             return null;
         }
 

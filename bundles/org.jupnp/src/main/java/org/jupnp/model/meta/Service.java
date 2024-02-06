@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Service<D extends Device, S extends Service> {
 
-    private final Logger log = LoggerFactory.getLogger(Service.class);
+    private final Logger logger = LoggerFactory.getLogger(Service.class);
 
     private final ServiceType serviceType;
     private final ServiceId serviceId;
@@ -170,11 +170,11 @@ public abstract class Service<D extends Device, S extends Service> {
                 List<ValidationError> actionErrors = action.validate();
                 if (!actionErrors.isEmpty()) {
                     actions.remove(action.getName()); // Remove it
-                    log.warn("Discarding invalid action of service '{}': {}", getServiceId(), action.getName());
+                    logger.warn("Discarding invalid action of service '{}': {}", getServiceId(), action.getName());
                     // log details only in debug level
-                    if (log.isDebugEnabled()) {
+                    if (logger.isDebugEnabled()) {
                         for (ValidationError actionError : actionErrors) {
-                            log.debug("Invalid action '{}': {}", action.getName(), actionError);
+                            logger.debug("Invalid action '{}': {}", action.getName(), actionError);
                         }
                     }
                 }

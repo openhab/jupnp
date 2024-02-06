@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class DLNAHeader<T> extends UpnpHeader<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DLNAHeader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DLNAHeader.class);
 
     /**
      * Maps a standardized DLNA header to potential header subtypes.
@@ -120,7 +120,7 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
      * <p>
      * This method iterates through all potential header subtype classes as declared in {@link Type}.
      * It creates a new instance of the subtype class and calls its {@link #setString(String)} method.
-     * If no {@link org.jupnp.model.message.header.InvalidHeaderException} is thrown, the subtype
+     * If no {@link InvalidHeaderException} is thrown, the subtype
      * instance is returned.
      * </p>
      *
@@ -128,24 +128,24 @@ public abstract class DLNAHeader<T> extends UpnpHeader<T> {
      * @param headerValue The value of the header.
      * @return The best matching header subtype instance, or <code>null</code> if no subtype can be found.
      */
-    public static DLNAHeader<?> newInstance(DLNAHeader.Type type, String headerValue) {
+    public static DLNAHeader<?> newInstance(Type type, String headerValue) {
 
         // Try all the UPnP headers and see if one matches our value parsers
         DLNAHeader<?> upnpHeader = null;
         for (int i = 0; i < type.getHeaderTypes().length && upnpHeader == null; i++) {
             Class<? extends DLNAHeader<?>> headerClass = type.getHeaderTypes()[i];
             try {
-                logger.trace("Trying to parse '{}' with class: {}", type, headerClass.getSimpleName());
+                LOGGER.trace("Trying to parse '{}' with class: {}", type, headerClass.getSimpleName());
                 upnpHeader = headerClass.getDeclaredConstructor().newInstance();
                 if (headerValue != null) {
                     upnpHeader.setString(headerValue);
                 }
-            } catch (InvalidHeaderException ex) {
-                logger.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(),
-                        ex.getMessage());
+            } catch (InvalidHeaderException e) {
+                LOGGER.trace("Invalid header value for tested type: {} - {}", headerClass.getSimpleName(),
+                        e.getMessage());
                 upnpHeader = null;
-            } catch (Exception ex) {
-                logger.error("Error instantiating header of type '{}' with value: {}", type, headerValue, ex);
+            } catch (Exception e) {
+                LOGGER.error("Error instantiating header of type '{}' with value: {}", type, headerValue, e);
             }
 
         }

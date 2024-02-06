@@ -24,9 +24,9 @@ public class FailedRemoteDeviceDiscovery extends DeviceDiscovery<RemoteDevice> {
 
     protected Exception exception;
 
-    public FailedRemoteDeviceDiscovery(RemoteDevice device, Exception ex) {
+    public FailedRemoteDeviceDiscovery(RemoteDevice device, Exception e) {
         super(device);
-        this.exception = ex;
+        this.exception = e;
     }
 
     public Exception getException() {

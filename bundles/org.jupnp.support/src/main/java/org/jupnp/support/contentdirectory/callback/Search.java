@@ -105,9 +105,9 @@ public abstract class Search extends ActionCallback {
                 DIDLContent didl = didlParser.parse(result.getResult());
                 received(actionInvocation, didl);
                 updateStatus(Status.OK);
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 actionInvocation.setFailure(
-                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + ex, ex));
+                        new ActionException(ErrorCode.ACTION_FAILED, "Can't parse DIDL XML response: " + e, e));
                 failure(actionInvocation, null);
             }
         } else {

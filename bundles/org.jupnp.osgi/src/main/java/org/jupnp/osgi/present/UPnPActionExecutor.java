@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPActionExecutor implements ActionExecutor {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPActionExecutor.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPActionExecutor.class);
 
     private UPnPAction action;
 
@@ -46,7 +46,7 @@ class UPnPActionExecutor implements ActionExecutor {
 
     @Override
     public void execute(ActionInvocation<LocalService> actionInvocation) {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "execute", actionInvocation);
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "execute", actionInvocation);
 
         ActionArgumentValue<LocalService>[] inputs = actionInvocation.getInput();
 
@@ -72,15 +72,15 @@ class UPnPActionExecutor implements ActionExecutor {
                             // System.out.printf("*** key: %s value: %s [%s]\n", key, value, value);
                             actionInvocation.setOutput(key, value);
                         } catch (InvalidValueException e) {
-                            log.error("Error executing action {} variable {}.", action.getName(), key);
-                            log.error(e.getMessage());
+                            logger.error("Error executing action {} variable {}.", action.getName(), key);
+                            logger.error(e.getMessage());
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            log.error("Error executing action ({}).", action.getName());
-            log.error(e.getMessage());
+            logger.error("Error executing action ({}).", action.getName());
+            logger.error(e.getMessage());
         }
     }
 }

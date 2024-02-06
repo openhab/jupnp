@@ -45,8 +45,8 @@ public class EventedValueURI extends EventedValue<URI> {
             // These URIs are really defined as 'string' datatype in AVTransport1.0.pdf, but we can try
             // to parse whatever devices give us, like the Roku which sends "unknown url".
             return super.valueOf(s);
-        } catch (InvalidValueException ex) {
-            logger.debug("Ignoring invalid URI in evented value '{}'", s, ex);
+        } catch (InvalidValueException e) {
+            logger.debug("Ignoring invalid URI in evented value '{}'", s, e);
             return null;
         }
     }

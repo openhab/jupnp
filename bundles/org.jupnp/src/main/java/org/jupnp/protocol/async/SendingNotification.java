@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class SendingNotification extends SendingAsync {
 
-    private final Logger log = LoggerFactory.getLogger(SendingNotification.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingNotification.class);
 
     private LocalDevice device;
 
@@ -63,7 +63,7 @@ public abstract class SendingNotification extends SendingAsync {
 
         List<NetworkAddress> activeStreamServers = getUpnpService().getRouter().getActiveStreamServers(null);
         if (activeStreamServers.isEmpty()) {
-            log.trace("Aborting notifications, no active stream servers found (network disabled?)");
+            logger.trace("Aborting notifications, no active stream servers found (network disabled?)");
             return;
         }
 
@@ -82,11 +82,11 @@ public abstract class SendingNotification extends SendingAsync {
                 }
 
                 // UDA 1.0 is silent about this but UDA 1.1 recomments "a few hundred milliseconds"
-                log.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
+                logger.trace("Sleeping {} milliseconds", getBulkIntervalMilliseconds());
                 Thread.sleep(getBulkIntervalMilliseconds());
 
-            } catch (InterruptedException ex) {
-                log.warn("Advertisement thread was interrupted", ex);
+            } catch (InterruptedException e) {
+                logger.warn("Advertisement thread was interrupted", e);
             }
         }
     }
@@ -100,7 +100,7 @@ public abstract class SendingNotification extends SendingAsync {
     }
 
     public void sendMessages(Location descriptorLocation) throws RouterException {
-        log.trace("Sending root device messages: {}", getDevice());
+        logger.trace("Sending root device messages: {}", getDevice());
         List<OutgoingNotificationRequest> rootDeviceMsgs = createDeviceMessages(getDevice(), descriptorLocation);
         for (OutgoingNotificationRequest upnpMessage : rootDeviceMsgs) {
             getUpnpService().getRouter().send(upnpMessage);
@@ -108,7 +108,7 @@ public abstract class SendingNotification extends SendingAsync {
 
         if (getDevice().hasEmbeddedDevices()) {
             for (LocalDevice embeddedDevice : getDevice().findEmbeddedDevices()) {
-                log.trace("Sending embedded device messages: {}", embeddedDevice);
+                logger.trace("Sending embedded device messages: {}", embeddedDevice);
                 List<OutgoingNotificationRequest> embeddedDeviceMsgs = createDeviceMessages(embeddedDevice,
                         descriptorLocation);
                 for (OutgoingNotificationRequest upnpMessage : embeddedDeviceMsgs) {
@@ -119,7 +119,7 @@ public abstract class SendingNotification extends SendingAsync {
 
         List<OutgoingNotificationRequest> serviceTypeMsgs = createServiceTypeMessages(getDevice(), descriptorLocation);
         if (!serviceTypeMsgs.isEmpty()) {
-            log.trace("Sending service type messages");
+            logger.trace("Sending service type messages");
             for (OutgoingNotificationRequest upnpMessage : serviceTypeMsgs) {
                 getUpnpService().getRouter().send(upnpMessage);
             }

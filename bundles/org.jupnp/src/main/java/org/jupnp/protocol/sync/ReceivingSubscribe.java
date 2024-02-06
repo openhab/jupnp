@@ -57,7 +57,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, OutgoingSubscribeResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingSubscribe.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingSubscribe.class);
 
     protected LocalGENASubscription subscription;
 
@@ -72,11 +72,11 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
                 .getResource(ServiceEventSubscriptionResource.class, getInputMessage().getUri());
 
         if (resource == null) {
-            log.trace("No local resource found: {}", getInputMessage());
+            logger.trace("No local resource found: {}", getInputMessage());
             return null;
         }
 
-        log.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
+        logger.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
 
         IncomingSubscribeRequestMessage requestMessage = new IncomingSubscribeRequestMessage(getInputMessage(),
                 resource.getModel());
@@ -88,11 +88,11 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
                     InetAddress callbackAddress = InetAddress.getByName(callbackUrl.getHost());
                     if (!(callbackAddress.isLoopbackAddress() || callbackAddress.isLinkLocalAddress()
                             || callbackAddress.isSiteLocalAddress())) {
-                        log.trace("Callback URL not on accepted address range: {}", getInputMessage());
+                        logger.trace("Callback URL not on accepted address range: {}", getInputMessage());
                         return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
                     }
                 } catch (UnknownHostException e) {
-                    log.trace("Unknown host for callback URL: {}", getInputMessage());
+                    logger.trace("Unknown host for callback URL: {}", getInputMessage());
                     return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
                 }
             }
@@ -101,7 +101,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
         if (requestMessage.getSubscriptionId() != null
                 && (requestMessage.hasNotificationHeader() || requestMessage.getCallbackURLs() != null)) {
-            log.trace("Subscription ID and NT or Callback in subscribe request: {}", getInputMessage());
+            logger.trace("Subscription ID and NT or Callback in subscribe request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.BAD_REQUEST);
         }
 
@@ -110,7 +110,8 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         } else if (requestMessage.hasNotificationHeader() && requestMessage.getCallbackURLs() != null) {
             return processNewSubscription(resource.getModel(), requestMessage);
         } else {
-            log.trace("No subscription ID, no NT or Callback, neither subscription or renewal: {}", getInputMessage());
+            logger.trace("No subscription ID, no NT or Callback, neither subscription or renewal: {}",
+                    getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
     }
@@ -122,16 +123,16 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
         if (subscription == null) {
-            log.trace("Invalid subscription ID for renewal request: {}", getInputMessage());
+            logger.trace("Invalid subscription ID for renewal request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
-        log.trace("Renewing subscription: {}", subscription);
+        logger.trace("Renewing subscription: {}", subscription);
         subscription.setSubscriptionDuration(requestMessage.getRequestedTimeoutSeconds());
         if (getUpnpService().getRegistry().updateLocalSubscription(subscription)) {
             return new OutgoingSubscribeResponseMessage(subscription);
         } else {
-            log.trace("Subscription went away before it could be renewed: {}", getInputMessage());
+            logger.trace("Subscription went away before it could be renewed: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
     }
@@ -142,12 +143,12 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
         if (callbackURLs == null || callbackURLs.isEmpty()) {
-            log.trace("Missing or invalid Callback URLs in subscribe request: {}", getInputMessage());
+            logger.trace("Missing or invalid Callback URLs in subscribe request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
         if (!requestMessage.hasNotificationHeader()) {
-            log.trace("Missing or invalid NT header in subscribe request: {}", getInputMessage());
+            logger.trace("Missing or invalid NT header in subscribe request: {}", getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
@@ -175,15 +176,15 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
                             .execute(getUpnpService().getProtocolFactory().createSendingEvent(this));
                 }
             };
-        } catch (Exception ex) {
-            log.warn("Couldn't create local subscription to service", ex);
+        } catch (Exception e) {
+            logger.warn("Couldn't create local subscription to service", e);
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
 
-        log.trace("Adding subscription to registry: {}", subscription);
+        logger.trace("Adding subscription to registry: {}", subscription);
         getUpnpService().getRegistry().addLocalSubscription(subscription);
 
-        log.trace("Returning subscription response, waiting to send initial event");
+        logger.trace("Returning subscription response, waiting to send initial event");
         return new OutgoingSubscribeResponseMessage(subscription);
     }
 
@@ -200,22 +201,22 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
             // event message arrives later than the first on-change event message. Shouldn't be a problem as the
             // subscriber is supposed to figure out what to do with out-of-sequence messages. I would be
             // surprised though if actual implementations won't crash!
-            log.trace("Establishing subscription");
+            logger.trace("Establishing subscription");
             subscription.registerOnService();
             subscription.establish();
 
-            log.trace("Response to subscription sent successfully, now sending initial event asynchronously");
+            logger.trace("Response to subscription sent successfully, now sending initial event asynchronously");
             getUpnpService().getConfiguration().getAsyncProtocolExecutor()
                     .execute(getUpnpService().getProtocolFactory().createSendingEvent(subscription));
 
         } else if (subscription.getCurrentSequence().getValue() == 0) {
-            log.trace("Subscription request's response aborted, not sending initial event");
+            logger.trace("Subscription request's response aborted, not sending initial event");
             if (responseMessage == null) {
-                log.trace("Reason: No response at all from subscriber");
+                logger.trace("Reason: No response at all from subscriber");
             } else {
-                log.trace("Reason: {}", responseMessage.getOperation());
+                logger.trace("Reason: {}", responseMessage.getOperation());
             }
-            log.trace("Removing subscription from registry: {}", subscription);
+            logger.trace("Removing subscription from registry: {}", subscription);
             getUpnpService().getRegistry().removeLocalSubscription(subscription);
         }
     }
@@ -225,7 +226,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         if (subscription == null) {
             return; // Nothing to do, we didn't get that far
         }
-        log.trace("Response could not be send to subscriber, removing local GENA subscription: {}", subscription);
+        logger.trace("Response could not be send to subscriber, removing local GENA subscription: {}", subscription);
         getUpnpService().getRegistry().removeLocalSubscription(subscription);
     }
 }

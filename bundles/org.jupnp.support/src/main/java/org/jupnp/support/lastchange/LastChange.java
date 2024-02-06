@@ -124,8 +124,8 @@ public class LastChange {
         }
         try {
             return parser.generate(event);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

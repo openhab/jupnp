@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UPnPActionImpl implements UPnPAction {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPActionImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPActionImpl.class);
 
     private Action<?> action;
 
@@ -141,7 +141,7 @@ public class UPnPActionImpl implements UPnPAction {
                     Object value = argument.getValue();
 
                     if (value == null) {
-                        log.error("Received null value for variable {} to OSGi type {}.", name,
+                        logger.error("Received null value for variable {} to OSGi type {}.", name,
                                 argument.getDatatype().getDisplayString());
                         // throw an exception
                     } else {
@@ -150,7 +150,7 @@ public class UPnPActionImpl implements UPnPAction {
                         value = OSGiDataConverter.toOSGiValue(argument.getDatatype(), value);
 
                         if (value == null) {
-                            log.error("Cannot convert variable {} to OSGi type {}.", name,
+                            logger.error("Cannot convert variable {} to OSGi type {}.", name,
                                     argument.getDatatype().getDisplayString());
                             // throw an exception
                         }

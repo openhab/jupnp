@@ -238,7 +238,7 @@ public class OSGiUPnPStringConverter {
      */
     static final String TYPE_UUID = "uuid";
 
-    private static final Logger log = LoggerFactory.getLogger(OSGiUPnPStringConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OSGiUPnPStringConverter.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -366,7 +366,7 @@ public class OSGiUPnPStringConverter {
                     value = Long.valueOf(string);
                 }
             } catch (ParseException e) {
-                log.warn("Failed to parse long of type '{}': {}", type, string, e);
+                LOGGER.warn("Failed to parse long of type '{}': {}", type, string, e);
             }
         }
 
@@ -421,7 +421,7 @@ public class OSGiUPnPStringConverter {
                     date = dateTimeTZFormat.parse(string);
                 }
             } catch (ParseException e) {
-                log.warn("Failed to parse date of type '{}': {}", type, string, e);
+                LOGGER.warn("Failed to parse date of type '{}': {}", type, string, e);
             }
         }
 

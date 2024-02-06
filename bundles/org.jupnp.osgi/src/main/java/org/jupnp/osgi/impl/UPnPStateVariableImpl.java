@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UPnPStateVariableImpl implements UPnPStateVariable {
-    private Logger logger = LoggerFactory.getLogger(UPnPStateVariableImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPStateVariableImpl.class);
 
     private StateVariable<?> variable;
 

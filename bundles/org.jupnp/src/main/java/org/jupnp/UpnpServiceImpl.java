@@ -66,7 +66,7 @@ public class UpnpServiceImpl implements UpnpService {
         boolean initialSearchEnabled() default true;
     }
 
-    private final Logger log = LoggerFactory.getLogger(UpnpServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpServiceImpl.class);
 
     protected boolean isConfigured = false;
     protected boolean isRunning = false;
@@ -199,11 +199,11 @@ public class UpnpServiceImpl implements UpnpService {
         Runnable shutdown = () -> {
             synchronized (lock) {
                 if (isRunning) {
-                    log.info("Shutting down UPnP service...");
+                    logger.info("Shutting down UPnP service...");
                     shutdownRegistry();
                     shutdownConfiguration();
                     shutdownRouter();
-                    log.info("UPnP service shutdown completed");
+                    logger.info("UPnP service shutdown completed");
                     isRunning = false;
                 }
             }
@@ -236,12 +236,12 @@ public class UpnpServiceImpl implements UpnpService {
     protected void shutdownRouter() {
         try {
             getRouter().shutdown();
-        } catch (RouterException ex) {
-            Throwable cause = Exceptions.unwrap(ex);
+        } catch (RouterException e) {
+            Throwable cause = Exceptions.unwrap(e);
             if (cause instanceof InterruptedException) {
-                log.debug("Router shutdown was interrupted", ex);
+                logger.debug("Router shutdown was interrupted", e);
             } else {
-                throw new RuntimeException("Router error on shutdown", ex);
+                throw new RuntimeException("Router error on shutdown", e);
             }
         }
     }
@@ -265,11 +265,11 @@ public class UpnpServiceImpl implements UpnpService {
     public void startup() {
         synchronized (lock) {
             if (!isRunning) {
-                log.info("Starting UPnP service...");
+                logger.info("Starting UPnP service...");
 
                 // Instantiation order is important: Router needs to start its network services after registry is ready
 
-                log.debug("Using configuration: {}", getConfiguration().getClass().getName());
+                logger.debug("Using configuration: {}", getConfiguration().getClass().getName());
 
                 this.protocolFactory = createProtocolFactory();
                 this.registry = createRegistry(protocolFactory);
@@ -277,13 +277,13 @@ public class UpnpServiceImpl implements UpnpService {
 
                 try {
                     this.router.enable();
-                } catch (RouterException ex) {
-                    throw new RuntimeException("Enabling network router failed", ex);
+                } catch (RouterException e) {
+                    throw new RuntimeException("Enabling network router failed", e);
                 }
 
                 this.controlPoint = createControlPoint(protocolFactory, registry);
 
-                log.debug("UPnP service started successfully");
+                logger.debug("UPnP service started successfully");
 
                 isRunning = true;
 

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPStateVariableAccessor extends StateVariableAccessor {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPStateVariableAccessor.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPStateVariableAccessor.class);
 
     private UPnPStateVariable variable;
 
@@ -35,13 +35,13 @@ class UPnPStateVariableAccessor extends StateVariableAccessor {
 
     @Override
     public Class<?> getReturnType() {
-        log.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType");
+        logger.trace("ENTRY {}.{}: ", this.getClass().getName(), "getReturnType");
         return variable.getJavaDataType();
     }
 
     @Override
     public Object read(Object serviceImpl) throws Exception {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "read", serviceImpl);
         return null;
     }
 }

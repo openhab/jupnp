@@ -140,17 +140,17 @@ public abstract class AbstractContentDirectoryService {
         SortCriterion[] orderByCriteria;
         try {
             orderByCriteria = SortCriterion.valueOf(orderBy);
-        } catch (Exception ex) {
-            throw new ContentDirectoryException(ContentDirectoryErrorCode.UNSUPPORTED_SORT_CRITERIA, ex.toString());
+        } catch (Exception e) {
+            throw new ContentDirectoryException(ContentDirectoryErrorCode.UNSUPPORTED_SORT_CRITERIA, e.toString());
         }
 
         try {
             return browse(objectId, BrowseFlag.valueOrNullOf(browseFlag), filter, firstResult.getValue(),
                     maxResults.getValue(), orderByCriteria);
-        } catch (ContentDirectoryException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, ex.toString());
+        } catch (ContentDirectoryException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, e.toString());
         }
     }
 
@@ -183,17 +183,17 @@ public abstract class AbstractContentDirectoryService {
         SortCriterion[] orderByCriteria;
         try {
             orderByCriteria = SortCriterion.valueOf(orderBy);
-        } catch (Exception ex) {
-            throw new ContentDirectoryException(ContentDirectoryErrorCode.UNSUPPORTED_SORT_CRITERIA, ex.toString());
+        } catch (Exception e) {
+            throw new ContentDirectoryException(ContentDirectoryErrorCode.UNSUPPORTED_SORT_CRITERIA, e.toString());
         }
 
         try {
             return search(containerId, searchCriteria, filter, firstResult.getValue(), maxResults.getValue(),
                     orderByCriteria);
-        } catch (ContentDirectoryException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, ex.toString());
+        } catch (ContentDirectoryException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, e.toString());
         }
     }
 
@@ -208,8 +208,8 @@ public abstract class AbstractContentDirectoryService {
 
         try {
             return new BrowseResult(new DIDLParser().generate(new DIDLContent()), 0, 0);
-        } catch (Exception ex) {
-            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, ex.toString());
+        } catch (Exception e) {
+            throw new ContentDirectoryException(ErrorCode.ACTION_FAILED, e.toString());
         }
     }
 }

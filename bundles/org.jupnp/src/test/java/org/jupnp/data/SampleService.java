@@ -46,8 +46,8 @@ public abstract class SampleService {
     public <S extends Service> S newInstanceLocal(Constructor<S> ctor) {
         try {
             return ctor.newInstance(getServiceType(), getServiceId(), getActions(), getStateVariables());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -55,8 +55,8 @@ public abstract class SampleService {
         try {
             return ctor.newInstance(getServiceType(), getServiceId(), getDescriptorURI(), getControlURI(),
                     getEventSubscriptionURI(), getActions(), getStateVariables());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -37,8 +37,8 @@ public class BinHexDatatype extends AbstractDatatype<byte[]> {
         }
         try {
             return HexBin.stringToBytes(s);
-        } catch (Exception ex) {
-            throw new InvalidValueException(ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage(), e);
         }
     }
 
@@ -49,8 +49,8 @@ public class BinHexDatatype extends AbstractDatatype<byte[]> {
         }
         try {
             return HexBin.bytesToString(value);
-        } catch (Exception ex) {
-            throw new InvalidValueException(ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new InvalidValueException(e.getMessage(), e);
         }
     }
 }

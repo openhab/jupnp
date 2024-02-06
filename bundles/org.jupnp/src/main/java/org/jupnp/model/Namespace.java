@@ -60,7 +60,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Namespace {
 
-    private final Logger log = LoggerFactory.getLogger(Namespace.class);
+    private final Logger logger = LoggerFactory.getLogger(Namespace.class);
 
     public static final String DEVICE = "/dev";
     public static final String SERVICE = "/svc";
@@ -162,12 +162,12 @@ public class Namespace {
         Set<Resource> resources = new HashSet<>();
         List<ValidationError> errors = new ArrayList<>();
 
-        log.trace("Discovering local resources of device graph");
+        logger.trace("Discovering local resources of device graph");
         Resource[] discoveredResources = device.discoverResources(this);
         for (Resource resource : discoveredResources) {
-            log.trace("Discovered: {}", resource);
+            logger.trace("Discovered: {}", resource);
             if (!resources.add(resource)) {
-                log.trace("Local resource already exists, queueing validation error");
+                logger.trace("Local resource already exists, queueing validation error");
                 errors.add(new ValidationError(getClass(), "resources",
                         "Local URI namespace conflict between resources of device: " + resource));
             }

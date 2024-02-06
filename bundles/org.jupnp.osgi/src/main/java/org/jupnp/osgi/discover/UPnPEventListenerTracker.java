@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPEventListenerTracker extends ServiceTracker {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
 
     private UpnpService upnpService;
     private UPnPDeviceImpl device;
@@ -63,7 +63,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
     public UPnPEventListenerTracker(BundleContext context, Filter filter, UpnpService upnpService,
             UPnPDeviceImpl device) {
         super(context, filter, null);
-        log.trace("ENTRY {}.{}: {} {} {} {}", this.getClass().getName(), "<init>", context, filter, upnpService,
+        logger.trace("ENTRY {}.{}: {} {} {} {}", this.getClass().getName(), "<init>", context, filter, upnpService,
                 device);
         this.upnpService = upnpService;
         this.device = device;
@@ -71,7 +71,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
 
     @Override
     public Object addingService(ServiceReference reference) {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
         final UPnPEventListener listener = (UPnPEventListener) super.addingService(reference);
 
         Filter filter = (Filter) reference.getProperty(UPnPEventListener.UPNP_FILTER);
@@ -83,7 +83,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
                 boolean all = filter.match(descriptions);
 
                 if (all) {
-                    log.trace("Matched UPnPEvent listener for device {} service: ALL.",
+                    logger.trace("Matched UPnPEvent listener for device {} service: ALL.",
                             device.getDevice().getIdentity().getUdn().toString());
                 }
 
@@ -99,13 +99,13 @@ class UPnPEventListenerTracker extends ServiceTracker {
                         dictionary.put(UPnPService.TYPE, service.getType());
                         match = filter.match(dictionary);
                         if (match) {
-                            log.trace("Matched UPnPEvent listener for device {} service: {}.",
+                            logger.trace("Matched UPnPEvent listener for device {} service: {}.",
                                     device.getDevice().getIdentity().getUdn().toString(), service.getId());
                         }
                     }
 
                     if (match) {
-                        log.trace("Creating subscription callback for device {} service: {}.",
+                        logger.trace("Creating subscription callback for device {} service: {}.",
                                 device.getDevice().getIdentity().getUdn().toString(), service.getId());
                         SubscriptionCallback callback = new UPnPEventListenerSubscriptionCallback(device, service,
                                 listener);
@@ -123,7 +123,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
 
     @Override
     public void removedService(ServiceReference reference, Object service) {
-        log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, service);
+        logger.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, service);
 
         List<SubscriptionCallback> callbacks = listenerCallbacks.get(reference);
         if (callbacks != null) {

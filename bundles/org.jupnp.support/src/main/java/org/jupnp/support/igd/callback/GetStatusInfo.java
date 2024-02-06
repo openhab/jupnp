@@ -46,9 +46,9 @@ public abstract class GetStatusInfo extends ActionCallback {
             success(new Connection.StatusInfo(status,
                     (UnsignedIntegerFourBytes) invocation.getOutput("NewUptime").getValue(), lastError));
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
             invocation.setFailure(
-                    new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID, "Invalid status or last error string", ex));
+                    new ActionException(ErrorCode.ARGUMENT_VALUE_INVALID, "Invalid status or last error string", e));
             failure(invocation, null);
         }
     }

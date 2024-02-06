@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class DLNAAttribute<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(DLNAAttribute.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DLNAAttribute.class);
 
     /**
      * Maps a standardized DLNA attribute to potential attribute subtypes.
@@ -129,18 +129,17 @@ public abstract class DLNAAttribute<T> {
         for (int i = 0; i < type.getAttributeTypes().length && attr == null; i++) {
             Class<? extends DLNAAttribute<?>> attributeClass = type.getAttributeTypes()[i];
             try {
-                logger.trace("Trying to parse DLNA '{}' with class: {}", type, attributeClass.getSimpleName());
+                LOGGER.trace("Trying to parse DLNA '{}' with class: {}", type, attributeClass.getSimpleName());
                 attr = attributeClass.getDeclaredConstructor().newInstance();
                 if (attributeValue != null) {
                     attr.setString(attributeValue, contentFormat);
                 }
-            } catch (InvalidDLNAProtocolAttributeException ex) {
-                logger.trace("Invalid DLNA attribute value for tested type: {} - {}", attributeClass.getSimpleName(),
-                        ex.getMessage());
+            } catch (InvalidDLNAProtocolAttributeException e) {
+                LOGGER.trace("Invalid DLNA attribute value for tested type: {} - {}", attributeClass.getSimpleName(),
+                        e.getMessage());
                 attr = null;
-            } catch (Exception ex) {
-                logger.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue,
-                        ex);
+            } catch (Exception e) {
+                LOGGER.error("Error instantiating DLNA attribute of type '{}' with value: {}", type, attributeValue, e);
             }
         }
         return attr;

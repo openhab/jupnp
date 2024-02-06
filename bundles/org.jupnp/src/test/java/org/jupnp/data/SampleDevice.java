@@ -72,8 +72,8 @@ public abstract class SampleDevice {
             }
             return deviceConstructor.newInstance(getIdentity(), getDeviceType(), getDeviceDetails(), getIcons(),
                     getService(), getEmbeddedDevice());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

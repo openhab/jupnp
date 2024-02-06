@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class UpnpMessage<O extends UpnpOperation> {
 
-    private static final Logger log = LoggerFactory.getLogger(UpnpMessage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpnpMessage.class);
 
     public enum BodyType {
         STRING,
@@ -144,8 +144,8 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
             } else {
                 return new String((byte[]) getBody(), getContentTypeCharset());
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -159,8 +159,8 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
             } else {
                 return (byte[]) getBody();
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -212,7 +212,7 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         try {
             return Charset.forName(charsetValue);
         } catch (UnsupportedCharsetException e) {
-            log.warn("UpnpMessage has unsupported charset '{}' using UTF-8 instead", charsetValue, e);
+            LOGGER.warn("UpnpMessage has unsupported charset '{}' using UTF-8 instead", charsetValue, e);
             return StandardCharsets.UTF_8;
         }
     }

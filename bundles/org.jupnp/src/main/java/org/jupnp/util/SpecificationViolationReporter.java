@@ -40,7 +40,7 @@ public class SpecificationViolationReporter {
      */
     private volatile boolean enabled = true;
 
-    private Logger logger = LoggerFactory.getLogger(SpecificationViolationReporter.class);
+    private final Logger logger = LoggerFactory.getLogger(SpecificationViolationReporter.class);
 
     private void _disableReporting() {
         enabled = false;

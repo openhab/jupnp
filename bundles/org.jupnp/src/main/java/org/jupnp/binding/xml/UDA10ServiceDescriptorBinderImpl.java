@@ -64,7 +64,7 @@ import org.xml.sax.SAXParseException;
  */
 public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder, ErrorHandler {
 
-    private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
     @Override
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
@@ -74,7 +74,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         }
 
         try {
-            log.trace("Populating service from XML descriptor: {}", undescribedService);
+            logger.trace("Populating service from XML descriptor: {}", undescribedService);
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -88,10 +88,10 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
             return describe(undescribedService, d);
 
-        } catch (ValidationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse service descriptor", ex);
+        } catch (ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not parse service descriptor", e);
         }
     }
 
@@ -99,7 +99,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
     public <S extends Service> S describe(S undescribedService, Document dom)
             throws DescriptorBindingException, ValidationException {
         try {
-            log.trace("Populating service from DOM: {}", undescribedService);
+            logger.trace("Populating service from DOM: {}", undescribedService);
 
             // Read the XML into a mutable descriptor graph
             MutableService descriptor = new MutableService();
@@ -112,10 +112,10 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
             // Build the immutable descriptor graph
             return buildInstance(undescribedService, descriptor);
 
-        } catch (ValidationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse service DOM", ex);
+        } catch (ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not parse service DOM", e);
         }
     }
 
@@ -153,13 +153,13 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
             }
 
             if (ELEMENT.specVersion.equals(rootChild)) {
-                log.trace("Ignoring UDA major/minor specVersion");
+                logger.trace("Ignoring UDA major/minor specVersion");
             } else if (ELEMENT.actionList.equals(rootChild)) {
                 hydrateActionList(descriptor, rootChild);
             } else if (ELEMENT.serviceStateTable.equals(rootChild)) {
                 hydrateServiceStateTableList(descriptor, rootChild);
             } else {
-                log.trace("Ignoring unknown element: {}", rootChild.getNodeName());
+                logger.trace("Ignoring unknown element: {}", rootChild.getNodeName());
             }
         }
     }
@@ -229,7 +229,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 try {
                     actionArgument.direction = ActionArgument.Direction
                             .valueOf(directionString.toUpperCase(Locale.ENGLISH));
-                } catch (IllegalArgumentException ex) {
+                } catch (IllegalArgumentException e) {
                     // TODO: UPNP VIOLATION: Pelco SpectraIV-IP uses illegal value INOUT
                     SpecificationViolationReporter.report("Invalid action argument direction, assuming 'IN': {}",
                             directionString);
@@ -317,17 +317,17 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                     if (ELEMENT.minimum.equals(allowedValueRangeChild)) {
                         try {
                             range.minimum = Long.valueOf(XMLUtil.getTextContent(allowedValueRangeChild));
-                        } catch (Exception ex) {
+                        } catch (Exception e) {
                         }
                     } else if (ELEMENT.maximum.equals(allowedValueRangeChild)) {
                         try {
                             range.maximum = Long.valueOf(XMLUtil.getTextContent(allowedValueRangeChild));
-                        } catch (Exception ex) {
+                        } catch (Exception e) {
                         }
                     } else if (ELEMENT.step.equals(allowedValueRangeChild)) {
                         try {
                             range.step = Long.valueOf(XMLUtil.getTextContent(allowedValueRangeChild));
-                        } catch (Exception ex) {
+                        } catch (Exception e) {
                         }
                     }
                 }
@@ -340,12 +340,12 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
     @Override
     public String generate(Service service) throws DescriptorBindingException {
         try {
-            log.trace("Generating XML descriptor from service model: {}", service);
+            logger.trace("Generating XML descriptor from service model: {}", service);
 
             return XMLUtil.documentToString(buildDOM(service));
 
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not build DOM: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not build DOM: " + e.getMessage(), e);
         }
     }
 
@@ -353,7 +353,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
     public Document buildDOM(Service service) throws DescriptorBindingException {
 
         try {
-            log.trace("Generting XML descriptor from service model: {}", service);
+            logger.trace("Generting XML descriptor from service model: {}", service);
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -363,8 +363,8 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
             return d;
 
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not generate service descriptor: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not generate service descriptor: " + e.getMessage(), e);
         }
     }
 
@@ -488,7 +488,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
     @Override
     public void warning(SAXParseException e) throws SAXException {
-        log.warn(e.toString());
+        logger.warn(e.toString());
     }
 
     @Override

@@ -48,7 +48,7 @@ public class NamedServiceType {
         UDN udn;
         try {
             udn = UDN.valueOf(strings[0]);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             throw new InvalidValueException("Can't parse UDN: " + strings[0]);
         }
 

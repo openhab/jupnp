@@ -178,9 +178,9 @@ public interface Registry {
      * </p>
      *
      * @param device The half-hydrated (without services) metadata of the discovered device.
-     * @param ex The cause for the interruption of the discovery protocol.
+     * @param e The cause for the interruption of the discovery protocol.
      */
-    void notifyDiscoveryFailure(RemoteDevice device, Exception ex);
+    void notifyDiscoveryFailure(RemoteDevice device, Exception e);
 
     // #################################################################################################
 

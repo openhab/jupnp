@@ -83,7 +83,7 @@ public class DateTimeDatatype extends AbstractDatatype<Calendar> {
             try {
                 d = sdt.parse(value);
                 // Continue, last match is the one we need
-            } catch (ParseException ex) {
+            } catch (ParseException e) {
                 // Just continue
             }
         }

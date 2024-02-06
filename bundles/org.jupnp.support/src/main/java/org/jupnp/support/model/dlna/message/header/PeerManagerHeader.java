@@ -36,7 +36,7 @@ public class PeerManagerHeader extends DLNAHeader<ServiceReference> {
                     setValue(serviceReference);
                     return;
                 }
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // no need to take any precaution measure
             }
         }

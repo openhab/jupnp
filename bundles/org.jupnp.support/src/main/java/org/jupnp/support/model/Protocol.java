@@ -32,7 +32,7 @@ public enum Protocol {
     XBMC_GET("xbmc-get"),
     OTHER("other");
 
-    private static final Logger logger = LoggerFactory.getLogger(Protocol.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Protocol.class);
 
     private final String protocolString;
 
@@ -51,7 +51,7 @@ public enum Protocol {
                 return protocol;
             }
         }
-        logger.info("Unsupported OTHER protocol string: {}", s);
+        LOGGER.info("Unsupported OTHER protocol string: {}", s);
         return OTHER;
     }
 }

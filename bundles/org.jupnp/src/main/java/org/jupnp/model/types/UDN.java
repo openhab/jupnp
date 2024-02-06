@@ -55,7 +55,7 @@ public class UDN {
         try {
             UUID.fromString(identifierString);
             return true;
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             return false;
         }
     }
@@ -108,8 +108,8 @@ public class UDN {
             byte[] hash = MessageDigest.getInstance("MD5")
                     .digest(systemSalt.toString().getBytes(StandardCharsets.UTF_8));
             return new UDN(new UUID(new BigInteger(-1, hash).longValue(), salt.hashCode()));
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

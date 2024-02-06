@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TestData {
-    private static final Logger log = LoggerFactory.getLogger(TestData.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestData.class);
     private String file;
     private Properties properties;
 
@@ -36,13 +36,13 @@ public class TestData {
             properties = new Properties();
             InputStream in = this.getClass().getResourceAsStream(file);
             if (in == null) {
-                log.error("No test data file {}.", file);
+                LOGGER.error("No test data file {}.", file);
             } else {
                 try {
                     properties.load(in);
                     in.close();
                 } catch (IOException e) {
-                    log.error("Cannot read test data file {}.", file);
+                    LOGGER.error("Cannot read test data file {}.", file);
                 }
             }
         }
@@ -55,7 +55,7 @@ public class TestData {
 
         value = getProperties().getProperty(name);
         if (value == null) {
-            log.error("No test data for type {}.", name);
+            LOGGER.error("No test data for type {}.", name);
         }
 
         return value;

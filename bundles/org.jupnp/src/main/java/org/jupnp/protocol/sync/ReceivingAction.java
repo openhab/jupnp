@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingAction.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingAction.class);
 
     public ReceivingAction(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);
@@ -78,11 +78,11 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                 getInputMessage().getUri());
 
         if (resource == null) {
-            log.trace("No local resource found: {}", getInputMessage());
+            logger.trace("No local resource found: {}", getInputMessage());
             return null;
         }
 
-        log.trace("Found local action resource matching relative request URI: {}", getInputMessage().getUri());
+        logger.trace("Found local action resource matching relative request URI: {}", getInputMessage().getUri());
 
         RemoteActionInvocation invocation;
         OutgoingActionResponseMessage responseMessage;
@@ -93,14 +93,14 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             IncomingActionRequestMessage requestMessage = new IncomingActionRequestMessage(getInputMessage(),
                     resource.getModel());
 
-            log.trace("Created incoming action request message: {}", requestMessage);
+            logger.trace("Created incoming action request message: {}", requestMessage);
             invocation = new RemoteActionInvocation(requestMessage.getAction(), getRemoteClientInfo());
 
             // Throws UnsupportedDataException if the body can't be read
-            log.trace("Reading body of request message");
+            logger.trace("Reading body of request message");
             getUpnpService().getConfiguration().getSoapActionProcessor().readBody(requestMessage, invocation);
 
-            log.trace("Executing on local service: {}", invocation);
+            logger.trace("Executing on local service: {}", invocation);
             resource.getModel().getExecutor(invocation.getAction()).execute(invocation);
 
             if (invocation.getFailure() == null) {
@@ -108,7 +108,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             } else {
 
                 if (invocation.getFailure() instanceof ActionCancelledException) {
-                    log.trace("Action execution was cancelled, returning 404 to client");
+                    logger.trace("Action execution was cancelled, returning 404 to client");
                     // A 404 status is appropriate for this situation: The resource is gone/not available and it's
                     // a temporary condition. Most likely the cancellation happened because the client connection
                     // has been dropped, so it doesn't really matter what we return here anyway.
@@ -119,18 +119,18 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                 }
             }
 
-        } catch (ActionException ex) {
-            log.trace("Error executing local action", ex);
+        } catch (ActionException e) {
+            logger.trace("Error executing local action", e);
 
-            invocation = new RemoteActionInvocation(ex, getRemoteClientInfo());
+            invocation = new RemoteActionInvocation(e, getRemoteClientInfo());
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
-        } catch (UnsupportedDataException ex) {
-            log.warn("Error reading action request XML body", ex);
+        } catch (UnsupportedDataException e) {
+            logger.warn("Error reading action request XML body", e);
 
             invocation = new RemoteActionInvocation(
-                    Exceptions.unwrap(ex) instanceof ActionException ? (ActionException) Exceptions.unwrap(ex)
-                            : new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage()),
+                    Exceptions.unwrap(e) instanceof ActionException ? (ActionException) Exceptions.unwrap(e)
+                            : new ActionException(ErrorCode.ACTION_FAILED, e.getMessage()),
                     getRemoteClientInfo());
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
@@ -138,14 +138,15 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
 
         try {
 
-            log.trace("Writing body of response message");
+            logger.trace("Writing body of response message");
             getUpnpService().getConfiguration().getSoapActionProcessor().writeBody(responseMessage, invocation);
 
-            log.trace("Returning finished response message: {}", responseMessage);
+            logger.trace("Returning finished response message: {}", responseMessage);
             return responseMessage;
 
-        } catch (UnsupportedDataException ex) {
-            log.warn("Failure writing body of response message, sending '500 Internal Server Error' without body", ex);
+        } catch (UnsupportedDataException e) {
+            logger.warn("Failure writing body of response message, sending '500 Internal Server Error' without body",
+                    e);
             return new StreamResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
         }
     }

@@ -56,11 +56,11 @@ import org.slf4j.LoggerFactory;
  */
 public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
-    private Logger log = LoggerFactory.getLogger(AnnotationLocalServiceBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(AnnotationLocalServiceBinder.class);
 
     @Override
     public LocalService read(Class<?> clazz) throws LocalServiceBindingException {
-        log.trace("Reading and binding annotations of service implementation class: {}", clazz);
+        logger.trace("Reading and binding annotations of service implementation class: {}", clazz);
 
         // Read the service ID and service type from the annotation
         if (clazz.isAnnotationPresent(UpnpService.class)) {
@@ -108,10 +108,10 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             return new LocalService(type, id, actions, stateVariables, stringConvertibleTypes,
                     supportsQueryStateVariables);
 
-        } catch (ValidationException ex) {
-            log.error("Could not validate device model", ex);
-            for (ValidationError validationError : ex.getErrors()) {
-                log.error(validationError.toString());
+        } catch (ValidationException e) {
+            logger.error("Could not validate device model", e);
+            for (ValidationError validationError : e.getErrors()) {
+                logger.error(validationError.toString());
             }
             throw new LocalServiceBindingException("Validation of model failed, check the log");
         }
@@ -126,7 +126,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
             }
             try {
                 stringConvertibleType.getConstructor(String.class);
-            } catch (NoSuchMethodException ex) {
+            } catch (NoSuchMethodException e) {
                 throw new LocalServiceBindingException(
                         "Declared string-convertible type needs a public single-argument String constructor: "
                                 + stringConvertibleType);
@@ -171,7 +171,7 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
                 } else if (getter != null) {
                     accessor = new GetterStateVariableAccessor(getter);
                 } else {
-                    log.trace("No field or getter found for state variable, skipping accessor: {}", v.name());
+                    logger.trace("No field or getter found for state variable, skipping accessor: {}", v.name());
                 }
 
                 StateVariable stateVar = new AnnotationStateVariableBinder(v, v.name(), accessor,

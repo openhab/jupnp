@@ -40,8 +40,8 @@ public class RangeHeader extends UpnpHeader<BytesRange> {
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(BytesRange.valueOf(s));
-        } catch (InvalidValueException ex) {
-            throw new InvalidHeaderException("Invalid Range Header: " + ex.getMessage(), ex);
+        } catch (InvalidValueException e) {
+            throw new InvalidHeaderException("Invalid Range Header: " + e.getMessage(), e);
         }
     }
 

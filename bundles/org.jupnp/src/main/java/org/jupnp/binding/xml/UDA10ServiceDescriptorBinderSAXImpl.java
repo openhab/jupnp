@@ -50,7 +50,7 @@ import org.xml.sax.SAXException;
  */
 public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorBinderImpl {
 
-    private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
     @Override
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
@@ -61,7 +61,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
         }
 
         try {
-            log.trace("Reading service from XML descriptor");
+            logger.trace("Reading service from XML descriptor");
 
             SAXParser parser = new SAXParser();
 
@@ -79,10 +79,10 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
             // Build the immutable descriptor graph
             return (S) descriptor.build(undescribedService.getDevice());
 
-        } catch (ValidationException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new DescriptorBindingException("Could not parse service descriptor", ex);
+        } catch (ValidationException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new DescriptorBindingException("Could not parse service descriptor", e);
         }
     }
 
@@ -205,7 +205,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                     try {
                         getInstance().direction = ActionArgument.Direction
                                 .valueOf(directionString.toUpperCase(Locale.ENGLISH));
-                    } catch (IllegalArgumentException ex) {
+                    } catch (IllegalArgumentException e) {
                         // TODO: UPNP VIOLATION: Pelco SpectraIV-IP uses illegal value INOUT
                         SpecificationViolationReporter.report("Invalid action argument direction, assuming 'IN': {}",
                                 directionString);
@@ -346,7 +346,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                         getInstance().step = Long.valueOf(getCharacters());
                         break;
                 }
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // Ignore
             }
         }

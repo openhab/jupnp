@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Device<DI extends DeviceIdentity, D extends Device, S extends Service> implements Validatable {
 
-    private final Logger log = LoggerFactory.getLogger(Device.class);
+    private final Logger logger = LoggerFactory.getLogger(Device.class);
 
     private final DI identity;
 
@@ -123,9 +123,9 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
         List<ValidationError> errors = validate();
         if (!errors.isEmpty()) {
-            if (log.isTraceEnabled()) {
+            if (logger.isTraceEnabled()) {
                 for (ValidationError error : errors) {
-                    log.trace(error.toString());
+                    logger.trace(error.toString());
                 }
             }
             throw new ValidationException("Validation of device graph failed, call getErrors() on exception", errors);

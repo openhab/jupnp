@@ -40,8 +40,8 @@ public class UDADeviceTypeHeader extends DeviceTypeHeader {
     public void setString(String s) throws InvalidHeaderException {
         try {
             setValue(UDADeviceType.valueOf(s));
-        } catch (Exception ex) {
-            throw new InvalidHeaderException("Invalid UDA device type header value, " + ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new InvalidHeaderException("Invalid UDA device type header value, " + e.getMessage(), e);
         }
     }
 }

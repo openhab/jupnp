@@ -35,7 +35,7 @@ public class GetAvailableSeekRangeHeader extends DLNAHeader<Integer> {
                 if (t == 1) {
                     return;
                 }
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // no need to take any precaution measure
             }
         }

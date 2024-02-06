@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPEventListenerTracker extends ServiceTracker {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPEventListenerTracker.class);
 
     public UPnPEventListenerTracker(BundleContext context, Filter filter, ServiceTrackerCustomizer customizer) {
         super(context, filter, null);
@@ -38,7 +38,7 @@ class UPnPEventListenerTracker extends ServiceTracker {
 
     @Override
     public Object addingService(ServiceReference reference) {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
 
         return super.addingService(reference);
     }

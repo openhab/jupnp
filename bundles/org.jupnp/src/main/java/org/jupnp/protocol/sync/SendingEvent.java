@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, StreamResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(SendingEvent.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingEvent.class);
 
     protected final String subscriptionId;
     protected final OutgoingEventRequestMessage[] requestMessages;
@@ -73,21 +73,22 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
     @Override
     protected StreamResponseMessage executeSync() throws RouterException {
 
-        log.trace("Sending event for subscription: {}", subscriptionId);
+        logger.trace("Sending event for subscription: {}", subscriptionId);
 
         StreamResponseMessage lastResponse = null;
 
         for (OutgoingEventRequestMessage requestMessage : requestMessages) {
 
             if (currentSequence.getValue() == 0) {
-                log.trace("Sending initial event message to callback URL: {}", requestMessage.getUri());
+                logger.trace("Sending initial event message to callback URL: {}", requestMessage.getUri());
             } else {
-                log.trace("Sending event message '{}' to callback URL: {}", currentSequence, requestMessage.getUri());
+                logger.trace("Sending event message '{}' to callback URL: {}", currentSequence,
+                        requestMessage.getUri());
             }
 
             // Send request
             lastResponse = getUpnpService().getRouter().send(requestMessage);
-            log.trace("Received event callback response: {}", lastResponse);
+            logger.trace("Received event callback response: {}", lastResponse);
 
         }
 

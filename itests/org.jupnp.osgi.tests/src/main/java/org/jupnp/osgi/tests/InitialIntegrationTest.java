@@ -44,7 +44,7 @@ public class InitialIntegrationTest extends BaseIntegration {
     static final String INITIAL_TEST_DATA_ID = "initial";
     static final String SET_TEST_DATA_ID = "set";
 
-    static final Logger log = LoggerFactory.getLogger(InitialIntegrationTest.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(InitialIntegrationTest.class);
 
     static final String DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
     static final String SERVICE_TYPE = "urn:schemas-4thline-com:service:SimpleTest:1";
@@ -78,7 +78,7 @@ public class InitialIntegrationTest extends BaseIntegration {
 
             @Override
             public void success(ActionInvocation invocation) {
-                log.info("Successfully called action '{}'", name);
+                LOGGER.info("Successfully called action '{}'", name);
                 ActionArgumentValue[] outputs = invocation.getOutput();
                 for (ActionArgumentValue output : outputs) {
                     ActionArgument argument = output.getArgument();
@@ -104,7 +104,7 @@ public class InitialIntegrationTest extends BaseIntegration {
     static class SetTargetActionInvocation extends ActionInvocation {
         SetTargetActionInvocation(Service service, String name, TestData data) {
             super(service.getAction(name));
-            log.debug("@@@ name: {}  inputs: {}", name, getAction().getInputArguments().length);
+            LOGGER.debug("@@@ name: {}  inputs: {}", name, getAction().getInputArguments().length);
             ActionArgument lastArgument = null;
             String argumentType = "";
             Object argumentObject = "";
@@ -112,20 +112,20 @@ public class InitialIntegrationTest extends BaseIntegration {
                 for (ActionArgument argument : getAction().getInputArguments()) {
                     lastArgument = argument;
 
-                    log.debug("@@@ argument: {}", argument);
+                    LOGGER.debug("@@@ argument: {}", argument);
                     argumentType = argument.getDatatype().getBuiltin().getDescriptorName();
-                    log.debug("@@@ type: {}", argumentType);
+                    LOGGER.debug("@@@ type: {}", argumentType);
 
                     argumentObject = data.getOSGiUPnPValue(argument.getName(), argumentType);
-                    log.debug("@@@ object: {}", argumentObject);
+                    LOGGER.debug("@@@ object: {}", argumentObject);
                     argumentObject = data.getjUPnPUPnPValue(argumentType, argumentObject);
-                    log.debug("@@@ type: {}  value: {} ({})", argumentType, argumentObject,
+                    LOGGER.debug("@@@ type: {}  value: {} ({})", argumentType, argumentObject,
                             argumentObject.getClass().getName());
                     setInput(argument.getName(), argumentObject);
                 }
             } catch (InvalidValueException e) {
-                InvalidValueException exception = log.isDebugEnabled() ? e : null;
-                log.warn("Invalid value while setting '{}' argument '{}' of type '{}' to: {}", name, lastArgument,
+                InvalidValueException exception = LOGGER.isDebugEnabled() ? e : null;
+                LOGGER.warn("Invalid value while setting '{}' argument '{}' of type '{}' to: {}", name, lastArgument,
                         argumentType, argumentObject, exception);
             }
         }
@@ -154,7 +154,7 @@ public class InitialIntegrationTest extends BaseIntegration {
 
             @Override
             public void success(ActionInvocation invocation) {
-                log.info("Successfully called action '{}'", name);
+                LOGGER.info("Successfully called action '{}'", name);
                 successful.set(true);
             }
 

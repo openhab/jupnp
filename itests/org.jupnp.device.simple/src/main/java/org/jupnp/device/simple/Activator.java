@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class Activator implements BundleActivator {
     private static Activator plugin;
     private static BundleContext context;
-    private final Logger log = LoggerFactory.getLogger(Activator.class);
+    private final Logger logger = LoggerFactory.getLogger(Activator.class);
     private ServiceTracker tracker;
     private List<ServiceReference> references = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class Activator implements BundleActivator {
             tracker = new ServiceTracker(context, filter, null);
             tracker.open();
         } catch (InvalidSyntaxException e) {
-            log.warn("Failed to create service tracker filter: {}", string, e);
+            logger.warn("Failed to create service tracker filter: {}", string, e);
         }
 
         BaseUPnPDevice simpleTestDevice = new SimpleTestDevice(new Simple());

@@ -39,7 +39,7 @@ public class ParserException extends Exception {
         super(throwable);
     }
 
-    public ParserException(SAXParseException ex) {
-        super("(Line/Column: " + ex.getLineNumber() + ":" + ex.getColumnNumber() + ") " + ex.getMessage());
+    public ParserException(SAXParseException e) {
+        super("(Line/Column: " + e.getLineNumber() + ":" + e.getColumnNumber() + ") " + e.getMessage());
     }
 }

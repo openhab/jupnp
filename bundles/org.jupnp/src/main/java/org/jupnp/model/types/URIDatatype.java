@@ -33,8 +33,8 @@ public class URIDatatype extends AbstractDatatype<URI> {
         }
         try {
             return new URI(s);
-        } catch (URISyntaxException ex) {
-            throw new InvalidValueException(ex.getMessage(), ex);
+        } catch (URISyntaxException e) {
+            throw new InvalidValueException(e.getMessage(), e);
         }
     }
 }

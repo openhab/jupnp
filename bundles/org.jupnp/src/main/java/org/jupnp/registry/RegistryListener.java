@@ -67,10 +67,10 @@ public interface RegistryListener {
      *
      * @param registry The jUPnP registry of all devices and services know to the local UPnP stack.
      * @param device A validated and hydrated device metadata graph, with anemic service metadata.
-     * @param ex The reason why service metadata could not be initialized, or <code>null</code> if service
+     * @param e The reason why service metadata could not be initialized, or <code>null</code> if service
      *            descriptors couldn't be retrieved at all.
      */
-    void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
+    void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e);
 
     /**
      * Called when complete metadata of a newly discovered device is available.

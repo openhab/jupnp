@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(ReceivingUnsubscribe.class);
+    private final Logger logger = LoggerFactory.getLogger(ReceivingUnsubscribe.class);
 
     public ReceivingUnsubscribe(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);
@@ -47,11 +47,11 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
                 .getResource(ServiceEventSubscriptionResource.class, getInputMessage().getUri());
 
         if (resource == null) {
-            log.trace("No local resource found: {}", getInputMessage());
+            logger.trace("No local resource found: {}", getInputMessage());
             return null;
         }
 
-        log.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
+        logger.trace("Found local event subscription matching relative request URI: {}", getInputMessage().getUri());
 
         IncomingUnsubscribeRequestMessage requestMessage = new IncomingUnsubscribeRequestMessage(getInputMessage(),
                 resource.getModel());
@@ -59,7 +59,7 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
         // Error conditions UDA 1.0 section 4.1.3
         if (requestMessage.getSubscriptionId() != null
                 && (requestMessage.hasNotificationHeader() || requestMessage.hasCallbackHeader())) {
-            log.trace("Subscription ID and NT or Callback in unsubcribe request: {}", getInputMessage());
+            logger.trace("Subscription ID and NT or Callback in unsubcribe request: {}", getInputMessage());
             return new StreamResponseMessage(UpnpResponse.Status.BAD_REQUEST);
         }
 
@@ -67,15 +67,15 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
                 .getLocalSubscription(requestMessage.getSubscriptionId());
 
         if (subscription == null) {
-            log.trace("Invalid subscription ID for unsubscribe request: {}", getInputMessage());
+            logger.trace("Invalid subscription ID for unsubscribe request: {}", getInputMessage());
             return new StreamResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
-        log.trace("Unregistering subscription: {}", subscription);
+        logger.trace("Unregistering subscription: {}", subscription);
         if (getUpnpService().getRegistry().removeLocalSubscription(subscription)) {
             subscription.end(null); // No reason, just an unsubscribe
         } else {
-            log.trace("Subscription was already removed from registry");
+            logger.trace("Subscription was already removed from registry");
         }
 
         return new StreamResponseMessage(UpnpResponse.Status.OK);

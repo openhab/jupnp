@@ -67,7 +67,7 @@ public class HttpFetch {
             return factory.createRepresentation(urlConnection, is);
 
             // Any response code above 400 is going to throw IOException (or FileNotFoundException subclass)
-        } catch (IOException ex) {
+        } catch (IOException e) {
             if (urlConnection != null) {
                 int responseCode = urlConnection.getResponseCode();
                 InputStream errorStream = urlConnection.getErrorStream();
@@ -78,7 +78,7 @@ public class HttpFetch {
                 }
                 throw new IOException("Fetching resource failed, returned status code: " + responseCode);
             }
-            throw ex;
+            throw e;
         } finally {
             if (is != null) {
                 is.close();

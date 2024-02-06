@@ -71,14 +71,14 @@ import org.slf4j.LoggerFactory;
  */
 class UPnPDeviceTracker extends ServiceTracker {
 
-    private final Logger log = LoggerFactory.getLogger(UPnPDeviceTracker.class);
+    private final Logger logger = LoggerFactory.getLogger(UPnPDeviceTracker.class);
 
     private final UpnpService upnpService;
     private final Map<UPnPDevice, LocalDevice> registrations = new Hashtable<>();
 
     public UPnPDeviceTracker(BundleContext context, UpnpService upnpService, Filter filter) {
         super(context, filter, null);
-        log.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "<init>", context, upnpService, filter);
+        logger.trace("ENTRY {}.{}: {} {} {}", this.getClass().getName(), "<init>", context, upnpService, filter);
         this.upnpService = upnpService;
     }
 
@@ -242,9 +242,9 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     @Override
     public Object addingService(ServiceReference reference) {
-        log.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
+        logger.trace("ENTRY {}.{}: {}", this.getClass().getName(), "addingService", reference);
         UPnPDevice device = (UPnPDevice) super.addingService(reference);
-        log.trace(device.toString());
+        logger.trace(device.toString());
 
         try {
             LocalDevice local = createDevice(device);
@@ -253,7 +253,7 @@ class UPnPDeviceTracker extends ServiceTracker {
                 registrations.put(device, local);
             }
         } catch (ValidationException | IOException | URISyntaxException e) {
-            log.warn("Failed to add UPnPDevice for service: {}", reference, e);
+            logger.warn("Failed to add UPnPDevice for service: {}", reference, e);
         }
 
         return device;
@@ -261,7 +261,7 @@ class UPnPDeviceTracker extends ServiceTracker {
 
     @Override
     public void removedService(ServiceReference reference, Object device) {
-        log.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, device);
+        logger.trace("ENTRY {}.{}: {} {}", this.getClass().getName(), "removedService", reference, device);
 
         LocalDevice local = registrations.get(device);
         if (local != null) {

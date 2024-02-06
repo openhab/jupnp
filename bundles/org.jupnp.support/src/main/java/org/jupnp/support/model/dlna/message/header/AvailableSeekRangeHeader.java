@@ -75,9 +75,9 @@ public class AvailableSeekRangeHeader extends DLNAHeader<AvailableSeekRangeType>
                         setValue(new AvailableSeekRangeType(mode, byteRange));
                     }
                     return;
-                } catch (InvalidValueException ex) {
+                } catch (InvalidValueException e) {
                     throw new InvalidHeaderException(
-                            "Invalid AvailableSeekRange header value: " + s + "; " + ex.getMessage(), ex);
+                            "Invalid AvailableSeekRange header value: " + s + "; " + e.getMessage(), e);
                 }
             }
         }

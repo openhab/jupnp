@@ -51,8 +51,8 @@ public class IpAddressUtils {
                 if (ip1Int != ip2Int) {
                     return false;
                 }
-            } catch (NumberFormatException ex) {
-                throw new IllegalArgumentException("IpAddress is invalid (" + ex.getMessage() + "!");
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("IpAddress is invalid (" + e.getMessage() + "!");
             }
         }
         return true;

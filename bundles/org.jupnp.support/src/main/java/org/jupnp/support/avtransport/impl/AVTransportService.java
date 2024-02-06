@@ -109,15 +109,15 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         URI uri;
         try {
             uri = new URI(currentURI);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             throw new AVTransportException(ErrorCode.INVALID_ARGS, "CurrentURI can not be null or malformed");
         }
 
         try {
             AVTransportStateMachine transportStateMachine = findStateMachine(instanceId, true);
             transportStateMachine.setTransportURI(uri, currentURIMetaData);
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -128,15 +128,15 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         URI uri;
         try {
             uri = new URI(nextURI);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             throw new AVTransportException(ErrorCode.INVALID_ARGS, "NextURI can not be null or malformed");
         }
 
         try {
             AVTransportStateMachine transportStateMachine = findStateMachine(instanceId, true);
             transportStateMachine.setNextTransportURI(uri, nextURIMetaData);
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         try {
             transport.setTransportSettings(new TransportSettings(PlayMode.valueOf(newPlayMode),
                     transport.getTransportSettings().getRecQualityMode()));
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             throw new AVTransportException(AVTransportErrorCode.PLAYMODE_NOT_SUPPORTED,
                     "Unsupported play mode: " + newPlayMode);
         }
@@ -159,7 +159,7 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         try {
             transport.setTransportSettings(new TransportSettings(transport.getTransportSettings().getPlayMode(),
                     RecordQualityMode.valueOrExceptionOf(newRecordQualityMode)));
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             throw new AVTransportException(AVTransportErrorCode.RECORDQUALITYMODE_NOT_SUPPORTED,
                     "Unsupported record quality mode: " + newRecordQualityMode);
         }
@@ -194,8 +194,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void stop(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             findStateMachine(instanceId).stop();
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -203,8 +203,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void play(UnsignedIntegerFourBytes instanceId, String speed) throws AVTransportException {
         try {
             findStateMachine(instanceId).play(speed);
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -212,8 +212,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void pause(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             findStateMachine(instanceId).pause();
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -221,8 +221,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void record(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             findStateMachine(instanceId).record();
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -231,15 +231,15 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         SeekMode seekMode;
         try {
             seekMode = SeekMode.valueOrExceptionOf(unit);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException e) {
             throw new AVTransportException(AVTransportErrorCode.SEEKMODE_NOT_SUPPORTED,
                     "Unsupported seek mode: " + unit);
         }
 
         try {
             findStateMachine(instanceId).seek(seekMode, target);
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -247,8 +247,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void next(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             findStateMachine(instanceId).next();
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -256,8 +256,8 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
     public void previous(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
         try {
             findStateMachine(instanceId).previous();
-        } catch (TransitionException ex) {
-            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, ex.getMessage());
+        } catch (TransitionException e) {
+            throw new AVTransportException(AVTransportErrorCode.TRANSITION_NOT_AVAILABLE, e.getMessage());
         }
     }
 
@@ -266,7 +266,7 @@ public class AVTransportService<T extends AVTransport> extends AbstractAVTranspo
         AVTransportStateMachine stateMachine = findStateMachine(instanceId);
         try {
             return stateMachine.getCurrentState().getCurrentTransportActions();
-        } catch (TransitionException ex) {
+        } catch (TransitionException e) {
             return new TransportAction[0];
         }
     }

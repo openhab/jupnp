@@ -55,8 +55,8 @@ public class URIUtil {
             if (base.getPath().isEmpty()) {
                 try {
                     base = new URI(base.getScheme(), base.getAuthority(), "/", base.getQuery(), base.getFragment());
-                } catch (Exception ex) {
-                    throw new IllegalArgumentException(ex);
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
                 }
             }
             return base.resolve(relativeOrNot);
@@ -74,7 +74,7 @@ public class URIUtil {
         } else if (base == null && relativeOrNot.isAbsolute()) {
             try {
                 return relativeOrNot.toURL();
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Base URL was null and given URI can't be converted to URL");
             }
         } else {
@@ -83,9 +83,9 @@ public class URIUtil {
                 URI baseURI = base.toURI();
                 URI absoluteURI = createAbsoluteURI(baseURI, relativeOrNot);
                 return absoluteURI.toURL();
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Base URL is not an URI, or can't create absolute URI (null?), "
-                        + "or absolute URI can not be converted to URL", ex);
+                        + "or absolute URI can not be converted to URL", e);
             }
         }
     }
@@ -93,8 +93,8 @@ public class URIUtil {
     public static URL createAbsoluteURL(URI base, URI relativeOrNot) throws IllegalArgumentException {
         try {
             return createAbsoluteURI(base, relativeOrNot).toURL();
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Absolute URI can not be converted to URL", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Absolute URI can not be converted to URL", e);
         }
     }
 
@@ -110,8 +110,8 @@ public class URIUtil {
             } else {
                 throw new IllegalArgumentException("InetAddress is neither IPv4 nor IPv6: " + address);
             }
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Address, port, and URI can not be converted to URL", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Address, port, and URI can not be converted to URL", e);
         }
     }
 
@@ -143,24 +143,24 @@ public class URIUtil {
     public static URI createRelativeURI(URL base, URL full) throws IllegalArgumentException {
         try {
             return createRelativeURI(base.toURI(), full.toURI());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Can't convert base or full URL to URI", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Can't convert base or full URL to URI", e);
         }
     }
 
     public static URI createRelativeURI(URI base, URL full) throws IllegalArgumentException {
         try {
             return createRelativeURI(base, full.toURI());
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Can't convert full URL to URI", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Can't convert full URL to URI", e);
         }
     }
 
     public static URI createRelativeURI(URL base, URI full) throws IllegalArgumentException {
         try {
             return createRelativeURI(base.toURI(), full);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException("Can't convert base URL to URI", ex);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Can't convert base URL to URI", e);
         }
     }
 
@@ -181,8 +181,8 @@ public class URIUtil {
         }
         try {
             return uri.toURL();
-        } catch (MalformedURLException ex) {
-            throw new RuntimeException(ex);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -192,8 +192,8 @@ public class URIUtil {
         }
         try {
             return url.toURI();
-        } catch (URISyntaxException ex) {
-            throw new RuntimeException(ex);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -320,8 +320,8 @@ public class URIUtil {
                     }
                 }
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return encoded.toString();
     }

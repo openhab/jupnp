@@ -59,7 +59,7 @@ public class JUPnPTool {
 
     private static final long DEFAULT_TIMEOUT = 10L;
 
-    private Logger logger = LoggerFactory.getLogger(JUPnPTool.class);
+    private final Logger logger = LoggerFactory.getLogger(JUPnPTool.class);
 
     protected PrintStream outputStream;
     protected PrintStream errorStream;
@@ -98,8 +98,8 @@ public class JUPnPTool {
         commander.setProgramName(TOOL_NAME);
         try {
             commander.parse(args);
-        } catch (ParameterException ex) {
-            printStderr(ex.getLocalizedMessage());
+        } catch (ParameterException e) {
+            printStderr(e.getLocalizedMessage());
             printToolUsage(commander);
             return RC_INVALID_OPTION;
         }
@@ -166,8 +166,8 @@ public class JUPnPTool {
             try {
                 logger.debug("Stopping jUPnP...");
                 upnpService.shutdown();
-            } catch (Exception ex) {
-                logger.error("Error during shutdown", ex);
+            } catch (Exception e) {
+                logger.error("Error during shutdown", e);
             }
             return RC_OK;
         } else {

@@ -73,8 +73,8 @@ class EventXMLProcessingTest {
         List<URL> urls = List.of(SampleData.getLocalBaseURL());
 
         LocalGENASubscription subscription = new LocalGENASubscription(localService, 1800, urls) {
-            void failed(Exception ex) {
-                throw new RuntimeException("TEST SUBSCRIPTION FAILED: " + ex);
+            void failed(Exception e) {
+                throw new RuntimeException("TEST SUBSCRIPTION FAILED: " + e);
             }
 
             @Override

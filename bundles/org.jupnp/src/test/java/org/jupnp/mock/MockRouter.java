@@ -92,7 +92,7 @@ public class MockRouter implements Router {
     }
 
     @Override
-    public void handleStartFailure(InitializationException ex) throws InitializationException {
+    public void handleStartFailure(InitializationException e) throws InitializationException {
     }
 
     @Override
@@ -102,8 +102,8 @@ public class MockRouter implements Router {
         try {
             return Arrays.asList(new NetworkAddress(InetAddress.getByName("127.0.0.1"),
                     NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT));
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 

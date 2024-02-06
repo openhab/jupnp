@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UpnpHeaders extends Headers {
 
-    private final Logger log = LoggerFactory.getLogger(UpnpHeaders.class);
+    private final Logger logger = LoggerFactory.getLogger(UpnpHeaders.class);
 
     protected Map<UpnpHeader.Type, List<UpnpHeader>> parsedHeaders;
 
@@ -56,7 +56,7 @@ public class UpnpHeaders extends Headers {
     protected void parseHeaders() {
         // This runs as late as possible and only when necessary (getter called and map is dirty)
         parsedHeaders = new LinkedHashMap<>();
-        log.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
+        logger.trace("Parsing all HTTP headers for known UPnP headers: {}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
             if (entry.getKey() == null) {
@@ -65,14 +65,15 @@ public class UpnpHeaders extends Headers {
 
             UpnpHeader.Type type = UpnpHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
-                log.trace("Ignoring non-UPNP HTTP header: {}", entry.getKey());
+                logger.trace("Ignoring non-UPNP HTTP header: {}", entry.getKey());
                 continue;
             }
 
             for (String value : entry.getValue()) {
                 UpnpHeader upnpHeader = UpnpHeader.newInstance(type, value);
                 if (upnpHeader == null || upnpHeader.getValue() == null) {
-                    log.trace("Ignoring known but irrelevant header (value violates the UDA specification?) '{}': {}",
+                    logger.trace(
+                            "Ignoring known but irrelevant header (value violates the UDA specification?) '{}': {}",
                             type.getHttpName(), value);
                 } else {
                     addParsedValue(type, upnpHeader);
@@ -82,7 +83,7 @@ public class UpnpHeaders extends Headers {
     }
 
     protected void addParsedValue(UpnpHeader.Type type, UpnpHeader value) {
-        log.trace("Adding parsed header: {}", value);
+        logger.trace("Adding parsed header: {}", value);
         List<UpnpHeader> list = parsedHeaders.computeIfAbsent(type, k -> new LinkedList<>());
         list.add(value);
     }
@@ -169,24 +170,24 @@ public class UpnpHeaders extends Headers {
     }
 
     public void log() {
-        if (log.isTraceEnabled()) {
-            log.trace("############################ RAW HEADERS ###########################");
+        if (logger.isTraceEnabled()) {
+            logger.trace("############################ RAW HEADERS ###########################");
             for (Entry<String, List<String>> entry : entrySet()) {
-                log.trace("=== NAME : {}", entry.getKey());
+                logger.trace("=== NAME : {}", entry.getKey());
                 for (String v : entry.getValue()) {
-                    log.trace("VALUE: {}", v);
+                    logger.trace("VALUE: {}", v);
                 }
             }
             if (parsedHeaders != null && !parsedHeaders.isEmpty()) {
-                log.trace("########################## PARSED HEADERS ##########################");
+                logger.trace("########################## PARSED HEADERS ##########################");
                 for (Map.Entry<UpnpHeader.Type, List<UpnpHeader>> entry : parsedHeaders.entrySet()) {
-                    log.trace("=== TYPE: {}", entry.getKey());
+                    logger.trace("=== TYPE: {}", entry.getKey());
                     for (UpnpHeader upnpHeader : entry.getValue()) {
-                        log.trace("HEADER: {}", upnpHeader);
+                        logger.trace("HEADER: {}", upnpHeader);
                     }
                 }
             }
-            log.trace("####################################################################");
+            logger.trace("####################################################################");
         }
     }
 }

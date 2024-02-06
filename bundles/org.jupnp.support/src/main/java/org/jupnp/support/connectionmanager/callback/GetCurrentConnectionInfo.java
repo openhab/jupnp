@@ -56,9 +56,9 @@ public abstract class GetCurrentConnectionInfo extends ActionCallback {
 
             received(invocation, info);
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
             invocation.setFailure(
-                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ConnectionInfo response: " + ex, ex));
+                    new ActionException(ErrorCode.ACTION_FAILED, "Can't parse ConnectionInfo response: " + e, e));
             failure(invocation, null);
         }
     }

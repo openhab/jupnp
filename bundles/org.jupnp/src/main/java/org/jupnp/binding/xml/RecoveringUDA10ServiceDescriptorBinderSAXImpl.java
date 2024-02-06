@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RecoveringUDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorBinderSAXImpl {
 
-    private final Logger log = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
+    private final Logger logger = LoggerFactory.getLogger(ServiceDescriptorBinder.class);
 
     @Override
     public <S extends Service> S describe(S undescribedService, String descriptorXml)
@@ -45,14 +45,14 @@ public class RecoveringUDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceD
         }
 
         try {
-            log.trace("Reading service from XML descriptor");
+            logger.trace("Reading service from XML descriptor");
 
             String fixedXml = fixBOM(descriptorXml);
             fixedXml = fixRetval(fixedXml);
             fixedXml = fixQuotes(fixedXml);
             return super.describe(undescribedService, fixedXml);
         } catch (DescriptorBindingException e) {
-            log.warn(e.getMessage());
+            logger.warn(e.getMessage());
         }
         return null;
     }

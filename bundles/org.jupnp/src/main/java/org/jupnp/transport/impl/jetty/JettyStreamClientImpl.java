@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConfigurationImpl, Request> {
 
-    private final Logger log = LoggerFactory.getLogger(StreamClient.class);
+    private final Logger logger = LoggerFactory.getLogger(StreamClient.class);
 
     protected final StreamClientConfigurationImpl configuration;
     protected final HttpClient httpClient;
@@ -82,7 +82,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
         try {
             httpClient.start();
         } catch (final Exception e) {
-            log.error("Failed to instantiate HTTP client", e);
+            logger.error("Failed to instantiate HTTP client", e);
             throw new InitializationException("Failed to instantiate HTTP client", e);
         }
     }
@@ -96,7 +96,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     protected Request createRequest(StreamRequestMessage requestMessage) {
         final UpnpRequest upnpRequest = requestMessage.getOperation();
 
-        log.trace("Creating HTTP request. URI: '{}' method: '{}'", upnpRequest.getURI(), upnpRequest.getMethod());
+        logger.trace("Creating HTTP request. URI: '{}' method: '{}'", upnpRequest.getURI(), upnpRequest.getMethod());
         Request request;
         switch (upnpRequest.getMethod()) {
             case GET:
@@ -107,7 +107,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
                 try {
                     request = httpClient.newRequest(upnpRequest.getURI()).method(upnpRequest.getHttpMethodName());
                 } catch (IllegalArgumentException e) {
-                    log.debug("Cannot create request because URI '{}' is invalid", upnpRequest.getURI(), e);
+                    logger.debug("Cannot create request because URI '{}' is invalid", upnpRequest.getURI(), e);
                     return null;
                 }
                 break;
@@ -154,11 +154,11 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
     protected Callable<StreamResponseMessage> createCallable(final StreamRequestMessage requestMessage,
             final Request request) {
         return () -> {
-            log.trace("Sending HTTP request: {}", requestMessage);
+            logger.trace("Sending HTTP request: {}", requestMessage);
             try {
                 final ContentResponse httpResponse = request.send();
 
-                log.trace("Received HTTP response: {}", httpResponse.getReason());
+                logger.trace("Received HTTP response: {}", httpResponse.getReason());
 
                 // Status
                 final UpnpResponse responseOperation = new UpnpResponse(httpResponse.getStatus(),
@@ -173,22 +173,22 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
                 // Body
                 final byte[] bytes = httpResponse.getContent();
                 if (bytes == null || 0 == bytes.length) {
-                    log.trace("HTTP response message has no entity");
+                    logger.trace("HTTP response message has no entity");
 
                     return responseMessage;
                 }
 
                 if (responseMessage.isContentTypeMissingOrText()) {
-                    log.trace("HTTP response message contains text entity");
+                    logger.trace("HTTP response message contains text entity");
                 } else {
-                    log.trace("HTTP response message contains binary entity");
+                    logger.trace("HTTP response message contains binary entity");
                 }
 
                 responseMessage.setBodyCharacters(bytes);
 
                 return responseMessage;
             } catch (final RuntimeException e) {
-                log.error("Request: {} failed", request, e);
+                logger.error("Request: {} failed", request, e);
                 throw e;
             }
         };
@@ -204,7 +204,7 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
         if (t instanceof IllegalStateException) {
             // TODO: Document when/why this happens and why we can ignore it, violating the
             // logging rules of the StreamClient#sendRequest() method
-            log.trace("Illegal state: {}", t.getMessage());
+            logger.trace("Illegal state: {}", t.getMessage());
             return true;
         } else if (t.getMessage().contains("HTTP protocol violation")) {
             SpecificationViolationReporter.report(t.getMessage());
@@ -215,20 +215,20 @@ public class JettyStreamClientImpl extends AbstractStreamClient<StreamClientConf
 
     @Override
     public void stop() {
-        log.trace("Shutting down HTTP client connection manager/pool");
+        logger.trace("Shutting down HTTP client connection manager/pool");
         try {
             httpClient.stop();
         } catch (Exception e) {
-            log.info("Shutting down of HTTP client throwed exception", e);
+            logger.info("Shutting down of HTTP client throwed exception", e);
         }
     }
 
     protected <O extends UpnpOperation> ContentProvider.Typed createContentProvider(final UpnpMessage<O> upnpMessage) {
         if (upnpMessage.getBodyType().equals(UpnpMessage.BodyType.STRING)) {
-            log.trace("Preparing HTTP request entity as String");
+            logger.trace("Preparing HTTP request entity as String");
             return new StringContentProvider(upnpMessage.getBodyString(), upnpMessage.getContentTypeCharset());
         } else {
-            log.trace("Preparing HTTP request entity as byte[]");
+            logger.trace("Preparing HTTP request entity as byte[]");
             return new BytesContentProvider(upnpMessage.getBodyBytes());
         }
     }

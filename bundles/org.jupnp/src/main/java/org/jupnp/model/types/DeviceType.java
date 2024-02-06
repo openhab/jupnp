@@ -88,7 +88,7 @@ public class DeviceType {
         // First try UDADeviceType parse
         try {
             deviceType = UDADeviceType.valueOf(s);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
 

@@ -27,8 +27,8 @@ public class UnsignedIntegerFourBytesDatatype extends AbstractDatatype<UnsignedI
         }
         try {
             return new UnsignedIntegerFourBytes(s);
-        } catch (NumberFormatException ex) {
-            throw new InvalidValueException("Can't convert string to number or not in range: " + s, ex);
+        } catch (NumberFormatException e) {
+            throw new InvalidValueException("Can't convert string to number or not in range: " + s, e);
         }
     }
 }

@@ -38,12 +38,9 @@ import org.slf4j.LoggerFactory;
  */
 public class BlockingServlet extends HttpServlet {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 3124088565842038644L;
 
-    private final Logger log = LoggerFactory.getLogger(BlockingServlet.class);
+    private final Logger logger = LoggerFactory.getLogger(BlockingServlet.class);
 
     private final Router router;
 
@@ -61,8 +58,9 @@ public class BlockingServlet extends HttpServlet {
 
         final long startTime = System.currentTimeMillis();
         final int counter = mCounter++;
-        log.trace("{}", String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
-        log.trace("Handling Servlet request synchronously: {}", req);
+        logger.trace("{}",
+                String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
+        logger.trace("Handling Servlet request synchronously: {}", req);
 
         FauxAsyncContext asyncContext = new FauxAsyncContext(req, resp);
         asyncContext.setTimeout(configuration.getAsyncTimeoutSeconds() * 1000);
@@ -83,12 +81,12 @@ public class BlockingServlet extends HttpServlet {
         long duration = System.currentTimeMillis() - startTime;
 
         if (asyncContext.isCompleted()) {
-            log.trace("{}", String.format("BlockingServlet completed: id: %3d, duration: %,4d", counter, duration));
+            logger.trace("{}", String.format("BlockingServlet completed: id: %3d, duration: %,4d", counter, duration));
         } else {
             // set internal server error as response code when timeout
             // as per AsyncContext specification
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            log.warn("{}", String.format("BlockingServlet timed out: id: %3d, duration: %,4d, request: %s", counter,
+            logger.warn("{}", String.format("BlockingServlet timed out: id: %3d, duration: %,4d, request: %s", counter,
                     duration, req));
         }
     }

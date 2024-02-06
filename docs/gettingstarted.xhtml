@@ -30,8 +30,8 @@ public class Main {
             }
 
             @Override
-            public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
-                System.out.println("Discovery failed: " + device.getDisplayString() + " => " + ex);
+            public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e) {
+                System.out.println("Discovery failed: " + device.getDisplayString() + " => " + e);
             }
 
             @Override

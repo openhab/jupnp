@@ -70,10 +70,10 @@ class AllowedValueTest {
         try {
             return new LocalDevice[][] { { createTestDevice(MyServiceWithAllowedValues.class) },
                     { createTestDevice(MyServiceWithAllowedValueProvider.class) }, };
-        } catch (Exception ex) {
-            ex.printStackTrace(System.err);
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
             // Damn testng swallows exceptions in provider/factory methods
-            throw new RuntimeException(ex);
+            throw new RuntimeException(e);
         }
     }
 

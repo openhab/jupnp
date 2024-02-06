@@ -48,7 +48,7 @@ import org.xml.sax.SAXParseException;
  */
 public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEventProcessor, ErrorHandler {
 
-    private Logger log = LoggerFactory.getLogger(GENAEventProcessor.class);
+    private final Logger logger = LoggerFactory.getLogger(GENAEventProcessor.class);
 
     protected DocumentBuilderFactory createDocumentBuilderFactory() throws FactoryConfigurationError {
         return DocumentBuilderFactory.newInstance();
@@ -56,7 +56,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
     @Override
     public void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException {
-        log.trace("Writing body of: {}", requestMessage);
+        logger.trace("Writing body of: {}", requestMessage);
 
         try {
 
@@ -67,28 +67,28 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
             requestMessage.setBody(UpnpMessage.BodyType.STRING, toString(d));
 
-            if (log.isTraceEnabled()) {
-                log.trace(
+            if (logger.isTraceEnabled()) {
+                logger.trace(
                         "===================================== GENA BODY BEGIN ============================================");
-                log.trace(requestMessage.getBody().toString());
-                log.trace(
+                logger.trace(requestMessage.getBody().toString());
+                logger.trace(
                         "====================================== GENA BODY END =============================================");
             }
 
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void readBody(IncomingEventRequestMessage requestMessage) throws UnsupportedDataException {
 
-        log.trace("Reading body of: {}", requestMessage);
-        if (log.isTraceEnabled()) {
-            log.trace(
+        logger.trace("Reading body of: {}", requestMessage);
+        if (logger.isTraceEnabled()) {
+            logger.trace(
                     "===================================== GENA BODY BEGIN ============================================");
-            log.trace(requestMessage.getBody() != null ? requestMessage.getBody().toString() : "null");
-            log.trace(
+            logger.trace(requestMessage.getBody() != null ? requestMessage.getBody().toString() : "null");
+            logger.trace(
                     "-===================================== GENA BODY END ============================================");
         }
 
@@ -100,8 +100,8 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
             readProperties(propertysetElement, requestMessage);
 
-        } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload: " + ex.getMessage(), ex, body);
+        } catch (Exception e) {
+            throw new UnsupportedDataException("Can't transform message payload: " + e.getMessage(), e, body);
         }
     }
 
@@ -159,13 +159,13 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
                     String stateVariableName = getUnprefixedNodeName(propertyChild);
                     for (StateVariable stateVariable : stateVariables) {
                         if (stateVariable.getName().equals(stateVariableName)) {
-                            log.trace("Reading state variable value: {}", stateVariableName);
+                            logger.trace("Reading state variable value: {}", stateVariableName);
                             String value = XMLUtil.getTextContent(propertyChild);
                             try {
                                 message.getStateVariableValues().add(new StateVariableValue(stateVariable, value));
-                            } catch (InvalidValueException ex) {
-                                log.debug("Value {} for the state variable {} ignored: {}", value, stateVariableName,
-                                        ex.getMessage());
+                            } catch (InvalidValueException e) {
+                                logger.debug("Value {} for the state variable {} ignored: {}", value, stateVariableName,
+                                        e.getMessage());
                             }
                             break;
                         }
@@ -202,7 +202,7 @@ public class GENAEventProcessorImpl extends PooledXmlProcessor implements GENAEv
 
     @Override
     public void warning(SAXParseException e) throws SAXException {
-        log.warn(e.toString());
+        logger.warn(e.toString());
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ModelUtil {
         try {
             Class<?> androidBuild = Thread.currentThread().getContextClassLoader().loadClass("android.os.Build");
             foundAndroid = androidBuild.getField("ID").get(null) != null;
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
         ANDROID_RUNTIME = foundAndroid;
@@ -56,7 +56,7 @@ public class ModelUtil {
             if ("google_sdk".equals(product) || "sdk".equals(product)) {
                 foundEmulator = true;
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Ignore
         }
         ANDROID_EMULATOR = foundEmulator;
@@ -98,8 +98,8 @@ public class ModelUtil {
     public static InetAddress getInetAddressByName(String name) {
         try {
             return InetAddress.getByName(name);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -223,7 +223,7 @@ public class ModelUtil {
             return includeDomain ? hostname
                     : hostname.contains(".") ? hostname.substring(0, hostname.indexOf(".")) : hostname;
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Return a dummy String
             return "UNKNOWN HOST";
         }
@@ -240,7 +240,7 @@ public class ModelUtil {
                     return iface.getHardwareAddress();
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
             throw new RuntimeException("Could not discover first network interface hardware address");
         }
         throw new RuntimeException("Could not discover first network interface hardware address");

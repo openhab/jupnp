@@ -36,7 +36,7 @@ public class RealTimeInfoHeader extends DLNAHeader<NormalPlayTime> {
                 s = s.substring(PREFIX.length());
                 setValue(s.equals("*") ? null : NormalPlayTime.valueOf(s));
                 return;
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 // no need to take any precaution measure
             }
         }

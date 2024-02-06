@@ -44,8 +44,8 @@ public class BinaryLightClient implements Runnable {
 
             // Broadcast a search message for all devices
             upnpService.getControlPoint().search(new STAllHeader());
-        } catch (Exception ex) {
-            System.err.println("Exception occurred: " + ex);
+        } catch (Exception e) {
+            System.err.println("Exception occurred: " + e);
             System.exit(1);
         }
     }
@@ -104,8 +104,8 @@ public class BinaryLightClient implements Runnable {
                 // Throws InvalidValueException if the value is of wrong type
                 setInput("NewTargetValue", true);
 
-            } catch (InvalidValueException ex) {
-                System.err.println(ex.getMessage());
+            } catch (InvalidValueException e) {
+                System.err.println(e.getMessage());
                 System.exit(1);
             }
         }

@@ -39,7 +39,7 @@ import org.w3c.dom.ls.LSResourceResolver;
  */
 public class CatalogResourceResolver implements LSResourceResolver {
 
-    private Logger log = LoggerFactory.getLogger(CatalogResourceResolver.class);
+    private final Logger logger = LoggerFactory.getLogger(CatalogResourceResolver.class);
 
     private final Map<URI, URL> catalog;
 
@@ -49,21 +49,21 @@ public class CatalogResourceResolver implements LSResourceResolver {
 
     @Override
     public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
-        log.trace("Trying to resolve system identifier URI in catalog: {}", systemId);
+        logger.trace("Trying to resolve system identifier URI in catalog: {}", systemId);
         URL systemURL;
         if ((systemURL = catalog.get(URI.create(systemId))) != null) {
-            log.trace("Loading catalog resource: {}", systemURL);
+            logger.trace("Loading catalog resource: {}", systemURL);
             try {
                 Input i = new Input(systemURL.openStream());
                 i.setBaseURI(baseURI);
                 i.setSystemId(systemId);
                 i.setPublicId(publicId);
                 return i;
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
-        log.info(
+        logger.info(
                 "System identifier not found in catalog, continuing with default resolution (this most likely means remote HTTP request!): {}",
                 systemId);
         return null;

@@ -36,7 +36,7 @@ public class DefaultRegistryListener implements RegistryListener {
     }
 
     @Override
-    public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
+    public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception e) {
     }
 
     /**

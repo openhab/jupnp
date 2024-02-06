@@ -38,12 +38,12 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
     /** Statistical data collected. */
     private MonitoredQueueingThreadPoolExecutor.Statistics stats;
 
-    static final Logger logger = LoggerFactory.getLogger(MonitoredQueueingThreadPoolExecutor.class);
-    static final Logger statsLogger = LoggerFactory.getLogger("org.jupnp.tool.cli.stats");
+    static final Logger LOGGER = LoggerFactory.getLogger(MonitoredQueueingThreadPoolExecutor.class);
+    static final Logger STATS_LOGGER = LoggerFactory.getLogger("org.jupnp.tool.cli.stats");
 
     public MonitoredQueueingThreadPoolExecutor(String poolName, int threadPoolSize) {
         super(poolName, threadPoolSize);
-        logger.debug("Created MonitoredQueueingThreadPoolExecutor with poolName={} and poolSize={}", poolName,
+        LOGGER.debug("Created MonitoredQueueingThreadPoolExecutor with poolName={} and poolSize={}", poolName,
                 threadPoolSize);
         if (DEBUG_STATISTICS) {
             stats = new Statistics(poolName);
@@ -76,32 +76,32 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
                 return;
             }
             // Log only
-            logger.warn("Thread terminated {} abruptly with exception", runnable, throwable);
+            LOGGER.warn("Thread terminated {} abruptly with exception", runnable, throwable);
         }
     }
 
     @Override
     public void shutdown() {
-        logger.info("shutdown");
+        LOGGER.info("shutdown");
         super.shutdown();
         if (DEBUG_STATISTICS) {
             stats.dumpPoolStats();
             stats.dumpExecutorsStats();
             stats.release();
         }
-        logger.info("shutdown done");
+        LOGGER.info("shutdown done");
     }
 
     @Override
     public List<Runnable> shutdownNow() {
-        logger.info("shutdownNow");
+        LOGGER.info("shutdownNow");
         List<Runnable> res = super.shutdownNow();
         if (DEBUG_STATISTICS) {
             stats.dumpPoolStats();
             stats.dumpExecutorsStats();
             stats.release();
         }
-        logger.info("shutdownNow done");
+        LOGGER.info("shutdownNow done");
         return res;
     }
 
@@ -155,27 +155,27 @@ public class MonitoredQueueingThreadPoolExecutor extends QueueingThreadPoolExecu
         }
 
         public void dumpPoolStats() {
-            statsLogger.info("Dump Pool Statistics for poolName: {}", poolName);
-            statsLogger.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
+            STATS_LOGGER.info("Dump Pool Statistics for poolName: {}", poolName);
+            STATS_LOGGER.info("[timestamp,corePoolSize,poolSize,maxPoolSize,activeThreads,queueSize,completedTasks]");
             for (PoolStatPoint p : points) {
-                statsLogger.info("{},{},{},{},{},{},{}", p.timestamp, p.corePoolSize, p.poolSize, p.maxPoolSize,
+                STATS_LOGGER.info("{},{},{},{},{},{},{}", p.timestamp, p.corePoolSize, p.poolSize, p.maxPoolSize,
                         p.activeCounts, p.queueSize, p.completedTasks);
             }
-            statsLogger.info(" ");
+            STATS_LOGGER.info(" ");
         }
 
         public void dumpExecutorsStats() {
-            statsLogger.info("Dump Pool Executors for poolName: {}", poolName);
+            STATS_LOGGER.info("Dump Pool Executors for poolName: {}", poolName);
 
             List<ConcurrentHashMap.Entry<String, AtomicInteger>> entries = new ArrayList<>(executors.entrySet());
             // sort the entries by number of calls
             entries.sort((a, b) -> Integer.compare(b.getValue().get(), a.getValue().get()));
 
-            statsLogger.info("[executorClassName,numberOfExecutes]");
+            STATS_LOGGER.info("[executorClassName,numberOfExecutes]");
             for (ConcurrentHashMap.Entry<String, AtomicInteger> e : entries) {
-                statsLogger.info("{},{}", e.getKey(), e.getValue().get());
+                STATS_LOGGER.info("{},{}", e.getKey(), e.getValue().get());
             }
-            statsLogger.info(" ");
+            STATS_LOGGER.info(" ");
         }
     }
 }

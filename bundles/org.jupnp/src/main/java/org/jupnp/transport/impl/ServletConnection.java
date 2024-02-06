@@ -49,8 +49,8 @@ public class ServletConnection implements Connection {
     public InetAddress getRemoteAddress() {
         try {
             return InetAddress.getByName(getRequest().getRemoteAddr());
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,8 +58,8 @@ public class ServletConnection implements Connection {
     public InetAddress getLocalAddress() {
         try {
             return InetAddress.getByName(getRequest().getLocalAddr());
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
         }
     }
 

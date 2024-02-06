@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMessage, StreamResponseMessage> {
 
-    private final Logger log = LoggerFactory.getLogger(SendingUnsubscribe.class);
+    private final Logger logger = LoggerFactory.getLogger(SendingUnsubscribe.class);
 
     protected final RemoteGENASubscription subscription;
 
@@ -52,7 +52,7 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
     @Override
     protected StreamResponseMessage executeSync() throws RouterException {
 
-        log.trace("Sending unsubscribe request: {}", getInputMessage());
+        logger.trace("Sending unsubscribe request: {}", getInputMessage());
 
         StreamResponseMessage response = null;
         try {
@@ -69,13 +69,13 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
 
         getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(() -> {
             if (response == null) {
-                log.trace("Unsubscribe failed, no response received");
+                logger.trace("Unsubscribe failed, no response received");
                 subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
             } else if (response.getOperation().isFailed()) {
-                log.trace("Unsubscribe failed, response was: {}", response);
+                logger.trace("Unsubscribe failed, response was: {}", response);
                 subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
             } else {
-                log.trace("Unsubscribe successful, response was: {}", response);
+                logger.trace("Unsubscribe successful, response was: {}", response);
                 subscription.end(null, response.getOperation());
             }
         });

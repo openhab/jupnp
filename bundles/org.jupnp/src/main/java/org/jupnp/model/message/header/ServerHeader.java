@@ -97,7 +97,7 @@ public class ServerHeader extends UpnpHeader<ServerClientTokens> {
                 serverClientTokens.setProductVersion(productNameVersion[1].trim());
             }
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
 
             // If something goes wrong, go back to defaults
             serverClientTokens.setOsName(ServerClientTokens.UNKNOWN_PLACEHOLDER);

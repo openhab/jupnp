@@ -109,8 +109,8 @@ class ActionInvokeIncomingTest {
             public InetAddress getRemoteAddress() {
                 try {
                     return InetAddress.getByName("10.0.0.1");
-                } catch (UnknownHostException ex) {
-                    throw new RuntimeException(ex);
+                } catch (UnknownHostException e) {
+                    throw new RuntimeException(e);
                 }
             }
 
@@ -118,8 +118,8 @@ class ActionInvokeIncomingTest {
             public InetAddress getLocalAddress() {
                 try {
                     return InetAddress.getByName("10.0.0.2");
-                } catch (UnknownHostException ex) {
-                    throw new RuntimeException(ex);
+                } catch (UnknownHostException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });

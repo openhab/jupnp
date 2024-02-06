@@ -93,7 +93,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     protected static final String OSGI_SERVICE_HTTP_PORT = "org.osgi.service.http.port";
 
-    private Logger log = LoggerFactory.getLogger(OSGiUpnpServiceConfiguration.class);
+    private final Logger logger = LoggerFactory.getLogger(OSGiUpnpServiceConfiguration.class);
 
     // configurable properties
     protected int threadPoolSize = 20;
@@ -180,7 +180,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
         namespace = createNamespace();
 
-        log.debug("{} activated", this);
+        logger.debug("{} activated", this);
     }
 
     @Deactivate
@@ -191,7 +191,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
         shutdown();
 
-        log.debug("{} deactivated", this);
+        logger.debug("{} deactivated", this);
     }
 
     @Override
@@ -369,7 +369,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Override
     public void shutdown() {
-        log.debug("Shutting down executor services");
+        logger.debug("Shutting down executor services");
         shutdownExecutorServices();
 
         // create the executor again ready for reuse in case the runtime is started up again.
@@ -434,24 +434,24 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     protected void createExecutorServices() {
         if (mainThreadPool) {
-            log.debug("Creating mainThreadPool");
+            logger.debug("Creating mainThreadPool");
             mainExecutorService = createMainExecutorService();
         } else {
-            log.debug("Skipping mainThreadPool creation.");
+            logger.debug("Skipping mainThreadPool creation.");
         }
 
         if (asyncThreadPool) {
-            log.debug("Creating asyncThreadPool");
+            logger.debug("Creating asyncThreadPool");
             asyncExecutorService = createAsyncProtocolExecutorService();
         } else {
-            log.debug("Skipping asyncThreadPool creation.");
+            logger.debug("Skipping asyncThreadPool creation.");
         }
 
         if (remoteThreadPool) {
-            log.debug("Creating remoteThreadPool");
+            logger.debug("Creating remoteThreadPool");
             remoteExecutorService = createRemoteProtocolExecutorService();
         } else {
-            log.debug("Skipping remoteThreadPool creation.");
+            logger.debug("Skipping remoteThreadPool creation.");
         }
     }
 
@@ -478,10 +478,10 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                 threadPoolSize = Integer.parseInt((String) prop);
                 mainThreadPool = threadPoolSize != -1;
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
+                logger.error("Invalid value '{}' for threadPoolSize - using default value '{}'", prop, threadPoolSize);
             }
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration threadPoolSize = {} {}", threadPoolSize,
+        logger.info("OSGiUpnpServiceConfiguration createConfiguration threadPoolSize = {} {}", threadPoolSize,
                 mainThreadPool);
 
         prop = properties.get("asyncThreadPoolSize");
@@ -490,11 +490,11 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                 asyncThreadPoolSize = Integer.parseInt((String) prop);
                 asyncThreadPool = asyncThreadPoolSize != -1;
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for asyncThreadPoolSize - using default value '{}'", prop,
+                logger.error("Invalid value '{}' for asyncThreadPoolSize - using default value '{}'", prop,
                         asyncThreadPoolSize);
             }
         }
-        log.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize,
+        logger.info("OSGiUpnpServiceConfiguration createConfiguration asyncThreadPoolSize = {} {}", asyncThreadPoolSize,
                 asyncThreadPool);
 
         prop = properties.get("multicastResponsePort");
@@ -502,7 +502,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 multicastResponsePort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for multicastResponsePort - using default value '{}'", prop,
+                logger.error("Invalid value '{}' for multicastResponsePort - using default value '{}'", prop,
                         multicastResponsePort);
             }
         } else if (prop instanceof Integer) {
@@ -514,7 +514,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 streamListenPort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for streamListenPort - using default value '{}'", prop, streamListenPort);
+                logger.error("Invalid value '{}' for streamListenPort - using default value '{}'", prop,
+                        streamListenPort);
             }
         } else if (prop instanceof Integer) {
             streamListenPort = (Integer) prop;
@@ -522,7 +523,8 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 streamListenPort = Integer.parseInt(System.getProperty(OSGI_SERVICE_HTTP_PORT));
             } catch (NumberFormatException e) {
-                log.debug("Invalid value '{}' for osgi.http.port - using default value '{}'", prop, streamListenPort);
+                logger.debug("Invalid value '{}' for osgi.http.port - using default value '{}'", prop,
+                        streamListenPort);
             }
         }
 
@@ -531,7 +533,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 callbackURI = new Namespace((String) prop);
             } catch (Exception e) {
-                log.error("Invalid value '{}' for callbackURI - using default value '{}'", prop, callbackURI);
+                logger.error("Invalid value '{}' for callbackURI - using default value '{}'", prop, callbackURI);
             }
         }
 
@@ -540,7 +542,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 httpProxyPort = Integer.parseInt((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for httpProxyPort - using default value '{}'", prop, httpProxyPort);
+                logger.error("Invalid value '{}' for httpProxyPort - using default value '{}'", prop, httpProxyPort);
             }
         } else if (prop instanceof Integer) {
             httpProxyPort = (Integer) prop;
@@ -551,36 +553,36 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
             try {
                 retryAfterSeconds = Integer.valueOf((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
+                logger.error("Invalid value '{}' for retryAfterSeconds - using default value", prop);
             }
         } else if (prop instanceof Integer) {
             retryAfterSeconds = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration retryAfterSeconds = {}", retryAfterSeconds);
+        logger.info("OSGiUpnpServiceConfiguration retryAfterSeconds = {}", retryAfterSeconds);
 
         prop = properties.get("retryIterations");
         if (prop instanceof String) {
             try {
                 retryIterations = Integer.valueOf((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for retryIterations - using default value", prop);
+                logger.error("Invalid value '{}' for retryIterations - using default value", prop);
             }
         } else if (prop instanceof Integer) {
             retryIterations = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration retryIterations = {}", retryIterations);
+        logger.info("OSGiUpnpServiceConfiguration retryIterations = {}", retryIterations);
 
         prop = properties.get("timeoutSeconds");
         if (prop instanceof String) {
             try {
                 timeoutSeconds = Integer.valueOf((String) prop);
             } catch (NumberFormatException e) {
-                log.error("Invalid value '{}' for timeoutSeconds - using default value", prop);
+                logger.error("Invalid value '{}' for timeoutSeconds - using default value", prop);
             }
         } else if (prop instanceof Integer) {
             timeoutSeconds = (Integer) prop;
         }
-        log.info("OSGiUpnpServiceConfiguration timeoutSeconds = {}", timeoutSeconds);
+        logger.info("OSGiUpnpServiceConfiguration timeoutSeconds = {}", timeoutSeconds);
 
         // let's automatically determine the size for the remoteThreadPool
         if (!mainThreadPool || !asyncThreadPool) {

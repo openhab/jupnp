@@ -258,8 +258,8 @@ public abstract class DOMElement<CHILD extends DOMElement, PARENT extends DOMEle
                 return xpath.evaluate(expr, context);
             }
             return xpath.evaluate(expr, context, result);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
