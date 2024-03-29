@@ -35,7 +35,6 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.http.HttpService;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -52,9 +51,10 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Override the various <tt>create...()</tt> methods to customize instantiation of protocol factory, router, etc.
  * </p>
- * 
+ *
  * @author Christian Bauer
  * @author Kai Kreuzer - OSGiified the service
+ * @author Laurent Garnier - moved OSGi dependency to HttpService into OSGiUpnpServiceConfiguration
  */
 @Component(configurationPid = "org.jupnp.upnpservice")
 @Designate(ocd = UpnpServiceImpl.Config.class)
@@ -124,29 +124,13 @@ public class UpnpServiceImpl implements UpnpService {
     public void setUpnpServiceConfiguration(UpnpServiceConfiguration configuration) {
         this.configuration = configuration;
         if (isRunning) {
+            logger.debug("New OSGi UpnpServiceConfiguration is bound while UPnP service is running; restart needed");
             restart(true);
         }
     }
 
     public void unsetUpnpServiceConfiguration(UpnpServiceConfiguration configuration) {
         this.configuration = null;
-    }
-
-    @Reference
-    public void setHttpService(HttpService httpService) {
-        // Only need to restart jupnp after/if HttpService appears
-        if (isRunning) {
-            shutdown(false);
-            delayedStartup(1500);
-        }
-    }
-
-    public void unsetHttpService(HttpService httpService) {
-        // Only need to restart jupnp after/if HttpService disappears
-        if (isRunning) {
-            shutdown(false);
-            delayedStartup(1500);
-        }
     }
 
     protected ProtocolFactory createProtocolFactory() {

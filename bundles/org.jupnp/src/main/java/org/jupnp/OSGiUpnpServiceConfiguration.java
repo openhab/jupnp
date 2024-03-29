@@ -55,11 +55,11 @@ import org.jupnp.transport.spi.StreamClient;
 import org.jupnp.transport.spi.StreamClientConfiguration;
 import org.jupnp.transport.spi.StreamServer;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +87,7 @@ import org.slf4j.LoggerFactory;
  * @author Kai Kreuzer - introduced bounded thread pool and http service streaming server
  * @author Victor Toni - consolidated transport abstraction into one interface
  * @author Wouter Born - conditionally enable component based on autoEnable configuration value
+ * @author Laurent Garnier - added OSGi dependency to HttpService and removed its release
  */
 @Component(configurationPid = "org.jupnp", configurationPolicy = ConfigurationPolicy.REQUIRE, enabled = false)
 public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
@@ -123,14 +124,13 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     protected BundleContext context;
 
     @SuppressWarnings("rawtypes")
-    protected ServiceReference httpServiceReference;
-
-    @SuppressWarnings("rawtypes")
     protected TransportConfiguration transportConfiguration;
 
     protected Integer timeoutSeconds = 10;
     protected Integer retryIterations = 5;
     protected Integer retryAfterSeconds = (int) TimeUnit.MINUTES.toSeconds(10);
+
+    protected HttpService httpService;
 
     /**
      * Defaults to port '0', ephemeral.
@@ -185,13 +185,17 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     @Deactivate
     protected void deactivate() {
-        if (httpServiceReference != null) {
-            context.ungetService(httpServiceReference);
-        }
-
         shutdown();
-
         logger.debug("{} deactivated", this);
+    }
+
+    @Reference
+    public void setHttpService(HttpService httpService) {
+        this.httpService = httpService;
+    }
+
+    public void unsetHttpService(HttpService httpService) {
+        this.httpService = null;
     }
 
     @Override
@@ -237,25 +241,14 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        ServiceReference serviceReference = context.getServiceReference(HttpService.class.getName());
-
-        if (serviceReference != null) {
-
-            if (httpServiceReference != null) {
-                context.ungetService(httpServiceReference);
-            }
-
-            httpServiceReference = serviceReference;
-
-            HttpService httpService = (HttpService) context.getService(serviceReference);
-
-            if (httpService != null) {
-                return new ServletStreamServerImpl(new ServletStreamServerConfigurationImpl(
-                        HttpServiceServletContainerAdapter.getInstance(httpService, context),
-                        httpProxyPort != -1 ? httpProxyPort : callbackURI.getBasePath().getPort()));
-            }
+        if (httpService != null) {
+            logger.debug("createStreamServer using OSGi HttpService");
+            return new ServletStreamServerImpl(new ServletStreamServerConfigurationImpl(
+                    HttpServiceServletContainerAdapter.getInstance(httpService, context),
+                    httpProxyPort != -1 ? httpProxyPort : callbackURI.getBasePath().getPort()));
         }
 
+        logger.debug("createStreamServer without OSGi HttpService");
         return transportConfiguration.createStreamServer(networkAddressFactory.getStreamListenPort());
     }
 
