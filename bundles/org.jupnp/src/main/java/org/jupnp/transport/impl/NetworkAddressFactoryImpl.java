@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bauer
  * @author Kai Kreuzer - added multicast response port
+ * @author Laurent Garnier - added new parameter to provide a list of network interfaces to consider
  */
 public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
@@ -76,7 +77,13 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
     }
 
     public NetworkAddressFactoryImpl(int streamListenPort, int multicastResponsePort) throws InitializationException {
-        String useInterfacesString = System.getProperty(SYSTEM_PROPERTY_NET_IFACES);
+        this(streamListenPort, multicastResponsePort, null);
+    }
+
+    public NetworkAddressFactoryImpl(int streamListenPort, int multicastResponsePort, String interfaces)
+            throws InitializationException {
+        String useInterfacesString = interfaces != null && !interfaces.isBlank() ? interfaces
+                : System.getProperty(SYSTEM_PROPERTY_NET_IFACES);
         if (useInterfacesString != null) {
             String[] userInterfacesStrings = useInterfacesString.split(",");
             useInterfaces.addAll(Arrays.asList(userInterfacesStrings));
@@ -408,8 +415,8 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         }
 
         if (!useInterfaces.isEmpty() && !useInterfaces.contains(iface.getName())) {
-            logger.trace("Skipping unwanted network interface (-D {} ): {}", SYSTEM_PROPERTY_NET_IFACES,
-                    iface.getName());
+            logger.trace("Skipping unwanted network interface (OSGi parameter 'interfaces' or -D {}): {}",
+                    SYSTEM_PROPERTY_NET_IFACES, iface.getName());
             return false;
         }
 
