@@ -88,6 +88,7 @@ import org.slf4j.LoggerFactory;
  * @author Victor Toni - consolidated transport abstraction into one interface
  * @author Wouter Born - conditionally enable component based on autoEnable configuration value
  * @author Laurent Garnier - added OSGi dependency to HttpService and removed its release
+ * @author Laurent Garnier - added parameter "interfaces" to set a list of network interfaces to consider
  */
 @Component(configurationPid = "org.jupnp", configurationPolicy = ConfigurationPolicy.REQUIRE, enabled = false)
 public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
@@ -100,6 +101,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     protected int threadPoolSize = 20;
     protected int asyncThreadPoolSize = 20;
     protected int remoteThreadPoolSize = 40;
+    protected String interfaces;
     protected int multicastResponsePort;
     protected int httpProxyPort = -1;
     protected int streamListenPort = 8080;
@@ -382,7 +384,7 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastResponsePort) {
-        return new NetworkAddressFactoryImpl(streamListenPort, multicastResponsePort);
+        return new NetworkAddressFactoryImpl(streamListenPort, multicastResponsePort, interfaces);
     }
 
     protected DatagramProcessor createDatagramProcessor() {
@@ -520,6 +522,12 @@ public class OSGiUpnpServiceConfiguration implements UpnpServiceConfiguration {
                         streamListenPort);
             }
         }
+
+        prop = properties.get("interfaces");
+        if (prop instanceof String) {
+            interfaces = (String) prop;
+        }
+        logger.info("OSGiUpnpServiceConfiguration interfaces = {}", interfaces);
 
         prop = properties.get("callbackURI");
         if (prop instanceof String) {
