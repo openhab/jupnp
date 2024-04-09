@@ -7,6 +7,24 @@
 
 jUPnP is a Java UPnP library and has been forked from the no-longer maintained [Cling project](https://github.com/4thline/cling).
 
+# How to Use
+Download from Maven Central ![Maven Central Version](https://img.shields.io/maven-central/v/org.jupnp/jupnp)
+
+## Maven
+```
+<dependency>
+    <groupId>org.jupnp</groupId>
+    <artifactId>jupnp</artifactId>
+    <version>3.0.1</version>
+    <type>pom</type>
+</dependency>
+```
+
+## Gradle
+```
+implementation 'org.jupnp:jupnp:3.0.1'
+```
+
 # Build Instructions
 
 Building and running the project is fairly easy if you follow the steps detailed below.
