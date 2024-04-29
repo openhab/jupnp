@@ -32,13 +32,16 @@ import org.xml.sax.SAXException;
 
 /**
  * Abstract class responsible for creating new {@link Document}s either for writing or already parsed from a given input
- * stream. The class manages a pool ofr {@link DocumentBuilder}s internally and reuses them in different threads saving
- * cpu time from factory and builder instantiation.
- * 
+ * stream. The class manages a pool of {@link DocumentBuilder}s internally and reuses them in different threads saving
+ * CPU time from factory and builder instantiation if possible.
+ * <p>
+ * On Android this class will not reuse {@link DocumentBuilder}s because the {@link DocumentBuilder#reset()}
+ * implementation sets all internal properties to <code>false</code>
+ * <p>
  * Default pool size is 20.
- * 
- * @author Ivan Iliev - Initial contribution and API
  *
+ * @author Ivan Iliev - Initial contribution and API
+ * @author Wouter Born - Detect if pooling is possible to fix issues on Android
  */
 public abstract class PooledXmlProcessor {
 
@@ -47,6 +50,8 @@ public abstract class PooledXmlProcessor {
     private final ConcurrentLinkedQueue<DocumentBuilder> builderPool;
 
     private final transient Logger logger = LoggerFactory.getLogger(PooledXmlProcessor.class);
+
+    private boolean reuseDocumentBuilders;
 
     protected PooledXmlProcessor() {
         this(20);
@@ -57,13 +62,34 @@ public abstract class PooledXmlProcessor {
         documentBuilderFactory.setNamespaceAware(true);
         builderPool = new ConcurrentLinkedQueue<>();
 
-        for (int i = 0; i < basePoolSize; i++) {
-            try {
-                builderPool.add(documentBuilderFactory.newDocumentBuilder());
-            } catch (ParserConfigurationException e) {
-                logger.error("Error when invoking newDocumentBuilder():", e);
+        try {
+            reuseDocumentBuilders = isDocumentBuilderReusable();
+            if (reuseDocumentBuilders) {
+                logger.debug("Adding {} instances to the pool because DocumentBuilders can be reused", basePoolSize);
+                for (int i = 0; i < basePoolSize; i++) {
+                    builderPool.add(documentBuilderFactory.newDocumentBuilder());
+                }
+            } else {
+                logger.debug("Not adding instances to the pool because DocumentBuilders cannot be reused");
             }
+        } catch (ParserConfigurationException e) {
+            logger.error("Error when invoking newDocumentBuilder()", e);
         }
+    }
+
+    /**
+     * Determines if {@link DocumentBuilder} instances can be reused after resetting them.
+     * On Android it is not possible to reuse builders because {@link DocumentBuilder#reset()} sets all internal
+     * properties to <code>false</code>.
+     *
+     * @return <code>true</code> if {@link DocumentBuilder} instances can be reused after resetting them,
+     *         <code>false</code> otherwise
+     * @throws ParserConfigurationException when a {@link DocumentBuilder} cannot be created
+     */
+    private boolean isDocumentBuilderReusable() throws ParserConfigurationException {
+        DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+        builder.reset();
+        return builder.isNamespaceAware();
     }
 
     /**
@@ -110,13 +136,12 @@ public abstract class PooledXmlProcessor {
 
     private Document getDocument(InputSource inputSource, ErrorHandler errorHandler)
             throws FactoryConfigurationError, ParserConfigurationException, SAXException, IOException {
-        DocumentBuilder builder = builderPool.poll();
+        DocumentBuilder builder = reuseDocumentBuilders ? builderPool.poll() : null;
         if (builder == null) {
             builder = documentBuilderFactory.newDocumentBuilder();
         }
 
         try {
-
             if (errorHandler != null) {
                 builder.setErrorHandler(errorHandler);
             }
@@ -126,14 +151,15 @@ public abstract class PooledXmlProcessor {
             }
 
             return builder.newDocument();
-
         } finally {
             returnBuilder(builder);
         }
     }
 
-    private void returnBuilder(DocumentBuilder builder) throws FactoryConfigurationError, ParserConfigurationException {
-        builder.reset();
-        builderPool.add(builder);
+    private void returnBuilder(DocumentBuilder builder) throws FactoryConfigurationError {
+        if (reuseDocumentBuilders) {
+            builder.reset();
+            builderPool.add(builder);
+        }
     }
 }
