@@ -1,18 +1,15 @@
-[![GitHub Actions Build Status](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/jupnp/jupnp/actions/workflows/ci-build.yml)
-[![CDDL-1.0](https://img.shields.io/badge/license-CDDL%201.0-green.svg)](https://opensource.org/license/cddl-1-0/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jupnp/org.jupnp/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.jupnp/org.jupnp) 
-[![Javadocs](https://www.javadoc.io/badge/org.jupnp/org.jupnp.svg)](https://www.javadoc.io/doc/org.jupnp/org.jupnp)
+---
+sidebar_position: 1
+---
 
 # Introduction
 
-<img align="right" src="/website/static/img/logo.png" />
+<img align="right" src="/img/logo.png" />
 
 jUPnP is a Java UPnP library and has been forked from the no-longer maintained [Cling project](https://github.com/4thline/cling).
 
 You can use jUPnP in your code by adding a dependency on it.
 See the Maven, Gradle etc. dependency examples on [Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jupnp/org.jupnp).
-
-Additional documentation is available on [www.jupnp.org](https://www.jupnp.org).
 
 ## Build Instructions
 
@@ -33,7 +30,7 @@ Make sure that the "mvn" command is available on your path
 
 ### Checkout
 
-Checkout the source code from GitHub, e.g. by running:
+Checkout the source code from [GitHub](https://github.com/jupnp/jupnp), e.g. by running:
 
 ```shell
 git clone https://github.com/jupnp/jupnp.git
@@ -71,7 +68,7 @@ Parallel builds are also less easy to debug and the increased load may cause tim
 
 ### Code style
 
-The code style used by jUPnP is available as an Eclipse XML configuration in [codestyle.xml](tools/spotless/codestyle.xml).
+The code style used by jUPnP is available as an Eclipse XML configuration in [codestyle.xml](https://github.com/jupnp/jupnp/blob/main/tools/spotless/codestyle.xml).
 To use this configuration while coding, import the code style configuration into an IDE such as Eclipse or IntelliJ.
 
 To check if your code is following the code style run:

@@ -1,12 +1,13 @@
-<div class="chapter" id="chapter.GettingStarted" xmlns="http://www.w3.org/1999/xhtml">
-    <div class="title">Getting Started</div>
-    <div class="content">
+---
+sidebar_position: 2
+---
 
-        <p>
-            This is how you use jUPnP:
-        </p>
+# Getting Started
 
-        <div><pre class="prettyprint"><![CDATA[package ...;
+This is how you use jUPnP:
+
+```java
+package ...;
 
 import org.jupnp.model.message.header.STAllHeader;
 import org.jupnp.model.meta.LocalDevice;
@@ -61,7 +62,8 @@ public class Main {
 
             @Override
             public void beforeShutdown(Registry registry) {
-                System.out.println("Before shutdown, the registry has devices: " + registry.getDevices().size());
+                System.out.println("Before shutdown, the registry has devices: "
+                    + registry.getDevices().size());
             }
 
             @Override
@@ -88,13 +90,7 @@ public class Main {
         System.out.println("Stopping jUPnP...");
         upnpService.shutdown();
     }
-}]]></pre>
-        </div>
+}
+```
 
-        <p>
-            You need <code>org.jupnp-x.y.z.jar</code> and its dependencies (javax.servlet-api, 
-            jetty-client, jetty-server, slf4j-api JAR files) on your classpath to build and run this code.
-        </p>
-
-    </div>
-</div>
+You need `org.jupnp-x.y.z.jar` and its dependencies (javax.servlet-api, jetty-client, jetty-server, slf4j-api JAR files) on your classpath to build and run this code.
