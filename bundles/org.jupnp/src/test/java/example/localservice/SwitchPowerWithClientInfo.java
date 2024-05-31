@@ -32,7 +32,6 @@ public class SwitchPowerWithClientInfo {
 
     private boolean power;
 
-    // DOC:CLIENT_INFO
     @UpnpAction
     public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue,
             RemoteClientInfo clientInfo) {
@@ -50,7 +49,6 @@ public class SwitchPowerWithClientInfo {
             clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
         }
     }
-    // DOC:CLIENT_INFO
 
     @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))
     public boolean getTarget() {
@@ -61,4 +59,4 @@ public class SwitchPowerWithClientInfo {
     public boolean getStatus() {
         return power;
     }
-} // DOC:INC1
+}

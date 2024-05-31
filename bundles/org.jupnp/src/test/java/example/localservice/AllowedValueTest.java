@@ -29,31 +29,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 
-/**
- * Exclusive list of string values
- * <p>
- * If you have a static list of legal string values, set it directly on the annotation
- * of your state variable's field:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValues" style="include: VAR"/>
- * <p>
- * Alternatively, if your allowed values have to be determined dynamically when
- * your service is being bound, you can implement a class with the
- * <code>org.jupnp.binding.AllowedValueProvider</code> interface:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValueProvider" style="include:
- * PROVIDER"/>
- * <p>
- * Then, instead of specifying a static list of string values in your state variable declaration,
- * name the provider class:
- * </p>
- * <a class="citation" id="MyServiceWithAllowedValueProvider-VAR" href=
- * "javacode://example.localservice.MyServiceWithAllowedValueProvider" style="include: VAR"/>
- * <p>
- * Note that this provider will only be queried when your annotations are being processed,
- * once when your service is bound in jUPnP.
- * </p>
- */
 class AllowedValueTest {
 
     public static LocalDevice createTestDevice(Class serviceClass) throws Exception {

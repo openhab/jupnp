@@ -32,27 +32,6 @@ import org.jupnp.protocol.RetrieveRemoteDescriptors;
 import org.jupnp.registry.DefaultRegistryListener;
 import org.jupnp.registry.Registry;
 
-/**
- * Listening to registry changes
- * <p>
- * The <code>RegistryListener</code> is your primary API when discovering devices and services with your
- * control point. UPnP operates asynchronous, so advertisements (either <em>alive</em> or <em>byebye</em>)
- * of devices can occur at any time. Responses to your network search messages are also asynchronous.
- * </p>
- * <p>
- * This is the interface:
- * </p>
- * <a class="citation" href="javacode://example.registry.RegistryListenerTest.RegistryListener"/>
- * <p>
- * Typically you don't want to implement all of these methods. Some are only useful if you write
- * a service or a generic control point. Most of the time you want to be notified when a particular
- * device with a particular service appears on your network. So it is much easier to extend
- * the <code>DefaultRegistryListener</code>, which has empty implementations for all methods of
- * the interface, and only override the methods you need.
- * </p>
- * <a class="citation" href="javadoc://this#quickstartListener" style="read-title: false"/>
- * <a class="citation" href="javadoc://this#regularListener" style="read-title: false"/>
- */
 class RegistryListenerTest {
 
     // Just for documentation inclusion!
@@ -73,27 +52,8 @@ class RegistryListenerTest {
         void localDeviceRemoved(Registry registry, LocalDevice device);
     }
 
-    /**
-     * <p>
-     * The <code>remoteDeviceDiscoveryStarted()</code> and <code>remoteDeviceDiscoveryFailed()</code>
-     * methods are completely optional but useful on slow machines (such as Android handsets). jUPnP
-     * will retrieve and initialize all device metadata for each UPnP device before it will announce
-     * it on the <code>Registry</code>. UPnP metadata is split into several XML descriptors, so retrieval
-     * via HTTP of these descriptors, parsing, and validating all metadata for a complex UPnP device
-     * and service model can take several seconds. These two methods allow you to access the device
-     * as soon as possible, after the first descriptor has been retrieved and parsed. At this time
-     * the services metadata is however not available:
-     * </p>
-     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.QuickstartRegistryListener" style=
-     * "exclude: EXC1, EXC2;"/>
-     * <p>
-     * This is how you register and activate a listener:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: INC1"/>
-     */
     @Test
     void quickstartListener() throws Exception {
-
         final RemoteDevice discoveredDevice = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         final RemoteDevice hydratedDevice = SampleData.createRemoteDevice();
 
@@ -130,8 +90,8 @@ class RegistryListenerTest {
         };
         upnpService.startup();
 
-        QuickstartRegistryListener listener = new QuickstartRegistryListener(); // DOC: INC1
-        upnpService.getRegistry().addListener(listener); // DOC: INC1
+        QuickstartRegistryListener listener = new QuickstartRegistryListener();
+        upnpService.getRegistry().addListener(listener);
 
         RetrieveRemoteDescriptors retrieveDescriptors = new RetrieveRemoteDescriptors(upnpService, discoveredDevice);
         retrieveDescriptors.run();
@@ -179,7 +139,7 @@ class RegistryListenerTest {
     }
 
     public static class QuickstartRegistryListener extends DefaultRegistryListener {
-        public boolean valid = false; // DOC: EXC1
+        public boolean valid = false;
 
         @Override
         public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
@@ -192,7 +152,7 @@ class RegistryListenerTest {
                 assertEquals(0, service.getActions().length);
                 assertEquals(0, service.getStateVariables().length);
             }
-            valid = true; // DOC: EXC2
+            valid = true;
         }
 
         @Override
@@ -210,20 +170,6 @@ class RegistryListenerTest {
         }
     }
 
-    /**
-     * <p>
-     * Most of the time, on any device that is faster than a cellphone, your listeners will look
-     * like this:
-     * </p>
-     * <a class="citation" href="javacode://example.registry.RegistryListenerTest.MyListener" style="exclude: EXC1,
-     * EXC2, EXC3;"/>
-     * <p>
-     * The device metadata of the parameter to <code>remoteDeviceAdded()</code> is fully hydrated, all
-     * of its services, actions, and state variables are available. You can continue with this metadata,
-     * writing action invocations and event monitoring callbacks. You also might want to react accordingly
-     * when the device disappears from the network.
-     * </p>
-     */
     @Test
     void regularListener() throws Exception {
 
@@ -339,21 +285,21 @@ class RegistryListenerTest {
     }
 
     public static class MyListener extends DefaultRegistryListener {
-        public boolean added = false; // DOC: EXC1
-        public boolean removed = false; // DOC: EXC1
+        public boolean added = false;
+        public boolean removed = false;
         public RemoteDevice deviceAdded = null;
         public RemoteDevice deviceRemoved = null;
 
         @Override
         public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
-            added = true; // DOC: EXC2
+            added = true;
             deviceAdded = device;
         }
 
         @Override
         public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
             // Stop using the service if this is the same device, it's gone now
-            removed = true; // DOC: EXC3
+            removed = true;
             deviceRemoved = device;
         }
 

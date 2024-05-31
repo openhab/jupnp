@@ -17,8 +17,7 @@ package example.localservice;
 
 import org.jupnp.binding.annotations.*;
 
-@UpnpService( // DOC:INC1
-        serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"), stringConvertibleTypes = MyStringConvertible.class)
+@UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"), stringConvertibleTypes = MyStringConvertible.class)
 public class MyServiceWithEnum {
 
     public enum Color {
@@ -39,4 +38,4 @@ public class MyServiceWithEnum {
     public void setColor(@UpnpInputArgument(name = "In") String color) {
         this.color = Color.valueOf(color);
     }
-} // DOC:INC1
+}

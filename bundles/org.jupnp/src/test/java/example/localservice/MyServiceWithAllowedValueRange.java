@@ -26,10 +26,8 @@ import org.jupnp.binding.annotations.UpnpStateVariable;
 @UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValueRange {
 
-    // DOC:VAR
     @UpnpStateVariable(allowedValueMinimum = 10, allowedValueMaximum = 100, allowedValueStep = 5)
     private int restricted;
-    // DOC:VAR
 
     @UpnpAction(out = @UpnpOutputArgument(name = "Out"))
     public int getRestricted() {

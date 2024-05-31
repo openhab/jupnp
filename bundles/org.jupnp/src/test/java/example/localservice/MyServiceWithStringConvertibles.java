@@ -81,4 +81,4 @@ public class MyServiceWithStringConvertibles {
     public void setMyStringConvertible(@UpnpInputArgument(name = "In") MyStringConvertible myStringConvertible) {
         this.myStringConvertible = myStringConvertible;
     }
-} // DOC:INC1
+}

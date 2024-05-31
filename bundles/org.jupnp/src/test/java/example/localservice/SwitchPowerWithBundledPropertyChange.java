@@ -48,7 +48,6 @@ public class SwitchPowerWithBundledPropertyChange {
 
     @UpnpAction
     public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
-
         target = newTargetValue;
         status = newTargetValue;
 

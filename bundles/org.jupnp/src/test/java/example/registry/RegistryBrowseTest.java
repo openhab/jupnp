@@ -39,32 +39,8 @@ import org.jupnp.model.types.UDN;
 import org.jupnp.registry.RegistrationException;
 import org.jupnp.registry.Registry;
 
-/**
- * Browsing the Registry
- * <p>
- * Although you typically create a <code>RegistryListener</code> to be notified of discovered and
- * disappearing UPnP devices on your network, sometimes you have to browse the <code>Registry</code>
- * manually.
- * </p>
- * <a class="citation" href="javadoc://this#findDevice" style="read-title: false"/>
- * <a class="citation" href="javadoc://this#findDeviceByType" style="read-title: false"/>
- */
 class RegistryBrowseTest {
 
-    /**
-     * <p>
-     * The following call will return a device with the given unique device name, but
-     * only a root device and not any embedded device. Set the second parameter of
-     * <code>registry.getDevice()</code> to <code>false</code> if the device you are
-     * looking for might be an embedded device.
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: FIND_ROOT_UDN"/>
-     * <p>
-     * If you know that the device you need is a <code>LocalDevice</code> - or a
-     * <code>RemoteDevice</code> - you can use the following operation:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: FIND_LOCAL_DEVICE" id="javacode_find_device_local"/>
-     */
     @Test
     void findDevice() throws Exception {
         MockUpnpService upnpService = new MockUpnpService();
@@ -74,26 +50,18 @@ class RegistryBrowseTest {
 
         UDN udn = device.getIdentity().getUdn();
 
-        Registry registry = upnpService.getRegistry(); // DOC: FIND_ROOT_UDN
+        Registry registry = upnpService.getRegistry();
         Device foundDevice = registry.getDevice(udn, true);
 
-        assertEquals(udn, foundDevice.getIdentity().getUdn()); // DOC: FIND_ROOT_UDN
+        assertEquals(udn, foundDevice.getIdentity().getUdn());
 
-        LocalDevice localDevice = registry.getLocalDevice(udn, true); // DOC: FIND_LOCAL_DEVICE
+        LocalDevice localDevice = registry.getLocalDevice(udn, true);
         assertEquals(udn, localDevice.getIdentity().getUdn());
 
         SampleDeviceRootLocal
                 .assertLocalResourcesMatch(upnpService.getConfiguration().getNamespace().getResources(device));
     }
 
-    /**
-     * <p>
-     * Most of the time you need a device that is of a particular type or that implements
-     * a particular service type, because this is what your control point can handle:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: FIND_DEV_TYPE"/>
-     * <a class="citation" href="javacode://this" style="include: FIND_SERV_TYPE" id="javacode_find_serv_type"/>
-     */
     @Test
     void findDeviceByType() {
         MockUpnpService upnpService = new MockUpnpService();
@@ -103,12 +71,12 @@ class RegistryBrowseTest {
 
         Registry registry = upnpService.getRegistry();
 
-        DeviceType deviceType = new UDADeviceType("MY-DEVICE-TYPE", 1); // DOC: FIND_DEV_TYPE
-        Collection<Device> devices = registry.getDevices(deviceType); // DOC: FIND_DEV_TYPE
+        DeviceType deviceType = new UDADeviceType("MY-DEVICE-TYPE", 1);
+        Collection<Device> devices = registry.getDevices(deviceType);
         assertEquals(1, devices.size());
 
-        ServiceType serviceType = new UDAServiceType("MY-SERVICE-TYPE-ONE", 1); // DOC: FIND_SERV_TYPE
-        devices = registry.getDevices(serviceType); // DOC: FIND_SERV_TYPE
+        ServiceType serviceType = new UDAServiceType("MY-SERVICE-TYPE-ONE", 1);
+        devices = registry.getDevices(serviceType);
         assertEquals(1, devices.size());
     }
 

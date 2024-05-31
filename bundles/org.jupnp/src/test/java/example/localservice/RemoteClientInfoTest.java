@@ -38,35 +38,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.profile.RemoteClientInfo;
 import org.jupnp.model.types.UDADeviceType;
 
-/**
- * Accessing remote client information
- * <p>
- * Theoretically, your service implementation should work with any client, as UPnP is
- * supposed to provide a compatibility layer. In practice, this never works as no
- * UPnP client and server is fully compatible with the specifications (except jUPnP, of
- * course).
- * </p>
- * <p>
- * If your action method has a last (or only parameter) of type <code>RemoteClientInfo</code>,
- * jUPnP will provide details about the control point calling your service:
- * </p>
- * <a class="citation" href="javacode://example.localservice.SwitchPowerWithClientInfo" style="include:CLIENT_INFO"/>
- * <p>
- * The <code>RemoteClientInfo</code> argument will only be available when this action method
- * is processing a remote client call, an <code>ActionInvocation</code> executed by the
- * local UPnP stack on a local service does not have remote client information and the
- * argument will be <code>null</code>.
- * </p>
- * <p>
- * A client's remote and local address might be <code>null</code> if the jUPnP
- * transport layer was not able to obtain the connection's address.
- * </p>
- * <p>
- * You can set extra response headers on the <code>RemoteClientInfo</code>, which will be
- * returned to the client with the response of your UPnP action. There is also a
- * <code>setResponseUserAgent()</code> method for your convenience.
- * </p>
- */
 class RemoteClientInfoTest {
 
     static LocalDevice createTestDevice(Class serviceClass) throws Exception {

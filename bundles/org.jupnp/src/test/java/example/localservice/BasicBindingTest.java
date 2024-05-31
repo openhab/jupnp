@@ -33,49 +33,6 @@ import org.jupnp.model.types.UDADeviceType;
 import org.jupnp.model.types.UDAServiceId;
 import org.jupnp.model.types.UDAServiceType;
 
-/**
- * Annotating a service implementation
- * <p>
- * The previously shown service class had a few annotations on the class itself, declaring
- * the name and version of the service. Then annotations on fields were used to declare the
- * state variables of the service and annotations on methods to declare callable actions.
- * </p>
- * <p>
- * Your service implementation might not have fields that directly map to UPnP state variables.
- * </p>
- * <div class="section">
- * <a class="citation" href="javadoc://example.localservice.SwitchPowerAnnotatedClass"/>
- * </div>
- * <p>
- * jUPnP tries to provide smart defaults. For example, the previously shown service classes
- * did not name the related state variable of action output arguments, as required by UPnP.
- * jUPnP will automatically detect that the <code>getStatus()</code> method is a JavaBean
- * getter method (its name starts with <code>get</code> or <code>is</code>) and use the
- * JavaBean property name to find the related state variable. In this case that would be
- * the JavaBean property <code>status</code> and jUPnP is also smart enough to know that
- * you really want the uppercase UPnP state variable named <code>Status</code>.
- * </p>
- * <div class="section">
- * <a class="citation" href="javadoc://example.localservice.SwitchPowerNamedStateVariable"/>
- * </div>
- * <p>
- * For the next example, let's assume you have a class that was already written, not
- * necessarily as a service backend for UPnP but for some other purpose. You can't
- * redesign and rewrite your class without interrupting all existing code. jUPnP offers
- * some flexibility in the mapping of action methods, especially how the output of
- * an action call is obtained.
- * </p>
- * <div class="section">
- * <a class="citation" href="javadoc://example.localservice.SwitchPowerExtraGetter"/>
- * </div>
- * <p>
- * Alternatively, and especially if an action has several output arguments, you
- * can return multiple values wrapped in a JavaBean from your action method.
- * </p>
- * <div class="section">
- * <a class="citation" href="javadoc://example.localservice.SwitchPowerBeanReturn"/>
- * </div>
- */
 class BasicBindingTest {
 
     static LocalDevice createTestDevice(Class serviceClass) throws Exception {

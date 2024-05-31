@@ -31,24 +31,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 
-/**
- * Working with enums
- * <p>
- * Java <code>enum</code>'s are special, unfortunately: You can't instantiate
- * an enum value through reflection. So jUPnP can convert your enum value
- * into a string for transport in UPnP messages, but you have to convert
- * it back manually from a string. This is shown in the following
- * service example:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithEnum" style="include: INC1"/>
- * <p>
- * jUPnP will automatically assume that the datatype is a UPnP string if the
- * field (or getter) or getter Java type is an enum. Furthermore, an
- * <code>&lt;allowedValueList&gt;</code> will be created in your service descriptor
- * XML, so control points know that this state variable has in fact a defined
- * set of possible values.
- * </p>
- */
 class EnumTest {
 
     static LocalDevice createTestDevice(Class serviceClass) throws Exception {

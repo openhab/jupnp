@@ -32,43 +32,6 @@ import org.jupnp.model.meta.StateVariable;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 
-/**
- * String value converters
- * <p>
- * Consider the following service class with all state variables of
- * <code>string</code> UPnP datatype - but with a much more specific
- * Java type:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithStringConvertibles" style="include: INC1"/>
- * <p>
- * The state variables are all of UPnP datatype <code>string</code> because
- * jUPnP knows that the Java type of the annotated field is "string convertible".
- * This is always the case for <code>java.net.URI</code> and <code>java.net.URL</code>.
- * </p>
- * <p>
- * Any other Java type you'd like to use for automatic string conversion has to be named
- * in the <code>@UpnpService</code> annotation on the class, like the
- * <code>MyStringConvertible</code>. Note that these types have to
- * have an appropriate <code>toString()</code> method and a single argument constructor
- * that accepts a <code>java.lang.String</code> ("from string" conversion).
- * </p>
- * <p>
- * The <code>List&lt;Integer></code> is the collection you'd use in your service
- * implementation to group several numbers. Let's assume that for UPnP communication
- * you need a comma-separated representation of the individual values in a string,
- * as is required by many of the UPnP A/V specifications. First, tell jUPnP that
- * the state variable really is a string datatype, it can't infer that
- * from the field type. Then, if an action has this output argument, instead of
- * manually creating the comma-separated string you pick the appropriate converter
- * from the classes in <code>org.jupnp.model.types.csv.*</code> and return
- * it from your action method. These are actually <code>java.util.List</code>
- * implementations, so you could use them <em>instead</em> of
- * <code>java.util.List</code> if you don't care about the dependency. Any action
- * input argument value can also be converted from a comma-separated string
- * representation to a list automatically - all you have to do is use the
- * CSV converter class as an input argument type.
- * </p>
- */
 class StringConvertibleTest {
 
     static LocalDevice createTestDevice(Class serviceClass) throws Exception {

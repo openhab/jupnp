@@ -26,10 +26,8 @@ import org.jupnp.binding.annotations.UpnpStateVariable;
 @UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValues {
 
-    // DOC:VAR
     @UpnpStateVariable(allowedValues = { "Foo", "Bar", "Baz" })
     private String restricted;
-    // DOC:VAR
 
     @UpnpAction(out = @UpnpOutputArgument(name = "Out"))
     public String getRestricted() {

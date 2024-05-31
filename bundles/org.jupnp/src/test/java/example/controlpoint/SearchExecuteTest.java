@@ -41,125 +41,61 @@ import org.jupnp.model.types.UDAServiceType;
 import org.jupnp.model.types.UDN;
 import org.jupnp.protocol.async.SendingSearch;
 
-/**
- * Searching the network
- * <p>
- * When your control point joins the network it probably won't know any UPnP devices and services that
- * might be available. To learn about the present devices it can broadcast - actually with UDP multicast
- * datagrams - a search message which will be received by every device. Each receiver then inspects the
- * search message and decides if it should reply directly (with notification UDP datagrams) to the
- * sending control point.
- * </p>
- * <p>
- * Search messages carry a <em>search type</em> header and receivers consider this header when they
- * evaluate a potential response. The jUPnP <code>ControlPoint</code> API accepts a
- * <code>UpnpHeader</code> argument when creating outgoing search messages.
- * </p>
- * <a class="citation" href="javadoc://this#searchAll" style="read-title: false;"/>
- * <a class="citation" href="javadoc://this#searchUDN" style="read-title: false;"/>
- * <a class="citation" href="javadoc://this#searchDeviceType" style="read-title: false;"/>
- * <a class="citation" href="javadoc://this#searchServiceType" style="read-title: false;"/>
- */
 class SearchExecuteTest {
 
-    /**
-     * <p>
-     * Most of the time you'd like all devices to respond to your search, this is what the
-     * dedicated <code>STAllHeader</code> is used for:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: SEARCH"/>
-     * <p>
-     * Notification messages will be received by your control point and you can listen to
-     * the <code>Registry</code> and inspect the found devices and their services. (By the
-     * way, if you call <code>search()</code> without any argument, that's the same.)
-     * </p>
-     */
     @Test
     void searchAll() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        upnpService.getControlPoint().search( // DOC: SEARCH
-                new STAllHeader()); // DOC: SEARCH
+        upnpService.getControlPoint().search(new STAllHeader());
 
         assertMessages(upnpService, new STAllHeader());
     }
 
-    /**
-     * <p>
-     * On the other hand, when you already know the unique device name (UDN) of the device you
-     * are searching for - maybe because your control point remembered it while it was turned off - you
-     * can send a message which will trigger a response from only a particular device:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: SEARCH"/>
-     * <p>
-     * This is mostly useful to avoid network congestion when dozens of devices might <em>all</em>
-     * respond to a search request. Your <code>Registry</code> listener code however still has to
-     * inspect each newly found device, as registrations might occur independently from searches.
-     * </p>
-     */
     @Test
     void searchUDN() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
         UDN udn = new UDN(UUID.randomUUID());
-        upnpService.getControlPoint().search( // DOC: SEARCH
-                new UDNHeader(udn)); // DOC: SEARCH
+        upnpService.getControlPoint().search(new UDNHeader(udn));
 
         assertMessages(upnpService, new UDNHeader(udn));
     }
 
-    /**
-     * <p>
-     * You can also search by device or service type. This search request will trigger responses
-     * from all devices of type "<code>urn:schemas-upnp-org:device:BinaryLight:1</code>":
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: SEARCH_UDA"/>
-     * <p>
-     * If the desired device type is of a custom namespace, use this variation:
-     * </p>
-     * <a class="citation" id="javacode_dt_search_custom" href="javacode://this" style="include: SEARCH_CUSTOM"/>
-     */
     @Test
     void searchDeviceType() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        UDADeviceType udaType = new UDADeviceType("BinaryLight"); // DOC: SEARCH_UDA
-        upnpService.getControlPoint().search(new UDADeviceTypeHeader(udaType)); // DOC: SEARCH_UDA
+        UDADeviceType udaType = new UDADeviceType("BinaryLight");
+        upnpService.getControlPoint().search(new UDADeviceTypeHeader(udaType));
 
         assertMessages(upnpService, new UDADeviceTypeHeader(udaType));
 
         upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
-        DeviceType type = new DeviceType("org-mydomain", "MyDeviceType", 1); // DOC: SEARCH_CUSTOM
-        upnpService.getControlPoint().search(new DeviceTypeHeader(type)); // DOC: SEARCH_CUSTOM
+        DeviceType type = new DeviceType("org-mydomain", "MyDeviceType", 1);
+        upnpService.getControlPoint().search(new DeviceTypeHeader(type));
 
         assertMessages(upnpService, new DeviceTypeHeader(type));
     }
 
-    /**
-     * <p>
-     * Or, you can search for all devices which implement a particular service type:
-     * </p>
-     * <a class="citation" href="javacode://this" style="include: SEARCH_UDA"/>
-     * <a class="citation" id="javacode_st_search_custom" href="javacode://this" style="include: SEARCH_CUSTOM"/>
-     */
     @Test
     void searchServiceType() {
         MockUpnpService upnpService = new MockUpnpService();
         upnpService.startup();
 
-        UDAServiceType udaType = new UDAServiceType("SwitchPower"); // DOC: SEARCH_UDA
-        upnpService.getControlPoint().search(new UDAServiceTypeHeader(udaType)); // DOC: SEARCH_UDA
+        UDAServiceType udaType = new UDAServiceType("SwitchPower");
+        upnpService.getControlPoint().search(new UDAServiceTypeHeader(udaType));
 
         assertMessages(upnpService, new UDAServiceTypeHeader(udaType));
 
         upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
-        ServiceType type = new ServiceType("org-mydomain", "MyServiceType", 1); // DOC: SEARCH_CUSTOM
-        upnpService.getControlPoint().search(new ServiceTypeHeader(type)); // DOC: SEARCH_CUSTOM
+        ServiceType type = new ServiceType("org-mydomain", "MyServiceType", 1);
+        upnpService.getControlPoint().search(new ServiceTypeHeader(type));
 
         assertMessages(upnpService, new ServiceTypeHeader(type));
     }

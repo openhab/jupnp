@@ -27,19 +27,15 @@ import org.jupnp.binding.annotations.UpnpStateVariable;
 @UpnpService(serviceId = @UpnpServiceId("MyService"), serviceType = @UpnpServiceType(namespace = "mydomain", value = "MyService"))
 public class MyServiceWithAllowedValueProvider {
 
-    // DOC:PROVIDER
     public static class MyAllowedValueProvider implements AllowedValueProvider {
         @Override
         public String[] getValues() {
             return new String[] { "Foo", "Bar", "Baz" };
         }
     }
-    // DOC:PROVIDER
 
-    // DOC:VAR
     @UpnpStateVariable(allowedValueProvider = MyAllowedValueProvider.class)
     private String restricted;
-    // DOC:VAR
 
     @UpnpAction(out = @UpnpOutputArgument(name = "Out"))
     public String getRestricted() {

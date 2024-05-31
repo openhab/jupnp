@@ -29,31 +29,6 @@ import org.jupnp.model.meta.LocalService;
 import org.jupnp.model.types.Datatype;
 import org.jupnp.model.types.DeviceType;
 
-/**
- * Restricting numeric value ranges
- * <p>
- * For numeric state variables, you can limit the set of legal values within a range
- * when declaring the state variable:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValueRange" style="include: VAR"/>
- * <p>
- * Alternatively, if your allowed range has to be determined dynamically when
- * your service is being bound, you can implement a class with the
- * <code>org.jupnp.binding.AllowedValueRangeProvider</code> interface:
- * </p>
- * <a class="citation" href="javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include:
- * PROVIDER"/>
- * <p>
- * Then, instead of specifying a static list of string values in your state variable declaration,
- * name the provider class:
- * </p>
- * <a class="citation" id="MyServiceWithAllowedValueRangeProvider-VAR" href=
- * "javacode://example.localservice.MyServiceWithAllowedValueRangeProvider" style="include: VAR"/>
- * <p>
- * Note that this provider will only be queried when your annotations are being processed,
- * once when your service is bound in jUPnP.
- * </p>
- */
 class AllowedValueRangeTest {
 
     static LocalDevice createTestDevice(Class serviceClass) throws Exception {

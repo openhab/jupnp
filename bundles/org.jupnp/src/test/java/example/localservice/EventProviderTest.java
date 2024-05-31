@@ -36,55 +36,6 @@ import org.jupnp.util.Reflections;
 import example.binarylight.BinaryLightSampleData;
 import example.controlpoint.EventSubscriptionTest;
 
-/**
- * Providing events on service state changes
- * <p>
- * The standard mechanism in the JDK for eventing is the <code>PropertyChangeListener</code> reacting
- * on a <code>PropertyChangeEvent</code>. jUPnP utilizes this API for service eventing, thus avoiding
- * a dependency between your service code and proprietary APIs.
- * </p>
- * <p>
- * Consider the following modification of the original <a href="#section.SwitchPower">SwitchPower:1</a>
- * implementation:
- * </p>
- * <a class="citation" href="javacode://example.localservice.SwitchPowerWithPropertyChangeSupport"/>
- * <p>
- * The only additional dependency is on <code>java.beans.PropertyChangeSupport</code>. jUPnP
- * detects the <code>getPropertyChangeSupport()</code> method of your service class and automatically
- * binds the service management on it. You will have to have this method for eventing to work with
- * jUPnP. You can create the <code>PropertyChangeSupport</code> instance
- * in your service's constructor or any other way, the only thing jUPnP is interested in are property
- * change events with the "property" name of a UPnP state variable.
- * </p>
- * <p>
- * Consequently, <code>firePropertyChange("NameOfAStateVariable")</code> is how you tell jUPnP that
- * a state variable value has changed. It doesn't even matter if you call
- * <code>firePropertyChange("Status", null, null)</code> or
- * <code>firePropertyChange("Status", oldValue, newValue)</code>.
- * jUPnP <em>only</em> cares about the state variable name; it will then check if the state variable is
- * evented and pull the data out of your service implementation instance by accessing the appropriate
- * field or a getter. Any "old" or "new" value you pass along is ignored.
- * </p>
- * <p>
- * Also note that <code>firePropertyChange("Target", null, null)</code> would have no effect, because
- * <code>Target</code> is mapped with <code>sendEvents="false"</code>.
- * </p>
- * <p>
- * Most of the time a JavaBean property name is <em>not</em> the same as UPnP state variable
- * name. For example, the JavaBean <code>status</code> property name is lowercase, while the UPnP state
- * variable name is uppercase <code>Status</code>. The jUPnP eventing system ignores any property
- * change event that doesn't exactly name a service state variable. This allows you to use
- * JavaBean eventing independently from UPnP eventing, e.g. for GUI binding (Swing components also
- * use the JavaBean eventing system).
- * </p>
- * <p>
- * Let's assume for the sake of the next example that <code>Target</code> actually is also evented,
- * like <code>Status</code>. If several evented state variables change in your service, but you don't
- * want to trigger individual change events for each variable, you can combine them in a single event
- * as a comma-separated list of state variable names:
- * </p>
- * <a class="citation" href="javacode://example.localservice.SwitchPowerWithBundledPropertyChange#setTarget(boolean)"/>
- */
 class EventProviderTest extends EventSubscriptionTest {
 
     @Test
