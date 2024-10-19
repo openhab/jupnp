@@ -77,7 +77,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
             try {
                 connector.start();
             } catch (Exception e) {
-                logger.warn("Couldn't start connector: {}", connector , e);
+                logger.warn("Couldn't start connector: {}", connector, e);
                 throw new RuntimeException("Couldn't start connector", e);
             }
         }
