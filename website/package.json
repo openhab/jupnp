@@ -15,12 +15,12 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.4.0",
-    "@docusaurus/preset-classic": "^3.4.0",
+    "@docusaurus/core": "^3.5.2",
+    "@docusaurus/preset-classic": "^3.5.2",
     "@mdx-js/react": "^3.0.0",
     "@types/react": "^18.3.3",
     "clsx": "^2.0.0",
-    "docusaurus-lunr-search": "^3.4.0",
+    "docusaurus-lunr-search": "^3.5.0",
     "lunr": "^2.3.9",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
