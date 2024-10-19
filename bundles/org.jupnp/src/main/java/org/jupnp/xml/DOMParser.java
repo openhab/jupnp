@@ -77,7 +77,7 @@ public abstract class DOMParser<D extends DOM> implements ErrorHandler, EntityRe
     private final Logger logger = LoggerFactory.getLogger(DOMParser.class);
 
     public static final URL XML_SCHEMA_RESOURCE = Thread.currentThread().getContextClassLoader()
-            .getResource("org.jupnp/schemas/xml.xsd");
+            .getResource("org/jupnp/schemas/xml.xsd");
 
     protected Source[] schemaSources;
     protected Schema schema;
