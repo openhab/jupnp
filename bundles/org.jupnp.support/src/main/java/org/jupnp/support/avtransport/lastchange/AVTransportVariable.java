@@ -116,7 +116,7 @@ public class AVTransportVariable {
 
         @Override
         protected StorageMedium enumValueOf(String s) {
-            return StorageMedium.valueOf(s);
+            return StorageMedium.valueOrVendorSpecificOf(s);
         }
     }
 
@@ -131,9 +131,12 @@ public class AVTransportVariable {
 
         @Override
         protected StorageMedium[] enumValueOf(String[] names) {
+            if (names == null) {
+                return new StorageMedium[0];
+            }
             List<StorageMedium> list = new ArrayList<>();
             for (String s : names) {
-                list.add(StorageMedium.valueOf(s));
+                list.add(StorageMedium.valueOrVendorSpecificOf(s));
             }
             return list.toArray(new StorageMedium[list.size()]);
         }
@@ -221,6 +224,9 @@ public class AVTransportVariable {
 
         @Override
         protected RecordQualityMode[] enumValueOf(String[] names) {
+            if (names == null) {
+                return new RecordQualityMode[0];
+            }
             List<RecordQualityMode> list = new ArrayList<>();
             for (String s : names) {
                 list.add(RecordQualityMode.valueOf(s));
