@@ -15,7 +15,6 @@
  */
 package org.jupnp.model.meta;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +31,7 @@ import org.jupnp.model.types.BinHexDatatype;
 import org.jupnp.util.MimeType;
 import org.jupnp.util.SpecificationViolationReporter;
 import org.jupnp.util.URIUtil;
+import org.jupnp.util.io.IO;
 
 /**
  * The metadata of a device icon, might include the actual image data of a local icon.
@@ -91,7 +91,7 @@ public class Icon implements Validatable {
      */
     public Icon(String mimeType, int width, int height, int depth, String uniqueName, InputStream is)
             throws IOException {
-        this(mimeType, width, height, depth, uniqueName, convert(is));
+        this(mimeType, width, height, depth, uniqueName, IO.readAllBytes(is));
     }
 
     /**
@@ -157,29 +157,6 @@ public class Icon implements Validatable {
             throw new IllegalStateException("Final value has been set already, model is immutable");
         }
         this.device = device;
-    }
-
-    /**
-     * Converts the given InputStream into a byte array. This method should be replaced by
-     * java.io.InputStream#readAllBytes when Android 13 (API Level 33) is more widely used.
-     *
-     * @param inputStream the InputStream to be converted
-     * @return a byte array containing the data from the InputStream
-     * @throws IOException if an I/O error occurs
-     */
-    public static byte[] convert(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        byte[] data = new byte[1024];
-
-        // Read data from InputStream in chunks of 1024 bytes
-        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-            // Write the read data into ByteArrayOutputStream
-            buffer.write(data, 0, nRead);
-        }
-
-        // Return the complete byte array
-        return buffer.toByteArray();
     }
 
     @Override

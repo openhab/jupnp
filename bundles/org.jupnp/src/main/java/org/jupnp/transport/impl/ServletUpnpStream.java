@@ -34,6 +34,7 @@ import org.jupnp.model.message.UpnpMessage;
 import org.jupnp.model.message.UpnpRequest;
 import org.jupnp.protocol.ProtocolFactory;
 import org.jupnp.transport.spi.UpnpStream;
+import org.jupnp.util.io.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,7 +130,7 @@ public abstract class ServletUpnpStream extends UpnpStream {
             if (UpnpRequest.Method.GET.getHttpName().equals(requestMethod)) {
                 bodyBytes = new byte[] {};
             } else {
-                bodyBytes = is.readAllBytes();
+                bodyBytes = IO.readAllBytes(is);
             }
         }
         logger.trace("Reading request body bytes: {}", bodyBytes.length);

@@ -16,6 +16,7 @@
 package org.jupnp.util.io;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,5 +40,28 @@ public class IO {
         }
 
         return input.length() > 0 ? input.toString() : "";
+    }
+
+    /**
+     * Read the given InputStream into a byte array. This method should be replaced by
+     * java.io.InputStream#readAllBytes when Android 13 (API Level 33) is more widely used.
+     *
+     * @param inputStream the InputStream to be read
+     * @return a byte array containing the data from the InputStream
+     * @throws IOException if an I/O error occurs
+     */
+    public static byte[] readAllBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        int nRead;
+        byte[] data = new byte[1024];
+
+        // Read data from InputStream in chunks of 1024 bytes
+        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            // Write the read data into ByteArrayOutputStream
+            buffer.write(data, 0, nRead);
+        }
+
+        // Return the complete byte array
+        return buffer.toByteArray();
     }
 }

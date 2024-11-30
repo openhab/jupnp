@@ -35,7 +35,7 @@ public class HttpFetch {
     public static Representation<byte[]> fetchBinary(URL url, int connectTimeoutMillis, int readTimeoutMillis)
             throws IOException {
         return fetch(url, connectTimeoutMillis, readTimeoutMillis,
-                (urlConnection, is) -> new Representation<>(urlConnection, is.readAllBytes()));
+                (urlConnection, is) -> new Representation<>(urlConnection, IO.readAllBytes(is)));
     }
 
     public static Representation<String> fetchString(URL url, int connectTimeoutMillis, int readTimeoutMillis)
