@@ -24,6 +24,8 @@ import java.util.Map;
 import org.jupnp.model.action.ActionInvocation;
 import org.jupnp.model.message.UpnpResponse;
 import org.jupnp.model.meta.Device;
+import org.jupnp.model.meta.DeviceIdentity;
+import org.jupnp.model.meta.RemoteDeviceIdentity;
 import org.jupnp.model.meta.Service;
 import org.jupnp.model.types.DeviceType;
 import org.jupnp.model.types.ServiceType;
@@ -70,6 +72,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bauer
  * @author Amit Kumar Mondal - Code Refactoring
+ * @author Richard Maw - Nullable internalClient
  */
 public class PortMappingListener extends DefaultRegistryListener {
 
@@ -104,19 +107,45 @@ public class PortMappingListener extends DefaultRegistryListener {
 
         logger.debug("Activating port mappings on: {}", connectionService);
 
+        String defaultInternalClient = null;
         final List<PortMapping> activeForService = new ArrayList<>();
         for (final PortMapping pm : portMappings) {
-            new PortMappingAdd(connectionService, registry.getUpnpService().getControlPoint(), pm) {
+            final PortMapping newPm;
+            if (pm.getInternalClient() != null) {
+                newPm = pm;
+            } else {
+                if (defaultInternalClient == null) {
+                    DeviceIdentity deviceIdentity = device.getIdentity();
+                    if (!(deviceIdentity instanceof RemoteDeviceIdentity)) {
+                        handleFailureMessage("Found a non-remote IGD, can't determine default internal client address");
+                        continue;
+                    }
+                    RemoteDeviceIdentity remoteDeviceIdentity = (RemoteDeviceIdentity) deviceIdentity;
+                    defaultInternalClient = remoteDeviceIdentity.getDiscoveredOnLocalAddress().getHostAddress();
+                }
+
+                newPm = new PortMapping();
+                newPm.setEnabled(pm.isEnabled());
+                newPm.setLeaseDurationSeconds(pm.getLeaseDurationSeconds());
+                newPm.setRemoteHost(pm.getRemoteHost());
+                newPm.setExternalPort(pm.getExternalPort());
+                newPm.setInternalPort(pm.getInternalPort());
+                newPm.setProtocol(pm.getProtocol());
+                newPm.setDescription(pm.getDescription());
+                newPm.setInternalClient(defaultInternalClient);
+            }
+
+            new PortMappingAdd(connectionService, registry.getUpnpService().getControlPoint(), newPm) {
 
                 @Override
                 public void success(ActionInvocation invocation) {
-                    logger.debug("Port mapping added: {}", pm);
-                    activeForService.add(pm);
+                    logger.debug("Port mapping added: {}", newPm);
+                    activeForService.add(newPm);
                 }
 
                 @Override
                 public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                    handleFailureMessage("Failed to add port mapping: " + pm);
+                    handleFailureMessage("Failed to add port mapping: " + newPm);
                     handleFailureMessage("Reason: " + defaultMsg);
                 }
             }.run(); // Synchronous!
