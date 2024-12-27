@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Christian Bauer
  * @author Amit Kumar Mondal - Code Refactoring
- * @author Richard Maw - Nullable internalClient
+ * @author Richard Maw - Nullable internalClient, callbacks
  */
 public class PortMappingListener extends DefaultRegistryListener {
 
@@ -104,8 +104,7 @@ public class PortMappingListener extends DefaultRegistryListener {
         if ((connectionService = discoverConnectionService(device)) == null) {
             return;
         }
-
-        logger.debug("Activating port mappings on: {}", connectionService);
+        handleInternetGatewayDeviceFound(connectionService);
 
         String defaultInternalClient = null;
         final List<PortMapping> activeForService = new ArrayList<>();
@@ -139,14 +138,13 @@ public class PortMappingListener extends DefaultRegistryListener {
 
                 @Override
                 public void success(ActionInvocation invocation) {
-                    logger.debug("Port mapping added: {}", newPm);
+                    handleSuccessfulMapping(connectionService, newPm, invocation);
                     activeForService.add(newPm);
                 }
 
                 @Override
                 public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                    handleFailureMessage("Failed to add port mapping: " + newPm);
-                    handleFailureMessage("Reason: " + defaultMsg);
+                    handleFailedMapping(connectionService, newPm, invocation, operation, defaultMsg);
                 }
             }.run(); // Synchronous!
         }
@@ -182,18 +180,18 @@ public class PortMappingListener extends DefaultRegistryListener {
             while (it.hasNext()) {
                 final PortMapping pm = it.next();
                 logger.debug("Trying to delete port mapping on IGD: {}", pm);
-                new PortMappingDelete(activeEntry.getKey(), registry.getUpnpService().getControlPoint(), pm) {
+                final Service connectionService = activeEntry.getKey();
+                new PortMappingDelete(connectionService, registry.getUpnpService().getControlPoint(), pm) {
 
                     @Override
                     public void success(ActionInvocation invocation) {
-                        logger.debug("Port mapping deleted: {}", pm);
+                        handleSuccessfulUnmapping(connectionService, pm, invocation);
                         it.remove();
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
-                        handleFailureMessage("Failed to delete port mapping: " + pm);
-                        handleFailureMessage("Reason: " + defaultMsg);
+                        handleFailedUnmapping(connectionService, pm, invocation, operation, defaultMsg);
                     }
                 }.run(); // Synchronous!
             }
@@ -226,5 +224,29 @@ public class PortMappingListener extends DefaultRegistryListener {
 
     protected void handleFailureMessage(String s) {
         logger.warn(s);
+    }
+
+    protected void handleInternetGatewayDeviceFound(Service service) {
+        logger.debug("Activating port mappings on: {}", service);
+    }
+
+    protected void handleSuccessfulMapping(Service service, PortMapping pm, ActionInvocation invocation) {
+        logger.debug("Port mapping added: {}", pm);
+    }
+
+    protected void handleFailedMapping(Service service, PortMapping pm, ActionInvocation invocation,
+            UpnpResponse operation, String defaultMsg) {
+        handleFailureMessage("Failed to add port mapping: " + pm);
+        handleFailureMessage("Reason: " + defaultMsg);
+    }
+
+    protected void handleSuccessfulUnmapping(Service service, PortMapping pm, ActionInvocation invocation) {
+        logger.debug("Port mapping deleted: {}", pm);
+    }
+
+    protected void handleFailedUnmapping(Service service, PortMapping pm, ActionInvocation invocation,
+            UpnpResponse operation, String defaultMsg) {
+        handleFailureMessage("Failed to delete port mapping: " + pm);
+        handleFailureMessage("Reason: " + defaultMsg);
     }
 }
