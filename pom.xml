@@ -5,7 +5,7 @@
 
   <groupId>org.jupnp</groupId>
   <artifactId>jupnp</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.3</version>
   <packaging>pom</packaging>
 
   <name>jUPnP</name>
@@ -288,6 +288,17 @@
                 </excludes>
               </licenseSet>
             </licenseSets>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.8</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>maven</serverId>
+            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
           </configuration>
         </plugin>
       </plugins>
